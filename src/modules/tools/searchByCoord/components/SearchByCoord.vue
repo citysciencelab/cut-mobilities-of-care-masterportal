@@ -3,6 +3,7 @@ import Tool from "../../Tool.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
+import state from "../store/stateSearchByCoord";
 import proj4 from "proj4";
 
 export default {
@@ -16,17 +17,24 @@ export default {
             coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             currentCoordinateSystem: "ETRS89",
             zoomLevel: 7,
-            coordinatesEasting: {name: "", value: "", errorMessage: "", example: ""},
-            coordinatesNorthing: {name: "", value: "", errorMessage: "", example: ""},
+            coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
+            coordinatesNorthing: {id: "northing", name: "", value: "", errorMessage: ""},
             selectedCoordinates: [],
             transformedCoordinates: []
         };
     },
     computed: {
-        ...mapGetters("Tools/SearchByCoord", Object.keys(getters))
+        ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
+        coordinatesEastingExample: function () {
+            return state.coordinatesEastingExample;
+        },
+        coordinatesNorthingExample: function () {
+            return state.coordinatesNorthingExample;
+        }
     },
     created () {
         this.$on("close", this.close);
+        this.newCoordSystemSelected(this.currentCoordinateSystem);
         this.setExample();
     },
     beforeUpdate () {
@@ -41,11 +49,12 @@ export default {
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
         ...mapActions("Tools/SearchByCoord", [
-            "newProjectionSelected",
+            "newCoordSystemSelected",
             "setMarker",
             "removeMarker",
             "setCenter",
-            "setZoom"
+            "setZoom",
+            "setExample"
         ]),
         /**
          * Closes this tool window by setting active to false and removes the marker if it was placed.
@@ -67,11 +76,10 @@ export default {
          * @returns {void}
          */
         selectionChanged () {
+            this.newCoordSystemSelected(this.currentCoordinateSystem);
             this.setExample();
             this.removeMarker();
-            this.coordinatesEasting.errorMessage = "";
             this.coordinatesEasting.value = "";
-            this.coordinatesNorthing.errorMessage = "";
             this.coordinatesNorthing.value = "";
             this.searchCoordinate(this.coordinatesEasting, this.coordinatesNorthing);
         },
@@ -106,7 +114,9 @@ export default {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
                     }
                     else if (!coord.value.match(validETRS89)) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name, valueExample: coord.example});
+                        const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
+
+                        coord.errorMessage = coord.id === "easting" ? noMatch + this.coordinatesEastingExample : noMatch + this.coordinatesNorthingExample;
                     }
                     else {
                         coordinatesEasting.errorMessage = "";
@@ -122,7 +132,9 @@ export default {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
                     }
                     else if (!coord.value.match(validWGS84)) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: coord.name, valueExample: coord.example});
+                        const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
+
+                        coord.errorMessage = coord.id === "easting" ? noMatch + this.coordinatesEastingExample : noMatch + this.coordinatesNorthingExample;
                     }
                     else {
                         coordinatesEasting.errorMessage = "";
@@ -138,7 +150,9 @@ export default {
                         coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
                     }
                     else if (!coord.value.match(validWGS84_dez)) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: coord.name, valueExample: coord.example});
+                        const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
+
+                        coord.errorMessage = coord.id === "easting" ? noMatch + this.coordinatesEastingExample : noMatch + this.coordinatesNorthingExample;
                     }
                     else {
                         coordinatesEasting.errorMessage = "";
@@ -195,25 +209,6 @@ export default {
         moveToCoordinates (coordinates) {
             this.setMarker(coordinates);
             this.setCenter(coordinates);
-        },
-        /**
-         * Sets the example messages according to the selected coordinate system.
-         * @param {Array} coordinates from the validated coordinates
-         * @returns {void}
-         */
-        setExample () {
-            if (this.currentCoordinateSystem === "ETRS89") {
-                this.coordinatesEasting.example = "564459.13";
-                this.coordinatesNorthing.example = "5935103.67";
-            }
-            else if (this.currentCoordinateSystem === "WGS84") {
-                this.coordinatesEasting.example = "53° 33′ 25″";
-                this.coordinatesNorthing.example = "9° 59′ 50″";
-            }
-            else if (this.currentCoordinateSystem === "WGS84(Dezimalgrad)") {
-                this.coordinatesEasting.example = "53.55555°";
-                this.coordinatesNorthing.example = "10.01234°";
-            }
         }
     }};
 </script>
@@ -269,7 +264,7 @@ export default {
                                 :class="{ inputError: coordinatesEasting.errorMessage.length }"
                                 type="text"
                                 class="form-control"
-                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEasting.example"
+                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample"
                             ><p
                                 v-if="coordinatesEasting.errorMessage.length"
                                 class="error-text"
@@ -291,7 +286,7 @@ export default {
                                 :class="{ inputError: coordinatesNorthing.errorMessage.length }"
                                 type="text"
                                 class="form-control"
-                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthing.example"
+                                :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample"
                             ><p
                                 v-if="coordinatesNorthing.errorMessage.length"
                                 class="error-text"
@@ -323,6 +318,6 @@ export default {
     color: #a94442;
 }
 .inputError {
-     border: 1px solid #a94442;
+    border: 1px solid #a94442;
 }
 </style>

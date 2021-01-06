@@ -540,9 +540,9 @@
                 "exampleAcronym": "e.g. ",
                 "errorMsg": {
                     "noCoord": "Please enter your {{valueKey}}.",
-                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})",
+                    "noMatch": "Your chosen {{valueKey}} is not correct! Example: ",
                     "hdmsNoCoord": "Please enter your value for the {{valueKey}}.",
-                    "hdmsNoMatch": "Your chosen value for the {{valueKey}} is not correct! (Example: {{valueExample}})"
+                    "hdmsNoMatch": "Your chosen value for the {{valueKey}} is not correct! Example: "
                 }
             },
             "draw": {

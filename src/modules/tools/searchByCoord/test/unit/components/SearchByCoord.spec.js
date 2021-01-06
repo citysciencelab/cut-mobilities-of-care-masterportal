@@ -1,17 +1,20 @@
 import Vuex from "vuex";
 import {expect} from "chai";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import * as crs from "masterportalAPI/src/crs";
 import SearchByCoordComponent from "../../../components/SearchByCoord.vue";
 import SearchByCoord from "../../../store/indexSearchByCoord";
 
 const localVue = createLocalVue(),
-    namedProjections = [
-        ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
-        ["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"],
-        ["EPSG:8395", "+title=ETRS89/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=GRS80 +datum=GRS80 +units=m +no_defs"],
-        ["EPSG:4326", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"]
-    ];
+    etrs89Coord = ["5935103,67", "564459.13"],
+    etrs89ErrCoordNorthing = ["5935103,67", "qwertz"],
+    etrs89ErrCoordEasting = ["qwertz", "564459.13"],
+    wgs84Coord = ["9° 30` 50``", "53° 10' 55\""],
+    wgs84ErrCoordNorthing = ["9° 59' 50", "qwertz"],
+    wgs84ErrCoordEasting = ["qwertz", "53° 33` 25"],
+    wgsDezimalCoord = ["53.5555°", "10,01234"],
+    wgsDezimalErrCoordNorthing = ["53.5555°", "qwertz"],
+    wgsDezimalErrCoordEasting = ["qwertz","10,01234"],
+    undefCoord = [];
 
 localVue.use(Vuex);
 config.mocks.$t = key => key;
@@ -54,7 +57,6 @@ describe("src/modules/tools/supplyCoord/components/SearchByCoord.vue", () => {
                 configJson: mockConfigJson
             }
         });
-        crs.registerProjections(namedProjections);
     });
 
     it("renders SearchByCoord", () => {
@@ -79,6 +81,14 @@ describe("src/modules/tools/supplyCoord/components/SearchByCoord.vue", () => {
 
             expect(store.state.Tools.SearchByCoord.active).to.be.false;
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
+        });
+        it("method validateInput validates the user-input", () => {
+            const coordSystem = "EPSG:25832",
+                coordinates = etrs89Coord;
+
+            wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
+            wrapper.vm.setExample(coordSystem);
+            expect(store.state.Tools.SearchByCoord.coordinatesEastingExample).to.be.equals("564459.13");
         });
     });
 });

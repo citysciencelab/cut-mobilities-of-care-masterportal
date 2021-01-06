@@ -8,9 +8,11 @@ const state = {
     updatePosition: true,
     currentProjectionName: "EPSG:25832",
     currentProjection: null,
-    currentSelection: "EPSG:25832",
+    currentSelection: "ETRS89",
     coordinatesEastingField: "",
     coordinatesNorthingField: "",
+    coordinatesEastingExample: "",
+    coordinatesNorthingExample: "",
     // mandatory defaults for config.json parameters
     name: "Koordinatensuche",
     glyphicon: "glyphicon-record",
