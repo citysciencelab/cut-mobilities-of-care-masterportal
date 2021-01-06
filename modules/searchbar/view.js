@@ -494,7 +494,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (hit.coordinate.length === 2) {
             store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
-            Radio.trigger("MapView", "setCenter", hit.coordinate, {maxZoom: index});
+            Radio.trigger("MapView", "setCenter", hit.coordinate, index);
         }
         else {
             store.dispatch("MapMarker/removePolygonMarker");
