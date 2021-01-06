@@ -69,8 +69,9 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
     },
     /**
      * Add HTML content to this sidebar
-     * @param {HTML} element Element from a tool view
+     * @param {HTML}    element Element from a tool view
      * @param {boolean} draggable is the sidebar resizeable?
+     * @param {number}  fixedWidth fixed width of sidebar
      * @returns {void}
      */
     addContent: function (element, draggable = false, fixedWidth) {
