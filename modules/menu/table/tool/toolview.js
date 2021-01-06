@@ -6,13 +6,20 @@ const ToolView = Backbone.View.extend({
         "click": "checkItem"
     },
     initialize: function () {
+        this.render();
+
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 this.toggleSupportedVisibility(mode);
             }
         });
 
-        this.render();
+        this.listenTo(this.model, {
+            "change:currentLng": () => {
+                this.updateAttributes();
+            }
+        });
+
         this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
     },
     id: "table-tool",
@@ -22,6 +29,13 @@ const ToolView = Backbone.View.extend({
         const attr = this.model.toJSON();
 
         $("#table-tools-menu").append(this.$el.html(this.template(attr)));
+
+        return this;
+    },
+    updateAttributes: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
 
         return this;
     },

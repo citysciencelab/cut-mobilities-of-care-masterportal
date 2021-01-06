@@ -6,20 +6,29 @@ const ToolView = Backbone.View.extend({
         "click": "toggleToolMenu"
     },
     initialize: function () {
-        this.collection = Radio.request("ModelList", "getCollection");
         this.render();
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementTool": this.closeToolMenu
         });
-        this.listenTo(this.collection, {
+        this.model = Radio
+            .request("ModelList", "getCollection")
+            .models
+            .find(model => model.get("type") === "folder" && model.get("id") === "tools");
+        this.listenTo(this.model, {
             "change:currentLng": () => {
-                this.render();
+                this.updateTitle();
             }
         });
+        this.updateTitle();
     },
     id: "table-tools",
     className: "table-nav table-tools col-md-2",
     template: _.template(MenuTemplate),
+    updateTitle: function () {
+        const toolsName = this.model.toJSON().toolsName;
+
+        $("#table-tools-menu").prev().prop("title", toolsName);
+    },
     render: function () {
         const collection = Radio.request("ModelList", "getCollection"),
             models = collection.models.filter(function (model) {
