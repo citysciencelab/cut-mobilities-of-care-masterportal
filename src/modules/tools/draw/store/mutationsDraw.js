@@ -15,6 +15,9 @@ const mutations = {
     setDownloadFeatures: (state, payload) => {
         state.download.features = payload;
     },
+    setDownloadFile: (state, payload) => {
+        state.download.file = payload;
+    },
     setDownloadFileName: (state, payload) => {
         state.download.fileName = payload;
     },

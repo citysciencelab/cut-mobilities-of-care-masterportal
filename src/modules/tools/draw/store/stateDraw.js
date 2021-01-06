@@ -12,6 +12,7 @@ const symbol = {
      * @property {String} download.dataString Data that will be written to the file for the Download.
      * @property {Boolean} download.disabled Whether the Download Button is disabled or not.
      * @property {ol/Feature[]} download.features Features that are drawn on the Map.
+     * @property {String} download.file Name of the file including thr suffix.
      * @property {String} download.fileName Name for the to be downloaded file.
      * @property {String} download.fileUrl The URL encoded dataString.
      * @property {String[]} download.formats Choosable formats for the download of the features.
@@ -91,6 +92,7 @@ const symbol = {
             dataString: "",
             disabled: true,
             features: [],
+            file: "",
             fileName: "",
             fileUrl: "",
             formats: ["KML", "GEOJSON", "GPX"], // NOTE(roehlipa): If this can't be configured, then it may be moved out of the state IMO.

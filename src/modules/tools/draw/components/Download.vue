@@ -64,7 +64,7 @@ export default {
                     id="tool-draw-download-file"
                     class="col-xs-12 downloadFile"
                     :href="download.fileUrl"
-                    :download="download.fileName"
+                    :download="download.file"
                     :disabled="download.disabled"
                 >
                     <button

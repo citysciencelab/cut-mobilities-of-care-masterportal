@@ -71,7 +71,7 @@ function prepareDownload ({state, commit, dispatch}) {
             const dataString = state.download.dataString,
                 isIE = Radio.request("Util", "isInternetExplorer");
 
-            commit("setDownloadFileName", fileName);
+            commit("setDownloadFile", fileName);
 
             if (isIE) {
                 window.navigator.msSaveOrOpenBlob(new Blob([dataString]), fileName);
@@ -164,7 +164,7 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTar
  *
  * @param {Object} context actions context object.
  * @param {ol/geom/Geometry} geometry Geometry to be transformed.
- * @returns {ol/Coordinate|ol/Coordinate[]|[]} The transformed Geometry or an empty array.
+ * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)|[]} The transformed Geometry or an empty array.
  */
 function transformCoordinates ({dispatch}, geometry) {
     const coords = geometry.getCoordinates();
