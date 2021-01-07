@@ -48,7 +48,7 @@
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
-            "layerAnalysis": "Analyse Layer Overlapping"
+            "layerOverlapAnalysis": "Analyse Layer Overlapping"
         },
         "contact": "Mail",
         "info": "Information"
@@ -605,9 +605,10 @@
             "scaleSwitcher": {
                 "label": "Scale"
             },
-          "layerAnalysis": {
+          "layerOverlapAnalysis": {
             "selectLabel": "Choose source layer",
-            "rangeLabel": "Choose radius"
+            "rangeLabel": "Choose radius",
+            "clearBtn": "Reset"
           }
         },
         "controls": {

@@ -49,7 +49,7 @@
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
-            "layerAnalysis": "Layer-Überschneidung analysieren"
+            "layerOverlapAnalysis": "Layer-Überschneidung analysieren"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -606,9 +606,10 @@
             "scaleSwitcher": {
                 "label": "Maßstab"
             },
-            "layerAnalysis": {
+            "layerOverlapAnalysis": {
                 "selectLabel": "Quell-Layer auswählen",
-                "rangeLabel": "Radius auswählen"
+                "rangeLabel": "Radius auswählen",
+                "clearBtn": "Zurücksetzen"
             }
         },
         "controls": {

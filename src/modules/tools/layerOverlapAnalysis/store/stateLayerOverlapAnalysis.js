@@ -1,3 +1,5 @@
+import * as jsts from "jsts/dist/jsts";
+
 /**
  * User type definition
  * @typedef {Object} LayerOverlapAnalysisState
@@ -21,9 +23,12 @@ const state = {
     deactivateGFI: false,
     selectedSourceLayer: null,
     selectedTargetLayer: null,
-    vectorLayer: {},
+    bufferLayer: {},
     resultLayer: {},
-    bufferRadius: 0
+    bufferRadius: 0,
+    sourceOptions: [],
+    map: {},
+    parser: new jsts.io.OL3Parser()
 };
 
 export default state;
