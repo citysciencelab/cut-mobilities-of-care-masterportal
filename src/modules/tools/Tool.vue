@@ -112,7 +112,7 @@ export default {
          *  @return {void}
          */
         updateMap () {
-            if (this.renderToWindow || !this.active) {
+            if (this.renderToWindow) {
                 return;
             }
             Radio.trigger("Map", "updateSize");

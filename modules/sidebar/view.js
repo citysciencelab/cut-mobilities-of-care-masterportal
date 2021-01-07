@@ -115,10 +115,10 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
     toggle: function (visible) {
         this.model.setIsVisible(Boolean(visible));
         if (visible === true) {
-            $("#sidebar .tool-manager").hide();
+            document.querySelector("#sidebar .tool-manager").style.display = "none";
         }
         else {
-            $("#sidebar .tool-manager").show();
+            document.querySelector("#sidebar .tool-manager").style.display = "block";
         }
     },
 

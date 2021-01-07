@@ -263,8 +263,6 @@
         "glyphicon": "glyphicon-wrench",
         "children": {
           "einwohnerabfrage": {
-            "renderToWindow": false,
-            "resizable": true,
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
             "onlyDesktop": false,
@@ -318,6 +316,8 @@
             "glyphicon": "glyphicon-record"
           },
           "fileImport": {
+            "renderToWindow": false,
+            "resizableWindow": true,
             "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
           },
@@ -422,8 +422,7 @@
           "scaleSwitcher":
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-full",
-            "renderToWindow": true
+            "glyphicon": "glyphicon-resize-full"
           },
           "VueAddon": {
             "name": "AddonTool",
