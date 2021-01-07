@@ -1,25 +1,27 @@
-Um Erweiterungen für das MasterPortal zu schreiben und beizutragen finden sie hier weitere Informationen.
+# Developer documentation overview
 
-* **[lokale Entwicklungsumgebung einrichten](setup-dev.md)**
+The following information is offered to help write and contribute Masterportal extensions.
 
-Es sind folgende Code-Konventionen einzuhalten:
+* **[Set up local development environment](setupDev.md)**
 
-* **[Code-Konventionen](codingConventions.md)**
+The following code conventions are to be adhered to:
 
-Um Code dem Projekt beizutragen ist der Workflow und die "Definition of Done" einzuhalten:
+* **[Code conventions](codingConventions.md)**
 
-* **[Git-Workflow](git-workflow.md)**
+To contribute to the project, please follow this workflow and the "Definition of Done":
 
-Zum Schreiben von Unittests:
+* **[Git workflow](gitWorkflow.md)**
 
-* **[Test-Dokumentation](Testing.md)**
+About writing unit and end-to-end tests:
 
-Um Code zu schreiben der nicht im Masterportal-Repository landen soll, sondern als Addon eingebunden wird:
+* **[Test documentation](test.md)**
 
-* **[Addons](addons_vue.md)**
+To write code that's not supposed to be added to the Masterportal repository, features may be added to a Masterportal instance as add-ons:
 
-Weitere Infos:
+* **[Add-ons](addonsVue.md)**
 
-* **[Tutorial: Ein neues Modul erstellen (Scale Switcher)](02_tutorial_new_module_scale_switcher.md)**
-* **[Community Board (Entwickler- und Anwenderforum)](https://trello.com/c/qajdXkMa/110-willkommen)**
-* **[Issue-Tracker](https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues?status=new&status=open)**
+Further links:
+
+* **[Tutorial: Creating a new module (Scale Switcher)](vueTutorial.md)**
+* **[Community Board (Developer and user forum)](https://trello.com/c/qajdXkMa/110-willkommen)**
+* **[Issue tracker](https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues?status=new&status=open)**

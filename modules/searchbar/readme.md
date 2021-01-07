@@ -1,4 +1,9 @@
-#Readme
-Die Searchbar erwartet ein Konfigurationsobjekt (siehe jsdoc), mit jeder Menge Parametern. Diese steuern in der view, welche Suchalgorythmen genutzt werden sollen. Die Searchbar required diese Module und dtartet sie. Jeder Suchalgorythmus ist in einem Modul unterhalb der Searchbar beheimatet und kommuniziert mit der searchbar nur über den Radio.
-Auch das Zoomen auf Treffer erfolgt über den Radio und verbindet so den mapMarker.
-Die Searchbar selbst kümmert sich nur um das Darstellen der Treffer, die die Suchalgorythmen herausfinden.
+# Readme
+
+The search bar expects a wide range of configuration object parameters. See JSDoc for details.
+
+These control which search algorithms the UI is to use. The search bar requires and starts these modules. Each search algorithm is in a nested module to the search bar and communicates with the search bar by using the `Backbone.Radio`.
+
+Zooming to hits, too, is done by using the `Radio` and thus connects the search bar to the `mapMarker`.
+
+The search bar handles displaying hits found by search algorithms itself.

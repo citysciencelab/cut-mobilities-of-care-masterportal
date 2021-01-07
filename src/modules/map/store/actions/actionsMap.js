@@ -1,4 +1,3 @@
-import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
 import * as highlightFeature from "./highlightFeature";
 import * as removeHighlightFeature from "./removeHighlighting";
@@ -77,7 +76,7 @@ const actions = {
      * @param {MapBrowserEvent} evt - Moveend event
      * @returns {Function} update function for state parts to update onmoveend
      */
-    updateViewState ({commit, getters, rootGetters}, evt) {
+    updateViewState ({commit, getters}, evt) {
         let map;
 
         if (evt) {
@@ -87,8 +86,7 @@ const actions = {
             ({map} = getters);
         }
 
-        const mapView = map.getView(),
-            {dpi} = rootGetters;
+        const mapView = map.getView();
 
         commit("setZoomLevel", mapView.getZoom());
         commit("setMaxZoomLevel", mapView.getMaxZoom());
@@ -96,7 +94,6 @@ const actions = {
         commit("setResolution", mapView.getResolution());
         commit("setMaxResolution", mapView.getMaxResolution());
         commit("setMinResolution", mapView.getMinResolution());
-        commit("setScale", getScaleFromDpi(map, dpi));
         commit("setBbox", mapView.calculateExtent(map.getSize()));
         commit("setRotation", mapView.getRotation());
         commit("setCenter", mapView.getCenter());

@@ -12,7 +12,7 @@
 ## Branches und Workflow
 * Die Entwicklung neuer Features und das BugFixing erfolgt in der Regel auf Feature Branches ausgehend vom dev-Branch. Wir setzen den **[Gitflow Worklflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow)** ein.
 * der Entwicklungsbranch heißt **dev**, der stabile Branch **stable**.
-* Nutze Verben für die Merge-Commits **(add/remove/update/refactor/fix/config/hotfix)**. Die Merging-Commit-Messages sollen englisch und sprechend sein. 
+* Nutze Verben für die Merge-Commits **(add/remove/update/refactor/fix/config/hotfix)**. Die Merging-Commit-Messages sollen englisch und sprechend sein.
 * Branches werden nach dem Mergen gelöscht
 
 ## Pushen
@@ -23,13 +23,13 @@
     - der Ziel-Branch wurde unmittelbar vor dem Stellen des Pull Requests in den Feature-Branch gemerged. Es bestehen daher keine Merge-Konflikte.
     - der Code ist OK
         - Es gibt keine Linter-Meldungen
-        - der Code folgt unseren **[Konventionen](conventions.md)**
+        - der Code folgt unseren **[Konventionen](codingConventions.de.md)**
     - die Dokumentation wurde erweitert
-        - **[Anwender-Dokumentation](doc.md)**
-        - **[Entwickler-Dokumentation](doc/remoteinterface.md)**
+        - **[Anwender-Dokumentation](doc.de.md)**
+        - **[Entwickler-Dokumentation](remoteInterface.de.md)**
     - Testfälle/Tests liegen vor
         - bei neuen Funktionen: kurze Beschreibung eines Testfalls zur Aufnahme ins Testprotokoll (sollte sich aus dem Ticket ergeben)
-        - Unit Tests sind erstellt: **[Test-Dokumentation](doc/Testing.md)**
+        - Unit Tests sind erstellt: **[Test-Dokumentation](testing.de.md)**
     - funktionaler Test in gebauter Version
         - gemäß der Beschreibung im Ticket
         - Cross-Browser (Chrome, IE 11, FF) - mobiles Verhalten im Browser emuliert
@@ -38,9 +38,9 @@
 * **Externe Entwickler** sind keine Team-Mitglieder und haben daher keine Schreibberechtigungen im Repository. Sie erstellen bitte einen **[Fork](https://bitbucket.org/geowerkstatt-hamburg/masterportal/fork)** ausgehend vom **dev-Branch**.
 * In diesem werden die Commits vorgenommen und von diesem können Pull Requests in den **dev-Branch** gestellt werden.
 * Auch Bugs werden bitte im **dev-Branch** gefixt.
-    - Im Pull Request soll bitte ein entsprechender Hinweis kenntlich machen, wenn der Hotix in den aktuellen **stable-Branch** überführt werden sollte. Siehe auch **[Hinweise zur Versionierung](doc/Versionierung.md)**.
+    - Im Pull Request soll bitte ein entsprechender Hinweis kenntlich machen, wenn der Hotix in den aktuellen **stable-Branch** überführt werden sollte. Siehe auch **[Hinweise zur Versionierung](versioning.de.md)**.
     - Die Überführung übernehmen Team-Mitglieder.
-    - Wir nutzen das **[Cherry Picking](https://git-scm.com/docs/git-cherry-pick)**, um die hotfix-Commits in den **stable-Branch** zu überführen. Dies gelingt am einfachsten, wenn die Commits nur den Hotfix enthalten. Siehe auch die **[Code-Konventionen](conventions.md)**.
+    - Wir nutzen das **[Cherry Picking](https://git-scm.com/docs/git-cherry-pick)**, um die hotfix-Commits in den **stable-Branch** zu überführen. Dies gelingt am einfachsten, wenn die Commits nur den Hotfix enthalten. Siehe auch die **[Code-Konventionen](codingConventions.de.md)**.
 
 ## Pull Requests
 * Die in Branches abgelegten Commits gelangen nur über Pull Requests im **dev- oder stable Branch**.

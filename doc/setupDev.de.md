@@ -105,7 +105,7 @@ Jetzt müssen die Node-Modules installiert werden:
 
 Es werden alle Abhängigkeiten installiert.
 
-Falls Addons genutzt werden sollen, siehe hier für weitere Informationen bezüglich **[Addons](/doc/addons_vue.md)**.
+Falls Addons genutzt werden sollen, siehe hier für weitere Informationen bezüglich **[Addons](addonsVue.de.md)**.
 
 
 ## npm start
@@ -123,7 +123,7 @@ Einen lokalen Entwicklungsserver starten.
 
 
 ## npm run test
-Unittests durchführen. Dabei werden auch die Unittests der Addons ausgeführt (siehe **[addons](../addons_vue.md)**).
+Unittests durchführen. Dabei werden auch die Unittests der Addons ausgeführt (siehe **[addons](addonsVue.de.md)**).
 
 ```
 // Alle Unit Tests
@@ -221,7 +221,6 @@ für alle npm-Pakete:
 
 ## 6.	Debugger auswählen (1) und starten (2)
 ![Debugger auswählen und starten](https://i.stack.imgur.com/aJatw.png)
-
 
 ## 7.	Breakpoint setzen
 ![Breakpoint setzen](https://docs.microsoft.com/en-us/sharepoint/dev/images/vscode-debugging-breakpoint-configured.png)
