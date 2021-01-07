@@ -23,7 +23,7 @@ const initialState = Object.assign({}, stateDraw),
          * Adds an interaction to the current map instance.
          *
          * @param {Object} context actions context object.
-         * @param {ol/interaction/Interaction} interaction interaction with the map.
+         * @param {module:ol/interaction/Interaction} interaction interaction with the map.
          * @returns {undefined}
          */
         addInteraction ({rootState}, interaction) {
@@ -47,9 +47,9 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {Object} prm Parameter object.
-         * @param {ol/Feature} prm.feature Line, Polygon or Point.
+         * @param {moduke:ol/Feature} prm.feature Line, Polygon or Point.
          * @param {String} prm.targetProjection Target projection if the projection differs from the map's projection.
-         * @returns {ol/coordinate~Coordinate} Coordinates of the center point of the geometry.
+         * @returns {module:ol/coordinate~Coordinate} Coordinates of the center point of the geometry.
          */
         createCenterPoint ({rootState}, {feature, targetProjection}) {
             let centerPoint,
@@ -288,7 +288,7 @@ const initialState = Object.assign({}, stateDraw),
         /**
          * adds selected values from the state to the "drawState" of the given feature
          * @param {Object} context actions context object.
-         * @param {ol/Feature} feature the openlayer feature to append the current "drawState" to
+         * @param {module:ol/Feature} feature the openlayer feature to append the current "drawState" to
          * @returns {undefined}
          */
         addDrawStateToFeature ({getters}, feature) {
@@ -419,7 +419,7 @@ const initialState = Object.assign({}, stateDraw),
          * Removes the given interaction from the current map instance.
          *
          * @param {Object} context actions context object.
-         * @param {ol/interaction/Interaction} interaction interaction with the map
+         * @param {module:ol/interaction/Interaction} interaction interaction with the map
          * @returns {undefined}
          */
         removeInteraction ({rootState}, interaction) {

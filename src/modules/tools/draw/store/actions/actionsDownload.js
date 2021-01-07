@@ -8,7 +8,7 @@ import {transform, transformPoint} from "../../utils/download/transformGeometry"
  * Converts the features from OpenLayers Features to features in the chosen format.
  *
  * @param {Object} context actions context object.
- * @param {ol/format} format Format in which the features should be saved.
+ * @param {module:ol/format} format Format in which the features should be saved.
  * @returns {string} The features written in the chosen format as a String.
  */
 async function convertFeatures ({state, dispatch}, format) {
@@ -95,8 +95,10 @@ function prepareDownload ({state, commit, dispatch}) {
  * @param {Object} context actions context object.
  * @returns {undefined}
  */
-function setDownloadFeatures ({state, commit}) {
-    const features = state.layer.getSource().getFeatures();
+function setDownloadFeatures ({state, commit, dispatch}) {
+    const {download} = state,
+        features = state.layer.getSource().getFeatures(),
+        {fileName, selectedFormat} = download;
 
     features.forEach(feature => {
         const geometry = feature.getGeometry();
@@ -108,6 +110,9 @@ function setDownloadFeatures ({state, commit}) {
     });
 
     commit("setDownloadFeatures", features);
+    commit("setDownloadDisabled", features.length === 0 || fileName === "" || selectedFormat === "" || selectedFormat === "none");
+    dispatch("prepareData");
+    dispatch("prepareDownload");
 }
 
 /**
@@ -123,16 +128,17 @@ function setDownloadFeatures ({state, commit}) {
 function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
     const {download} = state,
         features = state.layer.getSource().getFeatures(),
+        length = features.length,
         {selectedFormat} = download,
         {value} = currentTarget;
 
     commit("setDownloadFileName", value);
 
-    if (features.length > 0) {
+    if (length > 0) {
         dispatch("prepareDownload");
     }
 
-    commit("setDownloadDisabled", value === "" || selectedFormat === "" || selectedFormat === "none");
+    commit("setDownloadDisabled", length === 0 || value === "" || selectedFormat === "" || selectedFormat === "none");
 }
 
 /**
@@ -147,15 +153,16 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
  */
 async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTarget}) {
     const features = state.layer.getSource().getFeatures(),
+        length = features.length,
         {value} = currentTarget;
 
     commit("setDownloadSelectedFormat", value);
-    if (features.length > 0) {
+    if (length > 0) {
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }
 
-    commit("setDownloadDisabled", state.download.fileName === "" || value === "" || value === "none");
+    commit("setDownloadDisabled", length === 0 || state.download.fileName === "" || value === "" || value === "none");
 }
 
 /**
@@ -163,7 +170,7 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTar
  * If the geometry is not an instance of ol/LineString, ol/Point or ol/Polygon an Alert is send to the user.
  *
  * @param {Object} context actions context object.
- * @param {ol/geom/Geometry} geometry Geometry to be transformed.
+ * @param {module:ol/geom/Geometry} geometry Geometry to be transformed.
  * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)|[]} The transformed Geometry or an empty array.
  */
 function transformCoordinates ({dispatch}, geometry) {

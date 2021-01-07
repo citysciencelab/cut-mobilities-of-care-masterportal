@@ -542,7 +542,7 @@
                   "format": "Format",
                   "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
                   "pleaseChoose": "Please choose",
-                  "unknownGeometry": "Unknown geometry:<br><strong>{{geometry}}</strong>"
+                  "unknownGeometry": "Unknown geometry: <strong>{{geometry}}</strong>"
                 },
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
