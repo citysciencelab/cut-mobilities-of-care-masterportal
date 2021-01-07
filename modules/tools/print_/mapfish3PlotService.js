@@ -590,7 +590,6 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale <= layer.getMinResolution()) {
                 invisibleLayer.push(layer);
                 invisibleLayerNames += "- " + layer.get("name") + "<br>";
-                layer.setVisible(false);
                 if (layerModel !== undefined) {
                     layerModel.setIsOutOfRange(true);
                 }
