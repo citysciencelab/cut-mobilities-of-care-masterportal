@@ -47,7 +47,7 @@ const initialState = Object.assign({}, stateDraw),
          *
          * @param {Object} context actions context object.
          * @param {Object} prm Parameter object.
-         * @param {moduke:ol/Feature} prm.feature Line, Polygon or Point.
+         * @param {module:ol/Feature} prm.feature Line, Polygon or Point.
          * @param {String} prm.targetProjection Target projection if the projection differs from the map's projection.
          * @returns {module:ol/coordinate~Coordinate} Coordinates of the center point of the geometry.
          */
