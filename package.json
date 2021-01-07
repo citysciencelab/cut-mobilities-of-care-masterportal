@@ -72,7 +72,7 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@intlify/vue-i18n-loader": "^0.6.1",
-    "@masterportal/mpconfigparser": "^1.0.0",
+    "@masterportal/mpconfigparser": "^1.1.1",
     "@vue/test-utils": "^1.0.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
@@ -130,7 +130,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
+      "pre-push": "node ./node_modules/@masterportal/mpconfigparser/cli.js ./doc/config.json.md ./doc/config.json.de.md && eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
   }
 }

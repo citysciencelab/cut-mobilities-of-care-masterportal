@@ -8,7 +8,7 @@ pipelines:
                     - node
                 script:
                     - npm install
-                    - node ./node_modules/@masterportal/mpconfigparser/cli.js ./doc/config.json.md
+                    - node ./node_modules/@masterportal/mpconfigparser/cli.js ./doc/config.json.md ./doc/config.json.de.md
         build and test in Browser:
             - step:
                 caches:
