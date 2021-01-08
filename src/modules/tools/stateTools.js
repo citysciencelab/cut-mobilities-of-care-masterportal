@@ -1,8 +1,9 @@
 import Draw from "./draw/components/Draw.vue";
-import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
-import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
+import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
+import StyleVT from "./styleVT/components/StyleVT";
+import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -12,10 +13,11 @@ import Gfi from "./gfi/components/Gfi.vue";
 const state = {
     componentMap: {
         draw: Draw,
-        scaleSwitcher: ScaleSwitcher,
-        supplyCoord: SupplyCoord,
         fileImport: FileImport,
-        gfi: Gfi
+        gfi: Gfi,
+        scaleSwitcher: ScaleSwitcher,
+        styleVT: StyleVT,
+        supplyCoord: SupplyCoord
     },
     configuredTools: []
 };
