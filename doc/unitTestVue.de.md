@@ -1,7 +1,7 @@
 ## Unit Tests ##
 
 **Beispiel:**
-*masterportal/src/modules/tools/scale/tests*
+*masterportal/src/modules/tools/scaleSwitcher/tests*
 
 **Aufrufe**:
 
@@ -19,7 +19,7 @@ Die Tests *.spec.js liegen neben der Komponente und dem Store. Hier am Beispiel 
 src
 |-- modules
 |   |-- tools
-|   |   |-- scale
+|   |   |-- scaleSwitcher
 |   |   |   |-- components
 |   |   |	|   |-- ScaleSwitcher.vue
 |   |   |   |   |-- ...
@@ -48,7 +48,8 @@ src
 
 **BeispielStruktur: Komponente testen**
 
-Komponente *modules/tools/scale/components/ScaleSwitcher.vue*
+
+Komponente *modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*
 ```js
 
 import Vuex from "vuex";
@@ -178,8 +179,10 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
 ```
 **BeispielStruktur: getters testen**
 
-Datei *modules/tools/scale/store/gettersScaleSwitcher.js*
+
+Datei *modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js*
 ```js
+
 import {expect} from "chai";
 import getters from "../../../store/gettersScaleSwitcher";
 import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
@@ -208,7 +211,7 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
 ```
 **BeispielStruktur: actions testen**
 
-Datei *modules/tools/scale/store/actionsScaleSwitcher.js*
+Datei *modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js*
 
 Es wird die Funktion *testAction* aus *test/unittests/VueTestUtils* genutzt.
 ```js
@@ -251,8 +254,10 @@ describe("src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js", () => 
 ```
 
 **BeispielStruktur: mutations testen**
-Datei *modules/tools/scale/store/mutationsScaleSwitcher.js*
+
+Datei *modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js*
 ```js
+
 import {expect} from "chai";
 import mutations from "../../../store/mutationsScaleSwitcher";
 
