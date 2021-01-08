@@ -18,6 +18,11 @@ const mutations = {
     setCoordinateSystem: (state, selectedCoordSystem) => {
         state.currentSelection = selectedCoordSystem;
     },
+    /**
+     * Sets the example values to state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
     setExample (state) {
         if (state.currentSelection === "ETRS89") {
             state.coordinatesEastingExample = "564459.13";
@@ -31,6 +36,32 @@ const mutations = {
             state.coordinatesEastingExample = "53.55555°";
             state.coordinatesNorthingExample = "10.01234°";
         }
+    },
+    /**
+     * Resets the selectedCoordinates Array in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    resetSelectedCoordinates: (state) => {
+        state.selectedCoordinates = [];
+    },
+    /**
+     * Resets the error messages in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    resetErrorMessages: (state) => {
+        state.coordinatesEasting.errorMessage = "";
+        state.coordinatesNorthing.errorMessage = "";
+    },
+    /**
+     * Pushes the coordinates to selectedCoordinates Array in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @param {Object} payload payload object.
+     * @returns {void}
+     */
+    pushCoordinates: (state, payload) => {
+        state.selectedCoordinates.push(payload);
     }
 };
 

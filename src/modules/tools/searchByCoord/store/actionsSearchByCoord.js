@@ -50,5 +50,70 @@ export default {
         const newCoords = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
 
         commit("Map/setCenter", newCoords, {root: true});
+    },
+    /**
+     * Validates the user-input depending on the selected projection and sets the error messages.
+     * If valid, the coordinates will be pushed in the selectedCoordinates array.
+     * @param {Array} coords the coordinates the user entered
+     * @returns {void}
+     */
+    validateInput ({state, commit}, coords) {
+        const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
+            validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
+            validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
+            coordinates = coords;
+
+        commit("resetSelectedCoordinates");
+
+        if (state.currentSelection === "ETRS89") {
+            for (const coord of coordinates) {
+                if (coord.value === "" || coord.value.length < 1) {
+                    coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                }
+                else if (!coord.value.match(validETRS89)) {
+                    const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
+
+                    coord.errorMessage = coord.id === "easting" ? noMatch + state.coordinatesEastingExample : noMatch + state.coordinatesNorthingExample;
+                }
+                else {
+                    commit("resetErrorMessages");
+                    commit("pushCoordinates", coord.value);
+                }
+            }
+        }
+        if (state.currentSelection === "WGS84") {
+            for (const coord of coordinates) {
+
+                if (coord.value === "" || coord.value.length < 1) {
+                    coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
+                }
+                else if (!coord.value.match(validWGS84)) {
+                    const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
+
+                    coord.errorMessage = coord.id === "easting" ? noMatch + state.coordinatesEastingExample : noMatch + state.coordinatesNorthingExample;
+                }
+                else {
+                    commit("resetErrorMessages");
+                    commit("pushCoordinates", coord.value.split(/[\s°′″'"´`]+/));
+                }
+            }
+        }
+        if (state.currentSelection === "WGS84(Dezimalgrad)") {
+            for (const coord of coordinates) {
+
+                if (coord.value === "" || coord.value.length < 1) {
+                    coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
+                }
+                else if (!coord.value.match(validWGS84_dez)) {
+                    const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
+
+                    coord.errorMessage = coord.id === "easting" ? noMatch + state.coordinatesEastingExample : noMatch + state.coordinatesNorthingExample;
+                }
+                else {
+                    commit("resetErrorMessages");
+                    commit("pushCoordinates", coord.value.split(/[\s°]+/));
+                }
+            }
+        }
     }
 };

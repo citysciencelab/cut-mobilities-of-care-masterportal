@@ -15,9 +15,6 @@ export default {
         return {
             mapElement: document.getElementById("map"),
             currentCoordinateSystem: "ETRS89",
-            coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
-            coordinatesNorthing: {id: "northing", name: "", value: "", errorMessage: ""},
-            selectedCoordinates: [],
             transformedCoordinates: []
         };
     },
@@ -28,6 +25,14 @@ export default {
         },
         coordinatesNorthingExample: function () {
             return state.coordinatesNorthingExample;
+        },
+        selectedCoordinates: {
+            get () {
+                return state.selectedCoordinates;
+            },
+            set (newValue) {
+                this.setSelectedCoordinates(newValue);
+            }
         }
     },
     created () {
@@ -46,7 +51,8 @@ export default {
             "removeMarker",
             "setCenter",
             "setZoom",
-            "setExample"
+            "setExample",
+            "validateInput"
         ]),
         /**
          * Closes this tool window by setting active to false and removes the marker if it was placed.
@@ -95,74 +101,6 @@ export default {
             return "modules.tools.searchByCoord." + type + "." + key;
         },
         /**
-         * Validates the user-input depending on the selected projection and sets the error messages.
-         * If valid, the coordinates will be pushed in the selectedCoordinates array.
-         * @param {String} coordinatesEasting the coordinates user entered
-         * @param {String} coordinatesNorthing the coordinates user entered
-         * @returns {void}
-         */
-        validateInput (coordinatesEasting, coordinatesNorthing) {
-            const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
-                validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
-                validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
-                coordinates = [coordinatesEasting, coordinatesNorthing];
-
-            this.selectedCoordinates = [];
-            if (this.currentCoordinateSystem === "ETRS89") {
-                for (const coord of coordinates) {
-                    if (coord.value === "" || coord.value.length < 1) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
-                    }
-                    else if (!coord.value.match(validETRS89)) {
-                        const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
-
-                        coord.errorMessage = coord.id === "easting" ? noMatch + this.coordinatesEastingExample : noMatch + this.coordinatesNorthingExample;
-                    }
-                    else {
-                        coordinatesEasting.errorMessage = "";
-                        coordinatesNorthing.errorMessage = "";
-                        this.selectedCoordinates.push(coord.value);
-                    }
-                }
-            }
-            if (this.currentCoordinateSystem === "WGS84") {
-                for (const coord of coordinates) {
-
-                    if (coord.value === "" || coord.value.length < 1) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
-                    }
-                    else if (!coord.value.match(validWGS84)) {
-                        const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
-
-                        coord.errorMessage = coord.id === "easting" ? noMatch + this.coordinatesEastingExample : noMatch + this.coordinatesNorthingExample;
-                    }
-                    else {
-                        coordinatesEasting.errorMessage = "";
-                        coordinatesNorthing.errorMessage = "";
-                        this.selectedCoordinates.push(coord.value.split(/[\s°′″'"´`]+/));
-                    }
-                }
-            }
-            if (this.currentCoordinateSystem === "WGS84(Dezimalgrad)") {
-                for (const coord of coordinates) {
-
-                    if (coord.value === "" || coord.value.length < 1) {
-                        coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
-                    }
-                    else if (!coord.value.match(validWGS84_dez)) {
-                        const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
-
-                        coord.errorMessage = coord.id === "easting" ? noMatch + this.coordinatesEastingExample : noMatch + this.coordinatesNorthingExample;
-                    }
-                    else {
-                        coordinatesEasting.errorMessage = "";
-                        coordinatesNorthing.errorMessage = "";
-                        this.selectedCoordinates.push(coord.value.split(/[\s°]+/));
-                    }
-                }
-            }
-        },
-        /**
          * Sets coordinates name for error messages and calls the validation function.
          * When valid coordinates were entered the transformCoordinates gets called.
          * @param {String} coordinatesEasting the coordinates user entered
@@ -170,9 +108,11 @@ export default {
          * @returns {void}
          */
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
+            const coords = [coordinatesEasting, coordinatesNorthing];
+
             this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
-            this.validateInput(coordinatesEasting, coordinatesNorthing);
+            this.validateInput(coords);
             this.transformCoordinates();
         },
         /**

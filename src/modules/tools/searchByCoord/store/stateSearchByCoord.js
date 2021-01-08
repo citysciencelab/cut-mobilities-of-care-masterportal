@@ -6,6 +6,8 @@ const state = {
     mapProjection: null,
     positionMapProjection: [],
     updatePosition: true,
+    coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
+    coordinatesNorthing: {id: "northing", name: "", value: "", errorMessage: ""},
     coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
     currentProjectionName: "EPSG:25832",
     currentProjection: null,
@@ -14,6 +16,7 @@ const state = {
     coordinatesNorthingField: "",
     coordinatesEastingExample: "",
     coordinatesNorthingExample: "",
+    selectedCoordinates: [],
     zoomLevel: 7,
     // mandatory defaults for config.json parameters
     name: "Koordinatensuche",
