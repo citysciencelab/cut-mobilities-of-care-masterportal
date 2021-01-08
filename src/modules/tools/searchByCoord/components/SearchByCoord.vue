@@ -14,9 +14,7 @@ export default {
     data: function () {
         return {
             mapElement: document.getElementById("map"),
-            coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
             currentCoordinateSystem: "ETRS89",
-            zoomLevel: 7,
             coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
             coordinatesNorthing: {id: "northing", name: "", value: "", errorMessage: ""},
             selectedCoordinates: [],

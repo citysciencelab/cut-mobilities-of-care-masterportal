@@ -6,6 +6,7 @@ const state = {
     mapProjection: null,
     positionMapProjection: [],
     updatePosition: true,
+    coordinateSystems: ["ETRS89", "WGS84", "WGS84(Dezimalgrad)"],
     currentProjectionName: "EPSG:25832",
     currentProjection: null,
     currentSelection: "ETRS89",
@@ -13,6 +14,7 @@ const state = {
     coordinatesNorthingField: "",
     coordinatesEastingExample: "",
     coordinatesNorthingExample: "",
+    zoomLevel: 7,
     // mandatory defaults for config.json parameters
     name: "Koordinatensuche",
     glyphicon: "glyphicon-record",
