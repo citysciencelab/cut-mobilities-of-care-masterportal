@@ -4,29 +4,16 @@ export default {
      * @param {String} value - currently selected coordinate System
      * @returns {void}
      */
-    newCoordSystemSelected ({state}, value) {
-        const selectedCoordSystem = value;
-
-        state.currentSelection = selectedCoordSystem;
+    newCoordSystemSelected ({commit}, value) {
+        commit("setCoordinateSystem", value);
     },
     /**
-         * Sets the example messages according to the selected coordinate system.
-         * @param {Array} coordinates from the validated coordinates
-         * @returns {void}
-         */
-    setExample ({state}) {
-        if (state.currentSelection === "ETRS89") {
-            state.coordinatesEastingExample = "564459.13";
-            state.coordinatesNorthingExample = "5935103.67";
-        }
-        else if (state.currentSelection === "WGS84") {
-            state.coordinatesEastingExample = "53° 33′ 25″";
-            state.coordinatesNorthingExample = "9° 59′ 50″";
-        }
-        else if (state.currentSelection === "WGS84(Dezimalgrad)") {
-            state.coordinatesEastingExample = "53.55555°";
-            state.coordinatesNorthingExample = "10.01234°";
-        }
+     * Sets the example messages according to the selected coordinate system.
+     * @param {Array} coordinates from the validated coordinates
+     * @returns {void}
+     */
+    setExample ({commit}) {
+        commit("setExample");
     },
     /**
      * Remembers the projection and shows mapmarker at the given position.
