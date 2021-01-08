@@ -4,7 +4,6 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
 import state from "../store/stateSearchByCoord";
-import proj4 from "proj4";
 
 export default {
     name: "SearchByCoord",
@@ -14,8 +13,7 @@ export default {
     data: function () {
         return {
             mapElement: document.getElementById("map"),
-            currentCoordinateSystem: "ETRS89",
-            transformedCoordinates: []
+            currentCoordinateSystem: "ETRS89"
         };
     },
     computed: {
@@ -42,6 +40,7 @@ export default {
     },
     beforeUpdate () {
         this.resetValues();
+        this.resetErrorMessages();
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
@@ -52,7 +51,10 @@ export default {
             "setCenter",
             "setZoom",
             "setExample",
-            "validateInput"
+            "validateInput",
+            "transformCoordinates",
+            "resetValues",
+            "resetErrorMessages"
         ]),
         /**
          * Closes this tool window by setting active to false and removes the marker if it was placed.
@@ -70,16 +72,6 @@ export default {
             }
         },
         /**
-         * Resets the coordinate values and error messages.
-         * @returns {void}
-         */
-        resetValues () {
-            this.coordinatesEasting.errorMessage = "";
-            this.coordinatesEasting.value = "";
-            this.coordinatesNorthing.errorMessage = "";
-            this.coordinatesNorthing.value = "";
-        },
-        /**
          * Called if selection of projection changed.
          * @returns {void}
          */
@@ -88,6 +80,7 @@ export default {
             this.setExample();
             this.removeMarker();
             this.resetValues();
+            this.resetErrorMessages();
         },
         /**
          * Returns the label name depending on the selected projection.
@@ -114,43 +107,9 @@ export default {
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coords);
             this.transformCoordinates();
-        },
-        /**
-         * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
-         * @returns {void}
-         */
-        transformCoordinates () {
-            if (this.selectedCoordinates.length === 2) {
-                this.setZoom(this.zoomLevel);
-                if (this.currentCoordinateSystem !== "ETRS89") {
-                    const latitude = this.selectedCoordinates[0],
-                        newLatitude = Number(latitude[0]) +
-                (Number(latitude[1] ? latitude[1] : 0) / 60) +
-                (Number(latitude[2] ? latitude[2] : 0) / 60 / 60),
-                        longitude = this.selectedCoordinates[1],
-                        newLongitude = Number(longitude[0]) +
-                (Number(longitude[1] ? longitude[1] : 0) / 60) +
-                (Number(longitude[2] ? longitude[2] : 0) / 60 / 60);
-
-                    this.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [newLongitude, newLatitude]); // turning the coordinates around to make it work for WGS84
-
-                    this.moveToCoordinates(this.transformedCoordinates);
-                }
-                else {
-                    this.moveToCoordinates(this.selectedCoordinates);
-                }
-            }
-        },
-        /**
-         * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
-         * @param {Array} coordinates from the validated coordinates
-         * @returns {void}
-         */
-        moveToCoordinates (coordinates) {
-            this.setMarker(coordinates);
-            this.setCenter(coordinates);
         }
-    }};
+    }
+};
 </script>
 
 <template lang="html">

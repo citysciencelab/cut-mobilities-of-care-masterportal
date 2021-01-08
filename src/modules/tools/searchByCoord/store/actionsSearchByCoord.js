@@ -1,3 +1,5 @@
+import proj4 from "proj4";
+
 export default {
     /**
      * Sets the current coordinate System to state.
@@ -14,6 +16,22 @@ export default {
      */
     setExample ({commit}) {
         commit("setExample");
+    },
+    /**
+     * Resets the values of the coordinates.
+     * @param {Array} coordinates from the validated coordinates
+     * @returns {void}
+     */
+    resetValues ({commit}) {
+        commit("resetValues");
+    },
+    /**
+     * Resets the error messages of the coordinates.
+     * @param {Array} coordinates from the validated coordinates
+     * @returns {void}
+     */
+    resetErrorMessages ({commit}) {
+        commit("resetErrorMessages");
     },
     /**
      * Remembers the projection and shows mapmarker at the given position.
@@ -115,5 +133,39 @@ export default {
                 }
             }
         }
+    },
+    /**
+     * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
+     * @returns {void}
+     */
+    transformCoordinates ({state, dispatch}) {
+        if (state.selectedCoordinates.length === 2) {
+            dispatch("setZoom", state.zoomLevel);
+            if (state.currentSelection !== "ETRS89") {
+                const latitude = state.selectedCoordinates[0],
+                    newLatitude = Number(latitude[0]) +
+            (Number(latitude[1] ? latitude[1] : 0) / 60) +
+            (Number(latitude[2] ? latitude[2] : 0) / 60 / 60),
+                    longitude = state.selectedCoordinates[1],
+                    newLongitude = Number(longitude[0]) +
+            (Number(longitude[1] ? longitude[1] : 0) / 60) +
+            (Number(longitude[2] ? longitude[2] : 0) / 60 / 60);
+
+                state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [newLongitude, newLatitude]); // turning the coordinates around to make it work for WGS84
+                dispatch("moveToCoordinates", state.transformedCoordinates);
+            }
+            else {
+                dispatch("moveToCoordinates", state.selectedCoordinates);
+            }
+        }
+    },
+    /**
+     * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
+     * @param {Array} coordinates from the validated coordinates
+     * @returns {void}
+     */
+    moveToCoordinates ({dispatch}, coordinates) {
+        dispatch("setMarker", coordinates);
+        dispatch("setCenter", coordinates);
     }
 };

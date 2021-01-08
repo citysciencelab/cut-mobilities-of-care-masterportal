@@ -55,6 +55,15 @@ const mutations = {
         state.coordinatesNorthing.errorMessage = "";
     },
     /**
+     * Resets the coordinate values in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    resetValues: (state) => {
+        state.coordinatesEasting.value = "";
+        state.coordinatesNorthing.value = "";
+    },
+    /**
      * Pushes the coordinates to selectedCoordinates Array in the state.
      * @param {Object} state the state of searchByCoord-module
      * @param {Object} payload payload object.

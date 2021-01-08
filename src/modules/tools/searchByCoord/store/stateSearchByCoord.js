@@ -17,6 +17,7 @@ const state = {
     coordinatesEastingExample: "",
     coordinatesNorthingExample: "",
     selectedCoordinates: [],
+    transformedCoordinates: [],
     zoomLevel: 7,
     // mandatory defaults for config.json parameters
     name: "Koordinatensuche",
