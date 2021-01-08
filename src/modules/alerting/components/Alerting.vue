@@ -115,8 +115,12 @@ export default {
                 collectedAlertIds = [...collectedAlertIds, ...data.globalAlerts];
             }
 
-            if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object" && Array.isArray(data.restrictedAlerts[this.currentUrl])) {
-                collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[this.currentUrl]];
+            if (data.restrictedAlerts !== undefined && typeof data.restrictedAlerts === "object") {
+                Object.keys(data.restrictedAlerts).forEach(restrictedAlertUrl => {
+                    if (restrictedAlertUrl.toLowerCase() === this.currentUrl.toLowerCase() && Array.isArray(data.restrictedAlerts[restrictedAlertUrl])) {
+                        collectedAlertIds = [...collectedAlertIds, ...data.restrictedAlerts[restrictedAlertUrl]];
+                    }
+                });
             }
 
             for (const alertId in data.alerts) {
