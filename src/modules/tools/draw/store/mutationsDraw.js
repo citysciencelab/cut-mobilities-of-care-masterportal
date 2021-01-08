@@ -3,9 +3,6 @@ import initialState from "./stateDraw";
 
 const mutations = {
     ...generateSimpleMutations(initialState),
-    setDownloadBlob: (state, payload) => {
-        state.download.blob = payload;
-    },
     setDownloadDataString: (state, payload) => {
         state.download.dataString = payload;
     },
