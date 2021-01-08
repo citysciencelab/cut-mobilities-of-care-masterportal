@@ -371,7 +371,7 @@ export default {
     }
 }
 .win-body-vue {
-    padding: 20px;
+    padding: @padding;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     background-color: @background_color_1;

@@ -16,6 +16,12 @@ const getters = {
 
             return JSON.parse(JSON.stringify(state[stateKey]));
         };
+    },
+    disableDownload (state) {
+        const {download} = state,
+            {features, fileName, selectedFormat} = download;
+
+        return features.length === 0 || fileName === "" || selectedFormat === "" || selectedFormat === "none";
     }
 };
 

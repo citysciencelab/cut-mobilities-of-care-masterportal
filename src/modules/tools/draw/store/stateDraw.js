@@ -10,7 +10,6 @@ const symbol = {
      * @property {Object[]} deactivatedDrawInteractions Array of draw interactions which are deactivated in the process of the tool. Can be used to reactivate them from another point.
      * @property {Boolean} deactivateGFI If set to true, the activation of the tool deactivates the GFI tool.
      * @property {String} download.dataString Data that will be written to the file for the Download.
-     * @property {Boolean} download.disabled Whether the Download Button is disabled or not.
      * @property {module:ol/Feature[]} download.features Features that are drawn on the Map.
      * @property {String} download.file Name of the file including thr suffix.
      * @property {String} download.fileName Name for the to be downloaded file.
@@ -90,7 +89,6 @@ const symbol = {
         deactivateGFI: true,
         download: {
             dataString: "",
-            disabled: true,
             features: [],
             file: "",
             fileName: "",

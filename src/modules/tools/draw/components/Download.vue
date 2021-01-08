@@ -69,7 +69,7 @@ export default {
                 >
                     <button
                         class="btn btn-sm btn-block btn-lgv-grey"
-                        :disabled="download.disabled"
+                        :disabled="disableDownload"
                         type="button"
                     >
                         <span class="glyphicon glyphicon-floppy-disk" />
@@ -84,12 +84,19 @@ export default {
 <style lang="less" scoped>
 @import "~variables";
 
-#tool-draw-download a {
+a {
     color: #000;
 }
-#tool-draw-download .disabled {
+.disabled {
     cursor: not-allowed;
 }
+/* Fix for Firefox-Bug https://bugzilla.mozilla.org/show_bug.cgi?id=748518 */
+#tool-draw-download:after {
+    content: "";
+    height: @padding;
+    display: block;
+}
+
 #tool-draw-download-file {
     background-color: buttonface;
     text-decoration: none;

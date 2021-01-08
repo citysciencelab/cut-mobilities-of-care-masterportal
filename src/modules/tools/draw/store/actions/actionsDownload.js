@@ -96,9 +96,7 @@ function prepareDownload ({state, commit, dispatch}) {
  * @returns {undefined}
  */
 function setDownloadFeatures ({state, commit, dispatch}) {
-    const {download} = state,
-        features = state.layer.getSource().getFeatures(),
-        {fileName, selectedFormat} = download;
+    const features = state.layer.getSource().getFeatures();
 
     features.forEach(feature => {
         const geometry = feature.getGeometry();
@@ -110,7 +108,6 @@ function setDownloadFeatures ({state, commit, dispatch}) {
     });
 
     commit("setDownloadFeatures", features);
-    commit("setDownloadDisabled", features.length === 0 || fileName === "" || selectedFormat === "" || selectedFormat === "none");
     dispatch("prepareData");
     dispatch("prepareDownload");
 }
@@ -126,10 +123,8 @@ function setDownloadFeatures ({state, commit, dispatch}) {
  * @returns {undefined}
  */
 function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
-    const {download} = state,
-        features = state.layer.getSource().getFeatures(),
+    const features = state.layer.getSource().getFeatures(),
         length = features.length,
-        {selectedFormat} = download,
         {value} = currentTarget;
 
     commit("setDownloadFileName", value);
@@ -137,8 +132,6 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
     if (length > 0) {
         dispatch("prepareDownload");
     }
-
-    commit("setDownloadDisabled", length === 0 || value === "" || selectedFormat === "" || selectedFormat === "none");
 }
 
 /**
@@ -161,8 +154,6 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTar
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }
-
-    commit("setDownloadDisabled", length === 0 || state.download.fileName === "" || value === "" || value === "none");
 }
 
 /**
