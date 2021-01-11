@@ -51,7 +51,7 @@ export default {
         dispatch("MapMarker/removePointMarker", null, {root: true});
     },
     /**
-     * Removes the marker from selected position.
+     * Sets the zoom level to the map.
      * @param {Number} zoomLevel - Zoomlevel to zoom to
      * @returns {void}
      */
