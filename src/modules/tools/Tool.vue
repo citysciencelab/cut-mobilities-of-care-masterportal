@@ -47,6 +47,7 @@ export default {
     },
     watch: {
         active (newValue) {
+            console.log(1);
             const modelCollection = Radio.request("ModelList", "getCollection"),
                 gfiModel = modelCollection ? modelCollection.findWhere({id: "gfi"}) : undefined;
 

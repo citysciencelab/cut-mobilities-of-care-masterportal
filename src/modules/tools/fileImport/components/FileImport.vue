@@ -111,7 +111,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.fileImport.title')"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
