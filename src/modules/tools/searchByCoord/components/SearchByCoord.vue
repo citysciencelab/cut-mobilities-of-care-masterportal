@@ -24,6 +24,9 @@ export default {
         coordinatesNorthingExample: function () {
             return state.coordinatesNorthingExample;
         },
+        /**
+         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
+         */
         selectedCoordinates: {
             get () {
                 return state.selectedCoordinates;
@@ -72,7 +75,7 @@ export default {
             }
         },
         /**
-         * Called if selection of projection changed.
+         * Called if selection of coordinate system changed.
          * @returns {void}
          */
         selectionChanged () {
@@ -83,7 +86,7 @@ export default {
             this.resetErrorMessages();
         },
         /**
-         * Returns the label name depending on the selected projection.
+         * Returns the label name depending on the selected coordinate system.
          * @param {String} key in the language files
          * @returns {String} the name of the label
          */
@@ -95,7 +98,7 @@ export default {
         },
         /**
          * Sets coordinates name for error messages and calls the validation function.
-         * When valid coordinates were entered the transformCoordinates gets called.
+         * When valid coordinates were entered the transformCoordinates function gets called.
          * @param {String} coordinatesEasting the coordinates user entered
          * @param {String} coordinatesNorthing the coordinates user entered
          * @returns {void}
