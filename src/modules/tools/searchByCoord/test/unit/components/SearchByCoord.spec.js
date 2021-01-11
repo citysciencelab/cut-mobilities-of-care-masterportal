@@ -72,12 +72,5 @@ describe("src/modules/tools/supplyCoord/components/SearchByCoord.vue", () => {
             expect(store.state.Tools.SearchByCoord.active).to.be.false;
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
-        it("method validateInput validates the user-input", () => {
-            const coordSystem = "EPSG:25832";
-
-            wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
-            wrapper.vm.setExample(coordSystem);
-            expect(store.state.Tools.SearchByCoord.coordinatesEastingExample).to.be.equals("564459.13");
-        });
     });
 });
