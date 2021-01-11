@@ -3,7 +3,7 @@
 [TOC]
 
 # services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS [SensorThings-API](sensorThings.de.md)) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und [SensorThings-API](sensorThings.de.md) (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
+Die den Portalen zur Verfügung stehenden Dienste (WMS, WFS [SensorThings-API](sensorThings.de.md und Weitere)) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/Basic/resources/*  *services-internet.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS, [SensorThings-API](sensorThings.de.md) und anderen Dienstetypen.
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ***

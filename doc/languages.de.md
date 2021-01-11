@@ -188,22 +188,20 @@ Es gibt folgende Möglichkeiten und folgende Hierarchie:
 * "name": "translate#common:foo.bar.exampleMenuTitle" --> wird übersetzt, wenn der Key existiert
 * kein Name angegeben (das Feld Name existiert nicht) --> Name kommt aus der model.js (hier ../tools/draw/model.js)
 
-#### Werkzeugname in der model.js definieren
+#### Werkzeugname in der state.js definieren
 
-Wenn das Feld "name" in der model.js gefüllt ist, wird es als Default-Name angesehen, der nicht übersetzt wird.
+Wenn das Feld "name" in der state.js gefüllt ist, wird es als Default-Name angesehen, der nicht übersetzt wird.
 ```
-const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
-    defaults: Object.assign({}, Tool.prototype.defaults, {
-        name: "Zeichnen / Schreiben",
-        ...
+const state = {
+    name: "Zeichnen / Schreiben",
+    ...
 ```
 
-Soll er übersetzt werden, kann im Feld "nameTranslationKey" der Key für die Übersetzung des Namens eingegeben werden.
+Soll er übersetzt werden, kann im Feld "name" der Key für die Übersetzung des Namens eingegeben werden.
 ```
-const DrawTool = Tool.extend(/** @lends DrawTool.prototype */{
-    defaults: Object.assign({}, Tool.prototype.defaults, {
-        nameTranslationKey: "common:menu.tools.draw",
-        ...
+const state = {
+    name: "common:menu.tools.draw",
+    ...
 ```
 ## Übersetzungen in den addons
 
