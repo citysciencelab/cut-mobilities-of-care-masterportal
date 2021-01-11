@@ -5,16 +5,7 @@ import SearchByCoordComponent from "../../../components/SearchByCoord.vue";
 import SearchByCoord from "../../../store/indexSearchByCoord";
 
 const localVue = createLocalVue(),
-    etrs89Coord = ["5935103,67", "564459.13"],
-    etrs89ErrCoordNorthing = ["5935103,67", "qwertz"],
-    etrs89ErrCoordEasting = ["qwertz", "564459.13"],
-    wgs84Coord = ["9° 30` 50``", "53° 10' 55\""],
-    wgs84ErrCoordNorthing = ["9° 59' 50", "qwertz"],
-    wgs84ErrCoordEasting = ["qwertz", "53° 33` 25"],
-    wgsDezimalCoord = ["53.5555°", "10,01234"],
-    wgsDezimalErrCoordNorthing = ["53.5555°", "qwertz"],
-    wgsDezimalErrCoordEasting = ["qwertz","10,01234"],
-    undefCoord = [];
+    etrs89Coord = ["5935103,67", "564459.13"];
 
 localVue.use(Vuex);
 config.mocks.$t = key => key;
