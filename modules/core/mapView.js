@@ -47,6 +47,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
      */
     initialize: function () {
         const channel = Radio.channel("MapView");
+        let params = {};
 
         if (this.get("settings") !== undefined && this.get("settings").options !== undefined) {
             this.setOptions(this.get("settings").options);
@@ -106,7 +107,11 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             Radio.trigger("MapView", "changedCenter", this.getCenter());
             Radio.trigger("RemoteInterface", "postMessage", {"centerPosition": this.getCenter()});
         }, this);
-        Radio.trigger("MapView", "changedOptions", Radio.request("Util", "findWhereJs", this.get("options"), {resolution: this.get("view").getConstrainedResolution(this.get("view").getResolution())}));
+
+        params = Radio.request("Util", "findWhereJs", this.get("options"), {resolution: this.get("view").getConstrainedResolution(this.get("view").getResolution())});
+
+        Radio.trigger("MapView", "changedOptions", params);
+        store.commit("Map/setScale", params?.scale);
         // NOTE: used for scaleSwitcher-tutorial
         store.commit("Map/setScales", {scales: this.get("options").map(function (option) {
             return option.scale;
@@ -130,6 +135,7 @@ const MapView = Backbone.Model.extend(/** @lends MapView.prototype */{
             params = Radio.request("Util", "findWhereJs", this.get("options"), {resolution: constrainResolution});
 
         Radio.trigger("MapView", "changedOptions", params);
+        store.commit("Map/setScale", params?.scale);
         Radio.trigger("MapView", "changedZoomLevel", this.getZoom());
         Radio.trigger("ClickCounter", "zoomChanged");
         Radio.trigger("RemoteInterface", "postMessage", {"zoomLevel": this.getZoom()});
