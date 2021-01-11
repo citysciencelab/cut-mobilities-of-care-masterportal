@@ -1,6 +1,7 @@
 import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
+import store from "../../../../src/app-store";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
@@ -208,7 +209,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @returns {void}
      */
     openStyleVT: function () {
-        Radio.trigger("StyleVT", "open", this.model);
+        store.dispatch("Tools/StyleVT/setActive", {active: true, layerModel: this.model}, {root: true});
     },
 
     /**

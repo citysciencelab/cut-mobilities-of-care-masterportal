@@ -11,7 +11,7 @@ import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
-import StyleVT from "./styleVT/components/StyleVT";
+import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 
 /**
