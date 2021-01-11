@@ -18,6 +18,7 @@ describe("menu/desktop/folder/viewTree", function () {
             },
 
             isFolderSelectable: false,
+            isSecured: false,
 
             setIsFolderSelectable: function (value) {
                 this.isFolderSelectable = value;
@@ -29,7 +30,8 @@ describe("menu/desktop/folder/viewTree", function () {
                     "isLeafFolder": true,
                     "isSelected": false,
                     "name": "testFolder",
-                    "showAllTopicsText": "test"
+                    "showAllTopicsText": "test",
+                    "isSecured": false
                 };
             },
 
