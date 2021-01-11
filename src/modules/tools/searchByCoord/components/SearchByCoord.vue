@@ -18,12 +18,6 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
-        coordinatesEastingExample: function () {
-            return state.coordinatesEastingExample;
-        },
-        coordinatesNorthingExample: function () {
-            return state.coordinatesNorthingExample;
-        },
         /**
          * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
          */
