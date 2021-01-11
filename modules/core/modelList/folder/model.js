@@ -27,7 +27,9 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         showAllTopicsText: "",
         categoryText: "",
         toolsName: "",
-        securedAllTopicsText: ""
+        securedAllTopicsText: "",
+        categoryText: "",
+        toolsName: ""
     }),
     /**
      * @class Folder
