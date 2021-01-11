@@ -1,6 +1,8 @@
 import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
+import store from "../../../../src/app-store/index";
+import axios from "axios";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
@@ -145,16 +147,14 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
         const that = this;
 
-        $.ajax({
-            xhrFields: {
-                withCredentials: true
-            },
+        axios({
+            method: "get",
             url: this.model.get("authenticationUrl"),
-            type: "GET",
-            success: successFunction,
-            error: function () {
-                that.errorFunction(successFunction, isErrorCalled);
-            }
+            withCredentials: true
+        }).then(function () {
+            that.toggleIsSelected();
+        }).catch(function () {
+            that.errorFunction(successFunction, isErrorCalled);
         });
     },
 
@@ -162,7 +162,6 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * Error handling for triggering the browser basic authentication
      * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
      * @param {Number} isErrorCalled - Flag if the function is called from error function
-     * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
      */
     errorFunction: function (successFunction, isErrorCalled) {
@@ -174,8 +173,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.triggerBrowserAuthentication(successFunction, !isError);
         }
         else if (isError === true) {
-            Radio.trigger("Alert", "alert", {
-                text: "Entschuldigung, der abgeicherte Layer \"" + layerName + "\" konnte nicht geladen werden. Bitte wenden sie sich an den Administrator und teilen Sie ihm mit, ob Sie aufgefordert wurden einen Nutzernamen und ein Passwort einzugeben.",
+            store.dispatch("Alerting/addSingleAlert", {
+                category: i18next.t("common:modules.alerting.categories.error"),
+                displayClass: "error",
+                content: i18next.t("common:modules.menu.layer.basicAuthError") + "\"" + layerName + "\"",
                 kategorie: "alert-danger"
             });
             console.warn("Triggering the basic browser authentication for the secured layer \"" + layerName + "\" was not successfull. Something went wrong with the authenticationUrl (" + authenticationUrl + ")");

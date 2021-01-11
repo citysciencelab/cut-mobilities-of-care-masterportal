@@ -153,6 +153,11 @@
         "mapMarker": {
           "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."
         },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Entschuldigung, der abgesicherte Layer konnte nicht geladen werden. Bitte wenden Sie sich an den Administrator und teilen Sie ihm mit, ob Sie aufgefordert wurden einen Nutzernamen und ein Passwort einzugeben. </br> Abgesicherter Layer: "
+            }
+        },
         "featureViaURL": {
             "coordLabel": "Koordinaten",
             "featureLabel": "Beschriftung",

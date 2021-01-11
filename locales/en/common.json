@@ -152,6 +152,11 @@
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
         },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Sorry, the secured layer could not be loaded. Please contact the administrator and let him know if you were prompted to enter a username and password. </br> Secured layer: "
+            }
+        },
         "featureViaURL": {
             "coordLabel": "Coordinates",
             "featureLabel": "Label",
