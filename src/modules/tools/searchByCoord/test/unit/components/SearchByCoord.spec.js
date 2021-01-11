@@ -4,8 +4,7 @@ import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import SearchByCoordComponent from "../../../components/SearchByCoord.vue";
 import SearchByCoord from "../../../store/indexSearchByCoord";
 
-const localVue = createLocalVue(),
-    etrs89Coord = ["5935103,67", "564459.13"];
+const localVue = createLocalVue();
 
 localVue.use(Vuex);
 config.mocks.$t = key => key;
@@ -74,8 +73,7 @@ describe("src/modules/tools/supplyCoord/components/SearchByCoord.vue", () => {
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
         });
         it("method validateInput validates the user-input", () => {
-            const coordSystem = "EPSG:25832",
-                coordinates = etrs89Coord;
+            const coordSystem = "EPSG:25832";
 
             wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
             wrapper.vm.setExample(coordSystem);
