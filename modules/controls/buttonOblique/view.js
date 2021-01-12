@@ -160,20 +160,18 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
                 "displayClass": "info"
             });
         }
-        else {
-            if (Radio.request("Map", "isMap3d")) {
-                Radio.once("Map", "change", function (map) {
-                    if (map === "2D") {
-                        this.mapChange();
-                    }
-                }.bind(this));
-                Radio.trigger("Map", "deactivateMap3d");
-                return;
-            }
-            this.$("#ObliqueTable-title-open").hide();
-            this.$("#ObliqueTable-title-close").show();
-            Radio.trigger("ObliqueMap", "activate");
+        else if (Radio.request("Map", "isMap3d")) {
+            Radio.once("Map", "change", function (map) {
+                if (map === "2D") {
+                    this.mapChange();
+                }
+            }.bind(this));
+            Radio.trigger("Map", "deactivateMap3d");
+            return;
         }
+        this.$("#ObliqueTable-title-open").hide();
+        this.$("#ObliqueTable-title-close").show();
+        Radio.trigger("ObliqueMap", "activate");
     }
 });
 
