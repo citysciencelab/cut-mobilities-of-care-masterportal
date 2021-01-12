@@ -70,6 +70,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         zoomLevel: null,
         hintInfo: "",
         spec: new BuildSpecModel(),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         */
         useProxy: false
     }),
 
@@ -372,6 +376,11 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     downloadFile: function (fileUrl, filename) {
         const link = document.createElement("a");
 
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
         link.href = this.get("useProxy") ? getProxyUrl(fileUrl) : fileUrl;
         link.download = filename;
         link.click();
