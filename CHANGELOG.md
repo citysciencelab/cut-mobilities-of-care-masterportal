@@ -1,11 +1,12 @@
 # Changelog Masterportal
- Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
+ All important changes in this project are stored in this file.
 
- Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
+[Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
 
 ## Unreleased - in development
 ### Added
+- Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
 
 ### Changed
 - The language of the changelog has been changed to English.
@@ -14,6 +15,19 @@
 ### Removed
 
 ### Fixed
+
+---
+
+## v2.6.1 - 2021-01-07
+### Added
+- Eine Sprachdatei für Italienisch wurde hinzugefügt.
+
+### Fixed
+- Ein Fehler wurde behoben der verhindert hat, dass das Portal vollständig geladen wurde, wenn eine portalLanguage konfiguriert war.
+- Die Beschreibung des Attributes portalLanguage wurde aus der doc/config.json.md vollständig enfernt, da die Sprache in der config.js konfiguriert werden muss.
+- Die Scale Werte für die Maßstabsanzeige werden nun wieder aus der config.json bzw. aus den Defaults übernommen und angezeigt.
+- Ein Fehler wurde beseitigt, der auftrat, wenn zuerst nach einer Kita und danach nach einem Bebauungsplan gesucht wurde.
+- Wenn im Maßstab 1:500 gedruckt werden soll, dann wird eine Warnung angezeigt, die die nicht druckbaren Layer nennt. Die Kartenansicht im Browser ändert sich nicht.
 
 ---
 

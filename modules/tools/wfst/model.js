@@ -1065,10 +1065,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
 
     /**
      * Deletes a geometry from the map and from the database
+     * @param {Object} target - target feature to delete
      * @returns {void}
      */
-    delete: function () {
-        const target = this.get("interaction").getFeatures().item(0);
+    delete: function (target) {
         let xmlString;
 
         if (typeof target === "object" && target !== null) {
