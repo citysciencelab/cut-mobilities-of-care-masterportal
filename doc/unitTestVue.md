@@ -191,7 +191,7 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
     });
     describe("testing default values", () => {
         it("returns the name default value from state", () => {
-            expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
+            expect(name(stateScaleSwitcher)).to.be.equals("common:menu.tools.scaleSwitcher");
         });
         // (...) - test further default values
     });

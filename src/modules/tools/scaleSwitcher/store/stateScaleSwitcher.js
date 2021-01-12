@@ -13,9 +13,9 @@
  */
 const state = {
     active: false,
-    id: "common:menu.tools.scaleSwitcher",
+    id: "scaleSwitcher",
     // defaults for config.json parameters
-    name: "Maßstab umschalten",
+    name: "common:menu.tools.scaleSwitcher",
     glyphicon: "glyphicon-resize-full",
     renderToWindow: true,
     resizableWindow: true,
