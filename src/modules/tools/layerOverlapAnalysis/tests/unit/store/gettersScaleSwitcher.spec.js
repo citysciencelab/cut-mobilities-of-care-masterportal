@@ -1,6 +1,6 @@
 import {expect} from "chai";
-import getters from "../../../store/gettersScaleSwitcher";
-import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
+import getters from "../../../store/gettersLayerOverlapAnalysis";
+import stateLayerOverlapAnalysis from "../../../store/stateLayerOverlapAnalysis";
 
 
 const {
@@ -14,33 +14,33 @@ const {
     deactivateGFI
 } = getters;
 
-describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => {
-    describe("ScaleSwitcher getters", () => {
+describe("src/modules/tools/layerOverlapAnalysis/store/gettersLayerOverlapAnalysis.js", () => {
+    describe("LayerOverlapAnalysis getters", () => {
         it("returns the active from state", () => {
-            expect(active(stateScaleSwitcher)).to.be.false;
+            expect(active(stateLayerOverlapAnalysis)).to.be.false;
         });
         it("returns the id from state", () => {
-            expect(id(stateScaleSwitcher)).to.equals("scaleSwitcher");
+            expect(id(stateLayerOverlapAnalysis)).to.equals("layerOverlapAnalysis");
         });
     });
     describe("testing default values", () => {
         it("returns the name default value from state", () => {
-            expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
+            expect(name(stateLayerOverlapAnalysis)).to.be.equals("Layer-Überschneidung analysieren");
         });
         it("returns the glyphicon default value from state", () => {
-            expect(glyphicon(stateScaleSwitcher)).to.equals("glyphicon-resize-full");
+            expect(glyphicon(stateLayerOverlapAnalysis)).to.equals("glyphicon-resize-full");
         });
         it("returns the renderToWindow default value from state", () => {
-            expect(renderToWindow(stateScaleSwitcher)).to.be.true;
+            expect(renderToWindow(stateLayerOverlapAnalysis)).to.be.true;
         });
         it("returns the resizableWindow default value from state", () => {
-            expect(resizableWindow(stateScaleSwitcher)).to.be.true;
+            expect(resizableWindow(stateLayerOverlapAnalysis)).to.be.true;
         });
         it("returns the isVisibleInMenu default value from state", () => {
-            expect(isVisibleInMenu(stateScaleSwitcher)).to.be.true;
+            expect(isVisibleInMenu(stateLayerOverlapAnalysis)).to.be.true;
         });
         it("returns the deactivateGFI default value from state", () => {
-            expect(deactivateGFI(stateScaleSwitcher)).to.be.false;
+            expect(deactivateGFI(stateLayerOverlapAnalysis)).to.be.false;
         });
     });
 });
