@@ -606,8 +606,12 @@
                 "label": "Scale"
             },
           "layerOverlapAnalysis": {
-            "selectLabel": "Choose source layer",
-            "rangeLabel": "Choose radius",
+            "sourceSelectLabel": "source layer",
+            "targetSelectLabel": "target layer",
+            "resultTypeLabel": "result type",
+            "overlapping": "inside radius",
+            "notOverlapping": "outside radius",
+            "rangeLabel": "radius",
             "clearBtn": "Reset"
           }
         },

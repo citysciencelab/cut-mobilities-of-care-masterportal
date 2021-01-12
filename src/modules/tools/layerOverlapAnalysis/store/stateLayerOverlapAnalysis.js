@@ -1,4 +1,5 @@
 import * as jsts from "jsts/dist/jsts";
+import {Fill, Stroke, Style} from "ol/style";
 
 /**
  * User type definition
@@ -17,6 +18,7 @@ const state = {
     id: "layerOverlapAnalysis",
     name: "Layer-Überschneidung analysieren",
     glyphicon: "glyphicon-resize-full",
+    timerId: null,
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
@@ -26,9 +28,29 @@ const state = {
     bufferLayer: {},
     resultLayer: {},
     bufferRadius: 0,
+    resultType: false,
     sourceOptions: [],
-    map: {},
-    parser: new jsts.io.OL3Parser()
+    targetOptions: [],
+    map: null,
+    parser: new jsts.io.OL3Parser(),
+    resultLayerStyle: new Style({
+        fill: new Fill({
+            color: ["105", "175", "105", "0.7"]
+        }),
+        stroke: new Stroke({
+            color: ["0", "135", "255", "0.7"],
+            width: 2
+        })
+    }),
+    bufferLayerStyle: new Style({
+        fill: new Fill({
+            color: ["255", "230", "65", "0.3"]
+        }),
+        stroke: new Stroke({
+            color: ["255", "50", "0", "0.5"],
+            width: 2
+        })
+    })
 };
 
 export default state;

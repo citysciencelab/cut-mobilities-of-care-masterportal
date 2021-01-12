@@ -607,8 +607,12 @@
                 "label": "Maßstab"
             },
             "layerOverlapAnalysis": {
-                "selectLabel": "Quell-Layer auswählen",
-                "rangeLabel": "Radius auswählen",
+                "sourceSelectLabel": "Quell-Layer",
+                "targetSelectLabel": "Ziel-Layer",
+                "resultTypeLabel": "Ergebnistyp",
+                "overlapping": "innerhalb Radien",
+                "notOverlapping": "außerhalb Radien",
+                "rangeLabel": "Radius",
                 "clearBtn": "Zurücksetzen"
             }
         },
