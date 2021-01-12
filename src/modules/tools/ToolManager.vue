@@ -17,7 +17,12 @@ export default {
             const res = {};
 
             this.configuredTools.forEach(tool => {
-                res[tool.key] = this.menuConfig.tools.children[tool.key].renderToWindow === false;
+                if (typeof this.menuConfig[tool.key] !== "undefined") {
+                    res[tool.key] = this.menuConfig[tool.key].renderToWindow === false;
+                }
+                if (typeof this.menuConfig.tools !== "undefined") {
+                    res[tool.key] = this.menuConfig.tools.children[tool.key].renderToWindow === false;
+                }
             });
 
             return res;
