@@ -664,7 +664,8 @@
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
-                "closeViewOblique": "close oblique aerial photos"
+                "closeViewOblique": "close oblique aerial photos",
+                "doNotUseIE": "The display of oblique aerial images is no longer supported in Internet Explorer 11. Please use Edge for this function."
             },
             "freeze": {
                 "freeze": "Freeze view",

@@ -1,6 +1,7 @@
 import ButtonObliqueTemplate from "text-loader!./template.html";
 import ButtonObliqueTemplateTable from "text-loader!./templateTable.html";
 import ButtonObliqueModel from "./model";
+import store from "../../../src/app-store";
 /**
  * @member ButtonObliqueTemplate
  * @description Template used for the "oblique aerial photos" button
@@ -152,18 +153,28 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
             this.$("#ObliqueTable-title-open").show();
         }
         else {
-            if (Radio.request("Map", "isMap3d")) {
-                Radio.once("Map", "change", function (map) {
-                    if (map === "2D") {
-                        this.mapChange();
-                    }
-                }.bind(this));
-                Radio.trigger("Map", "deactivateMap3d");
-                return;
+            if (navigator.userAgent.indexOf("Trident") > -1) {
+                //IE11: show info
+                store.dispatch("Alerting/addSingleAlert", {
+                    "category": "Info",
+                    "content":  i18next.t("common:modules.controls.oblique.doNotUseIE"),
+                    "displayClass": "info"
+                });
             }
-            this.$("#ObliqueTable-title-open").hide();
-            this.$("#ObliqueTable-title-close").show();
-            Radio.trigger("ObliqueMap", "activate");
+            else{
+                if (Radio.request("Map", "isMap3d")) {
+                    Radio.once("Map", "change", function (map) {
+                        if (map === "2D") {
+                            this.mapChange();
+                        }
+                    }.bind(this));
+                    Radio.trigger("Map", "deactivateMap3d");
+                    return;
+                }
+                this.$("#ObliqueTable-title-open").hide();
+                this.$("#ObliqueTable-title-close").show();
+                Radio.trigger("ObliqueMap", "activate");
+            }
         }
     }
 });
