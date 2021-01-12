@@ -6,6 +6,7 @@
 
 ## Unreleased - in development
 ### Added
+- Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
 
 ### Changed
 - The language of the changelog has been changed to English.
