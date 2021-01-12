@@ -7,6 +7,36 @@
 All services available for display in the Masterportal (WMS, WFS, [SensorThings-API](sensorThings.md), ...) are configured and maintained in this JSON file. The file is linked to from the *config.js* of each individual portal by the `layerConf` parameter. For an example, see the `services-internet-webatlas.json` included in the *examples.zip* at */examples/lgv-config*.
 
 All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, and [SensorThings-API](sensorThings.md) (Sensor). For an example, see **[this file](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**. You may also use local GeoJSON files; see GeoJSON example.
+## WMS-Layer ##
+
+|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
+|----|-------------|---|-------|------------|--------|
+|cache|nein|Boolean||Ist dieser Layer Teil eines gecachten Dienstes? Wenn true wird bei Portalen, die in der **[config.json](config.json.md)** den „Baumtyp“ = „default“ benutzen, dieser Layer den Layern vorgezogen, die mit demselben Metadatensatz verknüpft sind, aber „cache“ = false haben. Bei anderen Baumtypen hat dieser Parameter keine Auswirkungen.|`false`|
+|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object/Boolean||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der **[rest-services.json](rest-services.json.md)** die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der **[config.json](config.json.md)** der Baumtyp *default* gesetzt ist. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
+|featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
+|format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
+|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
+|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
+|id|ja|String||Frei wählbare Layer-ID|`"8"`|
+|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
+|layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
+|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
+|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
+|maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"1000000"`|
+|minScale|ja|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
+|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Luftbilder DOP 10"`|
+|singleTile|nein|Boolean||Soll die Grafik als eine große Kachel ausgeliefert werden? Wenn true wird immer der gesamte Kartenausschnitt angefragt, wenn false wird der Kartenausschnitt in kleineren Kacheln angefragt und zusammengesetzt.|`false`|
+|tilesize|ja|String||Kachelgröße in Pixel. Diese wird verwandt wenn singleTile=false gesetzt ist.|`"512"`|
+|transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`true`|
+|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMTS siehe unten](#markdown-header-wmts-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
+|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
+|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Wird nur für die ABfrage des GFI verwendet. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+|version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Anzeige ob der Layer zu einem abgesicherten Dienst gehört. (**[siehe unten](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Zusätzliche Url, die aufgerufen wird um die basic Authentifizierung im Browser auszulösen.|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
+
+**Beispiel WMS:**
 
 ***
 
@@ -60,6 +90,8 @@ All layer information the portal needs to use the services is stored here. Confi
       "legend" : false,
       "cache" : false,
       "featureCount" : "1",
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
@@ -77,6 +109,20 @@ All layer information the portal needs to use the services is stored here. Confi
       ]
    }
 ```
+***
+## WMS-Layer.isSecured ##
+WMS Layer der zu einem abgesicherte WMS Dienst gehört.
+
+**ACHTUNG: Wenn der Layer zu einem abgesicherten Dienst gehört, müssen folgende Änderungen am Service vorgenommen werden!**
+
+* Es müssen anhand des Referer zwei Header gesetzt werden.
+* Die Konfiguration hierfür muss z.B. im Apache Webserver erfolgen.
+* `Access-Control-Allow-Credentials: true`
+* Dynamische Umschreibung des nachfolgenden HTTP Headers von: <br>
+`Access-Control-Allow-Origin: *` <br>
+nach <br>
+`Access-Control-Allow-Origin: URL des zugreifenden Portals`
+* Dynamic rewrite of the following HTTP header from: `Access-Control-Allow-Origin: *` to `Access-Control-Allow-Origin: URL of the accessing portal`
 
 ***
 

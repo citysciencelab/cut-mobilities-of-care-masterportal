@@ -18,6 +18,7 @@ describe("menu/desktop/layer/viewSelection", function () {
             showSettings: true,
             supported: ["2D"],
             isRemovable: false,
+            isSecured: false,
 
             setIsSettingVisible: function (value) {
                 this.isSettingVisible = value;
@@ -71,6 +72,7 @@ describe("menu/desktop/layer/viewSelection", function () {
                     transparency: 42,
                     isVisibleInMap: true,
                     isRemovable: false,
+                    isSecured: false,
                     removeTopicText: "removeTopicText",
                     changeClassDivisionText: "changeClassDivisionText",
                     infosAndLegendText: "infosAndLegendText",

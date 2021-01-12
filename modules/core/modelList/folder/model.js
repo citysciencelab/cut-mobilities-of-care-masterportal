@@ -16,6 +16,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         glyphicon: "glyphicon-folder-open",
         obliqueModeBlacklist: ["tree", "tools"],
         isPinned: false,
+        isSecured: false,
         // translate
         currentLng: "",
         saveSelectionText: "",
@@ -24,6 +25,9 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
         pinTopicsTreeText: "",
         hideAllTopicsText: "",
         showAllTopicsText: "",
+        categoryText: "",
+        toolsName: "",
+        securedAllTopicsText: "",
         categoryText: "",
         toolsName: ""
     }),
@@ -51,13 +55,15 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
      * @property {String} pinTopicsTreeText="" will be translated
      * @property {String} hideAllTopicsText="" will be translated
      * @property {String} showAllTopicsText="" will be translated
+     * @property {String} securedAllTopicsText="" will be translated
      * @property {String} categoryText="" will be translated
      * @property {String[]} obliqueModeBlacklist=["tree,"tools"] List of folder ids that are not displayed in oblique mode("Schr�gluftbilder").
      */
     initialize: function () {
         let items,
             isEveryToolInvisible = true,
-            isEveryLayerSelected = true;
+            isEveryLayerSelected = true,
+            isEveryLayerSecured;
 
         // Wenn alle Layer in einem Folder selektiert sind, wird der Folder auch selektiert
         if (this.get("parentId") === "Overlayer") {
@@ -67,6 +73,13 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
             if (isEveryLayerSelected === true) {
                 this.setIsSelected(true);
             }
+
+            // If all layers in one folder are secured, the folder will be marked as secured as well
+            isEveryLayerSecured = items.every(item => item.isSecured === true);
+            if (isEveryLayerSecured === true) {
+                this.setIsSecured(true);
+            }
+
         }
         if (this.get("id") === "tools") {
             items = Radio.request("Parser", "getItemsByAttributes", {parentId: this.get("id")});
@@ -98,6 +111,7 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
             pinTopicsTreeText: i18next.t("common:tree.pinTopicsTree"),
             hideAllTopicsText: i18next.t("common:tree.hideAllTopics"),
             showAllTopicsText: i18next.t("common:tree.showAllTopics"),
+            securedAllTopicsText: i18next.t("common:tree.securedAllTopics"),
             categoryText: i18next.t("common:tree.category"),
             toolsName: i18next.t("common:menu.tools.name"),
             currentLng: lng
@@ -143,6 +157,15 @@ const Folder = Item.extend(/** @lends Folder.prototype */{
             this.set("isSelected", value);
         }
         this.set("isSelected", value, {silent: silent});
+    },
+
+    /**
+     * Setter for attribute "isSecured".
+     * @param {Boolean} value Flag for isSecured
+     * @returns {void}
+     */
+    setIsSecured: function (value) {
+        this.set("isSecured", value);
     },
 
     /**
