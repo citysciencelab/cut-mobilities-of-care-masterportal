@@ -309,7 +309,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         // tests if the configuration of the active layers is incorrect and remove the incorrect layers
         if (activeLayers !== undefined && activeLayers !== null && Object.entries(activeLayers).length > 0) {
             Object.entries(activeLayers).forEach(([key]) => {
-                if (incorrectConfigLayers.length > 0 && incorrectConfigLayers[0].includes(key)) {
+                if (incorrectConfigLayers.length > 0 && incorrectConfigLayers.includes(key)) {
                     delete activeLayers[key];
                 }
             });
@@ -1742,7 +1742,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     setIncorrectConfigLayers: function (value) {
-        this.get("incorrectConfigLayers").push(value);
+        this.set("incorrectConfigLayers", value);
     },
 
     /**
