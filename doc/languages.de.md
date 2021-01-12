@@ -296,13 +296,61 @@ Du hast einen Übersetzungsschlüssel in der config.json gesetzt, aber es wird i
     Experte: Der Inhalt der config.json wird beim Start komplett übersetzt. Zur Übersetzung wird ab diesem Zeitpunkt die Übersetzungsfunktion i18nextTranslate verwendet. Wird sie nicht verwendet, bleibt der Inhalt auch bei einem Sprachwechsel erhalten.
 
 
+## Wie man i18next in der Produktion verwendet Vue
+
+Der folgende Abschnitt ist eine Anleitung, wie du i18next mit Vue in dein MP-Projekt integrieren kannst.
+
+### Übersetzen im Template
+Die Übersetzung der anzuzeigenden Werte kann direkt im Template einer Vue-Komponente vorgenommen werden. Dazu wird `$t()` verwendet. Im folgenden Beispiel wird das Attribute `name` übersetzt.
+
+ExampleTemplate
+```vue
+<template lang="html">
+    <Tool
+        :title="$t(name)"
+        :icon="glyphicon"
+    >
+</template>
+```
+
+### Übersetzen im Script
+Zu Übersetung der Werte im Scriptteil einer Vue-Komponente muss dies in der computed property durchgeführt werden. Dazu wird `this.$t()` verwendet.
+
+```js
+ computed: {
+    /**
+    * Gets the exmaple attributes.
+    * @returns {Object} The exmaple attributes.
+    */
+    example: function () {
+        const example = {
+            exampleTitle: this.$t("common:foo.bar.exampleTitle"),
+            exampleText: this.$t("common:foo.bar.exampleText")
+        };
+
+        return example;
+    },
+ }
+```
+
+### Übersetzen in Unit-Tests
+
+i18next bietet einen Testmodus für Unit-Tests.
+Im Testmodus wird keine echte Übersetzung durchgeführt (es werden keine Dateien geladen).
+Stattdessen antwortet i18next immer mit dem angegebenen Schlüssel.
+
+Für Unit-Tests im Masterportal verwenden wir "Chai".
+Wenn in einer Komponente i18next verendet wird, muss in dem zugehörigen Unit-test ein Mock erstellt werden.
+
+```js
+import {config} from "@vue/test-utils";
+config.mocks.$t = key => key;
+```
 
 
-
-## Wie man i18next in der Produktion verwendet
+## Wie man i18next in der Produktion verwendet Backbone (Deprecated)
 
 Der folgende Abschnitt ist eine Anleitung, wie du i18next mit MV* in dein MP-Projekt integrieren kannst.
-
 
 
 ### Übersetze dein Model
