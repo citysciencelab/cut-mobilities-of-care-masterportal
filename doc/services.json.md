@@ -36,6 +36,8 @@ All layer information the portal needs to use the services is stored here. Confi
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **WMS example:**
 
@@ -81,18 +83,17 @@ All layer information the portal needs to use the services is stored here. Confi
 ```
 ***
 ## WMS-Layer.isSecured ##
-WMS Layer der zu einem abgesicherte WMS Dienst gehört.
+WMS layer belonging to a secured WMS service.
 
-**ACHTUNG: Wenn der Layer zu einem abgesicherten Dienst gehört, müssen folgende Änderungen am Service vorgenommen werden!**
+**CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
 
-* Es müssen anhand des Referer zwei Header gesetzt werden.
-* Die Konfiguration hierfür muss z.B. im Apache Webserver erfolgen.
-* `Access-Control-Allow-Credentials: true`
-* Dynamische Umschreibung des nachfolgenden HTTP Headers von: <br>
+* Two headers must be set based on the referer.
+* The configuration for this must be done e.g. in the Apache web server.
+* `Access-Control-Allow-Credentials: true`.
+* Dynamic rewrite of the following HTTP header from: <br>
 `Access-Control-Allow-Origin: *` <br>
-nach <br>
-`Access-Control-Allow-Origin: URL des zugreifenden Portals`
-* Dynamic rewrite of the following HTTP header from: `Access-Control-Allow-Origin: *` to `Access-Control-Allow-Origin: URL of the accessing portal`
+to <br>
+`Access-Control-Allow-Origin: URL of the accessing portal`.
 
 ***
 

@@ -34,12 +34,12 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Wird nur für die ABfrage des GFI verwendet. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Anzeige ob der Layer zu einem abgesicherten Dienst gehört. (**[siehe unten](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Zusätzliche Url, die aufgerufen wird um die basic Authentifizierung im Browser auszulösen.|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **Beispiel WMS:**
 
-```
-#!json
-
+```json
 {
       "id" : "8",
       "name" : "Luftbilder DOP 10",
@@ -60,6 +60,8 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "legend" : false,
       "cache" : false,
       "featureCount" : "1",
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
