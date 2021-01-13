@@ -316,8 +316,6 @@
             "glyphicon": "glyphicon-record"
           },
           "fileImport": {
-            "renderToWindow": false,
-            "resizableWindow": true,
             "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
           },
