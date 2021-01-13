@@ -29,26 +29,22 @@
 				"children": {
 					"gfi": {
             "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign",
 						"active": true
 					},
 					"searchByCoord": {
 						"name": "Koordinatensuche"
 					},
 					"supplyCoord": {
-						"name": "Koordinaten abfragen",
-						"glyphicon": "glyphicon-screenshot"
+						"name": "Koordinaten abfragen"
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
 					},
 					"draw": {
-						"name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
+						"name": "Zeichnen / Schreiben"
 					},
 					"fileImport": {
-            "name": "Datei Import",
-            "glyphicon": "glyphicon-import"
+            "name": "Datei Import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"

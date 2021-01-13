@@ -13,7 +13,7 @@
  */
 const state = {
     id: "gfi",
-    name: "Informationen abfragen",
+    name: "common:menu.tools.getInfos",
     glyphicon: "glyphicon-info-sign",
     active: false,
     currentFeature: null,

@@ -108,7 +108,7 @@ const actions = {
     },
 
     /**
-     * Activates a tool in the ModelList
+     * Activates a tool in the ModelList.
      * @param {Object} state state object; in this case rootState = state
      * @param {String} activeTool The tool to activate.
      * @returns {void}
@@ -118,6 +118,22 @@ const actions = {
 
         if (model) {
             model.set("isActive", true);
+        }
+    },
+
+    /**
+     * Adds the name and glyphicon of a tool to the ModelList, because they are used by the menu.
+     * @param {Object} state state object; in this case rootState = state
+     * @param {String} activeTool The tool to set name.
+     * @returns {void}
+     */
+    addToolNameAndGlyphiconToModelList ({state}, activeTool) {
+        const activeToolState = state[activeTool],
+            model = getComponent(activeToolState?.id);
+
+        if (model) {
+            model.set("name", i18next.t(activeToolState?.name));
+            model.set("glyphicon", activeToolState?.glyphicon);
         }
     }
 };

@@ -208,6 +208,7 @@ The code is written as readable and understandable as possible. The goal is not 
 
 * B.3.1 Vue components in the `share-components` folder contain comments according to the [Vue Styleguidist](https://vue-styleguidist.github.io/).
 * B.3.2 Backbone Radio - New Vue modules should avoid using the `Backbone.Radio` where possible. Radio events in old modules can be replaced with VueX store interaction.
+* B.3.3 For requests it is recommended to use the library Axios.
 
 ---
 

@@ -40,6 +40,7 @@ export default {
     #masterportal-container {
         display: flex;
         flex-direction: column;
+        flex-flow: column;
 
         position: relative;
 
@@ -52,6 +53,7 @@ export default {
         .map-region {
             display: flex;
             flex-grow: 1;
+            height:calc(100% - 50px);
         }
     }
 </style>

@@ -553,7 +553,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {ModelList} todo
      */
     createModelList: function () {
-        new ModelList(this.get("itemList").filter(function (model) {
+        const itemList = this.get("itemList");
+
+        this.logWarnings(itemList);
+        new ModelList(itemList.filter(model => {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -563,6 +566,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 model.parentId === "utilities" ||
                 model.parentId === "ansichten";
         }));
+    },
+
+    /**
+     * Logged warnings only once for all items.
+     * @param {Object[]} itemList - The itemList.
+     * @returns {void}
+     */
+    logWarnings: function (itemList) {
+        const itemWithLegendURL = itemList.find(item => item?.legendURL);
+
+        if (itemWithLegendURL) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+        }
     },
 
     /**

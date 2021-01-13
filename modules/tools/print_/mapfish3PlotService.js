@@ -6,6 +6,7 @@ import "./RadioBridge.js";
 import store from "../../../src/app-store/index";
 import thousandsSeparator from "../../../src/utils/thousandsSeparator.js";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import LoaderOverlay from "../../../src/utils/loaderOverlay";
 
 const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -69,6 +70,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         zoomLevel: null,
         hintInfo: "",
         spec: new BuildSpecModel(),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         */
         useProxy: false
     }),
 
@@ -337,7 +342,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             printFormat = format || this.get("currentFormat"),
             url = this.get("mapfishServiceUrl") + printId + "/report." + printFormat;
 
-        Radio.trigger("Util", "showLoader");
+        LoaderOverlay.show();
         this.sendRequest(url, "POST", this.waitForPrintJob, payload);
     },
 
@@ -356,10 +361,29 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 this.waitForPrintJob(response);
             }
             else {
-                Radio.trigger("Util", "hideLoader");
-                window.open(this.get("mapfishServiceUrl") + printAppId + "/report/" + response.ref);
+                LoaderOverlay.hide();
+                this.downloadFile(this.get("mapfishServiceUrl") + printAppId + "/report/" + response.ref, this.get("filename"));
             }
         });
+    },
+
+    /**
+     * Starts the download from printfile,
+     * @param {String} fileUrl The url to dwonloadfile.
+     * @param {String} filename The name of the donwloadfile.
+     * @returns {void}
+     */
+    downloadFile: function (fileUrl, filename) {
+        const link = document.createElement("a");
+
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        link.href = this.get("useProxy") ? getProxyUrl(fileUrl) : fileUrl;
+        link.download = filename;
+        link.click();
     },
 
     /**

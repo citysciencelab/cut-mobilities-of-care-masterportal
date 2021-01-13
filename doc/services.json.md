@@ -4,9 +4,9 @@
 
 # services.json
 
-All services available for display in the Masterportal (WMS, WFS, [SensorThings-API](sensorThings.md), ...) are configured and maintained in this JSON file. The file is linked to from the *config.js* of each individual portal by the `layerConf` parameter. For an example, see the `services-internet-webatlas.json` included in the *examples.zip* at */examples/lgv-config*.
+All services available for display in the Masterportal (WMS, WFS, [SensorThings-API](sensorThings.md), and more) are configured and maintained in this JSON file. The file is linked to from the *config.js* of each individual portal by the *layerConf* parameter. For an example, see the *services-internet.json* included in the *examples.zip* at *//examples/Basic/resources/*.
 
-All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, and [SensorThings-API](sensorThings.md) (Sensor). For an example, see **[this file](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**. You may also use local GeoJSON files; see GeoJSON example.
+All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, [SensorThings-API](sensorThings.md) and other services types. You may also use local GeoJSON files; see GeoJSON example.
 
 ***
 
@@ -36,6 +36,8 @@ All layer information the portal needs to use the services is stored here. Confi
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **WMS example:**
 
@@ -60,6 +62,8 @@ All layer information the portal needs to use the services is stored here. Confi
       "legend" : false,
       "cache" : false,
       "featureCount" : "1",
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
@@ -77,6 +81,19 @@ All layer information the portal needs to use the services is stored here. Confi
       ]
    }
 ```
+***
+## WMS-Layer.isSecured ##
+WMS layer belonging to a secured WMS service.
+
+**CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
+
+* Two headers must be set based on the referer.
+* The configuration for this must be done e.g. in the Apache web server.
+* `Access-Control-Allow-Credentials: true`.
+* Dynamic rewrite of the following HTTP header from: <br>
+`Access-Control-Allow-Origin: *` <br>
+to <br>
+`Access-Control-Allow-Origin: URL of the accessing portal`.
 
 ***
 
