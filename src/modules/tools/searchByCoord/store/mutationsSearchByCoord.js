@@ -52,7 +52,6 @@ const mutations = {
      */
     setEastingErrorNoCoord: (state) => {
         state.eastingNoCoord = true;
-        state.eastingError = true;
     },
     /**
      * Sets the northing error for no match in the state.
@@ -61,7 +60,6 @@ const mutations = {
      */
     setNorthingErrorNoCoord: (state) => {
         state.northingNoCoord = true;
-        state.northingError = true;
     },
     /**
      * Sets the easting error for no match in the state.
@@ -70,7 +68,6 @@ const mutations = {
      */
     setEastingErrorNoMatch: (state) => {
         state.eastingNoMatch = true;
-        state.eastingError = true;
     },
     /**
      * Sets the northing error for no match in the state.
@@ -79,7 +76,6 @@ const mutations = {
      */
     setNorthingErrorNoMatch: (state) => {
         state.northingNoMatch = true;
-        state.northingError = true;
     },
     /**
      * Resets the error messages in the state.

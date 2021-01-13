@@ -11,9 +11,22 @@ const getters = {
      * @param {object} state state to generate getters for
      * @returns {object.<string, function>} object of getters
      */
-    ...generateSimpleGetters(searchByCoordState)
+    ...generateSimpleGetters(searchByCoordState),
 
-    // NOTE overwrite getters here if you need a special behaviour in a getter
+    /**
+     * Returns true to each coordinate error variable if one their test cases is fails.
+     * @param {Object} state state of this tool
+     * @param {String} name of the projection
+     * @returns {Object} projection
+     */
+    getError: state => {
+        if (state.eastingNoCoord || state.eastingNoMatch) {
+            state.eastingError = true;
+        }
+        else if (state.northingNoCoord || state.northingNoMatch) {
+            state.northingError = true;
+        }
+    }
 };
 
 export default getters;
