@@ -54,7 +54,13 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
             params = {
                 projection: dataEpsg,
                 format: new MVT(),
-                url: url
+                url: url,
+                tileUrlFunction: (tileCoord) => {
+                    return url
+                        .replace("{z}", String(tileCoord[0]))
+                        .replace("{x}", String(tileCoord[1]))
+                        .replace("{y}", String(tileCoord[2]));
+                }
             };
 
         if (dataEpsg !== "EPSG:3857" || this.get("extent") || this.get("origin") || this.get("origins") || this.get("resolutions") || this.get("tileSize")) {
