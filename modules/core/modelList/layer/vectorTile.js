@@ -160,7 +160,12 @@ const VectorTileLayer = Layer.extend(/** @lends VTLayer.prototype */{
      * @returns {Promise} resolves void after style was set; may reject if received style is invalid
      */
     setStyleByDefinition: function ({id, url}) {
-        return fetch(url)
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        return fetch(this.get("useProxy") ? getProxyUrl(url) : url)
             .then(response => response.json())
             .then(style => {
                 // check if style is defined and required fields exist
