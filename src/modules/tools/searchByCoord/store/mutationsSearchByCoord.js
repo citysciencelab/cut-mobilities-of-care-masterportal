@@ -83,10 +83,8 @@ const mutations = {
      * @returns {void}
      */
     resetErrorMessages: (state) => {
-        state.eastingError = false;
         state.eastingNoCoord = false;
         state.eastingNoMatch = false;
-        state.northingError = false;
         state.northingNoCoord = false;
         state.northingNoMatch = false;
     },
