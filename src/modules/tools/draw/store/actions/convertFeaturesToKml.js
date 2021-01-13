@@ -6,7 +6,7 @@ import {colorOptions} from "../constantsDraw";
  * NOTE: The features can not be printed, if no unique id is present.
  *
  * @param {Document} convertedFeatures The features converted to KML.
- * @returns {undefined}
+ * @returns {void}
  */
 function addUniqueStyleId (convertedFeatures) {
     convertedFeatures.getElementsByTagName("ExtendedData").forEach(extendedData => {

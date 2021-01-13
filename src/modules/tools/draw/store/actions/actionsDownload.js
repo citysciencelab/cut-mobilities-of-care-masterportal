@@ -33,7 +33,7 @@ async function convertFeatures ({state, dispatch}, format) {
  * Converts the features to the chosen format and saves it in the state.
  *
  * @param {Object} context actions context object.
- * @returns {undefined}
+ * @returns {void}
  */
 async function prepareData ({state, commit, dispatch}) {
     let features = "";
@@ -63,7 +63,7 @@ async function prepareData ({state, commit, dispatch}) {
  * If the user is using Internet Explorer as a Browser a Blob is used, otherwise the download is accomplished through the href & download combo on an anchor tag.
  *
  * @param {Object} context actions context object.
- * @returns {undefined}
+ * @returns {void}
  */
 function prepareDownload ({state, commit, dispatch}) {
     dispatch("validateFileName").then(fileName => {
@@ -93,7 +93,7 @@ function prepareDownload ({state, commit, dispatch}) {
  * NOTE: When a feature is an instance of ol/Circle, it is converted to a ol/Polygon first.
  *
  * @param {Object} context actions context object.
- * @returns {undefined}
+ * @returns {void}
  */
 function setDownloadFeatures ({state, commit, dispatch}) {
     const features = state.layer.getSource().getFeatures();
@@ -120,7 +120,7 @@ function setDownloadFeatures ({state, commit, dispatch}) {
  * @param {Object} context actions context object.
  * @param {Event} event Event fired by changing the input for the name of the file.
  * @param {HTMLInputElement} event.currentTarget The HTML input element for the name of the file.
- * @returns {undefined}
+ * @returns {void}
  */
 function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
     const features = state.layer.getSource().getFeatures(),
@@ -142,7 +142,7 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
  * @param {Object} context actions context object.
  * @param {Event} event Event fired by selecting a different element.
  * @param {HTMLSelectElement} event.currentTarget The HTML select element for the file format.
- * @returns {undefined}
+ * @returns {void}
  */
 async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTarget}) {
     const features = state.layer.getSource().getFeatures(),
