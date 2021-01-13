@@ -2,6 +2,7 @@
 import Tool from "../../Tool.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
+import actions from "../store/actionsSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
 
 export default {
@@ -17,37 +18,15 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/SearchByCoord", Object.keys(getters))
-        // /**
-        //  * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
-        //  */
-        // selectedCoordinates: {
-        //     get () {
-        //         return state.selectedCoordinates;
-        //     },
-        //     set (newValue) {
-        //         this.setSelectedCoordinates(newValue);
-        //     }
-        // }
     },
     created () {
         this.$on("close", this.close);
-        this.newCoordSystemSelected(this.currentCoordinateSystem);
+        this.setCoordinateSystem(this.currentCoordinateSystem);
         this.setExample();
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
-        ...mapActions("Tools/SearchByCoord", [
-            "newCoordSystemSelected",
-            "setMarker",
-            "removeMarker",
-            "setCenter",
-            "setZoom",
-            "setExample",
-            "validateInput",
-            "transformCoordinates",
-            "resetValues",
-            "resetErrorMessages"
-        ]),
+        ...mapActions("Tools/SearchByCoord", Object.keys(actions)),
         /**
          * Closes this tool window by setting active to false and removes the marker if it was placed.
          * @returns {void}
@@ -68,10 +47,11 @@ export default {
          * @returns {void}
          */
         selectionChanged () {
-            this.newCoordSystemSelected(this.currentCoordinateSystem);
+            this.setCoordinateSystem(this.currentCoordinateSystem);
             this.setExample();
             this.removeMarker();
             this.resetValues();
+            this.resetErrorMessages();
         },
         /**
          * Returns the label name depending on the selected coordinate system.
@@ -95,7 +75,6 @@ export default {
             const coords = [coordinatesEasting, coordinatesNorthing];
 
             this.resetErrorMessages();
-            this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coords);
             this.transformCoordinates();
         }

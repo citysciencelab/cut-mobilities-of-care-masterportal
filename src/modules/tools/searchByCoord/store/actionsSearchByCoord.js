@@ -2,38 +2,6 @@ import proj4 from "proj4";
 
 export default {
     /**
-     * Sets the current coordinate System to state.
-     * @param {String} value - currently selected coordinate System
-     * @returns {void}
-     */
-    newCoordSystemSelected ({commit}, value) {
-        commit("setCoordinateSystem", value);
-    },
-    /**
-     * Sets the example messages according to the selected coordinate system.
-     * @param {Array} coordinates from the validated coordinates
-     * @returns {void}
-     */
-    setExample ({commit}) {
-        commit("setExample");
-    },
-    /**
-     * Resets the values of the coordinates.
-     * @param {Array} coordinates from the validated coordinates
-     * @returns {void}
-     */
-    resetValues ({commit}) {
-        commit("resetValues");
-    },
-    /**
-     * Resets the error messages of the coordinates.
-     * @param {Array} coordinates from the validated coordinates
-     * @returns {void}
-     */
-    resetErrorMessages ({commit}) {
-        commit("resetErrorMessages");
-    },
-    /**
      * Remembers the projection and shows mapmarker at the given position.
      * @param {Event} event - pointerdown-event, to get the position from
      * @returns {void}
