@@ -47,7 +47,6 @@ import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import StyleVT from "../../tools/styleVT/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
@@ -257,9 +256,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
-            }
-            else if (attrs.id === "styleVT") {
-                return new StyleVT(attrs, options);
             }
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
