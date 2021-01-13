@@ -10,6 +10,7 @@
 
 ### Changed
 - The language of the changelog has been changed to English.
+- Moved the Download Tool to Vue and integrated it into the Draw Tool.
 ### Deprecated
 
 ### Removed
