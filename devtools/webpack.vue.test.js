@@ -7,6 +7,10 @@ require("proj4");
 
 global.DOMParser = window.DOMParser;
 
+URL.createObjectURL = function () {
+    return false;
+};
+
 module.exports = {
     mode: "development",
     devtool: "inline-cheap-module-source-map",
