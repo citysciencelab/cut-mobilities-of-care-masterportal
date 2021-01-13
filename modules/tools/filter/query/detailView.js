@@ -4,6 +4,7 @@ import SnippetCheckBoxView from "../../../snippets/checkbox/view";
 import Template from "text-loader!./templateDetailView.html";
 import SnippetSliderView from "../../../snippets/slider/range/view";
 import SnippetMultiCheckboxView from "../../../snippets/multiCheckbox/view";
+import LoaderOverlay from "../../../../src/utils/loaderOverlay";
 
 const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototype */{
     events: {
@@ -21,7 +22,6 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
      * @listens Tools.Filter.Query#changeIsSelected
      * @listens Tools.Filter.Query#changeFeatureIds
      * @listens Tools.Filter.Query#changeIsLayerVisible
-     * @fires Core#RadioRequestUtilGetPathFromLoader
      * @fires Core#RadioRequestUtilIsViewMobile
      * @fires Tools.Filter.Query#valuesChanged
      * @fires Tools.Filter.Query#SnippetCollectionHideAllInfoText
@@ -48,17 +48,13 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
 
     /**
      * render the query detail view
-     * @fires Core#RadioRequestUtilGetPathFromLoader
      * @returns {*} todo
      */
     render: function () {
         const attr = this.model.toJSON();
-        let loaderPath;
 
         if (!this.model.get("features")) {
-            loaderPath = Radio.request("Util", "getPathFromLoader");
-            this.$el.html("<div id='filter-loader'><img src='" + loaderPath + "'></div>");
-
+            LoaderOverlay.show(2000);
             return this;
         }
 

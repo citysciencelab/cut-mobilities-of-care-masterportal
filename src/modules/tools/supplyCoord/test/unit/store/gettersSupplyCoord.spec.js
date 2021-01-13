@@ -101,7 +101,7 @@ describe("src/modules/tools/supplyCoord/store/gettersSupplyCoord.js", () => {
     });
     describe("testing default values", () => {
         it("returns the name default value from state", () => {
-            expect(getters.name(stateSupplyCoord)).to.be.equals("Koordinaten abfragen");
+            expect(getters.name(stateSupplyCoord)).to.be.equals("common:menu.tools.coord");
         });
         it("returns the glyphicon default value from state", () => {
             expect(getters.glyphicon(stateSupplyCoord)).to.equals("glyphicon-screenshot");

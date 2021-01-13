@@ -420,12 +420,15 @@
           "scaleSwitcher":
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-full",
-            "renderToWindow": true
+            "glyphicon": "glyphicon-resize-full"
           },
           "VueAddon": {
             "name": "AddonTool",
             "glyphicon": "glyphicon-screenshot"
+          },
+          "TacticalMark": {
+            "name": "Taktische Zeichen",
+            "glyphicon": "glyphicon-map-marker"
           }
         }
       },
@@ -667,7 +670,7 @@
           ],
           "name": "Eignungsflächen",
           "legendURL": [
-            "http://www.geoportal-hamburg.de/legende/legende_solar.png"
+            "https://www.geoportal-hamburg.de/legende/legende_solar.png"
           ],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
@@ -760,7 +763,7 @@
           "id": "18106",
           "styleId": "18106",
           "clusterDistance": 50,
-          "loadThingsOnlyInCurrentExtent": false,
+          "loadThingsOnlyInCurrentExtent": true,
           "gfiTheme" : {
             "name": "sensor",
             "params" : {

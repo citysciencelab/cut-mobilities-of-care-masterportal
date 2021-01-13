@@ -6,7 +6,7 @@
     "url": "https://www.masterportal.org"
   },
   "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
-  "version": "2.5.5-dev",
+  "version": "2.6.1-dev",
   "license": "MIT",
   "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
@@ -41,7 +41,7 @@
     "bootstrap-toggle": "2.x.x",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
-    "d3": "4.9.x",
+    "d3": "4.13.x",
     "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
     "dom-storage": "^2.1.0",
@@ -59,8 +59,10 @@
     "object-hash": "^2.0.3",
     "ol-mapbox-style": "^6.1.2",
     "olcs": "^2.10.0",
-    "rbush": "^3.0.1",
-    "vcs-oblique": "^2.0.1",
+    "polyfill-object.fromentries": "^1.0.1",
+    "rbush": "^2.0.2",
+    "rbush-knn": "^2.1.0",
+    "vcs-oblique": "^2.0.2",
     "vue": "^2.6.11",
     "vue-loader": "^15.7.2",
     "vue-template-compiler": "^2.6.10",
@@ -70,7 +72,7 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@intlify/vue-i18n-loader": "^0.6.1",
-    "@masterportal/mpconfigparser": "^1.0.0",
+    "@masterportal/mpconfigparser": "^1.1.1",
     "@vue/test-utils": "^1.0.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
@@ -128,7 +130,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
+      "pre-push": "node ./node_modules/@masterportal/mpconfigparser/cli.js ./doc/config.json.md ./doc/config.json.de.md && eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
   }
 }

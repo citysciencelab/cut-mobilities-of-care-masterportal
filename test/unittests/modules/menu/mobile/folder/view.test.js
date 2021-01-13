@@ -52,6 +52,7 @@ describe("menu/mobile/folder/view", function () {
 
             isFolderSelectable: true,
             isVisibleInTree: true,
+            isSecured: false,
 
             setIsFolderSelectable: function (value) {
                 this.isFolderSelectable = value;
@@ -62,6 +63,7 @@ describe("menu/mobile/folder/view", function () {
                     "isFolderSelectable": this.isFolderSelectable,
                     "isLeafFolder": true,
                     "isSelected": false,
+                    "isSecured": false,
                     "name": "testFolder",
                     "isExpanded": true,
                     "glyphicon": "test"

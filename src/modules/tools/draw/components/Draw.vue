@@ -290,7 +290,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="name"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"

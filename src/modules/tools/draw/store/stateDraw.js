@@ -131,7 +131,7 @@ const symbol = {
         symbol,
         withoutGUI: false,
         zIndex: 0,
-        name: "Zeichnen / Schreiben",
+        name: "common:menu.tools.draw",
         imgPath: "",
         // // // // // //
         // UI SETTINGS //

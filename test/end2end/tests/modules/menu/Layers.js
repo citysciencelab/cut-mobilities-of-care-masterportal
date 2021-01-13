@@ -230,7 +230,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
 
                 it("arrows moving down do nothing if layer is already last", async function () {
                     await (
-                        await driver.findElement(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog"))
+                        await driver.findElement(By.css("ul#root li.layer:nth-child(29) span.glyphicon-cog"))
                     ).click();
                     await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
 

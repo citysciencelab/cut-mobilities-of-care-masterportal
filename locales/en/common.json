@@ -59,6 +59,7 @@
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
+        "securedAllTopics": "Secured topics",
         "category": "Category",
         "backgroundMaps": "Background maps",
         "subjectData": "Subject data",
@@ -68,6 +69,7 @@
         "infosAndLegend": "Information und explanations",
         "removeTopic": "Remove topic",
         "showTopic": "Present topic",
+        "securedTopic": "Secured topic",
         "changeClassDivision": "Change class division",
         "settings": "Settings",
         "transparency": "Transparency",
@@ -84,7 +86,8 @@
         "language": {
             "languageTitle": "Please choose a language",
             "de": "German",
-            "en": "English"
+            "en": "English",
+            "it": "Italian"
         },
         "core": {
           "modelList": {
@@ -148,6 +151,11 @@
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
+        },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Sorry, the secured layer could not be loaded. Please contact the administrator and let him know if you were prompted to enter a username and password. </br> Secured layer: "
+            }
         },
         "featureViaURL": {
             "coordLabel": "Coordinates",
@@ -438,6 +446,7 @@
             "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
+                "copyToClipboard": "Content was copied to the clipboard.",
                 "hdms": {
                     "eastingLabel": "Longitude",
                     "northingLabel": "Latitude"
@@ -496,16 +505,16 @@
               "localeFormat": {
                 "decimal": "\".\"",
                 "thousands": "\",\"",
-                "grouping": "[3]",
-                "currency": "[\"$\", \"\"]",
+                "grouping": ["3"],
+                "currency": ["$", ""],
                 "dateTime": "\"%a %b %e %X %Y\"",
                 "date": "\"%m/%d/%Y\"",
                 "time": "\"%H:%M:%S\"",
-                "periods": "[\"AM\", \"PM\"]",
-                "days": "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]",
-                "shortDays": "[\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\"]",
-                "months": "[\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"]",
-                "shortMonths": "[\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"]"
+                "periods": ["AM", "PM"],
+                "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
               }
             },
             "viomRouting": {
@@ -601,7 +610,8 @@
                 "findFurtherInf": "You can find further information here",
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
-                "area": "Area"
+                "area": "Area",
+                "finishWithDoubleClick": "Complete with double click"
             },
             "scaleSwitcher": {
                 "label": "Scale"
@@ -653,8 +663,7 @@
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
-                "closeViewOblique": "close oblique aerial photos",
-                "betaWarningOblique": "The view for oblique aerial photos is currently still in the beta version!"
+                "closeViewOblique": "close oblique aerial photos"
             },
             "freeze": {
                 "freeze": "Freeze view",
@@ -736,7 +745,9 @@
             "toggleCollapseAll": "Toggle all legends"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
+          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
+          "alertRequiredService": "Details: A required service is not responding."
         }
     },
     "snippets": {

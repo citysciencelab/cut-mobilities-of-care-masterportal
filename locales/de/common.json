@@ -60,6 +60,7 @@
         "pinTopicsTree": "Themenbaum fixieren/lösen",
         "hideAllTopics": "Alle Themen entfernen",
         "showAllTopics": "Alle Themen darstellen",
+        "securedAllTopics": "Abgesicherte Themen",
         "category": "Kategorie",
         "backgroundMaps": "Hintergrundkarten",
         "subjectData": "Fachdaten",
@@ -69,6 +70,7 @@
         "infosAndLegend": "Informationen und Legende",
         "removeTopic": "Thema entfernen",
         "showTopic": "Thema darstellen",
+        "securedTopic": "Abgesichertes Thema",
         "changeClassDivision": "Klasseneinteilung ändern",
         "settings": "Einstellungen",
         "transparency": "Transparenz",
@@ -111,7 +113,8 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
-            "en": "Englisch"
+            "en": "Englisch",
+            "it": "Italienisch"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
@@ -149,6 +152,11 @@
         },
         "mapMarker": {
           "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."
+        },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Entschuldigung, der abgesicherte Layer konnte nicht geladen werden. Bitte wenden Sie sich an den Administrator und teilen Sie ihm mit, ob Sie aufgefordert wurden einen Nutzernamen und ein Passwort einzugeben. </br> Abgesicherter Layer: "
+            }
         },
         "featureViaURL": {
             "coordLabel": "Koordinaten",
@@ -439,6 +447,7 @@
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
+                "copyToClipboard": "Inhalt wurde in die Zwischenablage kopiert.",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"
@@ -497,16 +506,16 @@
               "localeFormat": {
                 "decimal": "\",\"",
                 "thousands": "\".\"",
-                "grouping": "[3]",
-                "currency": "[\"€\", \"\"]",
+                "grouping": ["3"],
+                "currency": ["€", ""],
                 "dateTime": "\"%a %b %e %X %Y\"",
                 "date": "\"%d.%m.%Y\"",
                 "time": "\"%H:%M:%S\"",
-                "periods": "[\"AM\", \"PM\"]",
-                "days": "[\"Sonntag\", \"Montag\", \"Dienstag\", \"Mittwoch\", \"Donnerstag\", \"Freitag\", \"Samstag\"]",
-                "shortDays": "[\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"]",
-                "months": "[\"Januar\", \"Februar\", \"März\", \"April\", \"Mai\", \"Juni\", \"Juli\", \"August\", \"September\", \"Oktober\", \"November\", \"Dezember\"]",
-                "shortMonths": "[\"Jan\", \"Feb\", \"Mär\", \"Apr\", \"Mai\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Okt\", \"Nov\", \"Dez\"]"
+                "periods": ["AM", "PM"],
+                "days": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+                "shortDays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                "shortMonths": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
               }
             },
             "viomRouting": {
@@ -602,7 +611,8 @@
                 "findFurtherInf": "Weitere Informationen finden Sie hier",
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
-                "area": "Fläche"
+                "area": "Fläche",
+                "finishWithDoubleClick": "Abschließen mit Doppelklick"
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
@@ -654,8 +664,7 @@
             "oblique": {
                 "buttonTitle": "Schrägluftbilder",
                 "openViewOblique": "Schrägluftbilder einschalten",
-                "closeViewOblique": "Schrägluftbilder ausschalten",
-                "betaWarningOblique": "Der Schrägluftbild-Modus befindet sich zur Zeit noch in der Beta-Version!"
+                "closeViewOblique": "Schrägluftbilder ausschalten"
             },
             "freeze": {
                 "freeze": "Ansicht sperren",
@@ -737,7 +746,9 @@
             "toggleCollapseAll": "Alle Legenden ein-/ausklappen"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter."
+          "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
+          "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
+          "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
         }
     },
     "snippets": {

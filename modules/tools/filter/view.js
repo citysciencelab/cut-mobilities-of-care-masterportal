@@ -64,7 +64,7 @@ const FilterView = Backbone.View.extend({
             Radio.trigger("TableMenu", "appendFilter", this.el);
         }
         else {
-            Radio.trigger("Sidebar", "append", this.el);
+            Radio.trigger("Sidebar", "append", this.el, false, 450);
             Radio.trigger("Sidebar", "toggle", true);
         }
         this.renderSimpleViews();

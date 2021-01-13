@@ -269,7 +269,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
          * @deprecated in 3.0.0
          */
         if (this.get("legendURL")) {
-            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
             if (this.get("legendURL") === "") {
                 legend = true;
             }
@@ -281,7 +280,10 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             }
         }
 
-        if (styleModel && legend === true) {
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
             if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
                 styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }

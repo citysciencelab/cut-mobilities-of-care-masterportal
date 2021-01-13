@@ -26,6 +26,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         infosAndLegendText: "",
         removeTopicText: "",
         showTopicText: "",
+        securedTopicText: "",
         changeClassDivisionText: "",
         settingsText: "",
         transparencyText: "",
@@ -33,7 +34,8 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
         reduceTransparencyText: "",
         removeLayerText: "",
         levelUpText: "",
-        levelDownText: ""
+        levelDownText: "",
+        isSecured: false
     },
     /**
      * @class Layer
@@ -64,6 +66,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {String} infosAndLegendText="" will be translated
      * @property {String} removeTopicText="" will be translated
      * @property {String} showTopicText="" will be translated
+     * @property {String} securedTopicText="" will be translated
      * @property {String} changeClassDivisionText="" will be translated
      * @property {String} settingsText="" will be translated
      * @property {String} transparencyText="" will be translated
@@ -72,6 +75,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @property {String} removeLayerText="" will be translated
      * @property {String} levelUpText="" will be translated
      * @property {String} levelDownText="" will be translated
+     * @property {Boolean} isSecured=false flag if the layer is secured
      * @fires Map#RadioTriggerMapAddLayerToIndex
      * @fires Layer#RadioTriggerVectorLayerFeaturesLoaded
      * @fires Layer#RadioTriggerVectorLayerFeatureUpdated
@@ -90,6 +94,11 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     initialize: function () {
         const portalConfig = Radio.request("Parser", "getPortalConfig");
+
+        // prevents the use of the isSecured parameter for layers other than WMS
+        if (this.get("typ") !== "WMS" && this.get("isSecured") === true) {
+            this.setIsSecured(false);
+        }
 
         if (portalConfig && portalConfig.singleBaselayer !== undefined) {
             this.setSingleBaselayer(portalConfig.singleBaselayer);
@@ -129,6 +138,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
             infosAndLegendText: i18next.t("common:tree.infosAndLegend"),
             removeTopicText: i18next.t("common:tree.removeTopic"),
             showTopicText: i18next.t("common:tree.showTopic"),
+            securedTopicText: i18next.t("common:tree.securedTopic"),
             changeClassDivisionText: i18next.t("common:tree.changeClassDivision"),
             settingsText: i18next.t("common:tree.settings"),
             increaseTransparencyText: i18next.t("common:tree.increaseTransparency"),
@@ -185,7 +195,12 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     featuresLoaded: function (features) {
+        const highlightFeature = Radio.request("ParametricURL", "getHighlightFeature");
+
         Radio.trigger("VectorLayer", "featuresLoaded", this.get("id"), features);
+        if (highlightFeature) {
+            store.dispatch("Map/highlightFeature", {type: "viaLayerIdAndFeatureId", layerIdAndFeatureId: highlightFeature});
+        }
     },
 
     /**
@@ -653,6 +668,15 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      */
     setSelectionIDX: function (value) {
         this.set("selectionIDX", value);
+    },
+
+    /**
+     * Setter for isSecured
+     * @param {Boolean} value Flag if layer is secured
+     * @returns {void}
+     */
+    setIsSecured: function (value) {
+        this.set("isSecured", value);
     },
 
     /**
