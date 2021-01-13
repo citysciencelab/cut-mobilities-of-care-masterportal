@@ -2,6 +2,13 @@ import stateStyleVT from "./stateStyleVT";
 
 const initialState = Object.assign({}, stateStyleVT),
     actions = {
+        /**
+         * Updates the list of vector tile layers to only include the currently visible layers.
+         * Also clears the current set layer of the layerModel if it is not inside the updated list; the layer is no longer visible.
+         *
+         * @param {Object} context actions context object.
+         * @returns {void}
+         */
         refreshVectorTileLayerList ({state, commit}) {
             const {layerModel} = state,
                 layerModelList = Radio.request("ModelList", "getModelsByAttributes", {typ: "VectorTile", isSelected: true}),
@@ -30,10 +37,27 @@ const initialState = Object.assign({}, stateStyleVT),
                 }
             }
         },
+        /**
+         * Resets the state to its initial configuration.
+         *
+         * @param {Object} context actions context object.
+         * @returns {void}
+         */
         resetModule ({commit}) {
             commit("setLayerModel", initialState.layerModel);
             commit("setVectorTileLayerList", initialState.vectorTileLayerList);
         },
+        /**
+         * Activates or deactivates the module.
+         * If the module is activated, a layerModel to be set is given and committed to the state.
+         * Else, the module is reset.
+         *
+         * @param {Object} context actions context object.
+         * @param {Object} payload payload object.
+         * @param {Boolean} payload.active Whether to activate or deactivate the module.
+         * @param {Backbone/Model/Item/Layer/VTLayer} payload.layerModel The layer selected to be initially selected.
+         * @returns {void}
+         */
         setActive ({commit, dispatch}, {active, layerModel}) {
             commit("setActive", active);
 
@@ -44,10 +68,16 @@ const initialState = Object.assign({}, stateStyleVT),
                 dispatch("resetModule");
             }
         },
-        triggerStyleUpdate ({state}, event) {
-            const styleId = event.target.value;
-
-            state.layerModel.setStyleById(styleId);
+        /**
+         * Changes the style of the selected layer to the one of the one with the selected styleId.
+         *
+         * @param {Object} context actions context object.
+         * @param {Event} event Event fired by changing the selected value for the style of the layer.
+         * @param {HTMLSelectElement} event.target The HTML select element for the style of the layer.
+         * @returns {void}
+         */
+        triggerStyleUpdate ({state}, {target}) {
+            state.layerModel.setStyleById(target.value);
         }
     };
 

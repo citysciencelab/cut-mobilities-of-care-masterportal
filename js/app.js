@@ -39,7 +39,6 @@ import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
@@ -293,10 +292,6 @@ async function loadApp () {
             }
             case "wfst": {
                 new WfstView({model: tool});
-                break;
-            }
-            case "styleVT": {
-                new StyleVTView({model: tool});
                 break;
             }
             /**

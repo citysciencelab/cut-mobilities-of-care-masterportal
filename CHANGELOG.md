@@ -9,6 +9,7 @@
 
 ### Changed
 - The language of the changelog has been changed to English.
+- Migrated the StyleVT from Backbone.js to Vue.js.
 ### Deprecated
 
 ### Removed
