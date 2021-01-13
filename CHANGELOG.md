@@ -19,6 +19,7 @@
 ### Removed
 
 ### Fixed
+- If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
 
 ---
 
