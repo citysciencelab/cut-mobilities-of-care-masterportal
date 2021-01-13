@@ -39,12 +39,16 @@ export default {
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
-            <p v-if="vectorTileLayerList.length === 0">
+            <p
+                v-if="vectorTileLayerList.length === 0"
+                id="tool-styleVT-noStyleableLayers"
+            >
                 {{ $t("common:modules.tools.styleVT.noStyleableLayers") }}
             </p>
             <div v-else>
                 <p>{{ $t("common:modules.tools.styleVT.introText") }}</p>
                 <form
+                    id="tool-styleVT-styleableLayersAvailable"
                     class="form-horizontal"
                     role="form"
                 >
