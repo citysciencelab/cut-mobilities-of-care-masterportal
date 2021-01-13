@@ -46,13 +46,53 @@ const mutations = {
         state.selectedCoordinates = [];
     },
     /**
+     * Sets the easting error for no match in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    setEastingErrorNoCoord: (state) => {
+        state.eastingNoCoord = true;
+        state.eastingError = true;
+    },
+    /**
+     * Sets the northing error for no match in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    setNorthingErrorNoCoord: (state) => {
+        state.northingNoCoord = true;
+        state.northingError = true;
+    },
+    /**
+     * Sets the easting error for no match in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    setEastingErrorNoMatch: (state) => {
+        state.eastingNoMatch = true;
+        state.eastingError = true;
+    },
+    /**
+     * Sets the northing error for no match in the state.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
+    setNorthingErrorNoMatch: (state) => {
+        state.northingNoMatch = true;
+        state.northingError = true;
+    },
+    /**
      * Resets the error messages in the state.
      * @param {Object} state the state of searchByCoord-module
      * @returns {void}
      */
     resetErrorMessages: (state) => {
-        state.coordinatesEasting.errorMessage = "";
-        state.coordinatesNorthing.errorMessage = "";
+        state.eastingError = false;
+        state.eastingNoCoord = false;
+        state.eastingNoMatch = false;
+        state.northingError = false;
+        state.northingNoCoord = false;
+        state.northingNoMatch = false;
     },
     /**
      * Resets the coordinate values in the state.

@@ -23,11 +23,25 @@ describe("src/modules/tools/supplyCoord/store/actionsSearchByCoord.js", () => {
             actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
             expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
-            expect(state.coordinatesEasting.errorMessage).to.equals("");
-            expect(state.coordinatesNorthing.errorMessage).to.equals("");
+            expect(state.coordinatesEasting.errorMessage).to.equal("");
+            expect(state.coordinatesNorthing.errorMessage).to.equal("");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
             expect(commit.thirdCall.args[1]).to.equal("564459.13");
+        });
+        it("Validates the coordinates according to the WGS84 coordinate system", () => {
+            const state = {
+                currentSelection: "WGS84(Dezimalgrad)",
+                coordinatesEasting: {id: "easting", name: "", value: "53° 33′ 25″", errorMessage: ""},
+                coordinatesNorthing: {id: "northing", name: "", value: "9° 59′ 50″", errorMessage: ""}
+            };
+
+            actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
+
+            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
+            expect(state.coordinatesEasting.errorMessage).to.equals("");
+            // expect(state.coordinatesNorthing.errorMessage).to.equals("");
+            // expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
         });
     });
 });

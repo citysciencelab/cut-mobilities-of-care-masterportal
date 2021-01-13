@@ -55,6 +55,7 @@ export default {
      * @param {Number} zoomLevel - Zoomlevel to zoom to
      * @returns {void}
      */
+    // TODO: direkt in Component?
     setZoom: function ({dispatch}, zoomLevel) {
         dispatch("Map/setZoomLevel", zoomLevel, {root: true});
     },
@@ -85,13 +86,21 @@ export default {
 
         if (state.currentSelection === "ETRS89") {
             for (const coord of coordinates) {
-                if (coord.value === "" || coord.value.length < 1) {
-                    coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: coord.name});
+                if (coord.value === "") {
+                    if (coord.id === "easting") {
+                        commit("setEastingErrorNoCoord");
+                    }
+                    else if (coord.id === "northing") {
+                        commit("setNorthingErrorNoCoord");
+                    }
                 }
                 else if (!coord.value.match(validETRS89)) {
-                    const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
-
-                    coord.errorMessage = coord.id === "easting" ? noMatch + state.coordinatesEastingExample : noMatch + state.coordinatesNorthingExample;
+                    if (coord.id === "easting") {
+                        commit("setEastingErrorNoMatch");
+                    }
+                    else if (coord.id === "northing") {
+                        commit("setNorthingErrorNoMatch");
+                    }
                 }
                 else {
                     commit("resetErrorMessages");
@@ -102,13 +111,21 @@ export default {
         if (state.currentSelection === "WGS84") {
             for (const coord of coordinates) {
 
-                if (coord.value === "" || coord.value.length < 1) {
-                    coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
+                if (coord.value === "") {
+                    if (coord.id === "easting") {
+                        commit("setEastingErrorNoCoord");
+                    }
+                    else if (coord.id === "northing") {
+                        commit("setNorthingErrorNoCoord");
+                    }
                 }
                 else if (!coord.value.match(validWGS84)) {
-                    const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
-
-                    coord.errorMessage = coord.id === "easting" ? noMatch + state.coordinatesEastingExample : noMatch + state.coordinatesNorthingExample;
+                    if (coord.id === "easting") {
+                        commit("setEastingErrorNoMatch");
+                    }
+                    else if (coord.id === "northing") {
+                        commit("setNorthingErrorNoMatch");
+                    }
                 }
                 else {
                     commit("resetErrorMessages");
@@ -119,13 +136,21 @@ export default {
         if (state.currentSelection === "WGS84(Dezimalgrad)") {
             for (const coord of coordinates) {
 
-                if (coord.value === "" || coord.value.length < 1) {
-                    coord.errorMessage = i18next.t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: coord.name});
+                if (coord.value === "") {
+                    if (coord.id === "easting") {
+                        commit("setEastingErrorNoCoord");
+                    }
+                    else if (coord.id === "northing") {
+                        commit("setNorthingErrorNoCoord");
+                    }
                 }
                 else if (!coord.value.match(validWGS84_dez)) {
-                    const noMatch = i18next.t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: coord.name});
-
-                    coord.errorMessage = coord.id === "easting" ? noMatch + state.coordinatesEastingExample : noMatch + state.coordinatesNorthingExample;
+                    if (coord.id === "easting") {
+                        commit("setEastingErrorNoMatch");
+                    }
+                    else if (coord.id === "northing") {
+                        commit("setNorthingErrorNoMatch");
+                    }
                 }
                 else {
                     commit("resetErrorMessages");

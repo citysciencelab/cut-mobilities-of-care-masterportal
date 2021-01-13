@@ -3,7 +3,6 @@ import Tool from "../../Tool.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
-import state from "../store/stateSearchByCoord";
 
 export default {
     name: "SearchByCoord",
@@ -17,27 +16,23 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
-        /**
-         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
-         */
-        selectedCoordinates: {
-            get () {
-                return state.selectedCoordinates;
-            },
-            set (newValue) {
-                this.setSelectedCoordinates(newValue);
-            }
-        }
+        ...mapGetters("Tools/SearchByCoord", Object.keys(getters))
+        // /**
+        //  * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
+        //  */
+        // selectedCoordinates: {
+        //     get () {
+        //         return state.selectedCoordinates;
+        //     },
+        //     set (newValue) {
+        //         this.setSelectedCoordinates(newValue);
+        //     }
+        // }
     },
     created () {
         this.$on("close", this.close);
         this.newCoordSystemSelected(this.currentCoordinateSystem);
         this.setExample();
-    },
-    beforeUpdate () {
-        this.resetValues();
-        this.resetErrorMessages();
     },
     methods: {
         ...mapMutations("Tools/SearchByCoord", Object.keys(mutations)),
@@ -77,7 +72,6 @@ export default {
             this.setExample();
             this.removeMarker();
             this.resetValues();
-            this.resetErrorMessages();
         },
         /**
          * Returns the label name depending on the selected coordinate system.
@@ -100,7 +94,7 @@ export default {
         searchCoordinate (coordinatesEasting, coordinatesNorthing) {
             const coords = [coordinatesEasting, coordinatesNorthing];
 
-            this.coordinatesEasting.name = i18next.t(this.label("eastingLabel"));
+            this.resetErrorMessages();
             this.coordinatesNorthing.name = i18next.t(this.label("northingLabel"));
             this.validateInput(coords);
             this.transformCoordinates();
@@ -157,15 +151,21 @@ export default {
                             <input
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEasting.value"
-                                :class="{ inputError: coordinatesEasting.errorMessage.length }"
+                                :class="{ inputError: eastingError }"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample"
                             ><p
-                                v-if="coordinatesEasting.errorMessage.length"
+                                v-if="eastingNoCoord"
                                 class="error-text"
                             >
-                                {{ coordinatesEasting.errorMessage }}
+                                {{ currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: $t(label("eastingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: $t(label("eastingLabel"))}) }}
+                            </p>
+                            <p
+                                v-if="eastingNoMatch"
+                                class="error-text"
+                            >
+                                {{ (currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: $t(label("eastingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: $t(label("eastingLabel"))})) + coordinatesEastingExample }}
                             </p>
                         </div>
                     </div>
@@ -179,15 +179,21 @@ export default {
                             <input
                                 id="coordinatesNorthingField"
                                 v-model="coordinatesNorthing.value"
-                                :class="{ inputError: coordinatesNorthing.errorMessage.length }"
+                                :class="{ inputError: northingError }"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample"
                             ><p
-                                v-if="coordinatesNorthing.errorMessage.length"
+                                v-if="northingNoCoord"
                                 class="error-text"
                             >
-                                {{ coordinatesNorthing.errorMessage }}
+                                {{ currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: $t(label("northingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: $t(label("northingLabel"))}) }}
+                            </p>
+                            <p
+                                v-if="northingNoMatch"
+                                class="error-text"
+                            >
+                                {{ (currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: $t(label("northingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: $t(label("northingLabel"))})) + coordinatesNorthingExample }}
                             </p>
                         </div>
                     </div>
@@ -207,7 +213,7 @@ export default {
     </Tool>
 </template>
 
-// <style lang="less" scoped>
+<style lang="less" scoped>
     @import "~variables";
 .error-text {
     font-size: 85%;
