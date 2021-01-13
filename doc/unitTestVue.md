@@ -1,6 +1,6 @@
 # Unit tests in Vue
 
-For am example test suite, see *masterportal/src/modules/tools/scale/tests*. Tests can be started in the Masterportal's root folder by either calling `npm run test:vue` (one-time run) or `npm run test:vue:watch` (updates on file changes).
+For an example test suite, see *masterportal/src/modules/tools/scaleSwitcher/tests*. Tests can be started in the Masterportal's root folder by either calling `npm run test:vue` (one-time run) or `npm run test:vue:watch` (updates on file changes).
 
 ## How to write tests
 
@@ -12,7 +12,7 @@ Test files are to be saved with the file extension `.spec.js`. All test files ar
 src
 |-- modules
 |   |-- tools
-|   |   |-- scale
+|   |   |-- scaleSwitcher
 |   |   |   |-- components
 |   |   |	|   |-- ScaleSwitcher.vue
 |   |   |   |   |-- ...
@@ -42,7 +42,7 @@ The following sub-chapters contain example test files that may be used as guidel
 ### Component test
 
 ```js
-// modules/tools/scale/components/ScaleSwitcher.vue
+// modules/tools/scaleSwitcher/components/ScaleSwitcher.vue
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import ScaleSwitcherComponent from "../../../components/ScaleSwitcher.vue";
@@ -172,7 +172,7 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
 ### Store/getters test
 
 ```js
-// modules/tools/scale/store/gettersScaleSwitcher.js
+// modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js
 import {expect} from "chai";
 import getters from "../../../store/gettersScaleSwitcher";
 import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
@@ -191,7 +191,7 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
     });
     describe("testing default values", () => {
         it("returns the name default value from state", () => {
-            expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
+            expect(name(stateScaleSwitcher)).to.be.equals("common:menu.tools.scaleSwitcher");
         });
         // (...) - test further default values
     });
@@ -203,7 +203,7 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
 Note the use of the `testAction` function imported from `test/unittests/VueTestUtils`. This tool shortens the code required and provides a sound action test base.
 
 ```js
-// modules/tools/scale/store/actionsScaleSwitcher.js
+// modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsScaleSwitcher";
 
@@ -244,7 +244,7 @@ describe("src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js", () => 
 ### Store/mutations test
 
 ```js
-// modules/tools/scale/store/mutationsScaleSwitcher.js
+// modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js
 import {expect} from "chai";
 import mutations from "../../../store/mutationsScaleSwitcher";
 

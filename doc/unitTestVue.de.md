@@ -1,7 +1,7 @@
 ## Unit Tests ##
 
 **Beispiel:**
-*masterportal/src/modules/tools/scale/tests*
+*masterportal/src/modules/tools/scaleSwitcher/tests*
 
 **Aufrufe**:
 
@@ -19,7 +19,7 @@ Die Tests *.spec.js liegen neben der Komponente und dem Store. Hier am Beispiel 
 src
 |-- modules
 |   |-- tools
-|   |   |-- scale
+|   |   |-- scaleSwitcher
 |   |   |   |-- components
 |   |   |	|   |-- ScaleSwitcher.vue
 |   |   |   |   |-- ...
@@ -48,8 +48,9 @@ src
 
 **BeispielStruktur: Komponente testen**
 
-Komponente *modules/tools/scale/components/ScaleSwitcher.vue*
-```
+
+Komponente *modules/tools/scaleSwitcher/components/ScaleSwitcher.vue*
+```js
 
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
@@ -178,8 +179,10 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
 ```
 **BeispielStruktur: getters testen**
 
-Datei *modules/tools/scale/store/gettersScaleSwitcher.js*
-```
+
+Datei *modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js*
+```js
+
 import {expect} from "chai";
 import getters from "../../../store/gettersScaleSwitcher";
 import stateScaleSwitcher from "../../../store/stateScaleSwitcher";
@@ -199,7 +202,7 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
     });
     describe("testing default values", () => {
         it("returns the name default value from state", () => {
-            expect(name(stateScaleSwitcher)).to.be.equals("Maßstab umschalten");
+            expect(name(stateScaleSwitcher)).to.be.equals("common:menu.tools.scaleSwitcher");
         });
         // (...) - weitere default-Werte testen
     });
@@ -208,10 +211,10 @@ describe("src/modules/tools/scaleSwitcher/store/gettersScaleSwitcher.js", () => 
 ```
 **BeispielStruktur: actions testen**
 
-Datei *modules/tools/scale/store/actionsScaleSwitcher.js*
+Datei *modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js*
 
 Es wird die Funktion *testAction* aus *test/unittests/VueTestUtils* genutzt.
-```
+```js
 import testAction from "../../../../../../../test/unittests/VueTestUtils";
 import actions from "../../../store/actionsScaleSwitcher";
 
@@ -251,8 +254,10 @@ describe("src/modules/tools/scaleSwitcher/store/actionsScaleSwitcher.js", () => 
 ```
 
 **BeispielStruktur: mutations testen**
-Datei *modules/tools/scale/store/mutationsScaleSwitcher.js*
-```
+
+Datei *modules/tools/scaleSwitcher/store/mutationsScaleSwitcher.js*
+```js
+
 import {expect} from "chai";
 import mutations from "../../../store/mutationsScaleSwitcher";
 
@@ -281,7 +286,7 @@ Im Beispiel wird das Äußere **describe** benutzt, um zu beschreiben Welches Mo
 Im Inneren **describe** wird die Funktion, die gerade getestet werden soll beschrieben.
 
 **Syntax:**
-```
+```js
     describe(name, callback)
 ```
 
@@ -290,7 +295,7 @@ Im Inneren **describe** wird die Funktion, die gerade getestet werden soll besch
 Als zweiten Parameter wird eine Callback übergeben, in der mit Hilfe eines *expect* (siehe unten) geprüft wird, ob die Eingenschaft tatsächlich besteht.
 
 **Syntax:**
-```
+```js
     it(testcaseDescription, callback)
 ```
 
@@ -307,7 +312,7 @@ Innerhalb eines **it** sollte ein **expect** stehen.
 **expect** kann genutzt werden, um eine oder mehrere Eigenschaften eines Objektes zu untersuchen.
 
 **Syntax:**
-```
+```js
  expect(model.testMe()).to.be.true;
 
  expect(model.testMe()).to.deep.equal({name: "Jon Snow"});

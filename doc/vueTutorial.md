@@ -97,7 +97,7 @@ const state = {
     active: false,
     id: "scaleSwitcher",
     // mandatory defaults for config.json parameters
-    name: "Switch scale",
+    name: "common:menu.tools.coord",
     glyphicon: "glyphicon-resize-full",
     renderToWindow: true,
     resizableWindow: true,
@@ -300,7 +300,7 @@ In `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, the template is y
 ```html
 <template lang="html">
     <Tool
-        :title="name"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"

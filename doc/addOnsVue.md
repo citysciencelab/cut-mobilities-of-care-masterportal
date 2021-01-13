@@ -303,7 +303,7 @@ export default {
 
 {
   "VueAddon": {
-      "vue": true
+    "type": "tool"
   }
 }
 ```
