@@ -27,7 +27,7 @@ describe("src/modules/tools/supplyCoord/store/actionsSearchByCoord.js", () => {
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
             expect(commit.thirdCall.args[1]).to.equal("564459.13");
         });
-        it("Throws an Error for wrong coordinates (ETRS89)", () => {
+        it("Throws an Error for wrong or missing coordinates - ETRS89", () => {
             const state = {
                 currentSelection: "ETRS89",
                 coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
@@ -53,7 +53,7 @@ describe("src/modules/tools/supplyCoord/store/actionsSearchByCoord.js", () => {
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
         });
-        it("Throws an Error for wrong coordinates (WGS84)", () => {
+        it("Throws an Error for wrong or missing coordinates - WGS84", () => {
             const state = {
                 currentSelection: "WGS84",
                 coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
@@ -79,7 +79,7 @@ describe("src/modules/tools/supplyCoord/store/actionsSearchByCoord.js", () => {
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
         });
-        it("Throws an Error for wrong coordinates (WGS84(Dezimalgrad))", () => {
+        it("Throws an Error for wrong or missing coordinates - WGS84(Dezimalgrad)", () => {
             const state = {
                 currentSelection: "WGS84(Dezimalgrad)",
                 coordinatesEasting: {id: "easting", name: "", value: "", errorMessage: ""},
