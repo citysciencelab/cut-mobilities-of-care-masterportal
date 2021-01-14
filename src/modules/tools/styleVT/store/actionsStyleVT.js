@@ -55,7 +55,7 @@ const initialState = Object.assign({}, stateStyleVT),
          * @param {Object} context actions context object.
          * @param {Object} payload payload object.
          * @param {Boolean} payload.active Whether to activate or deactivate the module.
-         * @param {Backbone/Model/Item/Layer/VTLayer} payload.layerModel The layer selected to be initially selected.
+         * @param {VTLayer} payload.layerModel The layer selected to be initially selected.
          * @returns {void}
          */
         setActive ({commit, dispatch}, {active, layerModel}) {
