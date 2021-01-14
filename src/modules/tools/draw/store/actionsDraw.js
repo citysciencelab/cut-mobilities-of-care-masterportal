@@ -370,7 +370,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} payload Payload object.
          * @param {String} payload.interaction name of the interaction to be manipulated.
          * @param {Boolean} payload.active Value to set the drawInteractions to.
-         * @return {undefined}
+         * @returns {void}
          */
         manipulateInteraction ({state}, {interaction, active}) {
             if (interaction === "draw") {
@@ -543,7 +543,7 @@ const initialState = Object.assign({}, stateDraw),
          * @param {Object} payload payload object.
          * @param {Boolean} payload.remove Remove one feature from the array if true.
          * @param {Object} [payload.feature] feature to be added to the array, if given.
-         * @return {undefined}
+         * @returns {void}
          */
         updateRedoArray: ({state, commit}, {remove, feature}) => {
             const redoArray = state.redoArray;
