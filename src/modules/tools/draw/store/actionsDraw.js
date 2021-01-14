@@ -16,7 +16,7 @@ import stateDraw from "./stateDraw";
 
 // NOTE: The Update and the Redo Buttons weren't working with the select and modify interaction in Backbone and are not yet working in Vue too.
 
-const initialState = Object.assign({}, stateDraw),
+const initialState = JSON.parse(JSON.stringify(stateDraw)),
     actions = {
         ...actionsDownload,
         /**
