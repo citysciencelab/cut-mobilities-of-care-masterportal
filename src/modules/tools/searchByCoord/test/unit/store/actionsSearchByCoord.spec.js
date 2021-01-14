@@ -93,4 +93,18 @@ describe("src/modules/tools/supplyCoord/store/actionsSearchByCoord.js", () => {
             expect(commit.thirdCall.args[0]).to.equal("setNorthingErrorNoMatch");
         });
     });
+    describe("transformCoordinates", () => {
+        it("Does not transform coordinates of the ETRS89 format and moves to coordinates", () => {
+            const state = {
+                currentSelection: "ETRS89",
+                selectedCoordinates: ["564459.13", "5935103.67"]
+            };
+
+            actions.transformCoordinates({state, dispatch});
+
+            expect(dispatch.firstCall.args[0]).to.equal("setZoom");
+            expect(dispatch.secondCall.args[0]).to.equal("moveToCoordinates");
+            expect(dispatch.secondCall.args[1]).to.eql(["564459.13", "5935103.67"]);
+        });
+    });
 });
