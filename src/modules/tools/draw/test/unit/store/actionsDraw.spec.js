@@ -112,7 +112,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const activeSymbol = Symbol(),
             maxFeaturesSymbol = Symbol(),
             getters = {
-                getStyleSettings: () => Symbol()
+                styleSettings: Symbol()
             };
 
         it("commits and dispatches as expected", () => {
@@ -741,7 +741,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const drawInteraction = Symbol(),
             drawInteractionTwo = Symbol(),
             getters = {
-                getStyleSettings: () => Symbol()
+                styleSettings: Symbol()
             };
 
         beforeEach(() => {

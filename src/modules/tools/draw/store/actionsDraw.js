@@ -103,7 +103,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @returns {void}
          */
         createDrawInteractionAndAddToMap ({state, commit, dispatch, getters}, {active, maxFeatures}) {
-            const styleSettings = getters.getStyleSettings(),
+            const {styleSettings} = getters,
                 drawInteraction = createDrawInteraction(state, styleSettings);
 
             commit("setDrawInteraction", drawInteraction);
@@ -249,7 +249,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
 
                 // the last selected feature is allways on top
                 const feature = event.selected[event.selected.length - 1],
-                    styleSettings = getters.getStyleSettings();
+                    {styleSettings} = getters;
 
                 commit("setSelectedFeature", feature);
 
@@ -295,7 +295,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             if (!feature) {
                 return;
             }
-            const styleSettings = getters.getStyleSettings();
+            const {styleSettings} = getters;
 
             feature.set("drawState", {
                 // copies
@@ -521,7 +521,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          */
         updateDrawInteraction ({state, commit, getters, dispatch}) {
             if (state.currentInteraction === "modify" && state.selectedFeature !== null) {
-                const styleSettings = getters.getStyleSettings();
+                const {styleSettings} = getters;
 
                 state.selectedFeature.setStyle(createStyle(state, styleSettings));
                 dispatch("addDrawStateToFeature", state.selectedFeature);

@@ -14,7 +14,7 @@ const errorBorder = "#E10019";
 * @returns {void}
 */
 export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState, getters}, {drawInteraction, doubleCircle}) {
-    const styleSettings = getters.getStyleSettings(),
+    const {styleSettings} = getters,
         interaction = state["drawInteraction" + drawInteraction],
         circleMethod = styleSettings.circleMethod,
         drawType = state.drawType,

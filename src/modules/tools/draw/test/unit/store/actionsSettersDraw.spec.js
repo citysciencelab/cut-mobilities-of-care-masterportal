@@ -24,7 +24,7 @@ describe("src/modules/tools/draw/store/actions/settersDraw.js", () => {
                 id,
                 geometry: ""
             },
-            getStyleSettings: () => drawTypeOptions
+            styleSettings: drawTypeOptions
         }, gettersOptions);
     }
 
