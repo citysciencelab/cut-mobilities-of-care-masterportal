@@ -45,7 +45,7 @@ export default {
          */
         drawCircleMethods () {
             return this.drawType.id === "drawCircle" ?
-                this.drawHTMLElements || this.getStyleSettings()?.circleMethod !== "defined"
+                this.drawHTMLElements || this.styleSettings?.circleMethod !== "defined"
                 : this.drawHTMLElements;
         },
 
@@ -55,7 +55,7 @@ export default {
              * @returns {Number} the current diameter
              */
             get () {
-                return this.getStyleSettings()?.circleInnerDiameter;
+                return this.styleSettings?.circleInnerDiameter;
             },
             /**
              * setter for the computed property circleInnerDiameter of the current drawType
@@ -63,7 +63,7 @@ export default {
              * @returns {void}
              */
             set (value) {
-                this.setCircleInnerDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+                this.setCircleInnerDiameter({target: {value, unit: this.styleSettings?.unit}});
             }
         },
         circleOuterDiameterComputed: {
@@ -72,7 +72,7 @@ export default {
              * @returns {Number} the current diameter
              */
             get () {
-                return this.getStyleSettings()?.circleOuterDiameter;
+                return this.styleSettings?.circleOuterDiameter;
             },
             /**
              * setter for the computed property circleOuterDiameter of the current drawType
@@ -80,7 +80,7 @@ export default {
              * @returns {void}
              */
             set (value) {
-                this.setCircleOuterDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+                this.setCircleOuterDiameter({target: {value, unit: this.styleSettings?.unit}});
             }
         },
         /**
@@ -88,77 +88,77 @@ export default {
          * @returns {String} "defined" or "interactive"
          */
         circleMethodComputed () {
-            return this.getStyleSettings()?.circleMethod;
+            return this.styleSettings?.circleMethod;
         },
         /**
          * computed property for the unit of the current drawType
          * @returns {String} "m" or "km"
          */
         unitComputed () {
-            return this.getStyleSettings()?.unit;
+            return this.styleSettings?.unit;
         },
         /**
          * computed property for the text of the current drawType
          * @returns {String} the current text
          */
         textComputed () {
-            return this.getStyleSettings()?.text;
+            return this.styleSettings?.text;
         },
         /**
          * computed property for the font-size of the current drawType
          * @returns {Number} the current font-size as number
          */
         fontSizeComputed () {
-            return this.getStyleSettings()?.fontSize;
+            return this.styleSettings?.fontSize;
         },
         /**
          * computed property for the font family of the current drawType
          * @returns {Number} the current font family
          */
         fontComputed () {
-            return this.getStyleSettings()?.font;
+            return this.styleSettings?.font;
         },
         /**
          * computed property for the stroke width of the current drawType
          * @returns {Number} the current width as number
          */
         strokeWidthComputed () {
-            return this.getStyleSettings()?.strokeWidth;
+            return this.styleSettings?.strokeWidth;
         },
         /**
          * computed property for the opacity linked to color of the current drawType
          * @returns {Number} the current opacity as css range [0..1] - this is the value, not the caption (!)
          */
         opacityComputed () {
-            return this.getStyleSettings()?.opacity;
+            return this.styleSettings?.opacity;
         },
         /**
          * computed property for the opacity linked to colorContour of the current drawType
          * @returns {Number} the current opacity (of colorContour) as css range [0..1] - this is the value, not the caption (!)
          */
         opacityContourComputed () {
-            return this.getStyleSettings()?.opacityContour;
+            return this.styleSettings?.opacityContour;
         },
         /**
          * computed property for the color of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorContourComputed () {
-            return this.getStyleSettings()?.colorContour;
+            return this.styleSettings?.colorContour;
         },
         /**
          * computed property for the outer color of a double circle
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         outerColorContourComputed () {
-            return this.getStyleSettings()?.outerColorContour;
+            return this.styleSettings?.outerColorContour;
         },
         /**
          * computed property for the colorContour of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorComputed () {
-            return this.getStyleSettings()?.color;
+            return this.styleSettings?.color;
         },
         /**
          * computed property of the label for the normal colorContour - incase this is a double circle

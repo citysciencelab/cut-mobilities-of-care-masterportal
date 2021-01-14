@@ -3,20 +3,23 @@ import initialState from "./stateDraw";
 
 const getters = {
     ...generateSimpleGetters(initialState),
-
     /**
      * Returns a clone of the current drawTypeSettings
      *
      * @param {Object} state Current state object of the store.
      * @returns {Object} The cloned current drawTypeSettings
      */
-    getStyleSettings (state) {
-        return () => { // TODO(roehlipa): Is there a reason why this is wrapped in a function?
-            const stateKey = state.drawType.id + "Settings";
+    styleSettings (state) {
+        const stateKey = state.drawType.id + "Settings";
 
-            return JSON.parse(JSON.stringify(state[stateKey]));
-        };
+        return JSON.parse(JSON.stringify(state[stateKey]));
     },
+    /**
+     * If no features are present or the filename or the format is not set, the download is disabled.
+     *
+     * @param {Object} state state Current state object of the store.
+     * @returns {Boolean} Whether to activate or deactivate the Download Button.
+     */
     disableDownload (state) {
         const {download} = state,
             {features, fileName, selectedFormat} = download;
