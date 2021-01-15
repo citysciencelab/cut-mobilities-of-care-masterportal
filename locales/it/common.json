@@ -665,7 +665,7 @@
                 "buttonTitle": "Vista aerea obliqua",
                 "openViewOblique": "Attiva vista aerea obliqua",
                 "closeViewOblique": "Disattiva vista aerea obliqua",
-                "doNotUseIE": "La visualizzazione di immagini aeree oblique non è più supportata in Internet Explorer 11. Per questa funzione utilizzare Edge."
+                "doNotUseIE": "La visualizzazione di immagini aeree oblique non è più supportata in Internet Explorer 11. Per questa funzione si prega di utilizzare un browser attuale."
             },
             "freeze": {
                 "freeze": "Blocca vista",
