@@ -666,7 +666,7 @@
                 "buttonTitle": "Schrägluftbilder",
                 "openViewOblique": "Schrägluftbilder einschalten",
                 "closeViewOblique": "Schrägluftbilder ausschalten",
-                "doNotUseIE": "Die Anzeige der Schrägluftbilder wird im Internet Explorer 11 nicht mehr unterstützt. Bitte nutzen Sie für diese Funktion den Edge."
+                "doNotUseIE": "Die Anzeige der Schrägluftbilder wird im Internet Explorer 11 nicht mehr unterstützt. Bitte nutzen Sie für diese Funktion einen aktuellen Browser."
             },
             "freeze": {
                 "freeze": "Ansicht sperren",
