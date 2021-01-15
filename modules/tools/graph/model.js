@@ -352,6 +352,12 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
         if (yAxisTicks && yAxisTicks.hasOwnProperty("ticks") && yAxisTicks.hasOwnProperty("factor")) {
             d3Object = d3.axisLeft(scale)
+                .tickFormat(function (d) {
+                    if (d % 1 === 0) {
+                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    }
+                    return false;
+                })
                 .ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
         else {
@@ -364,7 +370,6 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
                 });
         }
-
         return d3Object;
     },
 
