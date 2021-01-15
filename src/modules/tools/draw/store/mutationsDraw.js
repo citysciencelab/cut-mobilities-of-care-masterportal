@@ -6,8 +6,8 @@ const mutations = {
     setDownloadDataString: (state, payload) => {
         state.download.dataString = payload;
     },
-    setDownloadDisabled: (state, payload) => {
-        state.download.disabled = payload;
+    setDownloadEnabled: (state) => {
+        state.download.enabled = !state.download.enabled;
     },
     setDownloadFeatures: (state, payload) => {
         state.download.features = payload;

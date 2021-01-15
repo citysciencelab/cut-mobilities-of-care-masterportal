@@ -65,15 +65,15 @@ export default {
                     class="col-xs-12 downloadFile"
                     :href="download.fileUrl"
                     :download="download.file"
-                    :disabled="download.disabled"
                 >
                     <button
                         class="btn btn-sm btn-block btn-lgv-grey"
-                        :disabled="disableDownload"
+                        :disabled="disableFileDownload"
                         type="button"
                     >
                         <span class="glyphicon glyphicon-floppy-disk" />
-                        {{ $t("common:button.download") }}
+                        <!-- TODO: Add the italian translation -->
+                        {{ $t("common:modules.tools.draw.button.saveDrawing") }}
                     </button>
                 </a>
             </div>
@@ -89,12 +89,6 @@ a {
 }
 .disabled {
     cursor: not-allowed;
-}
-/* Fix for Firefox-Bug https://bugzilla.mozilla.org/show_bug.cgi?id=748518 */
-#tool-draw-download:after {
-    content: "";
-    height: @padding;
-    display: block;
 }
 
 #tool-draw-download-file {

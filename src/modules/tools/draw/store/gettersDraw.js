@@ -20,7 +20,7 @@ const getters = {
      * @param {Object} state state Current state object of the store.
      * @returns {Boolean} Whether to activate or deactivate the Download Button.
      */
-    disableDownload (state) {
+    disableFileDownload (state) {
         const {download} = state,
             {features, fileName, selectedFormat} = download;
 

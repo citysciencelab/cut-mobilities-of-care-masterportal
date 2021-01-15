@@ -539,6 +539,15 @@
             },
             "draw": {
                 "clickToPlaceText": "Clicca sulla mappa per inserire il testo",
+                "download": {
+                  "createFirst": "Si prega di creare prima un disegno o un testo!",
+                  "enterFilename": "Inserire nome del file",
+                  "filename": "Nome del file",
+                  "format": "Formato",
+                  "formatNotSupported": "Il formato {{selectedFormat}} non è supportato.",
+                  "pleaseChoose": "Scegliere",
+                  "unknownGeometry": "Geometria sconosciuta:"
+                },
                 "draw": "disegna",
                 "geometryDrawFailed": "La geometria passata non poteva essere visualizzata.",
                 "undefinedTwoCircles": "Si prega di disegnare entrambi i cerchi.",
@@ -578,7 +587,8 @@
                     "redo": "Ripeti",
                     "edit": "Modifica geometria",
                     "delete": "Cancella geometria / testo",
-                    "deleteAll": "Cancella tutto"
+                    "deleteAll": "Cancella tutto",
+                    "saveDrawing": ""
                 },
                 "symbol": "Simbolo",
                 "iconList": {
@@ -587,15 +597,6 @@
                     "iconCloud": "Nuvola",
                     "iconMeadow": "Campo"
                 }
-            },
-            "download": {
-                "format": "Formato",
-                "pleaseChoose": "Scegliere",
-                "filename": "Nome del file",
-                "enterFilename": "Inserire nome del file",
-                "createFirst": "Si prega di creare prima un disegno o un testo!",
-                "formatNotSupported": "Il formato {{selectedFormat}} non è supportato.",
-                "unknownGeometry": "Geometria sconosciuta:"
             },
             "measure": {
                 "geometry": "Geometria",

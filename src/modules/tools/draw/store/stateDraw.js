@@ -89,6 +89,7 @@ const symbol = {
         deactivateGFI: true,
         download: {
             dataString: "",
+            enabled: false,
             features: [],
             file: "",
             fileName: "",
@@ -123,7 +124,7 @@ const symbol = {
         outerBorderColor: "",
         pointSize: 16,
         redoArray: [],
-        renderToWindow: true,
+        renderToWindow: false,
         resizableWindow: true,
         selectInteraction: null,
         selectInteractionModify: null,

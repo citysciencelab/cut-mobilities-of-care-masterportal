@@ -592,7 +592,8 @@
                     "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
-                    "deleteAll": "Delete all"
+                    "deleteAll": "Delete all",
+                    "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
                 "iconList": {

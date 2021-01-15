@@ -593,7 +593,8 @@
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
                     "delete": "Geometrie / Text löschen",
-                    "deleteAll": "Alles löschen"
+                    "deleteAll": "Alles löschen",
+                    "saveDrawing": "Zeichnung speichern"
                 },
                 "symbol": "Symbol",
                 "iconList": {
