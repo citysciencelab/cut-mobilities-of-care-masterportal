@@ -114,23 +114,15 @@ function getScaleFromFontSize (fontSize) {
  * @returns {string} The features written in KML as a String.
 */
 export default async function convertFeaturesToKml ({state, dispatch}) {
-    const anchors = [],
-        features = state.download.features,
+    const features = state.download.features,
         featureCount = features.length,
+        anchors = Array(featureCount).fill(undefined),
         format = new KML({extractStyles: true}),
-        hasIconUrl = [],
-        pointColors = [],
-        // pointOpacities = [], NOTE: This existed in the old version but seems to be of no use.
-        skip = [],
-        textFonts = [],
+        hasIconUrl = Array(featureCount).fill(false),
+        pointColors = Array(featureCount).fill(undefined),
+        skip = Array(featureCount).fill(false),
+        textFonts = Array(featureCount).fill(undefined),
         convertedFeatures = new DOMParser().parseFromString(await dispatch("convertFeatures", format), "text/xml");
-
-    // TODO(roehlipa): Would something weird happen if this was not included?
-    pointColors.fill(undefined, 0, featureCount);
-    hasIconUrl.fill(false, 0, featureCount);
-    anchors.fill(undefined, 0, featureCount);
-    textFonts.fill(undefined, 0, featureCount);
-    skip.fill(false, 0, featureCount);
 
     features.forEach((feature, i) => {
         const type = feature.getGeometry().getType();
@@ -167,7 +159,6 @@ export default async function convertFeaturesToKml ({state, dispatch}) {
                 }
                 else {
                     color = style.getImage().getFill().getColor();
-                    // pointOpacities[i] = style.getImage().getFill().getColor()[3];
                     pointColors[i] = [color[0], color[1], color[2]];
                 }
             }
