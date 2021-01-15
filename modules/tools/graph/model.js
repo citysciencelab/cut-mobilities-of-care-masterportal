@@ -355,7 +355,14 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 .ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
         else {
-            d3Object = d3.axisLeft(scale);
+            d3Object = d3.axisLeft(scale)
+                .tickFormat(function (d) {
+                    if (d % 1 === 0) {
+                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    }
+                    return false;
+
+                });
         }
 
         return d3Object;
