@@ -147,8 +147,16 @@
           "publicationCreation": "Publikation / Erstellung",
           "buildings":"Gebäude",
           "roofType":"Dachtyp",
-          "roofHeight":"Dachhöhe",
-          "objectType":"Objektart"
+          "roofHeight":"Relative Höhe des Gebäudes in Metern",
+          "objectType":"Objektart",
+          "valueDesignation":"Wertbezeichnung",
+          "storeysAboveGround":"Anzahl der Obergeschosse (ALKIS)",
+          "dataSourceLayer":"Datenquelle Lage",
+          "street":"Straße",
+          "houseNumber":"Hausnummer",
+          "PLZ":"PLZ",
+          "city":"Stadt",
+          "creationDate":"Ableitungsdatum"
         },
         "mapMarker": {
           "noStyleModel": "Zu der angegebenen StyleId: {{styleId}} konnte keine Style gefunden werden. Bitte überprüfen sie ihre Konfiguration."

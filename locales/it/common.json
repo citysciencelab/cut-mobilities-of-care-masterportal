@@ -149,8 +149,16 @@
           "publicationCreation": "Pubblicazione / Creazione",
           "buildings":"Edificio",
           "roofType":"Tipo di tetto",
-          "roofHeight":"Altezza del tetto",
-          "objectType":"Tipo di oggetto"
+          "objectType":"Tipo di oggetto",
+          "roofHeight":"Relative height of the building in meters",
+          "valueDesignation":"Value designation",
+          "storeysAboveGround":"Number of upper floors (ALKIS)",
+          "dataSourceLayer":"Data source layer",
+          "street":"Street",
+          "houseNumber":"House number",
+          "PLZ":"PLZ",
+          "city":"City",
+          "creationDate":"Date of derivation"
         },
         "mapMarker": {
           "noStyleModel": "Non è stato possibile trovare uno stile per lo StyleId specificato: {{styleId}}. Si prega di controllare la configurazione."

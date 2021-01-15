@@ -146,8 +146,16 @@
           "publicationCreation": "Publication / Creation",
           "buildings":"Buildings",
           "roofType":"Roof type",
-          "roofHeight":"Roof height",
-          "objectType":"Object type"
+          "roofHeight":"Relative height of the building in meters",
+          "objectType":"Object type",
+          "valueDesignation":"Value designation",
+          "storeysAboveGround":"Number of upper floors (ALKIS)",
+          "dataSourceLayer":"Data source layer",
+          "street":"Street",
+          "houseNumber":"House number",
+          "PLZ":"PLZ",
+          "city":"City",
+          "creationDate":"Date of derivation"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
