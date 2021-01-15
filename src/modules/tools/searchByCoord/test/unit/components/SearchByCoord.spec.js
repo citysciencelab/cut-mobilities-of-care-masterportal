@@ -9,7 +9,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/supplyCoord/components/SearchByCoord.vue", () => {
+describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
     const mockConfigJson = {
         Portalconfig: {
             menu: {

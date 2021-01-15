@@ -98,7 +98,7 @@ const mutations = {
         state.coordinatesNorthing.value = "";
     },
     /**
-     * Pushes the coordinates to selectedCoordinates Array in the state.
+     * Pushes the coordinates to the selectedCoordinates Array in the state.
      * @param {Object} state the state of searchByCoord-module
      * @param {Object} payload payload object.
      * @returns {void}

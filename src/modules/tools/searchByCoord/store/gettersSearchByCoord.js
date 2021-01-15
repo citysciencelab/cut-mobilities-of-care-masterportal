@@ -14,7 +14,7 @@ const getters = {
     ...generateSimpleGetters(searchByCoordState),
 
     /**
-     * Returns true to each coordinate error variable if one their test cases is fails.
+     * Returns true to each coordinate error variable if one their test cases fails.
      * @param {Object} state state of this tool
      * @param {String} name of the projection
      * @returns {Object} projection
@@ -25,6 +25,10 @@ const getters = {
         }
         else if (state.northingNoCoord || state.northingNoMatch) {
             state.northingError = true;
+        }
+        else {
+            state.eastingError = false;
+            state.northingError = false;
         }
     }
 };

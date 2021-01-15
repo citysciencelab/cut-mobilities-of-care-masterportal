@@ -61,7 +61,6 @@ export default {
         label (key) {
             const type = this.currentCoordinateSystem === "ETRS89" ? "cartesian" : "hdms";
 
-
             return "modules.tools.searchByCoord." + type + "." + key;
         },
         /**

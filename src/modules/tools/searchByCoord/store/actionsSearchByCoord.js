@@ -132,7 +132,6 @@ export default {
      * @returns {void}
      */
     transformCoordinates ({state, dispatch}) {
-        console.log(state.selectedCoordinates);
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
             if (state.currentSelection !== "ETRS89") {
@@ -147,7 +146,6 @@ export default {
 
                 state.transformedCoordinates = proj4(proj4("EPSG:4326"), proj4("EPSG:25832"), [newLongitude, newLatitude]); // turning the coordinates around to make it work for WGS84
                 dispatch("moveToCoordinates", state.transformedCoordinates);
-                console.log(state.transformedCoordinates);
             }
             else {
                 dispatch("moveToCoordinates", state.selectedCoordinates);

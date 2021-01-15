@@ -3,7 +3,7 @@ import mutations from "../../../store/mutationsSearchByCoord";
 
 const {setExample} = mutations;
 
-describe("src/modules/tools/supplyCoord/store/mutationsSearchByCoord.js", () => {
+describe("src/modules/tools/searchByCoord/store/mutationsSearchByCoord.js", () => {
 
     describe("setExample", () => {
         it("Sets the example values according to the ETRS89 coordinate system", () => {
