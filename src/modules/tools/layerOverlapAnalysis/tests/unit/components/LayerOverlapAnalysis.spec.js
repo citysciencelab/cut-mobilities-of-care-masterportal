@@ -59,18 +59,18 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
         store.commit("Tools/LayerOverlapAnalysis/setActive", true);
     });
 
-    it("renders the layerOverlapAnalysis", () => {
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
-
-        expect(wrapper.find("#layer-analysis").exists()).to.be.true;
-    });
-
-    it("do not render the layerOverlapAnalysiss select if not active", () => {
-        store.commit("Tools/LayerOverlapAnalysis/setActive", false);
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
-
-        expect(wrapper.find("#layer-analysis").exists()).to.be.false;
-    });
+    // it("renders the layerOverlapAnalysis", () => {
+    //     const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
+    //
+    //     expect(wrapper.find("#layer-analysis").exists()).to.be.true;
+    // });
+    //
+    // it("do not render the layerOverlapAnalysiss select if not active", () => {
+    //     store.commit("Tools/LayerOverlapAnalysis/setActive", false);
+    //     const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
+    //
+    //     expect(wrapper.find("#layer-analysis").exists()).to.be.false;
+    // });
 
     // it("has initially set all scales to select", () => {
     //     const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue}),
