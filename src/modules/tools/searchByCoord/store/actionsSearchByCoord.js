@@ -23,7 +23,6 @@ export default {
      * @param {Number} zoomLevel - Zoomlevel to zoom to
      * @returns {void}
      */
-    // TODO: direkt in Component?
     setZoom: function ({dispatch}, zoomLevel) {
         dispatch("Map/setZoomLevel", zoomLevel, {root: true});
     },
