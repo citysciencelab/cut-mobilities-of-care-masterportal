@@ -46,13 +46,12 @@ export default {
     validateInput ({state, commit}, coords) {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
-            validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
-            coordinates = coords;
+            validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/;
 
         commit("resetSelectedCoordinates");
 
         if (state.currentSelection === "ETRS89") {
-            for (const coord of coordinates) {
+            for (const coord of coords) {
                 if (coord.value === "") {
                     if (coord.id === "easting") {
                         commit("setEastingErrorNoCoord");
@@ -76,7 +75,7 @@ export default {
             }
         }
         if (state.currentSelection === "WGS84") {
-            for (const coord of coordinates) {
+            for (const coord of coords) {
 
                 if (coord.value === "") {
                     if (coord.id === "easting") {
@@ -101,7 +100,7 @@ export default {
             }
         }
         if (state.currentSelection === "WGS84(Dezimalgrad)") {
-            for (const coord of coordinates) {
+            for (const coord of coords) {
 
                 if (coord.value === "") {
                     if (coord.id === "easting") {
