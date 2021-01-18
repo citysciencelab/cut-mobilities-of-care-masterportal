@@ -104,6 +104,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "addLayer": this.addLayer,
             "addGdiLayer": this.addGdiLayer,
             "addGeoJSONLayer": this.addGeoJSONLayer,
+            "addVectorLayer": this.addVectorLayer,
             "removeItem": this.removeItem
         }, this);
 
@@ -409,7 +410,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isVisibleInTree: true,
             cache: false,
             datasets: [],
-            urlIsVsible: true
+            urlIsVisible: true
         };
 
         if (styleId !== undefined) {
@@ -422,6 +423,49 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.addItem(layer);
     },
 
+    /**
+     * Creates the Masterportal Configuration for a Vector Layer.
+     * Adds the configuration to be parsed into the Portal.
+     *
+     * @param {String} name Name of the layer.
+     * @param {String} id Unique identifier for the layer.
+     * @param {ol.Feature[]} features - all features generated from the imported file
+     * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+     * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+     * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+     * @returns {void}
+     */
+    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore") {
+        const layer = {
+            type: "layer",
+            name: name,
+            id: id,
+            typ: "VectorBase",
+            features: features,
+            transparent: true,
+            minScale: "0",
+            maxScale: "350000",
+            gfiAttributes: gfiAttributes,
+            layerAttribution: "nicht vorhanden",
+            legendURL: "",
+            isBaseLayer: false,
+            isVisibleInTree: true,
+            isSelected: true,
+            cache: false,
+            datasets: [],
+            urlIsVisible: false
+        };
+
+        if (styleId !== undefined) {
+            layer.styleId = styleId;
+        }
+        if (parentId !== undefined) {
+            layer.parentId = parentId;
+        }
+
+        this.addItem(layer);
+        Radio.trigger("ModelList", "addModelsByAttributes", layer);
+    },
 
     /**
      * Adds found layer to layer tree

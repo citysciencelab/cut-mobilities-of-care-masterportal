@@ -1548,13 +1548,14 @@ Module used to draw features on the map. This includes points, which may also be
 |drawLineSettings|no|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for line drawing.|false|
 |drawCurveSettings|no|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for freehand drawing.|false|
 |drawAreaSettings|no|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{"strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for area drawing.|false|
-|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleInnerDiameter": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for circle drawing.|false|
-|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleInnerDiameter": 0, "circleOuterDiameter": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
+|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleRadius": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1, "tooltipStyle": {"fontSize": "16px", "paddingTop": "3px", "paddingLeft": "3px", "paddingRight": "3px", "backgroundColor": "rgba(255, 255, 255, .9)"}}|Pre-configuration for circle drawing.|false|
+|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleRadius": 0, "circleOuterRadius": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
 |writeTextSettings|no|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{"text": "", "fontSize": 10, "font": "Arial", "color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for text writing.|false|
 
 **Example**
 
-```json
+```
+#!json
 {
     "draw": {
         "name": "Draw / Write",
@@ -1579,13 +1580,20 @@ Module used to draw features on the map. This includes points, which may also be
             }
         ],
         "drawDoubleCircleSettings": {
-            "circleInnerDiameter": 3000,
-            "circleOuterDiameter": 6000,
+            "circleRadius": 1500,
+            "circleOuterRadius": 3000,
             "strokeWidth": 3,
             "color": [55, 126, 184, 0],
             "opacity": 0,
             "colorContour": [228, 26, 28, 1],
-            "opacityContour": 1
+            "opacityContour": 1,
+            "tooltipStyle": {
+                "fontSize": "14px",
+                "paddingTop": "3px",
+                "paddingLeft": "3px",
+                "paddingRight": "3px",
+                "backgroundColor": "rgba(255, 255, 255, .9)"
+            }
         }
     }
 }
@@ -1730,21 +1738,23 @@ Object to change the drawing tool's configured circle default value.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |circleMethod|yes|String|"interactive"|Pre-configured method of circle drawing. `"interactive"`: freehand, `"defined"`: by entering fixed values|false|
-|unit|yes|String|"m"|Pre-configured unit regarding the circle's diameter `circleInnerDiameter` when `"defined"` is chosen as `circleMethod`.|false|
-|circleInnerDiameter|yes|Number|0|Pre-configured circle diameter when `"defined"` is chosen as `circleMethod`.|false|
+|unit|yes|String|"m"|Pre-configured unit regarding the circle's Radius `circleRadius` when `"defined"` is chosen as `circleMethod`.|false|
+|circleRadius|yes|Number|0|Pre-configured circle Radius when `"defined"` is chosen as `circleMethod`.|false|
 |strokeWidth|yes|Number|1|Pre-configured stroke width of circle border in pixels.|false|
 |color|yes|Number[]|[55, 126, 184, 1]|Pre-configured circle color in RGBA.|false|
 |opacity|yes|Number|1|Pre-configured circle transparency in range [0..1].|false|
 |colorContour|yes|Number[]|[0, 0, 0, 1]|Pre-configured circle border color in RGBA.|false|
 |opacityContour|yes|Number|1|Pre-configured circle border transparency in range [0..1].|false|
+|tooltipStyle|no|String|{}|Pre-configured style for tooltip.|false|
 
 **Example**
 
-```json
+```
+#!json
 {
     "circleMethod": "interactive",
     "unit": "m",
-    "circleInnerDiameter": 0,
+    "circleRadius": 0,
     "strokeWidth": 1,
     "color": [55, 126, 184, 1],
     "opacity": 1,
@@ -1762,9 +1772,9 @@ Object to change the drawing tool's configured circle default value.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |circleMethod|yes|String|"defined"|Pre-configured method of circle drawing. `"interactive"`: freehand, `"defined"`: by entering fixed values|false|
-|unit|yes|String|"m"|Pre-configured unit regarding the circle's diameter `circleInnerDiameter` and `circleOuterDiameter` when `"defined"` is chosen as `circleMethod`.|false|
-|circleInnerDiameter|yes|Number|0|Pre-configured inner circle diameter when `"defined"` is chosen as `circleMethod`.|false|
-|circleOuterDiameter|yes|Number|0|Pre-configured outer circle diameter when `"defined"` is chosen as `circleMethod`.|false|
+|unit|yes|String|"m"|Pre-configured unit regarding the circle's radius `circleRadius` and `circleOuterRadius` when `"defined"` is chosen as `circleMethod`.|false|
+|circleRadius|yes|Number|0|Pre-configured inner circle radius when `"defined"` is chosen as `circleMethod`.|false|
+|circleOuterRadius|yes|Number|0|Pre-configured outer circle radius when `"defined"` is chosen as `circleMethod`.|false|
 |strokeWidth|yes|Number|1|Pre-configured stroke width of circle border in pixels.|false|
 |color|yes|Number[]|[55, 126, 184, 1]|Pre-configured circle color in RGBA.|false|
 |opacity|yes|Number|1|Pre-configured double circle transparency in range [0..1].|false|
@@ -1778,8 +1788,8 @@ Object to change the drawing tool's configured circle default value.
 {
     "circleMethod": "defined",
     "unit": "m",
-    "circleInnerDiameter": 0,
-    "circleOuterDiameter": 0,
+    "circleRadius": 0,
+    "circleOuterRadius": 0,
     "strokeWidth": 1,
     "color": [55, 126, 184, 1],
     "opacity": 1,

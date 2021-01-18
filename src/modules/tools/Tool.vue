@@ -226,152 +226,154 @@ export default {
 </template>
 
 <style lang="less" scoped>
-@import "~variables";
-@color_1: rgb(85, 85, 85);
-@color_2: rgb(255, 255, 255);
-@font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
-@font_family_2: "MasterPortalFont", sans-serif;
-@background_color_1: rgb(255, 255, 255);
-@background_color_2: #e10019;
-@background_color_3: #f2f2f2;
-@background_color_4: #646262;
+    @import "~variables";
+    @color_1: rgb(85, 85, 85);
+    @color_2: rgb(255, 255, 255);
+    @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
+    @font_family_2: "MasterPortalFont", sans-serif;
+    @background_color_1: rgb(255, 255, 255);
+    @background_color_2: #e10019;
+    @background_color_3: #f2f2f2;
+    @background_color_4: #646262;
 
-#vue-tool-content-body { display:block; }
+    #vue-tool-content-body { display:block; }
 
-.win-heading{
-    padding: 12px 10px 12px 10px;
-    border-bottom: 1px solid rgb(229, 229, 229);
-    font-family: @font_family_1;
-    display:flex;
-    flex-direction:row;
-    width:100%;
+    .win-heading{
+        padding: 12px 10px 12px 10px;
+        border-bottom: 1px solid rgb(229, 229, 229);
+        font-family: @font_family_1;
+        display:flex;
+        flex-direction:row;
+        width:100%;
 
-    .heading-element {
-        white-space: nowrap;
-        color: @color_1;
-        font-size: 14px;
-        padding: 6px;
-
-        &.flex-grow {
-            flex-grow:99;
-            overflow: hidden;
-        }
-
-        > .title {
-            margin:0;
-            overflow:hidden;
+        .heading-element {
             white-space: nowrap;
-        }
+            color: @color_1;
+            font-size: 14px;
+            padding: 6px;
 
-        > span {
-            &.glyphicon-minus { top: 3px; }
-            &:hover {
-                &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+            &.flex-grow {
+                flex-grow:99;
+                overflow: hidden;
+            }
+
+            > .title {
+                margin:0;
+                overflow:hidden;
+                white-space: nowrap;
+            }
+
+            > span {
+                &.glyphicon-minus { top: 3px; }
+                &:hover {
+                    &:not(.win-icon) { opacity: 0.7; cursor: pointer;}
+                }
             }
         }
     }
-}
 
-#tool-window-vue {
-    background-color: @background_color_1;
-    display: block;
-    position: absolute;
-    padding:0;
-    top: 20px;
-    left: 20px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
-    z-index: 999;
-    max-height:72vh;
-
-    .basic-resize-handle {
-        position:absolute;
-        width:6px;
-        height:6px;
-    }
-    #basic-resize-handle-tl { top:0px; left:0px; }
-    #basic-resize-handle-tr { top:0px; right:0px;}
-    #basic-resize-handle-br { bottom:0px; right:0px;}
-    #basic-resize-handle-bl { bottom:0px; left:0px;}
-
-    &.is-minified {
-        width:auto !important;
-        height:auto !important;
-
-        #vue-tool-content-body { display:none; }
-        .win-heading{
-            background-color:@background_color_2;
-            border-bottom:none;
-
-            .heading-element {
-                .title { color: @color_2; }
-            }
-        }
-    }
-}
-
-.win-body-vue {
-    position:relative;
-    padding:20px;
-    height:calc(100% - 58px);
-    width:100%;
-    -webkit-overflow-scrolling: touch;
-    background-color: @background_color_1;
-    overflow:auto;
-}
-
-.table-tool-win-all-vue {
-    font-family: @font_family_2;
-    border-radius: 12px;
-    background-color: @background_color_4;
-    margin-bottom: 30px;
-    .header {
-        font-family: @font_family_2;
-        > .title { color: @color_2; }
-        > .buttons { color: @color_2; }
-    }
-    .win-body-vue {
-        border-bottom-left-radius: 12px;
-        border-bottom-right-radius: 12px;
-        background-color: @background_color_3;
-        * { border-radius: 12px; }
-    }
-}
-
-#tool-sidebar-vue {
-    background-color: @background_color_1;
-    padding:0 0 0 12px;
-    height:100%;
-}
-
-#basic-resize-handle-sidebar{
-    position:absolute;
-    top:0;
-    left:0;
-    bottom:0;
-    padding:6px;
-    transition:background-color 0.25s;
-    background-color:#DDDDDD;
-
-    &:hover { background-color:#BBBBBB; }
-    &>div {
+    #tool-window-vue {
+        background-color: @background_color_1;
+        display: block;
         position: absolute;
-        top:50%;
-        margin-top:-8px;
+        padding:0;
+        top: 20px;
+        left: 20px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+        z-index: 999;
+        max-height:72vh;
+        overflow: auto;
+        min-width: 280px;
+
+        .basic-resize-handle {
+            position:absolute;
+            width:6px;
+            height:6px;
+        }
+        #basic-resize-handle-tl { top:0px; left:0px; }
+        #basic-resize-handle-tr { top:0px; right:0px;}
+        #basic-resize-handle-br { bottom:0px; right:0px;}
+        #basic-resize-handle-bl { bottom:0px; left:0px;}
+
+        &.is-minified {
+            width:auto !important;
+            height:auto !important;
+
+            #vue-tool-content-body { display:none; }
+            .win-heading{
+                background-color:@background_color_2;
+                border-bottom:none;
+
+                .heading-element {
+                    .title { color: @color_2; }
+                }
+            }
+        }
     }
-}
 
+    .win-body-vue {
+        position:relative;
+        padding:20px;
+        height:calc(100% - 58px);
+        width:100%;
+        -webkit-overflow-scrolling: touch;
+        background-color: @background_color_1;
+        overflow:auto;
+    }
 
-@media (max-width: 767px) {
-    .tool-window { right: 0; }
+    .table-tool-win-all-vue {
+        font-family: @font_family_2;
+        border-radius: 12px;
+        background-color: @background_color_4;
+        margin-bottom: 30px;
+        .header {
+            font-family: @font_family_2;
+            > .title { color: @color_2; }
+            > .buttons { color: @color_2; }
+        }
+        .win-body-vue {
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            background-color: @background_color_3;
+            * { border-radius: 12px; }
+        }
+    }
+
     #tool-sidebar-vue {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        z-index: 1050;
-        overflow-x: hidden;
-        overflow-y: auto;
-        margin: 3%;
+        background-color: @background_color_1;
+        padding:0 0 0 12px;
+        height:100%;
     }
-}
+
+    #basic-resize-handle-sidebar{
+        position:absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        padding:6px;
+        transition:background-color 0.25s;
+        background-color:#DDDDDD;
+
+        &:hover { background-color:#BBBBBB; }
+        &>div {
+            position: absolute;
+            top:50%;
+            margin-top:-8px;
+        }
+    }
+
+
+    @media (max-width: 767px) {
+        .tool-window { right: 0; }
+        #tool-sidebar-vue {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 1050;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin: 3%;
+        }
+    }
 </style>

@@ -103,12 +103,18 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             Radio.trigger("Alert", "alert", this.get("createFirstText"));
             return;
         }
+        const newFeatures = [];
+
         obj.features.forEach(feature => {
+            const newFeature = feature.clone();
+
             if (feature.getGeometry() instanceof Circle) {
-                feature.setGeometry(fromCircle(feature.getGeometry()));
+                newFeature.setGeometry(fromCircle(feature.getGeometry()));
             }
+            newFeatures.push(newFeature);
         });
 
+        obj.features = newFeatures;
         this.setFormats(obj.formats);
         this.setFeatures(obj.features);
 
@@ -207,8 +213,13 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
             }
             else {
                 try {
-                    styles = feature.getStyleFunction().call(feature);
-                    style = styles[0];
+                    styles = feature.getStyleFunction()(feature);
+                    if (Array.isArray(styles)) {
+                        style = styles[0];
+                    }
+                    else {
+                        style = styles;
+                    }
                 }
                 catch (ex) {
                     // only happens if an imported kml is exported, can be skipped
@@ -226,8 +237,8 @@ const DownloadModel = Tool.extend(/** @lends DownloadModel.prototype */{
                         anchors[i] = {xUnit: anchorXUnits, yunit: anchorYUnits, anchor: anchor};
 
                     }
-                    else if (feature.getStyle().getText()) {
-                        textFonts[i] = feature.getStyle().getText().getFont();
+                    else if (style.getText()) {
+                        textFonts[i] = style.getText().getFont();
                     }
                     else {
                         color = style.getImage().getFill().getColor();

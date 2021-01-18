@@ -307,9 +307,11 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
         }
         else {
+            spec.setLegend({});
+            spec.setShowLegend(false);
             spec = spec.toJSON();
             spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
-            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+            this.createPrintJob(encodeURIComponent(JSON.stringify(spec)), this.get("printAppId"), this.get("currentFormat"));
         }
     },
 

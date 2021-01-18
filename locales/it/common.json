@@ -59,6 +59,7 @@
         "mapBackground": "Sfondo mappa grigio/bianco",
         "pinTopicsTree": "Fissa l'albero di livelli",
         "hideAllTopics": "Nascondi tutti i livelli",
+        "securedAllTopics": "Livelli protetti",
         "showAllTopics": "Mostra tutti i livelli",
         "category": "Categorie",
         "backgroundMaps": "Mappe di sfondo",
@@ -69,6 +70,7 @@
         "infosAndLegend": "Informazioni e legenda",
         "removeTopic": "Nascondi livello selezionato",
         "showTopic": "Mostra livello selezionato",
+        "securedTopic": "Livello protetto",
         "changeClassDivision": "Cambia classificazione",
         "settings": "Impostazioni",
         "transparency": "Opacità",
@@ -152,6 +154,11 @@
         },
         "mapMarker": {
           "noStyleModel": "Non è stato possibile trovare uno stile per lo StyleId specificato: {{styleId}}. Si prega di controllare la configurazione."
+        },
+        "menu": {
+          "layer": {
+            "basicAuthError": "Spiacenti, il livello sicuro non ha potuto essere caricato. Contattate l'amministratore e fategli sapere se vi è stato chiesto di inserire un nome utente e una password. </br> Livello protetto: "
+          }
         },
         "featureViaURL": {
             "coordLabel": "Coordinate",
@@ -500,16 +507,16 @@
               "localeFormat": {
                 "decimal": "\",\"",
                 "thousands": "\".\"",
-                "grouping": "[3]",
-                "currency": "[\"€\", \"\"]",
+                "grouping": ["3"],
+                "currency": ["€", ""],
                 "dateTime": "\"%a %b %e %X %Y\"",
                 "date": "\"%d/%m/%Y\"",
                 "time": "\"%H:%M:%S\"",
-                "periods": "[\"AM\", \"PM\"]",
-                "days": "[\"domenica\", \"lunedì\", \"martedì\", \"mercoledì\", \"giovedì\", \"venerdì\", \"sabato\"]",
-                "shortDays": "[\"do\", \"lu\", \"ma\", \"me\", \"gi\", \"ve\", \"sa\"]",
-                "months": "[\"gennaio\", \"febbraio\", \"marzo\", \"aprile\", \"maggio\", \"giugno\", \"luglio\", \"agosto\", \"settembre\", \"ottobre\", \"novembre\", \"dicembre\"]",
-                "shortMonths": "[\"gen\", \"feb\", \"mar\", \"apr\", \"mag\", \"gui\", \"lug\", \"ago\", \"set\", \"ott\", \"nov\", \"dic\"]"
+                "periods": ["AM", "PM"],
+                "days": ["domenica", "lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato"],
+                "shortDays": ["do", "lu", "ma", "me", "gi", "ve", "sa"],
+                "months": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+                "shortMonths": ["gen", "feb", "mar", "apr", "mag", "gui", "lug", "ago", "set", "ott", "nov", "dic"]
               }
             },
             "viomRouting": {
