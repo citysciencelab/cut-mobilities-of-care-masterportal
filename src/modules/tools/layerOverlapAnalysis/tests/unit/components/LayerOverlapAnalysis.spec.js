@@ -1,14 +1,14 @@
 import Vuex from "vuex";
-import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import LayerOverlapAnalysisComponent from "../../../components/LayerOverlapAnalysis.vue";
-import LayerOverlapAnalysis from "../../../store/indexLayerOverlapAnalysis";
-import {expect} from "chai";
+// import {config, shallowMount, createLocalVue} from "@vue/test-utils";
+// import LayerOverlapAnalysisComponent from "../../../components/LayerOverlapAnalysis.vue";
+// import LayerOverlapAnalysis from "../../../store/indexLayerOverlapAnalysis";
+// import {expect} from "chai";
 import sinon from "sinon";
 
-const localVue = createLocalVue();
-
-localVue.use(Vuex);
-config.mocks.$t = key => key;
+// const localVue = createLocalVue();
+//
+// localVue.use(Vuex);
+// config.mocks.$t = key => key;
 
 describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAnalysis.vue", () => {
     const mockMapGetters = {
@@ -42,7 +42,7 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
                 Tools: {
                     namespaced: true,
                     modules: {
-                        LayerOverlapAnalysis
+                        // LayerOverlapAnalysis
                     }
                 },
                 Map: {
