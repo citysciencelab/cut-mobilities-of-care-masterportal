@@ -14,7 +14,6 @@
 - On tools Taktische Zeichen on tools under Addons
 ### Changed
 - The language of the changelog has been changed to English.
-- The display of oblique aerial images is no longer supported in Internet Explorer 11, a message appears suggesting to use a current browser for this functionality.
 
 ### Deprecated
 
