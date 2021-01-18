@@ -104,6 +104,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "addLayer": this.addLayer,
             "addGdiLayer": this.addGdiLayer,
             "addGeoJSONLayer": this.addGeoJSONLayer,
+            "addVectorLayer": this.addVectorLayer,
             "removeItem": this.removeItem
         }, this);
 
@@ -409,7 +410,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isVisibleInTree: true,
             cache: false,
             datasets: [],
-            urlIsVsible: true
+            urlIsVisible: true
         };
 
         if (styleId !== undefined) {
@@ -422,6 +423,49 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.addItem(layer);
     },
 
+    /**
+     * Creates the Masterportal Configuration for a Vector Layer.
+     * Adds the configuration to be parsed into the Portal.
+     *
+     * @param {String} name Name of the layer.
+     * @param {String} id Unique identifier for the layer.
+     * @param {ol.Feature[]} features - all features generated from the imported file
+     * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+     * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+     * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+     * @returns {void}
+     */
+    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore") {
+        const layer = {
+            type: "layer",
+            name: name,
+            id: id,
+            typ: "VectorBase",
+            features: features,
+            transparent: true,
+            minScale: "0",
+            maxScale: "350000",
+            gfiAttributes: gfiAttributes,
+            layerAttribution: "nicht vorhanden",
+            legendURL: "",
+            isBaseLayer: false,
+            isVisibleInTree: true,
+            isSelected: true,
+            cache: false,
+            datasets: [],
+            urlIsVisible: false
+        };
+
+        if (styleId !== undefined) {
+            layer.styleId = styleId;
+        }
+        if (parentId !== undefined) {
+            layer.parentId = parentId;
+        }
+
+        this.addItem(layer);
+        Radio.trigger("ModelList", "addModelsByAttributes", layer);
+    },
 
     /**
      * Adds found layer to layer tree
@@ -553,7 +597,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {ModelList} todo
      */
     createModelList: function () {
-        new ModelList(this.get("itemList").filter(function (model) {
+        const itemList = this.get("itemList");
+
+        this.logWarnings(itemList);
+        new ModelList(itemList.filter(model => {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -563,6 +610,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 model.parentId === "utilities" ||
                 model.parentId === "ansichten";
         }));
+    },
+
+    /**
+     * Logged warnings only once for all items.
+     * @param {Object[]} itemList - The itemList.
+     * @returns {void}
+     */
+    logWarnings: function (itemList) {
+        const itemWithLegendURL = itemList.find(item => item?.legendURL);
+
+        if (itemWithLegendURL) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+        }
     },
 
     /**

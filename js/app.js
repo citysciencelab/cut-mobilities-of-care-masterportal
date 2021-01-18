@@ -41,7 +41,6 @@ import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
-import hidePreLoadContainers from "../src/utils/hidePreLoadContainers";
 import i18next from "./i18next";
 
 /**
@@ -73,12 +72,12 @@ import WfstView from "../modules/tools/wfst/view";
 import ControlsView from "../modules/controls/view";
 import OrientationView from "../modules/controls/orientation/view";
 import SearchbarView from "../modules/searchbar/view";
-import HighlightFeature from "../modules/highlightFeature/model";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
 import SelectFeaturesView from "../modules/tools/selectFeatures/view";
+import LoaderOverlay from "../src/utils/loaderOverlay";
 
 let sbconfig,
     controls,
@@ -370,8 +369,6 @@ async function loadApp () {
         new SearchbarView(sbconfig);
     }
 
-    new HighlightFeature();
-
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
         const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
@@ -407,9 +404,7 @@ async function loadApp () {
             }
         });
     }
-
-    hidePreLoadContainers();
-    Radio.trigger("Util", "hideLoader");
+    LoaderOverlay.hide();
 }
 
 /**

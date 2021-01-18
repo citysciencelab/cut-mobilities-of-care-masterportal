@@ -312,6 +312,17 @@
  */
 
 /**
+ * @event Core.ConfigLoader#RadioTriggerParseraddVectorLayer
+ * @param {String} layerName - The name of the layer (can be selected alphanumerically)
+ * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
+ * @param {ol.Feature[]} features - all features generated from the imported file
+ * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+ * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+ * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+ * @example Radio.trigger("Parser", "addVectorLayer", name, id, features, parentId, styleId, gfiAttributes)
+ */
+
+/**
  * @event Core.ConfigLoader#RadioTriggerParserRemoveItem
  * @description Event that removes an item from the layertree
  * @param {String} id - id from item that be removed
@@ -1436,13 +1447,6 @@
  * @description todo
  * @returns {*} - todod
  * @example Radio.request("Util", "convertArrayOfObjectsToCsv");
- */
-
-/**
- * @event Core#RadioRequestUtilGetPathFromLoader
- * @description returns the path to the loader gif
- * @returns {String} - path to loader gif
- * @example Radio.request("Util", "getPathFromLoader");
  */
 
 /**

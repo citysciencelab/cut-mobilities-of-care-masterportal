@@ -10,6 +10,7 @@ import TerrainLayer from "./layer/terrain";
 import EntitiesLayer from "./layer/entities";
 import TileSetLayer from "./layer/tileset";
 import VectorTileLayer from "./layer/vectorTile";
+import VectorBaseLayer from "./layer/vectorBase";
 import ObliqueLayer from "./layer/oblique";
 import Folder from "./folder/model";
 import Tool from "./tool/model";
@@ -232,6 +233,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.typ === "VectorTile") {
                 return new VectorTileLayer(attrs, options);
             }
+            else if (attrs.typ === "VectorBase") {
+                return new VectorBaseLayer(attrs, options);
+            }
         }
         else if (attrs.type === "folder") {
             return new Folder(attrs, options);
@@ -374,7 +378,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * Sets all models of given parentId visibleInTree=false
      * @param {String} parentId The Id of the parent whose children should be set invisible
      * @return {void}
-    */
+     */
     setModelsInvisibleByParentId: function (parentId) {
         let children;
 
@@ -390,10 +394,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-    * Sets all children visible or invisible depending on the parents attribute isExpanded
-    * @param {String} parentId The Id of the parent whose children should be set visible
-    * @return {void}
-    */
+     * Sets all children visible or invisible depending on the parents attribute isExpanded
+     * @param {String} parentId The Id of the parent whose children should be set visible
+     * @return {void}
+     */
     setVisibleByParentIsExpanded: function (parentId) {
         const parent = this.findWhere({id: parentId});
 
@@ -453,9 +457,9 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-    * Sets all models invisible
-    * @return {void}
-    */
+     * Sets all models invisible
+     * @return {void}
+     */
     setAllModelsInvisible: function () {
         this.forEach(function (model) {
             model.setIsVisibleInTree(false);
@@ -879,7 +883,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @fires Core#RadioRequestMapGetMapMode
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @return {void}
-    */
+     */
     showModelInTree: function (modelId) {
         const mode = Radio.request("Map", "getMapMode"),
             lightModel = Radio.request("Parser", "getItemByAttributes", {id: modelId});
@@ -906,10 +910,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-    * Scrolls to layer in layerTree
-    * @param {String} overlayerName Name of Layer in "Overlayer" to be scrolled to
-    * @return {void}
-    */
+     * Scrolls to layer in layerTree
+     * @param {String} overlayerName Name of Layer in "Overlayer" to be scrolled to
+     * @return {void}
+     */
     scrollToLayer: function (overlayerName) {
         const $Overlayer = $("#Overlayer"),
             element = $Overlayer.find("span").toArray().find(layer => layer.title === overlayerName);
@@ -969,10 +973,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-    * Removes all layer models from the map
-    * @param {String} parentId Id of the parent folder
-    * @return {void}
-    */
+     * Removes all layer models from the map
+     * @param {String} parentId Id of the parent folder
+     * @return {void}
+     */
     removeModelsByParentId: function (parentId) {
         this.where({parentId: parentId}).forEach(model => {
             if (model.get("type") === "layer" && model.get("isVisibleInMap") === true) {
@@ -985,11 +989,11 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
     },
 
     /**
-    * replaces a model by a given id
-    * @param  {String} id from model that be replaced in ModelList
-    * @param  {Object} newModel to add to the ModelList
-    * @return {void}
-    */
+     * replaces a model by a given id
+     * @param  {String} id from model that be replaced in ModelList
+     * @param  {Object} newModel to add to the ModelList
+     * @return {void}
+     */
     replaceModelById: function (id, newModel) {
         const model = this.get(id);
         let index = 0;
@@ -1002,10 +1006,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
     },
     /**
-    * remove a model by a given id
-    * @param  {String} id from model that be remove from ModelList
-    * @return {void}
-    */
+     * remove a model by a given id
+     * @param  {String} id from model that be remove from ModelList
+     * @return {void}
+     */
     removeModelsById: function (id) {
         const model = this.get(id);
 

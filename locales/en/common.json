@@ -59,6 +59,7 @@
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
+        "securedAllTopics": "Secured topics",
         "category": "Category",
         "backgroundMaps": "Background maps",
         "subjectData": "Subject data",
@@ -68,6 +69,7 @@
         "infosAndLegend": "Information und explanations",
         "removeTopic": "Remove topic",
         "showTopic": "Present topic",
+        "securedTopic": "Secured topic",
         "changeClassDivision": "Change class division",
         "settings": "Settings",
         "transparency": "Transparency",
@@ -84,7 +86,8 @@
         "language": {
             "languageTitle": "Please choose a language",
             "de": "German",
-            "en": "English"
+            "en": "English",
+            "it": "Italian"
         },
         "core": {
           "modelList": {
@@ -148,6 +151,11 @@
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
+        },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Sorry, the secured layer could not be loaded. Please contact the administrator and let him know if you were prompted to enter a username and password. </br> Secured layer: "
+            }
         },
         "featureViaURL": {
             "coordLabel": "Coordinates",
@@ -438,6 +446,7 @@
             "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
+                "copyToClipboard": "Content was copied to the clipboard.",
                 "hdms": {
                     "eastingLabel": "Longitude",
                     "northingLabel": "Latitude"
@@ -496,16 +505,16 @@
               "localeFormat": {
                 "decimal": "\".\"",
                 "thousands": "\",\"",
-                "grouping": "[3]",
-                "currency": "[\"$\", \"\"]",
+                "grouping": ["3"],
+                "currency": ["$", ""],
                 "dateTime": "\"%a %b %e %X %Y\"",
                 "date": "\"%m/%d/%Y\"",
                 "time": "\"%H:%M:%S\"",
-                "periods": "[\"AM\", \"PM\"]",
-                "days": "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]",
-                "shortDays": "[\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\"]",
-                "months": "[\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"]",
-                "shortMonths": "[\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"]"
+                "periods": ["AM", "PM"],
+                "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
               }
             },
             "viomRouting": {
@@ -539,7 +548,7 @@
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
                 "undefinedTwoCircles": "Please define both circles.",
                 "undefinedInnerCircle": "Please also define the inner circle.",
-                "undefinedDiameter": "Please specify a diameter.",
+                "undefinedRadius": "Please specify a radius.",
                 "undefinedOuterCircle": "Please also define the outer circle.",
                 "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
                 "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
@@ -550,9 +559,10 @@
                 "drawArea": "Area",
                 "drawCircle": "Circle",
                 "drawDoubleCircle": "Double circle",
-                "doubleCirclePlaceholder": "Please enter a diameter",
-                "diameter": "Diameter",
-                "outerDiameter": "Outer diameter",
+                "doubleCirclePlaceholder": "Please enter a radius",
+                "radius": "Radius",
+                "innerRadius": "Inner radius",
+                "outerRadius": "Outer radius",
                 "unit": "Unit",
                 "text": "Text",
                 "method": "Method",
@@ -602,7 +612,7 @@
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
                 "area": "Area",
-                "finishInteraction": "Double click to finish"
+                "finishWithDoubleClick": "Double click to complete"
             },
             "scaleSwitcher": {
                 "label": "Scale"
@@ -655,7 +665,7 @@
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
                 "closeViewOblique": "close oblique aerial photos",
-                "betaWarningOblique": "The view for oblique aerial photos is currently still in the beta version!"
+                "doNotUseIE": "The display of oblique aerial images is no longer supported in Internet Explorer 11. Please use a current browser for this function."
             },
             "freeze": {
                 "freeze": "Freeze view",
@@ -737,7 +747,9 @@
             "toggleCollapseAll": "Toggle all legends"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
+          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
+          "alertRequiredService": "Details: A required service is not responding."
         }
     },
     "snippets": {

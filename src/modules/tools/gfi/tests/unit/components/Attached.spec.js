@@ -18,6 +18,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     getTitle: () => "Hallo"
                 }
             },
+            components: {
+                Default: {
+                    template: "<span />"
+                }
+            },
             computed: {
                 clickCoord: () => [],
                 styleContent: () => [{
@@ -38,6 +43,12 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     getTheme: () => "Default",
                     getMimeType: () => "text/xml",
                     getTitle: () => "Hallo"
+                }
+            },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
                 }
             },
             computed: {
@@ -62,6 +73,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     getTitle: () => "Hallo"
                 }
             },
+            components: {
+                Default: {
+                    template: "<span />"
+                }
+            },
             computed: {
                 clickCoord: () => [],
                 styleContent: () => [{
@@ -83,6 +99,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                         getTheme: () => "Default",
                         getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
+                    }
+                },
+                components: {
+                    Default: {
+                        template: "<span />"
                     }
                 },
                 computed: {
@@ -110,6 +131,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                         getTitle: () => "Hallo"
                     }
                 },
+                components: {
+                    Default: {
+                        template: "<span />"
+                    }
+                },
                 computed: {
                     clickCoord: () => [],
                     styleContent: () => [{
@@ -133,6 +159,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                         getTheme: () => "Default",
                         getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
+                    }
+                },
+                components: {
+                    Default: {
+                        template: "<span />"
                     }
                 },
                 computed: {

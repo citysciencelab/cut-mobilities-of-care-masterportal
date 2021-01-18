@@ -1,5 +1,6 @@
-import getScaleFromDpi from "./getScaleFromDpi";
 import normalizeLayers from "./normalizeLayers";
+import * as highlightFeature from "./highlightFeature";
+import * as removeHighlightFeature from "./removeHighlighting";
 import {getWmsFeaturesByMimeType} from "../../../../api/gfi/getWmsFeaturesByMimeType";
 import {MapMode} from "../enums";
 import getProxyUrl from "../../../../utils/getProxyUrl";
@@ -75,7 +76,7 @@ const actions = {
      * @param {MapBrowserEvent} evt - Moveend event
      * @returns {Function} update function for state parts to update onmoveend
      */
-    updateViewState ({commit, getters, rootGetters}, evt) {
+    updateViewState ({commit, getters}, evt) {
         let map;
 
         if (evt) {
@@ -85,8 +86,7 @@ const actions = {
             ({map} = getters);
         }
 
-        const mapView = map.getView(),
-            {dpi} = rootGetters;
+        const mapView = map.getView();
 
         commit("setZoomLevel", mapView.getZoom());
         commit("setMaxZoomLevel", mapView.getMaxZoom());
@@ -94,7 +94,6 @@ const actions = {
         commit("setResolution", mapView.getResolution());
         commit("setMaxResolution", mapView.getMaxResolution());
         commit("setMinResolution", mapView.getMinResolution());
-        commit("setScale", getScaleFromDpi(map, dpi));
         commit("setBbox", mapView.calculateExtent(map.getSize()));
         commit("setRotation", mapView.getRotation());
         commit("setCenter", mapView.getCenter());
@@ -310,7 +309,25 @@ const actions = {
         const {map} = state;
 
         map.removeInteraction(interaction);
-    }
+    },
+    /**
+     * Zoom to the given geometry or extent based on the current map size.
+     * @param {Object} getters - the map getters
+     * @param {module:ol/geom/SimpleGeometry | module:ol/extent} geometryOrExtent - The geometry or extent to zoom to.
+     * @param {Object} options - @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|Openlayers}
+     * @returns {void}
+     */
+    zoomTo ({getters}, geometryOrExtent, options) {
+        const {map} = getters;
+
+        map.getView().fit(geometryOrExtent, {
+            duration: options?.duration ? options.duration : 800,
+            ...options
+        });
+    },
+    ...highlightFeature,
+    ...removeHighlightFeature
+
 };
 
 export default actions;

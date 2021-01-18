@@ -13,6 +13,9 @@ const symbol = {
      * @property {module:ol/interaction/Draw} drawInteractionTwo The second draw interaction of the draw tool needed if a double circle is to be drawn.
      * @property {Object} drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
      * @property {Number} fId ID of the last feature that was added to the redoArray.
+     * @property {Object[]} filterList Filter to show and hide featuers based on their drawtype.
+     * @property {String[]} filterList.drawTypes The drawtypes to be filtered.
+     * @property {String} filterList.name The name of the corresponding filter.
      * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
      * @property {String} glyphicon Glyphicon used in the header of the window.
      * @property {Object[]} iconList List of icons used for the point draw interaction.
@@ -29,6 +32,7 @@ const symbol = {
      * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
      * @property {module:ol/interaction/Select} selectInteraction The select interaction of the draw tool.
      * @property {Object} symbol The symbol for the point.
+     * @property {module:ol/Feature} tooltipCircleRadiusNode the tooltip to show when a circles radius is created or changed
      * @property {Boolean} withoutGUI Determines whether the window for the draw tool is rendered or not.
      * @property {Number} zIndex Determines in which order features are rendered on the view.
      * @property {Object} drawSymbolSettings the values used for the drawType drawSymbol
@@ -50,8 +54,9 @@ const symbol = {
      * @property {Number} drawAreaSettings.opacityContour The opacity of the color of the contours for features of drawType "LineString". NOTE: The values of the transparencySettings are opacity values.
      * @property {Object} drawCircleSettings the values used for the drawType drawCircle
      * @property {String} drawCircleSettings.circleMethod The method for drawing features of drawType "Circle".
+     * @property {Object} drawCircleSettings.tooltipStyle The custom style for the tooltip of drawType "Circle".
      * @property {String} drawCircleSettings.unit The unit of measurement (e.g. "km").
-     * @property {Number} drawCircleSettings.circleInnerDiameter The inner diameter for feature of drawType "Circle".
+     * @property {Number} drawCircleSettings.circleRadius The inner radius for feature of drawType "Circle".
      * @property {Number} drawCircleSettings.strokeWidth Stroke width.
      * @property {String[]} drawCircleSettings.color The color of the drawn feature represented as an array.
      * @property {Number} drawCircleSettings.opacity The opacity of the color of the drawn features. NOTE: The values of the transparencySettings are opacity values.
@@ -60,8 +65,8 @@ const symbol = {
      * @property {Object} drawDoubleCircleSettings the values used for the drawType drawDoubleCircle
      * @property {String} drawDoubleCircleSettings.circleMethod The method for drawing features of drawType "DoubleCircle".
      * @property {String} drawDoubleCircleSettings.unit The unit of measurement (e.g. "km").
-     * @property {Number} drawDoubleCircleSettings.circleInnerDiameter The inner diameter for feature of drawType "DoubleCircle".
-     * @property {Number} drawDoubleCircleSettings.circleOuterDiameter The outer diameter for feature of drawType "DoubleCircle".
+     * @property {Number} drawDoubleCircleSettings.circleRadius The inner radius for feature of drawType "DoubleCircle".
+     * @property {Number} drawDoubleCircleSettings.circleOuterRadius The outer radius for feature of drawType "DoubleCircle".
      * @property {Number} drawDoubleCircleSettings.strokeWidth Stroke width.
      * @property {String[]} drawDoubleCircleSettings.color The color of the drawn feature represented as an array.
      * @property {Number} drawDoubleCircleSettings.opacity The opacity of the color of the drawn features. NOTE: The values of the transparencySettings are opacity values.
@@ -87,6 +92,7 @@ const symbol = {
             geometry: "Point"
         },
         fId: 0,
+        filterList: null,
         freeHand: false,
         glyphicon: "glyphicon-pencil",
         iconList: [
@@ -113,9 +119,10 @@ const symbol = {
         selectInteractionModify: null,
         selectedFeature: null,
         symbol,
+        tooltipCircleRadiusNode: null,
         withoutGUI: false,
         zIndex: 0,
-        name: "Zeichnen / Schreiben",
+        name: "common:menu.tools.draw",
         imgPath: "",
 
         drawSymbolSettings: {
@@ -142,18 +149,25 @@ const symbol = {
         drawCircleSettings: {
             circleMethod: "interactive",
             unit: "m",
-            circleInnerDiameter: 0,
+            circleRadius: 0,
             strokeWidth: 1,
             color: [55, 126, 184, 1],
             opacity: 1,
             colorContour: [0, 0, 0, 1],
-            opacityContour: 1
+            opacityContour: 1,
+            tooltipStyle: {
+                fontSize: "14px",
+                paddingTop: "3px",
+                paddingLeft: "3px",
+                paddingRight: "3px",
+                backgroundColor: "rgba(255, 255, 255, .9)"
+            }
         },
         drawDoubleCircleSettings: {
             circleMethod: "defined",
             unit: "m",
-            circleInnerDiameter: 0,
-            circleOuterDiameter: 0,
+            circleRadius: 0,
+            circleOuterRadius: 0,
             strokeWidth: 1,
             color: [55, 126, 184, 1],
             opacity: 1,

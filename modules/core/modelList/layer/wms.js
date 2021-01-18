@@ -15,6 +15,7 @@ const WMSLayer = Layer.extend({
             supported: ["2D", "3D"],
             showSettings: true,
             extent: null,
+            isSecured: false,
             notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
             useProxy: false
         });
@@ -139,15 +140,13 @@ const WMSLayer = Layer.extend({
      * @return {void}
      */
     createLegend: function () {
-        const legends = [],
-            version = this.get("version");
+        const version = this.get("version");
         let legend = this.get("legend");
 
         /**
          * @deprecated in 3.0.0
          */
         if (this.get("legendURL")) {
-            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
             if (this.get("legendURL") === "") {
                 legend = true;
             }
@@ -159,8 +158,12 @@ const WMSLayer = Layer.extend({
             }
         }
 
-        if (legend === true || Array.isArray(legend)) {
-            const layerNames = this.get("layers").split(",");
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (legend === true) {
+            const layerNames = this.get("layers").split(","),
+                legends = [];
 
             if (layerNames.length === 1) {
                 legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + this.get("layers")));
@@ -170,7 +173,6 @@ const WMSLayer = Layer.extend({
                     legends.push(encodeURI(this.get("url") + "?VERSION=" + version + "&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=" + layerName));
                 });
             }
-
             this.setLegend(legends);
         }
         else if (typeof legend === "string") {

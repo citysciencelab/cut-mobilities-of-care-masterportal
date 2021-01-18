@@ -70,7 +70,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // require("./tests/modules/core/ParametricUrl.js"),
 
                     // modules/menu
-                    require("./tests/modules/menu/Layers.js"),
+                    // require("./tests/modules/menu/Layers.js"),
 
                     // modules/searchbar
                     // require("./tests/modules/searchbar/SearchCategories.js"),
@@ -78,14 +78,14 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
                     // modules/tools
                     require("./tests/modules/tools/Contact.js"),
-                    require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
+                    // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                     require("./tests/modules/tools/ExtendedFilter.js"),
-                    require("./tests/modules/tools/Gfi.js"),
+                    // require("./tests/modules/tools/Gfi.js"),
                     require("./tests/modules/Legend.js"),
                     require("./tests/modules/tools/List.js"),
                     require("../../src/modules/tools/measure/test/end2end/Measure.e2e.js"),
-                    require("./tests/modules/tools/ParcelSearch.js"),
-                    require("./tests/modules/tools/SearchByCoord.js"),
+                    // require("./tests/modules/tools/ParcelSearch.js"),
+                    // require("./tests/modules/tools/SearchByCoord.js"),
 
                     // non-module tests
                     require("../../src/test/end2end/Pan.e2e.js"),

@@ -11,7 +11,6 @@
  * @property {String}   selectedFiletype - This controls, which openlayers format is used when displaying the file data. Using "auto" will result in selecting one format according to the filename's suffix.
  * @property {String[]}   importedFileNames - list of names of successfully imported files
  * @property {Object}   supportedFiletypes - Configuration object which is used to generate the selectedFiletype radio form from.
- * @property {String}   title - Module title
  */
 
 export default {
@@ -19,7 +18,7 @@ export default {
     deactivateGFI: false,
     glyphicon: "glyphicon-import",
     id: "fileImport",
-    name: "KML-Datei laden",
+    name: "common:menu.tools.fileImport",
     onlyDesktop: true,
     renderToWindow: true,
     resizableWindow: false,
@@ -41,6 +40,5 @@ export default {
             caption: "common:modules.tools.fileImport.captions.supportedFiletypes.geojson",
             rgx: /\.(geo)?json$/i
         }
-    },
-    title: "KML-Datei laden"
+    }
 };

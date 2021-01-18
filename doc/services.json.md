@@ -1,48 +1,50 @@
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+>**[Return to the Masterportal documentation](doc.md)**.
 
 [TOC]
 
-# services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS [SensorThings-API](sensorThings.md)) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und [SensorThings-API](sensorThings.md) (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
-Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
+# services.json
+
+All services available for display in the Masterportal (WMS, WFS, [SensorThings-API](sensorThings.md), and more) are configured and maintained in this JSON file. The file is linked to from the *config.js* of each individual portal by the *layerConf* parameter. For an example, see the *services-internet.json* included in the *examples.zip* at *//examples/Basic/resources/*.
+
+All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, [SensorThings-API](sensorThings.md) and other services types. You may also use local GeoJSON files; see GeoJSON example.
 
 ***
 
-## WMS-Layer ##
+## WMS layer
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|cache|nein|Boolean||Ist dieser Layer Teil eines gecachten Dienstes? Wenn true wird bei Portalen, die in der **[config.json](config.json.md)** den „Baumtyp“ = „default“ benutzen, dieser Layer den Layern vorgezogen, die mit demselben Metadatensatz verknüpft sind, aber „cache“ = false haben. Bei anderen Baumtypen hat dieser Parameter keine Auswirkungen.|`false`|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object/Boolean||Verknüpfung zu den Metadaten. Hier werden die Metadatensätze der Datensätze angegeben, die in diesem Layer dargestellt werden. Sie werden nach Click auf den „i“-Button des Layers in den Layerinformationen über die CSW-Schnittstelle angesprochen und dargestellt. Dazu muss in der **[rest-services.json](rest-services.json.md)** die URL des Metadatenkatalogs bzw. seiner CSW-Schnittstelle angegeben sein. Die Angaben unter *kategorie_opendata*, *kategorie_inspire* und *kategorie_organisation* werden verwandt, um die Layer in die entprechenden Kategorien einzuordnen, wenn in der **[config.json](config.json.md)** der Baumtyp *default* gesetzt ist. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|featureCount|ja|String||Anzahl der zurückzugebenden Features bei GFI-Abfragen. Entspricht dem *GetFeatureInfo-Parameter "FEATURE_COUNT"*|`"1"`|
-|format|ja|String||Grafikformat der Kachel, die vom Portal über den *GetMap* aufgerufen wird. Muss einem der Werte aus den Capabilities unter *Capability/Request/GetMap/Format* entsprechen.|`"image/jpeg"`|
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
-|id|ja|String||Frei wählbare Layer-ID|`"8"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"1000000"`|
-|minScale|ja|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Luftbilder DOP 10"`|
-|singleTile|nein|Boolean||Soll die Grafik als eine große Kachel ausgeliefert werden? Wenn true wird immer der gesamte Kartenausschnitt angefragt, wenn false wird der Kartenausschnitt in kleineren Kacheln angefragt und zusammengesetzt.|`false`|
-|tilesize|ja|String||Kachelgröße in Pixel. Diese wird verwandt wenn singleTile=false gesetzt ist.|`"512"`|
-|transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`true`|
-|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMTS siehe unten](#markdown-header-wmts-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMS"`|
-|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Wird nur für die ABfrage des GFI verwendet. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-|version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|cache|no|Boolean||Is this layer part of a cached service? If `true`, this layer is preferred to layers that share the same metadata, but have `cache` set to `false`. This only works in portals with `"treeType": "default"` in their **[config.json](config.json.md)**. The parameter has no effects on other tree types.|`false`|
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|featureCount|yes|String||Amount of features retrieved on GFI requests. Corresponds to the *GetFeatureInfo parameter "FEATURE_COUNT"*.|`"1"`|
+|format|yes|String||Image format of tiles requested via *GetMap*. Must match one of the service's formats listed in *Capability/Request/GetMap/Format*.|`"image/jpeg"`|
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown|`"ignore"`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
+|gutter|no|String|`"0"`|Additionally loaded tile contents in border pixel width. Serves to avoid cut symbols on tile borders.|`"0"`|
+|id|yes|String||Arbitrary id|`"8"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|layers|yes|String||The service's layer name. Must match a name of the service's capabilities in *Layer/Layer/Name*.|`"1"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|maxScale|yes|String||The layer is shown only up to this scale.|`"1000000"`|
+|minScale|yes|String||The layer is shown only down to this scale.|`"0"`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Aerial View DOP 10"`|
+|singleTile|no|Boolean||`true`: Request map as a single tile of the current view. `false`: Build map from multiple smaller tiles.|`false`|
+|tilesize|yes|String||Tile height and width in pixels. Used if `singleTile` is `false`.|`"512"`|
+|transparent|yes|Boolean||Whether the tile background should be transparent. Corresponds to the *GetMap* parameter *TRANSPARENT*.|`true`|
+|typ|yes|String||Service type; in this case, "WMS". (**[WMTS docs](#markdown-header-wmts-layer)**, **[WFS docs](#markdown-header-wfs-layer)**, **[SensorThings-API docs](#markdown-header-sensor-layer)**)|`"WMS"`|
+|url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+|version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
-**Beispiel WMS:**
+**WMS example:**
 
-```
-#!json
-
+```json
 {
       "id" : "8",
-      "name" : "Luftbilder DOP 10",
+      "name" : "Aerial View DOP 10",
       "url" : "https://geodienste.hamburg.de/HH_WMS_DOP10",
       "typ" : "WMS",
       "layers" : "1",
@@ -60,6 +62,8 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "legend" : false,
       "cache" : false,
       "featureCount" : "1",
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
@@ -77,47 +81,58 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       ]
    }
 ```
+***
+## WMS-Layer.isSecured ##
+WMS layer belonging to a secured WMS service.
+
+**CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
+
+* Two headers must be set based on the referer.
+* The configuration for this must be done e.g. in the Apache web server.
+* `Access-Control-Allow-Credentials: true`.
+* Dynamic rewrite of the following HTTP header from: <br>
+`Access-Control-Allow-Origin: *` <br>
+to <br>
+`Access-Control-Allow-Origin: URL of the accessing portal`.
 
 ***
 
-## WMTS-Layer ##
+## WMTS layer
 
-Es gibt zwei Wege, einen WMTS-Layer im Masterportal zu definieren:
+WMTS layers can be added by
 
-A) Angabe aller nachfolgenden WMTS-Parameter
-B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
+* entering all the following WMTS parameters
+* using OpenLayers' `optionsFromCapabilities` method (see second example below)
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|capabilitiesUrl|nein|String||Capabilities URL des WMTS-Dienstes|"https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"|
-|coordinateSystem|ja|String||Das Koordinatenreferenzsystem des Layers.|`"EPSG:3857"`|
-|format|ja|String||Das Graphikformat der Kacheln des Layers. Wird nur benötigt, wenn der Parameter requestEncoding="KVP" ist.|`"image/png"`|
-|id|ja|String||Frei wählbare Layer-ID|`"320"`|
-|layers|ja|String||Name des Layers, welcher dem aus den WMTS Capabilities entsprechen muss.|`"geolandbasemap"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"2500000"`|
-|minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Geoland Basemap"`|
-|optionsFromCapabilities|nein|Boolean||Option zur Nutzung der getOptionsFromCapabilities Methode, um den WMTS-Layer zu definieren. Siehe nachfolgende Beispiele|true|
-|origin|ja|Number[]||Der Ursprung des Kachelrasters. Dieser kann entweder den WMTS Capabilities entnommen werden oder entspricht meist der oberen linken Ecke des extents.|`[-20037508.3428, 20037508.3428]`|
-|requestEncoding|ja|enum["KVP", "REST"]||Codierung der Anfrage an den WMTS Dienst.|`"REST"`|
-|resLength|ja|String||Länge des resolutions und des matrixIds Arrays. Wird benötigt, um die maximale Zoom-Stufe des Layers einstellen zu können.|`"20"`|
-|style|nein|String|"normal"|Name des Styles, welcher dem aus den WMTS Capabilities entsprechen muss.|`"normal"`|
-|tileMatrixSet|ja|String||Set der Matrix, das für die Anfrage an den WMTS Dienst benötigt wird. Bei der optionsFromCapabilities-Variante, ist dieser Parameter nicht zwingend notwendig (es wird ein passendes TileMatrixSet gesucht).|`"google3857"`|
-|tileSize|ja|String||Kachelgröße in Pixel.|`"256"`|
-|transparent|ja|Boolean||Hintergrund der Kachel transparent oder nicht (false/true). Entspricht dem GetMap-Parameter *TRANSPARENT*|`false`|
-|typ|ja|String||Diensttyp, in diesem Fall WMS (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WFS siehe unten](#markdown-header-wfs-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WMTS"`|
-|urls|ja|String[]/String||URLs des WMTS Dienstes. Wenn nur eine einzelne URL als String angegeben wird, dann wird diese intern zu einem Array verarbeitet.|`["https://maps1.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]`|
-|version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.0.0"`|
-|wrapX|nein|Boolean|false|Gibt an, ob die Welt horizontal gewrapped werden soll.|`true`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|capabilitiesUrl|no|String||Service's capabilities URL|`"https://www.wmts.nrw.de/geobasis/wmts_nw_dtk/1.0.0/WMTSCapabilities.xml"`|
+|coordinateSystem|yes|String||Layer's coordinate reference system|`"EPSG:3857"`|
+|format|yes|String||Image format of layer tiles. Only required with parameter `requestEncoding` set to `"KVP"` ist.|`"image/png"`|
+|id|yes|String||Arbitrary id|`"320"`|
+|layers|yes|String||Layer name. Must match the name noted in the WMTS capabilities.|`"geolandbasemap"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|maxScale|yes|String||The layer is shown only up to this scale.|`"1000000"`|
+|minScale|yes|String||The layer is shown only down to this scale.|`"0"`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Geoland Basemap"`|
+|optionsFromCapabilities|no|Boolean||If `true`, use the `getOptionsFromCapabilities` method for definitions. See following examples.|`true`|
+|origin|yes|Number[]||Tile raster origin. Can be fetched from the WMTS capabilities; usually the extent's top left corner.|`[-20037508.3428, 20037508.3428]`|
+|requestEncoding|yes|enum["KVP", "REST"]||WMTS service request encoding.|`"REST"`|
+|resLength|yes|String||Length of resolution and matrixIds arrays. Required to configure the layer's maximum zoom level.|`"20"`|
+|style|no|String|"normal"|Name of the style. Must match the noted in the WMTS capabilities.|`"normal"`|
+|tileMatrixSet|yes|String||Matrix set required to call the WMTS service. Not required when using `optionsFromCapabilities`, a fitting TileMatrixSet is injected then.|`"google3857"`|
+|tilesize|yes|String||Tile height and width in pixels.|`"512"`|
+|transparent|yes|Boolean||Whether the tile background should be transparent. Corresponds to the *GetMap* parameter *TRANSPARENT*.|`true`|
+|typ|yes|String||Service type; in this case, "WMTS". (**[WMTS docs](#markdown-header-wmts-layer)**, **[WFS docs](#markdown-header-wfs-layer)**, **[SensorThings-API docs](#markdown-header-sensor-layer)**)|`"WMS"`|
+|urls|yes|String[]/String||WMTS service URL. If only a single URL is given, it's internally transformed to an array.|`["https://maps1.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps2.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps3.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps4.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png", "https://maps.wien.gv.at/basemap/geolandbasemap/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]`|
+|version|yes|String||Service version used for *GetMap* requests.|`"1.0.0"`|
+|wrapX|no|Boolean|`false`|Whether world should be wrapped horizontally.|`true`|
 
-**Beispiel 1 WMTS:**
+**WMTS example 1:**
 
-```
-#!json
-
+```json
 {
    "id": "320",
    "name": "Geoland Basemap",
@@ -151,7 +166,8 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
    "requestEncoding": "REST"
 }
 ```
-**Beispiel 2 WMTS (optionsFromCapabilities Methode)**
+
+**WMTS example 2 (`optionsFromCapabilities` method):**
 
 ```
 {
@@ -164,38 +180,39 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 }
 
 ```
+
 ***
 
-## WFS-Layer ##
+## WFS layer
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|featureNS|ja|String||featureNamespace. Ist gewöhnlich im Header der WFS-Capabilities referenziert und löst den Namespace auf, der unter FeatureType/Name angegeben wird.|`"http://www.deegree.org/app"`|
-|featureType|ja|String||featureType-Name im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *FeatureTypeList/FeatureType/Name* entsprechen. Allerdings ohne Namespace.|`"bab_vkl"`|
-|featurePrefix|nein|String||Dient der eindeutigen Identifizierung eines FeatureTypes im Dienst.|
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|id|ja|String||Frei wählbare Layer-ID|`"44"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall WFS (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[SensorThings-API siehe unten](#markdown-header-sensor-layer)**)|`"WFS"`|
-|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"`|
-|version|nein|String||Dienste Version, die über GetFeature angesprochen wird.|`"1.1.0"`|
-|altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
-|altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
-|altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-**Beispiel WFS:**
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|datasets|yes|**[datasets](#markdown-header-wms_wfs_datasets)**[]/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|featureNS|yes|String||Usually referenced in the WFS *GetCapabilities*' header. Used to resolve the namespace given in *FeatureType/Name*.|`"http://www.deegree.org/app"`|
+|featureType|yes|String||Feature type to load. Must match a value of *FeatureTypeList/FeatureType/Name* in the *GetCapabilities* response. Provide without namespace.|`"bab_vkl"`|
+|featurePrefix|no|String||Used to identify a *FeatureType* in the service.|
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
+|id|yes|String||Arbitrary id|`"44"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Traffic situation on freeways"`|
+|typ|yes|String||Service type; in this case, "WFS". (**[WMS (see above)](#markdown-header-wms-layer)**, **[WMTS (see above)](#markdown-header-wmts-layer)**, and **[SensorThings-API (see below)](#markdown-header-sensor-layer)**)|`"WFS"`|
+|url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata"`|
+|version|no|String||Service version to use in *GetFeature* requests.|`"1.1.0"`|
+|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
+|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
+|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 
-```
-#!json
+**WFS example:**
+
+```json
 
 {
       "id" : "44",
-      "name" : "Verkehrslage auf Autobahnen",
+      "name" : "Traffic situation on freeways",
       "url" : "https://geodienste.hamburg.de/HH_WFS_Verkehr_opendata",
       "typ" : "WFS",
       "featureType" : "bab_vkl",
@@ -223,10 +240,9 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
    }
 ```
 
-**Beispiel WFS-T:**
+**WFS-T example:**
 
-```
-#!json
+```json
 {
     "id" : "1234",
     "name" : "WFSTLayer",
@@ -246,40 +262,36 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 ```
 
 ***
-## Vector Tile Layer ##
+## Vector Tile Layer
 
-[Diese Beschreibung](https://docs.mapbox.com/vector-tiles/specification/#what-the-spec-doesnt-cover) verdeutlicht, was VTL umfasst und was nicht.
+Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specification/#what-the-spec-doesnt-cover) on what VTL exactly is capable of.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|nein|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|epsg|nein|String|EPSG-Code des Portals|EPSG-String; wird zum Abgleich benutzt, bei Schiefstand wird jedoch nur eine Warnung ausgegeben. VTL sollten aus Performanzgründen serverseitig passend vorgehalten werden. Ist der Wert "EPSG:3857" und weder "extend", noch "origin", noch "resolutions", noch "tileSize" sind gesetzt, dann wird kein GridSet erzeugt. Der Ol-default wird verwendet.|`"EPSG:3857"`|
-|extent|nein|Number[4]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird der Extent des Portal-EPSG verwendet.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
-|origin|nein|Number[2]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird die obere linke Ecke des Extents verwendet.|`[-9497963.94293634221, 9997963.94293634221]`|
-|origins|nein|Number[2][]||Wird benötigt um das GridSet des VTC zu definieren. Wird "origins" konfiguriert, so wird der Parameter "origin" ignoriert. Falls "origins" nicht konfiguriert wird, so wird "origin" benutzt|`[[239323.44497139292, 9336416.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9321005.0],[239323.44497139292, 9320646.0],[239323.44497139292, 9320467.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9320109.0],[239323.44497139292, 9320145.0],[239323.44497139292, 9320109.0]]`|
-|resolutions|nein|Number[]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, werden die Resolutions des Portals verwendet.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453, 0.59716428347787265, 0.29858214173893632, 0.14929107086946816]`|
-|tileSize|nein|Number|512|Wird benötigt um die Größe der VTC-Kachel zu definieren.|`256`|
-|id|ja|String||Frei wählbare Layer-ID|`"41"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|transparency|nein|number|`0`|Initiale Layertransparenz von 0 bis 100 inklusive|`0`|
-|visibility|nein|boolean|`false`|Ob Layer initial sichtbar ist|`true`|
-|maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"1000000"`|
-|minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|vtStyles|nein|vtStyle[]||Siehe Beispiel und Definition in **[config.json](config.json.md)**. Beschreibt verfügbare Styles, aus denen mit dem Tool styleVT ausgewählt werden kann.|siehe Beispiel unten|
-|typ|ja|String||Muss in diesem Fall "VectorTile" sein.|`"VectorTile"`|
-|url|ja|String||Dienste URL|`"https://example.com/3857/tile/{z}/{y}/{x}.pbf"`|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
+|epsg|no|String|The portal's default EPSG code.|EPSG string used for checking the coordinate reference system. If the value does not match the VTL, a warning is shown. Vector tile services should offer the data in the target CRS for performance reasons. If `"EPSG:3857"` is set with neither `"extend"`, nor `"origin"`, `"resolutions"`, or `"tileSize"`, no *GridSet* is created. The OL default will be used instead.|`"EPSG:3857"`|
+|extent|no|Number[4]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's extent is used.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
+|origin|no|Number[2]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's top-left corner is used.|`[-9497963.94293634221, 9997963.94293634221]`|
+|origins|no|Number[2][]||Required to define the VTC's *GridSet*. If `"origins"` is used, the parameter `"origin"` is ignored; else, `"origin"` is used.|`[[239323.44497139292, 9336416.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9321005.0],[239323.44497139292, 9320646.0],[239323.44497139292, 9320467.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9320109.0],[239323.44497139292, 9320145.0],[239323.44497139292, 9320109.0]]`|
+|resolutions|no|Number[]||Required to define the VTC's *GridSet*. It not used, the portal's resolutions are used. Missing zoom levels are extrapolated only if the resolutions are explicitly specified. Therefore, only resolutions for which tiles exist may be specified.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453]`|
+|tileSize|no|Number|`512`|Required to define the size of a VTC tile.|`256`|
+|id|yes|String||Arbitrary id|`"41"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|transparency|no|number|`0`|Initial layer transparency, 0 to 100 (inclusive)|`0`|
+|visibility|no|boolean|`false`|Whether the layer is initially active|`true`|
+|maxScale|yes|String||The layer is shown only up to this scale.|`"1000000"`|
+|minScale|yes|String||The layer is shown only down to this scale.|`"0"`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Traffic situation on freeways"`|
+|vtStyles|no|vtStyle[]||See example and definition in **[config.json](config.json.md)**. Describes available styles usable with the *styleVT* tool.|see example below|
+|typ|yes|String||Must be set to `"VectorTile"` for this layer.|`"VectorTile"`|
+|url|yes|String||Service URL|`"https://example.com/3857/tile/{z}/{y}/{x}.pbf"`|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 
+**VectorTile example:**
 
-**Beispiel VectorTile:**
-
-```
-#!json
+```json
 
 {
   "id": "UNIQUE_ID",
@@ -312,44 +324,45 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 
 ***
 
-## Sensor-Layer ##
+## Sensor layer
 
-Ein Feature kann mehrere Datastreams vorhalten. Im Portal wird für jeden Datastream die neueste Beobachtung als Attribut am Feature wie folgt eingetragen: "dataStream_[id]_[name]". id ist die @iot.id des Datastreams.
-Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter nicht verfügbar wird der Wert aus datastream.unitOfMeasurement.name verwendet.
+A feature kann hold multiple Datastreams. For each Datastream, the latest obervation is added as a feature attribute as `"dataStream_[id]_[name]"`, where `id` is the Datastream's `@iot.id`.
 
-Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokumentation der SensorThings-API](sensorThings.md)
+The name is read from `datastream.properties.type`; if not available, `datastream.unitOfMeasurement.name` is used.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|epsg|nein|String|"EPSG:4326"|Koordinatensystem der SensorThings-API|`"EPSG:4326"`|
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|**[gfiTheme](#markdown-header-gfi_theme)**|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|id|ja|String||Frei wählbare Layer-ID|`"999999"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
-|typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
-|url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-|version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
-|loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
-|showNoDataValue|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
-|noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
-|altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
-|altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
-|altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-|timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
-|***[mqttOptions](#markdown-header-mqtt_options)**|nein|Object||Konfiuration der Websocket-Verbindung für mqtt||
-**Beispiel Sensor:**
+For more details, consider reading the [extensive SensorThings-API documentation.](sensorThings.md).
+
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|epsg|no|String|`"EPSG:4326"`|SensorThings-API coordinate reference system|`"EPSG:4326"`|
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
+|gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
+|id|yes|String||Arbitrary id|`"999999"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
+|typ|yes|String||Service type; in this case, `"SensorThings"`. (**[WMS, see above](#markdown-header-wms-layer)**, **[WMTS, see above](#markdown-header-wmts-layer)**, and **[WFS, see above](#markdown-header-wfs-layer)**)|`"SensorThings"`|
+|url|yes|String||Service URL; may be extended by `urlParameter`|`"https://51.5.242.162/itsLGVhackathon"`|
+|urlParameter|no|**[urlParameter](#markdown-header-url_parameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+|version|no|String||Service version used to request data.|`"1.0"`|
+|loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
+|showNoDataValue|no|Boolean|`true`|Whether Datastreams should be given without Observations.|`true`|
+|noDataValue|no|String|`"no data"`|Placeholder for unavailable Observations to Datastreams.|`"no data"`|
+|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
+|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
+|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
+|timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
+|mqttOptions|no|**[mqttOptions](#markdown-header-mqtt_options)**||mqtt web socket connection configuration||
+
+**Sensor example:**
 
 
-```
-#!json
+```json
 
    {
       "id" : "999999",
-      "name" : "Live - Elektro Ladestandorte",
+      "name" : "Live - Charging locations",
       "typ" : "SensorThings",
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
@@ -368,90 +381,83 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
       }
    }
 ```
-## mqtt_options ##
+## mqtt_options
 
-Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt definiert werden. Wird hier nichts angegeben so wird veruscht die Parameter aus der Server-URL zu extrahieren.
+Used to configure the target of a mqtt web socket connection. If nothing is set, the portal tries to infer the parameters from the service URL.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|host|nein|String||Adresse des Hosts|`"example.com"`|
-|port|nein|String||Port am Host|`"9876"`|
-|path|nein|String||Pfad|`"/mqtt"`|
-|protocol|nein|String||Verwendetes Protokol|`"ws"`, `"wss"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|host|no|String||Host address|`"example.com"`|
+|port|no|String||Host port|`"9876"`|
+|path|no|String||Path|`"/mqtt"`|
+|protocol|no|String||Used protocol|`"ws"`, `"wss"`|
 
-## url_Parameter ##
+## url_Parameter
 
-Über die UrlParameter können die daten aus der SensorThingsAPI gefiltert werden.
+Enables filtering SensorThingsAPI requests.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
-|expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
+|expand|no|String/Array||See [full documentation](sensorThings.md)|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
 
-**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
+**urlParameter example:** Show all Things where the name starts with `"Charging"`, and all Datastreams belonging to those Things. Show each Datastream's latest Observation.
 
+```json
+{
+    "urlParameter" : {
+        "filter" : "startswith(Things/name,'Charging')",
+        "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+    }
+}
 ```
-#!json
 
-   {
-      "urlParameter" : {
-         "filter" : "startswith(Things/name,'Charging')",
-         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
-      }
-   }
-```
-**Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation und das Phänomen (ObservedProperty), das beobachtet wird. Wenn vorhanden wird die ObservedProperty für die dynamische Attributerstellung verwendet.**
+**urlParameter example:** Show all Things where the name starts with `"Charging"`, and all Datastreams belonging to those Things where `"Lastenrad"` is part of the name. Show each Datastream's latest Observation and the Phaenomenon (ObversedProperty) that is observed. If available, the ObservedProperty will be used for dynamic attribute creation.
 
-```
-#!json
-
-   {
-      "urlParameter": {
-			"filter": "startswith(Things/name,'Charging')",
-			"expand": [
-				"Locations",
-				"Datastreams($filter=indexof(Datastream/name,'Lastenrad') ge 1)",
-				"Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-            "Datastreams/ObservedProperty"
-			]
-		}
-   }
+```json
+{
+    "urlParameter": {
+        "filter": "startswith(Things/name,'Charging')",
+        "expand": [
+            "Locations",
+            "Datastreams($filter=indexof(Datastream/name,'Lastenrad') ge 1)",
+            "Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
+        "Datastreams/ObservedProperty"
+        ]
+    }
+}
 ```
 
 ***
 
-## WMS_WFS_datasets ##
+## WMS_WFS_datasets
 
-Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter *kategorie..* werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.
+Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|md_id|nein|String||Metadatensatz-Identifier des Metadatensatzes|
-|rs_id|nein|String||Ressource-Identifier des Metadatensatzes|
-|md_name|nein|String||Name des Datensatzes|
-|bbox|nein|String||Ausdehnung des Datensatzes|
-|kategorie_opendata|nein|String||Opendata-Kategorie aus der Codeliste von govdata.de|
-|kategorie_inspire|nein|String||Inspire-Kategorie aus der Inspire-Codeliste wenn vorhanden, wenn nicht vorhanden *„nicht Inspire-identifiziert“*|
-|kategorie_organisation|nein|String||Organisationsname der datenhaltenden Stelle|
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|md_id|no|String||Metadata record identifier|
+|rs_id|no|String||Ressource identifier of the metadata record|
+|md_name|no|String||Record name|
+|bbox|no|String||Record extension|
+|kategorie_opendata|no|String||Opendata category from the govdata.de code list|
+|kategorie_inspire|no|String||Inspire category from the Inspire code list, if available; if not, set to `"nicht Inspire-identifiziert"`|
+|kategorie_organisation|no|String||Organization name of the data holding body|
 
 ***
 
-## gfi_theme ##
+## gfi_theme
 
-Das Attribut "gfiTheme" kann entweder als String oder als Object angegeben werden.
-Wird es als String angegeben, so wird das entsprechende Template verwendet.
+This attribute may be either a string or an object. In case it's a string, the matching template will be used. In case it's an object, the following parameters are interpreted.
 
-Wird es als Objekt verwendet, so gelten folgende Parameter.
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|name|yes|String||GFI template name|
+|params|no|**[params](#markdown-header-gfi_theme_params)**||Template-specific attributes|
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|ja|String||Name des gfi Templates.|
-|**[params](#markdown-header-gfi_theme_params)**|nein|Object||Template spezifische Attribute.|
+**gfiTheme example:**
 
-**Beispiel gfiTheme:**
-
-```
-#!json
+```json
 "gfiTheme": {
    "name": "default",
    "params": {}
@@ -460,8 +466,9 @@ Wird es als Objekt verwendet, so gelten folgende Parameter.
 
 ***
 
-## gfi_theme_params ##
-Hier werden die Parameter für die GFI-Templates definiert.
+## gfi_theme_params
+
+Definition of template-specific parameters.
 
 |Name|params|
 |----|------|
@@ -470,18 +477,19 @@ Hier werden die Parameter für die GFI-Templates definiert.
 
 ***
 
-## gfi_theme_default_params ##
-Hier werden die Parameter für das GFI-Template "default" definiert.
+## gfi_theme_default_params
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|imageLinks|nein|String/String[]|["bildlink", "link_bild"]|Gibt an in welchem Attribut die Referenz zum dem Bild steht. Es wird in der angegebenen Reihenfolge nach den Attributen gesucht. Der erste Treffer wird verwendet.|
-|showFavoriteIcons|nein|Boolean|true|Gibt an ob eine Leiste mit Icons angezeigt werden soll, mittels derer sich verschiedene Werkzeuge verwenden lassen. Die Icons werden nur angezeigt, wenn die enstprechenden Werkzeuge konfiguriert sind. Bisher verwendbar für die Werkzeuge: compareFeatures/vergleichsliste (Bisher nicht für WMS verfügbar) und routing/Routenplaner.
+Definition of parameters for GFI template `"default"`.
 
-**Beispiel gfiTheme für das template "Default":**
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|imageLinks|no|String/String[]|`["imgLink", "link_image"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
+|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS) and `routing`.
 
-```
-#!json
+
+**gfiTheme example for template "Default":**
+
+```json
 "gfiTheme": {
    "name": "default",
    "params": {
@@ -493,31 +501,31 @@ Hier werden die Parameter für das GFI-Template "default" definiert.
 
 ***
 
-## gfi_theme_sensor_params ##
-Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-API visualisieren. Dabei wird zu jedem konfigurierten Result der Observations eine Grafik erzeugt. Dieses GFI-Theme lässt sich also nur für Results die einen Status (z.B. bei Ladesäulen die Status: frei, laden, außer Betrieb) beinhalten sinnvoll verwenden.
+## gfi_theme_sensor_params
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|**[charts](#markdown-header-gfi_theme_sensor_params_charts)**|ja|Object||Enthält die Attribute zur Konfiguration der Diagramme.|
-|**[data](#markdown-header-gfi_theme_sensor_params_data)**|nein|Object||Gibt an wie die Spaltenbeschriftungen in den Daten sein sollen.|
-|header|nein|Object|{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}|Gibt an welche Attribute für die Kopfzeilen verwendet werden sollen. Der Anzeigename jedes Attributes lässt sich hier angeben. Z.B. lässt sich das Attribut "description" als "Beschreibung" anzeigen. |
-|**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**|nein|Object||Gibt an für welchen Zeitraum die historischen Observations angefragt werden sollen.|
+This theme allows the visualization of historical data regarding a SensorThings-API layer. For each configured Observation result an image is created. Therefore, this GFI theme is only usable for results providing a status; e.g., for charging stations such a status range is "free", "loading", "out of order".
 
-**Beispiel gfiTheme für das template "Sensor":**
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|charts|yes|**[charts](#markdown-header-gfi_theme_sensor_params_charts)**||Contains attributes for chart creation.|
+|data|no|**[data](#markdown-header-gfi_theme_sensor_params_data)**||Data column names.|
+|header|no|Object|`{"name": "Name", "description": "Beschreibung", "ownerThing": "Eigentümer"}`|Specifies which attributes are to be used for the headers. The display name of each attribute can be specified here, e.g. `"description"` may be displayed `"Arbitrary String"`.|
+|historicalData|no|**[historicalData](#markdown-header-gfi_theme_sensor_params_historicalData)**||Indicates for which period the historical Observations should be requested.|
 
-```
-#!json
+**gfiTheme example for template "Sensor":**
+
+```json
 "gfiTheme": {
    "name": "sensor",
    "params": {
         "header": {
             "name": "Name",
-            "description": "Beschreibung",
-            "ownerThing": "Eigentümer"
+            "description": "Description",
+            "ownerThing": "Owner"
         },
         "data": {
-            "name": "Daten",
-            "firstColumnHeaderName": "Eigenschaften",
+            "name": "Data",
+            "firstColumnHeaderName": "Properties",
             "columnHeaderAttribute": "layerName"
         },
         "charts": {
@@ -525,11 +533,11 @@ Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-A
             "barPercentage": 1.1,
             "values": {
                 "available": {
-                    "title": "Verfügbar",
+                    "title": "Available",
                     "color": "rgba(0, 220, 0, 1)"
                 },
                 "charging": {
-                    "title": "Auslastung",
+                    "title": "Charging",
                     "color": "rgba(220, 0, 0, 1)"
                 },
                 "outoforder": {
@@ -548,18 +556,18 @@ Mit diesem Theme lassen sich historische Daten zu einem Layer der SensorThings-A
 
 ***
 
-## gfi_theme_sensor_params_charts ##
-Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
+## gfi_theme_sensor_params_charts
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|values|ja|String[] / **[valuesObject](#markdown-header-gfi_theme_sensor_params_charts_valuesObject)**||Hier wird definiert, zu welchen Results der Observations Grafiken angezeigt werden sollen. Es wird für jeden Result ein eigener Reiter mit einer eigenen Grafik angelegt. Die Results können als Array oder Object angegeben werden. Beim object lassen sich weitere Attribute definieren.|
-|hoverBackgroundColor|nein|String|"rgba(0, 0, 0, 0.8)"|Die Hintergundfarbe der Balken beim Hovern.|
-|barPercentage|nein|Number|1.0|Breite der Balken in der Grafik.|
+Chart display parameters.
 
-**Beispiel Konfiguration value als Array**
-```
-#!json
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|values|yes|String[]/**[valuesObject](#markdown-header-gfi_theme_sensor_params_charts_valuesObject)**||Definition of which Observation Results are turned into charts. A separate tab will be created for each result. Results may be entered as array or object; when given as object, further attributes may be defined.|
+|hoverBackgroundColor|no|String|`"rgba(0, 0, 0, 0.8)"`|Bar background color on hovering.|
+|barPercentage|no|Number|`1.0`|Bar width.|
+
+**Configuration example with array value:**
+```json
 "charts": {
     "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
     "barPercentage": 1.1,
@@ -567,23 +575,22 @@ Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
 }
 ```
 
-**Beispiel Konfiguration value als Object**
-```
-#!json
+**Configuration example with object value:**
+```json
 "charts": {
     "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
     "barPercentage": 1.1,
     "values": {
         "available": {
-            "title": "Verfügbar",
+            "title": "Available",
             "color": "rgba(0, 220, 0, 1)"
         },
         "charging": {
-            "title": "Auslastung",
+            "title": "Charging",
             "color": "rgba(220, 0, 0, 1)"
         },
         "outoforder": {
-            "title": "Außer Betrieb",
+            "title": "Out Of Order",
             "color": "rgba(175, 175, 175, 1)"
         }
     }
@@ -592,63 +599,62 @@ Hier werden die Parameter für die Anzeige der Grafiken konfiguriert.
 
 ***
 
-## gfi_theme_sensor_params_charts_valuesObject ##
-Hier wird das Layout für eine einzelne Grafik zu einem result konfiguriert.
+## gfi_theme_sensor_params_charts_valuesObject
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|title|nein|String||Angabe eines Titels für die Grafik. Der Titel kann auch mit einem Pfad in der Übersetzungsdatei angegeben werden. Dazu besteht die Möglichkeit die Übersetzungsdateien unter masterportal/locales zu erweitern.|
-|colcor|nein|String|"rgba(0, 0, 0, 1)"|Die Farbe der Balken.|
+Layout definition for each result's chart.
 
-```
-#!json
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|title|no|String||Chart image title. May also be set to a path in the translation files in `masterportal/locales`, which you may extend at your own discretion.|
+|color|no|String|`"rgba(0, 0, 0, 1)"`|Bar color.|
+
+```json
 "available": {
-    "title": "Verfügbar",
+    "title": "Available",
     "color": "rgba(0, 220, 0, 1)"
 }
 ```
 
-```
-#!json
+```json
 "charging": {
-   "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-   "color": "rgba(220, 0, 0, 1)"
+    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+    "color": "rgba(220, 0, 0, 1)"
 },
 ```
 
 ***
 
-## gfi_theme_sensor_params_data ##
-Hier wird der die Anzeige der Sachdaten konfiguriert.
+## gfi_theme_sensor_params_data
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|nein|String||Angabe des Names für den Reiter.|
-|firstColumnHeaderName|nein|String|"Eigenschaften"|Angabe des Titles für die Spalte mit den Attributnamen.|
-|columnHeaderAttribute|nein|String|"dataStreamName"|Angabe des Attributes, das für die Titel der Spalten mit den Attributwerten verwendet werden soll.|
+Data display configuration.
 
-```
-#!json
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|name|no|String||Tab name.|
+|firstColumnHeaderName|no|String|`"Properties"`|Column title for attribute names.|
+|columnHeaderAttribute|no|String|`"dataStreamName"`|Value column title.|
+
+```json
 "data": {
-    "name": "Daten",
-    "firstColumnHeaderName": "Eigenschaften",
+    "name": "Data",
+    "firstColumnHeaderName": "Properties",
     "columnHeaderAttribute": "layerName"
 }
 ```
 
 ***
 
-## gfi_theme_sensor_params_historicalData ##
-Hier wird konfiguriert für welchen Zeitraum die historischen Observations angefragt werden sollen.
+## gfi_theme_sensor_params_historicalData
 
-|Name|Verpflichtend|Typ|default|Beschreibung|
-|----|-------------|---|-------|------------|
-|name|nein|String||Angabe des Names für den Reiter.|
-|periodLength|nein|Number|3|Angabe der Länge des Zeitraumes.|
-|periodUnit|nein|String|"month"|Angabe der Einheit des Zeitraumes. Möglich sind "month" und "year".|
+Configuration of historical data period to be request.
 
-```
-#!json
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|name|no|String||Tab name.|
+|periodLength|no|Number|`3`|Period length.|
+|periodUnit|no|String|`"month"`|Unit for period. Use `"month"` or `"year"`.|
+
+```json
 "historicalData": {
     "periodLength" : 3,
     "periodUnit" : "month"
@@ -657,75 +663,76 @@ Hier wird konfiguriert für welchen Zeitraum die historischen Observations angef
 
 ***
 
-## gfi_attributes ##
-Hier erlauben Key-Value-Paare die portalseitige Übersetzung manchmal diensteseitig kryptischer Attributnamen in lesbare. Weitere Optionen sind:
-**ignore**: keine GFI-Abfrage möglich,
-**showAll**: alle GFI-Attribute werden abgefragt und wie vom Dienst geliefert angezeigt.
-Bestimmte Standard-Attribute ohne Informationswert für den Benutzer werden immer aus der Anzeige im Portal ausgeschlossen, siehe(**[config.js](config.js.md)**)
+## gfi_attributes
 
-**Beispiel gfiAttributes als String:**
+Potentially cryptic service-side attribute names may be translated with these key-value pairs within the portal.
 
-```
-#!json
+Other options:
+
+* `"ignore"`: GFI requests disabled
+* `"showAll"`: All GFI attributes are requested and shown as given
+
+The portal excludes a set of standard attributes that have no information value to users. See **[config.js](config.js.md)** for details.
+
+**gfiAttributes string example:**
+
+```json
 {
    "gfiAttributes": "showAll"
 }
 ```
 
-**Beispiel gfiAttributes als String:**
+**gfiAttributes string example:**
 
-```
-#!json
+```json
 {
    "gfiAttributes": "ignore"
 }
 ```
 
-**Beispiel gfiAttributes als Objekt:**
+**gfiAttributes object example:**
 
-```
-#!json
+```json
 {
    "gfiAttributes": {
-      "key1": "Key der im Portal gezeigt wird 1",
-      "key2": "Key der im Portal gezeigt wird 2",
-      "key3": "Key der im Portal gezeigt wird 3"
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "key3": "key shown in the portal 3"
    }
 }
 ```
 
-Beispiel gfiAttributes als Objekt mit [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise).
-```
-#!json
+**gfiAttributes example object with [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) (object path reference):**
+```json
 {
    "gfiAttributes": {
-      "key1": "Key der im Portal gezeigt wird 1",
-      "key2": "Key der im Portal gezeigt wird 2",
-      "@Datastreams.0.Observations.0.result": "Key der im Portal gezeigt wird 3"
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
+      "@Datastreams.0.Observations.0.result": "key shown in the portal 3"
    }
 }
 
 ```
-Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. Dann wird ein Key erst verwendet, wenn eine Bedingung erfüllt ist
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|name|true|String||Name, der bei exakt einem Match angezeigt werden soll. |'"Test"'|
-|condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
-|type|false|enum["string","date"]|"string"|Wenn type = "date", dann wird versucht ein Datum aus dem Attributwert zu erzeugen.| '"date"'|
-|format|false|String|"DD.MM.YYYY HH:mm:ss"|Datumsformat.| '"DD.MM.YYY"'|
-|suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
+If the gfiAttributes are given as an object, a key's value may also be an object. In that case, the nested object defines a restriction for using that key.
 
-**Beispiel gfiAttributes als Objekt mit suffix:**
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|name|yes|String||Name to be shown on an exact match.|`"Test"`|
+|condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
+|type|no|enum["string","date"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date.|`"date"`|
+|format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
+|suffix|no|String||Attribute value suffix.|`"°C"`|
 
-```
-#!json
+**gfiAttributes example object using `suffix`:**
+
+```json
 {
    "gfiAttributes": {
-      "key1": "Key der im Portal gezeigt wird 1",
-      "key2": "Key der im Portal gezeigt wird 2",
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
       "key3": {
-         "name": "Key der im Portal gezeigt wird 3",
+         "name": "key shown in the portal 3",
          "condition": "contains",
          "suffix": "°C"
       }
@@ -733,16 +740,15 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 }
 ```
 
-**Beispiel gfiAttributes als Objekt mit type und format:**
+**gfiAttributes example object using `type` and `format`:**
 
-```
-#!json
+```json
 {
    "gfiAttributes": {
-      "key1": "Key der im Portal gezeigt wird 1",
-      "key2": "Key der im Portal gezeigt wird 2",
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
       "key3": {
-         "name": "Key der im Portal gezeigt wird 3",
+         "name": "key shown in the portal 3",
          "condition": "contains",
          "type": "date",
          "format": "DD.MM.YY"
@@ -751,13 +757,13 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 }
 ```
 
-Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) und Value als Objekt.
-```
-#!json
+**gfiAttributes example object with [Objektpfadverweis](style.json.md#markdown-header-objektpfadverweise) (object path reference) key and object value:**
+
+```json
 {
    "gfiAttributes": {
-      "key1": "Key der im Portal gezeigt wird 1",
-      "key2": "Key der im Portal gezeigt wird 2",
+      "key1": "key shown in the portal 1",
+      "key2": "key shown in the portal 2",
       "@Datastreams.0.Observations.0.result": {
         "name": "Temperatur",
         "suffix": "°C"
@@ -768,30 +774,27 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 ***
 
-## GeoJSON-Layer ##
+## GeoJSON layer
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|id|ja|String||Frei wählbare Layer-ID|`"11111"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"lokale GeoJSON"`|
-|typ|ja|String||Diensttyp, in diesem Fall GeoJSON |`"GeoJSON"`|
-|subTyp|nein|enum["OpenSenseMap]||SubTyp um spezielle Daten nachzuladen. |`"OpenSenseMap"`|
-|url|ja|String||Pfad/URL zur GeoJSON. Der Pfad ist relativ zur index.html|`"/myJsons/test.json"`|
-|altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
-|altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
-|altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-|gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
-|**[gfiTheme](#markdown-header-gfi_theme)**|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
+|id|yes|String||Arbitrary id|`"11111"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"local GeoJSON"`|
+|typ|yes|String||Service type; in this case, `"GeoJSON"`. |`"GeoJSON"`|
+|subTyp|no|enum["OpenSenseMap"]||SubType to fetch special data.|`"OpenSenseMap"`|
+|url|yes|String||GeoJSON path/URL. The path must be given relative to the `index.html` file.|`"/myJsons/test.json"`|
+|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
+|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
+|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
+|gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 
-**Beispiel GeoJSON:**
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+**GeoJSON layer example:**
 
-```
-#!json
+```json
 
     {
       "id" : "11111",
@@ -807,125 +810,116 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 ***
 
-## Heatmap-Layer ##
+## Heatmap layer
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|id|ja|String||Frei wählbare Layer-ID|`"11111"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Mein Heatmap Layer"`|
-|typ|ja|String||Diensttyp, in diesem Fall Heatmap |`"Heatmap"`|
-|attribute|nein|String|""|Attributname. Nur Features, die dem "attribute" und "value" entsprechen, werden verwendet. |`"attr1"`|
-|value|nein|String|""|Attributwert. Nur Features, die dem "attribute" und "value" entsprechen, werden verwendet.|`"val1"`|
-|radius|nein|Number|10|Radius der Heatmap features.|`10`|
-|blur|nein|Number|15|Blur der Heatmap Features |`15`|
-|gradient|nein|String[]|["#00f", "#0ff", "#0f0", "#ff0", "#f00"]|Farbgradient der Heatmap |`["#f00", "#0f0", "#00f"]`|
-|dataLayerId|ja|String||Id des Layers der die Features für die Heatmap liefert |`"4321"`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|id|yes|String||Arbitrary id|`"11111"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"My heatmap layer"`|
+|typ|yes|String||Service type; in this case, `"Heatmap"`. |`"Heatmap"`|
+|attribute|no|String|`""`|Attribute name. Only features holding "key" and "value" will be used.|`"attr1"`|
+|value|no|String|`""`|Attribute value. Only features holding "key" and "value" will be used.|`"val1"`|
+|radius|no|Number|`10`|Radius of a heatmap feature.|`10`|
+|blur|no|Number|`15`|Blur of heatmap features.|`15`|
+|gradient|no|String[]|`["#00f", "#0ff", "#0f0", "#ff0", "#f00"]`|Heatmap color gradient.|`["#f00", "#0f0", "#00f"]`|
+|dataLayerId|yes|String||Id of layer to use for heatmap features.|`"4321"`|
 
-**Beispiel HeatmapLayer:**
+**Heatmap layer example:**
 
-```
-#!json
-
-    {
-		"id": "1234",
-		"name": "Heatmap des Vektorlayers mit der layerid 4321",
-		"typ": "Heatmap",
-		"attribute": "state",
-		"value": "charging",
-		"radius": 20,
-		"blur": 30,
-		"gradient": [
-			"#ffffb2",
-			"#fd8d3c",
-			"#fd8d3c",
-			"#f03b20",
-			"#bd0026"
-		],
-        "gfiAttributes": "ignore",
-        "dataLayerId": "4321"
-	}
-```
-
-***
-
-## 3D Object Layer TileSet ##
-
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
-|id|ja|String||Frei wählbare Layer-ID|`"44"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|hiddenFeatures|nein|Array||Liste mit IDs, die in der Ebene versteckt werden sollen|`["id_1", "id_2"]`|
-|typ|ja|String||Diensttyp, in diesem Fall TileSet3D |`"TileSet3D"`|
-|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
-|**[cesium3DTilesetOptions]**|nein|Object|Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-
-[cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
-
-**Beispiel Tileset:**
-
-```
-#!json
-
+```json
 {
-      "id" : "buildings",
-      "name" : "Gebäude",
-      "url" : "https://geodienste.hamburg.de/b3dm_hamburg_lod2",
-      "typ" : "Tileset3D",
-      "gfiAttributes" : "showAll",
-      "layerAttribution" : "nicht vorhanden",
-      "legend" : false,
-      "hiddenFeatures": ["id1", "id2"],
-      "cesium3DTilesetOptions" : {
-        maximumScreenSpaceError : 6
-      },
-      "datasets" : [
-         {
-            "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
-            "rs_id" : "HMDK/6f62c5f7-7ea3-4e31-99ba-97407b1af9ba",
-            "md_name" : "LOD 2 Gebäude",
-            "bbox" : "461468.97,5916367.23,587010.91,5980347.76",
-            "kategorie_opendata" : [
-               "LOD 2 Gebäude"
-            ],
-            "kategorie_inspire" : [
-               "LOD 2 Gebäude"
-            ],
-            "kategorie_organisation" : "Behörde für Wirtschaft, Verkehr und Innovation"
-         }
-      ]
-   }
+    "id": "1234",
+    "name": "Heatmap to vector layer 4321",
+    "typ": "Heatmap",
+    "attribute": "state",
+    "value": "charging",
+    "radius": 20,
+    "blur": 30,
+    "gradient": [
+      "#ffffb2",
+      "#fd8d3c",
+      "#fd8d3c",
+      "#f03b20",
+      "#bd0026"
+    ],
+    "gfiAttributes": "ignore",
+    "dataLayerId": "4321"
+}
 ```
 
 ***
 
-## Terrain3D Quantized Mesh Dataset ##
+## 3D Object Layer TileSet
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|id|ja|String||Frei wählbare Layer-ID|`"44"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall Terrain3D |`"Terrain3D"`|
-|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/terrain"`|
-|**[cesiumTerrainProviderOptions]**|nein|Object|Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata the layer data is referenced here. On clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
+|id|yes|String||Arbitrary id|`"44"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Traffic situation on freeways"`|
+|hiddenFeatures|no|Array||List of ids describing features to hide|`["id_1", "id_2"]`|
+|typ|yes|String||Service type; in this case, `"TileSet3D"`.|`"TileSet3D"`|
+|url|yes|String||Dienste URL|`"https://geodienste.hamburg.de/buildings_lod2"`|
+|cesium3DTilesetOptions|no|**[cesium3DTilesetOptions](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)**||Cesium 3D tileset options directly forwarded to the cesium tileset object. E.g. `maximumScreenSpaceError` can be used for distance visibility.|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 
-[cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
+**Tileset example:**
 
-**Beispiel Terrain:**
-
+```json
+{
+    "id": "buildings",
+    "name": "Buildings",
+    "url": "https://geodienste.hamburg.de/b3dm_hamburg_lod2",
+    "typ": "Tileset3D",
+    "gfiAttributes": "showAll",
+    "layerAttribution": "nicht vorhanden",
+    "legend": false,
+    "hiddenFeatures": ["id1", "id2"],
+    "cesium3DTilesetOptions": {
+        "maximumScreenSpaceError": 6
+    },
+    "datasets": [
+        {
+            "md_id": "2FC4BBED-350C-4380-B138-4222C28F56C6",
+            "rs_id": "HMDK/6f62c5f7-7ea3-4e31-99ba-97407b1af9ba",
+            "md_name": "LOD 2 Gebäude",
+            "bbox": "461468.97,5916367.23,587010.91,5980347.76",
+            "kategorie_opendata": [
+                "LOD 2 Gebäude"
+            ],
+            "kategorie_inspire": [
+                "LOD 2 Gebäude"
+            ],
+            "kategorie_organisation": "Behörde für Wirtschaft, Verkehr und Innovation"
+        }
+    ]
+}
 ```
-#!json
+
+***
+
+## Terrain3D Quantized Mesh Dataset
+
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|id|yes|String||Arbitrary id|`"44"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
+|typ|yes|String||Service type; in this case, `"Terrain3D"`.|`"Terrain3D"`|
+|url|yes|String||Service URL|`"https://geodienste.hamburg.de/terrain"`|
+|cesiumTerrainProviderOptions|no|**[cesiumTerrainProviderOptions](https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html)**||Cesium TerrainProvider options directly forwarded to the Cesium TerrainProvider. E.g. `requestVertexNormals` can be used for object shading.|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+
+**Terrain example:**
+
+```json
    {
       "id" : "buildings",
       "name" : "Terrain",
@@ -957,29 +951,26 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 ***
 
-## Oblique Layer ##
+## Oblique Layer
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|id|ja|String||Frei wählbare Layer-ID|`"44"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall Oblique |`"Oblique"`|
-|hideLevels|nein|Number||Anzahl der Level der Bildpyramide, die nicht angezeigt werden sollen. |`0`|
-|minZoom|nein|Number||Minimale Zoomstufe 0 zeigt das komplette Schrägluftbild in der Mitte des Bildschirms. |`0`|
-|terrainUrl|nein|String||URL zu Cesium Quantized Mesh Terrain dataset |`"https://geodienste.hamburg.de/terrain"`|
-|resolution|nein|Number||Auflösung der Schrägluftbilder in cm z.B. 10 . |`10`|
-|projection|ja|String||Projektion der Schrägluftbild ebene. |`EPSG:25832`|
-|url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/oblique"`|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|id|yes|String||Arbitrary id|`"44"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
+|typ|yes|String||Service type; in this case, `"Oblique"`.|`"Oblique"`|
+|hideLevels|no|Number||Amount of image levels of the image pyramid not to be shown.|`0`|
+|minZoom|no|Number||Minimal zoom level 0 shows the complete oblique image.|`0`|
+|terrainUrl|no|String||URL to the *Cesium Quantized Mesh Terrain* dataset.|`"https://geodienste.hamburg.de/terrain"`|
+|resolution|no|Number||Resolution of oblique images in centimeters.|`10`|
+|projection|yes|String||Projection of the oblique image layer.|`EPSG:25832`|
+|url|yes|String||Service URL|`"https://geodienste.hamburg.de/oblique"`|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 
-**Beispiel Oblique Ebene:**
+**Oblique layer example:**
 
-```
-#!json
+```json
    {
       "id" : "oblique",
       "name" : "Oblique",
@@ -1008,42 +999,39 @@ Beispiel gfiAttributes als Objekt mit Key als [Objektpfadverweis](style.json.md#
 
 ***
 
-## Entities Layer 3D ##
+## Entities Layer 3D
 
-Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
+Used to display 3D models in Gltf or Glb format.
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|**[datasets](#markdown-header-wms_wfs_datasets)**|ja|Object[]/Boolean||Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Diese Werden in der Layerinfo (i-Knopf) im Portal zur Laufzeit aus dem Metadatenkatalog bzw. seiner CS-W – Schnittstelle abgerufen und dargestellt. Die Angaben unter „Kategorie_...“ werden im default-tree zur Auswahl der Kategorien bzw. zur Strukturierung des Layerbaums verwandt. Es kann explizit "datasets": false gesetzt werden, damit der „i“-Button nicht angezeigt wird.||
-|id|ja|String||Frei wählbare Layer-ID|`"44"`|
-|layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
-|legendURL|ja|String||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
-|legend|nein|Boolean/String||Wert aus **[services.json](services.json.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
-|name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Verkehrslage auf Autobahnen"`|
-|typ|ja|String||Diensttyp, in diesem Fall Entities3D |`"Entities3D"`|
-|entities|ja|Array||Modelle, die angezeigt werden sollen |`[]`|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|datasets|no|**[datasets](#markdown-header-wms_wfs_datasets)**/Boolean||Metadata specification. All metadata of the layer data is referenced here. By clicking the "i" button in the layer tree, the information is retrieved by the CSW interface and shown to the user. For this, the **[rest-services.json](rest-services.json.md)** has to provide the URL of the metadata catalog resp. its CSW interface. The values *kategorie_opendata*, *kategorie_inspire*, and *kategorie_organisation* are used for layer categorization if the **[config.json](config.json.md)** has `treeType` set to `"default"`. To remove the "i" button altogether, explicitly set `"datasets": false`.||
+|id|yes|String||Arbitrary id|`"41"`|
+|layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
+|name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
+|typ|yes|String||Service type; in this case, `"Entities3D"`.|`"Entities3D"`|
+|entities|yes|Array||Models to be shown|`[]`|
+|useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 
-**Entity Optionen**
+**Entity options**
 
-|Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
-|----|-------------|---|-------|------------|--------|
-|url|ja|String|`""`|Url zu dem Modell|`"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|
-|attributes|nein|Object|{}|Attribute für das Modell|`{"name": "test"}`|
-|latitude|ja|Number| |Breitengrad des Modell-Origins in Grad|`53.541831`|
-|longitude|ja|Number| |Längengrad des Modell-Origins in Grad|`9.917963`|
-|height|nein|Number|0|Höhe des Modell-Origins|`10`|
-|heading|nein|Number|0|Rotation des Modells, in Grad|`0`|
-|pitch|nein|Number|0|Neigung des Modells in Grad |`0`|
-|roll|nein|Number|0|Roll des Modells in Grad|`0`|
-|scale|nein|Number|1|Skalierung des Modells|`1`|
-|allowPicking|nein|Boolean|true|Ob das Modell angeklickt werden darf (GFI)|`true`|
-|show|nein|Boolean|true|Ob das Modell angezeigt werden soll (sollte true sein)|`true`|
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|url|yes|String|`""`|Model URL|`"https://hamburg.virtualcitymap.de/gltf/4AQfNWNDHHFQzfBm.glb"`|
+|attributes|no|Object|`{}`|Model attributes|`{"name": "test"}`|
+|latitude|yes|Number||Model origin latitude in degree|`53.541831`|
+|longitude|yes|Number||Model origin longitude in degree|`9.917963`|
+|height|no|Number|`0`|Model origin height|`10`|
+|heading|no|Number|`0`|Model origin rotation in degree|`0`|
+|pitch|no|Number|`0`|Model pitch in degree|`0`|
+|roll|no|Number|`0`|Model roll in degree|`0`|
+|scale|no|Number|`1`|Model scale|`1`|
+|allowPicking|no|Boolean|`true`|Whether model may be clicked for GFI|`true`|
+|show|no|Boolean|`true`|Whether model should be visible (should be `true`)|`true`|
 
-**Beispiel Entities3D Ebene:**
+**Entities3D layer example:**
 
-```
-#!json
+```json
    {
      "id": "gltfLayer",
      "name": "GltfLayer",
@@ -1084,4 +1072,5 @@ Entities Layer um 3D Modelle im Gltf oder Glb Format darzustellen.
      ]
    }
 ```
->Zurück zur **[Dokumentation Masterportal](doc.md)**.
+
+>**[Return to the Masterportal documentation](doc.md)**.

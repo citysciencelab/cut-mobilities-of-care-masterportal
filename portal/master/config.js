@@ -1,7 +1,7 @@
 const Config = {
     addons: ["einwohnerabfrage", "VueAddon", "TacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
-        // fetchBroadcastUrl: "https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"
+        fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: false,
@@ -83,11 +83,11 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch"
+            en: "englisch",
+            it: "italienisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
     },
     /**
      * @deprecated to be deleted with version 3.0

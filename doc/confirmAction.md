@@ -1,10 +1,10 @@
-# Das Confirm Action Modul #
+# The ConfirmAction module
 
-Ein einfaches Modal, welches die Möglichkeit bietet, den User um Bestätigung einer Aktion oder um eine Entscheidung zu bitten. Für jeweils Zustimmung, Ablehnung oder das Schließen des Modals können Callback Funktionen definiert werden.
+A simple modal dialog asking the user to confirm an action or make a decision. Callback functions can be defined for confirmation, rejection, and closing the modal dialog.
 
-Eine Confirm Action kann wie folgt hinzugefügt werden:
+A confirmation action may be added in this fashion:
 
-```
+```js
 import store from "[...]/src/app-store/index";
 
 // [...]
@@ -24,23 +24,24 @@ const
         actionDeniedCallback: denyCallback,
         actionEscapedCallback: escapeCallback,
         confirmCaption: "OK",
-        textContent: "Wollen Sie dieses wichtige Dokument wirklich löschen?",
-        denyCaption: "Abbrechen",
+        textContent: "Do you want to delete this important document?",
+        denyCaption: "Deny",
         forceClickToClose: true,
-        headline: "Achtung"
+        headline: "Warning"
     };
 
 store.dispatch("ConfirmAction/addSingleAction", confirmActionSettings);
 
 ```
 
-## Parameter beim Erstellen einer Confirm Action ##
-|Name|Verpflichtend|Typ|Default|Beschreibung|
-|----|-------------|---|-------|------------|
-|actionConfirmedCallback|nein|Function|false|Callback Funktion, welche bei Click auf den Confirm Button ausgeführt wird.|
-|actionDeniedCallback|nein|Function|false|Callback Funktion, welche bei Click auf den Deny Button ausgeführt wird.|
-|confirmCaption|nein|String|"common:modules.confirmAction.defaultConfirmCaption"|Beschriftung des Confirm Buttons.|
-|textContent|nein|String|"common:modules.confirmAction.defaultCopy"|Angezeigter Text.|
-|denyCaption|nein|String|"common:modules.confirmAction.defaultDenyCaption"|Beschriftung des Deny Buttons.|
-|forceClickToClose|nein|Boolean|true|Flag, ob das Modal nur durch Click auf das X geschlossen werden kann.|
-|headline|nein|String|"common:modules.confirmAction.defaultHeadline"|Headline.|
+## Parameters used to create a ConfirmAction
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|actionConfirmedCallback|no|Function|false|Callback function fired on clicking the confirmation button.|
+|actionDeniedCallback|no|Function|false|Callback function fired on clocking the deny button.|
+|confirmCaption|no|String|"common:modules.confirmAction.defaultConfirmCaption"|Confirm button text.|
+|textContent|no|String|"common:modules.confirmAction.defaultCopy"|Display text describing the situation to be resolved.|
+|denyCaption|no|String|"common:modules.confirmAction.defaultDenyCaption"|Deny button text.|
+|forceClickToClose|no|Boolean|true|Flag indicating whether the modal dialog may only be closed on clicking the X button.|
+|headline|no|String|"common:modules.confirmAction.defaultHeadline"|Header text.|

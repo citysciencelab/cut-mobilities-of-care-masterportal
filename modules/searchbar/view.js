@@ -14,6 +14,7 @@ import ElasticSearchModel from "./elasticSearch/model";
 import Searchbar from "./model";
 import "./RadioBridge.js";
 import store from "../../src/app-store/index";
+import {getWKTGeom} from "../../src/utils/getWKTGeom";
 
 /**
  * @member SearchbarTemplate
@@ -395,7 +396,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             // sz, does not want to work in a local environment, so first use the template as variable
             // $("ul.dropdown-menu-search").html(_.template(SearchbarHitListTemplate, attr));
         }
-        if (attr.hasOwnProperty("typelist")) {
+
+        if (attr.hasOwnProperty("typeList")) {
             this.$("ul.dropdown-menu-search").html(this.templateHitList(attr));
         }
     },
@@ -446,40 +448,29 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (hit.hasOwnProperty("triggerEvent")) {
             this.model.setHitIsClick(true);
             Radio.trigger(hit.triggerEvent.channel, hit.triggerEvent.event, hit, true, evt.handleObj.type);
-        }
-        else {
-            const resolutions = Radio.request("MapView", "getResolutions"),
-                index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
-            let extent = [];
 
             if (hit?.coordinate) {
-                if (hit.coordinate.length === 2) {
-                    store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
-                    Radio.trigger("MapView", "setCenter", hit.coordinate, {maxZoom: index});
-                }
-                else {
-                    store.dispatch("MapMarker/removePolygonMarker");
-                    store.dispatch("MapMarker/placingPolygonMarker", {wktcontent: hit});
-                    extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
-                    Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
-                }
+                this.setMarkerZoom(hit);
             }
-            else {
-                const isMobile = Radio.request("Util", "isViewMobile");
+        }
+        else if (hit?.coordinate) {
+            this.setMarkerZoom(hit);
+        }
+        else {
+            const isMobile = Radio.request("Util", "isViewMobile");
 
-                // desktop - topics tree is expanded
-                if (isMobile === false) {
-                    Radio.trigger("ModelList", "showModelInTree", hit.id);
-                }
-                // mobil
-                else {
-                    // adds the model to list, if not contained
-                    Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
-                    Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
-                }
-                // triggers selection of checkbox in tree
-                Radio.trigger("ModelList", "refreshLightTree");
+            // desktop - topics tree is expanded
+            if (isMobile === false) {
+                Radio.trigger("ModelList", "showModelInTree", hit.id);
             }
+            // mobil
+            else {
+                // adds the model to list, if not contained
+                Radio.trigger("ModelList", "addModelsByAttributes", {id: hit.id});
+                Radio.trigger("ModelList", "setModelAttributesById", hit.id, {isSelected: true});
+            }
+            // triggers selection of checkbox in tree
+            Radio.trigger("ModelList", "refreshLightTree");
         }
         // 5. Triggere hit by the radio
         // is needed for IDA and sgv-online, ...
@@ -491,6 +482,27 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         }
     },
 
+    /**
+     * sets a Marker and triggers the zooming
+     * @param {Object} hit search result
+     * @returns {void}
+     */
+    setMarkerZoom: function (hit) {
+        const resolutions = Radio.request("MapView", "getResolutions"),
+            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+        let extent = [];
+
+        if (hit.coordinate.length === 2) {
+            store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            Radio.trigger("MapView", "setCenter", hit.coordinate, index);
+        }
+        else {
+            store.dispatch("MapMarker/removePolygonMarker");
+            store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
+            extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
+            Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
+        }
+    },
     /**
      * todo
      * @param {*} e todo

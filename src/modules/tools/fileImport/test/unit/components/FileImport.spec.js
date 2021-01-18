@@ -19,7 +19,7 @@ describe("src/modules/tools/fileImport/components/FileImport.vue", () => {
                         children: {
                             fileImport:
                             {
-                                "title": "translate#common:menu.tools.fileImport",
+                                "name": "translate#common:menu.tools.fileImport",
                                 "glyphicon": "glyphicon-resize-full",
                                 "renderToWindow": true
                             }

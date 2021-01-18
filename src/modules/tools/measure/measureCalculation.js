@@ -38,7 +38,7 @@ export function calculateLinesLength (scaleError, projection, unit, lines, radiu
                 measure: selectedUnit === "1"
                     ? `${(length / 1000).toFixed(1)} ${unit}`
                     : `${length.toFixed(0)} ${unit}`,
-                deviance: "modules.tools.measure.finishInteraction"
+                deviance: "modules.tools.measure.finishWithDoubleClick"
             };
         }
         else {
@@ -87,7 +87,7 @@ export function calculatePolygonsArea (scaleError, projection, unit, polygons, r
                 measure: selectedUnit === "1"
                     ? `${(area / 1000000).toFixed(1)} ${unit}`
                     : `${area.toFixed(0)} ${unit}`,
-                deviance: "modules.tools.measure.finishInteraction"
+                deviance: "modules.tools.measure.finishWithDoubleClick"
             };
         }
         else {
