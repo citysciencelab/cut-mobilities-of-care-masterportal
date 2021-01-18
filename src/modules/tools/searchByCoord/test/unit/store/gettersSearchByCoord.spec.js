@@ -1,64 +1,60 @@
 import {expect} from "chai";
 import getters from "../../../store/gettersSearchByCoord";
 
-const {getError} = getters;
+const {getEastingError, getNorthingError} = getters;
 
 describe("src/modules/tools/searchByCoord/store/gettersSearchByCoord.js", () => {
 
-    describe("getError", () => {
-        it("Sets the easting error true if there are no coordinates or they don´t match the specified format", () => {
+    describe("getEastingError", () => {
+        it("Returns true if the easting coordinates don´t match the specified format", () => {
             const state = {
-                eastingNoCoord: true,
+                eastingNoCoord: false,
                 eastingNoMatch: true
             };
 
-            getError(state);
-            expect(state.eastingError).to.be.true;
+            expect(getEastingError(state)).to.be.true;
         });
-        it("Sets the easting error true if at least one error was detected", () => {
+        it("Returns true if no easting coordinates were entered", () => {
             const state = {
                 eastingNoCoord: true,
                 eastingNoMatch: false
             };
 
-            getError(state);
-            expect(state.eastingError).to.be.true;
+            expect(getEastingError(state)).to.be.true;
         });
-        it("Sets the easting error to false when there are no errors", () => {
+        it("Returns false when there are no easting errors", () => {
             const state = {
                 eastingNoCoord: false,
                 eastingNoMatch: false
             };
 
-            getError(state);
-            expect(state.eastingError).to.be.false;
+            expect(getEastingError(state)).to.be.false;
         });
-        it("Sets the northing error true if there are no coordinates or they don´t match the specified format", () => {
-            const state = {
-                northingNoCoord: true,
-                northingNoMatch: true
-            };
-
-            getError(state);
-            expect(state.northingError).to.be.true;
-        });
-        it("Sets the northing error true if at least one error was detected", () => {
+    });
+    describe("getNorthingError", () => {
+        it("Returns true if the northing coordinates don´t match the specified format", () => {
             const state = {
                 northingNoCoord: false,
                 northingNoMatch: true
             };
 
-            getError(state);
-            expect(state.northingError).to.be.true;
+            expect(getNorthingError(state)).to.be.true;
         });
-        it("Sets the northing error to false when there are no errors", () => {
+        it("Returns true if no northing coordinates were entered", () => {
+            const state = {
+                northingNoCoord: true,
+                northingNoMatch: false
+            };
+
+            expect(getNorthingError(state)).to.be.true;
+        });
+        it("Returns false when there are no northing errors", () => {
             const state = {
                 northingNoCoord: false,
                 northingNoMatch: false
             };
 
-            getError(state);
-            expect(state.northingError).to.be.false;
+            expect(getNorthingError(state)).to.be.false;
         });
     });
 });
