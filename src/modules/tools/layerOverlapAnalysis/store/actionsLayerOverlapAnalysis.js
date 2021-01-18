@@ -20,11 +20,11 @@ const actions = {
 
             state.bufferLayer.getSource().getFeatures().forEach(sourceFeature => {
                 const sourceGeometry = sourceFeature.getGeometry(),
-                    targetGeometry = targetFeature.getGeometry();
-
+                    targetGeometry = targetFeature.getGeometry(),
+                    sameFeature = sourceFeature.get("originFeature").getId() === targetFeature.getId();
 
                 if (targetFeature.getGeometry().getType() === "Point") {
-                    if (sourceGeometry.intersectsCoordinate(targetGeometry.getCoordinates())) {
+                    if (sourceGeometry.intersectsCoordinate(targetGeometry.getCoordinates()) && !sameFeature) {
                         foundIntersection = true;
                     }
                 }
@@ -32,18 +32,18 @@ const actions = {
                     const sourcePoly = state.parser.read(sourceGeometry),
                         targetPoly = state.parser.read(targetGeometry);
 
-                    if (sourcePoly.intersects(targetPoly)) {
+                    if (sourcePoly.intersects(targetPoly) && !sameFeature) {
                         foundIntersection = true;
                     }
                 }
-
             });
             if (foundIntersection === state.resultType) {
                 resultFeatures.push(targetFeature);
             }
         });
         if (resultFeatures.length) {
-            const vectorSource = new VectorSource();
+            const vectorSource = new VectorSource(),
+                gfiAttributes = state.selectedTargetLayer.get("gfiAttributes");
 
             commit("setResultLayer", new VectorLayer({
                 source: vectorSource,
@@ -51,8 +51,9 @@ const actions = {
             }));
 
             vectorSource.addFeatures(resultFeatures);
+            state.resultLayer.set("gfiAttributes", gfiAttributes);
             rootGetters["Map/map"].addLayer(state.resultLayer);
-            state.sourceOptions.forEach(option => {
+            state.options.forEach(option => {
                 option.setIsSelected(false);
             });
         }
@@ -85,6 +86,7 @@ const actions = {
                 });
 
             newFeature.setStyle(state.bufferLayerStyle);
+            newFeature.set("originFeature", feature);
             newFeatures.push(newFeature);
         });
 
@@ -103,7 +105,7 @@ const actions = {
         }
 
         if (selectedSourceLayer) {
-            state.sourceOptions.forEach(option => {
+            state.options.forEach(option => {
                 option.setIsSelected(selectedSourceLayer.get("id") === option.get("id"));
             });
         }

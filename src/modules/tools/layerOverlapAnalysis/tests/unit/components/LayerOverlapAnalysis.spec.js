@@ -10,7 +10,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAnalysis.vue", () => {
+describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAnalysis.vue", () => {
     const mockMapGetters = {
         },
         mockMapActions = {

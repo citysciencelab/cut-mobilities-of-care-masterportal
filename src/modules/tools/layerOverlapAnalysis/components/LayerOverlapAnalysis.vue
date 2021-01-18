@@ -68,7 +68,6 @@ export default {
      * @returns {void}
      */
     created () {
-        this.setMap(this.map);
         this.$on("close", this.close);
     },
     methods: {
@@ -81,6 +80,12 @@ export default {
             this.targetLayerSelection = null;
             this.removeGeneratedLayers();
         },
+        // saveLayer () {
+        //     const geoJson = new GeoJSON(),
+        //         text = geoJson.writeFeatures(this.resultLayer.getSource().getFeatures());
+        //     console.log(text);
+        //
+        // },
         /**
          * Sets active to false.
          * @returns {void}
@@ -124,7 +129,7 @@ export default {
                         class="font-arial form-control input-sm pull-left"
                     >
                         <option
-                            v-for="layer in sourceOptions"
+                            v-for="layer in options"
                             :key="layer.get('id')"
                             :value="layer"
                         >
@@ -144,7 +149,6 @@ export default {
                         :disabled="!sourceLayerSelection || targetLayerSelection"
                         min="0"
                         max="3000"
-                        step="10"
                         class="font-arial form-control input-sm pull-left"
                         type="number"
                     >
@@ -198,7 +202,7 @@ export default {
                         :disabled="!sourceLayerSelection || !inputBufferRadius || targetLayerSelection"
                     >
                         <option
-                            v-for="layer in targetOptions"
+                            v-for="layer in options"
                             :key="layer.get('id')"
                             :value="layer"
                         >
@@ -217,6 +221,17 @@ export default {
                         {{ $t("modules.tools.layerOverlapAnalysis.clearBtn") }}
                     </button>
                 </div>
+
+                <!--                <div class="col-md-12 col-sm-12 form-group form-group-sm">-->
+                <!--                    <button-->
+                <!--                        id="layer-analysis-save-button"-->
+                <!--                        class="btn-primary pull-right"-->
+                <!--                        :disabled="!sourceLayerSelection || !targetLayerSelection || !inputBufferRadius"-->
+                <!--                        @click="saveLayer()"-->
+                <!--                    >-->
+                <!--                        {{ $t("modules.tools.layerOverlapAnalysis.saveBtn") }}-->
+                <!--                    </button>-->
+                <!--                </div>-->
             </div>
         </template>
     </Tool>

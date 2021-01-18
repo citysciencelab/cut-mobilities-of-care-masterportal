@@ -611,8 +611,9 @@
             "resultTypeLabel": "result type",
             "overlapping": "inside radius",
             "notOverlapping": "outside radius",
-            "rangeLabel": "radius",
-            "clearBtn": "Reset"
+            "rangeLabel": "radius (m)",
+            "clearBtn": "Reset",
+            "saveBtn": "Save"
           }
         },
         "controls": {

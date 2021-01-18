@@ -612,8 +612,9 @@
                 "resultTypeLabel": "Ergebnistyp",
                 "overlapping": "innerhalb Radien",
                 "notOverlapping": "außerhalb Radien",
-                "rangeLabel": "Radius",
-                "clearBtn": "Zurücksetzen"
+                "rangeLabel": "Radius (m)",
+                "clearBtn": "Zurücksetzen",
+                "saveBtn": "Speichern"
             }
         },
         "controls": {

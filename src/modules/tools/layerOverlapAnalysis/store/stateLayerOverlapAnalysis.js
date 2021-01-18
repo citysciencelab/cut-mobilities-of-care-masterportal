@@ -29,8 +29,7 @@ const state = {
     resultLayer: {},
     bufferRadius: 0,
     resultType: false,
-    sourceOptions: [],
-    targetOptions: [],
+    options: [],
     map: null,
     parser: new jsts.io.OL3Parser(),
     resultLayerStyle: new Style({
