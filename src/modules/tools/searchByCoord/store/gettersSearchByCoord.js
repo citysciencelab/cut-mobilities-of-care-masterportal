@@ -19,7 +19,7 @@ const getters = {
      * @returns {Boolean} true if an error for the coordinate occurs
      */
     getEastingError: state => {
-        return Boolean(state.eastingNoCoord || state.eastinNoMatch);
+        return Boolean(state.eastingNoCoord || state.eastingNoMatch);
     },
     /**
      * Returns true to northing coordinate error variable if one test case fails.
@@ -27,10 +27,7 @@ const getters = {
      * @returns {Boolean} true if an error for the coordinate occurs
      */
     getNorthingError: state => {
-        if (state.northingNoCoord || state.northingNoMatch) {
-            return true;
-        }
-        return false;
+        return Boolean(state.northingNoCoord || state.northingNoMatch);
     }
 };
 
