@@ -4,11 +4,12 @@ import actions from "../../../store/actionsSearchByCoord";
 import * as proj4 from "proj4";
 
 describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => {
-    let commit, dispatch;
+    let commit, dispatch, getters;
 
     beforeEach(() => {
         commit = sinon.spy();
         dispatch = sinon.spy();
+        getters = sinon.spy();
     });
 
     afterEach(sinon.restore);
@@ -21,7 +22,7 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
                 coordinatesNorthing: {id: "northing", name: "", value: "5935103.67", errorMessage: ""}
             };
 
-            actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
+            actions.validateInput({state, commit, dispatch, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
             expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
@@ -48,7 +49,7 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
                 coordinatesNorthing: {id: "northing", name: "", value: "9° 59′ 50", errorMessage: ""}
             };
 
-            actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
+            actions.validateInput({state, commit, dispatch, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
             expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
@@ -74,7 +75,7 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
                 coordinatesNorthing: {id: "northing", name: "", value: "10.01234°", errorMessage: ""}
             };
 
-            actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
+            actions.validateInput({state, commit, dispatch, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
             expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");

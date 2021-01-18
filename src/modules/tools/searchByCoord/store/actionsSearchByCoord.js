@@ -43,7 +43,7 @@ export default {
      * @param {Array} coords the coordinates the user entered
      * @returns {void}
      */
-    validateInput ({state, commit}, coords) {
+    validateInput ({state, commit, getters}, coords) {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/;
@@ -68,7 +68,7 @@ export default {
                         commit("setNorthingErrorNoMatch");
                     }
                 }
-                else {
+                else if (!getters.getEastingError && !getters.getNorthingError) {
                     commit("resetErrorMessages");
                     commit("pushCoordinates", coord.value);
                 }
@@ -93,7 +93,7 @@ export default {
                         commit("setNorthingErrorNoMatch");
                     }
                 }
-                else {
+                else if (!getters.getEastingError && !getters.getNorthingError) {
                     commit("resetErrorMessages");
                     commit("pushCoordinates", coord.value.split(/[\s°′″'"´`]+/));
                 }
@@ -118,7 +118,7 @@ export default {
                         commit("setNorthingErrorNoMatch");
                     }
                 }
-                else {
+                else if (!getters.getEastingError && !getters.getNorthingError) {
                     commit("resetErrorMessages");
                     commit("pushCoordinates", coord.value.split(/[\s°]+/));
                 }
