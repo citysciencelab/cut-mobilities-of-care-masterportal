@@ -129,7 +129,7 @@ export default {
                             <input
                                 id="coordinatesEastingField"
                                 v-model="coordinatesEasting.value"
-                                :class="{ inputError: eastingError }"
+                                :class="{ inputError: getEastingError }"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample"
@@ -157,7 +157,7 @@ export default {
                             <input
                                 id="coordinatesNorthingField"
                                 v-model="coordinatesNorthing.value"
-                                :class="{ inputError: northingError }"
+                                :class="{ inputError: getNorthingError }"
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample"
