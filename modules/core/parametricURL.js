@@ -175,7 +175,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "ISINITOPEN": this.parseIsInitOpen.bind(this),
             "LAYERIDS": this.createLayerParams.bind(this),
             "MAP": this.adjustStartingMap3DParameter.bind(this),
-            "MARKER": this.setMarkerFromUrl.bind(this),
             "MDID": this.parseMDID.bind(this),
             "PROJECTION": this.parseProjection.bind(this),
             "QUERY": this.parseQuery.bind(this),
@@ -661,15 +660,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     setLayerParams: function (value) {
         this.set("layerParams", value);
-    },
-
-    /**
-     * Setter for markerFromUrl.
-     * @param {String} coordinate - Coordinate for the marker.
-     * @returns {void}
-     */
-    setMarkerFromUrl: function (coordinate) {
-        store.commit("MapMarker/setUrlParameter", this.parseCoordinates(coordinate, "MARKER"));
     },
 
     /**

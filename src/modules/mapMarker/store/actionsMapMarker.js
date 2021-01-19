@@ -2,6 +2,7 @@ import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
 import {MapMode} from "../../map/store/enums";
+import {transform, getMapProjection} from "masterportalAPI/src/crs";
 
 /**
  * @const {String} configPaths an array of possible config locations. First one found will be used
@@ -23,13 +24,20 @@ export default {
 
     /**
      * Checks if the MapMarker should be set initially by the url param "marker".
+     * The coordinates are projected if the parameter "projection" was specified.
      * @returns {void}
      */
     activateByUrlParam: ({rootState, dispatch}) => {
-        if (rootState.queryParams instanceof Object && rootState?.queryParams?.marker) {
-            const coordinates = rootState.queryParams.marker.split(",");
+        const queryParams = rootState.queryParams;
 
-            dispatch("placingPointMarker", coordinates.map(coordinate => parseFloat(coordinate, 10)));
+        if (queryParams instanceof Object && queryParams?.marker) {
+            let coordinates = queryParams.marker.split(",").map(coordinate => parseFloat(coordinate, 10));
+
+            if (queryParams?.projection) {
+                coordinates = transform(queryParams.projection, getMapProjection(rootState?.Map?.map), coordinates);
+            }
+
+            dispatch("placingPointMarker", coordinates);
         }
     },
 

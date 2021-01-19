@@ -1,23 +1,15 @@
 <script>
-import {mapGetters, mapActions} from "vuex";
+import {mapActions} from "vuex";
 
 export default {
     name: "MapMarker",
-    computed: {
-        ...mapGetters("MapMarker", ["urlParameter"])
-    },
-    /**
-     * The watcher can be replaced by calling the action activateByUrlParamin the mounted hook
-     * once the vectorStyling has moved to Vue
-     */
-    watch: {
-        urlParameter (value) {
-            this.placingPointMarker(value);
-        }
-    },
     mounted () {
         this.initialize();
-        // this.activateByUrlParam();
+
+        // The timeout can be removed once the vectorStyle module has moved to Vue.
+        setTimeout(() => {
+            this.activateByUrlParam();
+        }, 500);
     },
     methods: {
         ...mapActions("MapMarker", ["initialize", "activateByUrlParam", "placingPointMarker"])
