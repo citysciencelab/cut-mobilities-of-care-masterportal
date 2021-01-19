@@ -12,7 +12,6 @@ export default {
     },
     data: function () {
         return {
-            mapElement: document.getElementById("map"),
             currentCoordinateSystem: "ETRS89"
         };
     },

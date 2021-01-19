@@ -311,6 +311,11 @@
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },
+          "searchByCoord":
+          {
+            "name": "translate#common:menu.tools.searchByCoord",
+            "glyphicon": "glyphicon-record"
+          },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
@@ -412,12 +417,6 @@
                 "layerId": "4561"
               }
             ]
-          },
-          "searchByCoord":
-          {
-            "name": "translate#common:menu.tools.searchByCoord",
-            "glyphicon": "glyphicon-record",
-            "renderToWindow": true
           },
           "scaleSwitcher":
           {
