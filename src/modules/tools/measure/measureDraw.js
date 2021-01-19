@@ -15,7 +15,7 @@ import i18next from "../../../../js/i18next";
  * @param {String} featureId feature id
  * @returns {object} holding vue instance and overlay
  */
-export function createTooltip (map, featureId) {
+function createTooltip (map, featureId) {
     const element = document.createElement("div"),
         overlay = new Overlay({
             element,
@@ -47,7 +47,7 @@ export function createTooltip (map, featureId) {
  * @param {function} addOverlay callback to add overlay to store
  * @returns {module:ol/interaction/Draw} draw interaction
  */
-export function makeDraw (map, type, addFeature, addOverlay) {
+function makeDraw (map, type, addFeature, addOverlay) {
     const draw = new Draw({
         source,
         type,
@@ -91,3 +91,5 @@ export function makeDraw (map, type, addFeature, addOverlay) {
 
     return draw;
 }
+
+export default makeDraw;

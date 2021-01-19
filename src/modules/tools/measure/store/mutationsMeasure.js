@@ -3,6 +3,14 @@ import stateMeasure from "./stateMeasure";
 
 const mutations = {
     ...generateSimpleMutations(stateMeasure),
+    /**
+     * Adds a feature depending on the currently selected geometry style to either
+     * the lines or the polygons object by key. Features cannot be added multiple
+     * times by design. To trigger an update regarding the feature, re-add it.
+     * @param {object} state vuex state
+     * @param {(module:ol/Feature)} payload feature to add
+     * @returns {void}
+     */
     addFeature (state, payload) {
         const key = state.selectedGeometry === "LineString" ? "lines" : "polygons";
 
@@ -11,6 +19,12 @@ const mutations = {
             [payload.ol_uid]: payload
         };
     },
+    /**
+     * Adds an overlay to the overlays array.
+     * @param {object} state vuex state
+     * @param {(module:ol/Overlay)} payload added overlay
+     * @returns {void}
+     */
     addOverlay (state, payload) {
         state.overlays = [...state.overlays, payload];
     }

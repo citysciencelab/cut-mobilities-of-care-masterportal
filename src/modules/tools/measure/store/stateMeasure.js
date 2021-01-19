@@ -3,8 +3,6 @@ import VectorLayer from "ol/layer/Vector.js";
 import style from "../measureStyle";
 import source from "../measureSource";
 
-// TODO when drawing, disable first select (or better, make selection reset state)
-
 /**
  * Measure tool state definition.
  * @typedef {Object} MeasureState
@@ -16,7 +14,20 @@ import source from "../measureSource";
  * @property {Boolean} resizableWindow if true, window is resizable (config-param)
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
- * TODO add new properties
+ * @property {Number} earthRadius earth radius to assume for length/area calculations (config-param)
+ * @property {Boolean} showInaccuracy whether tooltip shows inaccuracy in default style (config-param)
+ * @property {Object<String, module:ol/Feature>} lines line features by ol_uid
+ * @property {Object<String, module:ol/Feature>} polygons polygon features by ol_uid
+ * @property {module:ol/Overlay[]} overlays currently visible overlays with measurements
+ * @property {String[]} geometryValues Available geometry values for measurement selection
+ * @property {String[]} geometryValues3d Available geometry values for measurement selection in 3D mode
+ * @property {String[]} lineStringUnits Available units for line measurement
+ * @property {String[]} polygonUnits Available units for polygon measurement
+ * @property {String} selectedGeometry Selected geometry value for measurement
+ * @property {String} selectedUnit Selected unit by stringified index ("0"/"1")
+ * @property {module:ol/Interaction} interaction current interaction on map, if any
+ * @property {module:ol/vector/Source} source draw layer source
+ * @property {module:ol/vector/Layer} layer draw layer
  */
 const state = {
     active: false,
@@ -30,7 +41,7 @@ const state = {
     isVisibleInMenu: true,
     deactivateGFI: true,
 
-    // config.json parameters
+    // tool-specific config.json parameters
     earthRadius: 6378137,
     showInaccuracy: true,
 

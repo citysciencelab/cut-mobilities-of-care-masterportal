@@ -1,5 +1,6 @@
 import source from "../measureSource";
-import {makeDraw} from "../measureDraw";
+import makeDraw2d from "../measureDraw";
+import makeDraw3d from "../measureDraw3d";
 
 export default {
     /**
@@ -28,19 +29,27 @@ export default {
      * interaction created by this tool.
      * @returns {void}
      */
-    createDrawInteraction ({state, dispatch, commit, rootGetters}) {
+    createDrawInteraction ({state, dispatch, commit, rootGetters, getters}) {
         dispatch("removeDrawInteraction");
 
-        const map = rootGetters["Map/map"],
-            {selectedGeometry} = state,
-            interaction = makeDraw(
+        const {selectedGeometry} = state;
+        let interaction = null;
+
+        if (getters.is3d) {
+            interaction = makeDraw3d(rootGetters["Map/map3d"], feature => commit("addFeature", feature));
+        }
+        else {
+            const map = rootGetters["Map/map"];
+
+            interaction = makeDraw2d(
                 map,
                 selectedGeometry,
                 feature => commit("addFeature", feature),
                 overlay => commit("addOverlay", overlay)
             );
+            map.addInteraction(interaction);
+        }
 
-        map.addInteraction(interaction);
         commit("setInteraction", interaction);
     },
     /**

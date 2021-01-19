@@ -20,11 +20,19 @@ export default {
         ...mapGetters("Map", ["layerById", "map"])
     },
     watch: {
+        /**
+         * (Re-)Creates or removes draw interaction on opening/closing tool.
+         * @param {boolean} value active state of tool
+         * @returns {void}
+         */
         active (value) {
             (value ? this.createDrawInteraction : this.removeDrawInteraction)();
         },
+        /**
+         * Recreates draw interaction on geometry type update.
+         * @returns {void}
+         */
         selectedGeometry () {
-            // if geometry type changes, re-create draw interaction
             this.createDrawInteraction();
         }
     },

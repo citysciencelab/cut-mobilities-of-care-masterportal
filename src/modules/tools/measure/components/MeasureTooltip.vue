@@ -16,6 +16,9 @@ export default {
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["isTableStyle"]),
+        /**
+         * @returns {MeasureCalculation} calculation to display results of
+         */
         featureMeasurement () {
             return this.linesLength[this.featureId] || this.polygonsArea[this.featureId];
         },

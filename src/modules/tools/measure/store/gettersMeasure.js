@@ -4,42 +4,61 @@ import {calculateLinesLength, calculatePolygonsArea} from "../measureCalculation
 import {MapMode} from "../../../map/store/enums";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 
-/**
- * @typedef {Object} MeasureCalculation
- * @property {String} deviance estimation of scale-related error
- * @property {String} measure length or area of geometry
- */
-
-// TODO source.clear on mode change
-// TODO when 3D changes, re-do interaction
-
 const getters = {
     ...generateSimpleGetters(stateMeasure),
-    is3D (_, __, ___, rootGetters) {
+    /**
+     * @param {object} _ measure store state
+     * @param {object} __ measure store getters
+     * @param {object} ___ root state
+     * @param {object} rootGetters root getters
+     * @return {boolean} whether the portal is currently in 3D mode
+     */
+    is3d (_, __, ___, rootGetters) {
         return rootGetters["Map/mapMode"] === MapMode.MODE_3D;
     },
-    geometryValues (state, {is3D}) {
-        return is3D
+    /**
+     * @param {object} state measure store state
+     * @param {object} getters measure store getters
+     * @returns {String[]} options for geometry selection
+     */
+    geometryValues (state, {is3d}) {
+        return is3d
             ? state.geometryValues3d
             : state.geometryValues;
     },
-    selectedGeometry (state, {is3D}) {
-        return is3D
-            ? state.geometryValues3d[0]
+    /**
+     * @param {object} state measure store state
+     * @param {object} getters measure store getters
+     * @returns {String} selected geometry selection option
+     */
+    selectedGeometry (state, {is3d}) {
+        return is3d
+            ? state.geometryValues3d[0] // 3D mode only has one option
             : state.selectedGeometry;
     },
-    currentUnits ({selectedGeometry, lineStringUnits, polygonUnits, geometryValues3d}, {is3D}) {
-        if (is3D) {
-            return geometryValues3d;
+    /**
+     * @param {String} state measure store state
+     * @param {object} getters measure store getters
+     * @returns {String[]} options for measurement units
+     */
+    currentUnits ({selectedGeometry, lineStringUnits, polygonUnits}, {is3d}) {
+        if (is3d) {
+            return lineStringUnits;
         }
+
         return selectedGeometry === "LineString"
             ? lineStringUnits
             : polygonUnits;
     },
-    selectedUnit (state, {is3D}) {
-        return is3D
-            ? 0
-            : state.selectedUnit;
+    /**
+     * The selected unit is not saved by value, but by index string, to allow smoother
+     * changes between measurement systems. E.g. when switching from 2D polygon measuring
+     * to 3D line measuring, the unit stays in kilos, in this example km² to km.
+     * @param {object} state measure store state
+     * @returns {String} currently selected option for measurement unit as "0" or "1"
+     */
+    selectedUnit (state) {
+        return state.selectedUnit;
     },
     /**
      * Calculates the length of lines.
