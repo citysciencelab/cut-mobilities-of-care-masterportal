@@ -30,6 +30,18 @@ async function convertFeatures ({state, dispatch}, format) {
 }
 
 /**
+ * Resets values to hide the UI for the Download and not cause side effects while doing so.
+ *
+ * @param {Object} context actions context object.
+ * @returns {void}
+ */
+function fileDownloaded ({commit}) {
+    commit("setDownloadEnabled");
+    commit("setDownloadFileName", "");
+    commit("setDownloadSelectedFormat", "");
+}
+
+/**
  * Converts the features to the chosen format and saves it in the state.
  *
  * @param {Object} context actions context object.
@@ -103,7 +115,6 @@ function setDownloadFeatures ({state, commit, dispatch}) {
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
-        // TODO(roehlipa): Is this still needed for compatibility reasons for the choosable formats or can this be removed?
         if (geometry instanceof Circle) {
             feature.setGeometry(fromCircle(geometry));
         }
@@ -126,13 +137,11 @@ function setDownloadFeatures ({state, commit, dispatch}) {
  * @returns {void}
  */
 function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
-    const features = state.layer.getSource().getFeatures(),
-        length = features.length,
-        {value} = currentTarget;
+    const {value} = currentTarget;
 
     commit("setDownloadFileName", value);
 
-    if (length > 0) {
+    if (state.layer.getSource().getFeatures().length > 0) {
         dispatch("prepareDownload");
     }
 }
@@ -148,12 +157,10 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
  * @returns {void}
  */
 async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTarget}) {
-    const features = state.layer.getSource().getFeatures(),
-        length = features.length,
-        {value} = currentTarget;
+    const {value} = currentTarget;
 
     commit("setDownloadSelectedFormat", value);
-    if (length > 0) {
+    if (state.layer.getSource().getFeatures().length > 0) {
         await dispatch("prepareData");
         dispatch("prepareDownload");
     }
@@ -168,9 +175,10 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTar
  * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)|[]} The transformed Geometry or an empty array.
  */
 function transformCoordinates ({dispatch}, geometry) {
-    const coords = geometry.getCoordinates();
+    const coords = geometry.getCoordinates(),
+        type = geometry.getType();
 
-    switch (geometry.getType()) {
+    switch (type) {
         case "LineString":
             return transform(coords, false);
         case "Point":
@@ -178,7 +186,7 @@ function transformCoordinates ({dispatch}, geometry) {
         case "Polygon":
             return transform(coords, true);
         default:
-            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.download.unknownGeometry", {geometry: geometry.getType()}), {root: true});
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.download.unknownGeometry", {geometry: type}), {root: true});
             return [];
     }
 }
@@ -190,8 +198,7 @@ function transformCoordinates ({dispatch}, geometry) {
  * @returns {String} Returns the filename including the suffix of the chosen format; returns and empty String if either the filename or the format has not been chosen yet.
  */
 function validateFileName ({state}) {
-    const {download} = state,
-        {fileName, selectedFormat} = download;
+    const {fileName, selectedFormat} = state.download;
 
     if (fileName.length > 0 && selectedFormat.length > 0) {
         const suffix = `.${selectedFormat.toLowerCase()}`;
@@ -203,6 +210,7 @@ function validateFileName ({state}) {
 
 export {
     convertFeatures,
+    fileDownloaded,
     prepareData,
     prepareDownload,
     setDownloadFeatures,

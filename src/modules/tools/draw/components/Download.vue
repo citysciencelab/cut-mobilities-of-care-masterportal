@@ -70,6 +70,7 @@ export default {
                         class="btn btn-sm btn-block btn-lgv-grey"
                         :disabled="disableFileDownload"
                         type="button"
+                        @click="fileDownloaded"
                     >
                         <span class="glyphicon glyphicon-floppy-disk" />
                         <!-- TODO: Add the italian translation -->

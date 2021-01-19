@@ -21,8 +21,7 @@ const getters = {
      * @returns {Boolean} Whether to activate or deactivate the Download Button.
      */
     disableFileDownload (state) {
-        const {download} = state,
-            {features, fileName, selectedFormat} = download;
+        const {features, fileName, selectedFormat} = state.download;
 
         return features.length === 0 || fileName === "" || selectedFormat === "" || selectedFormat === "none";
     }
