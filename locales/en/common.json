@@ -612,7 +612,9 @@
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
                 "area": "Area",
-                "finishWithDoubleClick": "Double click to complete"
+                "finishWithDoubleClick": "Double click to complete",
+                "3dLength": "Length: {{length}}",
+                "3dHeight": " Height: {{height}}"
             },
             "scaleSwitcher": {
                 "label": "Scale"

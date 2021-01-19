@@ -9,19 +9,23 @@ export default {
      * @return {void}
      */
     deleteFeatures ({state, commit, rootGetters}) {
-        const {overlays, interaction} = state,
+        const {overlays, unlisteners, interaction} = state,
             map = rootGetters["Map/map"];
 
-        interaction.abortDrawing();
+        if (interaction) {
+            interaction.abortDrawing();
+        }
         overlays.forEach(({vueInstance, overlay}) => {
             map.removeOverlay(overlay);
             vueInstance.$destroy();
         });
+        unlisteners.forEach(unlistener => unlistener());
         source.clear();
 
         commit("setLines", {});
         commit("setPolygons", {});
         commit("setOverlays", []);
+        commit("setUnlisteners", []);
     },
     /**
      * Creates a new draw interaction depending on state to either draw
@@ -36,13 +40,19 @@ export default {
         let interaction = null;
 
         if (getters.is3d) {
+            dispatch("deleteFeatures");
             interaction = makeDraw3d(
                 rootGetters["Map/map3d"],
                 rootGetters["Map/projectionCode"],
-                getters.selectedUnit
+                getters.selectedUnit,
+                unlistener => commit("addUnlistener", unlistener)
             );
         }
         else {
+            if (getters.unlisteners.length) {
+                // if unlisteners are registered, this indicates 3D mode was active immediately before
+                dispatch("deleteFeatures");
+            }
             const map = rootGetters["Map/map"];
 
             interaction = makeDraw2d(

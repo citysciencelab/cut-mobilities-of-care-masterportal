@@ -25,6 +25,7 @@ import source from "../measureSource";
  * @property {String[]} polygonUnits Available units for polygon measurement
  * @property {String} selectedGeometry Selected geometry value for measurement
  * @property {String} selectedUnit Selected unit by stringified index ("0"/"1")
+ * @property {Function[]} unlisteners unlisten methods to execute before source clear
  * @property {(module:ol/Interaction|MeasureDraw3d)} interaction current interaction on map or 3d model, if any
  * @property {module:ol/vector/Source} source draw layer source
  * @property {module:ol/vector/Layer} layer draw layer
@@ -55,6 +56,7 @@ const state = {
     polygonUnits: ["m²", "km²"],
     selectedGeometry: "LineString",
     selectedUnit: "0",
+    unlisteners: [],
 
     // measure layer and ol
     interaction: null,

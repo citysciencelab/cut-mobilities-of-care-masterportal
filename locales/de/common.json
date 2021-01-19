@@ -613,7 +613,9 @@
                 "deleteMeasurements": "Messungen löschen",
                 "stretch": "Strecke",
                 "area": "Fläche",
-                "finishWithDoubleClick": "Abschließen mit Doppelklick"
+                "finishWithDoubleClick": "Abschließen mit Doppelklick",
+                "3dLength": "Länge: {{length}}",
+                "3dHeight": " Höhe: {{height}}"
             },
             "scaleSwitcher": {
                 "label": "Maßstab"

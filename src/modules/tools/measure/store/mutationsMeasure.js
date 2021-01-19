@@ -8,7 +8,7 @@ const mutations = {
      * the lines or the polygons object by key. Features cannot be added multiple
      * times by design. To trigger an update regarding the feature, re-add it.
      * @param {object} state vuex state
-     * @param {(module:ol/Feature)} payload feature to add
+     * @param {module:ol/Feature} payload feature to add
      * @returns {void}
      */
     addFeature (state, payload) {
@@ -22,11 +22,20 @@ const mutations = {
     /**
      * Adds an overlay to the overlays array.
      * @param {object} state vuex state
-     * @param {(module:ol/Overlay)} payload added overlay
+     * @param {module:ol/Overlay} payload added overlay
      * @returns {void}
      */
     addOverlay (state, payload) {
         state.overlays = [...state.overlays, payload];
+    },
+    /**
+     * Adds an unlisten function to the unlisteners array.
+     * @param {object} state vuex state
+     * @param {function} payload added unlisten function
+     * @returns {void}
+     */
+    addUnlistener (state, payload) {
+        state.unlisteners = [...state.unlisteners, payload];
     }
 };
 
