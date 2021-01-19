@@ -46,82 +46,41 @@ export default {
     validateInput ({state, commit, getters}, coords) {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
-            validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/;
+            validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
+            {currentSelection} = state,
+            validators = {
+                ETRS89: validETRS89,
+                WGS84: validWGS84,
+                "WGS84(Dezimalgrad)": validWGS84_dez
+            },
+            formatters = {
+                ETRS89: coord=>coord.value,
+                WGS84: coord=>coord.value.split(/[\s°′″'"´`]+/),
+                "WGS84(Dezimalgrad)": coord=>coord.value.split(/[\s°]+/)
+            };
 
         commit("resetSelectedCoordinates");
 
-        if (state.currentSelection === "ETRS89") {
-            for (const coord of coords) {
-                if (coord.value === "") {
-                    if (coord.id === "easting") {
-                        commit("setEastingErrorNoCoord");
-                    }
-                    else if (coord.id === "northing") {
-                        commit("setNorthingErrorNoCoord");
-                    }
+        for (const coord of coords) {
+            if (coord.value === "") {
+                if (coord.id === "easting") {
+                    commit("setEastingErrorNoCoord");
                 }
-                else if (!coord.value.match(validETRS89)) {
-                    if (coord.id === "easting") {
-                        commit("setEastingErrorNoMatch");
-                    }
-                    else if (coord.id === "northing") {
-                        commit("setNorthingErrorNoMatch");
-                    }
-                }
-                else if (!getters.getEastingError && !getters.getNorthingError) {
-                    commit("resetErrorMessages");
-                    commit("pushCoordinates", coord.value);
+                else if (coord.id === "northing") {
+                    commit("setNorthingErrorNoCoord");
                 }
             }
-        }
-        if (state.currentSelection === "WGS84") {
-            for (const coord of coords) {
-
-                if (coord.value === "") {
-                    if (coord.id === "easting") {
-                        commit("setEastingErrorNoCoord");
-                    }
-                    else if (coord.id === "northing") {
-                        commit("setNorthingErrorNoCoord");
-                    }
+            else if (!coord.value.match(validators[currentSelection])) {
+                if (coord.id === "easting") {
+                    commit("setEastingErrorNoMatch");
                 }
-                else if (!coord.value.match(validWGS84)) {
-                    if (coord.id === "easting") {
-                        commit("setEastingErrorNoMatch");
-                    }
-                    else if (coord.id === "northing") {
-                        commit("setNorthingErrorNoMatch");
-                    }
-                }
-                else if (!getters.getEastingError && !getters.getNorthingError) {
-                    commit("resetErrorMessages");
-                    commit("pushCoordinates", coord.value.split(/[\s°′″'"´`]+/));
+                else if (coord.id === "northing") {
+                    commit("setNorthingErrorNoMatch");
                 }
             }
-        }
-        if (state.currentSelection === "WGS84(Dezimalgrad)") {
-            for (const coord of coords) {
-
-                if (coord.value === "") {
-                    if (coord.id === "easting") {
-                        commit("setEastingErrorNoCoord");
-                    }
-                    else if (coord.id === "northing") {
-                        commit("setNorthingErrorNoCoord");
-                    }
-                }
-                else if (!coord.value.match(validWGS84_dez)) {
-                    if (coord.id === "easting") {
-                        commit("setEastingErrorNoMatch");
-                    }
-                    else if (coord.id === "northing") {
-                        commit("setNorthingErrorNoMatch");
-                    }
-                }
-                else if (!getters.getEastingError && !getters.getNorthingError) {
-                    commit("resetErrorMessages");
-                    commit("pushCoordinates", coord.value.split(/[\s°]+/));
-                }
+            else if (!getters.getEastingError && !getters.getNorthingError) {
+                commit("resetErrorMessages");
+                commit("pushCoordinates", formatters[currentSelection](coord));
             }
         }
     },
