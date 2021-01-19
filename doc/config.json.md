@@ -2730,7 +2730,6 @@ List of typical WMS attributes.
 |featureCount|no|Integer|1|Amount of feature to be returned at maximum on a *GetFeatureInfo* request.|false|
 |geomType|no|String||Geometry type of WMS data. Currently, only `"polygon"` is supported. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|false|
 |styleable|no|Boolean||Whether the `styleWMS` tool may use this layer. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|true|
-|infoFormat|no|String|"text/xml"|**[services.json](services.json.md)** value. WMS *GetFeatureInfo* response format. `"text/xml"` and `"text/html"` are available. When using `"text/html"`, the service response is checked and will only be used when it contains a fully valid and filled HTML table.|false|
 |gfiAsNewWindow|no|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Relevant if `"text/html"` is used.|true|
 |styles|no|String[]||Will be sent to the server if defined. The server will interpret and apply these styles and return the corresponding styled tiles.|true|
 
@@ -2753,7 +2752,6 @@ List of typical WMS attributes.
     "attributesToStyle": ["MyFirstAttr"],
     "featureCount": 2,
     "geomType": "geometry",
-    "infoFormat": "text/html",
     "gfiAsNewWindow": {
         "name": "_blank",
         "specs": "width=800,height=700"
