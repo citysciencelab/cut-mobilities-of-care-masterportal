@@ -21,20 +21,20 @@ const getters = {
      * @param {object} getters measure store getters
      * @returns {String[]} options for geometry selection
      */
-    geometryValues (state, {is3d}) {
+    geometryValues ({geometryValues3d, geometryValues}, {is3d}) {
         return is3d
-            ? state.geometryValues3d
-            : state.geometryValues;
+            ? geometryValues3d
+            : geometryValues;
     },
     /**
      * @param {object} state measure store state
      * @param {object} getters measure store getters
      * @returns {String} selected geometry selection option
      */
-    selectedGeometry (state, {is3d}) {
+    selectedGeometry ({geometryValues3d, selectedGeometry}, {is3d}) {
         return is3d
-            ? state.geometryValues3d[0] // 3D mode only has one option
-            : state.selectedGeometry;
+            ? geometryValues3d[0] // 3D mode only has one option
+            : selectedGeometry;
     },
     /**
      * @param {String} state measure store state

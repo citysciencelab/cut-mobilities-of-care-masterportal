@@ -99,6 +99,7 @@ export default {
                             <select
                                 id="measure-tool-geometry-select"
                                 class="font-arial form-control input-sm pull-left"
+                                :disabled="is3d"
                                 :value="selectedGeometry"
                                 @change="setSelectedGeometry($event.target.value)"
                             >
@@ -107,8 +108,10 @@ export default {
                                     :key="'measure-tool-geometry-select-' + geometryValue"
                                     :value="geometryValue"
                                 >
-                                    {{ $t('modules.tools.measure.' +
-                                        (geometryValue === "LineString" ? "stretch" : "area"))
+                                    {{ is3d
+                                        ? selectedGeometry
+                                        : $t('modules.tools.measure.' +
+                                            (geometryValue === "LineString" ? "stretch" : "area"))
                                     }}
                                 </option>
                             </select>

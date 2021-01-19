@@ -36,7 +36,11 @@ export default {
         let interaction = null;
 
         if (getters.is3d) {
-            interaction = makeDraw3d(rootGetters["Map/map3d"], feature => commit("addFeature", feature));
+            interaction = makeDraw3d(
+                rootGetters["Map/map3d"],
+                rootGetters["Map/projectionCode"],
+                getters.selectedUnit
+            );
         }
         else {
             const map = rootGetters["Map/map"];
@@ -65,7 +69,15 @@ export default {
             const map = rootGetters["Map/map"];
 
             interaction.abortDrawing();
-            map.removeInteraction(interaction);
+
+            if (interaction.interaction3d) {
+                // 3d interaction is not directly added to map, but provides it's own method
+                interaction.stopInteraction();
+            }
+            else {
+                map.removeInteraction(interaction);
+            }
+
             commit("setInteraction", null);
         }
     }

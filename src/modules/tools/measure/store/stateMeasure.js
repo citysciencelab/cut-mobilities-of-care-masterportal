@@ -25,7 +25,7 @@ import source from "../measureSource";
  * @property {String[]} polygonUnits Available units for polygon measurement
  * @property {String} selectedGeometry Selected geometry value for measurement
  * @property {String} selectedUnit Selected unit by stringified index ("0"/"1")
- * @property {module:ol/Interaction} interaction current interaction on map, if any
+ * @property {(module:ol/Interaction|MeasureDraw3d)} interaction current interaction on map or 3d model, if any
  * @property {module:ol/vector/Source} source draw layer source
  * @property {module:ol/vector/Layer} layer draw layer
  */
