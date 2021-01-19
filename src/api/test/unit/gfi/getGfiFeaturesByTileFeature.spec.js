@@ -19,23 +19,9 @@ before(function () {
 describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
     describe("getGfiFeature", () => {
         it("should use default values for layer attributes - but not for properties", () => {
-            const atts = {"Objektart": "common:modules.layerInformation.objectType",
-                    "Wertbezeichnung": "common:modules.layerInformation.valueDesignation",
-                    "Dachform": "common:modules.layerInformation.roofType",
-                    "measuredHeight": "common:modules.layerInformation.roofHeight",
-                    "storeysAboveGround": "common:modules.layerInformation.storeysAboveGround",
-                    "DatenquelleLage": "common:modules.layerInformation.dataSourceLayer",
-                    "Straße": "common:modules.layerInformation.street",
-                    "Hausnummer": "common:modules.layerInformation.houseNumber",
-                    "PLZ": "common:modules.layerInformation.PLZ",
-                    "Stadt": "common:modules.layerInformation.city",
-                    "creationDate": "common:modules.layerInformation.creationDate"
-                },
-                result = getGfiFeature(null, null);
+            const result = getGfiFeature(null, null);
 
             expect(result.getTitle()).to.equal("common:modules.layerInformation.buildings");
-            expect(result.getTheme()).to.equal("buildings_3d");
-            expect(result.getAttributesToShow()).to.deep.equal(atts);
             expect(result.getProperties()).to.deep.equal(null);
         });
         it("should get attributes and properties according to given parameters", () => {

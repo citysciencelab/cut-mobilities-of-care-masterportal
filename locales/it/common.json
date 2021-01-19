@@ -147,18 +147,7 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicità",
           "publicationCreation": "Pubblicazione / Creazione",
-          "buildings":"Edificio",
-          "roofType":"Tipo di tetto",
-          "objectType":"Tipo di oggetto",
-          "roofHeight":"Relative height of the building in meters",
-          "valueDesignation":"Value designation",
-          "storeysAboveGround":"Number of upper floors (ALKIS)",
-          "dataSourceLayer":"Data source layer",
-          "street":"Street",
-          "houseNumber":"House number",
-          "PLZ":"PLZ",
-          "city":"City",
-          "creationDate":"Date of derivation"
+          "buildings":"Edificio"
         },
         "mapMarker": {
           "noStyleModel": "Non è stato possibile trovare uno stile per lo StyleId specificato: {{styleId}}. Si prega di controllare la configurazione."

@@ -75,26 +75,13 @@ function isCesiumEntity (entity) {
 export function getGfiFeature (layerAttributes, properties) {
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "common:modules.layerInformation.buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
-        attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes :
-            {
-                "Objektart": "common:modules.layerInformation.objectType",
-                "Wertbezeichnung": "common:modules.layerInformation.valueDesignation",
-                "Dachform": "common:modules.layerInformation.roofType",
-                "measuredHeight": "common:modules.layerInformation.roofHeight",
-                "storeysAboveGround": "common:modules.layerInformation.storeysAboveGround",
-                "DatenquelleLage": "common:modules.layerInformation.dataSourceLayer",
-                "Straße": "common:modules.layerInformation.street",
-                "Hausnummer": "common:modules.layerInformation.houseNumber",
-                "PLZ": "common:modules.layerInformation.PLZ",
-                "Stadt": "common:modules.layerInformation.city",
-                "creationDate": "common:modules.layerInformation.creationDate"
-            },
+        attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : properties?.attributes,
         featureProperties = properties && properties.attributes ? properties.attributes : properties,
 
         layer = {
             get: (key) => {
                 if (key === "name") {
-                    return properties && properties.attributes && properties.attributes.Objektart ? properties.attributes.Objektart : layerName;
+                    return properties?.attributes?.Objektart ? properties.attributes.Objektart : layerName;
                 }
                 else if (key === "gfiTheme") {
                     return gfiTheme;

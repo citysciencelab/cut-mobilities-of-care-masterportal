@@ -21,10 +21,6 @@
 
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
-- 3D: das GFI von Gebäuden zeigt wieder alle verfügbaren Attribute an und das GFI für Brückenflächen wird wieder angezeigt
-
-### Known Issues
-- 3D: Klickt man auf ein 3D-Objekt verschwindet der Positions-Anzeiger im Objekt
 
 
 ---
