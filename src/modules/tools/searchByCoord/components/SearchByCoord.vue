@@ -4,6 +4,7 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSearchByCoord";
 import actions from "../store/actionsSearchByCoord";
 import mutations from "../store/mutationsSearchByCoord";
+import state from "../store/stateSearchByCoord";
 
 export default {
     name: "SearchByCoord",
@@ -16,7 +17,19 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("Tools/SearchByCoord", Object.keys(getters))
+        ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
+        eastingNoCoordMessage: function () {
+            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("eastingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("eastingLabel"))});
+        },
+        northingNoCoordMessage: function () {
+            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("northingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("northingLabel"))});
+        },
+        northingNoMatchMessage: function () {
+            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("northingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("northingLabel"))});
+        },
+        eastingNoMatchMessage: function () {
+            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("eastingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("eastingLabel"))});
+        }
     },
     created () {
         this.$on("close", this.close);
@@ -136,13 +149,13 @@ export default {
                                 v-if="eastingNoCoord"
                                 class="error-text"
                             >
-                                {{ currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: $t(label("eastingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: $t(label("eastingLabel"))}) }}
+                                {{ eastingNoCoordMessage }}
                             </p>
                             <p
                                 v-if="eastingNoMatch"
                                 class="error-text"
                             >
-                                {{ (currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: $t(label("eastingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: $t(label("eastingLabel"))})) + coordinatesEastingExample }}
+                                {{ eastingNoMatchMessage + coordinatesEastingExample }}
                             </p>
                         </div>
                     </div>
@@ -164,13 +177,13 @@ export default {
                                 v-if="northingNoCoord"
                                 class="error-text"
                             >
-                                {{ currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: $t(label("northingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: $t(label("northingLabel"))}) }}
+                                {{ northingNoCoordMessage }}
                             </p>
                             <p
                                 v-if="northingNoMatch"
                                 class="error-text"
                             >
-                                {{ (currentSelection === "ETRS89" ? $t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: $t(label("northingLabel"))}) : $t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: $t(label("northingLabel"))})) + coordinatesNorthingExample }}
+                                {{ northingNoMatchMessage + coordinatesNorthingExample }}
                             </p>
                         </div>
                     </div>
