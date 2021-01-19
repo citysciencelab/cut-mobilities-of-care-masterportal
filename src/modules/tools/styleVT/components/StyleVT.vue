@@ -17,7 +17,7 @@ export default {
             "updatedSelectedLayerList": this.refreshVectorTileLayerList
         });
 
-        if (Radio.request("Parser", "getTreeType" === "light")) {
+        if (Radio.request("Parser", "getTreeType") === "light") {
             this.refreshVectorTileLayerList();
         }
         this.$on("close", this.close);
@@ -71,7 +71,6 @@ export default {
                             >
                                 {{ $t("common:modules.tools.styleVT.chooseTheme") }}
                             </option>
-                            <!-- TODO: Could the classes be set for every option through css? -->
                             <option
                                 v-for="vectorTileLayer in vectorTileLayerList"
                                 :key="vectorTileLayer.id"
