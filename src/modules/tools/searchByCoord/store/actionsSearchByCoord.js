@@ -7,9 +7,7 @@ export default {
      * @returns {void}
      */
     setMarker: function ({dispatch}, event) {
-        const position = event;
-
-        dispatch("MapMarker/placingPointMarker", position, {root: true});
+        dispatch("MapMarker/placingPointMarker", event, {root: true});
     },
     /**
      * Removes the marker from selected position.
