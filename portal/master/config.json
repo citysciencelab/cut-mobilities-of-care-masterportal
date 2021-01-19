@@ -302,7 +302,7 @@
           "print": {
             "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "mapfish_qs",
+            "mapfishServiceId": "mapfish",
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",

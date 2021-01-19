@@ -274,7 +274,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 |extent|no|Number[4]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's extent is used.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
 |origin|no|Number[2]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's top-left corner is used.|`[-9497963.94293634221, 9997963.94293634221]`|
 |origins|no|Number[2][]||Required to define the VTC's *GridSet*. If `"origins"` is used, the parameter `"origin"` is ignored; else, `"origin"` is used.|`[[239323.44497139292, 9336416.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9321005.0],[239323.44497139292, 9320646.0],[239323.44497139292, 9320467.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9320109.0],[239323.44497139292, 9320145.0],[239323.44497139292, 9320109.0]]`|
-|resolutions|no|Number[]||Required to define the VTC's *GridSet*. It not used, the portal's resolutions are used.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453, 0.59716428347787265, 0.29858214173893632, 0.14929107086946816]`|
+|resolutions|no|Number[]||Required to define the VTC's *GridSet*. It not used, the portal's resolutions are used. Missing zoom levels are extrapolated only if the resolutions are explicitly specified. Therefore, only resolutions for which tiles exist may be specified.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453]`|
 |tileSize|no|Number|`512`|Required to define the size of a VTC tile.|`256`|
 |id|yes|String||Arbitrary id|`"41"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
@@ -316,7 +316,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
     {
       "id": "STYLE_2",
       "name": "Nachtansicht",
-      "url": "https://example.com/3857/resources/styles/night.json",
+      "url": "https://example.com/3857/resources/styles/night.json"
     }
   ]
 }
@@ -458,9 +458,11 @@ This attribute may be either a string or an object. In case it's a string, the m
 **gfiTheme example:**
 
 ```json
-"gfiTheme": {
-   "name": "default",
-   "params": {}
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {}
+    }
 }
 ```
 
@@ -490,12 +492,18 @@ Definition of parameters for GFI template `"default"`.
 **gfiTheme example for template "Default":**
 
 ```json
-"gfiTheme": {
-   "name": "default",
-   "params": {
-        "imageLinks": ["imageLink", "linkImage", "abc"],
-        "showFavoriteIcons": true
-   }
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {
+            "imageLinks": [
+                "imageLink",
+                "linkImage",
+                "abc"
+            ],
+            "showFavoriteIcons": true
+        }
+    }
 }
 ```
 
@@ -515,40 +523,42 @@ This theme allows the visualization of historical data regarding a SensorThings-
 **gfiTheme example for template "Sensor":**
 
 ```json
-"gfiTheme": {
-   "name": "sensor",
-   "params": {
-        "header": {
-            "name": "Name",
-            "description": "Description",
-            "ownerThing": "Owner"
-        },
-        "data": {
-            "name": "Data",
-            "firstColumnHeaderName": "Properties",
-            "columnHeaderAttribute": "layerName"
-        },
-        "charts": {
-            "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-            "barPercentage": 1.1,
-            "values": {
-                "available": {
-                    "title": "Available",
-                    "color": "rgba(0, 220, 0, 1)"
-                },
-                "charging": {
-                    "title": "Charging",
-                    "color": "rgba(220, 0, 0, 1)"
-                },
-                "outoforder": {
-                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                    "color": "rgba(175, 175, 175, 1)"
+{
+    "gfiTheme": {
+        "name": "sensor",
+        "params": {
+            "header": {
+                "name": "Name",
+                "description": "Description",
+                "ownerThing": "Owner"
+            },
+            "data": {
+                "name": "Data",
+                "firstColumnHeaderName": "Properties",
+                "columnHeaderAttribute": "layerName"
+            },
+            "charts": {
+                "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+                "barPercentage": 1.1,
+                "values": {
+                    "available": {
+                        "title": "Available",
+                        "color": "rgba(0, 220, 0, 1)"
+                    },
+                    "charging": {
+                        "title": "Charging",
+                        "color": "rgba(220, 0, 0, 1)"
+                    },
+                    "outoforder": {
+                        "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                        "color": "rgba(175, 175, 175, 1)"
+                    }
                 }
+            },
+            "historicalData": {
+                "periodLength": 3,
+                "periodUnit": "month"
             }
-        },
-        "historicalData": {
-            "periodLength": 3,
-            "periodUnit": "month"
         }
     }
 }
@@ -568,30 +578,38 @@ Chart display parameters.
 
 **Configuration example with array value:**
 ```json
-"charts": {
-    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-    "barPercentage": 1.1,
-    "values": ["available", "charging", "outoforder"]
+{
+    "charts": {
+        "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+        "barPercentage": 1.1,
+        "values": [
+            "available",
+            "charging",
+            "outoforder"
+        ]
+    }
 }
 ```
 
 **Configuration example with object value:**
 ```json
-"charts": {
-    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-    "barPercentage": 1.1,
-    "values": {
-        "available": {
-            "title": "Available",
-            "color": "rgba(0, 220, 0, 1)"
-        },
-        "charging": {
-            "title": "Charging",
-            "color": "rgba(220, 0, 0, 1)"
-        },
-        "outoforder": {
-            "title": "Out Of Order",
-            "color": "rgba(175, 175, 175, 1)"
+{
+    "charts": {
+        "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+        "barPercentage": 1.1,
+        "values": {
+            "available": {
+                "title": "Available",
+                "color": "rgba(0, 220, 0, 1)"
+            },
+            "charging": {
+                "title": "Charging",
+                "color": "rgba(220, 0, 0, 1)"
+            },
+            "outoforder": {
+                "title": "Out Of Order",
+                "color": "rgba(175, 175, 175, 1)"
+            }
         }
     }
 }
@@ -609,17 +627,21 @@ Layout definition for each result's chart.
 |color|no|String|`"rgba(0, 0, 0, 1)"`|Bar color.|
 
 ```json
-"available": {
-    "title": "Available",
-    "color": "rgba(0, 220, 0, 1)"
+{
+    "available": {
+        "title": "Available",
+        "color": "rgba(0, 220, 0, 1)"
+    }
 }
 ```
 
 ```json
-"charging": {
-    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-    "color": "rgba(220, 0, 0, 1)"
-},
+{
+    "charging": {
+        "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+        "color": "rgba(220, 0, 0, 1)"
+    }
+}
 ```
 
 ***
@@ -635,10 +657,12 @@ Data display configuration.
 |columnHeaderAttribute|no|String|`"dataStreamName"`|Value column title.|
 
 ```json
-"data": {
-    "name": "Data",
-    "firstColumnHeaderName": "Properties",
-    "columnHeaderAttribute": "layerName"
+{
+    "data": {
+        "name": "Data",
+        "firstColumnHeaderName": "Properties",
+        "columnHeaderAttribute": "layerName"
+    }
 }
 ```
 
@@ -655,9 +679,11 @@ Configuration of historical data period to be request.
 |periodUnit|no|String|`"month"`|Unit for period. Use `"month"` or `"year"`.|
 
 ```json
-"historicalData": {
-    "periodLength" : 3,
-    "periodUnit" : "month"
+{
+    "historicalData": {
+        "periodLength": 3,
+        "periodUnit": "month"
+    }
 }
 ```
 

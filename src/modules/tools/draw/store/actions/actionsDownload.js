@@ -96,18 +96,21 @@ function prepareDownload ({state, commit, dispatch}) {
  * @returns {void}
  */
 function setDownloadFeatures ({state, commit, dispatch}) {
-    const features = state.layer.getSource().getFeatures();
+    const downloadFeatures = [],
+        drawnFeatures = state.layer.getSource().getFeatures();
 
-    features.forEach(feature => {
-        const geometry = feature.getGeometry();
+    drawnFeatures.forEach(drawnFeature => {
+        const feature = drawnFeature.clone(),
+            geometry = feature.getGeometry();
 
         // TODO(roehlipa): Is this still needed for compatibility reasons for the choosable formats or can this be removed?
         if (geometry instanceof Circle) {
             feature.setGeometry(fromCircle(geometry));
         }
+        downloadFeatures.push(feature);
     });
 
-    commit("setDownloadFeatures", features);
+    commit("setDownloadFeatures", downloadFeatures);
     dispatch("prepareData");
     dispatch("prepareDownload");
 }

@@ -271,6 +271,7 @@ GFI search service configuration.
             "params": {
                 "query_string": "%%searchString%%"
             }
+        }
     }
 }
 ```
@@ -574,7 +575,7 @@ The entry `attributions` may be of type boolean or object. If of type boolean, t
 {
     "attributions": {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false,
+        "isInitOpenMobile": false
     }
 }
 ```
@@ -923,7 +924,7 @@ A folder object defined by a name, glyphicon, and its children.
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            {
+            "legend": {
                 "name": "Legende",
                 "glyphicon": "glyphicon-book"
             }
@@ -1548,13 +1549,14 @@ Module used to draw features on the map. This includes points, which may also be
 |drawLineSettings|no|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for line drawing.|false|
 |drawCurveSettings|no|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for freehand drawing.|false|
 |drawAreaSettings|no|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{"strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for area drawing.|false|
-|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleInnerDiameter": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for circle drawing.|false|
-|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleInnerDiameter": 0, "circleOuterDiameter": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
+|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleRadius": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1, "tooltipStyle": {"fontSize": "16px", "paddingTop": "3px", "paddingLeft": "3px", "paddingRight": "3px", "backgroundColor": "rgba(255, 255, 255, .9)"}}|Pre-configuration for circle drawing.|false|
+|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleRadius": 0, "circleOuterRadius": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
 |writeTextSettings|no|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{"text": "", "fontSize": 10, "font": "Arial", "color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for text writing.|false|
 
 **Example**
 
-```json
+```
+#!json
 {
     "draw": {
         "name": "Draw / Write",
@@ -1579,13 +1581,20 @@ Module used to draw features on the map. This includes points, which may also be
             }
         ],
         "drawDoubleCircleSettings": {
-            "circleInnerDiameter": 3000,
-            "circleOuterDiameter": 6000,
+            "circleRadius": 1500,
+            "circleOuterRadius": 3000,
             "strokeWidth": 3,
             "color": [55, 126, 184, 0],
             "opacity": 0,
             "colorContour": [228, 26, 28, 1],
-            "opacityContour": 1
+            "opacityContour": 1,
+            "tooltipStyle": {
+                "fontSize": "14px",
+                "paddingTop": "3px",
+                "paddingLeft": "3px",
+                "paddingRight": "3px",
+                "backgroundColor": "rgba(255, 255, 255, .9)"
+            }
         }
     }
 }
@@ -1609,23 +1618,25 @@ Dot object consisting of text, type, and value.
 
 ```json
 {
-    {
-        "id": "iconPoint",
-        "type": "simple_point",
-        "value": "simple_point"
-    },
-    {
-        "id": "iconMeadow",
-        "type": "image",
-        "scale": 0.8,
-        "value": "meadow.png"
-    },
-    {
-        "id": "yellow pin",
-        "type": "image",
-        "scale": 0.5,
-        "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-    }
+    "iconList": [
+        {
+            "id": "iconPoint",
+            "type": "simple_point",
+            "value": "simple_point"
+        },
+        {
+            "id": "iconMeadow",
+            "type": "image",
+            "scale": 0.8,
+            "value": "meadow.png"
+        },
+        {
+            "id": "yellow pin",
+            "type": "image",
+            "scale": 0.5,
+            "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+        }
+    ]
 }
 ```
 
@@ -1730,21 +1741,23 @@ Object to change the drawing tool's configured circle default value.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |circleMethod|yes|String|"interactive"|Pre-configured method of circle drawing. `"interactive"`: freehand, `"defined"`: by entering fixed values|false|
-|unit|yes|String|"m"|Pre-configured unit regarding the circle's diameter `circleInnerDiameter` when `"defined"` is chosen as `circleMethod`.|false|
-|circleInnerDiameter|yes|Number|0|Pre-configured circle diameter when `"defined"` is chosen as `circleMethod`.|false|
+|unit|yes|String|"m"|Pre-configured unit regarding the circle's Radius `circleRadius` when `"defined"` is chosen as `circleMethod`.|false|
+|circleRadius|yes|Number|0|Pre-configured circle Radius when `"defined"` is chosen as `circleMethod`.|false|
 |strokeWidth|yes|Number|1|Pre-configured stroke width of circle border in pixels.|false|
 |color|yes|Number[]|[55, 126, 184, 1]|Pre-configured circle color in RGBA.|false|
 |opacity|yes|Number|1|Pre-configured circle transparency in range [0..1].|false|
 |colorContour|yes|Number[]|[0, 0, 0, 1]|Pre-configured circle border color in RGBA.|false|
 |opacityContour|yes|Number|1|Pre-configured circle border transparency in range [0..1].|false|
+|tooltipStyle|no|String|{}|Pre-configured style for tooltip.|false|
 
 **Example**
 
-```json
+```
+#!json
 {
     "circleMethod": "interactive",
     "unit": "m",
-    "circleInnerDiameter": 0,
+    "circleRadius": 0,
     "strokeWidth": 1,
     "color": [55, 126, 184, 1],
     "opacity": 1,
@@ -1762,9 +1775,9 @@ Object to change the drawing tool's configured circle default value.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |circleMethod|yes|String|"defined"|Pre-configured method of circle drawing. `"interactive"`: freehand, `"defined"`: by entering fixed values|false|
-|unit|yes|String|"m"|Pre-configured unit regarding the circle's diameter `circleInnerDiameter` and `circleOuterDiameter` when `"defined"` is chosen as `circleMethod`.|false|
-|circleInnerDiameter|yes|Number|0|Pre-configured inner circle diameter when `"defined"` is chosen as `circleMethod`.|false|
-|circleOuterDiameter|yes|Number|0|Pre-configured outer circle diameter when `"defined"` is chosen as `circleMethod`.|false|
+|unit|yes|String|"m"|Pre-configured unit regarding the circle's radius `circleRadius` and `circleOuterRadius` when `"defined"` is chosen as `circleMethod`.|false|
+|circleRadius|yes|Number|0|Pre-configured inner circle radius when `"defined"` is chosen as `circleMethod`.|false|
+|circleOuterRadius|yes|Number|0|Pre-configured outer circle radius when `"defined"` is chosen as `circleMethod`.|false|
 |strokeWidth|yes|Number|1|Pre-configured stroke width of circle border in pixels.|false|
 |color|yes|Number[]|[55, 126, 184, 1]|Pre-configured circle color in RGBA.|false|
 |opacity|yes|Number|1|Pre-configured double circle transparency in range [0..1].|false|
@@ -1778,8 +1791,8 @@ Object to change the drawing tool's configured circle default value.
 {
     "circleMethod": "defined",
     "unit": "m",
-    "circleInnerDiameter": 0,
-    "circleOuterDiameter": 0,
+    "circleRadius": 0,
+    "circleOuterRadius": 0,
     "strokeWidth": 1,
     "color": [55, 126, 184, 1],
     "opacity": 1,
@@ -1864,7 +1877,7 @@ A line-like depiction of commute movement used in the MRH (Metropolregion Hambur
         "featureType": "mrh_einpendler_gemeinde",
         "attrAnzahl": "anzahl_einpendler",
         "attrGemeinde": "wohnort",
-        "zoomlevel": 1,
+        "zoomlevel": 1
     }
 }
 ```
@@ -1911,25 +1924,32 @@ A commute animation used in the MRH (Metropolregion Hamburg, en.: Metropolitan a
 **Example**
 
 ```json
-"animation": {
-    "name": "Commute (Animation)",
-    "glyphicon": "glyphicon-play-circle",
-    "steps": 30,
-    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-    "params": {
-        "REQUEST": "GetFeature",
-        "SERVICE": "WFS",
-        "TYPENAME": "app:mrh_kreise",
-        "VERSION": "1.1.0",
-        "maxFeatures": "10000"
-    },
-    "featureType": "mrh_einpendler_gemeinde",
-    "attrAnzahl": "anzahl_einpendler",
-    "attrGemeinde": "wohnort",
-    "minPx": 5,
-    "maxPx": 30,
-    "zoomlevel": 1,
-    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+{
+    "animation": {
+        "name": "Commute (Animation)",
+        "glyphicon": "glyphicon-play-circle",
+        "steps": 30,
+        "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+        "params": {
+            "REQUEST": "GetFeature",
+            "SERVICE": "WFS",
+            "TYPENAME": "app:mrh_kreise",
+            "VERSION": "1.1.0",
+            "maxFeatures": "10000"
+        },
+        "featureType": "mrh_einpendler_gemeinde",
+        "attrAnzahl": "anzahl_einpendler",
+        "attrGemeinde": "wohnort",
+        "minPx": 5,
+        "maxPx": 30,
+        "zoomlevel": 1,
+        "colors": [
+            "rgba(255,0,0,0.5)",
+            "rgba(0,255,0,0.5)",
+            "rgba(0,0,255,0.5)",
+            "rgba(0,255,255,0.5)"
+        ]
+    }
 }
 ```
 

@@ -136,8 +136,8 @@ export default async function convertFeaturesToKml ({state, dispatch}) {
         }
         else {
             try {
-                styles = feature.getStyleFunction().call(feature);
-                style = styles[0];
+                styles = feature.getStyleFunction()(feature);
+                style = Array.isArray(styles) ? styles[0] : styles;
             }
             catch (err) {
                 // Only happens if an imported KML is exported, can be skipped
@@ -154,8 +154,8 @@ export default async function convertFeaturesToKml ({state, dispatch}) {
 
                     anchors[i] = {xUnit: anchorXUnits, yUnit: anchorYUnits, anchor: anchor};
                 }
-                else if (feature.getStyle().getText()) {
-                    textFonts[i] = feature.getStyle().getText().getFont();
+                else if (style.getText()) {
+                    textFonts[i] = style.getText().getFont();
                 }
                 else {
                     color = style.getImage().getFill().getColor();

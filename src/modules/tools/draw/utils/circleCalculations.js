@@ -5,19 +5,20 @@ const earthRadius = 6378137;
 
 /**
  * Helper Function to coordinate the calculation of a circle.
- * @param {Event} event Event sent when drawing a feature on the map.
+ * @param {(Event | Object)} event Event sent when drawing a feature on the map or a simple object.
  * @param {module:ol/coordinate~Coordinate} circleCenter The center of the circle to be calculated.
- * @param {Number} circleDiameter The diameter of the circle to be calculated.
+ * @param {Number} circleRadius The radius of the circle to be calculated.
  * @param {module:ol/Map} map Map object.
  * @returns {void}
  */
-function calculateCircle (event, circleCenter, circleDiameter, map) {
-    const resultCoordinates = [
-        getCircleExtentByDistanceLat(circleCenter, circleDiameter, map),
-        getCircleExtentByDistanceLat(circleCenter, -1 * circleDiameter, map),
-        getCircleExtentByDistanceLon(circleCenter, circleDiameter, map),
-        getCircleExtentByDistanceLon(circleCenter, -1 * circleDiameter, map)
-    ];
+function calculateCircle (event, circleCenter, circleRadius, map) {
+    const diameter = parseInt(circleRadius, 10) * 2,
+        resultCoordinates = [
+            getCircleExtentByDistanceLat(circleCenter, diameter, map),
+            getCircleExtentByDistanceLat(circleCenter, -1 * diameter, map),
+            getCircleExtentByDistanceLon(circleCenter, diameter, map),
+            getCircleExtentByDistanceLon(circleCenter, -1 * diameter, map)
+        ];
 
     // The northernmost point of the circle is described by the longitude (northing) of that point (0).
     // The southernmost point is described by the longitude (northing) of that point (1).

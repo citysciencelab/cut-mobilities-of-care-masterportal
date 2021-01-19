@@ -7,7 +7,11 @@
 ## Unreleased - in development
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
-
+- On draw tool Double Circle configuration available in config.json
+- On draw tool Tooltip and Tooltip style configuration available in config.json
+- On tools Imported Layer in theme tree integrated function under Addons
+- On tools Geometrie/Gebäude Analyse funtion on tools under Addons
+- On tools Taktische Zeichen on tools under Addons
 ### Changed
 - The language of the changelog has been changed to English.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
@@ -16,6 +20,7 @@
 ### Removed
 
 ### Fixed
+- If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
 
 ---
 

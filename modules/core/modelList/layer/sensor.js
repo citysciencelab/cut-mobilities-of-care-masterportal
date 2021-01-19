@@ -1078,7 +1078,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {Void}  -
      */
     clearLayerSource: function () {
-        this.get("layer").getSource().clear();
+        this.get("layerSource").clear();
     },
 
     /**

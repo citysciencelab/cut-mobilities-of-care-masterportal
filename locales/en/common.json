@@ -557,7 +557,7 @@
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
                 "undefinedTwoCircles": "Please define both circles.",
                 "undefinedInnerCircle": "Please also define the inner circle.",
-                "undefinedDiameter": "Please specify a diameter.",
+                "undefinedRadius": "Please specify a radius.",
                 "undefinedOuterCircle": "Please also define the outer circle.",
                 "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
                 "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
@@ -568,9 +568,10 @@
                 "drawArea": "Area",
                 "drawCircle": "Circle",
                 "drawDoubleCircle": "Double circle",
-                "doubleCirclePlaceholder": "Please enter a diameter",
-                "diameter": "Diameter",
-                "outerDiameter": "Outer diameter",
+                "doubleCirclePlaceholder": "Please enter a radius",
+                "radius": "Radius",
+                "innerRadius": "Inner radius",
+                "outerRadius": "Outer radius",
                 "unit": "Unit",
                 "text": "Text",
                 "method": "Method",
@@ -664,7 +665,8 @@
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
-                "closeViewOblique": "close oblique aerial photos"
+                "closeViewOblique": "close oblique aerial photos",
+                "doNotUseIE": "The display of oblique aerial images is no longer supported in Internet Explorer 11. Please use a current browser for this function."
             },
             "freeze": {
                 "freeze": "Freeze view",

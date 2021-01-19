@@ -79,18 +79,14 @@
 		"Hintergrundkarten": {
 			"Layer": [
 				{
-          "id": "453",
-          "name": "Stadtplan",
-				  "visibility": true
+          "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
+          "name": "Geobasiskarten (farbig)",
+          "visibility": true
 				},
-				{
+        {
           "id": "452",
           "name": "Luftbilder DOP 20"
-				},
-				{
-				  "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
-				  "name": "Geobasiskarten (farbig)"
-				}
+        }
 			]
 		},
 		"Fachdaten": {

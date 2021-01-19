@@ -37,43 +37,6 @@
     ]
   },
   {
-    "id": "453",
-    "name": "Stadtplan",
-    "url": "https://geodienste.hamburg.de/HH_WMS_Cache_Stadtplan",
-    "typ": "WMS",
-    "layers": "stadtplan",
-    "format": "image/png",
-    "version": "1.1.1",
-    "singleTile": false,
-    "transparent": true,
-    "transparency": 0,
-    "tilesize": "512",
-    "gutter": "0",
-    "minScale": "0",
-    "maxScale": "2500000",
-    "gfiAttributes": "ignore",
-    "gfiTheme": "default",
-    "layerAttribution": "nicht vorhanden",
-    "legendURL": "ignore",
-    "cache": true,
-    "featureCount": "1",
-    "datasets": [
-      {
-        "md_id": "61C8428E-6270-4AA0-B38D-C1DC9964AAEA",
-        "rs_id": "https://registry.gdi-de.org/id/de.hh/932c8a6b-31f7-40e0-aade-c29c5c631c4f",
-        "md_name": "Internetstadtplan Hamburg",
-        "bbox": "461468.97,5916367.23,587010.91,5980347.76",
-        "kategorie_opendata": [
-          "Sonstiges"
-        ],
-        "kategorie_inspire": [
-          "nicht INSPIRE-identifiziert"
-        ],
-        "kategorie_organisation": "Landesbetrieb Geoinformation und Vermessung"
-      }
-    ]
-  },
-  {
     "id": "682",
     "name": "Kindertagesstätten",
     "url": "https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung",
