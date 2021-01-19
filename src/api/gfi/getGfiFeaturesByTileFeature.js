@@ -76,7 +76,7 @@ export function getGfiFeature (layerAttributes, properties) {
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "common:modules.layerInformation.buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
         attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : properties?.attributes,
-        featureProperties = properties && properties.attributes ? properties.attributes : properties,
+        featureProperties = properties?.attributes ? properties.attributes : properties,
 
         layer = {
             get: (key) => {

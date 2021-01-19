@@ -18,7 +18,7 @@ before(function () {
 
 describe("src/api/gfi/getGfiFeaturesByTileFeature.js", () => {
     describe("getGfiFeature", () => {
-        it("should use default values for layer attributes - but not for properties", () => {
+        it("should use default values not for properties", () => {
             const result = getGfiFeature(null, null);
 
             expect(result.getTitle()).to.equal("common:modules.layerInformation.buildings");
