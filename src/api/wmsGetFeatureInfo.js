@@ -81,31 +81,54 @@ export function parseDocumentString (documentString, mimeType, parseFromStringOp
 }
 
 /**
- * Parses the response into openlayers features
- * @throws will throw an error
- * @param {XMLDocument} doc - data to be parsed
- * @returns {module:ol/Feature[]} array of openlayers features
+ * Parses the response into openlayers features.
+ * A distinction is made between ESRI services and OGC-conform services.
+ * OpenLayers supports OGC-conform services that have the root element `FeatureCollection` or `msGMLOutput`.
+ * @throws Will throw an error.
+ * @param {XMLDocument} doc Data to be parsed.
+ * @returns {module:ol/Feature[]} Collection of openlayers features.
  */
 export function parseFeatures (doc) {
+    const firstChild = doc.firstChild.tagName;
     let features = [];
 
-    // OGC-conform
-    if (doc.firstChild.tagName.includes("FeatureCollection")) {
-        const gfiFormat = new WMSGetFeatureInfo();
-
-        features = gfiFormat.readFeatures(doc);
+    if (firstChild.includes("FeatureCollection") || firstChild.includes("msGMLOutput")) {
+        features = parseOgcConformFeatures(doc);
     }
-    // ESRI...
     else {
-        doc.getElementsByTagName("FIELDS").forEach(element => {
-            const feature = new Feature();
-
-            element.attributes.forEach(attribute => {
-                feature.set(attribute.localName, attribute.value);
-            });
-            features.push(feature);
-        });
+        features = parseEsriFeatures(doc);
     }
+
+    return features;
+}
+
+/**
+ * Parse the response of a gfi from an OGC-conform service.
+ * @param {XMLDocument} doc Data to be parsed.
+ * @returns {module:ol/Feature[]} Collection of openlayers features.
+ */
+function parseOgcConformFeatures (doc) {
+    const gfiFormat = new WMSGetFeatureInfo();
+
+    return gfiFormat.readFeatures(doc);
+}
+
+/**
+ * Parse the response of a gfi from an ESRi service.
+ * @param {XMLDocument} doc Data to be parsed.
+ * @returns {module:ol/Feature[]} Collection of openlayers features.
+ */
+function parseEsriFeatures (doc) {
+    const features = [];
+
+    doc.getElementsByTagName("FIELDS").forEach(element => {
+        const feature = new Feature();
+
+        element.attributes.forEach(attribute => {
+            feature.set(attribute.localName, attribute.value);
+        });
+        features.push(feature);
+    });
 
     return features;
 }
