@@ -381,12 +381,14 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * @param {Object} context actions context object.
          * @returns {void}
          */
-        createSelectInteractionListener ({state}) {
+        createSelectInteractionListener ({state, dispatch}) {
             state.selectInteraction.on("select", event => {
                 // remove feature from source
                 state.layer.getSource().removeFeature(event.selected[0]);
                 // remove feature from interaction
                 state.selectInteraction.getFeatures().clear();
+                // remove feature from array of downloadable features
+                dispatch("setDownloadFeatures");
             });
         },
         /**
