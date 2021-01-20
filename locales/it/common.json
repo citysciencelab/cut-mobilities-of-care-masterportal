@@ -539,10 +539,8 @@
                 "exampleAcronym": "Es.",
                 "errorMsg": {
                     "noCoord": "Si prega di inserire {{valueKey}} completo.",
-                    "noMatch": "L'input per {{valueKey}} non è corretto! (Esempio: {{valueExample}})"
-                },
-                "hdmsEastingText": "Valore $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Valore $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
+                    "noMatch": "L'input per {{valueKey}} non è corretto! Esempio: "
+                }
             },
             "draw": {
                 "clickToPlaceText": "Clicca sulla mappa per inserire il testo",
