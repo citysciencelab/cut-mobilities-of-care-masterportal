@@ -25,7 +25,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Adds selected values from the state to the "drawState" of the given feature
          *
-         * @param {Object} context actions context object.
          * @param {ol/Feature} feature The OpenLayers feature to append to the current "drawState".
          * @returns {void}
          */
@@ -70,7 +69,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Adds an interaction to the current map instance.
          *
-         * @param {Object} context actions context object.
          * @param {module:ol/interaction/Interaction} interaction interaction with the map.
          * @returns {void}
          */
@@ -80,7 +78,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Removes all features from the layer.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         clearLayer ({state, dispatch}) {
@@ -91,7 +88,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Clears the tooltip from the map.
          *
-         * @param {Object} context actions context object.
          * @param {module:ol/Overlay} tooltip The tooltip to be removed.
          * @returns {void}
          */
@@ -105,7 +101,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * Returns the center point of a Line or Polygon or a point itself.
          * If a targetprojection is given, the values are transformed.
          *
-         * @param {Object} context actions context object.
          * @param {Object} prm Parameter object.
          * @param {module:ol/Feature} prm.feature Line, Polygon or Point.
          * @param {String} prm.targetProjection Target projection if the projection differs from the map's projection.
@@ -156,7 +151,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Creates a draw interaction to add to the map.
          *
-         * @param {Object} context actions context object.
          * @param {Object} payload payload object.
          * @param {Boolean} payload.active Decides whether the draw interactions are active or not.
          * @param {Integer} [payload.maxFeatures] Max amount of features to be added to the map.
@@ -184,7 +178,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Listener to change the entries for the next drawing.
          *
-         * @param {Object} context actions context object.
          * @param {Object} payload payload object.
          * @param {Boolean} payload.isOuterCircle Determines if the outer circle of a doubleCircle is supposed to be drawn.
          * @param {String} payload.drawInteraction Either an empty String or "Two" to identify for which drawInteraction this is used.
@@ -250,7 +243,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Creates a modify interaction and adds it to the map.
          *
-         * @param {Object} context actions context object.
          * @param {Boolean} active Decides whether the modify interaction is active or not.
          * @returns {void}
          */
@@ -271,7 +263,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * Listener to change the features through the modify interaction.
          * NOTE: For text only the position can be changed. This can be done by clicking at highlighted (on-hover) bottom-left corner of the text.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         createModifyInteractionListener ({rootState, state, dispatch, commit, getters}) {
@@ -334,7 +325,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Listener to select (for modify) the features through ol select interaction
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         createSelectInteractionModifyListener ({state, commit, dispatch}) {
@@ -363,7 +353,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * Creates a select interaction (for deleting features) and adds it to the map.
          * NOTE: Deletion of text can be done by clicking at the highlighted (on-hover) bottom-left corner of the text.
          *
-         * @param {Object} context actions context object.
          * @param {Boolean} active Decides whether the select interaction is active or not.
          * @returns {void}
          */
@@ -378,7 +367,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Listener to select (for deletion) the features through the select interaction.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         createSelectInteractionListener ({state, dispatch}) {
@@ -395,7 +383,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * Deactivates all draw interactions of the map and add them to the state.
          * NOTE: This is mainly used with the RemoteInterface because otherwise not all interactions are removed.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         deactivateDrawInteractions ({state, rootState}) {
@@ -412,7 +399,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Activates or deactivates the given Interactions based on the given parameters.
          *
-         * @param {Object} context actions context object.
          * @param {Object} payload payload object.
          * @param {String} payload.interaction name of the interaction to be manipulated.
          * @param {Boolean} payload.active Value to set the drawInteractions to.
@@ -444,7 +430,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Restores the last deleted element of the feature array of the layer.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         redoLastStep ({state, commit, dispatch}) {
@@ -464,7 +449,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Removes the given interaction from the current map instance.
          *
-         * @param {Object} context actions context object.
          * @param {module:ol/interaction/Interaction} interaction interaction with the map.
          * @returns {void}
          */
@@ -474,7 +458,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Resets the Draw Tool.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         resetModule ({state, commit, dispatch, getters}) {
@@ -506,7 +489,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Sets the given feature as currentFeature and applies the styleSettings
          *
-         * @param {Object} context actions context object.
          * @param {ol/Feature} feature The OpenLayers feature to append to  current "drawState".
          * @returns {void}
          */
@@ -550,7 +532,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Enables the given interaction and disables the others.
          *
-         * @param {Object} context actions context object.
          * @param {String} interaction The interaction to be enabled.
          * @returns {void}
          */
@@ -577,7 +558,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Deletes the last element in the feature array of the layer.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         undoLastStep ({state, dispatch}) {
@@ -593,7 +573,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
          * Creates and returns a unique ID.
          * If given, it starts with a prefix.
          *
-         * @param {Object} context actions context object.
          * @param {String} [prefix] Prefix for the ID.
          * @returns {String} A unique ID.
          */
@@ -606,7 +585,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Updates the selected feature during modify for circles
          *
-         * @param {Object} context actions context object.
          * @param {Number} radius The radius of the circle.
          * @returns {void}
          */
@@ -623,7 +601,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Updates the drawInteractions on the map and creates a new one.
          *
-         * @param {Object} context actions context object.
          * @returns {void}
          */
         updateDrawInteraction ({state, commit, getters, dispatch}) {
@@ -651,7 +628,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
         /**
          * Adds or removes one element from the redoArray.
          *
-         * @param {Object} context actions context object.
          * @param {Object} payload payload object.
          * @param {Boolean} payload.remove Remove one feature from the array if true.
          * @param {Object} [payload.feature] feature to be added to the array, if given.

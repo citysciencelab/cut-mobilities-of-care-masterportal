@@ -7,7 +7,6 @@ import {transform, transformPoint} from "../../utils/download/transformGeometry"
 /**
  * Converts the features from OpenLayers Features to features in the chosen format.
  *
- * @param {Object} context actions context object.
  * @param {module:ol/format} format Format in which the features should be saved.
  * @returns {string} The features written in the chosen format as a String.
  */
@@ -32,7 +31,6 @@ async function convertFeatures ({state, dispatch}, format) {
 /**
  * Resets values to hide the UI for the Download and not cause side effects while doing so.
  *
- * @param {Object} context actions context object.
  * @returns {void}
  */
 function fileDownloaded ({commit}) {
@@ -44,7 +42,6 @@ function fileDownloaded ({commit}) {
 /**
  * Converts the features to the chosen format and saves it in the state.
  *
- * @param {Object} context actions context object.
  * @returns {void}
  */
 async function prepareData ({state, commit, dispatch}) {
@@ -74,7 +71,6 @@ async function prepareData ({state, commit, dispatch}) {
  * Prepares the download.
  * If the user is using Internet Explorer as a Browser a Blob is used, otherwise the download is accomplished through the href & download combo on an anchor tag.
  *
- * @param {Object} context actions context object.
  * @returns {void}
  */
 function prepareDownload ({state, commit, dispatch}) {
@@ -104,7 +100,6 @@ function prepareDownload ({state, commit, dispatch}) {
  * Action is dispatched when a feature is drawn, edited or deleted.
  * NOTE: When a feature is an instance of ol/Circle, it is converted to a ol/Polygon first.
  *
- * @param {Object} context actions context object.
  * @returns {void}
  */
 function setDownloadFeatures ({state, commit, dispatch}) {
@@ -131,7 +126,6 @@ function setDownloadFeatures ({state, commit, dispatch}) {
  * If at least one feature is already drawn, the download is prepared.
  * If the user entered a name for a file and has chosen a format for the features, the download button is enabled.
  *
- * @param {Object} context actions context object.
  * @param {Event} event Event fired by changing the input for the name of the file.
  * @param {HTMLInputElement} event.currentTarget The HTML input element for the name of the file.
  * @returns {void}
@@ -151,7 +145,6 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
  * If at least one feature is already drawn, they are converted to the chosen format and the download is prepared.
  * If the user entered a name for a file and has chosen a format for the features, the download button is enabled.
  *
- * @param {Object} context actions context object.
  * @param {Event} event Event fired by selecting a different element.
  * @param {HTMLSelectElement} event.currentTarget The HTML select element for the file format.
  * @returns {void}
@@ -170,7 +163,6 @@ async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTar
  * Transforms the given geometry from EPSG:25832 to EPSG:4326.
  * If the geometry is not an instance of ol/LineString, ol/Point or ol/Polygon an Alert is send to the user.
  *
- * @param {Object} context actions context object.
  * @param {module:ol/geom/Geometry} geometry Geometry to be transformed.
  * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)|[]} The transformed Geometry or an empty array.
  */
@@ -194,7 +186,6 @@ function transformCoordinates ({dispatch}, geometry) {
 /**
  * Checks whether the user has added the suffix of the chosen format to the filename and if not, it is added.
  *
- * @param {Object} context actions context object.
  * @returns {String} Returns the filename including the suffix of the chosen format; returns and empty String if either the filename or the format has not been chosen yet.
  */
 function validateFileName ({state}) {
