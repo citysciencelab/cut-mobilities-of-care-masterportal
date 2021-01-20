@@ -29,7 +29,7 @@ const state = {
     resultLayer: {},
     bufferRadius: 0,
     resultType: false,
-    options: [],
+    selectOptions: [],
     map: null,
     parser: new jsts.io.OL3Parser(),
     resultLayerStyle: new Style({

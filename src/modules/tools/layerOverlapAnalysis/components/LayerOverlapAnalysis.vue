@@ -129,7 +129,7 @@ export default {
                         class="font-arial form-control input-sm pull-left"
                     >
                         <option
-                            v-for="layer in options"
+                            v-for="layer in selectOptions"
                             :key="layer.get('id')"
                             :value="layer"
                         >
@@ -202,7 +202,7 @@ export default {
                         :disabled="!sourceLayerSelection || !inputBufferRadius || targetLayerSelection"
                     >
                         <option
-                            v-for="layer in options"
+                            v-for="layer in selectOptions"
                             :key="layer.get('id')"
                             :value="layer"
                         >
@@ -238,5 +238,5 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    @import "~variables";
+    // @import "~variables";
 </style>

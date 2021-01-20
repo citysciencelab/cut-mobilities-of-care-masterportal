@@ -3,16 +3,18 @@ import state from "./stateLayerOverlapAnalysis";
 
 const getters = {
     ...generateSimpleGetters(state),
-    options () {
-        if (!state.options.length) {
-            Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "WFS"}).forEach(layer => {
+    selectOptions () {
+        if (!state.selectOptions.length) {
+            const layers = Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "WFS"}) || [];
+
+            layers.forEach(layer => {
                 if (layer.get("layerSource").getFeatures().length > 100) {
                     layer.set("performanceWarning", true);
                 }
-                state.options.push(layer);
+                state.selectOptions.push(layer);
             });
         }
-        return state.options;
+        return state.selectOptions;
     }
 };
 

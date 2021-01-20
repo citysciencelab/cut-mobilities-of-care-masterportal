@@ -53,7 +53,7 @@ const actions = {
             vectorSource.addFeatures(resultFeatures);
             state.resultLayer.set("gfiAttributes", gfiAttributes);
             rootGetters["Map/map"].addLayer(state.resultLayer);
-            state.options.forEach(option => {
+            state.selectOptions.forEach(option => {
                 option.setIsSelected(false);
             });
         }
@@ -105,7 +105,7 @@ const actions = {
         }
 
         if (selectedSourceLayer) {
-            state.options.forEach(option => {
+            state.selectOptions.forEach(option => {
                 option.setIsSelected(selectedSourceLayer.get("id") === option.get("id"));
             });
         }
