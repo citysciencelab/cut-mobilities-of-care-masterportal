@@ -10,15 +10,6 @@ const mutations = {
      */
     ...generateSimpleMutations(searchByCoordState),
     /**
-     * Sets the current coordinate System to state.
-     * @param {Object} state the state of searchByCoord-module
-     * @param {String} selectedCoordSystem - currently selected coordinate System
-     * @returns {void}
-     */
-    setCoordinateSystem: (state, selectedCoordSystem) => {
-        state.currentSelection = selectedCoordSystem;
-    },
-    /**
      * Sets the example values to state.
      * @param {Object} state the state of searchByCoord-module
      * @returns {void}

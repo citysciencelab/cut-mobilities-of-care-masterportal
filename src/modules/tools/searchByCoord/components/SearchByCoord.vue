@@ -33,7 +33,7 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.setCoordinateSystem(this.currentCoordinateSystem);
+        this.setCurrentSelection(this.currentCoordinateSystem);
         this.setExample();
     },
     methods: {
@@ -59,7 +59,7 @@ export default {
          * @returns {void}
          */
         selectionChanged () {
-            this.setCoordinateSystem(this.currentCoordinateSystem);
+            this.setCurrentSelection(this.currentCoordinateSystem);
             this.setExample();
             this.removeMarker();
             this.resetValues();
