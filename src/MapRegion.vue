@@ -6,7 +6,7 @@ import Footer from "./modules/footer/components/Footer.vue";
 import LegendWindow from "./modules/legend/components/LegendWindow.vue";
 import MapMarker from "./modules/mapMarker/components/MapMarker.vue";
 import ToolManager from "./modules/tools/ToolManager.vue";
-import {mapState, mapGetters} from "vuex";
+import {mapState} from "vuex";
 
 export default {
     name: "MapRegion",
@@ -24,8 +24,7 @@ export default {
             // listen to configJson changes for mounting the tools
             "configJson",
             "i18NextInitialized"
-        ]),
-        ...mapGetters(["legendConfig"])
+        ])
     }
 };
 </script>
@@ -34,7 +33,7 @@ export default {
     <div class="anchor">
         <!-- OpenLayers node; control map itself via vuex map module -->
         <div class="menu">
-            <LegendWindow v-if="legendConfig" />
+            <LegendWindow />
         </div>
         <div id="map-wrapper">
             <div
