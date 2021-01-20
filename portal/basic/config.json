@@ -129,7 +129,8 @@
 					"id": "2404",
 					"name": "WFS Bike and Ride Parkplätze",
 					"styleId": "45",
-					"clusterDistance": 40
+          "clusterDistance": 40,
+          "styleGeometryType": ["Point"]
 				},
 				{
 					"id": "1711",
@@ -147,15 +148,15 @@
 				},
 				{
 				  "id": "4560",
-				  "name": "WFS Polygon (Default Style)"
+          "name": "WFS Polygon (Default Style)"
 				},
 				{
 				  "id": "1132",
-				  "name": "WFS Point (Default Style)"
+          "name": "WFS Point (Default Style)"
 				},
 				{
 				  "id": "1133",
-				  "name": "WFS Line (Default Style)"
+          "name": "WFS Line (Default Style)"
 				}
 			]
 		}
