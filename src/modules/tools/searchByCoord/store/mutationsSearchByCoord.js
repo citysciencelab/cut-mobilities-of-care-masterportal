@@ -29,46 +29,6 @@ const mutations = {
         }
     },
     /**
-     * Resets the selectedCoordinates Array in the state.
-     * @param {Object} state the state of searchByCoord-module
-     * @returns {void}
-     */
-    resetSelectedCoordinates: (state) => {
-        state.selectedCoordinates = [];
-    },
-    /**
-     * Sets the easting error for no match in the state.
-     * @param {Object} state the state of searchByCoord-module
-     * @returns {void}
-     */
-    setEastingErrorNoCoord: (state) => {
-        state.eastingNoCoord = true;
-    },
-    /**
-     * Sets the northing error for no match in the state.
-     * @param {Object} state the state of searchByCoord-module
-     * @returns {void}
-     */
-    setNorthingErrorNoCoord: (state) => {
-        state.northingNoCoord = true;
-    },
-    /**
-     * Sets the easting error for no match in the state.
-     * @param {Object} state the state of searchByCoord-module
-     * @returns {void}
-     */
-    setEastingErrorNoMatch: (state) => {
-        state.eastingNoMatch = true;
-    },
-    /**
-     * Sets the northing error for no match in the state.
-     * @param {Object} state the state of searchByCoord-module
-     * @returns {void}
-     */
-    setNorthingErrorNoMatch: (state) => {
-        state.northingNoMatch = true;
-    },
-    /**
      * Resets the error messages in the state.
      * @param {Object} state the state of searchByCoord-module
      * @returns {void}

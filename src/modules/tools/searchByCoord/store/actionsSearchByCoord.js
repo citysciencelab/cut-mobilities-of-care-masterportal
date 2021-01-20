@@ -62,23 +62,23 @@ export default {
                 "WGS84(Dezimalgrad)": coord=>coord.value.split(/[\s°]+/)
             };
 
-        commit("resetSelectedCoordinates");
+        commit("setSelectedCoordinates", []);
 
         for (const coord of coords) {
             if (coord.value === "") {
                 if (coord.id === "easting") {
-                    commit("setEastingErrorNoCoord");
+                    commit("setEastingNoCoord", true);
                 }
                 else if (coord.id === "northing") {
-                    commit("setNorthingErrorNoCoord");
+                    commit("setNorthingNoCoord", true);
                 }
             }
             else if (!coord.value.match(validators[currentSelection])) {
                 if (coord.id === "easting") {
-                    commit("setEastingErrorNoMatch");
+                    commit("setEastingNoMatch", true);
                 }
                 else if (coord.id === "northing") {
-                    commit("setNorthingErrorNoMatch");
+                    commit("setNorthingNoMatch", true);
                 }
             }
             else if (!getters.getEastingError && !getters.getNorthingError) {
