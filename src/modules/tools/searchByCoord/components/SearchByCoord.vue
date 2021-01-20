@@ -109,7 +109,7 @@ export default {
                                 @change="selectionChanged($event)"
                             >
                                 <option
-                                    v-for="(coordinateSystem) in coordinateSystems"
+                                    v-for="coordinateSystem in coordinateSystems"
                                     :key="coordinateSystem"
                                 >
                                     {{ coordinateSystem }}
