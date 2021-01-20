@@ -197,7 +197,11 @@ function handle3DClicked (map, projectionCode, selectedUnit, addUnlistener, obj)
  * @returns {MeasureDraw3d} measurement-interaction representing object (no real module:ol/interaction)
  */
 function makeDraw (map, projectionCode, selectedUnit, addUnlistener) {
-    // TODO when the 3d module is moved from backbone, this function must be migrated to listen to the new click mechanism
+    /* TODO
+     * when the 3d module is moved from backbone, this function must be updated
+     * to listen to the new click mechanism; 3d measure may also be fully integrated
+     * into vuex then
+     */
     const mapChannel = Radio.channel("Map"),
         handle = handle3DClicked.bind(null, map, projectionCode, selectedUnit, addUnlistener);
 
