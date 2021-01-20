@@ -3,6 +3,7 @@ import proj4 from "proj4";
 export default {
     /**
      * Remembers the projection and shows mapmarker at the given position.
+     * @param {Object} context actions context object.
      * @param {Event} event - pointerdown-event, to get the position from
      * @returns {void}
      */
@@ -11,6 +12,7 @@ export default {
     },
     /**
      * Removes the marker from selected position.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     removeMarker: function ({dispatch}) {
@@ -18,6 +20,7 @@ export default {
     },
     /**
      * Sets the zoom level to the map.
+     * @param {Object} context actions context object.
      * @param {Number} zoomLevel - Zoomlevel to zoom to
      * @returns {void}
      */
@@ -26,7 +29,8 @@ export default {
     },
     /**
      * Takes the selected coordinates and centers the map to the new position.
-     * @param {Array} coordinates - coordinates for new center position
+     * @param {Object} context actions context object.
+     * @param {String[]} coordinates - coordinates for new center position
      * @returns {void}
      */
     setCenter: function ({commit}, coordinates) {
@@ -37,8 +41,9 @@ export default {
     },
     /**
      * Validates the user-input depending on the selected projection and sets the error messages.
-     * If valid, the coordinates will be pushed in the selectedCoordinates array.
-     * @param {Array} coords the coordinates the user entered
+     * If valid, the coordinates will be pushed in the selectedCoordinates String[].
+     * @param {Object} context actions context object.
+     * @param {String[]} coords the coordinates the user entered
      * @returns {void}
      */
     validateInput ({state, commit, getters}, coords) {
@@ -84,6 +89,7 @@ export default {
     },
     /**
      * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
+     * @param {Object} context actions context object.
      * @returns {void}
      */
     transformCoordinates ({state, dispatch}) {
@@ -109,7 +115,8 @@ export default {
     },
     /**
      * Transforms the selected and validated coordinates to their given coordinate system and calls the moveToCoordinates function.
-     * @param {Array} coordinates from the validated coordinates
+     * @param {Object} context actions context object.
+     * @param {String[]} coordinates from the validated coordinates
      * @returns {void}
      */
     moveToCoordinates ({dispatch}, coordinates) {
@@ -119,6 +126,7 @@ export default {
     /**
      * Resets the error messages, calls the validation function with the entered coordinates
      * and calls the transformCoordinates function.
+     * @param {Object} context actions context object.
      * @param {String} coordinatesEasting the coordinates user entered
      * @param {String} coordinatesNorthing the coordinates user entered
      * @returns {void}
