@@ -14,16 +14,28 @@ export default {
     computed: {
         ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
         eastingNoCoordMessage: function () {
-            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("eastingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("eastingLabel"))});
+            if (state.currentSelection === "ETRS89") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("eastingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("eastingLabel"))});
         },
         northingNoCoordMessage: function () {
-            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("northingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("northingLabel"))});
+            if (state.currentSelection === "ETRS89") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("northingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("northingLabel"))});
         },
         northingNoMatchMessage: function () {
-            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("northingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("northingLabel"))});
+            if (state.currentSelection === "ETRS89") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("northingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("northingLabel"))});
         },
         eastingNoMatchMessage: function () {
-            return state.currentSelection === "ETRS89" ? this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("eastingLabel"))}) : this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("eastingLabel"))});
+            if (state.currentSelection === "ETRS89") {
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("eastingLabel"))});
+            }
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("eastingLabel"))});
         }
     },
     created () {
