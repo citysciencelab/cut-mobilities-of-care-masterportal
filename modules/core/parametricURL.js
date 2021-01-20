@@ -257,7 +257,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
         // Read out transparency value. If missing null.
         if (transparencyListString === "") {
-            transparencyList = layerIdList.map(() => null);
+            transparencyList = layerIdList.map(() => 0);
         }
         else if (transparencyListString.indexOf(",") > -1) {
             transparencyList = transparencyListString.split(",").map(val => {
