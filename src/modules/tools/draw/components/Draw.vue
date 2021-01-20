@@ -713,7 +713,7 @@ export default {
                             @change="setColor"
                         >
                             <option
-                                v-for="option in constants.pointColorOptions"
+                                v-for="option in constants.colorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
                                 :selected="isEqualColorArrays(option.value, colorComputed)"

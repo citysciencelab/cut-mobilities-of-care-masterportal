@@ -29,7 +29,7 @@ const symbol = {
      * @property {String} id Internal Identifier for the Tool.
      * @property {Integer} idCounter Amount of features drawn.
      * @property {String} innerBorderColor The color of the border of the dropdown menu for the selection of the inner radius of a circle.
-     * @property {Boolean} isVisibleInMenu TODO: Currently has no use. Update this comment when there is a usage.
+     * @property {Boolean} isVisibleInMenu If true, the draw tool is listed in the menu.
      * @property {module:ol/layer/Vector} layer The layer in which the features are drawn.
      * @property {module:ol/interaction/Modify} modifyInteraction The modify interaction of the draw tool.
      * @property {String} name Title of the Tool. Can be configured through the config.json.

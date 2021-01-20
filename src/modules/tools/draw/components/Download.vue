@@ -73,7 +73,6 @@ export default {
                         @click="fileDownloaded"
                     >
                         <span class="glyphicon glyphicon-floppy-disk" />
-                        <!-- TODO: Add the italian translation -->
                         {{ $t("common:modules.tools.draw.button.saveDrawing") }}
                     </button>
                 </a>
