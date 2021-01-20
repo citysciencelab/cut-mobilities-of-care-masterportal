@@ -95,11 +95,14 @@ export default {
     transformCoordinates ({state, dispatch}) {
         if (state.selectedCoordinates.length === 2) {
             dispatch("setZoom", state.zoomLevel);
+
             if (state.currentSelection !== "ETRS89") {
+
                 const latitude = state.selectedCoordinates[0],
                     newLatitude = Number(latitude[0]) +
             (Number(latitude[1] ? latitude[1] : 0) / 60) +
             (Number(latitude[2] ? latitude[2] : 0) / 60 / 60),
+
                     longitude = state.selectedCoordinates[1],
                     newLongitude = Number(longitude[0]) +
             (Number(longitude[1] ? longitude[1] : 0) / 60) +
