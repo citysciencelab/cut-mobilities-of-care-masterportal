@@ -128,13 +128,13 @@ function createPointFeature (coords) {
 }
 
 /**
- * @todo Write the documentation.
+ * Handler for 3D clicks.
  * @param {module:ol/Map} map ol 3d map
  * @param {string} projectionCode current map projection code
  * @param {string} selectedUnit whether to measure in m or km
  * @param {function} addUnlistener function to register unlisteners
  * @param {object} obj point with coordinates
- * @returns {this} this
+ * @returns {void}
  */
 function handle3DClicked (map, projectionCode, selectedUnit, addUnlistener, obj) {
     const scene = map.getCesiumScene(),
