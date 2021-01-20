@@ -16,8 +16,8 @@ export default {
             interaction.abortDrawing();
         }
         overlays.forEach(({vueInstance, overlay}) => {
-            map.removeOverlay(overlay);
             vueInstance.$destroy();
+            map.removeOverlay(overlay);
         });
         unlisteners.forEach(unlistener => unlistener());
         source.clear();
@@ -59,7 +59,8 @@ export default {
                 map,
                 selectedGeometry,
                 feature => commit("addFeature", feature),
-                overlay => commit("addOverlay", overlay)
+                overlay => commit("addOverlay", overlay),
+                flag => commit("setIsDrawing", flag)
             );
             map.addInteraction(interaction);
         }
@@ -73,11 +74,20 @@ export default {
      * @returns {void}
      */
     removeDrawInteraction ({state, commit, rootGetters}) {
-        const {interaction} = state;
+        const {interaction, isDrawing, overlays} = state;
 
         if (interaction) {
             const map = rootGetters["Map/map"];
 
+            if (isDrawing) {
+                const overlaysCopy = [...overlays],
+                    {overlay, vueInstance} = overlaysCopy.pop();
+
+                vueInstance.$destroy();
+                map.removeOverlay(overlay);
+
+                commit("setOverlays", overlaysCopy);
+            }
             interaction.abortDrawing();
 
             if (interaction.interaction3d) {

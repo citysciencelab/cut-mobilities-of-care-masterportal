@@ -57,6 +57,7 @@ const state = {
     selectedGeometry: "LineString",
     selectedUnit: "0",
     unlisteners: [],
+    isDrawing: false,
 
     // measure layer and ol
     interaction: null,

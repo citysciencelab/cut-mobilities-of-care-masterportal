@@ -45,9 +45,10 @@ function createTooltip (map, featureId) {
  * @param {module:ol/geom/GeometryType} type geometry type to create when drawing
  * @param {function} addFeature callback for features to put into store
  * @param {function} addOverlay callback to add overlay to store
+ * @param {function} setIsDrawing sets whether tool is currently drawing (i.e. sketch exists)
  * @returns {module:ol/interaction/Draw} draw interaction
  */
-function makeDraw (map, type, addFeature, addOverlay) {
+function makeDraw (map, type, addFeature, addOverlay, setIsDrawing) {
     const draw = new Draw({
         source,
         type,
@@ -80,6 +81,7 @@ function makeDraw (map, type, addFeature, addOverlay) {
             };
 
         sketch.getGeometry().on("change", listener);
+        setIsDrawing(true);
     });
 
     draw.on("drawend", function () {
@@ -87,6 +89,7 @@ function makeDraw (map, type, addFeature, addOverlay) {
         sketch.set("isBeingDrawn", false);
         sketch = null;
         listener = null;
+        setIsDrawing(false);
     });
 
     return draw;
