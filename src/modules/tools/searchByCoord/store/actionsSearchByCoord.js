@@ -46,10 +46,10 @@ export default {
      * @param {String[]} coords the coordinates the user entered
      * @returns {void}
      */
-    validateInput ({state, commit, getters}, coords) { // TODO: validation for WGS84 Dezimalgrad need work
+    validateInput ({state, commit, getters}, coords) {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
-            validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
-            validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
+            validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}\s*$/,
+            validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
             {currentSelection} = state,
             validators = {
                 ETRS89: validETRS89,
