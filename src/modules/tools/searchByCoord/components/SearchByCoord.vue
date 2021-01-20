@@ -11,11 +11,6 @@ export default {
     components: {
         Tool
     },
-    data: function () {
-        return {
-            currentCoordinateSystem: "ETRS89"
-        };
-    },
     computed: {
         ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
         eastingNoCoordMessage: function () {
@@ -33,7 +28,6 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        this.setCurrentSelection(this.currentCoordinateSystem);
         this.setExample();
     },
     methods: {
@@ -55,23 +49,12 @@ export default {
             }
         },
         /**
-         * Called if selection of coordinate system changed.
-         * @returns {void}
-         */
-        selectionChanged () {
-            this.setCurrentSelection(this.currentCoordinateSystem);
-            this.setExample();
-            this.removeMarker();
-            this.resetValues();
-            this.resetErrorMessages();
-        },
-        /**
          * Returns the label name depending on the selected coordinate system.
          * @param {String} key in the language files
          * @returns {String} the name of the label
          */
         label (key) {
-            const type = this.currentCoordinateSystem === "ETRS89" ? "cartesian" : "hdms";
+            const type = this.currentSelection === "ETRS89" ? "cartesian" : "hdms";
 
             return "modules.tools.searchByCoord." + type + "." + key;
         }
@@ -104,13 +87,14 @@ export default {
                         <div class="col-md-7 col-sm-7">
                             <select
                                 id="coordSystemField"
-                                v-model="currentCoordinateSystem"
                                 class="font-arial form-control input-sm pull-left"
-                                @change="selectionChanged($event)"
+                                :value="currentSelection"
+                                @change="selectionChanged"
                             >
                                 <option
                                     v-for="coordinateSystem in coordinateSystems"
                                     :key="coordinateSystem"
+                                    :value="coordinateSystem"
                                 >
                                     {{ coordinateSystem }}
                                 </option>

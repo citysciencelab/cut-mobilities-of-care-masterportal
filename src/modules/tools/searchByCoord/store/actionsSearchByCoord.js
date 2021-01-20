@@ -46,7 +46,7 @@ export default {
      * @param {String[]} coords the coordinates the user entered
      * @returns {void}
      */
-    validateInput ({state, commit, getters}, coords) {
+    validateInput ({state, commit, getters}, coords) { // TODO: validation for WGS84 Dezimalgrad need work
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{0,1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["]{0,2}\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,]{0,1}[0-9]{0,5}[\s]{0,1}[°]{0,1}\s*$/,
@@ -140,5 +140,16 @@ export default {
         commit("resetErrorMessages");
         dispatch("validateInput", coords);
         dispatch("transformCoordinates");
+    },
+    /**
+         * Called if selection of coordinate system changed.
+         * @returns {void}
+         */
+    selectionChanged ({commit, dispatch}, {currentTarget}) {
+        commit("setCurrentSelection", currentTarget.value);
+        commit("setExample");
+        commit("resetValues");
+        commit("resetErrorMessages");
+        dispatch("removeMarker");
     }
 };
