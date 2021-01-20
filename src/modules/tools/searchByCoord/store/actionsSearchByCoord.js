@@ -115,5 +115,19 @@ export default {
     moveToCoordinates ({dispatch}, coordinates) {
         dispatch("setMarker", coordinates);
         dispatch("setCenter", coordinates);
+    },
+    /**
+     * Resets the error messages, calls the validation function with the entered coordinates
+     * and calls the transformCoordinates function.
+     * @param {String} coordinatesEasting the coordinates user entered
+     * @param {String} coordinatesNorthing the coordinates user entered
+     * @returns {void}
+     */
+    searchCoordinate ({dispatch, commit, state}) {
+        const coords = [state.coordinatesEasting, state.coordinatesNorthing];
+
+        commit("resetErrorMessages");
+        dispatch("validateInput", coords);
+        dispatch("transformCoordinates");
     }
 };
