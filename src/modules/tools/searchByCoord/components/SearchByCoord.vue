@@ -15,27 +15,27 @@ export default {
         ...mapGetters("Tools/SearchByCoord", Object.keys(getters)),
         eastingNoCoordMessage: function () {
             if (state.currentSelection === "ETRS89") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("eastingLabel"))});
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("eastingLabel"))});
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("eastingLabel"))});
         },
         northingNoCoordMessage: function () {
             if (state.currentSelection === "ETRS89") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.label("northingLabel"))});
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.label("northingLabel"))});
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoCoord", {valueKey: this.$t(this.getLabel("northingLabel"))});
         },
         northingNoMatchMessage: function () {
             if (state.currentSelection === "ETRS89") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("northingLabel"))});
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("northingLabel"))});
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("northingLabel"))});
         },
         eastingNoMatchMessage: function () {
             if (state.currentSelection === "ETRS89") {
-                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.label("eastingLabel"))});
+                return this.$t("common:modules.tools.searchByCoord.errorMsg.noMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
             }
-            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.label("eastingLabel"))});
+            return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
         }
     },
     created () {
@@ -59,16 +59,6 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-        },
-        /**
-         * Returns the label name depending on the selected coordinate system.
-         * @param {String} key in the language files
-         * @returns {String} the name of the label
-         */
-        label (key) {
-            const type = this.currentSelection === "ETRS89" ? "cartesian" : "hdms";
-
-            return "modules.tools.searchByCoord." + type + "." + key;
         }
     }
 };
@@ -118,7 +108,7 @@ export default {
                             id="coordinatesEastingLabel"
                             for="coordinatesEastingField"
                             class="col-md-5 col-sm-5 control-label"
-                        >{{ $t(label("eastingLabel")) }}</label>
+                        >{{ $t(getLabel("eastingLabel")) }}</label>
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesEastingField"
@@ -146,7 +136,7 @@ export default {
                             id="coordinatesNorthingLabel"
                             for="coordinatesNorthingField"
                             class="col-md-5 col-sm-5 control-label"
-                        >{{ $t(label("northingLabel")) }}</label>
+                        >{{ $t(getLabel("northingLabel")) }}</label>
                         <div class="col-md-7 col-sm-7">
                             <input
                                 id="coordinatesNorthingField"
