@@ -14,6 +14,7 @@
 - On tools Taktische Zeichen on tools under Addons
 ### Changed
 - The language of the changelog has been changed to English.
+- The measure tool has been migrated to Vue.
 
 ### Deprecated
 

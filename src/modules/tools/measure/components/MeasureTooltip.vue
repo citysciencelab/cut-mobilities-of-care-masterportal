@@ -36,7 +36,7 @@ export default {
          * @returns {boolean} whether second line is to be shown
          */
         showDevianceLine () {
-            return this.isTableStyle ? this.isBeingDrawn : this.showInaccuracy;
+            return (!this.isTableStyle || this.isBeingDrawn);
         }
     }
 };

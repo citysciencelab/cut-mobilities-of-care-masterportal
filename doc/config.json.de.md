@@ -1804,7 +1804,6 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |earthRadius|nein|Number|6378137|Erdradius in Meter.|false|
-|showInaccuracy|nein|Boolean|true|Ob die Messungenauigkeit angezeigt werden soll. Es wird empfohlen diese eingeschaltet zu lassen, um den Nutzer bezüglich der Ungenauigkeit zu informieren. Der Parameter hat im Table-Style keinen Effekt.|false|
 
 **Beispiel**
 
@@ -1812,8 +1811,7 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 #!json
 "measure": {
     "name": "translate#common:menu.tools.measure",
-    "earthRadius": 6378137,
-    "showInaccuracy": true
+    "earthRadius": 6378137
 },
 ```
 

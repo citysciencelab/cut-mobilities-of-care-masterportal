@@ -41,7 +41,7 @@ import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
-import i18next from "./i18next";
+import vueI18Next from "./vueI18Next";
 
 /**
  * WFSFeatureFilterView
@@ -135,7 +135,7 @@ async function loadApp () {
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: i18next
+        i18n: vueI18Next
     });
 
 
@@ -371,7 +371,7 @@ async function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        const i18nextLanguages = vueI18Next && vueI18Next.options.hasOwnProperty("getLanguages") ? vueI18Next.options.getLanguages() : {};
         let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
@@ -391,7 +391,7 @@ async function loadApp () {
                         /* webpackInclude: /[\\\/]additional.json$/ */
                         `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            i18next.addResourceBundle(lng, "additional", additionalLocales, true);
+                            vueI18Next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
                             checkInitCounter(initCounter, legacyAddons);
                         }).catch(error => {

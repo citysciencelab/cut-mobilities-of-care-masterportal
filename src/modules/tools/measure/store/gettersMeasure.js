@@ -1,5 +1,5 @@
 import stateMeasure from "./stateMeasure";
-import {calculateLinesLength, calculatePolygonsArea} from "../measureCalculation";
+import {calculateLinesLength, calculatePolygonsArea} from "../util/measureCalculation";
 
 import {MapMode} from "../../../map/store/enums";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";

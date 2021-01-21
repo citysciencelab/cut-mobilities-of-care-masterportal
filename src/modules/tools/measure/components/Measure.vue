@@ -134,7 +134,7 @@ export default {
                                 <option
                                     v-for="(unit, i) in currentUnits"
                                     :key="'measure-tool-unit-select-' + i"
-                                    :value="'' + i"
+                                    :value="i"
                                 >
                                     {{ unit }}
                                 </option>

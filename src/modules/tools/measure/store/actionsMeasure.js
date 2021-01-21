@@ -1,6 +1,6 @@
-import source from "../measureSource";
-import makeDraw2d from "../measureDraw";
-import makeDraw3d from "../measureDraw3d";
+import source from "../util/measureSource";
+import makeDraw2d from "../util/measureDraw";
+import makeDraw3d from "../util/measureDraw3d";
 
 export default {
     /**

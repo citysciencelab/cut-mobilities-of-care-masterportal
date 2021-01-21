@@ -1889,8 +1889,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|earthRadius|nein|Number|6378137|Erdradius in Meter.|false|
-|showInaccuracy|nein|Boolean|true|Whether inaccuracy should be shown. It is advised to keep this on to inform users of inaccurate measurement results. The parameter is ignored in table style.|false|
+|earthRadius|no|Number|6378137|Earth radius in meters.|false|
 
 **Example**
 
@@ -1898,8 +1897,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 {
     "measure": {
         "name": "translate#common:menu.tools.measure",
-        "earthRadius": 6378137,
-        "showInaccuracy": true
+        "earthRadius": 6378137
     }
 }
 ```

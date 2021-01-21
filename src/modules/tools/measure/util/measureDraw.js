@@ -2,12 +2,12 @@ import Vue from "vue";
 import {Draw} from "ol/interaction.js";
 import Overlay from "ol/Overlay";
 
-import MeasureTooltip from "./components/MeasureTooltip.vue";
+import MeasureTooltip from "../components/MeasureTooltip.vue";
 import style from "./measureStyle";
 import source from "./measureSource";
 
-import store from "../../../app-store";
-import i18next from "../../../../js/i18next";
+import store from "../../../../app-store";
+import i18next from "../../../../../js/vueI18Next";
 
 /**
  * Creates measurement tooltip.

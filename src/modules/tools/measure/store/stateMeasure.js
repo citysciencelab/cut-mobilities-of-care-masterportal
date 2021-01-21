@@ -1,7 +1,7 @@
 import VectorLayer from "ol/layer/Vector.js";
 
-import style from "../measureStyle";
-import source from "../measureSource";
+import style from "../util/measureStyle";
+import source from "../util/measureSource";
 
 /**
  * Measure tool state definition.
@@ -15,7 +15,6 @@ import source from "../measureSource";
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
  * @property {Number} earthRadius earth radius to assume for length/area calculations (config-param)
- * @property {Boolean} showInaccuracy whether tooltip shows inaccuracy in default style (config-param)
  * @property {Object<String, module:ol/Feature>} lines line features by ol_uid
  * @property {Object<String, module:ol/Feature>} polygons polygon features by ol_uid
  * @property {module:ol/Overlay[]} overlays currently visible overlays with measurements
@@ -44,7 +43,6 @@ const state = {
 
     // tool-specific config.json parameters
     earthRadius: 6378137,
-    showInaccuracy: true,
 
     // measure form state and UI
     lines: {},
