@@ -41,7 +41,8 @@
 						"name": "Strecke / Fläche messen"
 					},
 					"draw": {
-						"name": "Zeichnen / Schreiben"
+						"name": "Zeichnen / Schreiben",
+            "renderToWindow": false
 					},
 					"fileImport": {
             "name": "Datei Import"
