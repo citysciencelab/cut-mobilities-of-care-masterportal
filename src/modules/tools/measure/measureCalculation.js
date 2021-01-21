@@ -6,7 +6,7 @@ import {getArea, getLength} from "ol/sphere";
  * @param {Number[]} coordinateB second coordinate
  * @return {undefined}
  */
-export function calculateDeltaPow (coordinateA, coordinateB) {
+function calculateDeltaPow (coordinateA, coordinateB) {
     const dx = coordinateA[0] - coordinateB[0],
         dy = coordinateA[1] - coordinateB[1];
 
