@@ -128,8 +128,14 @@ export default {
             class="table table-hover"
         >
             <tbody v-if="typeof feature.getMappedProperties === 'function'">
+                <tr v-if="Object.entries(feature.getMappedProperties()).length === 0">
+                    <td class="bold">
+                        {{ $t("modules.tools.gfi.themes.default.noAttributeAvailable") }}
+                    </td>
+                </tr>
                 <tr
                     v-for="(value, key) in feature.getMappedProperties()"
+                    v-else
                     :key="key"
                 >
                     <td class="bold">
@@ -170,7 +176,6 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
-
 
 .table > tbody > tr > td {
     padding: 5px 8px;
