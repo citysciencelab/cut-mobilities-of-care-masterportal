@@ -142,9 +142,9 @@ export default {
         dispatch("transformCoordinates");
     },
     /**
-         * Called if selection of coordinate system changed.
-         * @returns {void}
-         */
+     * Called if selection of coordinate system changed.
+     * @returns {void}
+     */
     selectionChanged ({commit, dispatch}, {currentTarget}) {
         commit("setCurrentSelection", currentTarget.value);
         commit("setExample");
