@@ -202,10 +202,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Triggers the parser to remove the item/layer
-     * Executes removeLayer in the model
-     * Removes the element
-     * Select a style for vector tile leyer.
+     * Activates the StyleVT Tool and commits the current layer model to the state.
+     *
      * @returns {void}
      */
     openStyleVT: function () {

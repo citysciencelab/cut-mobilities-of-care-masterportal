@@ -55,7 +55,7 @@ const initialState = Object.assign({}, stateStyleVT),
          * @param {Object} context actions context object.
          * @param {Object} payload payload object.
          * @param {Boolean} payload.active Whether to activate or deactivate the module.
-         * @param {VTLayer} payload.layerModel The layer selected to be initially selected.
+         * @param {?VTLayer} payload.layerModel The layer selected to be initially selected.
          * @returns {void}
          */
         setActive ({commit, dispatch}, {active, layerModel}) {
@@ -72,12 +72,11 @@ const initialState = Object.assign({}, stateStyleVT),
          * Changes the style of the selected layer to the one of the one with the selected styleId.
          *
          * @param {Object} context actions context object.
-         * @param {Event} event Event fired by changing the selected value for the style of the layer.
-         * @param {HTMLSelectElement} event.target The HTML select element for the style of the layer.
+         * @param {String} styleId Id of the style to be set on the layer.
          * @returns {void}
          */
-        triggerStyleUpdate ({state}, {target}) {
-            state.layerModel.setStyleById(target.value);
+        triggerStyleUpdate ({state}, styleId) {
+            state.layerModel.setStyleById(styleId);
         }
     };
 

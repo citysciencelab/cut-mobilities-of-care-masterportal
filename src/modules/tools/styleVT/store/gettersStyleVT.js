@@ -19,7 +19,7 @@ const getters = {
      * @returns {function(String): boolean} The returned function returns true, if the given styleId is the id of the style of the layer set in the state; false otherwise.
      */
     selectedStyle (state) {
-        return styleId => styleId === state.layerModel.selectedStyleID;
+        return styleId => styleId === state.layerModel.get("selectedStyleID");
     }
 };
 

@@ -9,12 +9,10 @@ const mutations = {
      * If no id is present, null is committed.
      *
      * @param {Object} state State object of the module.
-     * @param {Event} event Event fired by changing the selected value for the layerModel.
-     * @param {HTMLSelectElement} event.target The HTML select element for the layerModel.
+     * @param {String} id Id of the layerModel.
      * @returns {void}
      */
-    setLayerModelById (state, {target}) {
-        const id = target.value;
+    setLayerModelById (state, id) {
         let layerModel = null;
 
         if (id !== "") {

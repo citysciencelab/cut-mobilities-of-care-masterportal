@@ -1,5 +1,6 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsStyleVT";
 
@@ -10,6 +11,17 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/StyleVT", constants.getterKeys)
+    },
+    watch: {
+        /**
+         * Dispatches the action 'setActive' when the tool should be activated.
+         *
+         * @param {Boolean} active Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (active) {
+            this.setActive({active});
+        }
     },
     created () {
         // TODO(roehlipa): Is this how Vue Components should listen to Events from Backbone?
@@ -24,7 +36,17 @@ export default {
     },
     methods: {
         ...mapMutations("Tools/StyleVT", constants.mutationKeys),
-        ...mapActions("Tools/StyleVT", constants.actionKeys)
+        ...mapActions("Tools/StyleVT", constants.actionKeys),
+        close () {
+            this.setActive({active: false});
+
+            // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
+            const model = getComponent(this.$store.state.Tools.StyleVT.id);
+
+            if (model) {
+                model.set("isActive", false);
+            }
+        }
     }
 };
 </script>
@@ -62,7 +84,7 @@ export default {
                         <select
                             id="tool-styleVT-selectedLayerField"
                             class="form-control input-sm"
-                            @change="setLayerModelById"
+                            @change="setLayerModelById($event.target.value)"
                         >
                             <option
                                 class="pull-left"
@@ -83,7 +105,7 @@ export default {
                         </select>
                     </div>
                     <div
-                        v-if="layerModel !== null && layerModel !== undefined"
+                        v-if="layerModel"
                         class="form-group form-group-sm col-md-12 col-sm-12"
                     >
                         <label
@@ -95,7 +117,7 @@ export default {
                         <select
                             id="tool-styleVT-selectedStyleField"
                             class="form-control input-sm"
-                            @change="triggerStyleUpdate"
+                            @change="triggerStyleUpdate($event.target.value)"
                         >
                             <option
                                 v-for="vtStyle in layerModel.get('vtStyles')"
