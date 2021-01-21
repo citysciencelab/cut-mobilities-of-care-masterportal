@@ -24,7 +24,7 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
 
             actions.validateInput({state, commit, dispatch, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
-            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
+            expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
             expect(commit.thirdCall.args[1]).to.equal("564459.13");
@@ -38,9 +38,9 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
 
             actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
-            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
-            expect(commit.secondCall.args[0]).to.equal("setEastingErrorNoCoord");
-            expect(commit.thirdCall.args[0]).to.equal("setNorthingErrorNoMatch");
+            expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
+            expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
+            expect(commit.thirdCall.args[0]).to.equal("setNorthingNoMatch");
         });
         it("Validates the coordinates according to the WGS84 coordinate system", () => {
             const state = {
@@ -51,7 +51,7 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
 
             actions.validateInput({state, commit, dispatch, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
-            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
+            expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
         });
@@ -64,9 +64,9 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
 
             actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
-            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
-            expect(commit.secondCall.args[0]).to.equal("setEastingErrorNoCoord");
-            expect(commit.thirdCall.args[0]).to.equal("setNorthingErrorNoMatch");
+            expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
+            expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
+            expect(commit.thirdCall.args[0]).to.equal("setNorthingNoMatch");
         });
         it("Validates the coordinates according to the WGS84(Dezimalgrad) coordinate system", () => {
             const state = {
@@ -77,7 +77,7 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
 
             actions.validateInput({state, commit, dispatch, getters}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
-            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
+            expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
             expect(commit.secondCall.args[0]).to.equal("resetErrorMessages");
             expect(commit.thirdCall.args[0]).to.equal("pushCoordinates");
         });
@@ -90,9 +90,9 @@ describe("src/modules/tools/searchByCoord/store/actionsSearchByCoord.js", () => 
 
             actions.validateInput({state, commit, dispatch}, [state.coordinatesEasting, state.coordinatesNorthing]);
 
-            expect(commit.firstCall.args[0]).to.equal("resetSelectedCoordinates");
-            expect(commit.secondCall.args[0]).to.equal("setEastingErrorNoCoord");
-            expect(commit.thirdCall.args[0]).to.equal("setNorthingErrorNoMatch");
+            expect(commit.firstCall.args[0]).to.equal("setSelectedCoordinates");
+            expect(commit.secondCall.args[0]).to.equal("setEastingNoCoord");
+            expect(commit.thirdCall.args[0]).to.equal("setNorthingNoMatch");
         });
     });
     describe("transformCoordinates", () => {
