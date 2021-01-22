@@ -33,7 +33,9 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         loadThingsOnlyInCurrentExtent: false,
         intvLoadingThingsInExtent: 0,
         delayLoadingThingsInExtent: 1000,
-        useProxy: false
+        useProxy: false,
+        mqttRh: 2,
+        mqttQos: 2
     }),
 
     /**
@@ -783,11 +785,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamIds = this.getDataStreamIds(features),
             version = this.get("version"),
             client = this.get("mqttClient"),
-            subscriptionTopics = this.get("subscriptionTopics");
+            subscriptionTopics = this.get("subscriptionTopics"),
+            rh = this.get("mqttRh"),
+            qos = this.get("mqttQos");
 
-        dataStreamIds.forEach(function (id) {
+        dataStreamIds.forEach(id => {
             if (client && id && !subscriptionTopics[id]) {
-                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {rh: 0});
+                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {rh, qos});
                 subscriptionTopics[id] = true;
             }
         });
