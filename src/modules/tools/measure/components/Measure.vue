@@ -58,13 +58,6 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-        },
-        /**
-         * Opens the quick help window.
-         * @returns {void}
-         */
-        openQuickHelp () {
-            Radio.trigger("QuickHelp", "showWindowHelp", "measure");
         }
     }
 };
@@ -145,17 +138,15 @@ export default {
                         v-if="isDefaultStyle"
                         class="form-group form-group-sm"
                     >
-                        <div class="col-md-12 col-sm-12">
-                            {{ $t('modules.tools.measure.plzConsider') }}: <br>
-                            {{ $t('modules.tools.measure.valuesNotExact') }}.<br>
-                            <span v-if="isQuickHelpActive">
-                                {{ $t('modules.tools.measure.findFurtherInf') }}
-                                <span
-                                    class="glyphicon glyphicon-question-sign"
-                                    @click="openQuickHelp"
-                                >
-                                </span>
-                            </span>
+                        <div class="col-md-12 col-sm-12 inaccuracy-list">
+                            {{ $t('modules.tools.measure.influenceFactors') }}
+                            <ul>
+                                <li>{{ $t('modules.tools.measure.scale') }}</li>
+                                <li>{{ $t('modules.tools.measure.resolution') }}</li>
+                                <li>{{ $t('modules.tools.measure.screenResolution') }}</li>
+                                <li>{{ $t('modules.tools.measure.inputAccuracy') }}</li>
+                                <li>{{ $t('modules.tools.measure.measureDistance') }}</li>
+                            </ul>
                         </div>
                     </div>
                     <div class="form-group form-group-sm">
@@ -177,4 +168,8 @@ export default {
 
 <style lang="less" scoped>
 @import "~variables";
+
+.inaccuracy-list {
+    max-width: 270px;
+}
 </style>
