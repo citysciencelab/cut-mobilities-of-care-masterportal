@@ -542,6 +542,15 @@
             },
             "draw": {
                 "clickToPlaceText": "Klicken Sie auf die Karte um den Text zu platzieren",
+                "download": {
+                  "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
+                  "enterFilename": "Bitte Dateiname angeben",
+                  "filename": "Dateiname",
+                  "format": "Format",
+                  "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
+                  "pleaseChoose": "Bitte Auswählen",
+                  "unknownGeometry": "Unbekannte Geometrie: <strong>{{geometry}}</strong>"
+                },
                 "draw": "zeichnen",
                 "geometryDrawFailed": "Die übergebene Geometrie konnte nicht dargestellt werden.",
                 "undefinedTwoCircles": "Bitte definieren Sie beide Kreise.",
@@ -582,7 +591,8 @@
                     "redo": "Wiederholen",
                     "edit": "Geometrie bearbeiten",
                     "delete": "Geometrie / Text löschen",
-                    "deleteAll": "Alles löschen"
+                    "deleteAll": "Alles löschen",
+                    "saveDrawing": "Zeichnung speichern"
                 },
                 "symbol": "Symbol",
                 "iconList": {
@@ -591,15 +601,6 @@
                     "iconCloud": "Wolke",
                     "iconMeadow": "Wiese"
                 }
-            },
-            "download": {
-                "format": "Format",
-                "pleaseChoose": "Bitte Auswählen",
-                "filename": "Dateiname",
-                "enterFilename": "Bitte Dateiname angeben",
-                "createFirst": "Bitte erstellen Sie zuerst eine Zeichnung oder einen Text!",
-                "formatNotSupported": "Das Format {{selectedFormat}} wird noch nicht unterstützt.",
-                "unknownGeometry": "Unbekannte Geometry:"
             },
             "measure": {
                 "geometry": "Geometrie",

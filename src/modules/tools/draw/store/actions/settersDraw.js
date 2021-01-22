@@ -45,7 +45,7 @@ function setActive ({state, commit, dispatch, rootState}, active) {
  * @returns {void}
  */
 function setCircleRadius ({getters, commit, dispatch}, radius) {
-    const styleSettings = getters.getStyleSettings();
+    const {styleSettings} = getters;
 
     styleSettings.circleRadius = radius;
 
@@ -63,7 +63,7 @@ function setCircleRadius ({getters, commit, dispatch}, radius) {
  */
 function setCircleMethod ({getters, commit}, {target}) {
     const circleMethod = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.circleMethod = circleMethod;
 
@@ -78,7 +78,7 @@ function setCircleMethod ({getters, commit}, {target}) {
  * @returns {void}
  */
 function setCircleOuterRadius ({getters, commit, dispatch}, radius) {
-    const styleSettings = getters.getStyleSettings();
+    const {styleSettings} = getters;
 
     styleSettings.circleOuterRadius = radius;
 
@@ -97,7 +97,7 @@ function setCircleOuterRadius ({getters, commit, dispatch}, radius) {
 function setColor ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
         colorCopy = [],
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     color.forEach(val => {
         colorCopy.push(parseInt(val, 10));
@@ -121,7 +121,7 @@ function setColor ({getters, commit, dispatch}, {target}) {
 function setColorContour ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
         colorCopy = [],
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     color.forEach(val => {
         colorCopy.push(parseInt(val, 10));
@@ -144,7 +144,7 @@ function setColorContour ({getters, commit, dispatch}, {target}) {
 function setOuterColorContour ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
         colorCopy = [],
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     color.forEach(val => {
         colorCopy.push(parseInt(val, 10));
@@ -185,7 +185,7 @@ function setDrawType ({commit, dispatch}, {target}) {
  */
 function setFont ({getters, commit, dispatch}, {target}) {
     const font = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.font = font;
 
@@ -203,7 +203,7 @@ function setFont ({getters, commit, dispatch}, {target}) {
  */
 function setFontSize ({getters, commit, dispatch}, {target}) {
     const fontSize = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.fontSize = fontSize;
 
@@ -221,7 +221,7 @@ function setFontSize ({getters, commit, dispatch}, {target}) {
  */
 function setOpacity ({getters, commit, dispatch}, {target}) {
     const opacity = parseFloat(target.options[target.selectedIndex].value),
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.opacity = opacity;
     styleSettings.color[3] = opacity;
@@ -240,7 +240,7 @@ function setOpacity ({getters, commit, dispatch}, {target}) {
  */
 function setOpacityContour ({getters, commit, dispatch}, {target}) {
     const opacityContour = parseFloat(target.options[target.selectedIndex].value),
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.opacityContour = opacityContour;
     styleSettings.colorContour[3] = opacityContour;
@@ -274,7 +274,7 @@ function setPointSize ({commit, dispatch}, {target}) {
  */
 function setStrokeWidth ({getters, commit, dispatch}, {target}) {
     const strokeWidth = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.strokeWidth = parseInt(strokeWidth, 10);
 
@@ -310,7 +310,7 @@ function setSymbol ({state, commit, dispatch}, {target}) {
  */
 function setText ({getters, commit, dispatch}, {target}) {
     const text = target.value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.text = text;
 
@@ -328,7 +328,7 @@ function setText ({getters, commit, dispatch}, {target}) {
  */
 function setUnit ({getters, commit, dispatch}, {target}) {
     const unit = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.unit = unit;
 

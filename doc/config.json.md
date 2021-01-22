@@ -271,6 +271,7 @@ GFI search service configuration.
             "params": {
                 "query_string": "%%searchString%%"
             }
+        }
     }
 }
 ```
@@ -574,7 +575,7 @@ The entry `attributions` may be of type boolean or object. If of type boolean, t
 {
     "attributions": {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false,
+        "isInitOpenMobile": false
     }
 }
 ```
@@ -923,7 +924,7 @@ A folder object defined by a name, glyphicon, and its children.
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            {
+            "legend": {
                 "name": "Legende",
                 "glyphicon": "glyphicon-book"
             }
@@ -1617,23 +1618,25 @@ Dot object consisting of text, type, and value.
 
 ```json
 {
-    {
-        "id": "iconPoint",
-        "type": "simple_point",
-        "value": "simple_point"
-    },
-    {
-        "id": "iconMeadow",
-        "type": "image",
-        "scale": 0.8,
-        "value": "meadow.png"
-    },
-    {
-        "id": "yellow pin",
-        "type": "image",
-        "scale": 0.5,
-        "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-    }
+    "iconList": [
+        {
+            "id": "iconPoint",
+            "type": "simple_point",
+            "value": "simple_point"
+        },
+        {
+            "id": "iconMeadow",
+            "type": "image",
+            "scale": 0.8,
+            "value": "meadow.png"
+        },
+        {
+            "id": "yellow pin",
+            "type": "image",
+            "scale": 0.5,
+            "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+        }
+    ]
 }
 ```
 
@@ -1874,7 +1877,7 @@ A line-like depiction of commute movement used in the MRH (Metropolregion Hambur
         "featureType": "mrh_einpendler_gemeinde",
         "attrAnzahl": "anzahl_einpendler",
         "attrGemeinde": "wohnort",
-        "zoomlevel": 1,
+        "zoomlevel": 1
     }
 }
 ```
@@ -1921,25 +1924,32 @@ A commute animation used in the MRH (Metropolregion Hamburg, en.: Metropolitan a
 **Example**
 
 ```json
-"animation": {
-    "name": "Commute (Animation)",
-    "glyphicon": "glyphicon-play-circle",
-    "steps": 30,
-    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-    "params": {
-        "REQUEST": "GetFeature",
-        "SERVICE": "WFS",
-        "TYPENAME": "app:mrh_kreise",
-        "VERSION": "1.1.0",
-        "maxFeatures": "10000"
-    },
-    "featureType": "mrh_einpendler_gemeinde",
-    "attrAnzahl": "anzahl_einpendler",
-    "attrGemeinde": "wohnort",
-    "minPx": 5,
-    "maxPx": 30,
-    "zoomlevel": 1,
-    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+{
+    "animation": {
+        "name": "Commute (Animation)",
+        "glyphicon": "glyphicon-play-circle",
+        "steps": 30,
+        "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+        "params": {
+            "REQUEST": "GetFeature",
+            "SERVICE": "WFS",
+            "TYPENAME": "app:mrh_kreise",
+            "VERSION": "1.1.0",
+            "maxFeatures": "10000"
+        },
+        "featureType": "mrh_einpendler_gemeinde",
+        "attrAnzahl": "anzahl_einpendler",
+        "attrGemeinde": "wohnort",
+        "minPx": 5,
+        "maxPx": 30,
+        "zoomlevel": 1,
+        "colors": [
+            "rgba(255,0,0,0.5)",
+            "rgba(0,255,0,0.5)",
+            "rgba(0,0,255,0.5)",
+            "rgba(0,255,255,0.5)"
+        ]
+    }
 }
 ```
 

@@ -208,7 +208,7 @@ function initializeWithoutGUI ({state, commit, dispatch, getters}, {drawType, co
     commit("setWithoutGUI", true);
 
     if (["Point", "LineString", "Polygon", "Circle"].indexOf(drawType) > -1) {
-        const styleSettings = getters.getStyleSettings();
+        const {styleSettings} = getters;
 
         commit("setDrawType", {id: drawTypeId, geometry: drawType});
 
