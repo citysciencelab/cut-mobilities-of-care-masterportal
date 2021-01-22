@@ -21,7 +21,8 @@ function createTooltip (map, featureId) {
             element,
             offset: [20, 0],
             positioning: "center-left",
-            stopEvent: false
+            stopEvent: false,
+            insertFirst: false
         }),
         vueInstance = new Vue({
             el: element,
