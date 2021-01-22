@@ -32,7 +32,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
         intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 1000,
+        delayLoadingThingsInExtent: 0,
         useProxy: false,
         mqttRh: 2,
         mqttQos: 2
