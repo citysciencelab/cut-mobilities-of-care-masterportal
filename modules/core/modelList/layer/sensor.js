@@ -21,7 +21,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          * @enum webpack.MomentTimezoneDataPlugin.matchZones
          */
         timezone: "Europe/Berlin",
-        version: "1.0",
+        version: "1.1",
         mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
@@ -32,10 +32,31 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
         intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 0,
+        delayLoadingThingsInExtent: 500,
         useProxy: false,
         mqttRh: 2,
-        mqttQos: 2
+        mqttQos: 2,
+        datastreamAttributes: [
+            "@iot.id",
+            "@iot.selfLink",
+            "Observations",
+            "description",
+            "name",
+            "observationType",
+            "observedArea",
+            "phenomenonTime",
+            "properties",
+            "resultTime",
+            "unitOfMeasurement"
+        ],
+        thingAttributes: [
+            "@iot.id",
+            "@indexTools.selfLink",
+            "Locations",
+            "description",
+            "name",
+            "properties"
+        ]
     }),
 
     /**
@@ -378,10 +399,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             /**
              * a function to receive the response of a http call
              * @param {Object} result the response from the http request as array buffer
-             * @returns {Void}  -
+             * @returns {void}
              */
             httpOnSucess = function (result) {
                 let allThings;
+
+                if (urlParams?.root === "Datastreams") {
+                    allThings = this.changeSensordataRoot(result, this.get("datastreamAttributes"), this.get("thingAttributes"));
+                }
 
                 allThings = this.flattenArray(result);
                 allThings = this.getNewestSensorData(allThings);
@@ -429,6 +454,36 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         else {
             http.getInExtent(requestUrl, currentExtent, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
         }
+    },
+
+    /**
+     * Changes the root in the sensordata from datastream to thing.
+     * @param {Object[]} sensordata the sensordata with datastream as root.
+     * @param {String[]} datastreamAttributes  The datastreamattributes.
+     * @param {String[]} thingAttributes The thing attributes.
+     * @returns {Object[]} The sensordata with things as root.
+     */
+    changeSensordataRoot: function (sensordata, datastreamAttributes, thingAttributes) {
+        const things = [...sensordata];
+
+        sensordata.forEach((stream, index) => {
+            const datastreamNewAttributes = {};
+
+            Object.keys(stream).forEach(key => {
+                if (datastreamAttributes.includes(key)) {
+                    datastreamNewAttributes[key] = stream[key];
+                    delete things[index][key];
+                }
+            });
+            things[index].Datastreams = [datastreamNewAttributes];
+            Object.keys(stream.Thing).forEach(key => {
+                if (thingAttributes.includes(key)) {
+                    things[index][key] = stream.Thing[key];
+                }
+            });
+        });
+
+        return things;
     },
 
     /**
@@ -548,17 +603,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {String} URL to request sensorThings
      */
     buildSensorThingsUrl: function (url, version, urlParams) {
-        let query = "",
-            versionAsString = version,
-            key;
-
-        if (typeof version === "number") {
-            versionAsString = version.toFixed(1);
-        }
+        const root = urlParams?.root || "Things",
+            versionAsString = typeof version === "number" ? version.toFixed(1) : version;
+        let query = "";
 
         if (typeof urlParams === "object") {
-            for (key in urlParams) {
-                if (query !== "") {
+            for (const key in urlParams) {
+                if (key === "root") {
+                    continue;
+                }
+                else if (query !== "") {
                     query += "&";
                 }
 
@@ -573,7 +627,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }
         }
 
-        return String(url) + "/v" + String(versionAsString) + "/Things?" + query;
+        return `${url}/v${versionAsString}/${root}?${query}`;
     },
 
     /**
@@ -584,7 +638,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {object|null} Json object or null
      */
     getJsonGeometry: function (thing, index) {
-        const Locations = thing && thing.hasOwnProperty("Locations") ? thing.Locations : null,
+        const Locations = thing?.Locations || thing?.Thing?.Locations,
             location = Locations && Locations.hasOwnProperty(index) && Locations[index].hasOwnProperty("location") ? Locations[index].location : null;
 
         if (location && location.hasOwnProperty("geometry") && location.geometry.hasOwnProperty("type")) {

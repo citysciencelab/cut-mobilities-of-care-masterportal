@@ -345,7 +345,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-|version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
+|version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 |loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
 |showNoDataValue|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
 |noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
@@ -402,6 +402,7 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
 |----|-------------|---|-------|------------|--------|
 |filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|root|nein|String|"Things"|Das Wurzelelement in der URL, auf dem die Query angewendet wird. möglich sind `"Things"` oder `"Datastreams"`|"Datastreams|
 
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
 
@@ -411,7 +412,8 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
    {
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
-         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
+         "root": "Datasreams
       }
    }
 ```

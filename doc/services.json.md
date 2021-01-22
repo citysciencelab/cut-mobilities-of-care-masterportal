@@ -347,7 +347,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |url|yes|String||Service URL; may be extended by `urlParameter`|`"https://51.5.242.162/itsLGVhackathon"`|
 |urlParameter|no|**[urlParameter](#markdown-header-url_parameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
-|version|no|String||Service version used to request data.|`"1.0"`|
+|version|no|String|"1.1"|Service version used to request data.|`"1.0"`|
 |loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
 |showNoDataValue|no|Boolean|`true`|Whether Datastreams should be given without Observations.|`true`|
 |noDataValue|no|String|`"no data"`|Placeholder for unavailable Observations to Datastreams.|`"no data"`|
@@ -404,6 +404,7 @@ Enables filtering SensorThingsAPI requests.
 |----|--------|----|-------|-----------|-------|
 |filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
 |expand|no|String/Array||See [full documentation](sensorThings.md)|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|root|no|String|"Things"|The root element in the URL to which the query is applied. possible are `"Things"` or `"Datastreams"`|"Datastreams|
 
 **urlParameter example:** Show all Things where the name starts with `"Charging"`, and all Datastreams belonging to those Things. Show each Datastream's latest Observation.
 
@@ -411,7 +412,8 @@ Enables filtering SensorThingsAPI requests.
 {
     "urlParameter" : {
         "filter" : "startswith(Things/name,'Charging')",
-        "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+        "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
+        "root": "Datasreams
     }
 }
 ```
