@@ -6,7 +6,7 @@ import "../util/typedefs";
 
 export default {
     namespaced: true,
-    state: {...state},
+    state,
     mutations,
     actions,
     getters

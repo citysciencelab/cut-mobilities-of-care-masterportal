@@ -23,7 +23,9 @@ import source from "../util/measureSource";
  * @property {String[]} lineStringUnits Available units for line measurement
  * @property {String[]} polygonUnits Available units for polygon measurement
  * @property {String} selectedGeometry Selected geometry value for measurement
- * @property {String} selectedUnit Selected unit by stringified index ("0"/"1")
+ * @property {String} selectedUnit Selected unit by stringified index ("0"/"1"). Index allows smoother
+ *                                 changes between measurement systems. E.g. when switching from 2D polygon measuring
+ *                                 to 3D line measuring, the unit stays in kilos, in this example km² to km.
  * @property {Function[]} unlisteners unlisten methods to execute before source clear
  * @property {(module:ol/Interaction|MeasureDraw3d)} interaction current interaction on map or 3d model, if any
  * @property {module:ol/vector/Source} source draw layer source

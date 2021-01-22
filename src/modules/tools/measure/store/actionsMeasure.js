@@ -36,7 +36,6 @@ export default {
     createDrawInteraction ({state, dispatch, commit, rootGetters, getters}) {
         dispatch("removeDrawInteraction");
 
-        const {selectedGeometry} = state;
         let interaction = null;
 
         if (getters.is3d) {
@@ -53,7 +52,8 @@ export default {
                 // if unlisteners are registered, this indicates 3D mode was active immediately before
                 dispatch("deleteFeatures");
             }
-            const map = rootGetters["Map/map"];
+            const map = rootGetters["Map/map"],
+                {selectedGeometry} = state;
 
             interaction = makeDraw2d(
                 map,

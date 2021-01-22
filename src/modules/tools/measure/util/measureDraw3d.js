@@ -91,9 +91,7 @@ function generate3dTextStyles (distance, heightDiff, selectedUnit, addUnlistener
  * @returns {module:ol/Feature} pointFeature
  */
 function generateTextPoint (distance, heightDiff, coords, selectedUnit, addUnlistener) {
-    const pointFeature = new Feature({
-        geometry: new Point(coords)
-    });
+    const pointFeature = createPointFeature(coords);
 
     pointFeature.setStyle(generate3dTextStyles(distance, heightDiff, selectedUnit, addUnlistener));
     pointFeature.set("styleId", `__measureStyle_${idCounter++}`);

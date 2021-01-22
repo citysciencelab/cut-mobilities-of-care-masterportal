@@ -37,38 +37,24 @@ const getters = {
             : selectedGeometry;
     },
     /**
-     * @param {String} state measure store state
+     * @param {object} state measure store state
      * @param {object} getters measure store getters
      * @returns {String[]} options for measurement units
      */
     currentUnits ({selectedGeometry, lineStringUnits, polygonUnits}, {is3d}) {
-        if (is3d) {
-            return lineStringUnits;
-        }
-
-        return selectedGeometry === "LineString"
+        return is3d || selectedGeometry === "LineString"
             ? lineStringUnits
             : polygonUnits;
     },
     /**
-     * The selected unit is not saved by value, but by index string, to allow smoother
-     * changes between measurement systems. E.g. when switching from 2D polygon measuring
-     * to 3D line measuring, the unit stays in kilos, in this example km² to km.
-     * @param {object} state measure store state
-     * @returns {String} currently selected option for measurement unit as "0" or "1"
-     */
-    selectedUnit (state) {
-        return state.selectedUnit;
-    },
-    /**
      * Calculates the length of lines.
      * @param {object} state measure store state
-     * @param {object} getters measure store getters
-     * @param {object} _ root state
+     * @param {object} _ measure store getters
+     * @param {object} __ root state
      * @param {object} rootGetters root getters
      * @return {MeasureCalculation[]} calculated value for display
      */
-    linesLength ({lines, earthRadius, lineStringUnits}, {selectedUnit}, _, rootGetters) {
+    linesLength ({lines, earthRadius, lineStringUnits, selectedUnit}, _, __, rootGetters) {
         return calculateLinesLength(
             rootGetters["Map/scale"] / 1000,
             rootGetters["Map/projection"].getCode(),
@@ -82,12 +68,12 @@ const getters = {
     /**
      * Calculates the area of a polygon.
      * @param {object} state measure store state
-     * @param {object} getters measure store getters
-     * @param {object} _ root state
+     * @param {object} _ measure store getters
+     * @param {object} __ root state
      * @param {object} rootGetters root getters
      * @return {MeasureCalculation[]} calculated values for display, or false if none is available
      */
-    polygonsArea ({polygons, earthRadius, polygonUnits}, {selectedUnit}, _, rootGetters) {
+    polygonsArea ({polygons, earthRadius, polygonUnits, selectedUnit}, _, __, rootGetters) {
         return calculatePolygonsArea(
             rootGetters["Map/scale"] / 1000,
             rootGetters["Map/projection"].getCode(),
