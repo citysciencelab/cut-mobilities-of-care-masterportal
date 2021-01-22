@@ -3,12 +3,15 @@ import {LineString, Point} from "ol/geom.js";
 import Feature from "ol/Feature";
 import * as Proj from "ol/proj.js";
 
+import store from "../../../../app-store";
 import source from "./measureSource";
 
+// variables to keep half-done measurements in quick access
 let firstPoint = null,
     firstPointFeature = null,
     idCounter = 0;
 
+// display font style
 const fill = new Fill({
         color: [255, 255, 255, 1]
     }),
@@ -18,7 +21,8 @@ const fill = new Fill({
     });
 
 /**
- * Update function to translate feature measurement. (Must be re-added to olcs.)
+ * Update function to translate/update feature measurement.
+ * (Must be re-added to olcs after ol elements habe been changed..)
  * @param {module:ol/Feature} textPoint text point
  * @returns {void}
  */
@@ -31,11 +35,10 @@ function updateTextPoint (textPoint) {
  * Generates style for text in 3D view.
  * @param {number} distance distance between two points
  * @param {number} heightDiff height difference
- * @param {string} selectedUnit whether to measure in m or km
  * @param {function} addUnlistener function to register unlisteners
  * @returns {object} styles
  */
-function generate3dTextStyles (distance, heightDiff, selectedUnit, addUnlistener) {
+function generate3dTextStyles (distance, heightDiff, addUnlistener) {
     const lengthText = new Text({
             text: "",
             textAlign: "left",
@@ -55,25 +58,41 @@ function generate3dTextStyles (distance, heightDiff, selectedUnit, addUnlistener
             offsetX: 10
         });
 
+    let currentUnit = store.getters["Tools/Measure/selectedUnit"];
+
     /**
      * Updates text nodes on language change.
      * @returns {void}
      */
     function updateText () {
         lengthText.setText(i18next.t("modules.tools.measure.3dLength", {
-            length: selectedUnit === "1"
-                ? `${(distance / 1000).toFixed(3)}km`
-                : `${distance.toFixed(2)}m`
+            length: currentUnit === "1"
+                ? `${(distance / 1000).toFixed(1)}km`
+                : `${distance.toFixed(0)}m`
         }));
 
         heightText.setText(i18next.t("modules.tools.measure.3dHeight", {
-            height: `${heightDiff.toFixed(2)}m`
+            height: `${heightDiff.toFixed(0)}m`
         }));
     }
     updateText();
 
+    /*
+     * update text elements when the language OR measurement unit is changed;
+     * however, olcs does not listen to this, and does not update the display text;
+     * the ol text elements are re-added to update with the boundUpdateTextPoint in a next step
+     * (see handle3DClicked for that)
+     */
     i18next.on("languageChanged", updateText);
     addUnlistener(() => i18next.off("languageChanged", updateText));
+
+    // store.subscribe returns an unlistener function
+    addUnlistener(store.subscribe(({type, payload}) => {
+        if (type === "Tools/Measure/setSelectedUnit") {
+            currentUnit = payload;
+            updateText();
+        }
+    }));
 
     return [
         new Style({text: lengthText}),
@@ -86,14 +105,13 @@ function generate3dTextStyles (distance, heightDiff, selectedUnit, addUnlistener
  * @param {number} distance distance for 3D
  * @param {number} heightDiff height for 3D
  * @param {number} coords coordinates for 3D
- * @param {string} selectedUnit whether to measure in m or km
  * @param {function} addUnlistener function to register unlisteners
  * @returns {module:ol/Feature} pointFeature
  */
-function generateTextPoint (distance, heightDiff, coords, selectedUnit, addUnlistener) {
+function generateTextPoint (distance, heightDiff, coords, addUnlistener) {
     const pointFeature = createPointFeature(coords);
 
-    pointFeature.setStyle(generate3dTextStyles(distance, heightDiff, selectedUnit, addUnlistener));
+    pointFeature.setStyle(generate3dTextStyles(distance, heightDiff, addUnlistener));
     pointFeature.set("styleId", `__measureStyle_${idCounter++}`);
 
     return pointFeature;
@@ -129,12 +147,11 @@ function createPointFeature (coords) {
  * Handler for 3D clicks.
  * @param {module:ol/Map} map ol 3d map
  * @param {string} projectionCode current map projection code
- * @param {string} selectedUnit whether to measure in m or km
  * @param {function} addUnlistener function to register unlisteners
  * @param {object} obj point with coordinates
  * @returns {void}
  */
-function handle3DClicked (map, projectionCode, selectedUnit, addUnlistener, obj) {
+function handle3DClicked (map, projectionCode, addUnlistener, obj) {
     const scene = map.getCesiumScene(),
         object = scene.pick(obj.position);
 
@@ -172,15 +189,21 @@ function handle3DClicked (map, projectionCode, selectedUnit, addUnlistener, obj)
         const distance = Cesium.Cartesian3.distance(firstPoint.cartesian, cartesian),
             heightDiff = Math.abs(coords[2] - firstPoint.coords[2]),
             feature = createLineFeature(firstPoint.coords, coords),
-            textPoint = generateTextPoint(distance, heightDiff, coords, selectedUnit, addUnlistener),
+            textPoint = generateTextPoint(distance, heightDiff, coords, addUnlistener),
             boundUpdateTextPoint = updateTextPoint.bind(null, textPoint);
 
         source.removeFeature(firstPointFeature);
         source.addFeature(feature);
         source.addFeature(textPoint);
 
+        // update text points by re-adding - olcs won't notice else
         i18next.on("languageChanged", boundUpdateTextPoint);
         addUnlistener(() => i18next.off("languageChanged", boundUpdateTextPoint));
+        addUnlistener(store.subscribe(({type}) => {
+            if (type === "Tools/Measure/setSelectedUnit") {
+                boundUpdateTextPoint();
+            }
+        }));
 
         firstPoint = null;
         firstPointFeature = null;
@@ -190,18 +213,17 @@ function handle3DClicked (map, projectionCode, selectedUnit, addUnlistener, obj)
 /**
  * @param {module:ol/Map} map ol/Map
  * @param {string} projectionCode current map projection
- * @param {string} selectedUnit whether to measure in m or km
  * @param {function} addUnlistener function to register unlisteners
  * @returns {MeasureDraw3d} measurement-interaction representing object (no real module:ol/interaction)
  */
-function makeDraw (map, projectionCode, selectedUnit, addUnlistener) {
+function makeDraw (map, projectionCode, addUnlistener) {
     /* TODO
      * when the 3d module is moved from backbone, this function must be updated
      * to listen to the new click mechanism; 3d measure may also be fully integrated
      * into vuex then
      */
     const mapChannel = Radio.channel("Map"),
-        handle = handle3DClicked.bind(null, map, projectionCode, selectedUnit, addUnlistener);
+        handle = handle3DClicked.bind(null, map, projectionCode, addUnlistener);
 
     mapChannel.on("clickedWindowPosition", handle);
 

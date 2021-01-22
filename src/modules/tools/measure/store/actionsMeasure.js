@@ -43,7 +43,6 @@ export default {
             interaction = makeDraw3d(
                 rootGetters["Map/map3d"],
                 rootGetters["Map/projectionCode"],
-                getters.selectedUnit,
                 unlistener => commit("addUnlistener", unlistener)
             );
         }
