@@ -307,9 +307,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let activeLayers = selectedLayers;
 
         // tests if the configuration of the active layers is incorrect and remove the incorrect layers
-        if (activeLayers !== undefined && activeLayers !== null) {
+        if (activeLayers !== undefined && activeLayers !== null && Object.entries(activeLayers).length > 0) {
             Object.entries(activeLayers).forEach(([key]) => {
-                if (incorrectConfigLayers.includes(key)) {
+                if (incorrectConfigLayers.length > 0 && incorrectConfigLayers.includes(key)) {
                     delete activeLayers[key];
                 }
             });
@@ -541,8 +541,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             method: "GET",
             context: this,
             success: this.handleResponse,
-            error: function (jqXHR) {
-                this.handleError(jqXHR);
+            error: function () {
+                this.handleError();
             }
         });
     },
@@ -586,20 +586,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
 
     /**
      * Handles a not successfull DescribeFeaturType request
-     * @param {Object} jqXHR - response object
      * @returns {void}
      */
-    handleError: function (jqXHR) {
-        let exceptionText,
-            exceptionCode;
-
-        if (jqXHR.responseText.includes("Exception")) {
-            exceptionCode = this.getSubstring(jqXHR.responseText, ["exceptionCode", "\"", "\""]);
-            if (jqXHR.responseText.indexOf("ExceptionText") > 0) {
-                exceptionText = this.getExceptionText(jqXHR);
-                console.error("Saving has failed. \n ExceptionCode:" + exceptionCode + "\n StatusCode: " + jqXHR.statusText + "\n error message: " + exceptionText);
-            }
-        }
+    handleError: function () {
         this.addInitialAlertCases("FailedDFT");
     },
 
@@ -1065,10 +1054,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
 
     /**
      * Deletes a geometry from the map and from the database
+     * @param {Object} target - target feature to delete
      * @returns {void}
      */
-    delete: function () {
-        const target = this.get("interaction").getFeatures().item(0);
+    delete: function (target) {
         let xmlString;
 
         if (typeof target === "object" && target !== null) {
@@ -1753,7 +1742,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     setIncorrectConfigLayers: function (value) {
-        this.get("incorrectConfigLayers").push(value);
+        this.set("incorrectConfigLayers", value);
     },
 
     /**

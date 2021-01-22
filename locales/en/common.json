@@ -59,6 +59,7 @@
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
+        "securedAllTopics": "Secured topics",
         "category": "Category",
         "backgroundMaps": "Background maps",
         "subjectData": "Subject data",
@@ -68,6 +69,7 @@
         "infosAndLegend": "Information und explanations",
         "removeTopic": "Remove topic",
         "showTopic": "Present topic",
+        "securedTopic": "Secured topic",
         "changeClassDivision": "Change class division",
         "settings": "Settings",
         "transparency": "Transparency",
@@ -142,13 +144,15 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings",
-          "roofType":"Roof type",
-          "roofHeight":"Roof height",
-          "objectType":"Object type"
+          "buildings":"Buildings"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
+        },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Sorry, the secured layer could not be loaded. Please contact the administrator and let him know if you were prompted to enter a username and password. </br> Secured layer: "
+            }
         },
         "featureViaURL": {
             "coordLabel": "Coordinates",
@@ -537,11 +541,20 @@
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
+                "download": {
+                  "createFirst": "Please create a drawing or text first!",
+                  "enterFilename": "Please enter filename",
+                  "filename": "Filename",
+                  "format": "Format",
+                  "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                  "pleaseChoose": "Please choose",
+                  "unknownGeometry": "Unknown geometry: <strong>{{geometry}}</strong>"
+                },
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
                 "undefinedTwoCircles": "Please define both circles.",
                 "undefinedInnerCircle": "Please also define the inner circle.",
-                "undefinedDiameter": "Please specify a diameter.",
+                "undefinedRadius": "Please specify a radius.",
                 "undefinedOuterCircle": "Please also define the outer circle.",
                 "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
                 "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
@@ -552,9 +565,10 @@
                 "drawArea": "Area",
                 "drawCircle": "Circle",
                 "drawDoubleCircle": "Double circle",
-                "doubleCirclePlaceholder": "Please enter a diameter",
-                "diameter": "Diameter",
-                "outerDiameter": "Outer diameter",
+                "doubleCirclePlaceholder": "Please enter a radius",
+                "radius": "Radius",
+                "innerRadius": "Inner radius",
+                "outerRadius": "Outer radius",
                 "unit": "Unit",
                 "text": "Text",
                 "method": "Method",
@@ -576,7 +590,8 @@
                     "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
-                    "deleteAll": "Delete all"
+                    "deleteAll": "Delete all",
+                    "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
                 "iconList": {
@@ -585,15 +600,6 @@
                     "iconCloud": "Cloud",
                     "iconMeadow": "Meadow"
                 }
-            },
-            "download": {
-                "format": "Format",
-                "pleaseChoose": "Please choose",
-                "filename": "Filename",
-                "enterFilename": "Please enter filename",
-                "createFirst": "Please create a drawing or text first!",
-                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
-                "unknownGeometry": "Unknown geometry:"
             },
             "measure": {
                 "geometry": "Geometry",
@@ -656,7 +662,8 @@
             "oblique": {
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
-                "closeViewOblique": "close oblique aerial photos"
+                "closeViewOblique": "close oblique aerial photos",
+                "doNotUseIE": "The display of oblique aerial images is no longer supported in Internet Explorer 11. Please use a current browser for this function."
             },
             "freeze": {
                 "freeze": "Freeze view",

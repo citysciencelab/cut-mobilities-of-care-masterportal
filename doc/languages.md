@@ -299,7 +299,60 @@ Please check first whether the module controlled by this part of the config.json
 
 >Expert hint: The `config.json` is translated initially when the Masterportal starts. For language changes, `i18next.translate` must be used in the code. If not used, the content will permanently remain in the initially active language.
 
-## How to use i18next in production
+
+## How to use i18next in production Vue
+
+The following section is a guide on how to integrate i18next into your MP project using Vue.
+
+### Translate in the template
+The translation of the values to be displayed can be done directly in the template of a Vue component. For this purpose `$t()` is used. In the following example, the `name` attribute is translated.
+
+ExampleTemplate
+```vue
+<template lang="html">
+    <Tool
+        :title="$t(name)"
+        :icon="glyphicon"
+    >
+</template>
+```
+
+### Translate in script
+To translate the values in the script part of a Vue component, this must be done in the computed property. For this purpose `this.$t()` is used.
+
+```js
+ computed: {
+    /**
+    * Gets the exmaple attributes.
+    * @returns {Object} The exmaple attributes.
+    */
+    example: function () {
+        const example = {
+            exampleTitle: this.$t("common:foo.bar.exampleTitle"),
+            exampleText: this.$t("common:foo.bar.exampleText")
+        };
+
+        return example;
+    },
+ }
+```
+
+### Translate to unit tests
+
+i18next provides a test mode for unit tests.
+In test mode, no real translation is performed (no files are loaded).
+Instead, i18next always responds with the specified key.
+
+For unit tests in the master portal, we use "Chai".
+When i18next exits in a component, a mock must be created in the associated unit test.
+
+```js
+import {config} from "@vue/test-utils";
+config.mocks.$t = key => key;
+```
+
+
+## How to use i18next in production Backbone (Deprecated)
 
 This section is a guide on how to integrate i18next into your Masterportal project using MV*.
 

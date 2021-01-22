@@ -310,8 +310,24 @@ const actions = {
 
         map.removeInteraction(interaction);
     },
+    /**
+     * Zoom to the given geometry or extent based on the current map size.
+     * @param {Object} getters - the map getters
+     * @param {module:ol/geom/SimpleGeometry | module:ol/extent} geometryOrExtent - The geometry or extent to zoom to.
+     * @param {Object} options - @see {@link https://openlayers.org/en/latest/apidoc/module-ol_View-View.html#fit|Openlayers}
+     * @returns {void}
+     */
+    zoomTo ({getters}, geometryOrExtent, options) {
+        const {map} = getters;
+
+        map.getView().fit(geometryOrExtent, {
+            duration: options?.duration ? options.duration : 800,
+            ...options
+        });
+    },
     ...highlightFeature,
     ...removeHighlightFeature
+
 };
 
 export default actions;

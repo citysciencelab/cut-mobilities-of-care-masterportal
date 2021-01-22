@@ -6,7 +6,6 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
         "mousedown .drag-bar": "dragStart",
         "touchstart .drag-bar": "dragStart"
     },
-
     /**
      * @class SidebarView
      * @extends Backbone.View
@@ -16,25 +15,27 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      * @listens Sidebar#changeIsVisible
      * @listens Sidebar#changeIsMobile
      * @listens Sidebar#addContent
-     * @listens Sidebar#setWidth
      */
     initialize: function () {
+        const channel = Radio.channel("Sidebar");
+
         this.model = new SidebarModel();
         this.$el.addClass(this.getClassName());
 
+        this.listenTo(channel, {
+            "append": this.addContent,
+            "toggle": this.toggle
+        });
+
         this.listenTo(this.model, {
-            "change:isVisible": this.toggle,
+            "change:isVisible": this.updateSidebar,
             "change:isMobile": this.toggleClass,
-            "change:width": this.setWidth,
-            "addContent": this.addContent,
-            "resize": function () {
-                this.toggle(this.model);
-            }
+            "change:width": this.updateWidth
         });
 
         this.addEventListeners();
 
-        $("#map").after(this.$el);
+        $("#sidebar").append(this.$el);
     },
     template: _.template(Template),
     /**
@@ -47,7 +48,6 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
         }
         return "sidebar";
     },
-
     /**
      * adds the eventListeners to the window Object
      * responsible for handling the drag Events on Keyboard and Touch
@@ -67,44 +67,59 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
             this.dragMove(event);
         });
     },
-
     /**
      * Add HTML content to this sidebar
-     * @param {HTML} element Element from a tool view
-     * @param {boolean} dragable is the sidebar resizeable?
+     * @param {HTML}    element Element from a tool view
+     * @param {boolean} draggable is the sidebar resizeable?
+     * @param {number}  fixedWidth fixed width of sidebar
      * @returns {void}
      */
-    addContent: function (element, dragable) {
-        this.$el.html(this.template({dragable}));
+    addContent: function (element, draggable = false, fixedWidth) {
+        this.$el.html(this.template({draggable}));
         this.$el.find("#sidebar-content").html(element);
-    },
-
-    /**
-     * Sets the width.
-     * @param {Backbone.Model} model - The sidebar model.
-     * @param {String} width Width
-     * @returns {void}
-     */
-    setWidth: function (model, width) {
-        this.$el.css("width", width);
+        this.model.setWidth(fixedWidth);
     },
     /**
-     * Shows or hides this view.
-     * @param {SidebarModel} model The sidebar model.
-     * @param {boolean} isVisible Flag if sidebar is visible.
-     * @return {void}
-     * @fires Map#RadioTriggerMapUpdateSize
+     * Setter for "width".
+     * @param {String} value The width of the sidebar in percent. e.g. "30%".
+     * @returns{void}
      */
-    toggle: function (model) {
+    updateWidth: function () {
+        if (document.querySelector("#sidebar .sidebar") !== null) {
+            document.querySelector("#sidebar .sidebar").style.width = this.model.get("width");
+            Radio.trigger("Map", "updateSize");
+        }
+        if (document.querySelector("#sidebar .sidebar-mobile") !== null) {
+            document.querySelector("#sidebar .sidebar-mobile").style.width = "auto";
+            Radio.trigger("Map", "updateSize");
+        }
+    },
+    /**
+     * Updates sidebar's visibility state
+     * @returns{void}
+     */
+    updateSidebar: function () {
         if (this.model.get("isVisible")) {
-            this.$el.css("width", this.model.get("width"));
             this.$el.show();
         }
         else {
             this.$el.hide();
         }
-        this.setMapWidth(this.model.get("isMobile"), this.model.get("isVisible"), model.get("width"));
-        Radio.trigger("Map", "updateSize");
+        this.updateWidth();
+    },
+    /**
+     * Shows or hides this view.
+     * @param {boolean} visible Flag if sidebar is visible.
+     * @return {void}
+     */
+    toggle: function (visible) {
+        this.model.setIsVisible(Boolean(visible));
+        if (visible === true) {
+            document.querySelector("#sidebar .tool-manager").style.display = "none";
+        }
+        else {
+            document.querySelector("#sidebar .tool-manager").style.display = "block";
+        }
     },
 
     /**
@@ -113,30 +128,16 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
      * @param {boolean} isMobile Flag if the portal is in mobile mode.
      * @return {void}
      */
-    toggleClass: function (model, isMobile) {
-        this.$el.toggleClass("sidebar sidebar-mobile");
-        this.setMapWidth(isMobile, this.model.get("isVisible"));
-    },
-    /**
-     * Sets the width of the map
-     * @param {boolean} isMobile Flag if the portal is in mobile mode.
-     * @param {boolean} isVisible Flag if the sidebar is visible.
-     * @param {String} width The width of the sidebar in percent. e.g. "30%"
-     * @return {void}
-     */
-    setMapWidth: function (isMobile, isVisible, width = "100%") {
-        if (!isMobile && isVisible) {
-            const diffToHundred = 100 - parseFloat(width.substring(0, width.length - 1));
-
-            $("#map").css("width", diffToHundred + "%");
-            $(".elements-positioned-over-map").css("width", diffToHundred + "%");
+    toggleClass: function () {
+        if (this.model.get("isMobile")) {
+            this.$el.addClass("sidebar-mobile");
+            this.$el.removeClass("sidebar");
         }
         else {
-            $("#map").css("width", "100%");
-            $(".elements-positioned-over-map").css("width", "100%");
+            this.$el.addClass("sidebar");
+            this.$el.removeClass("sidebar-mobile");
         }
     },
-
     /**
      * handles the drag Start event to resize the sidebar
      * @param {*} event the DOM-event
@@ -147,23 +148,19 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
         this.isDragging = true;
         this.$el.find(".drag-bar").addClass("dragging");
     },
-
     /**
      * handles the drag move event to resize the sidebar
      * @param {*} event the DOM-event
-     * @fires Sidebar#RadioTriggerResize
      * @returns {void}
      */
     dragMove: function (event) {
         if (this.isDragging) {
             const eventX = event.type === "touchmove" ? event.touches[0].clientX : event.clientX,
-                newWidth = (((window.innerWidth - eventX) / window.innerWidth) * 100).toFixed(2) + "%";
+                newWidth = Math.floor(window.innerWidth - eventX) + "px";
 
-            // Radio.trigger("Sidebar", "resize", newWidth);
-            this.model.resize(newWidth);
+            this.model.setWidth(newWidth);
         }
     },
-
     /**
      * handles the drag End event to resize the sidebar
      * @param {*} event the DOM-event

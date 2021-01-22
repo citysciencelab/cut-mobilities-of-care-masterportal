@@ -3,7 +3,7 @@
 [TOC]
 
 # services.json #
-Die den Portalen zur Verfügung stehenden Dienste (WMS und WFS [SensorThings-API](sensorThings.de.md)) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/lgv-config*  *services-internet-webatlas.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS und [SensorThings-API](sensorThings.de.md) (Sensor). Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**.
+Die den Portalen zur Verfügung stehenden Dienste (WMS, WFS [SensorThings-API](sensorThings.de.md und Weitere)) bzw. deren Layer werden in einer JSON-Datei konfiguriert und gepflegt. Die Datei wird in der Datei *config.js*  der einzelnen Portale unter dem Parameter *layerConf* über ihren Pfad referenziert. Als Beispiel für eine solche Datei ist in *examples.zip* im Verzeichnis */examples/Basic/resources/*  *services-internet.json* vorhanden. Hier werden alle Informationen der Layer hinterlegt, die das Portal für die Nutzung der Dienste benötigt. Die Konfiguration unterscheidet sich leicht zwischen WMS, WFS, [SensorThings-API](sensorThings.de.md) und anderen Dienstetypen.
 Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beispiel GeoJSON).
 
 ***
@@ -20,6 +20,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"8"`|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.de.md)**. Format in dem die WMS-GetFeatureInfo ausgegeben werden soll. Die Formate: `"text/xml"`, `"text/html"` und `"application/vnd.ogc.gml"` werden unterstützt. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt.|`"text/xml"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
 |legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
@@ -34,12 +35,12 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |url|ja|String||Dienste URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Wird nur für die ABfrage des GFI verwendet. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |version|ja|String||Dienste Version, die über GetMap angesprochen wird.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Anzeige ob der Layer zu einem abgesicherten Dienst gehört. (**[siehe unten](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Zusätzliche Url, die aufgerufen wird um die basic Authentifizierung im Browser auszulösen.|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **Beispiel WMS:**
 
-```
-#!json
-
+```json
 {
       "id" : "8",
       "name" : "Luftbilder DOP 10",
@@ -54,12 +55,15 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "1000000",
+      "infoFormat": "text/html",
       "gfiAttributes" : "ignore",
       "gfiTheme" : "default",
       "layerAttribution" : "nicht vorhanden",
       "legend" : false,
       "cache" : false,
       "featureCount" : "1",
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
@@ -77,6 +81,17 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       ]
    }
 ```
+
+***
+## WMS-Layer.isSecured ##
+WMS Layer der zu einem abgesicherte WMS Dienst gehört.
+
+**ACHTUNG: Wenn der Layer zu einem abgesicherten Dienst gehört, müssen folgende Änderungen am Service vorgenommen werden!**
+
+* Es müssen anhand des Referer zwei Header gesetzt werden.
+* Die Konfiguration hierfür muss z.B. im Apache Webserver erfolgen.
+* `Access-Control-Allow-Credentials: true`
+* Dynamische Umschreibung des nachfolgenden HTTP Headers von: `Access-Control-Allow-Origin: *` nach `Access-Control-Allow-Origin: URL des zugreifenden Portals`
 
 ***
 
@@ -258,7 +273,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |extent|nein|Number[4]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird der Extent des Portal-EPSG verwendet.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
 |origin|nein|Number[2]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, wird die obere linke Ecke des Extents verwendet.|`[-9497963.94293634221, 9997963.94293634221]`|
 |origins|nein|Number[2][]||Wird benötigt um das GridSet des VTC zu definieren. Wird "origins" konfiguriert, so wird der Parameter "origin" ignoriert. Falls "origins" nicht konfiguriert wird, so wird "origin" benutzt|`[[239323.44497139292, 9336416.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9321005.0],[239323.44497139292, 9320646.0],[239323.44497139292, 9320467.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9320109.0],[239323.44497139292, 9320145.0],[239323.44497139292, 9320109.0]]`|
-|resolutions|nein|Number[]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, werden die Resolutions des Portals verwendet.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453, 0.59716428347787265, 0.29858214173893632, 0.14929107086946816]`|
+|resolutions|nein|Number[]||Wird benötigt um das GridSet des VTC zu definieren. Ist dieser Parameter nicht angegeben, werden die Resolutions des Portals verwendet. Nur bei expliziter Angabe der Resolutions werden fehlende Zoomstufen extrapoliert. Daher dürfen nur Resolutions angeben werden, zu denen Kacheln existieren.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453]`|
 |tileSize|nein|Number|512|Wird benötigt um die Größe der VTC-Kachel zu definieren.|`256`|
 |id|ja|String||Frei wählbare Layer-ID|`"41"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|

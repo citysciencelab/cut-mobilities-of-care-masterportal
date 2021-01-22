@@ -302,7 +302,7 @@
           "print": {
             "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "mapfish_qs",
+            "mapfishServiceId": "mapfish",
             "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
@@ -335,24 +335,25 @@
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
+            "renderToWindow": false,
             "iconList": [
-                {
-                  "id": "iconPoint",
-                  "type": "simple_point",
-                  "value": "simple_point"
-                },
-                {
-                  "id": "iconMeadow",
-                  "type": "image",
-                  "scale": 0.8,
-                  "value": "wiese.png"
-                },
-                {
-                  "id": "gelber Pin",
-                  "type": "image",
-                  "scale": 0.5,
-                  "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-                }
+              {
+                "id": "iconPoint",
+                "type": "simple_point",
+                "value": "simple_point"
+              },
+              {
+                "id": "iconMeadow",
+                "type": "image",
+                "scale": 0.8,
+                "value": "wiese.png"
+              },
+              {
+                "id": "gelber Pin",
+                "type": "image",
+                "scale": 0.5,
+                "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+              }
             ]
           },
           "styleWMS": {
@@ -420,8 +421,7 @@
           "scaleSwitcher":
           {
             "name": "translate#common:menu.tools.scaleSwitcher",
-            "glyphicon": "glyphicon-resize-full",
-            "renderToWindow": true
+            "glyphicon": "glyphicon-resize-full"
           },
           "VueAddon": {
             "name": "AddonTool",

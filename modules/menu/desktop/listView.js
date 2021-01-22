@@ -171,7 +171,7 @@ const ListView = ListViewMain.extend(/** @lends ListView.prototype */{
 
         this.addOverlayViews(folders);
 
-        folders.forEach(folder => {
+        folders.filter(folder => folder.get("isExpanded")).forEach(folder => {
             this.renderSubTree(folder.get("id"), level + 1, levelLimit, false);
         });
     },

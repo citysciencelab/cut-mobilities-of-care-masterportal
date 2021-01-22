@@ -4,9 +4,9 @@
 
 # services.json
 
-All services available for display in the Masterportal (WMS, WFS, [SensorThings-API](sensorThings.md), ...) are configured and maintained in this JSON file. The file is linked to from the *config.js* of each individual portal by the `layerConf` parameter. For an example, see the `services-internet-webatlas.json` included in the *examples.zip* at */examples/lgv-config*.
+All services available for display in the Masterportal (WMS, WFS, [SensorThings-API](sensorThings.md), and more) are configured and maintained in this JSON file. The file is linked to from the *config.js* of each individual portal by the *layerConf* parameter. For an example, see the *services-internet.json* included in the *examples.zip* at *//examples/Basic/resources/*.
 
-All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, and [SensorThings-API](sensorThings.md) (Sensor). For an example, see **[this file](https://bitbucket.org/geowerkstatt-hamburg/masterportal-config-public/raw/master/services-internet.json)**. You may also use local GeoJSON files; see GeoJSON example.
+All layer information the portal needs to use the services is stored here. Configuration details differ between WMS, WFS, [SensorThings-API](sensorThings.md) and other services types. You may also use local GeoJSON files; see GeoJSON example.
 
 ***
 
@@ -22,6 +22,7 @@ All layer information the portal needs to use the services is stored here. Confi
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |gutter|no|String|`"0"`|Additionally loaded tile contents in border pixel width. Serves to avoid cut symbols on tile borders.|`"0"`|
 |id|yes|String||Arbitrary id|`"8"`|
+|infoFormat|no|String|"text/xml"|**[services.json](services.json.md)** value. WMS *GetFeatureInfo* response format. The formats: `"text/xml"`, `"text/html"` and `"application/vnd.ogc.gml"` are supported. When using `"text/html"`, the service response is checked and will only be used when it contains a fully valid and filled HTML table.|`"text/xml"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |layers|yes|String||The service's layer name. Must match a name of the service's capabilities in *Layer/Layer/Name*.|`"1"`|
 |legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
@@ -36,6 +37,8 @@ All layer information the portal needs to use the services is stored here. Confi
 |url|yes|String||Service URL|`"https://geodienste.hamburg.de/HH_WMS_DOP10"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|yes|String||Service version used for *GetMap* requests.|`"1.3.0"`|
+|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities"|
 
 **WMS example:**
 
@@ -54,12 +57,15 @@ All layer information the portal needs to use the services is stored here. Confi
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "1000000",
+      "infoFormat": "text/html",
       "gfiAttributes" : "ignore",
       "gfiTheme" : "default",
       "layerAttribution" : "nicht vorhanden",
       "legend" : false,
       "cache" : false,
       "featureCount" : "1",
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
       "datasets" : [
          {
             "md_id" : "25DB0242-D6A3-48E2-BAE4-359FB28491BA",
@@ -77,6 +83,19 @@ All layer information the portal needs to use the services is stored here. Confi
       ]
    }
 ```
+***
+## WMS-Layer.isSecured ##
+WMS layer belonging to a secured WMS service.
+
+**CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
+
+* Two headers must be set based on the referer.
+* The configuration for this must be done e.g. in the Apache web server.
+* `Access-Control-Allow-Credentials: true`.
+* Dynamic rewrite of the following HTTP header from: <br>
+`Access-Control-Allow-Origin: *` <br>
+to <br>
+`Access-Control-Allow-Origin: URL of the accessing portal`.
 
 ***
 
@@ -257,7 +276,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 |extent|no|Number[4]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's extent is used.|`[902186.674876469653, 7054472.60470921732, 1161598.35425907862, 7175683.41171819717]`|
 |origin|no|Number[2]||Required to define the VTC's *GridSet*. If not set, the portal's coordinate reference system's top-left corner is used.|`[-9497963.94293634221, 9997963.94293634221]`|
 |origins|no|Number[2][]||Required to define the VTC's *GridSet*. If `"origins"` is used, the parameter `"origin"` is ignored; else, `"origin"` is used.|`[[239323.44497139292, 9336416.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9322080.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9321005.0],[239323.44497139292, 9320646.0],[239323.44497139292, 9320467.0],[239323.44497139292, 9320288.0],[239323.44497139292, 9320109.0],[239323.44497139292, 9320145.0],[239323.44497139292, 9320109.0]]`|
-|resolutions|no|Number[]||Required to define the VTC's *GridSet*. It not used, the portal's resolutions are used.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453, 0.59716428347787265, 0.29858214173893632, 0.14929107086946816]`|
+|resolutions|no|Number[]||Required to define the VTC's *GridSet*. It not used, the portal's resolutions are used. Missing zoom levels are extrapolated only if the resolutions are explicitly specified. Therefore, only resolutions for which tiles exist may be specified.|`[78271.5169640117238, 39135.7584820058619, 19567.8792410029309, 9783.93962050146547, 4891.96981025073273, 2445.98490512536637, 1222.99245256268318, 611.496226281341592, 305.7481131406708, 152.8740565703354, 76.437028285167699, 38.2185141425838495, 19.1092570712919247, 9.55462853564596237, 4.77731426782298119, 2.38865713391149059, 1.1943285669557453]`|
 |tileSize|no|Number|`512`|Required to define the size of a VTC tile.|`256`|
 |id|yes|String||Arbitrary id|`"41"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
@@ -299,7 +318,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
     {
       "id": "STYLE_2",
       "name": "Nachtansicht",
-      "url": "https://example.com/3857/resources/styles/night.json",
+      "url": "https://example.com/3857/resources/styles/night.json"
     }
   ]
 }
@@ -441,9 +460,11 @@ This attribute may be either a string or an object. In case it's a string, the m
 **gfiTheme example:**
 
 ```json
-"gfiTheme": {
-   "name": "default",
-   "params": {}
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {}
+    }
 }
 ```
 
@@ -473,12 +494,18 @@ Definition of parameters for GFI template `"default"`.
 **gfiTheme example for template "Default":**
 
 ```json
-"gfiTheme": {
-   "name": "default",
-   "params": {
-        "imageLinks": ["imageLink", "linkImage", "abc"],
-        "showFavoriteIcons": true
-   }
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {
+            "imageLinks": [
+                "imageLink",
+                "linkImage",
+                "abc"
+            ],
+            "showFavoriteIcons": true
+        }
+    }
 }
 ```
 
@@ -498,40 +525,42 @@ This theme allows the visualization of historical data regarding a SensorThings-
 **gfiTheme example for template "Sensor":**
 
 ```json
-"gfiTheme": {
-   "name": "sensor",
-   "params": {
-        "header": {
-            "name": "Name",
-            "description": "Description",
-            "ownerThing": "Owner"
-        },
-        "data": {
-            "name": "Data",
-            "firstColumnHeaderName": "Properties",
-            "columnHeaderAttribute": "layerName"
-        },
-        "charts": {
-            "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-            "barPercentage": 1.1,
-            "values": {
-                "available": {
-                    "title": "Available",
-                    "color": "rgba(0, 220, 0, 1)"
-                },
-                "charging": {
-                    "title": "Charging",
-                    "color": "rgba(220, 0, 0, 1)"
-                },
-                "outoforder": {
-                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                    "color": "rgba(175, 175, 175, 1)"
+{
+    "gfiTheme": {
+        "name": "sensor",
+        "params": {
+            "header": {
+                "name": "Name",
+                "description": "Description",
+                "ownerThing": "Owner"
+            },
+            "data": {
+                "name": "Data",
+                "firstColumnHeaderName": "Properties",
+                "columnHeaderAttribute": "layerName"
+            },
+            "charts": {
+                "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+                "barPercentage": 1.1,
+                "values": {
+                    "available": {
+                        "title": "Available",
+                        "color": "rgba(0, 220, 0, 1)"
+                    },
+                    "charging": {
+                        "title": "Charging",
+                        "color": "rgba(220, 0, 0, 1)"
+                    },
+                    "outoforder": {
+                        "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                        "color": "rgba(175, 175, 175, 1)"
+                    }
                 }
+            },
+            "historicalData": {
+                "periodLength": 3,
+                "periodUnit": "month"
             }
-        },
-        "historicalData": {
-            "periodLength": 3,
-            "periodUnit": "month"
         }
     }
 }
@@ -551,30 +580,38 @@ Chart display parameters.
 
 **Configuration example with array value:**
 ```json
-"charts": {
-    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-    "barPercentage": 1.1,
-    "values": ["available", "charging", "outoforder"]
+{
+    "charts": {
+        "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+        "barPercentage": 1.1,
+        "values": [
+            "available",
+            "charging",
+            "outoforder"
+        ]
+    }
 }
 ```
 
 **Configuration example with object value:**
 ```json
-"charts": {
-    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-    "barPercentage": 1.1,
-    "values": {
-        "available": {
-            "title": "Available",
-            "color": "rgba(0, 220, 0, 1)"
-        },
-        "charging": {
-            "title": "Charging",
-            "color": "rgba(220, 0, 0, 1)"
-        },
-        "outoforder": {
-            "title": "Out Of Order",
-            "color": "rgba(175, 175, 175, 1)"
+{
+    "charts": {
+        "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+        "barPercentage": 1.1,
+        "values": {
+            "available": {
+                "title": "Available",
+                "color": "rgba(0, 220, 0, 1)"
+            },
+            "charging": {
+                "title": "Charging",
+                "color": "rgba(220, 0, 0, 1)"
+            },
+            "outoforder": {
+                "title": "Out Of Order",
+                "color": "rgba(175, 175, 175, 1)"
+            }
         }
     }
 }
@@ -592,17 +629,21 @@ Layout definition for each result's chart.
 |color|no|String|`"rgba(0, 0, 0, 1)"`|Bar color.|
 
 ```json
-"available": {
-    "title": "Available",
-    "color": "rgba(0, 220, 0, 1)"
+{
+    "available": {
+        "title": "Available",
+        "color": "rgba(0, 220, 0, 1)"
+    }
 }
 ```
 
 ```json
-"charging": {
-    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-    "color": "rgba(220, 0, 0, 1)"
-},
+{
+    "charging": {
+        "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+        "color": "rgba(220, 0, 0, 1)"
+    }
+}
 ```
 
 ***
@@ -618,10 +659,12 @@ Data display configuration.
 |columnHeaderAttribute|no|String|`"dataStreamName"`|Value column title.|
 
 ```json
-"data": {
-    "name": "Data",
-    "firstColumnHeaderName": "Properties",
-    "columnHeaderAttribute": "layerName"
+{
+    "data": {
+        "name": "Data",
+        "firstColumnHeaderName": "Properties",
+        "columnHeaderAttribute": "layerName"
+    }
 }
 ```
 
@@ -638,9 +681,11 @@ Configuration of historical data period to be request.
 |periodUnit|no|String|`"month"`|Unit for period. Use `"month"` or `"year"`.|
 
 ```json
-"historicalData": {
-    "periodLength" : 3,
-    "periodUnit" : "month"
+{
+    "historicalData": {
+        "periodLength": 3,
+        "periodUnit": "month"
+    }
 }
 ```
 

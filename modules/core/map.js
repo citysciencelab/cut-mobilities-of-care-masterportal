@@ -18,7 +18,8 @@ import WMTSLayer from "./modelList/layer/wmts";
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
         initialLoading: 0,
-        shadowTime: null
+        shadowTime: null,
+        timeoutReference: null
     },
 
     /**
@@ -123,7 +124,11 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
             "updateSize": function () {
-                this.get("map").updateSize();
+                // avoid expensive updateSize() spamming
+                clearTimeout(this.get("timeoutReference"));
+                this.set("timeoutReference", setTimeout(() => {
+                    this.get("map").updateSize();
+                }, 100));
             }
         }, this);
 

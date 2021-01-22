@@ -190,6 +190,7 @@ B.2.5 Die Typprüfung erfolgt mit typeof, instanceof und Array.isArray() sowie "
 #### B.3 Vue Best Practice
 B.3.1 Vue-Komponenten im share-components Verzeichnis werden nach den Regeln von [Vue-Styleguidist](https://vue-styleguidist.github.io/) kommentiert.
 B.3.2 Backbone Radio - Neue Vue-Module sollen soweit möglich ohne Radio auskommen. Radio-Events können in alten Modulen durch den Store ersetzt werden.
+B.3.3 Für Requests wird empfohlen die Biblothek Axios zu verwenden.
 
 ---
 
@@ -200,7 +201,6 @@ B.4.2 Nutze die Helper-Funktionen von vuex um die Daten aus dem Store einfacher 
 ---
 
 #### B.5 Vue Best Practice - Style
-
 B.5.1 Nutze wann immer möglich scoped im Style-Tag.
 B.5.2 Vermeide die Nutzung von !important.
 B.5.3 Verwende möglichst keine absoluten width und height Angaben (sehr schlecht für Responsive Design).

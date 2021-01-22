@@ -29,26 +29,23 @@
 				"children": {
 					"gfi": {
             "name": "Informationen abfragen",
-            "glyphicon": "glyphicon-info-sign",
 						"active": true
 					},
 					"searchByCoord": {
 						"name": "Koordinatensuche"
 					},
 					"supplyCoord": {
-						"name": "Koordinaten abfragen",
-						"glyphicon": "glyphicon-screenshot"
+						"name": "Koordinaten abfragen"
 					},
 					"measure": {
 						"name": "Strecke / Fläche messen"
 					},
 					"draw": {
 						"name": "Zeichnen / Schreiben",
-            "glyphicon": "glyphicon-pencil"
+            "renderToWindow": false
 					},
 					"fileImport": {
-            "name": "Datei Import",
-            "glyphicon": "glyphicon-import"
+            "name": "Datei Import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"
@@ -83,18 +80,14 @@
 		"Hintergrundkarten": {
 			"Layer": [
 				{
-          "id": "453",
-          "name": "Stadtplan",
-				  "visibility": true
+          "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
+          "name": "Geobasiskarten (farbig)",
+          "visibility": true
 				},
-				{
+        {
           "id": "452",
           "name": "Luftbilder DOP 20"
-				},
-				{
-				  "id": ["717", "718", "719", "720", "13712", "13709", "13714", "13716"],
-				  "name": "Geobasiskarten (farbig)"
-				}
+        }
 			]
 		},
 		"Fachdaten": {
@@ -137,7 +130,8 @@
 					"id": "2404",
 					"name": "WFS Bike and Ride Parkplätze",
 					"styleId": "45",
-					"clusterDistance": 40
+          "clusterDistance": 40,
+          "styleGeometryType": ["Point"]
 				},
 				{
 					"id": "1711",
@@ -155,15 +149,15 @@
 				},
 				{
 				  "id": "4560",
-				  "name": "WFS Polygon (Default Style)"
+          "name": "WFS Polygon (Default Style)"
 				},
 				{
 				  "id": "1132",
-				  "name": "WFS Point (Default Style)"
+          "name": "WFS Point (Default Style)"
 				},
 				{
 				  "id": "1133",
-				  "name": "WFS Line (Default Style)"
+          "name": "WFS Line (Default Style)"
 				}
 			]
 		}

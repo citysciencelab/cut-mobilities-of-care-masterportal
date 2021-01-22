@@ -39,9 +39,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 getSource: () => ({clear})
             }};
 
-            actions.clearLayer({state});
+            actions.clearLayer({state, dispatch});
 
             expect(clear.calledOnce).to.be.true;
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.getCall(0).args).to.eql(["setDownloadFeatures"]);
         });
     });
     describe("createCenterPoint", () => {
@@ -110,7 +112,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const activeSymbol = Symbol(),
             maxFeaturesSymbol = Symbol(),
             getters = {
-                getStyleSettings: () => Symbol()
+                styleSettings: Symbol()
             };
 
         it("commits and dispatches as expected", () => {
@@ -124,7 +126,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             // dispatches interaction-related actions
             expect(dispatch.calledThrice).to.be.true;
             expect(dispatch.firstCall.args).to.eql(["manipulateInteraction", {interaction: "draw", active: activeSymbol}]);
-            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
+            expect(dispatch.secondCall.args).to.eql(["createDrawInteractionListener", {isOuterCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
             expect(dispatch.thirdCall.args[0]).to.eql("addInteraction");
             expect(typeof dispatch.thirdCall.args[1]).to.eql("object");
         });
@@ -142,11 +144,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             // dispatches interaction-related actions
             expect(dispatch.callCount).to.equal(6);
             expect(dispatch.args[0]).to.eql(["manipulateInteraction", {interaction: "draw", active: activeSymbol}]);
-            expect(dispatch.args[1]).to.eql(["createDrawInteractionListener", {doubleCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
+            expect(dispatch.args[1]).to.eql(["createDrawInteractionListener", {isOuterCircle: false, drawInteraction: "", maxFeatures: maxFeaturesSymbol}]);
             expect(dispatch.args[2][0]).to.eql("addInteraction");
             expect(typeof dispatch.args[2][1]).to.eql("object");
             expect(dispatch.args[3]).to.eql(["manipulateInteraction", {interaction: "draw", active: activeSymbol}]);
-            expect(dispatch.args[4]).to.eql(["createDrawInteractionListener", {doubleCircle: true, drawInteraction: "Two", maxFeatures: maxFeaturesSymbol}]);
+            expect(dispatch.args[4]).to.eql(["createDrawInteractionListener", {isOuterCircle: true, drawInteraction: "Two", maxFeatures: maxFeaturesSymbol}]);
             expect(dispatch.args[5][0]).to.eql("addInteraction");
             expect(typeof dispatch.args[5][1]).to.eql("object");
         });
@@ -170,7 +172,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
         it("defines a drawstart and drawend function on the interaction", () => {
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: false,
+                isOuterCircle: false,
                 drawInteraction: ""
             });
 
@@ -180,7 +182,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
 
         it("defines a second drawstart function when maxFeatures is set", () => {
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: false,
+                isOuterCircle: false,
                 drawInteraction: "",
                 maxFeatures: 5
             });
@@ -225,16 +227,23 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 */
         it("enables the drawstart to dispatch and uses the correct parameters", () => {
-            const doubleCircleSymbol = Symbol();
+            const isOuterCircleSymbol = Symbol(),
+                event = {
+                    feature: {
+                        set: () => {
+                            return false;
+                        }
+                    }
+                };
 
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: doubleCircleSymbol,
+                isOuterCircle: isOuterCircleSymbol,
                 drawInteraction: ""
             });
 
-            definedFunctions.drawstart[0]();
+            definedFunctions.drawstart[0](event);
 
-            expect(dispatch.calledWithMatch("drawInteractionOnDrawEvent", {drawInteraction: "", doubleCircle: doubleCircleSymbol})).to.be.true;
+            expect(dispatch.calledWithMatch("drawInteractionOnDrawEvent", "")).to.be.true;
         });
 
         it("enables the maxFeatures drawstart to dispatch, does so on maxFeatures reached", () => {
@@ -247,7 +256,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             };
 
             actions.createDrawInteractionListener({state, dispatch}, {
-                doubleCircle: Symbol(),
+                isOuterCircle: Symbol(),
                 drawInteraction: "",
                 maxFeatures: 5
             });
@@ -306,6 +315,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         beforeEach(() => {
             trigger = sinon.spy();
             definedFunctions = {
+                modifystart: [],
                 modifyend: []
             };
             state = {
@@ -319,7 +329,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 
         it("should define a modifyend function on the interaction", () => {
-            actions.createModifyInteractionListener({state, dispatch});
+            actions.createModifyInteractionListener({state, dispatch, commit});
 
             expect(definedFunctions.modifyend).to.have.length(1);
         });
@@ -414,20 +424,22 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 
         it("should define a select function on the interaction", () => {
-            actions.createSelectInteractionListener({state});
+            actions.createSelectInteractionListener({state, dispatch});
 
             expect(definedFunctions.select).to.have.length(1);
         });
         it("should enable the select to call the functions removeFeature from the layerSource and clear from the features", () => {
             const selectedSymbol = Symbol();
 
-            actions.createSelectInteractionListener({state});
+            actions.createSelectInteractionListener({state, dispatch});
             definedFunctions.select[0]({selected: [selectedSymbol]});
 
             expect(removeFeature.calledOnce).to.be.true;
             expect(removeFeature.firstCall.args).to.eql([selectedSymbol]);
             expect(clear.calledOnce).to.be.true;
             expect(clear.firstCall.args).to.eql([]);
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.getCall(0).args).to.eql(["setDownloadFeatures"]);
         });
     });
     describe("deactivateDrawInteractions", () => {
@@ -610,7 +622,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(un.calledOnce).to.be.true;
             expect(un.firstCall.args).to.eql(["addFeature", listener]);
 
-            expect(commit.callCount).to.equal(7);
+            expect(commit.callCount).to.equal(11);
             expect(commit.getCall(0).args).to.eql(["setActive", false]);
             expect(commit.getCall(1).args).to.eql(["setSelectedFeature", null]);
             expect(commit.getCall(2).args).to.eql(["setDrawType", initialState.drawType]);
@@ -618,6 +630,10 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.getCall(4).args).to.eql(["setPointSize", initialState.pointSize]);
             expect(commit.getCall(5).args).to.eql(["setSymbol", iconSymbol]);
             expect(commit.getCall(6).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
+            expect(commit.getCall(7).args).to.eql(["setDownloadDataString", initialState.download.dataString]);
+            expect(commit.getCall(8).args).to.eql(["setDownloadFeatures", initialState.download.features]);
+            expect(commit.getCall(9).args).to.eql(["setDownloadFileName", initialState.download.fileName]);
+            expect(commit.getCall(10).args).to.eql(["setDownloadSelectedFormat", initialState.download.selectedFormat]);
 
             expect(dispatch.callCount).to.equal(7);
             expect(dispatch.getCall(0).args).to.eql(["toggleInteraction", "draw"]);
@@ -627,27 +643,6 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(dispatch.getCall(4).args).to.eql(["removeInteraction", modifyInteraction]);
             expect(dispatch.getCall(5).args).to.eql(["removeInteraction", selectInteractionModify]);
             expect(dispatch.getCall(6).args).to.eql(["removeInteraction", selectInteraction]);
-        });
-    });
-    describe("startDownloadTool", () => {
-        const features = Symbol(),
-            getFeatures = sinon.fake.returns(features),
-            trigger = sinon.spy();
-
-        beforeEach(() => {
-            state = {
-                layer: {
-                    getSource: () => ({getFeatures})
-                }
-            };
-            sinon.stub(Radio, "trigger").callsFake(trigger);
-        });
-
-        it("should trigger the download tool to start", () => {
-            actions.startDownloadTool({state});
-
-            expect(trigger.calledOnce).to.be.true;
-            expect(trigger.firstCall.args).to.eql(["Download", "start", {features, formats: ["KML", "GEOJSON", "GPX"]}]);
         });
     });
     describe("toggleInteraction", () => {
@@ -754,7 +749,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const drawInteraction = Symbol(),
             drawInteractionTwo = Symbol(),
             getters = {
-                getStyleSettings: () => Symbol()
+                styleSettings: Symbol()
             };
 
         beforeEach(() => {

@@ -175,7 +175,7 @@ Search configuration to use a *ESRI CH LocationFinder*.
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
 |spatialReference|no|String||Coordinate reference system to use for requests. By default, the value in `Portalconfig.mapView.epsg` is used.|false|
 
-##### Portalconfig.searchbar.locationFinder.LocationFinderClass
+##### Portalconfig.searchBar.locationFinder.LocationFinderClass
 
 Definition of classes to be taken into account for results.
 
@@ -271,6 +271,7 @@ GFI search service configuration.
             "params": {
                 "query_string": "%%searchString%%"
             }
+        }
     }
 }
 ```
@@ -299,8 +300,6 @@ Todo
 
 #### Portalconfig.searchBar.elasticSearch
 
-[type:CustomObject]: # (Datatypes.CustomObject)
-
 Elasticsearch service configuration.
 
 |Name|Required|Type|Default|Description|Expert|
@@ -308,14 +307,15 @@ Elasticsearch service configuration.
 |minChars|no|Integer|3|Minimum amount of characters required to start a search.|false|
 |serviceId|yes|String||Search service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
 |type|no|enum["POST", "GET"]|"POST"|Request type.|false|
-|payload|no|**[CustomObject](#markdown-header-datatypescustomobject)**|{}|Payload to be sent as part of the request. Must contain the search string attribute.|false|
 |searchStringAttribute|no|String|"searchString"|Search string attribute name for `payload` object.|false|
 |responseEntryPath|no|String|""|Response JSON attribute path to found features.|false|
-|triggerEvent|no|**[params](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event triggered on mouse hover and click.|false|
+|triggerEvent|no|**[triggerEvent](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event triggered on mouse hover and click.|false|
 |hitMap|no|**[hitMap](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Object mapping result object attributes to keys.|true|
 |hitType|no|String|"Elastic"|Search result type shown in the result list after the result name.|false|
 |hitGlyphicon|no|String|"glyphicon-road"|CSS glyphicon class of search results, shown before the result name.|false|
 |useProxy|no|Boolean|false|Defines whether the URL should be proxied.|false|
+
+As an additional property, you may add `payload`. It is not required, and matches the **[CustomObject](#markdown-header-datatypescustomobject)** description. By default, it is set to the empty object `{}`. The object describes the payload to be sent as part of the request. It must provide the searchString attribute. This object can not be handled in the Admintool, since **[CustomObject](#markdown-header-datatypescustomobject)** is not yet supported.
 
 **Example**
 
@@ -575,7 +575,7 @@ The entry `attributions` may be of type boolean or object. If of type boolean, t
 {
     "attributions": {
         "isInitOpenDesktop": true,
-        "isInitOpenMobile": false,
+        "isInitOpenMobile": false
     }
 }
 ```
@@ -924,7 +924,7 @@ A folder object defined by a name, glyphicon, and its children.
         "name": "Werkzeuge",
         "glyphicon": "glyphicon-wrench",
         "children": {
-            {
+            "legend": {
                 "name": "Legende",
                 "glyphicon": "glyphicon-book"
             }
@@ -964,6 +964,10 @@ A folder object defined by a name, glyphicon, and its children.
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
+[type:measure]: # (Portalconfig.menu.tool.measure)
+[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
+[type:legend]: # (Portalconfig.menu.legend)
+[type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
 
@@ -974,7 +978,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |compareFeatures|no|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**||Offers a comparison option for vector features. The getFeatureInfo (GFI) window will offer a clickable star symbol to put elements on the comparison list. Works when used together with the GFI theme **Default**.|false|
 |contact|no|**[contact](#markdown-header-portalconfigmenutoolcontact)**||The contact form allows users to send messages to a configured mail address. For example, this may be used to allow users to submit errors and suggestions.|false|
 |coord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `supplyCoord` instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
-|draw|no|**[tool](#markdown-header-portalconfigmenutool)**||The draw tool allows painting points, lines, polygons, circles, double circles, and texts to the map. You may download these drawing as KML, GeoJSON, or GPX.|false|
+|draw|no|**[draw](#markdown-header-portalconfigmenutooldraw)**||The draw tool allows painting points, lines, polygons, circles, double circles, and texts to the map. You may download these drawing as KML, GeoJSON, or GPX.|false|
 |extendedFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use "filter" instead._ Dynamic filtering of WFS features. This requires an `extendedFilter` configuration on the WFS layer object.|false|
 |featureLister|no|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Lists all features of a vector layer.|false|
 |fileImport|no|**[tool](#markdown-header-portalconfigmenutool)**||Import KML, GeoJSON, and GPX files with this tool.|false|
@@ -985,15 +989,15 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |layerslider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||_Deprecated in 3.0.0. Please use `layerSlider` instead._|false|
 |legend|no|**[legend](#markdown-header-portalconfigmenulegend)**||The legend for all visible layers is displayed here.|false|
 |lines|no|**[lines](#markdown-header-portalconfigmenutoollines)**||Commute animation with line-like objects.|false|
-|measure|no|**[tool](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
+|measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
 |routing|no|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Tool to compute routes.|true|
 |saveSelection|no|**[tool](#markdown-header-portalconfigmenutool)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
-|searchByCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
+|searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[tool](#markdown-header-portalconfigmenutool)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
 |shadow|no|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Configuration object for the 3D mode shadow time.|false|
-|styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutool)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
+|styleWMS|no|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Classification of WMS services. This tool is used in the commute portal of MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg). With a mask, classifications can be defined. The GetMap request will have an SLD body as payload, used by the server to render. The WMS service now delivers its tiles in the defined classifications and colors.|true|
 |styleVT|no|**[tool](#markdown-header-portalconfigmenutool)**||Style selection for VT services. Allows switching between styles of a Vector Tile Layer that provides multiple stylings via the `services.json` file.|false|
 |supplyCoord|no|**[tool](#markdown-header-portalconfigmenutool)**||Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
@@ -1540,18 +1544,19 @@ Module used to draw features on the map. This includes points, which may also be
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |name|yes|String||Tool name in the menu.|false|
-|iconList|no|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {"id": "yellow pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|List of symbols the user may choose from to draw colored symbols or dots. Images may be used, too, as shown in the example.|false|
-|drawSymbolSettings|no|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{color: [55, 126, 184, 1], opacity: 1}|Pre-configuration for symbol drawing.|false|
-|drawLineSettings|no|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Pre-configuration for line drawing.|false|
-|drawCurveSettings|no|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Pre-configuration for freehand drawing.|false|
-|drawAreaSettings|no|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Pre-configuration for area drawing.|false|
-|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{circleMethod: "interactive", unit: "m", circleInnerDiameter: null, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Pre-configuration for circle drawing.|false|
-|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{circleMethod: "defined", unit: "m", circleInnerDiameter: 0, circleOuterDiameter: 0, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], outerColorContour: [0, 0, 0, 1], opacityContour: 1}|Pre-configuration for double circle drawing.|false|
-|writeTextSettings|no|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{text: "", fontSize: 10, font: "Arial", color: [55, 126, 184, 1], opacity: 1}|Pre-configuration for text writing.|false|
+|iconList|no|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{"id": "iconPoint", "type": "simple_point", "value": "simple_point"}, {"id": "yellow pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|List of symbols the user may choose from to draw colored symbols or dots. Images may be used, too, as shown in the example.|false|
+|drawSymbolSettings|no|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{"color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for symbol drawing.|false|
+|drawLineSettings|no|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for line drawing.|false|
+|drawCurveSettings|no|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Pre-configuration for freehand drawing.|false|
+|drawAreaSettings|no|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{"strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for area drawing.|false|
+|drawCircleSettings|no|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleRadius": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1, "tooltipStyle": {"fontSize": "16px", "paddingTop": "3px", "paddingLeft": "3px", "paddingRight": "3px", "backgroundColor": "rgba(255, 255, 255, .9)"}}|Pre-configuration for circle drawing.|false|
+|drawDoubleCircleSettings|no|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleRadius": 0, "circleOuterRadius": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Pre-configuration for double circle drawing.|false|
+|writeTextSettings|no|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{"text": "", "fontSize": 10, "font": "Arial", "color": [55, 126, 184, 1], "opacity": 1}|Pre-configuration for text writing.|false|
 
 **Example**
 
-```json
+```
+#!json
 {
     "draw": {
         "name": "Draw / Write",
@@ -1576,13 +1581,20 @@ Module used to draw features on the map. This includes points, which may also be
             }
         ],
         "drawDoubleCircleSettings": {
-            "circleInnerDiameter": 3000,
-            "circleOuterDiameter": 6000,
+            "circleRadius": 1500,
+            "circleOuterRadius": 3000,
             "strokeWidth": 3,
             "color": [55, 126, 184, 0],
             "opacity": 0,
             "colorContour": [228, 26, 28, 1],
-            "opacityContour": 1
+            "opacityContour": 1,
+            "tooltipStyle": {
+                "fontSize": "14px",
+                "paddingTop": "3px",
+                "paddingLeft": "3px",
+                "paddingRight": "3px",
+                "backgroundColor": "rgba(255, 255, 255, .9)"
+            }
         }
     }
 }
@@ -1606,23 +1618,25 @@ Dot object consisting of text, type, and value.
 
 ```json
 {
-    {
-        "id": "iconPoint",
-        "type": "simple_point",
-        "value": "simple_point"
-    },
-    {
-        "id": "iconMeadow",
-        "type": "image",
-        "scale": 0.8,
-        "value": "meadow.png"
-    },
-    {
-        "id": "yellow pin",
-        "type": "image",
-        "scale": 0.5,
-        "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-    }
+    "iconList": [
+        {
+            "id": "iconPoint",
+            "type": "simple_point",
+            "value": "simple_point"
+        },
+        {
+            "id": "iconMeadow",
+            "type": "image",
+            "scale": 0.8,
+            "value": "meadow.png"
+        },
+        {
+            "id": "yellow pin",
+            "type": "image",
+            "scale": 0.5,
+            "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+        }
+    ]
 }
 ```
 
@@ -1727,21 +1741,23 @@ Object to change the drawing tool's configured circle default value.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |circleMethod|yes|String|"interactive"|Pre-configured method of circle drawing. `"interactive"`: freehand, `"defined"`: by entering fixed values|false|
-|unit|yes|String|"m"|Pre-configured unit regarding the circle's diameter `circleInnerDiameter` when `"defined"` is chosen as `circleMethod`.|false|
-|circleInnerDiameter|yes|Number|0|Pre-configured circle diameter when `"defined"` is chosen as `circleMethod`.|false|
+|unit|yes|String|"m"|Pre-configured unit regarding the circle's Radius `circleRadius` when `"defined"` is chosen as `circleMethod`.|false|
+|circleRadius|yes|Number|0|Pre-configured circle Radius when `"defined"` is chosen as `circleMethod`.|false|
 |strokeWidth|yes|Number|1|Pre-configured stroke width of circle border in pixels.|false|
 |color|yes|Number[]|[55, 126, 184, 1]|Pre-configured circle color in RGBA.|false|
 |opacity|yes|Number|1|Pre-configured circle transparency in range [0..1].|false|
 |colorContour|yes|Number[]|[0, 0, 0, 1]|Pre-configured circle border color in RGBA.|false|
 |opacityContour|yes|Number|1|Pre-configured circle border transparency in range [0..1].|false|
+|tooltipStyle|no|String|{}|Pre-configured style for tooltip.|false|
 
 **Example**
 
-```json
+```
+#!json
 {
     "circleMethod": "interactive",
     "unit": "m",
-    "circleInnerDiameter": 0,
+    "circleRadius": 0,
     "strokeWidth": 1,
     "color": [55, 126, 184, 1],
     "opacity": 1,
@@ -1759,9 +1775,9 @@ Object to change the drawing tool's configured circle default value.
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |circleMethod|yes|String|"defined"|Pre-configured method of circle drawing. `"interactive"`: freehand, `"defined"`: by entering fixed values|false|
-|unit|yes|String|"m"|Pre-configured unit regarding the circle's diameter `circleInnerDiameter` and `circleOuterDiameter` when `"defined"` is chosen as `circleMethod`.|false|
-|circleInnerDiameter|yes|Number|0|Pre-configured inner circle diameter when `"defined"` is chosen as `circleMethod`.|false|
-|circleOuterDiameter|yes|Number|0|Pre-configured outer circle diameter when `"defined"` is chosen as `circleMethod`.|false|
+|unit|yes|String|"m"|Pre-configured unit regarding the circle's radius `circleRadius` and `circleOuterRadius` when `"defined"` is chosen as `circleMethod`.|false|
+|circleRadius|yes|Number|0|Pre-configured inner circle radius when `"defined"` is chosen as `circleMethod`.|false|
+|circleOuterRadius|yes|Number|0|Pre-configured outer circle radius when `"defined"` is chosen as `circleMethod`.|false|
 |strokeWidth|yes|Number|1|Pre-configured stroke width of circle border in pixels.|false|
 |color|yes|Number[]|[55, 126, 184, 1]|Pre-configured circle color in RGBA.|false|
 |opacity|yes|Number|1|Pre-configured double circle transparency in range [0..1].|false|
@@ -1775,8 +1791,8 @@ Object to change the drawing tool's configured circle default value.
 {
     "circleMethod": "defined",
     "unit": "m",
-    "circleInnerDiameter": 0,
-    "circleOuterDiameter": 0,
+    "circleRadius": 0,
+    "circleOuterRadius": 0,
     "strokeWidth": 1,
     "color": [55, 126, 184, 1],
     "opacity": 1,
@@ -1861,7 +1877,7 @@ A line-like depiction of commute movement used in the MRH (Metropolregion Hambur
         "featureType": "mrh_einpendler_gemeinde",
         "attrAnzahl": "anzahl_einpendler",
         "attrGemeinde": "wohnort",
-        "zoomlevel": 1,
+        "zoomlevel": 1
     }
 }
 ```
@@ -1908,25 +1924,32 @@ A commute animation used in the MRH (Metropolregion Hamburg, en.: Metropolitan a
 **Example**
 
 ```json
-"animation": {
-    "name": "Commute (Animation)",
-    "glyphicon": "glyphicon-play-circle",
-    "steps": 30,
-    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-    "params": {
-        "REQUEST": "GetFeature",
-        "SERVICE": "WFS",
-        "TYPENAME": "app:mrh_kreise",
-        "VERSION": "1.1.0",
-        "maxFeatures": "10000"
-    },
-    "featureType": "mrh_einpendler_gemeinde",
-    "attrAnzahl": "anzahl_einpendler",
-    "attrGemeinde": "wohnort",
-    "minPx": 5,
-    "maxPx": 30,
-    "zoomlevel": 1,
-    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
+{
+    "animation": {
+        "name": "Commute (Animation)",
+        "glyphicon": "glyphicon-play-circle",
+        "steps": 30,
+        "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+        "params": {
+            "REQUEST": "GetFeature",
+            "SERVICE": "WFS",
+            "TYPENAME": "app:mrh_kreise",
+            "VERSION": "1.1.0",
+            "maxFeatures": "10000"
+        },
+        "featureType": "mrh_einpendler_gemeinde",
+        "attrAnzahl": "anzahl_einpendler",
+        "attrGemeinde": "wohnort",
+        "minPx": 5,
+        "maxPx": 30,
+        "zoomlevel": 1,
+        "colors": [
+            "rgba(255,0,0,0.5)",
+            "rgba(0,255,0,0.5)",
+            "rgba(0,0,255,0.5)",
+            "rgba(0,255,255,0.5)"
+        ]
+    }
 }
 ```
 
@@ -2011,7 +2034,7 @@ The contact form allows users to send messages to a configured mail address.
 }
 ```
 
-##### Hints regarding email safety
+>Hints regarding email safety
 
 The unchecked usage of *sender (FROM)*, *recipient (TO)*, *copy (CC)*, and *blind copy (BCC)* by the SMTP server is hereby **expressly discouraged** for security reasons. The unchecked usage of the customer email as a *reply to (REPLY-TO)* by the SMTP server is warned against.
 
@@ -2168,6 +2191,13 @@ The shadow tool provides a UI element to define a point in time. By using slider
 
 Todo.
 
+|Name|Required|Type|Default|Beschreibung|
+|----|--------|----|-------|------------|
+|month|no|String||month|
+|day|no|String||day|
+|hour|no|String||hour|
+|minute|no|String||minute|
+
 **Example**
 ```json
 {
@@ -2201,14 +2231,14 @@ WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*), 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |name|yes|String||Tool name shown in the portal.|
-|layerIds|yes|[layerId](#markdown-header-portalconfigmenutoolwfstlayerid)[]||Array of layer information objects.|false|
+|layerIds|yes|String[]||Array of layer ids.|false|
 |toggleLayer|no|Boolean|false|Whether layer feature stay visible when adding a new feature.|
 |layerSelect|no|String|"aktueller Layer:"|Option to change the layer selection label.|
-|pointButton|no|[pointButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating points and what label the button should have.|
-|lineButton|no|[lineButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating lines and what label the button should have.|
-|areaButton|no|[areaButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating areas and what label the button should have.|
-|edit|no|[edit](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Whether the edit button should be shown, and if, with which label.|
-|delete|no|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Whether the delete button should be shown, and if, with which label.|
+|pointButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating points and what label the button should have.|
+|lineButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating lines and what label the button should have.|
+|areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating areas and what label the button should have.|
+|edit|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the edit button should be shown, and if, with which label.|
+|delete|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the delete button should be shown, and if, with which label.|
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
 
 **Example**
@@ -2245,6 +2275,8 @@ WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*), 
 }
 ```
 
+***
+
 #### Portalconfig.menu.tool.wfst.Button
 
 The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or object. When of type boolean, it decides whether the create function is available to all layers. Else, the following attributes may be provided:
@@ -2253,7 +2285,7 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 |----|--------|----|-------|-----------|------|
 |layerId|yes|String||Layer to be configured.|false|
 |show|yes|Boolean|true|Whether the button is available.|false|
-|caption|no|String|"Punkt erfassen"/ "Linie erfassen"/ "Fläche erfassen"|Button text.|false|
+|caption|no|String|"Erfassen"|Button text. If no value is given, the Masterportal will use, depending on the type of button, "Punkt erfassen", "Linie erfassen", or "Fläche erfassen".|false|
 
 **Examples**
 
@@ -2265,24 +2297,25 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 
 ```json
 {
-    "pointButton": {
-        {
-            "layerId":"1234",
-            "show": true,
-            "caption": "Point test",
-        },
-        {
-            "layerId": "5678",
-            "show": true
-        },
-        {
-            "layerId": "5489",
-            "show": false
-        }
-    }
+    "layerId": "1234",
+    "show": true,
+    "caption": "Point test"
 }
 ```
 
+```json
+{
+    "layerId": "5678",
+    "show": true
+}
+```
+
+```json
+{
+    "layerId": "5489",
+    "show": false
+}
+```
 #### Portalconfig.menu.tool.wfst.EditDelete
 
 The attributes `edit` and `delete` may be of type boolean or string. If of type boolean, it indicates whether the respective function is available. When of type string, it is offered with the string as its label.
@@ -2427,7 +2460,6 @@ The `Themenconfig` entry defines the contents and their order in the topic selec
 ### Themenconfig.Hintergrundkarten
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 
 Background map definition.
@@ -2457,9 +2489,7 @@ Background map definition.
 ### Themenconfig.Fachdaten
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
-
 [type:Ordner]: # (Themenconfig.Ordner)
 
 Technical data definition.
@@ -2518,9 +2548,7 @@ Technical data definition.
 ### Themenconfig.Ordner
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
-
 [type:Ordner]: # (Themenconfig.Ordner)
 
 Folder definition. Folders may also be nested.
@@ -2610,7 +2638,6 @@ Folder definition. Folders may also be nested.
 ### Themenconfig.GroupLayer
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:Extent]: # (Datatypes.Extent)
 
 Group layer definition. Multiple ways to define group layers exist. Most attributes are defined in the **[services.json](services.json.md)**, but may be overwritten in the layer definition.
@@ -2659,9 +2686,7 @@ Also, type-specific attributes for **[WMS](#markdown-header-themenconfiglayerwms
 ### Themenconfig.Layer
 
 [type:Extent]: # (Datatypes.Extent)
-
 [type:Entity3D]: # (Themenconfig.Layer.Entity3D)
-
 [type:WMS]: # (Themenconfig.Layer.WMS)
 
 Layer definition. Multiple ways to define layers exist. Most attributes are defined in the **[services.json](services.json.md)**, but may be overwritten in the layer definition.
@@ -2716,7 +2741,6 @@ List of typical WMS attributes.
 |featureCount|no|Integer|1|Amount of feature to be returned at maximum on a *GetFeatureInfo* request.|false|
 |geomType|no|String||Geometry type of WMS data. Currently, only `"polygon"` is supported. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|false|
 |styleable|no|Boolean||Whether the `styleWMS` tool may use this layer. Required by the **[tool](#markdown-header-portalconfigmenutools)** `styleWMS`.|true|
-|infoFormat|no|String|"text/xml"|**[services.json](services.json.md)** value. WMS *GetFeatureInfo* response format. `"text/xml"` and `"text/html"` are available. When using `"text/html"`, the service response is checked and will only be used when it contains a fully valid and filled HTML table.|false|
 |gfiAsNewWindow|no|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Relevant if `"text/html"` is used.|true|
 |styles|no|String[]||Will be sent to the server if defined. The server will interpret and apply these styles and return the corresponding styled tiles.|true|
 
@@ -2739,7 +2763,6 @@ List of typical WMS attributes.
     "attributesToStyle": ["MyFirstAttr"],
     "featureCount": 2,
     "geomType": "geometry",
-    "infoFormat": "text/html",
     "gfiAsNewWindow": {
         "name": "_blank",
         "specs": "width=800,height=700"
@@ -2752,8 +2775,6 @@ List of typical WMS attributes.
 ***
 
 #### Themenconfig.Layer.WMS.gfiAsNewWindow
-
-[inherits]: # (Themenconfig.Layer.WMS)
 
 The parameter `gfiAsNewWindow` is only in use when `infoFormat` is set to `"text/html"`.
 
@@ -2769,10 +2790,10 @@ Due to the *No Mixed Content* policy of all modern browsers, unencrypted content
 
 For such cases, define `gfiAsNewWindow` manually as described above.
 
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|Name|Required|Type|Default|Description|Expert|
 |----|-------------|---|-------|------------|------|
-|_blank|yes|all|Opens a new browser tab or window (depending on browser) with the specified HTML content. If you set `name` to `"_blank"` (or did not set `name`) the window appearance can be changed with the `specs` parameter.|{"name": "_blank"}|ja|
-|_self|no|all|Opens the specified HTML content within the current browser window. You may add an arbitrary amount of comma-separated properties like `{"specs": "width=800,height=700"}`. For more options, please read the documentation regarding `javascript` and `window.open`: [W3 Schools: Met win open](https://www.w3schools.com/jsref/met_win_open.asp) (German), [JavaScript Info: Popup windows](https://javascript.info/popup-windows) (English), [MDN: Window open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (English)|{"name": "_self"}|ja|
+|name|ja|enum["_blank_","_self_"]|"_blank"|`"_blank"` opens a new browser tab or window (depending on browser) with the specified HTML content. The window appearance can be changed with the `specs` parameter. `"_self"` opens the specified HTML content within the current browser window.|true|
+|specs|nein|String||You may add an arbitrary amount of comma-separated properties like `{"specs": "width=800,height=700"}`. For more options, please read the documentation regarding `javascript` and `window.open`: [W3 Schools: Met win open](https://www.w3schools.com/jsref/met_win_open.asp) (German), [JavaScript Info: Popup windows](https://javascript.info/popup-windows) (English), [MDN: Window open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (English)|true|
 
 **Example**
 
@@ -2799,7 +2820,7 @@ List of attributes typically used for tilesets.
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |hiddenFeatures|no|String[]|[]|List of IDs to be hidden in the plane.|
-|[cesium3DTilesetOptions](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)|no|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**||Cesium 3D tileset options directly forwarded to the *Cesium tileset object*. E.g. `maximumScreenSpaceError` is relevant to the visibility.|
+|**[cesium3DTilesetOptions](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)**[]|no|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**[]||Cesium 3D tileset options directly forwarded to the *Cesium tileset object*. E.g. `maximumScreenSpaceError` is relevant to the visibility.|
 
 **Example**
 
@@ -2817,11 +2838,13 @@ List of attributes typically used for tilesets.
 
 ***
 
-#### Themenconfig.Layer.Tileset.Cesium3DTilesetOptions
-
-[inherits]: # (Themenconfig.Layer.Tileset)
+#### Themenconfig.Layer.Tileset.cesium3DTilesetOption
 
 Todo
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|maximumScreenSpaceError|no|Number||Todo|
 
 **Example**
 
@@ -2843,7 +2866,7 @@ List of attributes typically used for *Terrain*.
 
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
-|**[cesiumTerrainProviderOptions](https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html)**|no|**[cesiumTerrainProviderOption](#markdown-header-themenconfiglayerterraincesiumterrainprovideroption)**||Cesium TerrainProvider options directly forwarded to the *Cesium TerrainProvider* E.g. `requestVertexNormals` is used for object surface shading.|
+|**[cesiumTerrainProviderOptions](https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html)**|no|**[cesiumTerrainProviderOption](#markdown-header-themenconfiglayerterraincesiumterrainprovideroption)**[]||Cesium TerrainProvider options directly forwarded to the *Cesium TerrainProvider* E.g. `requestVertexNormals` is used for object surface shading.|
 
 **Example**
 
@@ -2860,11 +2883,13 @@ List of attributes typically used for *Terrain*.
 
 ***
 
-#### Themenconfig.Layer.Terrain.CesiumTerrainProviderOptions
-
-[inherits]: # (Themenconfig.Layer)
+#### Themenconfig.Layer.Terrain.cesiumTerrainProviderOption
 
 Todo
+
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|requestVertexNormals|no|Boolean||Todo|
 
 **Example**
 
@@ -2927,8 +2952,8 @@ List of attributes typically used for *Entities 3D*.
 
 #### Themenconfig.Layer.Entity3D.Attribute
 
-|Name|Required|Type|Default|Description|
-|----|--------|----|-------|-----------|
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
 |name|no|String|""|Todo|false|
 
 **Example**
@@ -2987,57 +3012,59 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 |searchField|no|String||Attribute name by which the searchbar would search in this layer.|false|
 |additionalInfoField|no|String|"name"|Feature's attribute name to use in the search bar's hit list. Should this attribute not exist in a hit feature, the layer name is used instead.|false|
 |styleId|no|String||Style ID. Resolved using the **[style.json](style.json.md)** file.|false|
-|styleGeometryType|no|String[]/String||WFS style geometry type to reduce visible features to the ones sharing the given geometry types. **[More information](style.json.md#markdown-header-abbildungsvorschriften)**.
+|styleGeometryType|no|String/String[]||WFS style geometry type to reduce visible features to the ones sharing the given geometry types. **[More information](style.json.md#markdown-header-abbildungsvorschriften)**.|false|
 |hitTolerance|no|String||Click tolerance for hits in pixels when firing a *GetFeatureInfo* request.|false|
 |vtStyles|no|**[vtStyle](#markdown-header-themenconfiglayervectorvtstyle)**[]||Choosable external style definitions. Only available in a *Vector Tile Layer*.|false|
 
 **Example**
 
 ```json
-{
-    "id": "123456",
-    "name": "MyVectorLayerName",
-    "transparency": 0,
-    "visibility": true,
-    "supported": ["2D"],
-    "extent": [454591, 5809000, 700000, 6075769],
-    "layerAttribution": "MyBoldAttribution for layer 123456",
-    "legend": "https://myServer/myService/legend.pdf",
-    "maxScale": "100000",
-    "minScale": "1000",
-    "autoRefresh": "10000",
-    "isNeverVisibleInTree": false,
-    "clusterDistance": 60,
-    "extendedFilter": true,
-    "filterOptions": [
-        {
-            "fieldName": "myFirstAttributeToFilter",
-            "filterName": "Filter_1",
-            "filterString": ["*", "value1", "value2"],
-            "filterType": "combo"
-        },
-        {
-            "fieldName": "mySecondAttributeToFilter",
-            "filterName": "Filter_2",
-            "filterString": ["*", "value3", "value4"],
-            "filterType": "combo"
-        }
-    ],
-    "mouseHoverField": "name",
-    "routable": false,
-    "searchField": "name",
-    "styleId": "123456",
-    "hitTolerance": 50
-},
-{
-    "id" : "11111",
-    "name" : "local GeoJSON",
-    "url" : "portal/master/test.json",
-    "typ" : "GeoJSON",
-    "gfiAttributes" : "showAll",
-    "layerAttribution" : "nicht vorhanden",
-    "legend" : true
-}
+[
+    {
+        "id": "123456",
+        "name": "MyVectorLayerName",
+        "transparency": 0,
+        "visibility": true,
+        "supported": ["2D"],
+        "extent": [454591, 5809000, 700000, 6075769],
+        "layerAttribution": "MyBoldAttribution for layer 123456",
+        "legend": "https://myServer/myService/legend.pdf",
+        "maxScale": "100000",
+        "minScale": "1000",
+        "autoRefresh": "10000",
+        "isNeverVisibleInTree": false,
+        "clusterDistance": 60,
+        "extendedFilter": true,
+        "filterOptions": [
+            {
+                "fieldName": "myFirstAttributeToFilter",
+                "filterName": "Filter_1",
+                "filterString": ["*", "value1", "value2"],
+                "filterType": "combo"
+            },
+            {
+                "fieldName": "mySecondAttributeToFilter",
+                "filterName": "Filter_2",
+                "filterString": ["*", "value3", "value4"],
+                "filterType": "combo"
+            }
+        ],
+        "mouseHoverField": "name",
+        "routable": false,
+        "searchField": "name",
+        "styleId": "123456",
+        "hitTolerance": 50
+    },
+    {
+        "id" : "11111",
+        "name" : "local GeoJSON",
+        "url" : "portal/master/test.json",
+        "typ" : "GeoJSON",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "legend" : true
+    }
+]
 ```
 
 ***

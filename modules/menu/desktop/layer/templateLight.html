@@ -6,6 +6,9 @@
         <% } else { %>
             <span class="glyphicon glyphicon-unchecked pull-left" title="<%=showTopicText%>"></span>
         <% } %>
+        <% if (isSecured) { %>
+            <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% } %>
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </span>
 </span>

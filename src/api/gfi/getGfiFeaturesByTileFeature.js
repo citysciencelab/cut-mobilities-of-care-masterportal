@@ -75,18 +75,13 @@ function isCesiumEntity (entity) {
 export function getGfiFeature (layerAttributes, properties) {
     const layerName = layerAttributes && layerAttributes.name ? layerAttributes.name : "common:modules.layerInformation.buildings",
         gfiTheme = layerAttributes && layerAttributes.gfiTheme ? layerAttributes.gfiTheme : "buildings_3d",
-        attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes :
-            {
-                "roofType": "common:modules.layerInformation.roofType",
-                "measuredHeight": "common:modules.layerInformation.roofHeight",
-                "function": "common:modules.layerInformation.objectType"
-            },
-        featureProperties = properties && properties.attributes ? properties.attributes : properties,
+        attributesToShow = layerAttributes && layerAttributes.gfiAttributes ? layerAttributes.gfiAttributes : properties?.attributes,
+        featureProperties = properties?.attributes ? properties.attributes : properties,
 
         layer = {
             get: (key) => {
                 if (key === "name") {
-                    return layerName;
+                    return properties?.attributes?.Objektart ? properties.attributes.Objektart : layerName;
                 }
                 else if (key === "gfiTheme") {
                     return gfiTheme;
@@ -122,7 +117,7 @@ export function getLayerModelFromTileFeature (tileFeature, getModelByAttributesO
     }
     else if (
         typeof isCesium3dTileFeatureOpt === "function" ? isCesium3dTileFeatureOpt(tileFeature) : isCesium3dTileFeature(tileFeature)
-        && tileFeature.hasOwnProperty("tileset")
+        && typeof tileFeature.tileset === "object"
         && tileFeature.tileset.hasOwnProperty("layerReferenceId")
     ) {
         filter = {id: tileFeature.tileset.layerReferenceId};

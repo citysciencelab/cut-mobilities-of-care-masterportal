@@ -15,6 +15,7 @@ const WMSLayer = Layer.extend({
             supported: ["2D", "3D"],
             showSettings: true,
             extent: null,
+            isSecured: false,
             notSupportedFor3D: ["1747", "1749", "1750", "9822", "12600", "9823", "1752", "9821", "1750", "1751", "12599", "2297"],
             useProxy: false
         });
@@ -146,7 +147,6 @@ const WMSLayer = Layer.extend({
          * @deprecated in 3.0.0
          */
         if (this.get("legendURL")) {
-            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
             if (this.get("legendURL") === "") {
                 legend = true;
             }

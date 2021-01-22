@@ -7,6 +7,7 @@
 # config.json
 Die *config.json* enthält die gesamte Konfiguration der Portal-Oberfläche. In ihr wird geregelt welche Elemente sich wo in der Menüleiste befinden, worauf die Karte zentriert werden soll und welche Layer geladen werden sollen. Hier geht es zu einem **[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/portal/basic/config.json)**.
 Die config.json besteht aus der **[Portalconfig](#markdown-header-Portalconfig)** und der **[Themenconfig](#markdown-header-Themenconfig)**
+
 ```
 {
    "Portalconfig": {},
@@ -163,9 +164,9 @@ Konfiguration zur Suche unter Verwendung eines ESRI CH LocationFinders.
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |spatialReference|nein|String||Koordinatensystem, in dem das Ergebnis angefragt werden soll. Standardmäßig wird  hier der Wert von Portalconfig.mapView.epsg verwendet.|false|
 
-##### Portalconfig.searchbar.locationFinder.LocationFinderClass #####
+##### Portalconfig.searchBar.locationFinder.LocationFinderClass #####
 
-Definitiion von Klassen, welche als Ergebnis berücksichtigt werden sollen.
+Definition von Klassen, welche als Ergebnis berücksichtigt werden sollen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -280,8 +281,6 @@ Todo
 
 #### Portalconfig.searchBar.elasticSearch
 
-[type:CustomObject]: # (Datatypes.CustomObject)
-
 Konfiguration des Elastic Search Suchdienstes
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -289,14 +288,15 @@ Konfiguration des Elastic Search Suchdienstes
 |minChars|nein|Integer|3|Minimale Anzahl an Buchstaben, ab der die Suche losläuft.|false|
 |serviceId|ja|String||Id des Suchdienstes. Wird aufgelöst in der **[rest-services.json](rest-services.json.de.md)**.|false|
 |type|nein|enum["POST", "GET"]|"POST"|Art des Requests.|false|
-|payload|nein|**[CustomObject](#markdown-header-datatypescustomobject)**|{}|Payload der mitgeschickt werden soll. Der Payload muss das Attribut für den searchString vorhalten.|false|
 |searchStringAttribute|nein|String|"searchString"|Attributname im payload für den searchString.|false|
 |responseEntryPath|nein|String|""|Der Pfad in der response (JSON) zum Attribut, das die gefundenen Features enthält.|false|
-|triggerEvent|nein|**[params](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
+|triggerEvent|nein|**[triggerEvent](#markdown-header-portalconfigsearchbarelasticsearchtriggerevent)**|{}|Radio event das ausgelöst werden soll durch Mouseover und Click.|false|
 |hitMap|nein|**[hitMap](#markdown-header-portalconfigsearchbarelasticsearchhitmap)**||Mapping Objekt. Mappt die Attribute des Ergebnis Objektes auf den entsprechenden Key.|true|
 |hitType|nein|String|"Elastic"|Typ des Suchergebnisses, wird in der Auswahlliste hinter dem Namen angezeigt.|false|
 |hitGlyphicon|nein|String|"glyphicon-road"|CSS Glyphicon Klasse des Suchergebnisses. Wird vor dem Namen angezeigt.|false|
 |useProxy|nein|Boolean|false|Flag die angibt ob die URL geproxied werden soll oder nicht.|false|
+
+Als zusätzliches property kann `payload` hinzugefügt werden. Es muss nicht zwingend gesetzt sein, und passt zur Beschreibung von **[CustomObject](#markdown-header-datatypescustomobject)**. Per default wird es als leeres Objekt `{}` gesetzt. Das Objekt beschreibt die Payload, die mitgeschickt werden soll. Es muss das Attribut für den searchString vorhalten. Dieses Objekt kann im Admintool nicht gepflegt werden, da dort **[CustomObject](#markdown-header-datatypescustomobject)** nicht definiert ist.
 
  **Beispiel**
 ```
@@ -351,31 +351,32 @@ Radio event das ausgelöst werden soll durch Mouseover und Click. Definiert durc
 |channel|ja|String||Channel an den der hit beim mouseover und click in der recommendedList getriggered wird.|false|
 |event|ja|String||Event das getriggered wird.|false|
 
+
 ***
 
 #### Portalconfig.searchBar.specialWFS
+
 Konfiguration der WFS-Suchfunktion "specialWFS": fragt Features eines WFS-Dienstes ab. Der Dienst muss hierfür WFS 2.0 Anfragen zulassen.
 
 Beispielsweise würde bei der Eingabe "Kronenmatten" der Dienst
 https://geoportal.freiburg.de/geoportal_freiburg_de/wfs/stpla_bplan/wfs_mapfile/geltungsbereiche
 folgende Anfrage mit einer xml FeatureCollection beantworten. Die Features der Collection werden anschließend als Suchergebnisse vorgeschlagen.
 
-```
-#!xml
-    <?xml version='1.0' encoding='UTF-8'?>
-    <wfs:GetFeature service='WFS' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>
+```xml
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:GetFeature service='WFS' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc' xmlns:gml='http://www.opengis.net/gml' traverseXlinkDepth='*' version='1.1.0'>
     <wfs:Query typeName='ms:geltungsbereiche'>
-    <wfs:PropertyName>ms:planbez</wfs:PropertyName>
-    <wfs:PropertyName>ms:msGeometry</wfs:PropertyName>
-    <wfs:maxFeatures>20</wfs:maxFeatures>
-    <ogc:Filter>
-    <ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'>
-    <ogc:PropertyName>ms:planbez</ogc:PropertyName>
-    <ogc:Literal>*Kronenmatten*</ogc:Literal>
-    </ogc:PropertyIsLike>
-    </ogc:Filter>
+        <wfs:PropertyName>ms:planbez</wfs:PropertyName>
+        <wfs:PropertyName>ms:msGeometry</wfs:PropertyName>
+        <wfs:maxFeatures>20</wfs:maxFeatures>
+        <ogc:Filter>
+            <ogc:PropertyIsLike matchCase='false' wildCard='*' singleChar='#' escapeChar='!'>
+                <ogc:PropertyName>ms:planbez</ogc:PropertyName>
+                <ogc:Literal>*Kronenmatten*</ogc:Literal>
+            </ogc:PropertyIsLike>
+        </ogc:Filter>
     </wfs:Query>
-    </wfs:GetFeature>
+</wfs:GetFeature>
 ```
 
 
@@ -420,6 +421,7 @@ Die WFS 2 query wird dabei dynamisch durch das Masterportal erstellt. Die Konfig
 ***
 
 #### Portalconfig.searchBar.specialWFS.definition
+
 Konfiguration einer Definition bei der SpecialWFS Suche
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -680,6 +682,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 ***
 
 ### Portalconfig.mapView
+
 [type:Extent]: # (Datatypes.Extent)
 [type:Coordinate]: # (Datatypes.Coordinate)
 
@@ -822,6 +825,7 @@ Dies ist ein Menüreiter, in dem typischerweise Links *("staticlinks")* zu Infor
 ***
 
 ##### Portalconfig.menu.info.children
+
 [type:staticlink]: # (Portalconfig.menu.staticlinks.staticlink)
 
 Liste der Werkzeuge *("tools")* oder Links *("staticlinks")*, die im Menüreiter *"info"* erscheinen sollen.
@@ -846,7 +850,6 @@ Hier können die Menüeinträge und deren Anordnung konfiguriert werden. Die Rei
 #### Portalconfig.menu.folder
 
 [type:tool]: # (Portalconfig.menu.tool)
-
 [type:staticlinks]: # (Portalconfig.menu.staticlinks)
 
 Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" noch das attribut "children" besitzt.
@@ -877,7 +880,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 ### Portalconfig.menu.tools
 
 [inherits]: # (Portalconfig.menu.folder)
-
 [type:tool]: # (Portalconfig.menu.tool)
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
@@ -889,36 +891,25 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 #### Portalconfig.menu.tools.children
 
 [type:tool]: # (Portalconfig.menu.tool)
-
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
-
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
-
 [type:print]: # (Portalconfig.menu.tool.print)
-
 [type:routing]: # (Portalconfig.menu.tool.routing)
-
 [type:draw]: # (Portalconfig.menu.tool.draw)
-
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
-
 [type:lines]: # (Portalconfig.menu.tool.lines)
-
 [type:animation]: # (Portalconfig.menu.tool.animation)
-
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
-
 [type:contact]: # (Portalconfig.menu.tool.contact)
-
 [type:filter]: # (Portalconfig.menu.tool.filter)
-
 [type:shadow]: # (Portalconfig.menu.tool.shadow)
-
 [type:virtualcity]: # (Portalconfig.menu.tool.virtualcity)
-
 [type:gfi]: # (Portalconfig.menu.tool.gfi)
-
 [type:wfst]: # (Portalconfig.menu.tool.wfst)
+[type:measure]: # (Portalconfig.menu.tool.measure)
+[type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
+[type:legend]: # (Portalconfig.menu.legend)
+[type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
 
@@ -929,7 +920,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Bietet eine Vergleichsmöglichkeit von Vektor-Features. In der getFeatureInfo lassen sich Features über das Stern-Symbol auf die Vergleichliste setzen. Funktioniert in Verbindung mit dem GFI-Theme **Default**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
-|draw|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
+|draw|nein|**[draw](#markdown-header-portalconfigmenutooldraw)**||Mithilfe des Zeichnen-Werkzeuges können Punkte, Linien, Polygone, Kreise, Doppelkreise und Texte gezeichnet werden. Farben und Transparenzen sind voreingestellt. Die Zeichnungen können in den Formaten: KML, GeoJSON oder GPX heruntergeladen werden.|false|
 |extendedFilter|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "filter" verwenden. Dynamisches Filtern von WFS Features. Über dieses Werkzeug können WFS features dynamisch gefiltert werden. Dies setzt jedoch eine Konfiguration der "extendedFilter" am WFS-Layer-Objekt voraus.|false|
 |featureLister|nein|**[featureLister](#markdown-header-portalconfigmenutoolfeaturelister)**||Listet alle Features eines Vektorlayers auf.|false|
 |fileImport|nein|**[tool](#markdown-header-portalconfigmenutool)**||Import von Dateien des Typs *.kml, *.geojson und *. gpx. Über dieses Werkzeug können solche Dateien importiert werden.|false|
@@ -940,15 +931,15 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
 |lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
-|measure|nein|**[tool](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
+|measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
 |saveSelection|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
-|searchByCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
+|searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
-|styleWMS|nein|**[styleWMS](#markdown-header-portalconfigmenutool)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
+|styleWMS|nein|**[styleWMS](#markdown-header-portalconfigmenutoolstylewms)**||Klassifizierung von WMS Diensten. Dieses Tool findet Verwendung im Pendlerportal der MRH(Metropolregion Hamburg). Über eine Maske können Klassifizierungen definiert werden. An den GetMap-Request wird nun ein SLD-Body angehängt, der dem Server einen neuen Style zum Rendern definiert. Der WMS-Dienst liefert nun die Daten in den definierten Klassifizierungen und Farben.|true|
 |styleVT|nein|**[tool](#markdown-header-portalconfigmenutool)**||Style-Auswahl zu VT-Diensten. Ermöglicht das Umschalten des Stylings eines Vector Tile Layers, wenn in der services.json mehrere Styles für ihn eingetragen sind.|false|
 |supplyCoord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
 |virtualcity|nein|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||virtualcityPLANNER planning Viewer|false|
@@ -1463,14 +1454,14 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |name|ja|String||Name des Werkzeugs im Menü.|false|
-|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{id: "iconPoint", type: "simple_point", value: "simple_point"}, {"id": "gelber Pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines farbigen Punktes oder eines Symbols hat. Es können wie im Beispiel eigene Bild-Dateien verwendet werden.|false|
-|drawSymbolSettings|nein|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Zeichnen von Symbolen.|false|
-|drawLineSettings|nein|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Linien.|false|
-|drawCurveSettings|nein|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{strokeWidth: 1, opacityContour: 1, colorContour: [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Freihand-Linien.|false|
-|drawAreaSettings|nein|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Flächen.|false|
-|drawCircleSettings|nein|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{circleMethod: "interactive", unit: "m", circleInnerDiameter: null, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Kreisen.|false|
-|drawDoubleCircleSettings|nein|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{circleMethod: "defined", unit: "m", circleInnerDiameter: 0, circleOuterDiameter: 0, strokeWidth: 1, color: [55, 126, 184, 1], opacity: 1, colorContour: [0, 0, 0, 1], outerColorContour: [0, 0, 0, 1], opacityContour: 1}|Voreinstellung für das Zeichnen von Doppel-Kreisen.|false|
-|writeTextSettings|nein|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{text: "", fontSize: 10, font: "Arial", color: [55, 126, 184, 1], opacity: 1}|Voreinstellung für das Schreiben von Texten.|false|
+|iconList|nein|**[icon](#markdown-header-portalconfigmenutooldrawicon)**[]|[{"id": "iconPoint", "type": "simple_point", "value": "simple_point"}, {"id": "yellow pin", "type": "image", "scale": 0.5, "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"}]|Liste an Symbolen, aus welcher ein Nutzer die Auswahl für das Zeichnen eines farbigen Punktes oder eines Symbols hat. Es können wie im Beispiel eigene Bild-Dateien verwendet werden.|false|
+|drawSymbolSettings|nein|**[drawSymbolSet](#markdown-header-portalconfigmenutooldrawdrawsymbolset)**|{"color": [55, 126, 184, 1], "opacity": 1}|Voreinstellung für das Zeichnen von Symbolen.|false|
+|drawLineSettings|nein|**[drawLineSet](#markdown-header-portalconfigmenutooldrawdrawlineset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Linien.|false|
+|drawCurveSettings|nein|**[drawCurveSet](#markdown-header-portalconfigmenutooldrawdrawcurveset)**|{"strokeWidth": 1, "opacityContour": 1, "colorContour": [0, 0, 0, 1]}|Voreinstellung für das Zeichnen von Freihand-Linien.|false|
+|drawAreaSettings|nein|**[drawAreaSet](#markdown-header-portalconfigmenutooldrawdrawareaset)**|{"strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1}|Voreinstellung für das Zeichnen von Flächen.|false|
+|drawCircleSettings|nein|**[drawCircleSet](#markdown-header-portalconfigmenutooldrawdrawcircleset)**|{"circleMethod": "interactive", "unit": "m", "circleRadius": null, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "opacityContour": 1, "tooltipStyle": {"fontSize": "16px", "paddingTop": "3px", "paddingLeft": "3px", "paddingRight": "3px", "backgroundColor": "rgba(255, 255, 255, .9)"}}|Voreinstellung für das Zeichnen von Kreisen.|false|
+|drawDoubleCircleSettings|nein|**[drawDoubleCircleSet](#markdown-header-portalconfigmenutooldrawdrawdoublecircleset)**|{"circleMethod": "defined", "unit": "m", "circleRadius": 0, "circleOuterRadius": 0, "strokeWidth": 1, "color": [55, 126, 184, 1], "opacity": 1, "colorContour": [0, 0, 0, 1], "outerColorContour": [0, 0, 0, 1], "opacityContour": 1}|Voreinstellung für das Zeichnen von Doppel-Kreisen.|false|
+|writeTextSettings|nein|**[writeTextSet](#markdown-header-portalconfigmenutooldrawwritetextset)**|{"text": "", "fontSize": 10, "font": "Arial", "color": [55, 126, 184, 1], "opacity": 1}|Voreinstellung für das Schreiben von Texten.|false|
 
 **Beispiel**
 
@@ -1499,13 +1490,20 @@ Modul für das Zeichnen von Features auf der Karte. Dies beinhaltet Punkte, welc
         }
     ],
     "drawDoubleCircleSettings": {
-        "circleInnerDiameter": 3000,
-        "circleOuterDiameter": 6000,
+        "circleRadius": 1500,
+        "circleOuterRadius": 3000,
         "strokeWidth": 3,
         "color": [55, 126, 184, 0],
         "opacity": 0,
         "colorContour": [228, 26, 28, 1],
-        "opacityContour": 1
+        "opacityContour": 1,
+        "tooltipStyle": {
+            "fontSize": "14px",
+            "paddingTop": "3px",
+            "paddingLeft": "3px",
+            "paddingRight": "3px",
+            "backgroundColor": "rgba(255, 255, 255, .9)"
+        }
     }
 }
 ```
@@ -1653,12 +1651,13 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Kreis im Zeichen
 |----|-------------|---|-------|------------|------|
 |circleMethod|ja|String|"interactive"|Die voreingestellte Methode wie der Kreis gezogen werden soll. "interactive": Freihand, "defined": mit Angabe fixer Werte|false|
 |unit|ja|String|"m"|Die voreingestellte Maßeinheit mit der der Durchmesser des Kreises unter der circleMethod "defined" berechnet werden soll.|false|
-|circleInnerDiameter|ja|Number|0|Der voreingestellte Durchmesser des Kreises bezogen auf die Unit unter der circleMethod "defined".|false|
+|circleRadius|ja|Number|0|Der voreingestellte Durchmesser des Kreises bezogen auf die Unit unter der circleMethod "defined".|false|
 |strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) des Randes des Kreises in Pixel.|false|
 |color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe des Kreises als RGB color array mit Alpha-Kanal.|false|
 |opacity|ja|Number|1|Die voreingestellte Transparenz des Kreises in einer Range [0..1].|false|
 |colorContour|ja|Number[]|[0, 0, 0, 1]|Die voreingestellte Rand-Farbe des Kreises als RGB color array mit Alpha-Kanal.|false|
 |opacityContour|ja|Number|1|Die voreingestellte Transparenz der Rand-Farbe des Kreises in einer Range [0..1].|false|
+|tooltipStyle|no|String|{}|Die voreingestellte Style des Tooltips|false|
 
 **Beispiel**
 
@@ -1667,7 +1666,7 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Kreis im Zeichen
     {
         circleMethod: "interactive",
         unit: "m",
-        circleInnerDiameter: 0,
+        circleRadius: 0,
         strokeWidth: 1,
         color: [55, 126, 184, 1],
         opacity: 1,
@@ -1686,8 +1685,8 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Doppelkreis im Z
 |----|-------------|---|-------|------------|------|
 |circleMethod|ja|String|"defined"|Die voreingestellte Methode wie der Doppelkreis gezogen werden soll. "interactive": Freihand, "defined": mit Angabe fixer Werte|false|
 |unit|ja|String|"m"|Die voreingestellte Maßeinheit mit der der Durchmesser des Doppelkreises unter der circleMethod "defined" berechnet werden soll.|false|
-|circleInnerDiameter|ja|Number|0|Der voreingestellte Durchmesser des inneren Ringes des Doppelkreises bezogen auf die Unit unter der circleMethod "defined".|false|
-|circleOuterDiameter|ja|Number|0|Der voreingestellte Durchmesser des äußeren Ringes des Doppelkreises bezogen auf die Unit unter der circleMethod "defined".|false|
+|circleRadius|ja|Number|0|Der voreingestellte Durchmesser des inneren Ringes des Doppelkreises bezogen auf die Unit unter der circleMethod "defined".|false|
+|circleOuterRadius|ja|Number|0|Der voreingestellte Durchmesser des äußeren Ringes des Doppelkreises bezogen auf die Unit unter der circleMethod "defined".|false|
 |strokeWidth|ja|Number|1|Die voreingestellte Strichstärke (Dicke) des Randes des Doppelkreises in Pixel.|false|
 |color|ja|Number[]|[55, 126, 184, 1]|Die voreingestellte Farbe des Doppelkreises als RGB color array mit Alpha-Kanal.|false|
 |opacity|ja|Number|1|Die voreingestellte Transparenz des Doppelkreises in einer Range [0..1].|false|
@@ -1702,8 +1701,8 @@ Objekt zum Ändern des konfigurierten Default-Wertes für einen Doppelkreis im Z
     {
         circleMethod: "defined",
         unit: "m",
-        circleInnerDiameter: 0,
-        circleOuterDiameter: 0,
+        circleRadius: 0,
+        circleOuterRadius: 0,
         strokeWidth: 1,
         color: [55, 126, 184, 1],
         opacity: 1,
@@ -1933,7 +1932,8 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
 }
 ```
 
-##### Hinweis zur Email-Sicherheit
+>Hinweis zur Email-Sicherheit
+
 Von der ungeprüften Übernahme von *Sender (FROM)*, *Empfänger (TO)*, *Kopie (CC)* und *Blindkopie (BCC)* durch den SMTP-Server wird hiermit aus Sicherheitsgründen **ausdrücklich abgeraten**.
 Vor der ungeprüften Übernahme durch den SMTP-Server der Kunden-Email als *Antwort an* (REPLY-TO) wird gewarnt.
 
@@ -2091,6 +2091,13 @@ Das ShadowTool bietet eine Oberfläche zur Definition einer Zeitangabe. Über Sl
 
 Todo
 
+|Name|Required|Type|Default|Description|
+|----|--------|----|-------|-----------|
+|month|nein|String||month|
+|day|nein|String||day|
+|hour|nein|String||hour|
+|minute|nein|String||minute|
+
 **Beispiel**
 ```
 #!json
@@ -2126,14 +2133,14 @@ Zur Vorbereitung muss ein WFS-T Service bereitgestellt werden (siehe services.js
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |name|ja|String||Name dieses Tools, wie er im Portal angezeigt werden soll.|
-|layerIds|ja|[layerId](#markdown-header-portalconfigmenutoolwfstlayerid)[]||Array von Objekten aus denen die Layerinformationen herangezogen werden.|false|
+|layerIds|ja|String[]||Array von Layer IDs.|false|
 |toggleLayer|nein|Boolean|false|Flag ob die Features eines Layers beim Hinzufügen eines neuen Features sichtbar bleiben.|
 |layerSelect|nein|String|"aktueller Layer:"|Möglichkeit die Beschriftung der Layer Auswahl zu konfigurieren.|
-|pointButton|nein|[pointButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|lineButton|nein|[lineButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|areaButton|nein|[areaButton](#markdown-header-portalconfigmenutoolwfstButton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
-|edit|nein|[edit](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
-|delete|nein|[delete](#markdown-header-portalconfigmenutoolwfstEditDelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
+|pointButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen eines Punktes zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|lineButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Linie zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|areaButton|nein|[Button](#markdown-header-portalconfigmenutoolwfstbutton)|false|Möglichkeit zu konfigurieren, für welchen Layer die Funktion zum Erfassen einer Fläche zur Verfügung steht und welche Beschriftung der Button haben soll.|
+|edit|nein|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Möglichkeit zu konfigurieren, ob der edit Button angezeigt wird und mit wekcher Beschriftung er angezeigt wird.|
+|delete|nein|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Möglichkeit zu konfigurieren, ob der delete Button angezeigt wird und mit welcher Beschriftung er angezeigt wird.|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 
 **Beispiel**
@@ -2176,7 +2183,7 @@ Das Attribut pointButton/lineButton/areaButton kann vom Typ Boolean oder Object 
 |----|-------------|---|-------|------------|------|
 |layerId|ja|String||Der Layer für den die Konfiguration vorgenommen werden soll|false|
 |show|ja|Boolean|true|Flag ob der Button zur Verfügung stehen soll.|false|
-|caption|nein|String|"Punkt erfassen"/ "Linie erfassen"/ "Fläche erfassen"|Beschriftung des Buttons.|false|
+|caption|nein|String|"Erfassen"|Beschriftung des Buttons. Der Default-Wert wird im Admintool genutzt. Falls hier kein Wert gegeben wird, benutzt das Masterportal je nach Umstand "Punkt erfassen", "Linie erfassen", oder "Fläche erfassen".|false|
 
 
 **Beispiel als Boolean**
@@ -2341,7 +2348,6 @@ Die Themenconfig definiert, welche Inhalte an welcher Stelle im Themenbaum vorko
 ### Themenconfig.Hintergrundkarten
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
 
 Hier werden die Hintergrundkarten definiert
@@ -2369,9 +2375,7 @@ Hier werden die Hintergrundkarten definiert
 ### Themenconfig.Fachdaten
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
-
 [type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Fachdaten definiert
@@ -2428,9 +2432,7 @@ Hier werden die 3D-Daten für die 3D-Ansicht definiert. Im custom tree und defau
 ### Themenconfig.Ordner
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:GroupLayer]: # (Themenconfig.GroupLayer)
-
 [type:Ordner]: # (Themenconfig.Ordner)
 
 Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert werden.
@@ -2514,7 +2516,6 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 ### Themenconfig.GroupLayer
 
 [type:Layer]: # (Themenconfig.Layer)
-
 [type:Extent]: # (Datatypes.Extent)
 
 Hier werden die GruppenLayer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.de.md)** definiert, kann jedoch hier am Layer überschrieben werden.
@@ -2563,9 +2564,7 @@ Neben diesen Attributen gibt es auch Typ-spezifische Attribute für **[WMS](#mar
 ### Themenconfig.Layer
 
 [type:Extent]: # (Datatypes.Extent)
-
 [type:Entity3D]: # (Themenconfig.Layer.Entity3D)
-
 [type:WMS]: # (Themenconfig.Layer.WMS)
 
 Hier werden die Layer definiert. Layer können auf viele verschiedene Arten konfiguriert werden. Ein Großteil der Attribute ist in der **[services.json](services.json.de.md)** definiert, kann jedoch hier am Layer überschrieben werden.
@@ -2622,7 +2621,6 @@ Hier werden WMS typische Attribute aufgelistet.
 |featureCount|nein|Integer|1|Anzahl der Features, die bei einer GetFeatureInfo-Abfrage zurückgegeben werden sollen.|false|
 |geomType|nein|String||Geometrietyp der Daten hinter dem WMS. Momentan wird nur "Polygon" unterstützt. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|false|
 |styleable|nein|Boolean||Zeigt an, ob der Layer vom Werkzeug "styleWMS" verwendet werden kann. Wird benötigt vom Werkzeug "styleWMS" in **[tools](#markdown-header-portalconfigmenutools)**.|true|
-|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.de.md)**. Format in dem der WMS-GetFeatureInfo-request zurückgegeben werden soll. Formate: text/xml oder text/html. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt. |false|
 |gfiAsNewWindow|nein|**[gfiAsNewWindow](#markdown-header-themenconfiglayerwmsgfiAsNewWindow)**|null|Wird nur berücksichtigt wenn infoFormat text/html ist.|true|
 |styles|nein|String[]||Werden styles angegeben, so werden diese mit an den WMS geschickt. Der Server interpretiert diese Styles und liefert die Daten entsprechend zurück.|true|
 
@@ -2645,7 +2643,6 @@ Hier werden WMS typische Attribute aufgelistet.
     "attributesToStyle": ["MyFirstAttr"],
     "featureCount": 2,
     "geomType": "geometry",
-    "infoFormat": "text/html",
     "gfiAsNewWindow": {
         "name": "_blank",
         "specs": "width=800,height=700"
@@ -2658,8 +2655,6 @@ Hier werden WMS typische Attribute aufgelistet.
 ***
 
 #### Themenconfig.Layer.WMS.gfiAsNewWindow
-
-[inherits]: # (Themenconfig.Layer.WMS)
 
 Der Parameter *gfiAsNewWindow* wird nur berücksichtigt wenn infoFormat text/html ist.
 
@@ -2680,8 +2675,8 @@ Stellen Sie in einem solchen Fall *gfiAsNewWindow* wie oben beschrieben manuell 
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|_blank|ja|alle|Öffnet ein neues Browser-Fenster oder Browser-Tab (browserabhängig) mit dem html-Inhalt.Haben Sie *name* auf *_blank* gestellt (oder lassen Sie *name* ganz weg), lässt sich die Erscheinung des Fensters mithilfe des Parameters *specs* beeinflussen. B|{"name": "_blank"}|ja|
-|_self|nein|alle|Öffnet den html-Inhalt im aktuellen Browser-Fenster.eachten Sie, dass sich beliebig viele der folgenden Einstellungen durch Komma-Separation (z.B. {"specs": "width=800,height=700"} kombinieren lassen. Weitere Einstellungsmöglichkeiten entnehmen Sie bitte den einschlägigen Informationen zum Thema "javascript + window.open": [https://www.w3schools.com/jsref/met_win_open.asp](https://www.w3schools.com/jsref/met_win_open.asp) (deutsch), [https://javascript.info/popup-windows](https://javascript.info/popup-windows) (englisch), [https://developer.mozilla.org/en-US/docs/Web/API/Window/open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (englisch)|{"name": "_self"}|ja|
+|name|ja|enum["_blank_","_self_"]|"_blank"|Bei `"_blank"` öffnet sich ein neues Browser-Fenster oder ein neuer Browser-Tab (browserabhängig) mit dem html-Inhalt. Die Erscheinung des Fensters lässt sich mithilfe des Parameters *specs* beeinflussen. Bei `"_self"` öffnet sich der html-Inhalt im aktuellen Browser-Fenster.  |true|
+|specs|nein|String||Beliebig viele der folgenden Einstellungen lassen sich durch durch Komma-Separation (z.B. {"specs": "width=800,height=700"}) kombinieren. Weitere Einstellungsmöglichkeiten entnehmen Sie bitte den einschlägigen Informationen zum Thema "javascript + window.open": [https://www.w3schools.com/jsref/met_win_open.asp](https://www.w3schools.com/jsref/met_win_open.asp) (deutsch), [https://javascript.info/popup-windows](https://javascript.info/popup-windows) (englisch), [https://developer.mozilla.org/en-US/docs/Web/API/Window/open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open) (englisch)|true|
 
 Beispiel:
 ```
@@ -2708,9 +2703,7 @@ Hier werden Tileset typische Attribute aufgelistet.
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
 |hiddenFeatures|nein|String[]|[]|Liste mit IDs, die in der Ebene versteckt werden sollen|
-|[cesium3DTilesetOptions]|nein|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**||Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.|
-
-[cesium3DTilesetOptions]: https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
+|**[cesium3DTilesetOptions](https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html)**[]|no|**[cesium3DTilesetOption](#markdown-header-themenconfiglayertilesetcesium3dtilesetoption)**[]||Cesium 3D Tileset Options, werden direkt an das Cesium Tileset Objekt durchgereicht. maximumScreenSpaceError ist z.B. für die Sichtweite relevant.|
 
 **Beispiel**
 ```
@@ -2728,11 +2721,13 @@ Hier werden Tileset typische Attribute aufgelistet.
 
 ***
 
-#### Themenconfig.Layer.Tileset.Cesium3DTilesetOptions
-
-[inherits]: # (Themenconfig.Layer.Tileset)
+#### Themenconfig.Layer.Tileset.cesium3DTilesetOption
 
 Todo
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|maximumScreenSpaceError|nein|Number||Todo|
 
 **Beispiel**
 ```
@@ -2753,7 +2748,7 @@ Hier werden Terrain typische Attribute aufgelistet.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|
 |----|-------------|---|-------|------------|
-|**[cesiumTerrainProviderOptions]**|nein|**[cesiumTerrainProviderOption](#markdown-header-themenconfiglayerterraincesiumterrainprovideroption)**||Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.
+|**[cesiumTerrainProviderOptions](https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html)**|no|**[cesiumTerrainProviderOption](#markdown-header-themenconfiglayerterraincesiumterrainprovideroption)**[]||Cesium TerrainProvider Options, werden direkt an den Cesium TerrainProvider durchgereicht. requestVertexNormals ist z.B. für das Shading auf der Oberfläche relevant.|
 
 [cesiumTerrainProviderOptions]: https://cesiumjs.org/Cesium/Build/Documentation/CesiumTerrainProvider.html
 
@@ -2772,11 +2767,13 @@ Hier werden Terrain typische Attribute aufgelistet.
 
 ***
 
-#### Themenconfig.Layer.Terrain.CesiumTerrainProviderOptions
-
-[inherits]: # (Themenconfig.Layer)
+#### Themenconfig.Layer.Terrain.cesiumTerrainProviderOption
 
 Todo
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|
+|----|-------------|---|-------|------------|
+|requestVertexNormals|nein|Boolean||Todo|
 
 ```
 #!json
@@ -2897,7 +2894,7 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
 |additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden, wird der Layername angegeben.|false|
 |styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.de.md)** aufgelöst.|false|
-|styleGeometryType|nein|String[],String||Geometrietypen für einen WFS-Style, falls nur bestimmte Geometrien eines Layers angezeigt werden sollen **[siehe dazu](style.json.md#markdown-header-abbildungsvorschriften)**.
+|styleGeometryType|nein|String/String[]||Geometrietypen für einen WFS-Style, falls nur bestimmte Geometrien eines Layers angezeigt werden sollen **[siehe dazu](style.json.md#markdown-header-abbildungsvorschriften)**.|false|
 |hitTolerance|nein|String||Clicktoleranz bei der ein Treffer für die GetFeatureInfo-Abfrage ausgelöst wird.|false|
 |vtStyles|nein|**[vtStyle](#markdown-header-themenconfiglayervectorvtstyle)**[]||Auswählbare externe Style-Definition (nur für Vector Tile Layer)|false|
 

@@ -269,7 +269,6 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
          * @deprecated in 3.0.0
          */
         if (this.get("legendURL")) {
-            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
             if (this.get("legendURL") === "") {
                 legend = true;
             }

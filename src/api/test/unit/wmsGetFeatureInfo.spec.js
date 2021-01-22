@@ -123,7 +123,7 @@ describe("src/api/wmsGetFeatureInfo.js", () => {
             expect(result).to.be.an.instanceof(Document);
             expect(result.firstElementChild.innerHTML).to.equal(expected);
         });
-        it("should return a parsed Document from the given documentString as text/xml with the infoFormat application/vnd.ogc.gml", () => {
+        it("should return a feature from the given documentString as text/xml with the infoFormat application/vnd.ogc.gml", () => {
             const documentString = `<?xml version="1.0" encoding="UTF-8"?>
                 <wfs:FeatureCollection xmlns="http://www.opengis.net/wfs" xmlns:wfs="http://www.opengis.net/wfs" xmlns:gml="http://www.opengis.net/gml" xmlns:geofox_workspace="geofox" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs https://map.geofox.de:443/geoserver/schemas/wfs/1.0.0/WFS-basic.xsd geofox https://map.geofox.de:443/geoserver/geofox_workspace/wfs?service=WFS&amp;version=1.0.0&amp;request=DescribeFeatureType&amp;typeName=geofox_workspace%3Ageofoxdb_stations">
                     <gml:boundedBy>
@@ -159,6 +159,37 @@ describe("src/api/wmsGetFeatureInfo.js", () => {
             expect(features[0].get("linekat")).equals("Niederflur-Nachtbus,Niederflur Stadtbus");
             expect(features[0].get("lineshortkat")).equals("Nachtbus,Bus");
             expect(features[0].getGeometry().getCoordinates()).to.include(563033.73375521, 5934434.5087641, 0);
+        });
+        it("should return a feature from mapserver service with the given documentString as text/xml with the infoFormat application/vnd.ogc.gml", () => {
+            const documentString = `<msGMLOutput
+                xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <addresses_layer>
+                    <gml:name>Example</gml:name>
+                        <addresses_feature>
+                            <gml:boundedBy>
+                                <gml:Box srsName="EPSG:25832">
+                                    <gml:coordinates>412600.660000,5315290.100000 412600.660000,5315290.100000</gml:coordinates>
+                                </gml:Box>
+                            </gml:boundedBy>
+                            <id>82549</id>
+                            <str_strs_a>04480</str_strs_a>
+                            <hnr_a>3</hnr_a>
+                            <x_coord>412600.66</x_coord>
+                            <y_coord>5315290.1</y_coord>
+                        </addresses_feature>
+                    </addresses_layer>
+                </msGMLOutput>`,
+                parser = new DOMParser(),
+                features = parseFeatures(parser.parseFromString(documentString, "text/xml"));
+
+            expect(features.length).equals(1);
+            expect(features[0].get("id")).equals("82549");
+            expect(features[0].get("hnr_a")).equals("3");
+            expect(features[0].get("str_strs_a")).equals("04480");
+            expect(features[0].get("x_coord")).equals("412600.66");
+            expect(features[0].get("y_coord")).equals("5315290.1");
         });
     });
 });

@@ -231,6 +231,12 @@ describe("LegendWindow.vue", () => {
                     legend: ["link_to_legend"],
                     position: 1
                 })).to.be.equals(true);
+                expect(wrapper.vm.isLegendChanged(legendObj.id, {
+                    id: "2042",
+                    name: "Festgestellte Änderungen – Berichtigungen – Nachrichtliche Übernahmen seit 1997",
+                    legend: ["https://geodienste.hamburg.de/HH_WMS_FNP_Aend?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=fnp_aenderungsuebersicht_aenderungen_festgestellt"],
+                    position: 2
+                })).to.be.equals(true);
             });
             it("returns false if legend doesn't changed", () => {
                 const legendObj = {
