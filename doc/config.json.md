@@ -2316,6 +2316,9 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
     "show": false
 }
 ```
+
+***
+
 #### Portalconfig.menu.tool.wfst.EditDelete
 
 The attributes `edit` and `delete` may be of type boolean or string. If of type boolean, it indicates whether the respective function is available. When of type string, it is offered with the string as its label.
