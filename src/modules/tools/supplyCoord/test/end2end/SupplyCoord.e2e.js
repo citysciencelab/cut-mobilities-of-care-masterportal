@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {reclickUntilNotStale, logBrowserstackUrlToTest, closeSingleAlert} = require("../../../../../../test/end2end/library/utils"),
-    {isMobile, isBasic, isMaster} = require("../../../../../../test/end2end/settings"),
+    {isMobile, isBasic} = require("../../../../../../test/end2end/settings"),
     namedProjectionsBasic = require("../../../../../../portal/basic/config").namedProjections,
     namedProjectionsMaster = require("../../../../../../portal/master/config").namedProjections,
     namedProjectionsCustom = require("../../../../../../portal/masterCustom/config").namedProjections,
@@ -94,10 +94,6 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
         });
 
         it("displays a modal dialog containing the tool elements", async () => {
-            if (isMaster(url)) {
-                await closeSingleAlert(driver);
-            }
-
             // can't keep tools/toolCoord as variable - tends to go stale in /portal/basic
             await driver.wait(until.elementIsVisible(await driver.findElement(selectors.tools)));
             while (!await (await driver.findElement(selectors.toolCoord)).isDisplayed()) {
