@@ -147,10 +147,7 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicità",
           "publicationCreation": "Pubblicazione / Creazione",
-          "buildings":"Edificio",
-          "roofType":"Tipo di tetto",
-          "roofHeight":"Altezza del tetto",
-          "objectType":"Tipo di oggetto"
+          "buildings":"Edificio"
         },
         "mapMarker": {
           "noStyleModel": "Non è stato possibile trovare uno stile per lo StyleId specificato: {{styleId}}. Si prega di controllare la configurazione."
@@ -546,6 +543,15 @@
             },
             "draw": {
                 "clickToPlaceText": "Clicca sulla mappa per inserire il testo",
+                "download": {
+                  "createFirst": "Si prega di creare prima un disegno o un testo!",
+                  "enterFilename": "Inserire nome del file",
+                  "filename": "Nome del file",
+                  "format": "Formato",
+                  "formatNotSupported": "Il formato {{selectedFormat}} non è supportato.",
+                  "pleaseChoose": "Scegliere",
+                  "unknownGeometry": "Geometria sconosciuta:"
+                },
                 "draw": "disegna",
                 "geometryDrawFailed": "La geometria passata non poteva essere visualizzata.",
                 "undefinedTwoCircles": "Si prega di disegnare entrambi i cerchi.",
@@ -594,15 +600,6 @@
                     "iconCloud": "Nuvola",
                     "iconMeadow": "Campo"
                 }
-            },
-            "download": {
-                "format": "Formato",
-                "pleaseChoose": "Scegliere",
-                "filename": "Nome del file",
-                "enterFilename": "Inserire nome del file",
-                "createFirst": "Si prega di creare prima un disegno o un testo!",
-                "formatNotSupported": "Il formato {{selectedFormat}} non è supportato.",
-                "unknownGeometry": "Geometria sconosciuta:"
             },
             "measure": {
                 "geometry": "Geometria",
@@ -665,7 +662,7 @@
                 "buttonTitle": "Vista aerea obliqua",
                 "openViewOblique": "Attiva vista aerea obliqua",
                 "closeViewOblique": "Disattiva vista aerea obliqua",
-                "betaWarningOblique": "La visualizzazione aerea obliqua è attualmente ancora in versione beta!"
+                "doNotUseIE": "La visualizzazione di immagini aeree oblique non è più supportata in Internet Explorer 11. Per questa funzione si prega di utilizzare un browser attuale."
             },
             "freeze": {
                 "freeze": "Blocca vista",

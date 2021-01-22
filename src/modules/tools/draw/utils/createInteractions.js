@@ -6,7 +6,7 @@ import {createStyle} from "./style/createStyle";
  *
  * @param {Object} state actions context object.
  * @param {Object} styleSettings the settings of the current style
- * @returns {ol/interaction/Draw} draw interaction
+ * @returns {module:ol/interaction/Draw} draw interaction
  */
 function createDrawInteraction (state, styleSettings) {
     return new Draw({

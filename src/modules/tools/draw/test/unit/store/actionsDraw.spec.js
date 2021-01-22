@@ -39,9 +39,11 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
                 getSource: () => ({clear})
             }};
 
-            actions.clearLayer({state});
+            actions.clearLayer({state, dispatch});
 
             expect(clear.calledOnce).to.be.true;
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.getCall(0).args).to.eql(["setDownloadFeatures"]);
         });
     });
     describe("createCenterPoint", () => {
@@ -110,7 +112,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const activeSymbol = Symbol(),
             maxFeaturesSymbol = Symbol(),
             getters = {
-                getStyleSettings: () => Symbol()
+                styleSettings: Symbol()
             };
 
         it("commits and dispatches as expected", () => {
@@ -422,20 +424,22 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         });
 
         it("should define a select function on the interaction", () => {
-            actions.createSelectInteractionListener({state});
+            actions.createSelectInteractionListener({state, dispatch});
 
             expect(definedFunctions.select).to.have.length(1);
         });
         it("should enable the select to call the functions removeFeature from the layerSource and clear from the features", () => {
             const selectedSymbol = Symbol();
 
-            actions.createSelectInteractionListener({state});
+            actions.createSelectInteractionListener({state, dispatch});
             definedFunctions.select[0]({selected: [selectedSymbol]});
 
             expect(removeFeature.calledOnce).to.be.true;
             expect(removeFeature.firstCall.args).to.eql([selectedSymbol]);
             expect(clear.calledOnce).to.be.true;
             expect(clear.firstCall.args).to.eql([]);
+            expect(dispatch.calledOnce).to.be.true;
+            expect(dispatch.getCall(0).args).to.eql(["setDownloadFeatures"]);
         });
     });
     describe("deactivateDrawInteractions", () => {
@@ -618,7 +622,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(un.calledOnce).to.be.true;
             expect(un.firstCall.args).to.eql(["addFeature", listener]);
 
-            expect(commit.callCount).to.equal(7);
+            expect(commit.callCount).to.equal(11);
             expect(commit.getCall(0).args).to.eql(["setActive", false]);
             expect(commit.getCall(1).args).to.eql(["setSelectedFeature", null]);
             expect(commit.getCall(2).args).to.eql(["setDrawType", initialState.drawType]);
@@ -626,6 +630,10 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.getCall(4).args).to.eql(["setPointSize", initialState.pointSize]);
             expect(commit.getCall(5).args).to.eql(["setSymbol", iconSymbol]);
             expect(commit.getCall(6).args).to.eql(["setWithoutGUI", initialState.withoutGUI]);
+            expect(commit.getCall(7).args).to.eql(["setDownloadDataString", initialState.download.dataString]);
+            expect(commit.getCall(8).args).to.eql(["setDownloadFeatures", initialState.download.features]);
+            expect(commit.getCall(9).args).to.eql(["setDownloadFileName", initialState.download.fileName]);
+            expect(commit.getCall(10).args).to.eql(["setDownloadSelectedFormat", initialState.download.selectedFormat]);
 
             expect(dispatch.callCount).to.equal(7);
             expect(dispatch.getCall(0).args).to.eql(["toggleInteraction", "draw"]);
@@ -635,27 +643,6 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(dispatch.getCall(4).args).to.eql(["removeInteraction", modifyInteraction]);
             expect(dispatch.getCall(5).args).to.eql(["removeInteraction", selectInteractionModify]);
             expect(dispatch.getCall(6).args).to.eql(["removeInteraction", selectInteraction]);
-        });
-    });
-    describe("startDownloadTool", () => {
-        const features = Symbol(),
-            getFeatures = sinon.fake.returns(features),
-            trigger = sinon.spy();
-
-        beforeEach(() => {
-            state = {
-                layer: {
-                    getSource: () => ({getFeatures})
-                }
-            };
-            sinon.stub(Radio, "trigger").callsFake(trigger);
-        });
-
-        it("should trigger the download tool to start", () => {
-            actions.startDownloadTool({state});
-
-            expect(trigger.calledOnce).to.be.true;
-            expect(trigger.firstCall.args).to.eql(["Download", "start", {features, formats: ["KML", "GEOJSON", "GPX"]}]);
         });
     });
     describe("toggleInteraction", () => {
@@ -762,7 +749,7 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
         const drawInteraction = Symbol(),
             drawInteractionTwo = Symbol(),
             getters = {
-                getStyleSettings: () => Symbol()
+                styleSettings: Symbol()
             };
 
         beforeEach(() => {

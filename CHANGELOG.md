@@ -14,12 +14,14 @@
 - On tools Taktische Zeichen on tools under Addons
 ### Changed
 - The language of the changelog has been changed to English.
+- Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 ### Deprecated
 
 ### Removed
 
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+
 
 ---
 

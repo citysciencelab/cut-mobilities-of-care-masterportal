@@ -312,13 +312,13 @@ export default {
     }
 
     .win-body-vue {
-        position:relative;
-        padding:20px;
-        height:calc(100% - 58px);
-        width:100%;
+        position: relative;
+        padding: @padding;
+        height: calc(100% - 58px);
+        width: 100%;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
-        overflow:auto;
+        overflow: auto;
     }
 
     .table-tool-win-all-vue {

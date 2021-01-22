@@ -9,10 +9,7 @@ function getDrawTypeByGeometryType (geometryType, drawTypeOptions) {
         return null;
     }
 
-    let i = 0,
-        n = 0;
-
-    for (i = 0; i < drawTypeOptions.length; i++) {
+    for (let i = 0; i < drawTypeOptions.length; i++) {
         if (drawTypeOptions[i] === null || typeof drawTypeOptions[i] !== "object" || !drawTypeOptions[i].hasOwnProperty("geometry")) {
             continue;
         }
@@ -20,7 +17,7 @@ function getDrawTypeByGeometryType (geometryType, drawTypeOptions) {
             return drawTypeOptions[i];
         }
         else if (drawTypeOptions[i].hasOwnProperty("altGeometry") && Array.isArray(drawTypeOptions[i].altGeometry)) {
-            for (n = 0; n < drawTypeOptions[i].altGeometry.length; n++) {
+            for (let n = 0; n < drawTypeOptions[i].altGeometry.length; n++) {
                 if (drawTypeOptions[i].altGeometry[n] === geometryType) {
                     return drawTypeOptions[i];
                 }
@@ -31,6 +28,4 @@ function getDrawTypeByGeometryType (geometryType, drawTypeOptions) {
     return drawTypeOptions[0];
 }
 
-export {
-    getDrawTypeByGeometryType
-};
+export default getDrawTypeByGeometryType;

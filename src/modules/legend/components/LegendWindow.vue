@@ -621,7 +621,7 @@ export default {
                 return legend.id === layerId;
             })[0];
 
-            if (btoa(JSON.stringify(layerLegend)) !== btoa(JSON.stringify(legendObj))) {
+            if (encodeURIComponent(JSON.stringify(layerLegend)) !== encodeURIComponent(JSON.stringify(legendObj))) {
                 isLegendChanged = true;
             }
 
