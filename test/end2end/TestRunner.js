@@ -53,7 +53,6 @@ function setLocalProxy (currentBrowser, builder) {
                 .addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`)
                 .addArguments("--ignore-certificate-errors")
                 .addArguments("--ignore-ssl-errors")
-                .addArguments("--no-sandbox")
         );
     }
     else {
