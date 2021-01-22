@@ -52,16 +52,14 @@ const getters = {
      * @param {object} _ measure store getters
      * @param {object} __ root state
      * @param {object} rootGetters root getters
-     * @return {MeasureCalculation[]} calculated value for display
+     * @return {String[]} calculated display values
      */
     linesLength ({lines, earthRadius, lineStringUnits, selectedUnit}, _, __, rootGetters) {
         return calculateLinesLength(
-            rootGetters["Map/scale"] / 1000,
             rootGetters["Map/projection"].getCode(),
-            lineStringUnits[selectedUnit],
             lines,
             earthRadius,
-            rootGetters.isTableStyle,
+            lineStringUnits[selectedUnit],
             selectedUnit
         );
     },
@@ -71,16 +69,14 @@ const getters = {
      * @param {object} _ measure store getters
      * @param {object} __ root state
      * @param {object} rootGetters root getters
-     * @return {MeasureCalculation[]} calculated values for display, or false if none is available
+     * @return {String[]} calculated display values
      */
     polygonsArea ({polygons, earthRadius, polygonUnits, selectedUnit}, _, __, rootGetters) {
         return calculatePolygonsArea(
-            rootGetters["Map/scale"] / 1000,
             rootGetters["Map/projection"].getCode(),
-            polygonUnits[selectedUnit],
             polygons,
             earthRadius,
-            rootGetters.isTableStyle,
+            polygonUnits[selectedUnit],
             selectedUnit
         );
     }

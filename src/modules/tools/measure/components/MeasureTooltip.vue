@@ -30,13 +30,6 @@ export default {
             const feature = this.lines[this.featureId] || this.polygons[this.featureId];
 
             return Boolean(feature && feature.get("isBeingDrawn"));
-        },
-        /**
-         * Decides whether the tooltip renders the second line.
-         * @returns {boolean} whether second line is to be shown
-         */
-        showDevianceLine () {
-            return !this.isTableStyle || this.isBeingDrawn;
         }
     }
 };
@@ -44,9 +37,9 @@ export default {
 
 <template lang="html">
     <section class="ol-tooltip ol-tooltip-measure measure-tooltip">
-        <div>{{ featureMeasurement.measure }}</div>
-        <div v-if="showDevianceLine">
-            {{ $t(featureMeasurement.deviance) }}
+        <div>{{ featureMeasurement }}</div>
+        <div v-if="isBeingDrawn">
+            {{ $t("modules.tools.measure.finishWithDoubleClick") }}
         </div>
     </section>
 </template>
