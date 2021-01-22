@@ -6,24 +6,24 @@ import * as setters from "../../store/actions/settersDraw";
  * returns the Feature to use as mouse label on change of circle or double circle
  * @param {Object} context context object for actions, getters and setters.
  *
- * @returns {ol/Feature} the Feature to use as mouse label
+ * @returns {module:ol/Overlay} the Feature to use as mouse label
  */
-function createToolTipOverlay ({getters, commit, dispatch}) {
-    let toolTip = null;
+function createTooltipOverlay ({getters, commit, dispatch}) {
+    let tooltip = null;
     const decimalsForKilometers = 3,
         autoUnit = false,
-        styleSettings = getters.getStyleSettings(),
+        {styleSettings} = getters,
         element = document.createElement("div"),
         factory = {
             mapPointerMoveEvent: evt => {
-                toolTip.setPosition(evt.coordinate);
+                tooltip.setPosition(evt.coordinate);
             },
             featureChangeEvent: evt => {
                 if (autoUnit && evt.target.getRadius() > 500 || !autoUnit && styleSettings.unit === "km") {
-                    toolTip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius()).toFixed(decimalsForKilometers)) + " km";
+                    tooltip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius()).toFixed(decimalsForKilometers)) + " km";
                 }
                 else {
-                    toolTip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius())) + " m";
+                    tooltip.getElement().innerHTML = thousandsSeparator(Math.round(evt.target.getRadius())) + " m";
                 }
 
                 setters.setCircleRadius({getters, commit, dispatch}, Math.round(evt.target.getRadius()));
@@ -38,16 +38,16 @@ function createToolTipOverlay ({getters, commit, dispatch}) {
         });
     }
 
-    toolTip = new Overlay({
+    tooltip = new Overlay({
         element,
         offset: [0, -15],
         positioning: "bottom-center"
     });
 
-    toolTip.set("mapPointerMoveEvent", factory.mapPointerMoveEvent);
-    toolTip.set("featureChangeEvent", factory.featureChangeEvent);
+    tooltip.set("mapPointerMoveEvent", factory.mapPointerMoveEvent);
+    tooltip.set("featureChangeEvent", factory.featureChangeEvent);
 
-    return toolTip;
+    return tooltip;
 }
 
-export default createToolTipOverlay;
+export default createTooltipOverlay;

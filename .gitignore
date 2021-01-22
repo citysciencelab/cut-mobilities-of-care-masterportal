@@ -5,6 +5,7 @@
 *.sass-cache
 .DS_Store
 .env
+.idea
 .vscode
 /img/*.db
 /jsdoc

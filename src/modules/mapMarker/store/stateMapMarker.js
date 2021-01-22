@@ -9,7 +9,6 @@ import {Style} from "ol/style.js";
  * @property {String} polygonStyleId The id references the style.json for a polygon map marker.
  * @property {Object} markerPoint The vector layer for the point map marker.
  * @property {Object} markerPolygon The vector layer for the polygon map marker.
- * @property {String} urlParameter Takes coordinates from the ParametricURL with the parameter marker
  */
 export default {
     pointStyleId: "defaultMapMarkerPoint",
@@ -25,6 +24,5 @@ export default {
         source: new VectorSource(),
         visible: false,
         style: new Style()
-    }),
-    urlParameter: null
+    })
 };

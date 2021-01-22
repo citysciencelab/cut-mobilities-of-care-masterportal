@@ -15,13 +15,14 @@
 ### Changed
 - The language of the changelog has been changed to English.
 - The measure tool has been migrated to Vue.
-
+- Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 ### Deprecated
 
 ### Removed
 
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+
 
 ---
 

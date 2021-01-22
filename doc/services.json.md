@@ -22,6 +22,7 @@ All layer information the portal needs to use the services is stored here. Confi
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |gutter|no|String|`"0"`|Additionally loaded tile contents in border pixel width. Serves to avoid cut symbols on tile borders.|`"0"`|
 |id|yes|String||Arbitrary id|`"8"`|
+|infoFormat|no|String|"text/xml"|**[services.json](services.json.md)** value. WMS *GetFeatureInfo* response format. The formats: `"text/xml"`, `"text/html"` and `"application/vnd.ogc.gml"` are supported. When using `"text/html"`, the service response is checked and will only be used when it contains a fully valid and filled HTML table.|`"text/xml"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |layers|yes|String||The service's layer name. Must match a name of the service's capabilities in *Layer/Layer/Name*.|`"1"`|
 |legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
@@ -56,6 +57,7 @@ All layer information the portal needs to use the services is stored here. Confi
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "1000000",
+      "infoFormat": "text/html",
       "gfiAttributes" : "ignore",
       "gfiTheme" : "default",
       "layerAttribution" : "nicht vorhanden",
@@ -316,7 +318,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
     {
       "id": "STYLE_2",
       "name": "Nachtansicht",
-      "url": "https://example.com/3857/resources/styles/night.json",
+      "url": "https://example.com/3857/resources/styles/night.json"
     }
   ]
 }
@@ -458,9 +460,11 @@ This attribute may be either a string or an object. In case it's a string, the m
 **gfiTheme example:**
 
 ```json
-"gfiTheme": {
-   "name": "default",
-   "params": {}
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {}
+    }
 }
 ```
 
@@ -490,12 +494,18 @@ Definition of parameters for GFI template `"default"`.
 **gfiTheme example for template "Default":**
 
 ```json
-"gfiTheme": {
-   "name": "default",
-   "params": {
-        "imageLinks": ["imageLink", "linkImage", "abc"],
-        "showFavoriteIcons": true
-   }
+{
+    "gfiTheme": {
+        "name": "default",
+        "params": {
+            "imageLinks": [
+                "imageLink",
+                "linkImage",
+                "abc"
+            ],
+            "showFavoriteIcons": true
+        }
+    }
 }
 ```
 
@@ -515,40 +525,42 @@ This theme allows the visualization of historical data regarding a SensorThings-
 **gfiTheme example for template "Sensor":**
 
 ```json
-"gfiTheme": {
-   "name": "sensor",
-   "params": {
-        "header": {
-            "name": "Name",
-            "description": "Description",
-            "ownerThing": "Owner"
-        },
-        "data": {
-            "name": "Data",
-            "firstColumnHeaderName": "Properties",
-            "columnHeaderAttribute": "layerName"
-        },
-        "charts": {
-            "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-            "barPercentage": 1.1,
-            "values": {
-                "available": {
-                    "title": "Available",
-                    "color": "rgba(0, 220, 0, 1)"
-                },
-                "charging": {
-                    "title": "Charging",
-                    "color": "rgba(220, 0, 0, 1)"
-                },
-                "outoforder": {
-                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                    "color": "rgba(175, 175, 175, 1)"
+{
+    "gfiTheme": {
+        "name": "sensor",
+        "params": {
+            "header": {
+                "name": "Name",
+                "description": "Description",
+                "ownerThing": "Owner"
+            },
+            "data": {
+                "name": "Data",
+                "firstColumnHeaderName": "Properties",
+                "columnHeaderAttribute": "layerName"
+            },
+            "charts": {
+                "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+                "barPercentage": 1.1,
+                "values": {
+                    "available": {
+                        "title": "Available",
+                        "color": "rgba(0, 220, 0, 1)"
+                    },
+                    "charging": {
+                        "title": "Charging",
+                        "color": "rgba(220, 0, 0, 1)"
+                    },
+                    "outoforder": {
+                        "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                        "color": "rgba(175, 175, 175, 1)"
+                    }
                 }
+            },
+            "historicalData": {
+                "periodLength": 3,
+                "periodUnit": "month"
             }
-        },
-        "historicalData": {
-            "periodLength": 3,
-            "periodUnit": "month"
         }
     }
 }
@@ -568,30 +580,38 @@ Chart display parameters.
 
 **Configuration example with array value:**
 ```json
-"charts": {
-    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-    "barPercentage": 1.1,
-    "values": ["available", "charging", "outoforder"]
+{
+    "charts": {
+        "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+        "barPercentage": 1.1,
+        "values": [
+            "available",
+            "charging",
+            "outoforder"
+        ]
+    }
 }
 ```
 
 **Configuration example with object value:**
 ```json
-"charts": {
-    "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
-    "barPercentage": 1.1,
-    "values": {
-        "available": {
-            "title": "Available",
-            "color": "rgba(0, 220, 0, 1)"
-        },
-        "charging": {
-            "title": "Charging",
-            "color": "rgba(220, 0, 0, 1)"
-        },
-        "outoforder": {
-            "title": "Out Of Order",
-            "color": "rgba(175, 175, 175, 1)"
+{
+    "charts": {
+        "hoverBackgroundColor": "rgba(0, 0, 0, 0.8)",
+        "barPercentage": 1.1,
+        "values": {
+            "available": {
+                "title": "Available",
+                "color": "rgba(0, 220, 0, 1)"
+            },
+            "charging": {
+                "title": "Charging",
+                "color": "rgba(220, 0, 0, 1)"
+            },
+            "outoforder": {
+                "title": "Out Of Order",
+                "color": "rgba(175, 175, 175, 1)"
+            }
         }
     }
 }
@@ -609,17 +629,21 @@ Layout definition for each result's chart.
 |color|no|String|`"rgba(0, 0, 0, 1)"`|Bar color.|
 
 ```json
-"available": {
-    "title": "Available",
-    "color": "rgba(0, 220, 0, 1)"
+{
+    "available": {
+        "title": "Available",
+        "color": "rgba(0, 220, 0, 1)"
+    }
 }
 ```
 
 ```json
-"charging": {
-    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-    "color": "rgba(220, 0, 0, 1)"
-},
+{
+    "charging": {
+        "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+        "color": "rgba(220, 0, 0, 1)"
+    }
+}
 ```
 
 ***
@@ -635,10 +659,12 @@ Data display configuration.
 |columnHeaderAttribute|no|String|`"dataStreamName"`|Value column title.|
 
 ```json
-"data": {
-    "name": "Data",
-    "firstColumnHeaderName": "Properties",
-    "columnHeaderAttribute": "layerName"
+{
+    "data": {
+        "name": "Data",
+        "firstColumnHeaderName": "Properties",
+        "columnHeaderAttribute": "layerName"
+    }
 }
 ```
 
@@ -655,9 +681,11 @@ Configuration of historical data period to be request.
 |periodUnit|no|String|`"month"`|Unit for period. Use `"month"` or `"year"`.|
 
 ```json
-"historicalData": {
-    "periodLength" : 3,
-    "periodUnit" : "month"
+{
+    "historicalData": {
+        "periodLength": 3,
+        "periodUnit": "month"
+    }
 }
 ```
 

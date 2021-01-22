@@ -20,6 +20,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"8"`|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.de.md)**. Format in dem die WMS-GetFeatureInfo ausgegeben werden soll. Die Formate: `"text/xml"`, `"text/html"` und `"application/vnd.ogc.gml"` werden unterstützt. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt.|`"text/xml"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
 |legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
@@ -54,6 +55,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "1000000",
+      "infoFormat": "text/html",
       "gfiAttributes" : "ignore",
       "gfiTheme" : "default",
       "layerAttribution" : "nicht vorhanden",

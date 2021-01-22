@@ -144,10 +144,7 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings",
-          "roofType":"Roof type",
-          "roofHeight":"Roof height",
-          "objectType":"Object type"
+          "buildings":"Buildings"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
@@ -544,6 +541,15 @@
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
+                "download": {
+                  "createFirst": "Please create a drawing or text first!",
+                  "enterFilename": "Please enter filename",
+                  "filename": "Filename",
+                  "format": "Format",
+                  "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                  "pleaseChoose": "Please choose",
+                  "unknownGeometry": "Unknown geometry: <strong>{{geometry}}</strong>"
+                },
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
                 "undefinedTwoCircles": "Please define both circles.",
@@ -584,7 +590,8 @@
                     "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
-                    "deleteAll": "Delete all"
+                    "deleteAll": "Delete all",
+                    "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
                 "iconList": {
@@ -593,15 +600,6 @@
                     "iconCloud": "Cloud",
                     "iconMeadow": "Meadow"
                 }
-            },
-            "download": {
-                "format": "Format",
-                "pleaseChoose": "Please choose",
-                "filename": "Filename",
-                "enterFilename": "Please enter filename",
-                "createFirst": "Please create a drawing or text first!",
-                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
-                "unknownGeometry": "Unknown geometry:"
             },
             "measure": {
                 "geometry": "Geometry",
