@@ -1,4 +1,10 @@
 const actions = {
+    /**
+     * Retrieves the ids, transparencies and the visibilities of the layers from the layerList
+     * and commits it to the state.
+     *
+     * @returns {void}
+     */
     createUrlParams ({state, commit}) {
         const {layerList} = state,
             layerTransparencies = [],
@@ -13,6 +19,14 @@ const actions = {
         commit("setLayerTransparencies", layerTransparencies);
         commit("setLayerVisibilities", layerVisibilities);
     },
+    /**
+     * Filters external layers (property 'isExternal') and sorts the list.
+     * Commits the sorted list to the state and dispatches the action to retrieve certain values
+     * from the list.
+     *
+     * @param {?ModelList} layerList List of layers.
+     * @returns {void}
+     */
     filterExternalLayer ({commit, dispatch}, layerList) {
         let filteredLayerList = layerList.filter(model => !model.get("isExternal"));
 
@@ -21,6 +35,11 @@ const actions = {
         commit("setLayerList", filteredLayerList);
         dispatch("createUrlParams");
     },
+    /**
+     * Updates the current url based on the current map state and returns the current url.
+     *
+     * @returns {String} The Url that can be copied by the user.
+     */
     getMapState ({dispatch, getters}) {
         dispatch("filterExternalLayer", Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
         return getters.url;

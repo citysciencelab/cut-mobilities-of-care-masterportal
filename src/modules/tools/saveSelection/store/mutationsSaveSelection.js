@@ -8,6 +8,7 @@ const mutations = {
             getIds = [];
         let layerList = [];
 
+        // The layer defined by the featureViaUrl module are excluded, as they are only given if the needed Url parameter is given.
         if (featureViaURL !== undefined) {
             featureViaURL.layers.forEach(el => {
                 getIds.push(el.id);
