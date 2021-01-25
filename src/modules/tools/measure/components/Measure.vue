@@ -152,8 +152,9 @@ export default {
                     <div class="form-group form-group-sm">
                         <div class="col-md-12 col-sm-12">
                             <button
+                                id="measure-delete"
                                 type="button"
-                                class="btn btn-lgv-grey col-md-12 col-sm-12 measure-delete"
+                                class="btn btn-lgv-grey col-md-12 col-sm-12"
                                 @click="deleteFeatures"
                             >
                                 {{ $t('modules.tools.measure.deleteMeasurements') }}

@@ -1,10 +1,10 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {areRegExpsInMeasureLayer, hasVectorLayerLength, getCoordinatesOfXthFeatureInLayer} = require("../../../../../../test/end2end/library/scripts"),
+    {hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
     {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
-    {isMobile, is3D} = require("../../../../../../test/end2end/settings"),
-    {By, until} = webdriver;
+    {isMobile, is3D, isBasic} = require("../../../../../../test/end2end/settings"),
+    {By} = webdriver;
 
 /**
  * Tests regarding measure tool.
@@ -12,13 +12,13 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function MeasureTests ({builder, url, resolution, mode, capability}) {
-    const testIsApplicable = !isMobile(resolution);
+    const testIsApplicable = !isMobile(resolution) && isBasic(url);
 
     if (testIsApplicable) {
         describe("Measure Tool", function () {
             if (!is3D(mode)) {
                 describe("2D measurement", function () {
-                    let driver, dropdownGeometry, dropdownUnit, questionIcon, deleteButton, viewport;
+                    let driver, selectGeometry, selectUnit, deleteButton, viewport, overlays;
 
                     before(async function () {
                         if (capability) {
@@ -41,17 +41,25 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                         await reclickUntilNotStale(driver, By.xpath("//ul[@id='tools']//.."));
                         await (await driver.findElement(By.css("#tools .glyphicon-resize-full"))).click();
 
-                        dropdownGeometry = await driver.findElement(By.css("#window .dropdown_geometry .filter-option"));
-                        dropdownUnit = await driver.findElement(By.css("#window .dropdown_unit .filter-option"));
-                        questionIcon = await driver.findElement(By.css("#window .glyphicon.glyphicon-question-sign"));
-                        deleteButton = await driver.findElement(By.css("div#window button.measure-delete"));
+                        selectGeometry = await driver.findElement(By.id("measure-tool-geometry-select"), 5000);
+                        selectUnit = await driver.findElement(By.id("measure-tool-unit-select"), 5000);
+                        deleteButton = await driver.findElement(By.id("measure-delete"), 5000);
 
-                        await driver.wait(async () => ["Strecke", "Distance"].includes(await dropdownGeometry.getText()));
-                        await driver.wait(async () => await dropdownUnit.getText() === "m");
+                        await driver.wait(
+                            async () => ["Strecke\nFläche", "Distance\nArea"].includes(await selectGeometry.getText()),
+                            5000,
+                            "Geometry select had unexpected content."
+                        );
+                        await driver.wait(
+                            async () => await selectUnit.getText() === "m\nkm",
+                            5000,
+                            "Unit select had unexpected content."
+                        );
                     });
 
-                    it("draws a line showing length in meters and deviation", async function () {
+                    it("draws a line showing length in meters and a tooltip", async function () {
                         viewport = await driver.findElement(By.css(".ol-viewport"));
+
                         await driver.actions({bridge: true})
                             .move({origin: viewport})
                             .click()
@@ -59,28 +67,18 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .click()
                             .perform();
 
-                        expect(await driver.executeScript(areRegExpsInMeasureLayer, [
-                            "\\d+\\.\\d+ m",
-                            "\\(\\+\\/- \\d+\\.\\d+ m\\)"
-                        ])).to.be.true;
+                        overlays = await driver.findElements(By.css(".ol-tooltip-measure.measure-tooltip"));
+                        expect((/\d+ m\n.+/).test(await overlays[0].getText())).to.be.true;
                     });
 
-                    it("ends drawing a line on double-click showing length in meters and deviation", async function () {
+                    it("ends drawing a line on double-click showing length in meters without tooltip", async function () {
                         await driver.actions({bridge: true})
                             .move({origin: viewport, x: -50, y: 50})
                             .doubleClick()
                             .perform();
 
-                        expect(await driver.executeScript(areRegExpsInMeasureLayer, [
-                            "\\d+\\.\\d+ m",
-                            "\\(\\+\\/- \\d+\\.\\d+ m\\)"
-                        ])).to.be.true;
-
-                        expect(await driver.executeScript(getCoordinatesOfXthFeatureInLayer, 1, "measure_layer")).to.have.length(3);
-                    });
-
-                    it.skip("displays start and end points of line measurements bigger than support points", async function () {
-                        // TODO A unit test is probably enough; no way comes to mind to directly test the visuals.
+                        overlays = await driver.findElements(By.css(".ol-tooltip-measure.measure-tooltip"));
+                        expect((/\d+ m/).test(await overlays[overlays.length - 1].getText())).to.be.true;
                     });
 
                     it("allows deleting made measurements by clicking the deletion button", async function () {
@@ -89,23 +87,15 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                         expect(await driver.executeScript(hasVectorLayerLength, "measure_layer", 0)).to.be.true;
                     });
 
-                    it("changing geometry mode also changes available units", async function () {
-                        await dropdownUnit.click();
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='m']"))).to.have.length(1);
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='km']"))).to.have.length(1);
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='m²']"))).to.be.empty;
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='km²']"))).to.be.empty;
-
-                        await dropdownGeometry.click();
-                        await (await driver.findElement(By.css(".dropdown_geometry ul li:last-child"))).click();
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='m']"))).to.be.empty;
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='km']"))).to.be.empty;
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='m²']"))).to.have.length(1);
-                        expect(await driver.findElements(By.xpath("//li//span[contains(@class,'text')][text()='km²']"))).to.have.length(1);
-                    });
-
                     it("draws a polygon, ending in double-click, displaying area in meters² and deviation", async function () {
+                        await (
+                            await driver.findElement(
+                                By.css("#measure-tool-geometry-select option:last-child")
+                            )
+                        ).click();
+
                         viewport = await driver.findElement(By.css(".ol-viewport"));
+
                         await driver.actions({bridge: true})
                             .move({origin: viewport, x: 0, y: 40}).click()
                             .move({origin: viewport, x: -40, y: 0}).click()
@@ -115,20 +105,8 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .move({origin: viewport, x: 40, y: 0}).doubleClick()
                             .perform();
 
-                        expect(await driver.executeScript(areRegExpsInMeasureLayer, [
-                            "\\d+(\\.\\d+)? m²",
-                            "\\(\\+\\/- \\d+(\\.\\d+)? m²\\)"
-                        ])).to.be.true;
-                    });
-
-                    it.skip("displays start and end points of polygon measurements bigger than support points", async function () {
-                        // TODO A unit test is probably enough; no way comes to mind to directly test the visuals.
-                    });
-
-                    it("provides a quickhelp", async function () {
-                        await questionIcon.click();
-                        await driver.wait(until.elementIsVisible(await driver.findElement(By.css(".quick-help-window"))));
-                        expect(await driver.findElements(By.css(".quick-help-window img"))).to.have.length(5);
+                        overlays = await driver.findElements(By.css(".ol-tooltip-measure.measure-tooltip"));
+                        expect((/\d+(\.\d+)? m²/).test(await overlays[overlays.length - 1].getText())).to.be.true;
                     });
                 });
             }
@@ -165,7 +143,9 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .move({origin: viewport, x: 0, y: 10}).click()
                             .perform();
 
-                        await driver.wait(async () => driver.executeScript(areRegExpsInMeasureLayer, [
+                        await driver.wait(async () => driver.executeScript(() => {
+                            /* was areRegExpsInMeasureLayer, should now check for olcs overlay*/
+                        }, [
                             "Länge: \\d+(\\.\\d+)?m",
                             "Höhe: \\d+(\\.\\d+)?m"
                         ]));
