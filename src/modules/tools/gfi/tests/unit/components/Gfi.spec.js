@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import {shallowMount, mount, createLocalVue} from "@vue/test-utils";
+import {config, shallowMount, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 import GfiComponent from "../../../components/Gfi.vue";
@@ -12,10 +12,12 @@ const localVue = createLocalVue(),
     },
     mockGetters = {
         desktopType: () => "",
-        centerMapToClickPoint: () => sinon.stub()
+        centerMapToClickPoint: () => sinon.stub(),
+        active: () => true
     };
 
 localVue.use(Vuex);
+config.mocks.$t = key => key;
 
 /**
  * Returns the store.
@@ -51,15 +53,15 @@ function getGfiStore () {
                         getlayerId: () => null,
                         getFeatures: () => sinon.stub()
                     }, {}],
-                    mapSize: sinon.stub(),
+                    size: sinon.stub(),
                     visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
                 }
             }
         },
         getters: {
-            isMobile: () => sinon.stub(),
+            mobile: () => sinon.stub(),
             gfiWindow: () => "",
-            isTable: () => sinon.stub(),
+            isTableStyle: () => sinon.stub(),
             ignoredKeys: () => sinon.stub()
         }
     });
@@ -69,19 +71,7 @@ function getGfiStore () {
 describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
     it("should find the child component Mobile", () => {
-        const wrapper = shallowMount(GfiComponent, {
-            computed: {
-                isMobile: () => true,
-                active: () => true,
-                gfiFeatures: () => [{
-                    getGfiUrl: () => null,
-                    getFeatures: () => sinon.stub()
-                }],
-                mapSize: () => []
-            },
-            store: getGfiStore,
-            localVue
-        });
+        const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue});
 
         expect(wrapper.findComponent({name: "Mobile"}).exists()).to.be.true;
     });
@@ -655,6 +645,20 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 key = "foobar";
 
             expect(wrapper.vm.prepareGfiValue(gfi, key)).to.be.undefined;
+        });
+        it("should return a value to a key regardless of upper and lower case", function () {
+            const wrapper = shallowMount(GfiComponent, {store: getGfiStore, localVue}),
+                gfi = {
+                    Test1: "Test1 Value",
+                    TEST2: "Test2 Value"
+                },
+                key1 = "Test1",
+                key2 = "Test2",
+                key3 = "TEST1";
+
+            expect(wrapper.vm.prepareGfiValue(gfi, key1)).equals(gfi.Test1);
+            expect(wrapper.vm.prepareGfiValue(gfi, key2)).equals(gfi.TEST2);
+            expect(wrapper.vm.prepareGfiValue(gfi, key3)).equals(gfi.Test1);
         });
     });
     describe("getValueFromPath", function () {
