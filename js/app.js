@@ -37,7 +37,6 @@ import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
-import SaveSelectionView from "../modules/tools/saveSelection/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
@@ -245,10 +244,6 @@ async function loadApp () {
             }
             case "searchByCoord": {
                 new SearchByCoordView({model: tool});
-                break;
-            }
-            case "saveSelection": {
-                new SaveSelectionView({model: tool});
                 break;
             }
             /**
