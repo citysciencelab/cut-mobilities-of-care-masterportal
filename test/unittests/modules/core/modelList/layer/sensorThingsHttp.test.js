@@ -27,9 +27,9 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 {x: "baz", y: "qux"}
             ];
 
-            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Locations/location,geography'POLYGON ((foo bar,baz qux))')");
-            expect(http.getPolygonQueryWithPoints([{}, {}])).to.equal("st_within(Locations/location,geography'POLYGON (())')");
-            expect(http.getPolygonQueryWithPoints([])).to.equal("st_within(Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar,baz qux))')");
+            expect(http.getPolygonQueryWithPoints([{}, {}])).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
+            expect(http.getPolygonQueryWithPoints([])).to.equal("st_within(Thing/Locations/location,geography'POLYGON (())')");
         });
         it("should return false if some damaged points are given", () => {
             const points = [
@@ -37,7 +37,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 {x: "baz", foobar: "qux"}
             ];
 
-            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Locations/location,geography'POLYGON ((foo bar))')");
+            expect(http.getPolygonQueryWithPoints(points)).to.equal("st_within(Thing/Locations/location,geography'POLYGON ((foo bar))')");
             expect(http.getPolygonQueryWithPoints(undefined)).to.be.false;
             expect(http.getPolygonQueryWithPoints(null)).to.be.false;
             expect(http.getPolygonQueryWithPoints(1)).to.be.false;
@@ -103,10 +103,10 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                 {x: 9.872388814958066, y: 53.623426671455626},
                 {x: 9.869432803790303, y: 53.47946522163486}
             ],
-            expectedOutcome = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Locations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
+            expectedOutcome = "https://iot.hamburg.de/v1.1/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
 
         it("should return the expected url with a well formed input", () => {
-            expect(http.addPointsToUrl("https://iot.hamburg.de/v1.0/Things", polygon)).to.equal(expectedOutcome);
+            expect(http.addPointsToUrl("https://iot.hamburg.de/v1.1/Things", polygon)).to.equal(expectedOutcome);
         });
 
         it("should return false and call an error if a funny url is given", () => {
@@ -960,7 +960,7 @@ describe("core/modelList/layer/SensorThingsHttp", () => {
                     targetProjection: "EPSG:4326"
                 },
                 url = "https://iot.hamburg.de/v1.0/Things",
-                lastUrlExpected = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Locations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
+                lastUrlExpected = "https://iot.hamburg.de/v1.0/Things?%24filter=st_within(Thing%2FLocations%2Flocation%2Cgeography'POLYGON%20((9.869432803790303%2053.47946522163486%2C10.102382514144907%2053.47754336682167%2C10.10613018673993%2053.62149474831524%2C9.872388814958066%2053.623426671455626%2C9.869432803790303%2053.47946522163486))')";
             let lastUrl = null;
 
             http.getInExtent(url, extentObj, "onsuccess", "onstart", "oncomplete", "onerror", "onprogress", urlShadow => {
