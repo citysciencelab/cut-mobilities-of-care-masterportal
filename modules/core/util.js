@@ -1,6 +1,6 @@
 import uniqueId from "../../src/utils/uniqueId.js";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
-import store from "../../src/app-store/index";
+import copyToClipboard from "../../src/utils/copyToClipboard";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -102,7 +102,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "hideLoadingModule": this.hideLoadingModule,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle,
-            "copyToClipboard": this.copyToClipboard
+            "copyToClipboard": copyToClipboard
         }, this);
 
         // initial isMobileView setzen
@@ -449,52 +449,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     sortObjectsAsAddress: function (input) {
         return input.sort(this.sortAddress.bind(this));
-    },
-
-    /**
-     * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
-     * behaviour of ios strange used solution from :
-     * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
-     * @param  {el} el element to copy
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {void}
-     */
-    copyToClipboard: function (el) {
-        const oldReadOnly = el.readOnly,
-            oldContentEditable = el.contentEditable,
-            range = document.createRange(),
-            selection = window.getSelection();
-
-        el.readOnly = false;
-        el.contentEditable = true;
-
-        range.selectNodeContents(el);
-        selection.removeAllRanges();
-        if (!this.isInternetExplorer()) {
-            selection.addRange(range);
-        }
-        el.setSelectionRange(0, 999999); // A big number, to cover anything that could be inside the element.
-
-        el.readOnly = oldReadOnly;
-        el.contentEditable = oldContentEditable;
-
-        try {
-            document.execCommand("copy");
-            store.dispatch("Alerting/addSingleAlert", {
-                content: i18next.t("common:modules.tools.saveSelection.contentSaved"),
-                kategorie: "alert-info",
-                position: "top-center",
-                fadeOut: 5000
-            }, {root: true});
-        }
-        catch (e) {
-            store.dispatch("Alerting/addSingleAlert", {
-                content: i18next.t("common:modules.tools.saveSelection.contentNotSaved"),
-                kategorie: "alert-info",
-                position: "top-center"
-            }, {root: true});
-        }
     },
 
     /**

@@ -392,9 +392,7 @@
                 }
             },
             "saveSelection": {
-                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
-                "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden.",
-                "infoText": "Speichern Sie diese URL als Lesezeichen ab"
+                "infoText": "Speichern Sie diese URL als Lesezeichen ab,"
             },
             "fileImport": {
                 "captions": {
@@ -444,7 +442,6 @@
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
-                "copyToClipboard": "Inhalt wurde in die Zwischenablage kopiert.",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"
@@ -749,6 +746,12 @@
           "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
           "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
           "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
+                "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
+            }
         }
     },
     "snippets": {

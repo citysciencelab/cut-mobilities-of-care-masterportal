@@ -3,6 +3,7 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import constants from "../store/constantsSaveSelection";
+import copyToClipboard from "../../../../utils/copyToClipboard";
 
 export default {
     name: "SaveSelection",
@@ -46,9 +47,7 @@ export default {
                 model.set("isActive", false);
             }
         },
-        copyToClipboard (url) {
-            Radio.trigger("Util", "copyToClipboard", url);
-        }
+        copyToClipboard
     }
 };
 </script>
@@ -57,7 +56,7 @@ export default {
     <Tool
         :title="$t(name)"
         :icon="glyphicon"
-        :active="active && !withoutGUI"
+        :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
