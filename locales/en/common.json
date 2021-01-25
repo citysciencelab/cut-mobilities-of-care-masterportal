@@ -391,9 +391,9 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Save this URL as a bookmark",
                 "contentSaved": "Content was copied to the clipboard.",
-                "contenNotSaved": "Content could not be copied to the clipboard."
+                "contentNotSaved": "Content could not be copied to the clipboard.",
+                "infoText": "Save this URL as a bookmark"
             },
             "fileImport": {
                 "captions": {

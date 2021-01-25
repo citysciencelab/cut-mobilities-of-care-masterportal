@@ -1,5 +1,6 @@
 import uniqueId from "../../src/utils/uniqueId.js";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
+import store from "../../src/app-store/index";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -480,19 +481,19 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
         try {
             document.execCommand("copy");
-            Radio.trigger("Alert", "alert", {
-                text: i18next.t("common:modules.tools.saveSelection.contentSaved"),
+            store.dispatch("Alerting/addSingleAlert", {
+                content: i18next.t("common:modules.tools.saveSelection.contentSaved"),
                 kategorie: "alert-info",
                 position: "top-center",
                 fadeOut: 5000
-            });
+            }, {root: true});
         }
         catch (e) {
-            Radio.trigger("Alert", "alert", {
-                text: i18next.t("common:modules.tools.saveSelection.contenNotSaved"),
+            store.dispatch("Alerting/addSingleAlert", {
+                content: i18next.t("common:modules.tools.saveSelection.contentNotSaved"),
                 kategorie: "alert-info",
                 position: "top-center"
-            });
+            }, {root: true});
         }
     },
 
