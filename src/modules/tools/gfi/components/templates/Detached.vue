@@ -3,12 +3,14 @@ import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
 import getTheme from "../../utils/getTheme";
 import {mapGetters, mapMutations, mapActions} from "vuex";
-import "jquery-ui/ui/widgets/draggable";
-import "jquery-ui/ui/widgets/resizable";
+import BasicDragHandle from "../../../../../share-components/BasicDragHandle.vue";
+import BasicResizeHandle from "../../../../../share-components/BasicResizeHandle.vue";
 
 export default {
     name: "Detached",
     components: {
+        BasicDragHandle,
+        BasicResizeHandle,
         Default,
         Sensor
     },
@@ -45,25 +47,6 @@ export default {
         },
 
         /**
-         * Returns the custom style for the gfi window.
-         * it will always show the window on the top right.
-         * @returns {Object} the style in the object
-         */
-        styleAll: function () {
-            const rightBarWidth = document.getElementsByClassName("right-bar")[0].offsetWidth;
-
-            if (document.getElementsByClassName("sidebar")[0]) {
-                return {
-                    "right": rightBarWidth + 10 + document.getElementsByClassName("sidebar")[0].offsetWidth + "px"
-                };
-            }
-
-            return {
-                "right": rightBarWidth + 10 + "px"
-            };
-        },
-
-        /**
          * Returns the custom style for the gfi content.
          * it will make the content croll.
          * @returns {Object} the style in the object
@@ -95,19 +78,6 @@ export default {
         });
     },
     mounted: function () {
-        this.$nextTick(function () {
-            $(".gfi-detached").draggable({
-                containment: "#map",
-                handle: ".gfi-header",
-                drag: function (evt, ui) {
-                    ui.helper[0].style.right = "inherit";
-                },
-                stop: function (evt, ui) {
-                    ui.helper[0].style.left = (ui.position.left + 1) + "px";
-                }
-            });
-        });
-
         this.highlightVectorFeature();
         this.setMarker();
     },
@@ -186,25 +156,29 @@ export default {
 <template>
     <div
         class="gfi-detached"
-        :style="styleAll"
     >
-        <!-- header -->
-        <div class="gfi-header">
-            <button
-                type="button"
-                class="close"
-                aria-label="Close"
-                @click="close"
+        <BasicDragHandle
+            targetEl=".gfi-detached"
+            :margin="20"
             >
-                <span
-                    class="glyphicon glyphicon-remove"
+            <!-- header -->
+            <div class="gfi-header">
+                <button
+                    type="button"
+                    class="close"
+                    aria-label="Close"
+                    @click="close"
                 >
-                </span>
-            </button>
-            <h5>
-                {{ $t(title) }}
-            </h5>
-        </div>
+                    <span
+                        class="glyphicon glyphicon-remove"
+                    >
+                    </span>
+                </button>
+                <h5>
+                    {{ $t(title) }}
+                </h5>
+            </div>
+         </BasicDragHandle>
         <!-- theme -->
         <div
             class="gfi-content"
@@ -219,6 +193,15 @@ export default {
         <div class="gfi-footer">
             <slot name="footer" />
         </div>
+        <BasicResizeHandle
+            v-for="hPos in ['tl', 'tr', 'br', 'bl']"
+            :id="'basic-resize-handle-' + hPos"
+            :key="hPos"
+            :hPos="hPos"
+            targetEl=".gfi-detached"
+            :minW="250"
+            :minH="100"
+        />
     </div>
 </template>
 
@@ -227,9 +210,20 @@ export default {
         position: absolute;
         min-width: 250px;
         top: 50px;
+        //todo felix: warum funktioniert right nicht? oder: welchen Wert für left nutzen?
+        left: calc(100vw - 45%);
         margin: 10px 10px 30px 10px;
         background-color: #ffffff;
         box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
+         .basic-resize-handle {
+            position:absolute;
+            width:6px;
+            height:6px;
+        }
+        #basic-resize-handle-tl { top:0px; left:0px; }
+        #basic-resize-handle-tr { top:0px; right:0px;}
+        #basic-resize-handle-br { bottom:0px; right:0px;}
+        #basic-resize-handle-bl { bottom:0px; left:0px;}
     }
     .gfi-header {
         font-size: 13px;
@@ -238,9 +232,6 @@ export default {
         color: #646262;
         padding: 0px 15px;
         border-bottom: 1px solid #e5e5e5;
-        &.ui-draggable-handle {
-            cursor: move;
-        }
         button {
             font-size: 16px;
             opacity: 0.6;
