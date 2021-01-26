@@ -9,6 +9,7 @@
  * @property {Boolean} resizableWindow If true, window is resizable. (config-param)
  * @property {Boolean} isVisibleInMenu If true, tool is selectable in menu. (config-param)
  * @property {Boolean} deactivateGFI Flag if tool should deactivate GFI. (config-param)
+ * @property {Boolean} simpleMap Adds a SimpleMap URL to the component. When calling this URL, the menu bar, layer tree, and map control are deactivated.
  * @property {String[]} layerIds Array of unique layer ids.
  * @property {?ModelList} layerList List of layers.
  * @property {Number[]} layerTransparencies Array of transparencies of the layers.
@@ -24,6 +25,7 @@ const state = {
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: true,
+    simpleMap: false,
     // saveSelection state
     layerIds: [],
     layerList: [],

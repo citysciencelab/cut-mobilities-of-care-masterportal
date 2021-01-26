@@ -13,9 +13,6 @@ const getters = {
     centerCoordinates (_, __, ___, rootGetters) {
         return rootGetters["Map/center"];
     },
-    simpleMap () {
-        return Config.hasOwnProperty("simpleMap") ? Config.simpleMap : false;
-    },
     /**
      * @param {Object} state saveSelection store state.
      * @param {Object} getters saveSelection store getters.

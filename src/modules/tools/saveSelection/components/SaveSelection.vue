@@ -32,6 +32,12 @@ export default {
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": this.filterExternalLayer
         });
+
+        if (Config.hasOwnProperty("simpleMap")) {
+            console.warn("The Parameter 'simpleMap' in the config.js is deprecated in the next mayor release. Please use the parameter 'simpleMap' as part of the configuration of the 'saveSelection' tool in the config.json.");
+            this.setSimpleMap(Config.simpleMap);
+        }
+
         this.$on("close", this.close);
     },
     methods: {
