@@ -2,11 +2,13 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import Alerting from "../modules/alerting/store/indexAlerting";
-import Contact from "../modules/tools/contact/store/indexContact";
-import SupplyCoord from "../modules/tools/supplyCoord/store/indexSupplyCoord";
-import ScaleLine from "../modules/scaleLine/store/indexScaleLine";
+import ConfirmAction from "../modules/confirmAction/store/indexConfirmAction";
+import Footer from "../modules/footer/store/indexFooter";
+import Language from "../modules/language/store/indexLanguage";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";
+import MapMarker from "../modules/mapMarker/store/indexMapMarker";
+import Legend from "../modules/legend/store/indexLegend";
 
 import getters from "./getters";
 import mutations from "./mutations";
@@ -14,6 +16,7 @@ import state from "./state";
 import actions from "./actions";
 
 import controlsModule from "../modules/controls/indexControls";
+import toolsModule from "../modules/tools/indexTools";
 
 import isMobile from "../utils/isMobile";
 
@@ -21,21 +24,20 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     modules: {
-        Map,
+        ConfirmAction,
         Alerting,
-        Tools: {
-            namespaced: true,
-            modules: {
-                // enter here the stores of further tools
-                Contact,
-                SupplyCoord
-            }
-        },
+        Footer,
+        Language,
+        Legend,
+        Map,
+        MapMarker,
+        Title,
         controls: {
             ...controlsModule
         },
-        ScaleLine,
-        Title: Title
+        Tools: {
+            ...toolsModule
+        }
     },
     state,
     mutations,
@@ -45,8 +47,26 @@ const store = new Vuex.Store({
 
 export default store;
 
+/**
+ * Debounce function
+ * @param {Function} callback - The callback form debounce function.
+ * @param {Number} wait - Wait before the callback function is called.
+ * @returns {void}
+ */
+function debounce (callback, wait) {
+    let timeout;
+
+    return (...args) => {
+        const that = this;
+
+        clearTimeout(timeout);
+        timeout = setTimeout(() => callback.apply(that, args), wait);
+    };
+}
+
+
 // resize update
-window.addEventListener("resize", _.debounce(function () {
+window.addEventListener("resize", debounce(() => {
     const nextIsMobile = isMobile();
 
     if (nextIsMobile !== store.state.mobile) {

@@ -1,0 +1,153 @@
+<script>
+export default {
+    name: "LegendSingleLayer",
+    components: {},
+    props: {
+        id: {
+            type: String && undefined,
+            required: false,
+            default: ""
+        },
+        legendObj: {
+            type: Object && undefined,
+            required: true
+        },
+        renderToId: {
+            type: String,
+            required: true
+        }
+    },
+    watch: {
+        legendObj () {
+            this.$nextTick(() => {
+                if (this.renderToId !== "" && document.getElementById(this.renderToId) !== null) {
+                    this.$el.style.display = "block";
+                    document.getElementById(this.renderToId).appendChild(new DOMParser().parseFromString(this.$el.outerHTML, "text/html").firstChild);
+                    this.$el.style.display = "none";
+                }
+            });
+        }
+    }
+};
+</script>
+
+<template>
+    <div
+        :id="id"
+        class="layer-legend collapse in"
+    >
+        <template
+            v-if="legendObj !== undefined"
+        >
+            <div
+                v-for="legendPart in legendObj.legend"
+                :key="JSON.stringify(legendPart)"
+                class="layer-legend-container"
+            >
+                <!-- String -->
+                <template
+                    v-if="typeof legendPart === 'string'"
+                >
+                    <!--Legend as Image-->
+                    <img
+                        v-if="!legendPart.endsWith('.pdf') && !legendPart.endsWith('</svg>')"
+                        :src="legendPart"
+                    >
+                    <!--Legend as SVG-->
+                    <div
+                        v-if="legendPart.endsWith('</svg>')"
+                    >
+                        {{ legendPart }}
+                    </div>
+                    <!--Legend PDF as Link-->
+                    <a
+                        v-if="legendPart.endsWith('.pdf')"
+                        :href="legendPart"
+                        target="_blank"
+                        :title="legendPart"
+                    >
+                        {{ $t("common:modules.legend.linkToPdf") }}
+                    </a>
+                </template>
+
+                <!-- Object -->
+                <template
+                    v-if="typeof legendPart === 'object'"
+                >
+                    <div v-if="Array.isArray(legendPart.graphic)">
+                        <!--Legend as Image or SVG -->
+                        <img
+                            :src="legendPart.graphic[1]"
+                            :style="{
+                                width: legendPart.iconSize[0] + 'px',
+                                height: legendPart.iconSize[1] + 'px',
+                                margin: legendPart.iconSizeDifferenz + 'px'
+                            }"
+                            class="first-image"
+                        >
+                        <img
+                            :src="Array.isArray(legendPart.graphic) ? legendPart.graphic[0] : legendPart.graphic"
+                        >
+                        <span>
+                            {{ legendPart.name }}
+                        </span>
+                    </div>
+                    <div v-else>
+                        <!--Legend as Image or SVG -->
+                        <img
+                            v-if="!legendPart.graphic.endsWith('.pdf')"
+                            :src="legendPart.graphic"
+                            class="left"
+                        >
+                        <!--Legend PDF as Link-->
+                        <a
+                            v-if="legendPart.graphic.endsWith('.pdf')"
+                            :href="legendPart.graphic"
+                            target="_blank"
+                            :title="legendPart.graphic"
+                        >
+                            {{ $t("common:modules.legend.linkToPdf") }}
+                        </a>
+                        <span>
+                            {{ legendPart.name }}
+                        </span>
+                    </div>
+                </template>
+            </div>
+        </template>
+        <template
+            v-else
+        >
+            <span>
+                {{ $t("common:menu.legend.noLegendForLayerInfo") }}
+            </span>
+        </template>
+    </div>
+</template>
+
+<style lang="less" scoped>
+    @import "~variables";
+
+    .layer-legend {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        img {
+            max-width: 100%;
+            &.left {
+                max-width: 50px;
+                padding: 5px 0;
+            }
+        }
+    }
+    .layer-legend-container {
+        position: relative;
+    }
+    .layer-legend.collapsing {
+        -webkit-transition: none;
+        transition: none;
+        display: none;
+    }
+    .first-image {
+        position: absolute;
+    }
+</style>

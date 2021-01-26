@@ -1,10 +1,20 @@
 <script>
 // TODO this is just the HTML copied in - functions/CSS are still to be migrated
 import Title from "./modules/title/components/Title.vue";
+import LegendMenu from "./modules/legend/components/LegendMenu.vue";
+import {mapState, mapGetters} from "vuex";
 export default {
     name: "MainNav",
     components: {
-        Title
+        Title,
+        LegendMenu
+    },
+    computed: {
+        ...mapState([
+            // listen to configJson changes for mounting the tools
+            "configJson"
+        ]),
+        ...mapGetters(["legendConfig"])
     }
 };
 </script>
@@ -36,6 +46,7 @@ export default {
                         class="nav-menu"
                     />
                 </div>
+                <LegendMenu v-if="legendConfig" />
                 <Title />
             </div>
         </div>
@@ -43,4 +54,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
+    #main-nav{
+        flex-grow:0;
+    }
 </style>

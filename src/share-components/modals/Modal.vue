@@ -6,6 +6,10 @@ export default {
         showModal: {
             type: Boolean,
             default: false
+        },
+        forceClickToClose: {
+            type: Boolean,
+            default: false
         }
     },
 
@@ -43,14 +47,21 @@ export default {
 
     methods: {
         discardByClickX: function () {
+            this.$emit("clickedOnX");
             this.showing = false;
         },
         discardByClickOutside: function (event) {
+            if (this.forceClickToClose) {
+                return;
+            }
+
             // Ignore bubbled events
             if (event.target !== this.$el.querySelector("#modal-1-outer-wrapper")) {
                 return;
             }
-            this.discardByClickX();
+
+            this.$emit("clickedOutside");
+            this.showing = false;
         }
     }
 };
@@ -65,6 +76,7 @@ export default {
         <div
             id="modal-1-outer-wrapper"
             @mousedown="discardByClickOutside"
+            @dragenter.prevent="discardByClickOutside"
         >
             <div
                 id="modal-1-inner-wrapper"
@@ -108,7 +120,7 @@ export default {
         right:0;
         bottom:0;
         text-align:center;
-        z-index:2;
+        z-index:10000;
 
         &:before {
             content:'';

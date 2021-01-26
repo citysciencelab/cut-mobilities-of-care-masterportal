@@ -10,17 +10,32 @@ const ToolView = Backbone.View.extend({
         this.listenTo(Radio.channel("TableMenu"), {
             "hideMenuElementTool": this.closeToolMenu
         });
+        this.model = Radio
+            .request("ModelList", "getCollection")
+            .models
+            .find(model => model.get("type") === "folder" && model.get("id") === "tools");
+        this.listenTo(this.model, {
+            "change:currentLng": () => {
+                this.updateTitle();
+            }
+        });
+        this.updateTitle();
     },
     id: "table-tools",
     className: "table-nav table-tools col-md-2",
     template: _.template(MenuTemplate),
+    updateTitle: function () {
+        const toolsName = this.model.toJSON().toolsName;
+
+        $("#table-tools-menu").prev().prop("title", toolsName);
+    },
     render: function () {
         const collection = Radio.request("ModelList", "getCollection"),
             models = collection.models.filter(function (model) {
                 return model.get("type") === "tool" || model.get("type") === "folder";
             });
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             switch (model.get("type")) {
                 case "tool": {
                     this.addToolView(model);
@@ -28,17 +43,19 @@ const ToolView = Backbone.View.extend({
                 }
                 case "folder": {
                     if (model.get("id") === "tools") {
-                        this.addToolsMenuView();
+                        this.addToolsMenuView(model);
                     }
                     break;
                 }
                 default:
             }
-        }, this);
+        });
         return this;
     },
-    addToolsMenuView: function () {
-        $("#table-nav").append(this.$el.html(this.template()));
+    addToolsMenuView: function (model) {
+        const attr = model.toJSON();
+
+        $("#table-nav").append(this.$el.html(this.template(attr)));
     },
     addToolView: function (model) {
         if (model.get("isVisibleInMenu")) {

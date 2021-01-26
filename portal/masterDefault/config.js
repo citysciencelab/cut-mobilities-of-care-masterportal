@@ -1,6 +1,13 @@
 const Config = {
+    addons: ["continuousCountingBike", "dataTable", "solaratlas", "trinkwasser", "verkehrsstaerken"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     simpleMap: true,
+    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    metadata: {
+        useProxy: [
+            "https://metaver.de/csw"
+        ]
+    },
     tree: {
         orderBy: "opendata",
         saveSelection: true,
@@ -9,8 +16,6 @@ const Config = {
             "1912", "1913", "1914", "1915", "1916", "1917", // UESG
             "2298", // Straßenbaumkataster cache grau
             "1791", // nachträgliche Bodenrichtwerte lagetypisch 1964
-            "2627", "2628", "2629", "2630", "2631", "2632", "2633", "2634", "2635", "2636", "2637", "2638", "2639", // StaNord, wird bald abgeschaltet
-            "2640", "2641", "2642", "2643", "2644", "2645", "2646", "2647", "2648", "2649", "2650", "2651", // StaNord, wird bald abgeschaltet
             "8713" // Layer Schulinfo
         ],
         layerIDsToStyle: [
@@ -28,8 +33,6 @@ const Config = {
             }
         ],
         metaIDsToMerge: [
-        // "38575F13-7FA2-4F26-973F-EDED24D937E5", // Landesgrundbesitzverzeichnis
-        // "757A328B-415C-4E5A-A696-353ABDC80419", // ParkraumGIS
             "4AC1B569-65AA-4FAE-A5FC-E477DFE5D303", // Großraum- und Schwertransport-Routen in Hamburg
             "3EE8938B-FF9E-467B-AAA2-8534BB505580", // Bauschutzbereich § 12 LuftVG Hamburg
             "F691CFB0-D38F-4308-B12F-1671166FF181", // Flurstücke gelb
@@ -54,9 +57,7 @@ const Config = {
         ]
     },
     scaleLine: true,
-
     footer: {
-        visibility: true,
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",
@@ -66,8 +67,12 @@ const Config = {
             },
             {
                 "bezeichnung": "",
-                "url": "https://www.hamburg.de/bsu/timonline",
-                "alias": "common:modules.footer.cardDiscrepancy"
+                "url": "mailto:LGVGeoPortal-Hilfe@gv.hamburg.de"
+                    + "?subject=Kartenunstimmigkeiten%20melden"
+                    + "&body=Zur%20weiteren%20Bearbeitung%20bitten%20wir%20Sie%20die%20nachstehenden%20Angaben%20zu%20machen."
+                    + "%20Bei%20Bedarf%20fügen%20Sie%20bitte%20noch%20einen%20Screenshot%20hinzu."
+                    + "%20Vielen%20Dank!%0A%0A1.%20Name:%0A2.%20Telefon:%0A3.%20Anliegen",
+                "alias": "common:modules.footer.mapDiscrepancy"
             }
         ]
     },
@@ -78,7 +83,6 @@ const Config = {
     view: {
         center: [565874, 5934140]
     },
-    proxyURL: "/cgi-bin/proxy.cgi",
     namedProjections: [
         // GK DHDN
         ["EPSG:31467", "+title=Bessel/Gauß-Krüger 3 +proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs"],
@@ -91,14 +95,10 @@ const Config = {
     ],
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
+    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
+    useVectorStyleBeta: true,
     isMenubarVisible: true,
     gemarkungen: "https://geoportal-hamburg.de/lgv-config/gemarkung.json",
-    print: {
-        printID: "99999",
-        title: "MasterDefault",
-        gfi: false
-    },
     obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
@@ -117,7 +117,8 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch"
+            en: "englisch",
+            it: "italienisch"
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],

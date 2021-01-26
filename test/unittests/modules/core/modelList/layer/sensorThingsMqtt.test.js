@@ -1,193 +1,497 @@
 import {expect} from "chai";
-import {SensorThingsMqtt, SensorThingsMqttClient} from "@modules/core/modelList/layer/sensorThingsMqtt";
+import {SensorThingsMqtt} from "@modules/core/modelList/layer/sensorThingsMqtt";
+import {SensorThingsHttp} from "@modules/core/modelList/layer/sensorThingsHttp";
 
-describe("core/modelList/layer/SensorThingsMqtt", function () {
-    describe("SensorThingsMqtt connect", function () {
-        const mqtt = new SensorThingsMqtt(),
-            mqttTest = {
-                connect: function () {
-                    return "testclient";
+describe("core/modelList/layer/sensorThingsMqtt", function () {
+    let mqtt = null,
+        lastError = false;
+
+    /**
+     * a function to change lastError when an error occurs
+     * @param {String} error the error
+     * @returns {Void}  -
+     */
+    function onerror (error) {
+        lastError = error;
+    }
+
+    beforeEach(() => {
+        mqtt = new SensorThingsMqtt({
+            mqttUrl: "url"
+        }, {
+            connect: () => {
+                return false;
+            }
+        });
+        lastError = false;
+    });
+
+    describe("constructor", () => {
+        it("should connect to mqtt with the given url", () => {
+            let lastUrl = false;
+
+            new SensorThingsMqtt({
+                mqttUrl: "url"
+            }, {
+                connect: (url) => {
+                    lastUrl = url;
                 }
+            });
+
+            expect(lastUrl).to.equal("url");
+        });
+
+        it("should connect to mqtt with the given options", () => {
+            let lastOptions = false;
+            const expectedOptions = {
+                mqttUrl: "url",
+                mqttVersion: "3.1.1",
+                rhPath: "rhPath",
+                context: "this"
             };
 
-        it("should have a connect function", function () {
-            expect(typeof mqtt.connect === "function").to.be.true;
-        });
-        it("should return a new client and call connect on the given mqtt object", function () {
-            const client = mqtt.connect({
-                host: "foo"
-            }, mqttTest);
+            new SensorThingsMqtt(expectedOptions, {
+                connect: (url, options) => {
+                    lastOptions = options;
+                }
+            });
 
-            expect(typeof client.on === "function").to.be.true;
-            expect(typeof client.subscribe === "function").to.be.true;
-            expect(typeof client.unsubscribe === "function").to.be.true;
-
-            expect(client.getMqttClient()).to.equal("testclient");
+            expect(lastOptions).to.deep.equal(expectedOptions);
         });
 
-        it("should warn if the host is not set in the mqtt options", function () {
-            let lastError = false;
+        it("should expand the options for mqtt v3.1 by a different protocolId and protocolVersion", () => {
+            let lastOptions = false;
+            const givenOptions = {
+                    mqttUrl: "url",
+                    mqttVersion: "3.1",
+                    rhPath: "rhPath",
+                    context: "this"
+                },
+                expectedOptions = {
+                    mqttUrl: "url",
+                    mqttVersion: "3.1",
+                    rhPath: "rhPath",
+                    context: "this",
+                    protocolId: "MQIsdp",
+                    protocolVersion: 3
+                };
 
-            /**
-             * a function to call on error
-             * @param {String} errormsg the error message as String
-             * @returns {Void}  -
-             */
-            function onerror (errormsg) {
-                lastError = errormsg;
-            }
+            new SensorThingsMqtt(givenOptions, {
+                connect: (url, options) => {
+                    lastOptions = options;
+                }
+            });
 
-            mqtt.connect({}, mqttTest, onerror);
-            expect(lastError).to.be.a("string");
+            expect(lastOptions).to.deep.equal(expectedOptions);
+        });
+
+        it("should set the internal mqttClient to whatever is returned by connect", () => {
+            mqtt = new SensorThingsMqtt(null, {
+                connect: () => {
+                    return "mqttClient";
+                }
+            });
+
+            expect(mqtt.getMqttClient()).to.equal("mqttClient");
+        });
+
+        it("should set the internal messageHandler to null", () => {
+            expect(mqtt.getMessageHandler()).to.be.null;
+        });
+
+        it("should set the default httpClient as instance of SensorThingsHttp", () => {
+            expect(mqtt.getHttpClientDefault()).to.be.an.instanceof(SensorThingsHttp);
         });
     });
 
-    describe("SensorThingsMqttClient", function () {
-        /**
-         * declaration of the MqttTestClientClass to test the MqttClient with
-         * @returns {Void}  -
-         */
-        function MqttTestClientClass () {
-            let lastWhat,
-                lastHandler,
-                lastTopic,
-                lastOptions,
-                lastUnsubscribeTopic;
+    describe("on", () => {
+        it("should call onerror if anything but a function is given as handler", () => {
+            mqtt.on("eventName", "handler", onerror);
 
-            this.getLastWhat = function () {
-                return lastWhat;
-            };
-            this.getLastHandler = function () {
-                return lastHandler;
-            };
-            this.getLastTopic = function () {
-                return lastTopic;
-            };
-            this.getLastOptions = function () {
-                return lastOptions;
-            };
-            this.getLastUnsubscribeTopic = function () {
-                return lastUnsubscribeTopic;
-            };
+            expect(lastError).to.be.a("string");
+        });
+        it("should refuse to set on(disconnect) if mqtt version equals 3.1", () => {
+            mqtt.setMqttVersion("3.1");
+            mqtt.on("disconnect", () => {
+                // handler
+                return false;
+            }, onerror);
 
-            this.on = function (what, handler) {
-                lastWhat = what;
-                lastHandler = handler;
-            };
-            this.subscribe = function (topic, options) {
-                lastTopic = topic;
-                lastOptions = options;
-            };
-            this.unsubscribe = function (topic) {
-                lastUnsubscribeTopic = topic;
-            };
-        }
+            expect(lastError).to.be.a("string");
+        });
+        it("should refuse to set on(disconnect) if mqtt version equals 3.1.1", () => {
+            mqtt.setMqttVersion("3.1.1");
+            mqtt.on("disconnect", () => {
+                // handler
+                return false;
+            }, onerror);
 
-        const mqttTestClient = new MqttTestClientClass(),
-            testContext = {
-                barTest: function () {
-                    return "bar";
+            expect(lastError).to.be.a("string");
+        });
+
+        it("should register any event (other than message) at the given mqttClient", () => {
+            let lastEventName = false;
+
+            mqtt.on("eventName", () => {
+                // handler
+                return false;
+            }, onerror, {
+                // fake mqttClient
+                on: eventName => {
+                    lastEventName = eventName;
                 }
-            },
-            client = new SensorThingsMqttClient(mqttTestClient, "testhost", testContext);
+            });
 
-        describe("the 'on' event setter", function () {
-            it("should call the on function of the given mqttTestClient", function () {
-                client.on("foo", function () {
-                    return true;
-                });
-                expect(mqttTestClient.getLastWhat()).to.equal("foo");
-                expect(typeof mqttTestClient.getLastHandler() === "function").to.be.true;
+            expect(lastError).to.be.false;
+            expect(lastEventName).to.equal("eventName");
+        });
+        it("should set the internal messageHandler for on(message) with mqtt 3.1", () => {
+            mqtt.setMqttVersion("3.1");
+            mqtt.on("message", () => {
+                // handler
+                return "messageHandler";
+            }, onerror, {
+                // fake mqttClient
+                on: () => {
+                    return false;
+                }
             });
-            it("should apply the context to every handler given by the on function", function () {
-                client.on("foo", function () {
-                    return this.barTest();
-                });
-                expect(mqttTestClient.getLastHandler()()).to.equal("bar");
+
+            expect(mqtt.getMessageHandler()).to.be.a("function");
+            expect(mqtt.getMessageHandler()()).to.equal("messageHandler");
+        });
+        it("should set the internal messageHandler for on(message) with mqtt 3.1.1", () => {
+            mqtt.setMqttVersion("3.1.1");
+            mqtt.on("message", () => {
+                // handler
+                return "messageHandler";
+            }, onerror, {
+                // fake mqttClient
+                on: () => {
+                    return false;
+                }
             });
-            it("should parse the payload to JSON if the event name is 'message'", function () {
-                client.on("message", function (topic, payload) {
-                    return payload;
-                });
-                expect(mqttTestClient.getLastHandler()("testTopic", "{\"foo\": \"bar\"}")).to.deep.equal({foo: "bar"});
+
+            expect(mqtt.getMessageHandler()).to.be.a("function");
+            expect(mqtt.getMessageHandler()()).to.equal("messageHandler");
+        });
+    });
+
+    describe("subscribe", () => {
+        it("should call mqttClient.subscribe with the given topic", () => {
+            let lastTopic = false;
+
+            mqtt.subscribe("topic", null, null, onerror, {
+                // fake mqttClient
+                subscribe: topic => {
+                    lastTopic = topic;
+                }
+            }, () => {
+                // simulateRetainedHandlingOpt
+                return false;
             });
-            it("if the payload isn't a valid JSON string, it should not parse the payload, even if the event name is 'message'", function () {
-                expect(mqttTestClient.getLastHandler()("testTopic", undefined)).to.equal(undefined);
+
+            expect(lastTopic).to.equal("topic");
+        });
+        it("should call mqttClient.subscribe with standard options", () => {
+            let lastOptions = false;
+            const expectedOptions = {
+                qos: 0,
+                rh: 2
+            };
+
+            mqtt.subscribe("topic", {}, null, onerror, {
+                // fake mqttClient
+                subscribe: (topic, options) => {
+                    lastOptions = options;
+                }
+            }, () => {
+                // simulateRetainedHandlingOpt
+                return false;
             });
+
+            expect(lastOptions).to.deep.equal(expectedOptions);
+        });
+        it("should call mqttClient.subscribe with the given options", () => {
+            let lastOptions = false;
+            const expectedOptions = {
+                qos: 2,
+                rh: 0,
+                test: true
+            };
+
+            mqtt.subscribe("topic", expectedOptions, null, onerror, {
+                // fake mqttClient
+                subscribe: (topic, options) => {
+                    lastOptions = options;
+                }
+            }, () => {
+                // simulateRetainedHandlingOpt
+                return false;
+            });
+
+            expect(lastOptions).to.deep.equal(expectedOptions);
+        });
+        it("should call onerror if any error occurs for subscription callback", () => {
+            mqtt.subscribe("topic", null, null, onerror, {
+                // fake mqttClient
+                subscribe: (topic, options, callback) => {
+                    callback(new Error("errmsg"));
+                }
+            }, () => {
+                // simulateRetainedHandlingOpt
+                return false;
+            });
+
+            expect(lastError).to.be.an.instanceof(Error);
+        });
+        it("should call onsuccess with granted response from subscription callback", () => {
+            let lastTopic = false,
+                lastQos = false;
+
+            mqtt.subscribe("topic", {
+                qos: 1
+            }, (topic, qos) => {
+                // onsuccess
+                lastTopic = topic;
+                lastQos = qos;
+            }, onerror, {
+                // fake mqttClient
+                subscribe: (topic, options, callback) => {
+                    callback(null, [{topic: topic, qos: options.qos}]);
+                }
+            }, () => {
+                // simulateRetainedHandlingOpt
+                return false;
+            });
+
+            expect(lastTopic).to.equal("topic");
+            expect(lastQos).to.equal(1);
         });
 
-        describe("subscribe", function () {
-            let httpLastUrl = false;
+        it("should call simulateRetainedHandling if options.rh !== 2 and mqtt v3.1 or mqtt v3.1.1 and options.rhPath is set", () => {
+            let lastRhPath = false,
+                lastTopic = false,
+                lastHttpClient = false,
+                lastMessageHandler = false;
 
-            /**
-             * Setter for httpLastUrl
-             * @param {String} url the url to update httpLastUrl with
-             * @returns {Void}  -
-             */
-            function httpTestClient (url) {
-                httpLastUrl = url;
-            }
-
-            it("should call the subscribe function of the mqttClient without simulating retained messages if rmSimulate is set to false", function () {
-                client.subscribe("baz", {
-                    rmSimulate: false,
-                    rmHttpClient: httpTestClient
-                });
-
-                expect(mqttTestClient.getLastTopic()).to.equal("baz");
-                expect(httpLastUrl).to.be.false;
+            mqtt.setMqttVersion("3.1");
+            mqtt.setRhPath("rhPath");
+            mqtt.on("message", () => {
+                // handler
+                return "messageHandler";
+            }, onerror, {
+                // fake mqttClient
+                on: () => {
+                    return false;
+                }
             });
-            it("should not simulate retained messages if retain is set to 2, even if rmSimulate is set to true", function () {
-                client.subscribe("qux", {
-                    retain: 2,
-                    rmSimulate: true,
-                    rmHttpClient: httpTestClient
-                });
-
-                expect(mqttTestClient.getLastTopic()).to.equal("qux");
-                expect(httpLastUrl).to.be.false;
-            });
-            it("should simulate retained messages if rmSimulate is set to true and retain is 0 or 1", function () {
-                client.subscribe("baz", {
-                    retain: 0,
-                    rmSimulate: true,
-                    rmUrl: "https://example.com:8080",
-                    rmHttpClient: httpTestClient
-                });
-                expect(httpLastUrl).to.equal("https://example.com:8080/baz");
-
-                client.subscribe("qux", {
-                    retain: 1,
-                    rmSimulate: true,
-                    rmUrl: "https://example.com:8080",
-                    rmHttpClient: httpTestClient
-                });
-                expect(httpLastUrl).to.equal("https://example.com:8080/qux");
+            mqtt.subscribe("topic", {
+                rh: 0
+            }, null, onerror, {
+                // fake mqttClient
+                subscribe: (topic, options, callback) => {
+                    callback(null, [{topic: topic, qos: options.qos}]);
+                }
+            }, (rhPath, topic, httpClient, messageHandler) => {
+                lastRhPath = rhPath;
+                lastTopic = topic;
+                lastHttpClient = httpClient;
+                lastMessageHandler = messageHandler;
             });
 
-            it("should extent the simulation url in case Observations are subscribed", function () {
-                client.subscribe("baz/Observations", {
-                    rmSimulate: true,
-                    rmUrl: "https://example.com:8080",
-                    rmHttpClient: httpTestClient
-                });
-                expect(httpLastUrl).to.equal("https://example.com:8080/baz/Observations?%24orderby=phenomenonTime%20desc&%24top=1");
+            expect(lastRhPath).to.equal("rhPath");
+            expect(lastTopic).to.equal("topic");
+            expect(lastHttpClient).to.be.an.instanceof(SensorThingsHttp);
+            expect(lastMessageHandler).to.be.a("function");
+            expect(lastMessageHandler()).to.equal("messageHandler");
+        });
+        it("should call simulateRetainedHandling if options.rh !== 2 and mqtt v3.1 or mqtt v3.1.1 and options.rhPath is set", () => {
+            let lastRhPath = false,
+                lastTopic = false,
+                lastHttpClient = false,
+                lastMessageHandler = false;
+
+            mqtt.setMqttVersion("3.1.1");
+            mqtt.setRhPath("rhPath");
+            mqtt.on("message", () => {
+                // handler
+                return "messageHandler";
+            }, onerror, {
+                // fake mqttClient
+                on: () => {
+                    return false;
+                }
             });
-            it("should not extent the simulation url in case a Observation is subscribed with an exact identifier", function () {
-                client.subscribe("baz/Observations(123456)", {
-                    rmSimulate: true,
-                    rmUrl: "https://example.com:8080",
-                    rmHttpClient: httpTestClient
-                });
-                expect(httpLastUrl).to.equal("https://example.com:8080/baz/Observations(123456)");
+            mqtt.subscribe("topic", {
+                rh: 0
+            }, null, onerror, {
+                // fake mqttClient
+                subscribe: (topic, options, callback) => {
+                    callback(null, [{topic: topic, qos: options.qos}]);
+                }
+            }, (rhPath, topic, httpClient, messageHandler) => {
+                lastRhPath = rhPath;
+                lastTopic = topic;
+                lastHttpClient = httpClient;
+                lastMessageHandler = messageHandler;
             });
+
+            expect(lastRhPath).to.equal("rhPath");
+            expect(lastTopic).to.equal("topic");
+            expect(lastHttpClient).to.be.an.instanceof(SensorThingsHttp);
+            expect(lastMessageHandler).to.be.a("function");
+            expect(lastMessageHandler()).to.equal("messageHandler");
+        });
+    });
+
+    describe("unsubscribe", () => {
+        it("should call unsubscribe with the given topic", () => {
+            let lastTopic = false;
+
+            mqtt.unsubscribe("topic", null, null, onerror, {
+                // fake mqttClient
+                unsubscribe: (topic) => {
+                    lastTopic = topic;
+                }
+            });
+
+            expect(lastTopic).to.equal("topic");
+        });
+        it("should call unsubscribe with the given options", () => {
+            let lastOptions = false;
+            const expectedOptions = {
+                key: "value"
+            };
+
+            mqtt.unsubscribe("topic", expectedOptions, null, onerror, {
+                // fake mqttClient
+                unsubscribe: (topic, options) => {
+                    lastOptions = options;
+                }
+            });
+
+            expect(lastOptions).to.deep.equal(expectedOptions);
+        });
+        it("should call onerror when an error is given via callback", () => {
+            mqtt.unsubscribe("topic", null, null, onerror, {
+                // fake mqttClient
+                unsubscribe: (topic, options, callback) => {
+                    callback(new Error("errmsg"));
+                }
+            });
+
+            expect(lastError).to.be.an.instanceof(Error);
+        });
+        it("should call onsuccess when no error occurs during callback", () => {
+            let onsuccessCalled = false;
+
+            mqtt.unsubscribe("topic", null, () => {
+                onsuccessCalled = true;
+            }, onerror, {
+                // fake mqttClient
+                unsubscribe: (topic, options, callback) => {
+                    callback(null);
+                }
+            });
+
+            expect(onsuccessCalled).to.be.true;
+        });
+    });
+
+    describe("end", () => {
+        it("should call end with the given parameters on the mqttClient", () => {
+            let lastForce = false,
+                lastOptions = false,
+                lastCallback = false;
+            const expectedOptions = {key: "value"};
+
+            mqtt.end("force", expectedOptions, "onfinish", {
+                end: (force, options, callback) => {
+                    lastForce = force;
+                    lastOptions = options;
+                    lastCallback = callback;
+                }
+            });
+
+            expect(lastForce).to.equal("force");
+            expect(lastOptions).to.deep.equal(expectedOptions);
+            expect(lastCallback).to.equal("onfinish");
+        });
+    });
+
+    describe("simulateRetainedHandling", () => {
+        it("should call onerror if an unexpected httpClient is given", () => {
+            mqtt.simulateRetainedHandling("rhPath", "topic", "httpClient", "messageHandler", onerror);
+
+            expect(lastError).to.be.a("string");
+        });
+        it("should concat rhPath and topic if anything but an observation is subscribed via topic", () => {
+            let lastUrl = false;
+            const expectedUrl = "rhPath/topic";
+
+            mqtt.simulateRetainedHandling("rhPath", "topic", {
+                // fake httpClient
+                get: url => {
+                    lastUrl = url;
+                }
+            }, "messageHandler", onerror);
+
+            expect(lastUrl).to.equal(expectedUrl);
+        });
+        it("should expand the url with orderby + top if an observation is subscribed (1)", () => {
+            let lastUrl = false;
+            const expectedUrl = "rhPath/topic/Observations?%24orderby=phenomenonTime%20desc&%24top=1";
+
+            mqtt.simulateRetainedHandling("rhPath", "topic/Observations", {
+                // fake httpClient
+                get: url => {
+                    lastUrl = url;
+                }
+            }, "messageHandler", onerror);
+
+            expect(lastUrl).to.equal(expectedUrl);
+        });
+        it("should expand the url with orderby + top if an observation is subscribed (2)", () => {
+            let lastUrl = false;
+            const expectedUrl = "rhPath/topic(1234)/Observations(5678)?%24orderby=phenomenonTime%20desc&%24top=1";
+
+            mqtt.simulateRetainedHandling("rhPath", "topic(1234)/Observations(5678)", {
+                // fake httpClient
+                get: url => {
+                    lastUrl = url;
+                }
+            }, "messageHandler", onerror);
+
+            expect(lastUrl).to.equal(expectedUrl);
         });
 
-        describe("unsubscribe", function () {
-            it("should unsubscribe a topic", function () {
-                client.unsubscribe("foobar");
-                expect(mqttTestClient.getLastUnsubscribeTopic()).to.equal("foobar");
+        it("should call the messageHandler with topic, response and packet", () => {
+            let lastTopic = false,
+                lastMessage = false,
+                lastPacket = false;
+            const expectedPacket = {
+                cmd: "simulate",
+                dup: false,
+                payload: "message",
+                qos: 0,
+                retain: true,
+                topic: "topic"
+            };
+
+            mqtt.simulateRetainedHandling("rhPath", "topic", {
+                get: (url, onsuccess) => {
+                    onsuccess(["message"]);
+                }
+            }, (topic, message, packet) => {
+                lastTopic = topic;
+                lastMessage = message;
+                lastPacket = packet;
             });
+
+            expect(lastTopic).to.equal("topic");
+            expect(lastMessage).to.equal("message");
+            expect(lastPacket).to.deep.equal(expectedPacket);
         });
     });
 });

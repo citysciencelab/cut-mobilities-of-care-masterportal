@@ -1,9 +1,12 @@
 import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
+import checkChildrenDatasets from "../../checkChildrenDatasets.js";
+import store from "../../../../src/app-store/index";
+import axios from "axios";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .glyphicon-unchecked, .glyphicon-check, .title": "toggleIsSelected",
+        "click .glyphicon-unchecked, .glyphicon-check, .title": "preToggleIsSelected",
         "click .glyphicon-info-sign": "showLayerInformation",
         "click .glyphicon-cog": "toggleIsSettingVisible",
         "click .arrows > .glyphicon-arrow-up": "moveModelUp",
@@ -11,7 +14,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         "click .glyphicon-plus-sign": "incTransparency",
         "click .glyphicon-minus-sign": "decTransparency",
         "change select": "setTransparency",
-        "click .glyphicon-tint": "openStyleWMS",
+        "click .styleWMS": "openStyleWMS",
+        "click .styleVT": "openStyleVT",
         "click .remove-layer": "removeLayer"
     },
 
@@ -27,11 +31,14 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @listens Layer#changeCurrentLng
      * @listens Map#RadioTriggerMapChange
      * @listens LayerInformation#RadioTriggerLayerInformationUnhighlightLayerInformationIcon
+     * @listens i18next#RadioTriggerLanguageChanged
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
+     * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected": this.rerender,
             "change:isSettingVisible": this.renderSetting,
@@ -112,6 +119,67 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.append(this.templateSettings(attr));
             this.$el.find(".layer-settings").hide();
             this.$el.find(".layer-settings").slideDown();
+        }
+    },
+
+    /**
+     * handles toggeling of secured and not-secured layers
+     * @returns {void}
+     */
+    preToggleIsSelected: function () {
+        const isErrorCalled = false;
+
+        // if layer is secured and not selected
+        if (this.model.get("isSecured") && !this.model.get("isSelected")) {
+            this.triggerBrowserAuthentication(this.toggleIsSelected.bind(this), isErrorCalled);
+        }
+        else {
+            this.toggleIsSelected();
+        }
+    },
+
+    /**
+     * triggers the browser basic authentication if the selected layer is secured
+     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
+     * @param {Boolean} isErrorCalled - Flag if the function is called from error function
+     * @returns {void}
+     */
+    triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
+        const that = this;
+
+        axios({
+            method: "get",
+            url: this.model.get("authenticationUrl"),
+            withCredentials: true
+        }).then(function () {
+            that.toggleIsSelected();
+        }).catch(function () {
+            that.errorFunction(successFunction, isErrorCalled);
+        });
+    },
+
+    /**
+     * Error handling for triggering the browser basic authentication
+     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
+     * @param {Number} isErrorCalled - Flag if the function is called from error function
+     * @returns {void}
+     */
+    errorFunction: function (successFunction, isErrorCalled) {
+        const isError = isErrorCalled,
+            layerName = this.model.get("name"),
+            authenticationUrl = this.model.get("authenticationUrl");
+
+        if (isError === false) {
+            this.triggerBrowserAuthentication(successFunction, !isError);
+        }
+        else if (isError === true) {
+            store.dispatch("Alerting/addSingleAlert", {
+                category: i18next.t("common:modules.alerting.categories.error"),
+                displayClass: "error",
+                content: i18next.t("common:modules.menu.layer.basicAuthError") + "\"" + layerName + "\"",
+                kategorie: "alert-danger"
+            });
+            console.warn("Triggering the basic browser authentication for the secured layer \"" + layerName + "\" was not successfull. Something went wrong with the authenticationUrl (" + authenticationUrl + ")");
         }
     },
 
@@ -200,6 +268,15 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * Triggers the parser to remove the item/layer
      * Executes removeLayer in the model
      * Removes the element
+     * Select a style for vector tile leyer.
+     * @returns {void}
+     */
+    openStyleVT: function () {
+        Radio.trigger("StyleVT", "open", this.model);
+    },
+
+    /**
+     * todo
      * @fires Parser#RadioTriggerParserRemoveItem
      * @returns {void}
      */

@@ -17,7 +17,7 @@ describe("tools/measure/model", function () {
             model.setScale(1000);
             model.setUnit("m");
             expect(model.formatLength(geom)).to.deep.equal({
-                measure: "996.54 m",
+                measure: "997.32 m",
                 deviance: "(+/- 1.00 m)"
             });
         });
@@ -39,7 +39,7 @@ describe("tools/measure/model", function () {
             model.setScale(1000);
             model.setUnit("m²");
             expect(model.formatArea(geom)).to.deep.equal({
-                measure: "496536 m²",
+                measure: "500669 m²",
                 deviance: "(+/- 1000 m²)"
             });
         });
@@ -61,6 +61,7 @@ describe("tools/measure/model", function () {
 
             let textPoint = {};
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
@@ -74,6 +75,7 @@ describe("tools/measure/model", function () {
                 feature = new Feature({geometry: geom});
             let textPoint = {};
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
@@ -88,19 +90,21 @@ describe("tools/measure/model", function () {
                 feature = new Feature({geometry: geom});
             let textStyles = {};
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
             textStyles = model.generateTextStyles(feature);
 
             expect(textStyles).to.be.an("array").of.length(2);
-            expect(textStyles[0].getText().getText()).to.equal("996.54 m");
+            expect(textStyles[0].getText().getText()).to.equal("997.32 m");
             expect(textStyles[1].getText().getText()).to.equal("(+/- 1.00 m)");
         });
         it("should generate textStyles for Polygon", function () {
             const geom = new Polygon([[[0, 0], [1000, 0], [0, 1000], [0, 0]]]),
                 feature = new Feature({geometry: geom});
 
+            model.set("drawingFeature", feature);
             model.setScale(1000);
             model.setUnit("m");
 
@@ -108,7 +112,7 @@ describe("tools/measure/model", function () {
             const textStyles = model.generateTextStyles(feature);
 
             expect(textStyles).to.be.an("array").of.length(2);
-            expect(textStyles[0].getText().getText()).to.equal("496536 m");
+            expect(textStyles[0].getText().getText()).to.equal("500669 m");
             expect(textStyles[1].getText().getText()).to.equal("(+/- 1000 m)");
         });
     });

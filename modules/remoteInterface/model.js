@@ -1,4 +1,5 @@
 import {getCenter} from "ol/extent.js";
+import store from "../../src/app-store";
 
 const RemoteInterface = Backbone.Model.extend({
     defaults: {
@@ -61,10 +62,10 @@ const RemoteInterface = Backbone.Model.extend({
             Radio.trigger("Map", "zoomToExtent", event.data.zoomToExtent);
         }
         else if (event.data.hasOwnProperty("highlightfeature")) {
-            Radio.trigger("Highlightfeature", "highlightfeature", event.data.highlightfeature);
+            store.commit("Map/setVectorFeaturesLoaded", {type: "viaLayerAndLayerId", layerAndLayerId: event.data.highlightfeature});
         }
         else if (event.data === "hidePosition") {
-            Radio.trigger("MapMarker", "hideMarker");
+            store.dispatch("MapMarker/removePointMarker");
         }
     },
     /**
@@ -89,19 +90,19 @@ const RemoteInterface = Backbone.Model.extend({
             extent = feature.getGeometry().getExtent(),
             center = getCenter(extent);
 
-        Radio.trigger("MapMarker", "showMarker", center);
+        store.dispatch("MapMarker/placingPointMarker", center);
         Radio.trigger("MapView", "setCenter", center);
     },
     showPositionByExtent: function (extent) {
         const center = getCenter(extent);
 
-        Radio.trigger("MapMarker", "showMarker", center);
+        store.dispatch("MapMarker/placingPointMarker", center);
         Radio.trigger("MapView", "setCenter", center);
     },
     showPositionByExtentNoScroll: function (extent) {
         const center = getCenter(extent);
 
-        Radio.trigger("MapMarker", "showMarker", center);
+        store.dispatch("MapMarker/placingPointMarker", center);
     },
     showAllFeatures: function (id) {
         Radio.trigger("ModelList", "showAllFeatures", id);
@@ -117,7 +118,7 @@ const RemoteInterface = Backbone.Model.extend({
     },
     resetView: function () {
         Radio.trigger("MapView", "resetView");
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
     },
     getMapState: function () {
         return Radio.request("SaveSelection", "getMapState");

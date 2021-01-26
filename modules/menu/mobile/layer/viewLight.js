@@ -1,9 +1,12 @@
 import Template from "text-loader!./templateLight.html";
 import SettingTemplate from "text-loader!./templateSettings.html";
+import checkChildrenDatasets from "../../checkChildrenDatasets.js";
+import store from "../../../../src/app-store/index";
+import axios from "axios";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     events: {
-        "click .layer-item": "toggleIsSelected",
+        "click .layer-item": "preToggleIsSelected",
         "click .layer-info-item > .glyphicon-info-sign": "showLayerInformation",
         "click .selected-layer-item > div": "toggleIsVisibleInMap",
         "click .layer-info-item > .glyphicon-cog": "toggleIsSettingVisible",
@@ -28,8 +31,10 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
      * @fires Map#RadioRequestMapGetMapMode
      * @fires StyleWMS#RadioTriggerStyleWMSOpenStyleWMS
      * @fires Parser#RadioTriggerParserRemoveItem
+     * @fires Alerting#RadioTriggerAlertAlert
      */
     initialize: function () {
+        checkChildrenDatasets(this.model);
         this.listenTo(this.model, {
             "change:isSelected change:isVisibleInMap": this.render,
             "change:isSettingVisible": this.renderSetting,
@@ -40,6 +45,8 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             "change": this.toggleByMapMode
         });
 
+        // translates the i18n-props into current user-language. is done this way, because model's listener to languageChange reacts too late (after render, which ist riggered by creating new Menu)
+        this.model.changeLang();
         this.toggleByMapMode(Radio.request("Map", "getMapMode"));
         this.toggleColor(this.model, this.model.get("isOutOfRange"));
     },
@@ -109,6 +116,68 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
             this.$el.find(".item-settings").slideDown();
         }
     },
+
+    /**
+     * handles toggeling of secured and not-secured layers
+     * @returns {void}
+     */
+    preToggleIsSelected: function () {
+        const isErrorCalled = false;
+
+        // if layer is secured and not selected
+        if (this.model.get("isSecured") && !this.model.get("isSelected")) {
+            this.triggerBrowserAuthentication(this.toggleIsSelected.bind(this), isErrorCalled);
+        }
+        else {
+            this.toggleIsSelected();
+        }
+    },
+
+    /**
+     * triggers the browser basic authentication if the selected layer is secured
+     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
+     * @param {Boolean} isErrorCalled - Flag if the function is called from error function
+     * @returns {void}
+     */
+    triggerBrowserAuthentication: function (successFunction, isErrorCalled) {
+        const that = this;
+
+        axios({
+            method: "get",
+            url: this.model.get("authenticationUrl"),
+            withCredentials: true
+        }).then(function () {
+            that.toggleIsSelected();
+        }).catch(function () {
+            that.errorFunction(successFunction, isErrorCalled);
+        });
+    },
+
+    /**
+     * Error handling for triggering the browser basic authentication
+     * @param {Function} successFunction - Function called after triggering the browser basic authentication successfully
+     * @param {Number} isErrorCalled - Flag if the function is called from error function
+     * @returns {void}
+     */
+    errorFunction: function (successFunction, isErrorCalled) {
+        const isError = isErrorCalled,
+            layerName = this.model.get("name"),
+            authenticationUrl = this.model.get("authenticationUrl");
+
+        if (isError === false) {
+            this.triggerBrowserAuthentication(successFunction, !isError);
+        }
+        else if (isError === true) {
+            store.dispatch("Alerting/addSingleAlert", {
+                category: i18next.t("common:modules.alerting.categories.error"),
+                displayClass: "error",
+                content: i18next.t("common:modules.menu.layer.basicAuthError") + "\"" + layerName + "\"",
+                kategorie: "alert-danger"
+            });
+            console.warn("Triggering the basic browser authentication for the secured layer \"" + layerName + "\" was not successfull. Something went wrong with the authenticationUrl (" + authenticationUrl + ")");
+        }
+    },
+
 
     /**
      * todo

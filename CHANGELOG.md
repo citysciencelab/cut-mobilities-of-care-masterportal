@@ -1,21 +1,76 @@
 # Changelog Masterportal
- Alle wichtigen Änderungen in diesem Projekt werden in dieser Datei abgelegt.
- 
- Es wird die [Semantische Versionierung](https://semver.org/spec/v2.0.0.html) verwendet.
+ All important changes in this project are stored in this file.
+
+[Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
 
 ## Unreleased - in development
-
 ### Added
+- Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
+- On draw tool Double Circle configuration available in config.json
+- On draw tool Tooltip and Tooltip style configuration available in config.json
+- On tools Imported Layer in theme tree integrated function under Addons
+- On tools Geometrie/Gebäude Analyse funtion on tools under Addons
+- On tools Taktische Zeichen on tools under Addons
+### Changed
+- The language of the changelog has been changed to English.
+- Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
+### Deprecated
+
+### Removed
+
+### Fixed
+- If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+
+
+---
+
+## v2.6.1 - 2021-01-07
+### Added
+- Eine Sprachdatei für Italienisch wurde hinzugefügt.
+
+### Fixed
+- Ein Fehler wurde behoben der verhindert hat, dass das Portal vollständig geladen wurde, wenn eine portalLanguage konfiguriert war.
+- Die Beschreibung des Attributes portalLanguage wurde aus der doc/config.json.md vollständig enfernt, da die Sprache in der config.js konfiguriert werden muss.
+- Die Scale Werte für die Maßstabsanzeige werden nun wieder aus der config.json bzw. aus den Defaults übernommen und angezeigt.
+- Ein Fehler wurde beseitigt, der auftrat, wenn zuerst nach einer Kita und danach nach einem Bebauungsplan gesucht wurde.
+- Wenn im Maßstab 1:500 gedruckt werden soll, dann wird eine Warnung angezeigt, die die nicht druckbaren Layer nennt. Die Kartenansicht im Browser ändert sich nicht.
+
+---
+
+## v2.6.0 - 2020-12-17
+### Added
+- Neue Konfigurationsmöglichkeiten für "highlightVectorRules" hinzugefügt.
+- Ein neues Tool "Alerting" wurde hinzugefügt.
+- i18n wurde für zahlreiche Stellen angepasst.
+- Neues Modul "Confirm Action" hinzugefügt.
+- RemoteInterface wurde für Vue hinzugefügt.
+- Es ist nun möglich, mithilfe des "Datei-Import" Tools eigene GPX und GeoJSON Dateien darzustellen.
 - Es gibt nun ein Werkzeug um Daten und Geometrien von Web Feature Services (WFS) zu verändern, mittels WFS Transaction (WFS-T).
-- Ein GFI-Theme trafficCount, zum Anzeigen von Verkehrsmengen wurde hinzugefügt.
 - Das Zeichenmodul wurde erweitert, um beim Zeichnen von Punkten verschiedene Glyphicons zu verwenden.
 - Es können nun Web Map Tile Services (WMTS) als Layer eingebunden werden.
 - Das neue Styling wurde um die Möglichkeit erweitert, die Attribute scalingAttribute und labelAttribute zu konfigurieren.
 - Die “gfiAttribute”-keys können jetzt auch Objektpfade sein, analog zum neuen Styling.
 - Der Pfad zu den Sprachdateien ist jetzt in der config.js konfigurierbar und kann jetzt eine Funktion, einen Pfad oder ein Url enthalten.
+- Es wurde die Möglichkeit hinzugefügt über die URL Features zu übergeben, welche dann in einem GeoJSON-Layer dargestellt werden.
+- Es können nun Vector Tile Layer (VTL) als Layer eingebunden werden.
+- Für VTL wurde ein Tool hergestellt, mit dem zwischen externen Styles gewechselt werden kann.
+- Ein Tool zur vektordienstübergreifenden Auswahl von Features mittels einer aufziehbaren Box wurde hinzugefügt. Das Tool zeigt Feature-Eigenschaften an und bietet eine Zoomfunktion auf sie an.
+- Das Tool filter kann nun auch geclusterte Vektordienste filtern.
+- Hinzufügen einer zentralen Prüfinstanz, die deprecated Code sucht und ersetzt.
+- Im Informationsfenster eines Layers wird ein Hinweistext bez. des Datei-Typs angezeigt, falls im Reiter"Datensatz herunterladen" mehrere Dateien angezeigt werden.
+- Highlight von Vector Features ist nach vue umgezogen und konsolidiert. Der Parameter highlightVectorRules beim GFI wird nur vom neuen VectorStylye Version 3 unterstützt.
+- Der Parameter allowMultipleQueriesPerLayer, der im Tool Filter ermöglicht, dass mehrere Layer gleichzeitg gefiltert werden können, wurde in der Dokumentation beschrieben.
 
 ### Changed
+- Im Zuge des internen Umbaus von Backbone.js zu Vue.js wurden zahlreiche Module refactoriert oder neu erstellt. Folgende Module sind jetzt auf Basis von Vue.js: Alerting, ConfirmAction, Controls, Footer, Language, Map, MapMarker, RemoteInterface, ScaleLine, Title, Tools, Zahlreiche weitere Utils.
+- Der Ladebildschirm wurde überarbeitet.
+- Es werden nun alle URLs vom Portal direkt angefragt, ohne den Umweg über einen Proxy zu gehen, da von der GDI-DE empfohlen wird serverseitig einen CORS-Header einzurichten. Siehe dazu https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile Kapitel 4.7.1. Es besteht aber die Möglichkeit gezielt URLs bestimmter Dienste über einen Proxy umzuleiten. Diese Möglichkeit ist jedoch deprecated.
+- Das Tool "GFI" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Gleichzeitig wurden die speziellen Themes ausgelagert als Addons. Es gibt im Masterportal selber nur noch die Themes "default" zur tabellarischen Darstellung und "sensor" zur grafischen Anzeige von Sensordaten mit Zuständen/Status z.B. Elektroladesäulen. Die Verwendung infoFormates "text/html" ist weiterhin möglich, benötigt jedoch eine Tabelle zur Anzeige.
+- Im GFI Theme "default" werden Icons eingeblendet, um von dort andere Tools anzusteuern. Zur Verfügung stehen Icons für die Werkzeuge "routing" und "compareFeatures".
+- Das Tool "Draw" wurde überarbeitet und funktioniert nun auf Basis von Vue.js. Das Zeichnen von Punkten wurde geändert, alle Punkte basieren jetzt auf Bild-Dateien. Größe und Deckkraft können nicht mehr eingestellt werden, für diese Funktionalität steht das Zeichnen von Kreisen zur Verfügung. Das Bereitstellen von anderen Bilddateien wurde angepasst, siehe Doku der config.json.
+- Das Menü wurde dahingehend angepasst, dass für Layer kein Info-Icon angezeigt wird, wenn hierfür explizit "false" in der services-internet.json angegeben wurde.
+- Das Tool "KML-Import" wurde überarbeitet und heißt fortan "Datei-Import".
 - Babel wurde, um einen Support für alte Browser zu gewährleisten, auf den aktuellen Stand gebracht. Dazu wurde die Bibliothek core-js sowie eine babel.config.js hinzugefügt. Dadurch sind weitere Polyfills, die ES6 betreffen nun nicht mehr notwendig.
 - Die Version des Packages fs-extra wurde in der package.json aktualisiert.
 - Die Version des Packages replace-in-file wurde in der package.json aktualisiert.
@@ -23,22 +78,95 @@
 - Die Version des Packages null-loader wurde in der package.json aktualisiert.
 - Die Version des Packages https-proxy-agent wurde in der package.json aktualisiert.
 - Die Version des Packages zip-a-folder wurde in der package.json aktualisiert.
+- Das Package moment-timezone-data-webpack-plugin wurde entfernt.
+- In der index.html ist unter der id "loader" und ein neuer css-Loader eingebunden, dessen Darstellung über css geändert werden kann. Oberhalb davon werden Portaltitel und Portallogo während des Ladens des masterportals gezeigt. Sie sind in der index.html unter der id "portal-logo-box" zu finden.
+- In der Konfiguration des Werkzeugs "Strecke/Fläche messen" kann jetzt der Erdradius angegeben werden.
+- Das Modul MapMarker funktioniert nun auf Basis von Vue.js. Es ist nun möglich den Style für Punkt- und Polygon-Marker in der Style.json zu konfigurieren.
+- Bei Tool WMS-hinzufügen, darf externe Layer nur ab Version 1.3 importiert werden.
+- Bei Tool WMS-hinzufügen, darf externe Layer außer Portalextent nicht importiert werden.
+- Bei Tool Druck, die Layers, die nicht "visible" in Dreuckmaßstab sind, werden "invisible" beim Druck.
 
 ### Deprecated
+- Die Möglichkeit URLs über einen Proxy umzuleiten (useProxy) ist deprecated.
+- RemoteInterface via Backbone Radio ist ab jetzt deprecated.
 - WfsFeatureFilter ist deprecated. Bitte das Modul Filter benutzen.
 - ExtendedFilter ist deprecated. Bitte das Modul Filter benutzen.
+- Das Attribut coord für das Modul zur Koordinatenabfrage ist deprecated. Bitte das Attribut supplyCoord benutzen.
 
 ### Removed
+- Tool "Alerting" wurde entfernt und durch ein neues Tool ersetzt
 - @babel/polyfill wurde aus der package.json entfernt.
 - style-loader wurde aus der package.json entfernt.
 - es6-promise wurde aus der package.json entfernt.
 - url-polyfill wurde aus der package.json entfernt.
 - fs wurde aus der package.json entfernt.
 - Der Requestor wurde direkt in dem Tool featurelister integriert und daher entfernt.
+- Vom Tool "Draw" wird der Typ "glyphicon" nicht mehr von der iconList unterstützt, er wurde entfernt. Es sollen nur Bild-Dateien genutzt werden, siehe Doku der config.json.
+- Die Beta-Warnung für die Schrägluftbilder wurde entfernt.
 
 ### Fixed
+- GFI Darstellung von HTML wurde überarbeitet.
+- Mehrere Bugs beim Schulinformationssystem wurden behoben.
+- Ein Bug wurde behoben, durch den die Legende bei Gruppenlayern nicht funktionierte.
+- Ein Bug wurde behoben, durch den das Mobile Menu doppelt angezeigt wurde.
+- Mit Google Earth erstellte KML Dateien werden mit dem Tool "Datei-Import" nun besser dargestellt.
 - Ein Problem wurde behoben, durch das der Footer kaputt gegangen ist, wenn keine URLs konfiguriert waren.
-- Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen
+- Im Themenbaum wurden fehlende Übersetzungen hinzugefügt und im "custom tree" lassen sich die "Titel" der Ordner jetzt übersetzen.
+- Ein Fehler in der VisibleVector Suche wurde behoben. Dieser hatte verhindert, dass Suchergebnisse, die ein Leerzeichen beinhalten, gefunden werden.
+- In Geo-Online kann der Marker wieder über die URL gesetzt werden.
+- Zeichnen über das remote interface: centerPoint-Koordinaten werden erzeugt und heruntergeladen, kein freehand zu Beginn.
+- Im Styling wurde das Feld legendValue nicht ausgelesen. Dies funktioniert nun wieder.
+- Im Kontaktformular werden auch Email-Adressen mit einer Domain-Endung die länger als 2 Zeichen ist als gültig anerkannt (z.B. name@foo.hamburg).
+- Unstimmigkeiten beim Messen mit dem Werkzeug "Strecke/Fläche messen" wurden beseitigt.
+- Ein Problem mit Geo-JSOn Layern wurde behoben.
+- In der URL angegebene Layereigenschaften, wie Transparenz werden nun übernommen.
+- Viele weitere Bugfixes
+
+---
+
+## v2.5.5 - 2020-09-24
+### Fixed
+- SpecialWFS sucher funktioniert über mehere angegebene propertyNames im Array.
+
+---
+
+## v2.5.4 - 2020-08-27
+### Fixed
+- 3D Tileset Layer werden nun korrekt über die Legende aktiviert/deaktiviert
+- Ein Fehler in der Suche mittels des Gazetters, der bei Hausnummern mit Zusatz aufgetreten ist wurde behoben.
+
+---
+
+## v2.5.3 - 2020-06-29
+### Added
+- Multipolygone werden nun von der SpecialWFS Suche verarbeitet. Interne Polygone bspw. von B-Plänen werden fortan berücksichtigt und bei der Darstellung ausgespart.
+- Ein Konfigurationsparameter für das ZoomLevel bei der BKG-Suche wurde eingeführt.
+- In der BKG-Suche wurden die Parameter zoomToResultOnHover und zoomToResultOnClick zum Steuern der Anzeige der Suchergebnisse eingeführt.
+
+### Changed
+- Der erste Buchstabe wird für Einträge in der Legend aus WFS-Diensten nun immer groß geschrieben.
+- Das Werkzeug zur Koordinatenabfrage zeigt die Koordinatensysteme nun enstprechend der Reihenfolge der konfigurierten namedProjections aus der config.js an.
+
+### Deprecated
+- Der URL-Parameter zoomToResult ist deprecated. Bitte zoomToResultOnHover und zoomToResultOnClick benutzen.
+
+### Fixed
+- Die Legende für GruppenLayer wird nun wieder dargestellt.
+- Themenbaum/ Externe Fachdaten: Ein visuelles Problem beim Schliessen der Ordners wurde beseitigt.
+- Der Titel wird im Druckmodul nun beibehalten wenn der Maßstab geändert oder in der Karte gezoomt wird.
+- Die Legende wir für GruppenLayer wird nun nur noch einmal angezeigt.
+- Im Ausdrucken aus dem Druckmodul wird nun die Legende für GruppenLayer wieder angezeigt.
+
+---
+
+## v2.5.2 - 2020-06-09
+### Fixed
+- Die Portal-Konfiguration "singleBaselayer": "true" führt jetzt dazu, dass immer nur ein Hauptlayer ausgewählt werden kann.
+- Das Label der Version im Footer wird jetzt korrekt übersetzt.
+- Legenden, die den gleichen Namen und das gleiche Image haben, werden nur noch einmal für jeden Layer dargestellt.
+- In der Layerinformation wird, wenn keine Metadaten geladen wurden, der Link für "weitere Metadaten" nicht mehr dargestellt.
+- Der Infotext für Checkboxen wird nun beim Start nicht mehr ausgeklappt und hat nun den richtigen Style.
+- Die Quickhelp wird nun wieder richtig positioniert.
 
 ---
 
@@ -72,7 +200,7 @@
 - Der URL-Parameter "LNG" funktioniert nun ausschließlich wenn die Mehrsprachigkeit in den Portalconfigs aktiviert wurde und wirft keinen Fehler mehr.
 - Die Scrollbar beim Starten im IE11 wurde entfernt
 - Ein Problem, dass beim parametrisierten Aufruf mit ?config= auftrat, wurde behoben
-- Ein Problem wurde behoben, welches mit fehlernder Konfifuration des Portaltitels auftrat
+- Ein Problem wurde behoben, welches mit fehlernder Konfiguration des Portaltitels auftrat
 - Das Problem, das bei der Änderung der Sprache bei einem geöffneten Werkzeug auftrat und zu einer falschen Darstellung führte, wurde behoben
 - Im Footer können nun wieder eigene Einträge konfiguriert werden, die durch die Mehrsprachigkeit nicht mehr fehlerhaft angezeigt werden.
 - Ein Fehler wurde behoben, durch den Werkzeuge nach der Umschaltung der Sprache nicht mehr angezeigt wurden, da dort noch keine Mehrsprachigkeit implementiert ist
@@ -116,7 +244,7 @@
 - 3D:
     - 3D: Features eines Layers können zum Ausblenden in 3D in der config.json konfiguriert werden.
     - Map-Marker kann nun 3D-Koordinaten bekommen. Dies ist möglich durch eine Konfiguration des Markers als Ebene.
-    - VectorLayer können nun ihre 3D-Koordinate oder duch Konfiguration erhöht dargestellt werden.
+    - VectorLayer können nun ihre 3D-Koordinate oder durch Konfiguration erhöht dargestellt werden.
 - GFI:
     - Konfigurierbar, um Vektordaten bei GFI Abfrage anders darzustellen.
     - Neues GFI-Theme *sensor*, *bildungatlas*
@@ -139,7 +267,7 @@
 - Doku:
     - *setup.md* wurde angepasst
 - Konventionen: Wurden erweitert und überarbeitet.
-- Eslint: Überarbeitung der Regel function-paren-newline, sobald bei einem Paramter einer Funktion ein Zeilenumbruch verwendet wird ist dies bei allen Parametern erforderlich.
+- Eslint: Überarbeitung der Regel function-paren-newline, sobald bei einem Parameter einer Funktion ein Zeilenumbruch verwendet wird ist dies bei allen Parametern erforderlich.
 - master Portale: Intranet URL's entfernt.
 - Fonts: Erzeugung einer eigenen Fontclass MasterportalFont, um den Font des Masterportals zentral setzen zu können.
 - camelCase: Umbenennung diverser Ordner und Dateien entsprechend der camelCase Konvention.
@@ -155,7 +283,7 @@
 - Layer: Fortan können auch Layer deaktiviert werden, die im aktuellen Maßstab nicht sichtbar sind.
 - Filter: Der Filter kann im Internet Explorer wieder geöffnet werden.
 - Filter: Ein Fehler verhinderte die Verwendung des Filters. Dieser wurde behoben.
-- Elastic-Search: Es kann wieder nach konfigurierten Fachtemen gesucht werden.
+- Elastic-Search: Es kann wieder nach konfigurierten Fachthemen gesucht werden.
 - Suche: Ein Fehler wurde beseitig, der beim Entfernen des eingegebenen Suchbegriffs aufgetreten ist.
 - Messtool: Die voreingestellte Einheit (m² oder m) wurde auf die jeweilige Auswahl (Fläche oder Strecke) abgestimmt.
 - Themenbaum: Der Themenbaum lässt sich wieder inital öffnen.
@@ -204,7 +332,7 @@
 ### Fixed
   - Shadow-Tool: Das Schattentool ist nun mobil nicht mehr verfügbar
   - QuickHelp: Ein Bug wurde gefixt, der verhindert hat, dass die Bilder über den angegebenen Dateipfad geladen werden
-  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den enstprechenden Eintrag gescrollt
+  - Themenbaum: Es wird nun im DefaultTree nach der Suche eines Themas auf den entsprechenden Eintrag gescrollt
   - Searchbar: Ein Fehler wurde behoben der die Hausnummernsuche in der Gazetteer-Suche blockiert hat
   - WFS: Geoserver-WFS werden nun angezeigt
 

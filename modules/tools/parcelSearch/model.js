@@ -1,4 +1,5 @@
 import Tool from "../../core/modelList/tool/model";
+import store from "../../../src/app-store";
 
 const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -24,7 +25,6 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         createReport: false, // soll Berichts-Funktionalität gestartet werden? Aus Config.json
         parcelFound: false, // flag für den Bericht. Bericht wird nur abgefragt wenn Flurstück existiert
         glyphicon: "glyphicon-search",
-        mapMarkerType: "Parcel",
         // translations
         searchText: "",
         generateReportText: "",
@@ -37,7 +37,9 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         districtsLoadFailed: "",
         wrongConfigParcelsearch: "",
         parcelSearchImpossible: "",
-        tryAgainLater: ""
+        tryAgainLater: "",
+        zoomLevel: 7,
+        mapMarkerType: "Point"
 
     }),
     /**
@@ -66,7 +68,6 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {Boolean} createReport=false todo
      * @property {Boolean} parcelFound=false todo
      * @property {String} glyphicon="glyphicon-search" todo
-     * @property {String} mapMarkerType="Parcel" todo
      * @property {String} searchText="", filled with "Suchen"- translated
      * @property {String} generateReportText="", filled with "Bericht erzeugen"- translated
      * @property {String} parcelNumberText="", filled with "Flurstücksnummer"- translated
@@ -80,11 +81,8 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
      * @property {String} parcelSearchImpossible="", filled with "Flurstücksabfrage derzeit nicht möglich!"- translated
      * @property {String} tryAgainLater="", filled with "Bitte versuchen Sie es später erneut."- translated
      * @constructs
-     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
      * @listens i18next#RadioTriggerLanguageChanged
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function () {
         this.superInitialize();
@@ -210,15 +208,17 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
         }
     },
     buildUrl: function (url, params) {
+        const paramKeys = Object.entries(params);
         let addedUrl = url;
 
-        Object.entries(params).forEach(([key, val]) => {
-            const andSymbol = "&";
-
-            addedUrl += key + "=" + String(val) + andSymbol;
+        paramKeys.forEach(([key, val], i) => {
+            addedUrl += key + "=" + String(val);
+            if (i < paramKeys.length - 1) {
+                addedUrl = addedUrl + "&";
+            }
         });
         // if params is empty object
-        if (addedUrl.charAt(addedUrl.length - 1) !== "?") {
+        if (params.length === 0 && addedUrl.charAt(addedUrl.length - 1) !== "?") {
             addedUrl = addedUrl.slice(0, -1);
         }
         return addedUrl;
@@ -298,8 +298,15 @@ const ParcelSearch = Tool.extend(/** @lends ParcelSearch.prototype */{
             });
             this.setParcelFound(true);
 
-            Radio.trigger("MapMarker", "zoomTo", {type: this.get("mapMarkerType"), coordinate: coordinate});
-            Radio.trigger("ParcelSearch", "parcelFound", attributes);
+            if (this.get("mapMarkerType") === "Point") {
+                store.dispatch("MapMarker/placingPointMarker", coordinate);
+                Radio.trigger("MapView", "setCenter", coordinate, this.get("zoomLevel"));
+            }
+
+            // use a timeout here, else the resolution-change is not ready and in the addon showParcelGfi/RadioBridge the wrong result is returned for parcelsearch
+            setTimeout(() => {
+                Radio.trigger("ParcelSearch", "parcelFound", attributes);
+            }, 500);
         }
     },
 

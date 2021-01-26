@@ -1,6 +1,8 @@
 import "../model";
+import store from "../../../src/app-store/index";
+import {getWKTGeom} from "../../../src/utils/getWKTGeom";
 
-const BKGSearchModel = Backbone.Model.extend({
+const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype */{
     defaults: {
         minChars: 3,
         bkgSuggestURL: "",
@@ -14,8 +16,11 @@ const BKGSearchModel = Backbone.Model.extend({
         score: 0.6,
         ajaxRequests: {},
         typeOfRequest: "",
-        zoomToResult: false,
-        idCounter: 0
+        zoomToResult: false, // @deprecated in version 3.0.0
+        zoomToresulOnHover: false,
+        zoomToResultOnClick: true,
+        idCounter: 0,
+        zoomLevel: 7
     },
     /**
      * @description Initialisierung der BKG Suggest Suche
@@ -90,26 +95,24 @@ const BKGSearchModel = Backbone.Model.extend({
         if (data.length === 1) {
             this.bkgSearch({
                 name: data[0].suggestion
-            });
+            }, true, "click");
         }
-        else {
-            data.forEach(function (hit) {
-                if (hit.score > this.get("score")) {
-                    Radio.trigger("Searchbar", "pushHits", "hitList", {
-                        name: hit.suggestion,
-                        metaName: hit.suggestion,
-                        type: i18next.t("common:modules.searchbar.type.location"),
-                        bkg: true,
-                        glyphicon: "glyphicon-road",
-                        id: this.uniqueId("bkgSuggest"),
-                        triggerEvent: {
-                            channel: "Searchbar",
-                            event: "bkgSearch"
-                        }
-                    });
-                }
-            }, this);
-        }
+        data.forEach(hit => {
+            if (hit.score > this.get("score")) {
+                Radio.trigger("Searchbar", "pushHits", "hitList", {
+                    name: hit.suggestion,
+                    metaName: hit.suggestion,
+                    type: i18next.t("common:modules.searchbar.type.location"),
+                    bkg: true,
+                    glyphicon: "glyphicon-road",
+                    id: this.uniqueId("bkgSuggest"),
+                    triggerEvent: {
+                        channel: "Searchbar",
+                        event: "bkgSearch"
+                    }
+                });
+            }
+        });
         Radio.trigger("Searchbar", "createRecommendedList", "bkg");
     },
     /**
@@ -168,56 +171,105 @@ const BKGSearchModel = Backbone.Model.extend({
     },
 
     /**
-     * Startet die präzise Suche eines ausgewählten BKG-Vorschlags
-     * @param  {object} hit Objekt des BKG-Vorschlags
-     * @param  {boolean} showOrHideMarker Zeigt an, ob der Marker angezeigt oder versteckt werden soll
+     * Starts the precise search of a selected BKG proposal.
+     * @param  {object} hit - Object of the BKG proposal.
+     * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
+     * @param  {event} [eventType="click"] - The type of event that triggered this function.
      * @return {void}
      */
-    bkgSearch: function (hit, showOrHideMarker) {
+    bkgSearch: function (hit, showOrHideMarker, eventType = "click") {
         const name = hit.name,
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
-        this.setShowOrHideMarker(showOrHideMarker);
-
         this.setTypeOfRequest("search");
-        this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.get("typeOfRequest"), showOrHideMarker);
+        this.sendRequest(this.get("bkgSearchURL"), request, this.handleBKGSearchResult, true, this.get("typeOfRequest"), showOrHideMarker, eventType);
     },
+
     /**
-     * triggers the zoom on the feature and the drawing or hiding of the marker
-     * @param  {string} data - Data-XML from request
+     * Triggers the zoom on the feature and the drawing or hiding of the marker
+     * @param  {string} data - Data-XML from request.
+     * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
+     * @param  {event} eventType - The type of event that triggered this function.
      * @returns {void}
      */
-    handleBKGSearchResult: function (data) {
-        if (this.get("showOrHideMarker") === true) {
-            Radio.trigger("MapMarker", "showMarker", data.features[0].geometry.coordinates);
+    handleBKGSearchResult: function (data, showOrHideMarker, eventType) {
+        const zoomLevel = this.get("zoomLevel");
+
+        if (showOrHideMarker === true) {
+            store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);
         }
         else {
-            Radio.trigger("MapMarker", "hideMarker");
+            store.dispatch("MapMarker/removePointMarker");
         }
-        if (this.get("zoomToResult")) {
-            Radio.trigger("MapMarker", "zoomToBKGSearchResult", data);
+
+        if ((eventType === "mouseover" && this.get("zoomToResultOnHover")) || (eventType === "click" && this.get("zoomToResultOnClick"))) {
+            this.zoomToBKGSearchResult(data, zoomLevel);
+        }
+        /**
+         * zoomToResult
+         * @deprecated in 3.0.0
+         */
+        else if (eventType === "mouseover" && this.get("zoomToResult")) {
+            console.warn("Parameter 'zoomToResult' is deprecated. Please use 'zoomToResultOnHover' or 'zoomToResultOnClick' instead.");
+            this.zoomToBKGSearchResult(data, zoomLevel);
         }
     },
+
     /**
-     * @description Führt einen HTTP-GET-Request aus.
+     * Triggered by bkg this method receives the XML of the searched address.
+     * @param {string} data Die Data-Object des request.
+     * @fires Core#RadioTriggerMapZoomToExtent
+     * @fires Core#RadioTriggerMapViewSetCenter
+     * @param {number} zoomLevel The level to zoom.
+     * @returns {void}
+     */
+    zoomToBKGSearchResult: function (data, zoomLevel) {
+        if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
+            Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.get("zoomLevel"));
+            store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);
+        }
+
+        else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&
+            data.features[0].properties.bbox.type !== null && data.features[0].properties.bbox.type === "Polygon") {
+            const polygon = data.features[0].properties.bbox.coordinates[0].reduce((a, b) => a.concat(b), []);
+
+            store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(polygon));
+        }
+    },
+
+    /**
+     * Executes an HTTP GET request.
      * @param {String} url - URL the request is sent to.
      * @param {String} data - Data to be sent to the server
      * @param {function} successFunction - A function to be called if the request succeeds
      * @param {boolean} asyncBool - asynchroner oder synchroner Request
-     * @param {String} type - Typ des Requests
+     * @param {String} type - Typ des Requests,
+     * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
+     * @param  {event} eventType - The type of event that triggered this function
      * @returns {void}
      */
-    sendRequest: function (url, data, successFunction, asyncBool, type) {
+    sendRequest: function (url, data, successFunction, asyncBool, type, showOrHideMarker, eventType) {
         const ajax = this.get("ajaxRequests");
 
         if (ajax[type] !== null && ajax[type] !== undefined) {
             ajax[type].abort();
             this.polishAjax(type);
         }
-        this.ajaxSend(url, data, successFunction, asyncBool, type);
+        this.ajaxSend(url, data, successFunction, asyncBool, type, showOrHideMarker, eventType);
     },
 
-    ajaxSend: function (url, data, successFunction, asyncBool, typeRequest) {
+    /**
+     * Sends the ajax request.
+     * @param {String} url - URL the request is sent to.
+     * @param {String} data - Data to be sent to the server.
+     * @param {function} successFunction - A function to be called if the request succeeds.
+     * @param {boolean} asyncBool - asynchroner oder synchroner Request.
+     * @param {String} typeRequest - Typ des Requests.
+     * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
+     * @param  {event} eventType - The type of event that triggered this function.
+     * @returns {void}
+     */
+    ajaxSend: function (url, data, successFunction, asyncBool, typeRequest, showOrHideMarker, eventType) {
         this.get("ajaxRequests")[typeRequest] = $.ajax({
             url: url,
             data: data,
@@ -225,11 +277,11 @@ const BKGSearchModel = Backbone.Model.extend({
             context: this,
             async: asyncBool,
             type: "GET",
-            success: successFunction,
+            success: (resultData) => successFunction.call(this, resultData, showOrHideMarker, eventType),
             timeout: 6000,
             typeRequest: typeRequest,
             error: function (err) {
-                if (err.status !== 0) { // Bei abort keine Fehlermeldung
+                if (err.status !== 0) { // No error message for abort.
                     this.showError(err);
                 }
                 Radio.trigger("Searchbar", "abortSearch", "bkg");
@@ -241,8 +293,8 @@ const BKGSearchModel = Backbone.Model.extend({
     },
 
     /**
-     * Triggert die Darstellung einer Fehlermeldung
-     * @param {object} err Fehlerobjekt aus Ajax-Request
+     * Triggers the display of an error message.
+     * @param {object} err - Error object from Ajax request.
      * @returns {void}
      */
     showError: function (err) {
@@ -252,32 +304,38 @@ const BKGSearchModel = Backbone.Model.extend({
     },
 
     /**
-     * Löscht die Information des erfolgreichen oder abgebrochenen Ajax-Requests wieder aus dem Objekt der laufenden Ajax-Requests
-     * @param {string} type Bezeichnung des Typs
+     * Deletes the information of the successful or aborted Ajax request from the object of the running Ajax requests
+     * @param {string} type - Designation of the type.
      * @returns {void}
      */
     polishAjax: function (type) {
         const ajax = this.get("ajaxRequests"),
-            cleanedAjax = _.omit(ajax, type);
+            cleanedAjax = Radio.request("Util", "omit", ajax, Array.isArray(type) ? type : [type]);
 
         this.set("ajaxRequests", cleanedAjax);
     },
 
     /**
-     * Setzt den RequestTyp
-     * @param {string} value neuer Wert
+     * Sets the typeOfRequest
+     * @param {string} value - typeOfRequest
      * @returns {void}
      */
     setTypeOfRequest: function (value) {
         this.set("typeOfRequest", value);
     },
 
+    /**
+    * Sets the showOrHideMarker.
+    * @param {string} value - showOrHideMarker
+    * @returns {void}
+    */
     setShowOrHideMarker: function (value) {
         this.set("showOrHideMarker", value);
     },
+
     /**
     * Sets the idCounter.
-    * @param {string} value counter
+    * @param {string} value - idCounter
     * @returns {void}
     */
     setIdCounter: function (value) {

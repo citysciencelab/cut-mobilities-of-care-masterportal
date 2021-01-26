@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wfs:FeatureCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd http://www.deegree.org/app http://localhost:9001/fachdaten_a_b/services/wfs_hh_bebauungsplaene?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;OUTPUTFORMAT=text%2Fxml%3B+subtype%3Dgml%2F3.1.1&amp;TYPENAME=app:hh_hh_festgestellt&amp;NAMESPACE=xmlns(app=http%3A%2F%2Fwww.deegree.org%2Fapp)" xmlns:wfs="http://www.opengis.net/wfs" timeStamp="2020-06-08T08:29:19Z" xmlns:gml="http://www.opengis.net/gml">
+  <gml:featureMember>
+    <app:hh_hh_festgestellt xmlns:app="http://www.deegree.org/app" gml:id="APP_HH_HH_FESTGESTELLT_313baf2f-cdd1-4b3f-9735-3d2aa5ebd1f7">
+      <app:geltendes_planrecht>BSOttensen</app:geltendes_planrecht>
+      <app:geom>
+        <!--Inlined geometry 'APP_HH_HH_FESTGESTELLT_313baf2f-cdd1-4b3f-9735-3d2aa5ebd1f7_APP_GEOM'-->
+        <gml:MultiPolygon gml:id="APP_HH_HH_FESTGESTELLT_313baf2f-cdd1-4b3f-9735-3d2aa5ebd1f7_APP_GEOM" srsName="EPSG:25832">
+          <gml:polygonMember>
+            <gml:Polygon srsName="EPSG:25832">
+              <gml:exterior>
+                <gml:LinearRing srsName="EPSG:25832">
+                  <gml:posList>560313.401 5934298.407 560294.587 5934301.811 560285.063 5934303.535 560271.224 5934294.941 560268.175 5934295.831 560258.461 5934229.981</gml:posList>
+                </gml:LinearRing>
+              </gml:exterior>
+            </gml:Polygon>
+          </gml:polygonMember>
+        </gml:MultiPolygon>
+      </app:geom>
+    </app:hh_hh_festgestellt>
+  </gml:featureMember>
+</wfs:FeatureCollection>

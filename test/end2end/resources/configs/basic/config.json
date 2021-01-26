@@ -50,8 +50,8 @@
 						"name": "Zeichnen / Schreiben",
 						"glyphicon": "glyphicon-pencil"
 					},
-					"kmlimport": {
-						"name": "KML Import"
+					"fileImport": {
+						"name": "Datei Import"
 					},
 					"saveSelection": {
 						"name": "Auswahl speichern"

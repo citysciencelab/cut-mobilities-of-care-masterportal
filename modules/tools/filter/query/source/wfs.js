@@ -1,4 +1,5 @@
 import SourceModel from "./model";
+import getProxyUrl from "../../../../../src/utils/getProxyUrl";
 
 const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
 
@@ -7,7 +8,6 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
      * @extends SourceModel
      * @memberof Tools.Filter.Query.Source
      * @constructs
-     * @fires Util#getProxyURL
      */
     initialize: function () {
         this.initializeFunction();
@@ -23,7 +23,12 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
      * @returns {void}
      */
     buildQueryDatastructureByType: function (layerObject) {
-        const url = Radio.request("Util", "getProxyURL", layerObject.url),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(layerObject.url) : layerObject.url,
             featureType = layerObject.featureType,
             version = layerObject.version,
             featureAttributesMap = this.requestMetadata(url, featureType, version, this.parseResponse);
@@ -43,7 +48,6 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
             url: url,
             context: this,
             data: "service=WFS&version=" + version + "&request=DescribeFeatureType&typename=" + featureType,
-            // parent (QueryModel) function
             success: callback
         });
     },
@@ -60,7 +64,7 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
             elements = "";
 
         // Serialize xml-object. Skipped if a xml-string was provided.
-        if (!_.isString(response)) {
+        if (typeof response !== "string") {
             responseString = new XMLSerializer().serializeToString(response);
         }
         else {
@@ -75,7 +79,7 @@ const WfsQueryModel = SourceModel.extend(/** @lends WfsQueryModel.prototype*/{
 
         elements = $(selector, response);
 
-        _.each(elements, function (element) {
+        elements.toArray().forEach(element => {
 
             let type = $(element).attr("type"),
                 typeWithoutNamespace,

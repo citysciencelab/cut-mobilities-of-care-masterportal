@@ -34,7 +34,8 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
     initialize: function () {
         this.listenTo(this.model, {
             "updateDOMSlider": this.updateDOMSlider,
-            "removeView": this.remove
+            "removeView": this.remove,
+            "change:currentLng": this.render
         }, this);
     },
 

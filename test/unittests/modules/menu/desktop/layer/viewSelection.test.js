@@ -12,28 +12,20 @@ describe("menu/desktop/layer/viewSelection", function () {
                 return 42;
             },
 
+            children: [{datasets: false}],
             isSettingVisible: false,
             isStyleable: false,
             showSettings: true,
             supported: ["2D"],
             isRemovable: false,
+            isSecured: false,
 
             setIsSettingVisible: function (value) {
                 this.isSettingVisible = value;
             },
 
-            get: function (value) {
-                switch (value) {
-                    case "isSettingVisible":
-                        return this.isSettingVisible;
-                    case "isStyleable":
-                        return this.isStyleable;
-                    case "showSettings":
-                        return this.showSettings;
-                    case "supported":
-                        return this.supported;
-                    case "isRemovable":
-                        return this.isRemovable;
+            get: function (key) {
+                switch (key) {
                     case "removeTopicText":
                         return "removeTopicText";
                     case "changeClassDivisionText":
@@ -55,7 +47,7 @@ describe("menu/desktop/layer/viewSelection", function () {
                     case "selectedTopicsText":
                         return "selectedTopicsText";
                     default:
-                        return null;
+                        return this[key] || null;
                 }
             },
 
@@ -80,6 +72,7 @@ describe("menu/desktop/layer/viewSelection", function () {
                     transparency: 42,
                     isVisibleInMap: true,
                     isRemovable: false,
+                    isSecured: false,
                     removeTopicText: "removeTopicText",
                     changeClassDivisionText: "changeClassDivisionText",
                     infosAndLegendText: "infosAndLegendText",

@@ -10,12 +10,13 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
         states: "",
         searchParams: [],
         classes: [],
-        ajaxRequest: null
+        ajaxRequest: null,
+        serviceId: 10
     },
 
     /**
-     * @class MapView
-     * @description Initialisierung der OSM Suche
+     * @class OsmModel
+     * @description Initialization of the OSM search
      * @extends Backbone.Model
      * @memberOf Searchbar.Osm
      * @constructs
@@ -27,11 +28,6 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @property {Array} searchParams=[] - todo
      * @property {Array} classes=[] - todo
      * @property {*} ajaxRequest=null - todo
-     * @param {Object} config - The configuration object of the OSM search.
-     * @param {number} [config.minChars=3] - Minimum number of characters before a search is initiated.
-     * @param {string} config.osmServiceUrl - ID from rest services for URL.
-     * @param {number} [config.limit=50] - Number of proposals requested.
-     * @param {string}  [osm.states=""] - List of the federal states for the hit selection..
      * @listens Searchbar#RadioTriggerSearchbarSearchAll
      * @fires RestReader#RadioRequestRestReaderGetServiceById
      * @fires Core#RadioRequestParametricURLGetInitString
@@ -41,33 +37,17 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @fires Searchbar#RadioTriggerSearchbarCreateRecommendedList
      * @returns {void}
      */
-    initialize: function (config) {
-        const service = Radio.request("RestReader", "getServiceById", config.serviceId);
+    initialize: function () {
+        const service = Radio.request("RestReader", "getServiceById", this.get("serviceId"));
 
-        if (!_.isUndefined(config.minChars)) {
-            this.setMinChars(config.minChars);
-        }
-        if (!_.isUndefined(service) && !_.isUndefined(service.get("url"))) {
+        if (service !== undefined && service.get("url") !== undefined) {
             this.setOsmServiceUrl(service.get("url"));
         }
-        if (!_.isUndefined(config.limit)) {
-            this.setLimit(config.limit);
-        }
-        // über den Parameter "states" kann in der configdatei die Suche auf ander Bundesländer erweitert werden
-        // Der Eintrag in "states" muss ein string mit den gewünschten Ländern von "address.state" der Treffer sein...
-        if (!_.isUndefined(config.states)) {
-            this.setStates(config.states);
-        }
 
-        if (!_.isUndefined(config.classes)) {
-            this.setClasses(config.classes);
-        }
-
-        if (_.isUndefined(Radio.request("ParametricURL", "getInitString")) === false) {
+        if (Radio.request("ParametricURL", "getInitString") !== undefined) {
             this.search(Radio.request("ParametricURL", "getInitString"));
         }
         this.listenTo(Radio.channel("Searchbar"), {
-            // "search": this.search
             "searchAll": this.search
         });
     },
@@ -81,7 +61,6 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {void}
      */
     search: function (searchString) {
-
         if (searchString.length >= this.get("minChars")) {
             Radio.trigger("Searchbar", "removeHits", "hitList", {type: "OpenStreetMap"});
             this.suggestByOSM(searchString);
@@ -101,18 +80,18 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
             tmp = searchString.split(",");
         let request;
 
-        _.each(tmp, function (elem) {
+        tmp.forEach(elem => {
             if (elem.indexOf(" ") > -1) {
-                _.each(elem.split(" "), function (elem2) {
+                elem.split(" ").forEach(elem2 => {
                     if (elem2.trim().length > 0) {
-                        this.push(elem2);
+                        searchStrings.push(elem2);
                     }
-                }, this);
+                });
             }
             else {
-                this.push(elem);
+                searchStrings.push(elem);
             }
-        }, searchStrings);
+        });
 
         this.setSearchParams(searchStrings);
 
@@ -141,34 +120,37 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
             weg,
             county;
 
-        _.each(data, function (hit) {
-            if (this.get("states").length === 0 || this.get("states").includes(hit.address.state)) {
+        data.forEach(hit => {
+            if (this.get("states").length === 0 || this.get("states").includes(hit.address.state || hit.address.city)) {
                 if (this.isSearched(hit, this.get("searchParams"))) {
                     weg = hit.address.road || hit.address.pedestrian;
                     county = hit.address.county;
-                    display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village;
-                    if (!_.isUndefined(county) && _.isUndefined(display)) {
+                    display = hit.address.city || hit.address.city_district || hit.address.town || hit.address.village || hit.address.suburb;
+                    if (county !== undefined && display === undefined) {
                         display = county;
                     }
-                    if (!_.isUndefined(weg)) {
+                    if (weg !== undefined) {
                         display = display + ", " + weg;
-                        if (!_.isUndefined(hit.address.house_number)) {
+                        if (hit.address.house_number !== undefined) {
                             display = display + " " + hit.address.house_number;
                         }
                     }
 
                     // Tooltip
                     metaName = display;
-                    if (!_.isUndefined(hit.address.postcode) && !_.isUndefined(hit.address.state)) {
-                        metaName = metaName + ", " + hit.address.postcode + " " + hit.address.state;
-                        if (!_.isUndefined(hit.address.suburb)) {
+                    if (hit.address.postcode !== undefined && (hit.address.state !== undefined || hit.address.city !== undefined)) {
+                        metaName = metaName + ", " + hit.address.postcode + " " + (hit.address.state || hit.address.city);
+                        if (hit.address.suburb !== undefined) {
                             metaName = metaName + " (" + hit.address.suburb + ")";
                         }
                     }
 
                     bbox = hit.boundingbox;
-                    if (!_.isUndefined(hit.address.house_number)) {
-                        // Zentrum der BoundingBox ermitteln und von lat/lon ins Zielkoordinatensystem transformieren...
+                    if (hit?.lon && hit?.lat) {
+                        center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [parseFloat(hit.lon), parseFloat(hit.lat)]);
+                    }
+                    else if (hit.address.house_number !== undefined) {
+                        // Find the center of the BoundingBox and transform it from lat/lon to the target coordinate system...
                         north = (parseFloat(bbox[0]) + parseFloat(bbox[1])) / 2.0;
                         east = (parseFloat(bbox[2]) + parseFloat(bbox[3])) / 2.0;
                         center = transformToMapProjection(Radio.request("Map", "getMap"), "WGS84", [east, north]);
@@ -189,13 +171,13 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
                         type: "OpenStreetMap",
                         osm: true,
                         glyphicon: "glyphicon-road",
-                        id: _.uniqueId("osmSuggest"),
+                        id: Radio.request("Util", "uniqueId", "osmSuggest"),
                         marker: hit.class === "building",
                         coordinate: center
                     });
                 }
             }
-        }, this);
+        });
         Radio.trigger("Searchbar", "createRecommendedList", "osm");
     },
 
@@ -207,20 +189,19 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      */
     isSearched: function (searched, params) {
         const hits = [],
-            address = searched.address;
+            address = searched?.address || {};
 
         if (this.canShowHit(searched)) {
-
-            _.each(params, function (param) {
-                if ((_.has(address, "house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
-                    (_.has(address, "road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "county") && address.county !== null && address.county.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
-                    (_.has(address, "suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
+            params.forEach(param => {
+                if ((address.hasOwnProperty("house_number") && address.house_number !== null && address.house_number.toLowerCase() === param.toLowerCase()) ||
+                    (address.hasOwnProperty("road") && address.road !== null && address.road.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("pedestrian") && address.pedestrian !== null && address.pedestrian.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("county") && address.county !== null && address.county.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("city") && address.city !== null && address.city.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("city_district") && address.city_district !== null && address.city_district.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("town") && address.town !== null && address.town.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("village") && address.village !== null && address.village.toLowerCase().indexOf(param.toLowerCase()) > -1) ||
+                    (address.hasOwnProperty("suburb") && address.suburb !== null && address.suburb.toLowerCase().indexOf(param.toLowerCase()) > -1)
                 ) {
                     hits.push(param);
                 }
@@ -236,15 +217,15 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
      * @returns {boolean} true | false
      */
     canShowHit: function (hit) {
-        const classesToShow = this.get("classes");
+        const classesToShow = this.get("classes").split(",");
         let result = false;
 
         if (classesToShow.length === 0) {
             return true;
         }
 
-        _.each(classesToShow, function (classToShow) {
-            if (hit.class === classToShow || !_.isUndefined(hit.extratags[classToShow])) {
+        classesToShow.forEach(classToShow => {
+            if (hit?.class === classToShow || hit.hasOwnProperty("extratags") && hit.extratags[classToShow] !== undefined) {
                 result = true;
             }
         });
@@ -262,7 +243,7 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
     sendRequest: function (url, data, successFunction) {
         const ajax = this.get("ajaxRequest");
 
-        if (!_.isNull(ajax)) {
+        if (ajax !== null) {
             ajax.abort();
             this.polishAjax();
         }
@@ -335,57 +316,12 @@ const OsmModel = Backbone.Model.extend(/** @lends OsmModel.prototype */{
     },
 
     /**
-     * Setter for limit.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setLimit: function (value) {
-        this.set("limit", value);
-    },
-
-    /**
-     * Setter for states.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setStates: function (value) {
-        this.set("states", value);
-    },
-
-    /**
-     * Setter for street.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setStreet: function (value) {
-        this.set("street", value);
-    },
-
-    /**
      * Setter for searchParams.
      * @param {*} value - todo
      * @returns {void}
      */
     setSearchParams: function (value) {
         this.set("searchParams", value);
-    },
-
-    /**
-     * Setter for classes.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setClasses: function (value) {
-        this.set("classes", value.split(","));
-    },
-
-    /**
-     * Setter for minChars.
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    setMinChars: function (value) {
-        this.set("minChars", value);
     },
 
     /**

@@ -1,4 +1,5 @@
 const {getCenter, setCenter} = require("./scripts.js"),
+    axios = require("axios").default,
     {By} = require("selenium-webdriver");
 
 /**
@@ -67,10 +68,9 @@ async function clickFeature (driver, coordinates) {
     const viewport = await driver.findElement(By.css(".ol-viewport"));
 
     await driver.executeScript(setCenter, coordinates);
-    await driver.actions({bridge: true})
-        .move({origin: viewport})
-        .click()
-        .perform();
+    // wait until re-centering is sure to be done - may click old center else ...
+    await new Promise(r => setTimeout(r, 10));
+    await viewport.click();
 }
 
 /**
@@ -125,12 +125,148 @@ async function reclickUntilNotStale (driver, selector) {
         throw error;
     }
 }
+/**
+ * Logs the url to the test currently running in browserstack.
+ * Gets all current builds from browserstack to achieve the id of this build.
+ * Constructs an Url to the test in browserstack with the given session id and the build id.
+ * @param {string} sessionId id of the browserstack test session
+ * @returns {void}
+ */
+async function logBrowserstackUrlToTest (sessionId) {
+    const bsUrl = "https://api.browserstack.com/automate/builds.json";
+
+    axios({
+        method: "get",
+        url: bsUrl,
+        responseType: "json",
+        auth: {
+            /* eslint-disable-next-line no-process-env */
+            username: process.env.bs_user,
+            /* eslint-disable-next-line no-process-env */
+            password: process.env.bs_key
+        }
+    }).then(res => {
+        res.data.forEach(entry => {
+            const build = entry.automation_build;
+
+            /* eslint-disable-next-line no-process-env */
+            if (build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
+                const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
+
+                console.warn(`      ${url}${sessionId}`);
+            }
+        });
+    })
+        .catch(function (error) {
+            console.warn("Cannot get builds from browserstack: - an error occured calling the url: ", bsUrl, error);
+        });
+}
+
+/**
+ * Extracts layer order from config.json.
+ * Function will sort out special layers not initially visible, e.g. 3D layers and invisible layers.
+ * @param {object} configJson config.json file
+ * @param {object} services services.json file
+ * @returns {string[]} array of names
+ */
+function getOrderedTitlesFromConfig (configJson, services) {
+    /**
+     * @param {*} params config.json params for a service entry
+     * @returns {string[]} name list
+     */
+    function converter ({id, name, isVisibleInTree}) {
+        // mark invisible layers for removal
+        if (isVisibleInTree === false) {
+            return false;
+        }
+        // if id is an array of service ids OR a non-service id, return name, if defined or not
+        if (Array.isArray(id) || !(/^\d+$/).test(id)) {
+            return name;
+        }
+        // if name is present in other cases, also use it
+        if (name) {
+            return name;
+        }
+        // if name not found, use the service's name
+        const service = services.find(entry => entry.id === id);
+
+        if (service) {
+            return service.name;
+        }
+        // if none of the above work, just sort it out
+        return false;
+    }
+
+    const testTranslations = {
+        "translate#common:tree.trafficCameras": ["Verkehrskameras", "survey cameras (traffic)"]
+    };
+
+    return [
+        ...configJson
+            .Themenconfig
+            .Fachdaten
+            .Layer
+            .map(converter)
+            .filter(x => x) // filter out false entries
+            .map(x => Array.isArray(x) ? x[0] : x), // flatten arrayed names,
+        ...configJson.Themenconfig.Hintergrundkarten.Layer.map(converter)
+    ]
+        // remove initially inactive layers
+        .filter(name => !["Gelände", "Gebäude LoD2", "Oblique"].includes(name))
+        // execute required translations for test case
+        .map(name => testTranslations[name] || name);
+}
+
+/**
+ * Extracts layer order from config.json.
+ * Function will sort out special layers not initially visible, e.g. 3D layers and invisible layers.
+ * @param {object} configJson config.json file
+ * @returns {string[]} array of ids
+ */
+function getOrderedIdsFromConfig (configJson) {
+    return [
+        ...configJson.Themenconfig.Fachdaten.Layer,
+        ...configJson.Themenconfig.Hintergrundkarten.Layer
+    ]
+        .filter(layer => !["12883", "12884", "13032", "5708"].includes(layer.id)) // remove initially inactive and non-tree layers
+        .map(layer => {
+            // remove tree-invisible layers
+            if (layer.isVisibleInTree === false) {
+                return false;
+            }
+            // get ids from children (flat) where appropriate
+            return layer.children ? layer.children.map(entry => entry.id) : layer.id;
+        })
+        .filter(x => x) // filter out previously determined layers
+        .map(id => Array.isArray(id) ? id[0] : id) // if id is an array, use first entry as representant
+        .map(id => String(parseInt(id, 10))); // e.g. "1933geofox_stations" should only be 1933 for comparison
+}
+
+/**
+ * Function gets titles in expected-to-be-open layer tree.
+ * @param {object} driver driver object
+ * @returns {string[]} array of titles
+ */
+async function getOrderedTitleTexts (driver) {
+    const elements = await driver.findElements(By.css("ul#tree span.title"));
+
+    return (await Promise.all(elements.map(async element => {
+        const title = await element.getAttribute("title"),
+            visible = await element.isDisplayed();
+
+        return visible ? title : false;
+    }))).filter(x => x !== false);
+}
 
 module.exports = {
     getTextOfElements,
+    getOrderedTitleTexts,
+    getOrderedTitlesFromConfig,
+    getOrderedIdsFromConfig,
     centersTo,
     losesCenter,
     clickFeature,
     hoverFeature,
-    reclickUntilNotStale
+    reclickUntilNotStale,
+    logBrowserstackUrlToTest
 };

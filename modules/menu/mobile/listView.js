@@ -8,6 +8,7 @@ import "jquery-ui/ui/effects/effect-slide";
 import "jquery-ui/ui/effect";
 import "bootstrap/js/dropdown";
 import "bootstrap/js/collapse";
+import store from "../../../src/app-store";
 
 
 const MobileMenu = Backbone.View.extend({
@@ -35,9 +36,10 @@ const MobileMenu = Backbone.View.extend({
     render: function () {
         const rootModels = this.collection.where({parentId: "root"});
 
-        this.$("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
-        this.$("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
+        $("div.collapse.navbar-collapse ul.nav-menu").removeClass("nav navbar-nav desktop");
+        $("div.collapse.navbar-collapse ul.nav-menu").addClass("list-group mobile");
         this.addViews(rootModels);
+        store.dispatch("Legend/setShowLegendInMenu", true);
         return this;
     },
     traverseTree: function (model) {
@@ -61,31 +63,28 @@ const MobileMenu = Backbone.View.extend({
 
         models = this.collection.add(lightModels);
 
-        models = _.sortBy(models, function (layer) {
-            return layer.get("selectionIDX");
-        }).reverse();
+        models.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             model.setIsVisibleInTree(false);
-        }, this);
+        });
 
         this.addViews(models);
     },
 
     renderSelection: function (withAnimation) {
-        let models = this.collection.where({isSelected: true, type: "layer"});
+        const models = this.collection.where({isSelected: true, type: "layer"});
 
         if (withAnimation) {
             this.slideModels("descent", models, "tree", "Selection");
         }
         else {
             // Views löschen um doppeltes Zeichnen zu vermeiden
-            _.each(models, function (model) {
+            models.forEach(model => {
                 model.setIsVisibleInTree(false);
-            }, this);
-            models = _.sortBy(models, function (layer) {
-                return layer.get("selectionIDX");
-            }).reverse();
+            });
+
+            models.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
 
             this.addViews(models);
         }
@@ -114,8 +113,14 @@ const MobileMenu = Backbone.View.extend({
         const that = this;
         let slideIn,
             slideOut,
-            groupedModels,
-            modelsToShowSelection;
+            groupedModels;
+
+        if (modelsToShow.length > 0 && modelsToShow[0].get("parentId") === "root") {
+            store.dispatch("Legend/setShowLegendInMenu", true);
+        }
+        else {
+            store.dispatch("Legend/setShowLegendInMenu", false);
+        }
 
         if (direction === "descent") {
             slideIn = "right";
@@ -126,40 +131,37 @@ const MobileMenu = Backbone.View.extend({
             slideOut = "right";
         }
 
-        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
+        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideOut, duration: 200, mode: "hide"}, function () {
 
             that.collection.setModelsInvisibleByParentId(parentIdOfModelsToHide);
             if (currentList === "Selection") {
-                modelsToShowSelection = _.sortBy(modelsToShow, function (layer) {
-                    return layer.get("selectionIDX");
-                }).reverse();
-                that.addViews(modelsToShowSelection);
+                modelsToShow.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX")).reverse();
+                that.addViews(modelsToShow);
             }
             else {
                 // Gruppieren nach Folder und Rest
-                groupedModels = _.groupBy(modelsToShow, function (model) {
+                groupedModels = Radio.request("Util", "groupBy", modelsToShow, function (model) {
                     return model.get("type") === "folder" ? "folder" : "other";
                 });
-
                 // Im default-Tree werden folder und layer alphabetisch sortiert
                 if (Radio.request("Parser", "getTreeType") === "default" && modelsToShow[0].get("parentId") !== "tree") {
-                    groupedModels.folder = _.sortBy(groupedModels.folder, function (item) {
-                        return item.get("name");
-                    });
-                    groupedModels.other = _.sortBy(groupedModels.other, function (item) {
-                        return item.get("name");
-                    });
+                    if (groupedModels.folder) {
+                        groupedModels.folder.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
+                    }
+                    if (groupedModels.other) {
+                        groupedModels.other.sort((itemA, itemB) => itemA.get("name") - itemB.get("name"));
+                    }
                 }
                 // Folder zuerst zeichnen
-                that.addViews(groupedModels.folder);
-
-                groupedModels.other = _.sortBy(groupedModels.other, function (layer) {
-                    return layer.get("selectionIDX");
-                }).reverse();
-                that.addViews(groupedModels.other);
+                if (groupedModels.folder) {
+                    that.addViews(groupedModels.folder);
+                }
+                if (groupedModels.other) {
+                    that.addViews(groupedModels.other);
+                }
             }
         });
-        this.$("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
+        $("div.collapse.navbar-collapse ul.nav-menu").effect("slide", {direction: slideIn, duration: 200, mode: "show"});
     },
 
     doRequestTreeType: function () {
@@ -167,7 +169,7 @@ const MobileMenu = Backbone.View.extend({
     },
 
     doAppendNodeView: function (nodeView) {
-        this.$("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
+        $("div.collapse.navbar-collapse ul.nav-menu").append(nodeView.render().el);
     },
 
     /**
@@ -178,13 +180,12 @@ const MobileMenu = Backbone.View.extend({
      */
     addViews: function (models) {
         const treeType = this.doRequestTreeType(),
-            newModels = _.reject(models, function (model) {
-                return model.get("onlyDesktop") === true;
-            });
+            newModels = models.filter(model => !(model.get("onlyDesktop") === true));
+
         let nodeView,
             attr;
 
-        _.each(newModels, function (model) {
+        newModels.forEach(model => {
             model.setIsVisibleInTree(true);
             switch (model.get("type")) {
                 case "folder": {
@@ -227,7 +228,7 @@ const MobileMenu = Backbone.View.extend({
                 }
             }
             this.doAppendNodeView(nodeView);
-        }, this);
+        });
     },
 
     /**

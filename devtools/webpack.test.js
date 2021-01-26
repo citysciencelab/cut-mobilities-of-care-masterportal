@@ -2,6 +2,7 @@ const webpack = require("webpack"),
     path = require("path"),
     VueLoaderPlugin = require("vue-loader/lib/plugin");
 
+require("regenerator-runtime/runtime");
 require("jsdom-global")();
 global.DOMParser = window.DOMParser;
 
@@ -27,7 +28,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                exclude: /\bcore-js\b/,
+                exclude: /\bcore-js\b|\bvideo.js\b|\bsinon\b|\bturf\b/,
                 use: {
                     loader: "babel-loader"
                 }
@@ -84,7 +85,8 @@ module.exports = {
         // ADDONS wird hier global definiert, da der pre-push den Fehler ADDONS is undefined in ./src/addons.js wirft,
         // obwohl der linter die Zeile ignorieren soll
         new webpack.DefinePlugin({
-            ADDONS: {}
+            ADDONS: {},
+            VUE_ADDONS: {}
         })
     ]
 };

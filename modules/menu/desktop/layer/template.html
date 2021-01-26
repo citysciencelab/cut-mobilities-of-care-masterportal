@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <% if (typeof treeType === "undefined") { %>
 <div class="layer-info-item pull-right">
-    <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
+    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+        <span class="glyphicon glyphicon-info-sign" title="<%=infosAndLegendText%>"></span>
+    <% } %>
 </div>
 <% } else { %>
 <div class="layer-info-item pull-right">
@@ -13,6 +15,9 @@
         <span class="glyphicon glyphicon-check" title="<%=removeTopicText%>"></span>
     <% } else { %>
         <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
+    <% } %>
+    <% if (isSecured) { %>
+        <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
     <% } %>
     <span class="title" title="<%= name %>"><%= name %></span>
 </div>

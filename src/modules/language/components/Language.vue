@@ -1,4 +1,7 @@
 <script>
+import {mapGetters, mapMutations} from "vuex";
+import getters from "../store/gettersLanguage";
+
 export default {
     name: "Language",
     data () {
@@ -6,9 +9,18 @@ export default {
             showWindow: false
         };
     },
+    computed: {
+        ...mapGetters("Language", Object.keys(getters))
+    },
+    created: function () {
+        this.setCurrentLocale(this.$i18n.i18next.language);
+    },
     methods: {
+        ...mapMutations("Language", ["setCurrentLocale"]),
         translate (language) {
-            i18next.changeLanguage(language);
+            i18next.changeLanguage(language, () => {
+                this.setCurrentLocale(language);
+            });
         },
         toggleLanguageWindow () {
             this.showWindow = !this.showWindow;
@@ -69,6 +81,7 @@ export default {
     @import "~variables";
 
     #language-bar {
+        margin-left: 10px;
         .current-language {
             display: block;
             position: relative;

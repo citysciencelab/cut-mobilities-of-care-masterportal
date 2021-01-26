@@ -16,6 +16,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "measure",
             "print",
             "kmlimport",
+            "fileImport",
             "draw",
             "featureLister",
             "animation",
@@ -39,7 +40,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @property {String[]} categories=["Opendata", "Inspire", "Behörde"] categories for Fachdaten in DefaultTree
      * @property {String} category="Opendata" selected category for Fachdaten in DefaultTree
      * @property {Number} selectionIDX=-1 Index of the last inserted layers. Required for sorting/moving (only for the treeType lightTree)
-     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport", "draw", "featureLister", "animation", "addWMS"]
+     * @property {String[]} onlyDesktopTools=["measure", "print", "kmlimport" or "fileImport", "draw", "featureLister", "animation", "addWMS"]
      * @listens Core.ConfigLoader#RadioRequestParserGetItemByAttributes
      * @listens Core.ConfigLoader#RadioRequestParserGetItemsByAttributes
      * @listens Core.ConfigLoader#RadioRequestParserGetTreeType
@@ -103,6 +104,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "addLayer": this.addLayer,
             "addGdiLayer": this.addGdiLayer,
             "addGeoJSONLayer": this.addGeoJSONLayer,
+            "addVectorLayer": this.addVectorLayer,
             "removeItem": this.removeItem
         }, this);
 
@@ -114,7 +116,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         return model.get("type") === "layer" && model.get("parentId") !== "Baselayer";
                     });
 
-                _.each(modelListToRemove, function (model) {
+                modelListToRemove.forEach(model => {
                     model.setIsSelected(false);
                 });
                 modelList.remove(modelListToRemove);
@@ -137,6 +139,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
         this.parseControls(this.get("portalConfig").controls);
         this.parseSearchBar(this.get("portalConfig").searchBar);
 
+        this.addItem({
+            type: "featureViaURL",
+            attr: this.get("portalConfig").featureViaURL
+        });
+
         if (this.get("treeType") === "light") {
             this.parseTree(this.get("overlayer"), "tree", 0);
             this.parseTree(this.get("baselayer"), "tree", 0);
@@ -156,19 +163,21 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * Parsed the menu entries (everything except the contents of the tree)
-     * @param {Object} items Single levels of the menu bar, e.g. contact, legend, tools and tree
+     * @param {Object} [items={}] Single levels of the menu bar, e.g. contact, legend, tools and tree
      * @param {String} parentId indicates to whom the items will be added
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @return {void}
      */
-    parseMenu: function (items, parentId) {
-        _.each(items, function (value, key) {
+    parseMenu: function (items = {}, parentId) {
+        Object.entries(items).forEach(itemX => {
+            const value = itemX[1],
+                key = itemX[0];
             let item,
                 toolitem,
                 ansicht,
                 downloadItem;
 
-            if (_.has(value, "children") || key === "tree") {
+            if (value.hasOwnProperty("children") || key === "tree") {
                 item = {
                     type: "folder",
                     parentId: parentId,
@@ -178,29 +187,29 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 };
 
                 // Attribute aus der config.json werden von item geerbt
-                _.extend(item, value);
+                Object.assign(item, value);
                 this.addItem(item);
                 this.parseMenu(value.children, key);
             }
             else if (key.search("staticlinks") !== -1) {
-                _.each(value, function (staticlink) {
-                    toolitem = _.extend(staticlink, {type: "staticlink", parentId: parentId, id: _.uniqueId(key + "_")});
+                value.forEach(staticlink => {
+                    toolitem = Object.assign(staticlink, {type: "staticlink", parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
 
                     this.addItem(toolitem);
-                }, this);
+                });
             }
-            else if (_.has(value, "type") && value.type === "viewpoint") {
-                ansicht = _.extend(value, {parentId: parentId, id: _.uniqueId(key + "_")});
+            else if (value.hasOwnProperty("type") && value.type === "viewpoint") {
+                ansicht = Object.assign(value, {parentId: parentId, id: Radio.request("Util", "uniqueId", key + "_")});
                 this.addItem(ansicht);
             }
             else {
-                toolitem = _.extend(value, {type: "tool", parentId: parentId, id: key});
+                toolitem = Object.assign(value, {type: "tool", parentId: parentId, id: key});
 
                 // wenn tool noch kein "onlyDesktop" aus der Config bekommen hat
-                if (!_.has(toolitem, "onlyDesktop")) {
+                if (!toolitem.hasOwnProperty("onlyDesktop")) {
                     // wenn tool in onlyDesktopTools enthalten ist, setze onlyDesktop auf true
-                    if (_.indexOf(this.get("onlyDesktopTools"), toolitem.id) !== -1) {
-                        toolitem = _.extend(toolitem, {onlyDesktop: true});
+                    if (this.get("onlyDesktopTools").indexOf(toolitem.id) !== -1) {
+                        toolitem = Object.assign(toolitem, {onlyDesktop: true});
                     }
                 }
 
@@ -215,7 +224,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
                     this.addItem(downloadItem);
                 }
-                this.addItem(toolitem);
+                /**
+                 * @deprecated Due to refactorment, legend is no longer considered a tool.
+                 * Item for legend MUST NOT be added.
+                 */
+                if (toolitem.id !== "legend") {
+                    this.addItem(toolitem);
+                }
             }
         }, this);
     },
@@ -234,17 +249,20 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * todo
-     * @param  {Array} items - todo
+     * @param  {object} [items={}] - todo
      * @return {void}
      */
-    parseControls: function (items) {
-        _.each(items, function (value, key) {
+    parseControls: function (items = {}) {
+        Object.entries(items).forEach(item => {
+            const value = item[1],
+                key = item[0];
+
             this.addItem({
                 type: "control",
                 id: key,
                 attr: value
             });
-        }, this);
+        });
     },
 
     /**
@@ -253,7 +271,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {void}
      */
     addItem: function (obj) {
-        if (!_.isUndefined(obj.visibility)) {
+        if (obj.visibility !== undefined) {
             obj.isSelected = obj.visibility;
             obj.isVisibleInMap = obj.visibility;
             delete obj.visibility;
@@ -268,7 +286,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {void}
      */
     addItemByPosition: function (obj, position) {
-        if (!_.isUndefined(obj.visibility)) {
+        if (obj.visibility !== undefined) {
             obj.isSelected = obj.visibility;
             obj.isVisibleInMap = obj.visibility;
             delete obj.visibility;
@@ -283,9 +301,9 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      *  @return {void}
      */
     addItems: function (objs, attr) {
-        _.each(objs, function (obj) {
-            this.addItem(_.extend(obj, attr));
-        }, this);
+        objs.forEach(obj => {
+            this.addItem(Object.assign(obj, attr));
+        });
     },
 
     /**
@@ -363,13 +381,18 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} name - todo
-     * @param {*} id - todo
-     * @param {*} geojson - todo
+     * Creates the Masterportal Configuration for a GeoJSON Layer.
+     * Adds the configuration to be parsed into the Portal.
+     *
+     * @param {String} name Name of the layer.
+     * @param {String} id Unique identifier for the layer.
+     * @param {(String | Object)} geojson GeoJSON for the layer containing the features.
+     * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+     * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+     * @param {(String | Object)} [gfiAttributes="showAll"] Attributes to be shown when clicking on the feature using the GFI tool.
      * @returns {void}
      */
-    addGeoJSONLayer: function (name, id, geojson) {
+    addGeoJSONLayer: function (name, id, geojson, styleId, parentId, gfiAttributes = "showAll") {
         const layer = {
             type: "layer",
             name: name,
@@ -379,7 +402,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             transparent: true,
             minScale: "0",
             maxScale: "350000",
-            gfiAttributes: "showAll",
+            gfiAttributes: gfiAttributes,
             layerAttribution: "nicht vorhanden",
             legendURL: "",
             isBaseLayer: false,
@@ -387,12 +410,62 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isVisibleInTree: true,
             cache: false,
             datasets: [],
-            urlIsVsible: true
+            urlIsVisible: true
         };
+
+        if (styleId !== undefined) {
+            layer.styleId = styleId;
+        }
+        if (parentId !== undefined) {
+            layer.parentId = parentId;
+        }
 
         this.addItem(layer);
     },
 
+    /**
+     * Creates the Masterportal Configuration for a Vector Layer.
+     * Adds the configuration to be parsed into the Portal.
+     *
+     * @param {String} name Name of the layer.
+     * @param {String} id Unique identifier for the layer.
+     * @param {ol.Feature[]} features - all features generated from the imported file
+     * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+     * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+     * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+     * @returns {void}
+     */
+    addVectorLayer: function (name, id, features, parentId, styleId, gfiAttributes = "ignore") {
+        const layer = {
+            type: "layer",
+            name: name,
+            id: id,
+            typ: "VectorBase",
+            features: features,
+            transparent: true,
+            minScale: "0",
+            maxScale: "350000",
+            gfiAttributes: gfiAttributes,
+            layerAttribution: "nicht vorhanden",
+            legendURL: "",
+            isBaseLayer: false,
+            isVisibleInTree: true,
+            isSelected: true,
+            cache: false,
+            datasets: [],
+            urlIsVisible: false
+        };
+
+        if (styleId !== undefined) {
+            layer.styleId = styleId;
+        }
+        if (parentId !== undefined) {
+            layer.parentId = parentId;
+        }
+
+        this.addItem(layer);
+        Radio.trigger("ModelList", "addModelsByAttributes", layer);
+    },
 
     /**
      * Adds found layer to layer tree
@@ -456,6 +529,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                     url: hit.source.url,
                     version: hit.source.version,
                     gfiAttributes: hit.source.gfiAttributes ? hit.source.gfiAttributes : "showAll",
+                    gfiTheme: hit.source.gfiTheme ? hit.source.gfiTheme : "default",
                     datasets: hit.source.datasets,
                     isJustAdded: true
                 });
@@ -479,7 +553,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {void}
      */
     addItemAtTop: function (obj) {
-        if (!_.isUndefined(obj.visibility)) {
+        if (obj.visibility !== undefined) {
             obj.isSelected = obj.visibility;
             obj.isVisibleInMap = obj.visibility;
             delete obj.visibility;
@@ -493,7 +567,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {Object} item
      */
     getItemByAttributes: function (value) {
-        return _.findWhere(this.get("itemList"), value);
+        return this.get("itemList").find(item => Object.keys(value).every(key => item[key] === value[key]));
     },
 
     /**
@@ -502,7 +576,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {Array} Items
      */
     getItemsByAttributes: function (value) {
-        return _.where(this.get("itemList"), value);
+        return this.get("itemList").filter(item => Object.keys(value).every(key => item[key] === value[key]));
     },
 
     /**
@@ -523,7 +597,10 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {ModelList} todo
      */
     createModelList: function () {
-        new ModelList(this.get("itemList").filter(function (model) {
+        const itemList = this.get("itemList");
+
+        this.logWarnings(itemList);
+        new ModelList(itemList.filter(model => {
             return model.parentId === "root" ||
                 model.parentId === "tools" ||
                 model.parentId === "info" ||
@@ -533,6 +610,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                 model.parentId === "utilities" ||
                 model.parentId === "ansichten";
         }));
+    },
+
+    /**
+     * Logged warnings only once for all items.
+     * @param {Object[]} itemList - The itemList.
+     * @returns {void}
+     */
+    logWarnings: function (itemList) {
+        const itemWithLegendURL = itemList.find(item => item?.legendURL);
+
+        if (itemWithLegendURL) {
+            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
+        }
     },
 
     /**
@@ -584,7 +674,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             parentId: "tree",
             isInThemen: true,
             isInitiallyExpanded: false,
-            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Baselayer"),
+            isAlwaysExpanded: isAlwaysExpandedList.includes("Baselayer"),
             level: 0,
             quickHelp: isQuickHelpSet
         });
@@ -600,7 +690,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             parentId: "tree",
             isInThemen: true,
             isInitiallyExpanded: false,
-            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "Overlayer"),
+            isAlwaysExpanded: isAlwaysExpandedList.includes("Overlayer"),
             level: 0,
             quickHelp: isQuickHelpSet
         });
@@ -618,7 +708,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             isLeafFolder: true,
             isInThemen: true,
             isInitiallyExpanded: true,
-            isAlwaysExpanded: _.contains(isAlwaysExpandedList, "SelectedLayer"),
+            isAlwaysExpanded: isAlwaysExpandedList.includes("SelectedLayer"),
             level: 0,
             quickHelp: isQuickHelpSet
         });
@@ -675,7 +765,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     postionFor3DFolder: function (itemList) {
         let position = itemList.length + 1;
 
-        _.each(itemList, function (item, index) {
+        itemList.forEach((item, index) => {
             if (item.name === "Hintergrundkarten") {
                 position = index + 1;
             }
@@ -686,17 +776,19 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
 
     /**
      * Groups objects from the layerlist that match the IDs in the passed list.
-     * @param  {string[]} ids - Array of ids whose objects are grouped together
-     * @param  {Object[]} layerlist - Objects from the services.json
+     * @param  {string[]} [ids=[]] - Array of ids whose objects are grouped together
+     * @param  {Object[]} [layerlist=[]] - Objects from the services.json
      * @return {Object[]} layerlist - Objects from the services.json
      */
-    mergeObjectsByIds: function (ids, layerlist) {
-        const objectsByIds = [];
+    mergeObjectsByIds: function (ids = [], layerlist = []) {
+        const objectsByIds = [],
+            maxScales = [],
+            minScales = [];
         let newObject = {};
 
         // Objekte die gruppiert werden
-        _.each(ids, function (id) {
-            const lay = _.findWhere(layerlist, {id: id});
+        ids.forEach(id => {
+            const lay = layerlist.find(layer => layer.id === id);
 
             if (lay) {
                 objectsByIds.push(lay);
@@ -708,19 +800,18 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             return null;
         }
         // Das erste Objekt wird kopiert
-        newObject = _.clone(objectsByIds[0]);
+        newObject = {...objectsByIds[0]};
         // Das Attribut layers wird gruppiert und am kopierten Objekt gesetzt
-        newObject.layers = _.pluck(objectsByIds, "layers").toString();
+        newObject.layers = objectsByIds.map(value => value.layers).toString();
         // Das Attribut maxScale wird gruppiert
         // Am kopierten Objekt wird der höchste Wert gesetzt
-        newObject.maxScale = _.max(_.pluck(objectsByIds, "maxScale"), function (scale) {
-            return parseInt(scale, 10);
-        });
+        objectsByIds.forEach(object => maxScales.push(parseInt(object.maxScale, 10)));
+        newObject.maxScale = Math.max(...maxScales);
+
         // Das Attribut minScale wird gruppiert
         // Am kopierten Objekt wird der niedrigste Wert gesetzt
-        newObject.minScale = _.min(_.pluck(objectsByIds, "minScale"), function (scale) {
-            return parseInt(scale, 10);
-        });
+        objectsByIds.forEach(object => minScales.push(parseInt(object.minScale, 10)));
+        newObject.minScale = Math.min(...minScales);
 
         return newObject;
     },
@@ -734,7 +825,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
     createUniqId: function (value) {
         const trimmedValue = value.replace(/[^a-zA-Z0-9]/g, "");
 
-        return _.uniqueId(trimmedValue);
+        return Radio.request("Util", "uniqueId", trimmedValue);
     },
 
     /**
@@ -761,13 +852,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @return {String} layer initial visible baselayer
      */
     getInitVisibBaselayer: function () {
-        const layer = _.findWhere(this.get("baselayer").Layer, {visibility: true});
+        const layer = this.get("baselayer").Layer.find(singleLayer => singleLayer.visibility === true);
 
-        if (_.isUndefined(layer)) {
+        if (layer === undefined) {
             return undefined;
         }
 
-        if (_.isArray(layer.id)) {
+        if (Array.isArray(layer.id)) {
             layer.id = layer.id[0];
         }
         return layer;

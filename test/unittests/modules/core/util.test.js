@@ -1,5 +1,6 @@
 import Model from "@modules/core/util.js";
 import {expect} from "chai";
+import thousandsSeparator from "../../../../src/utils/thousandsSeparator";
 
 describe("core/Util", function () {
     let model;
@@ -30,30 +31,48 @@ describe("core/Util", function () {
         }
     ];
 
-    describe("punctuate", function () {
-        before(function () {
-            model = new Model();
+    describe("thousandsSeparator", function () {
+        it("should set two points for 7 digit number with decimals", function () {
+            expect(thousandsSeparator(1234567.890)).to.equal("1.234.567,89");
         });
         it("should set two points for 7 digit number with decimals", function () {
-            expect(model.punctuate(1234567.890)).to.equal("1.234.567,89");
+            expect(thousandsSeparator(-1234567.890)).to.equal("-1.234.567,89");
         });
         it("should set two  points for 7 digit number", function () {
-            expect(model.punctuate(3456789)).to.equal("3.456.789");
+            expect(thousandsSeparator(3456789)).to.equal("3.456.789");
+        });
+        it("should set two  points for 7 digit number", function () {
+            expect(thousandsSeparator(-3456789)).to.equal("-3.456.789");
         });
         it("should set point for 4 digit number", function () {
-            expect(model.punctuate(1000)).to.equal("1.000");
+            expect(thousandsSeparator(1000)).to.equal("1.000");
+        });
+        it("should set point for 4 digit number", function () {
+            expect(thousandsSeparator(-1000)).to.equal("-1.000");
         });
         it("should not set point for 3 digit number", function () {
-            expect(model.punctuate(785)).to.equal("785");
+            expect(thousandsSeparator(785)).to.equal("785");
+        });
+        it("should not set point for 3 digit number", function () {
+            expect(thousandsSeparator(-785)).to.equal("-785");
         });
         it("should not set point for 2 digit number", function () {
-            expect(model.punctuate(85)).to.equal("85");
+            expect(thousandsSeparator(85)).to.equal("85");
+        });
+        it("should not set point for 2 digit number", function () {
+            expect(thousandsSeparator(-85)).to.equal("-85");
         });
         it("should not set point for 1 digit number", function () {
-            expect(model.punctuate(1)).to.equal("1");
+            expect(thousandsSeparator(1)).to.equal("1");
+        });
+        it("should not set point for 1 digit number", function () {
+            expect(thousandsSeparator(-1)).to.equal("-1");
         });
         it("should work with 1 digit number with decimals", function () {
-            expect(model.punctuate(5.22)).to.equal("5,22");
+            expect(thousandsSeparator(5.22)).to.equal("5,22");
+        });
+        it("should work with 1 digit number with decimals", function () {
+            expect(thousandsSeparator(-5.22)).to.equal("-5,22");
         });
     });
     describe("sort", function () {
@@ -173,55 +192,13 @@ describe("core/Util", function () {
             expect(model.convertArrayOfObjectsToCsv(array)).to.be.a("string").to.have.lengthOf(39);
         });
         it("should find four commtatas", function () {
-            expect(model.convertArrayOfObjectsToCsv(array).match(/,/g)).to.have.lengthOf(4);
+            expect(model.convertArrayOfObjectsToCsv(array, ",").match(/,/g)).to.have.lengthOf(4);
         });
         it("should find four linebreaks (\n)", function () {
             expect(model.convertArrayOfObjectsToCsv(array).match(/\n/g)).to.have.lengthOf(4);
         });
         it("should find four dollar signs", function () {
             expect(model.convertArrayOfObjectsToCsv(array, "$").match(/\$/g)).to.have.lengthOf(4);
-        });
-    });
-
-    describe("generate proxy url", function () {
-        it("should generate key without hostname from url", function () {
-            let proxyURL = "";
-
-            model = new Model();
-
-            proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
-            expect(proxyURL).to.be.equal("/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
-        });
-
-        it("should generate key with hostname from url", function () {
-            let proxyURL = "";
-
-            model = new Model({
-                proxyHost: "https://test-proxy.example.com"
-            });
-
-            proxyURL = model.getProxyURL("https://dies.ist.ein.test/PFAD_ZU_TEST-QUELLE");
-            expect(proxyURL).to.be.equal("https://test-proxy.example.com/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
-        });
-        it("shouldn't transform url for local ressources I", function () {
-            let proxyURL = "";
-
-            model = new Model({
-                proxyHost: "https://test-proxy.example.com"
-            });
-
-            proxyURL = model.getProxyURL("http://localhost/test.json");
-            expect(proxyURL).to.be.equal("http://localhost/test.json");
-        });
-        it("shouldn't transform url for local ressources II", function () {
-            let proxyURL = "";
-
-            model = new Model({
-                proxyHost: "https://test-proxy.example.com"
-            });
-
-            proxyURL = model.getProxyURL("./test.json");
-            expect(proxyURL).to.be.equal("./test.json");
         });
     });
 
@@ -683,31 +660,6 @@ describe("core/Util", function () {
             }
 
             expect(model.sortBy(input, iteratee, context)).to.deep.equal(expected);
-        });
-    });
-    describe("changeTimeZone", function () {
-        it("should return an empty array for undefined input", function () {
-            expect(model.changeTimeZone(undefined, undefined)).to.be.an("array").that.is.empty;
-        });
-        it("should return an empty array for empty array and timezone +3 input", function () {
-            expect(model.changeTimeZone([], "+3")).to.be.an("array").that.is.empty;
-        });
-        it("should return an array that is equal to input array for incorrect array and timezone +1 input", function () {
-            expect(model.changeTimeZone(["test", "abc"], "+1")).to.be.an("array").that.includes("test", "abc");
-        });
-        it("should return array with changend phenomenonTime for correct array and timezone +5 input", function () {
-            const historicalData = [{
-                Observations: [{
-                    phenomenonTime: "2018-06-19T07:13:57.421Z",
-                    result: "available"
-                },
-                {
-                    phenomenonTime: "2018-01-19T07:13:57.421Z",
-                    result: "charging"
-                }]
-            }];
-
-            expect(model.changeTimeZone(historicalData, "+5")).to.be.an("array");
         });
     });
 });

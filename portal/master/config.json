@@ -16,22 +16,6 @@
         "searchParcels": true,
         "searchStreetKey": true
       },
-      "bkg": {
-        "minChars": 3,
-        "suggestServiceId": "4",
-        "geosearchServiceId": "5",
-        "extent": [
-          454591,
-          5809000,
-          700000,
-          6075769
-        ],
-        "suggestCount": 10,
-        "epsg": "EPSG:25832",
-        "filter": "filter=(typ:*)",
-        "score": 0.6,
-        "zoomToResult": true
-      },
       "osm": {
         "minChars": 3,
         "serviceId": "10",
@@ -64,7 +48,7 @@
         "hitGlyphicon": "glyphicon-list"
       },
       "visibleVector": {
-        "gfiOnClick": false
+        "gfiOnClick": true
       },
       "specialWFS": {
         "minChars": 3,
@@ -122,7 +106,7 @@
       "visibleWFS": {
         "minChars": 3
       },
-      "zoomLevel": 9,
+      "startZoomLevel": 9,
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView": {
@@ -179,15 +163,15 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "bilingual"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Anzahl Schüler",
+              "schwerpunktschule": "Schwerpunktschule",
+              "bilingual": "Bilingual"
+            }
           },
           {
             "layerId": "8712",
@@ -203,17 +187,17 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "schwerpunktschule",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "schwerpunktschule": "Schwerpunktschule Inklusion",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -229,16 +213,16 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "schulform",
-              "ganztagsform",
-              "anzahl_schueler",
-              "fremdsprache",
-              "fremdsprache_mit_klasse",
-              "schulische_ausrichtung"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "schulform": "Schulform",
+              "ganztagsform": "Ganztagsform",
+              "anzahl_schueler": "Schülerzahl",
+              "fremdsprache": "Fremdsprachen",
+              "fremdsprache_mit_klasse": "Fremdsprachen ab Klassenstufe",
+              "schulische_ausrichtung": "Schwerpunkte in den Angeboten"
+            }
           },
           {
             "layerId": "8712",
@@ -253,13 +237,13 @@
                 ]
               }
             ],
-            "attributeWhiteList": [
-              "bezirk",
-              "stadtteil",
-              "ganztagsform",
-              "foerderart",
-              "abschluss"
-            ]
+            "attributeWhiteList": {
+              "bezirk": "Bezirk",
+              "stadtteil": "Stadtteil",
+              "ganztagsform": "Ganztagsform",
+              "foerderart": "Förderart",
+              "abschluss": "Abschluss"
+            }
           },
           {
             "layerId": "1711",
@@ -267,10 +251,10 @@
             "isSelected": true,
             "name": "Krankenhäuser",
             "predefinedRules": [],
-            "attributeWhiteList": [
-              "teilnahme_geburtsklinik",
-              "teilnahme_notversorgung"
-            ]
+            "attributeWhiteList": {
+              "teilnahme_geburtsklinik": "Geburtshilfe",
+              "teilnahme_notversorgung": "Not- und Unfallversorgung"
+            }
           }
         ]
       },
@@ -281,7 +265,8 @@
           "einwohnerabfrage": {
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": false
+            "onlyDesktop": false,
+            "useProxy": true
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
@@ -299,25 +284,26 @@
             "name": "translate#common:menu.tools.measure",
             "glyphicon": "glyphicon-resize-full"
           },
-          "coord": {
+          "supplyCoord": {
             "name": "translate#common:menu.tools.coord",
             "glyphicon": "glyphicon-screenshot"
           },
           "shadow": {
-            "name": "Schatten",
+            "name": "translate#common:menu.tools.shadow",
             "glyphicon": "glyphicon-lamp",
             "isShadowEnabled": true
           },
           "gfi": {
             "name": "translate#common:menu.tools.getInfos",
+            "desktopType": "detached",
             "glyphicon": "glyphicon-info-sign",
-            "isActive": true
+            "active": true
           },
           "print": {
             "name": "translate#common:menu.tools.print",
             "glyphicon": "glyphicon-print",
-            "mapfishServiceId": "mapfish_qs",
-            "printAppId": "mrh",
+            "mapfishServiceId": "mapfish",
+            "printAppId": "master",
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "legendText": "Mit Legende",
@@ -329,8 +315,8 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
-          "kmlimport": {
-            "name": "translate#common:menu.tools.kmlimport",
+          "fileImport": {
+            "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
           },
           "extendedFilter": {
@@ -348,14 +334,34 @@
           },
           "draw": {
             "name": "translate#common:menu.tools.draw",
-            "glyphicon": "glyphicon-pencil"
+            "glyphicon": "glyphicon-pencil",
+            "renderToWindow": false,
+            "iconList": [
+              {
+                "id": "iconPoint",
+                "type": "simple_point",
+                "value": "simple_point"
+              },
+              {
+                "id": "iconMeadow",
+                "type": "image",
+                "scale": 0.8,
+                "value": "wiese.png"
+              },
+              {
+                "id": "gelber Pin",
+                "type": "image",
+                "scale": 0.5,
+                "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+              }
+            ]
           },
           "styleWMS": {
-            "name": "Style WMS",
+            "name": "translate#common:menu.tools.styleWMS",
             "glyphicon": "glyphicon-tint"
           },
           "featureLister": {
-            "name": "Liste",
+            "name": "translate#common:menu.tools.featureLister",
             "glyphicon": "glyphicon-menu-hamburger",
             "lister": 10
           },
@@ -367,7 +373,7 @@
             "name": "translate#common:menu.tools.commuterAnimation",
             "glyphicon": "glyphicon-play-circle",
             "steps": 30,
-            "url": "http://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+            "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
             "params": {
               "REQUEST": "GetFeature",
               "SERVICE": "WFS",
@@ -393,30 +399,44 @@
             "glyphicon": "glyphicon-share"
           },
           "layerSlider": {
-            "name": "Zeitreihe",
+            "name": "translate#common:menu.tools.layerSlider",
             "glyphicon": "glyphicon-film",
-            "title": "Simulation von Beispiel-WMS",
+            "title": "translate#common:modules.tools.layerSlider.title",
             "timeInterval": 2000,
             "layerIds": [
               {
-                "title": "Dienst 1",
+                "title": "translate#common:modules.tools.layerSlider.serviceOne",
                 "layerId": "8730"
               },
               {
-                "title": "Dienst 2",
+                "title": "translate#common:modules.tools.layerSlider.serviceTwo",
                 "layerId": "2426"
               },
               {
-                "title": "Dienst 3",
+                "title": "translate#common:modules.tools.layerSlider.serviceThree",
                 "layerId": "4561"
               }
             ]
+          },
+          "scaleSwitcher":
+          {
+            "name": "translate#common:menu.tools.scaleSwitcher",
+            "glyphicon": "glyphicon-resize-full"
+          },
+          "VueAddon": {
+            "name": "AddonTool",
+            "glyphicon": "glyphicon-screenshot"
+          },
+          "TacticalMark": {
+            "name": "Taktische Zeichen",
+            "glyphicon": "glyphicon-map-marker"
           }
         }
       },
       "legend": {
-        "name": "translate#common:menu.legend",
-        "glyphicon": "glyphicon-book"
+        "name": "common:modules.legend.name",
+        "glyphicon": "glyphicon-book",
+        "showCollapseAllButton": true
       },
       "contact": {
         "name": "translate#common:menu.contact",
@@ -515,11 +535,10 @@
     "Fachdaten": {
       "Layer": [
         {
-          "id": "15543",
-          "visibility": true
-        },
-        {
-          "id": "8194"
+          "id": "1132",
+          "styleId": "1132",
+          "name": "100 Jahre Stadtgruen POIs",
+          "transparency": 75
         },
         {
           "id": "16100",
@@ -544,6 +563,7 @@
         {
           "id": "2128",
           "styleId": "2128",
+          "styleGeometryType": ["Point"],
           "name": "translate#common:tree.trafficCameras"
         },
         {
@@ -618,11 +638,13 @@
         {
           "id": "47",
           "styleId": "47",
+          "styleGeometryType": "Point",
           "mouseHoverField": [
             "baubeginn",
             "bauende"
           ],
-          "autoRefresh": 6000
+          "autoRefresh": 6000,
+          "clusterDistance": 50
         },
         {
           "id": "2714",
@@ -631,7 +653,7 @@
         },
         {
           "id": "4905",
-          "gfiTheme": "table",
+          "gfiTheme": "DataTable",
           "featureCount": 20
         },
         {
@@ -639,10 +661,8 @@
           "styleId": "45",
           "clusterDistance": 40,
           "routable": true,
-          "searchField": "bezeichnung"
-        },
-        {
-          "id": "4479"
+          "searchField": "bezeichnung",
+          "styleGeometryType": "Point"
         },
         {
           "id": [
@@ -651,14 +671,18 @@
           ],
           "name": "Eignungsflächen",
           "legendURL": [
-            "http://www.geoportal-hamburg.de/legende/legende_solar.png"
+            "https://www.geoportal-hamburg.de/legende/legende_solar.png"
           ],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"
         },
         {
           "id": "2407",
-          "infoFormat": "text/html"
+          "infoFormat": "text/html",
+          "gfiAsNewWindow": {
+            "name": "_blank",
+            "specs": "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=500,width=800,height=700"
+          }
         },
         {
           "id": "1711",
@@ -695,6 +719,12 @@
         {
           "id": "8145",
           "visibility": false,
+          "gfiTheme": {
+            "name": "default",
+            "params": {
+              "showFavoriteIcons": false
+            }
+          },
           "styleId": "8145",
           "hitTolerance": 25,
           "mouseHoverField": "kategorie",
@@ -729,6 +759,42 @@
             }
           ],
           "name": "Kita und KH"
+        },
+        {
+          "id": "18106",
+          "styleId": "18106",
+          "clusterDistance": 50,
+          "loadThingsOnlyInCurrentExtent": true,
+          "gfiTheme" : {
+            "name": "sensor",
+            "params" : {
+              "charts": {
+                "barPercentage": 1.1,
+                "values": {
+                  "available": {
+                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.available",
+                    "color": "rgba(0, 220, 0, 1)"
+                  },
+                  "charging": {
+                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+                    "color": "rgba(220, 0, 0, 1)"
+                  },
+                  "outoforder": {
+                      "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                      "color": "rgba(175, 175, 175, 1)"
+                  }
+                }
+              }
+            }
+          },
+          "gfiAttributes" : {
+            "dataStreamPhenomenonTime": "Letze Zustandsänderung",
+            "dataStreamValue": "Zustand",
+            "connector" : "Stecker",
+            "steckerTyp" : "SteckerTyp",
+            "authMeth2" : "Authentifizierungsmethode",
+            "dataStreamId" : "DataStreamIds"
+          }
         },
         {
           "id": "13023"

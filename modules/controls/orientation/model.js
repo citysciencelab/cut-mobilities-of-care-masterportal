@@ -143,7 +143,7 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
         }
 
         this.set("tracking", false);
-        this.set("firstGeolocation", true);
+        this.set("geolocation", null);
     },
     track: function () {
         let geolocation = null;
@@ -198,9 +198,12 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
                 this.positionMarker(centerPosition);
             }
         }
-        else {
+        else if (zoomMode === "always") {
             this.positionMarker(centerPosition);
             this.zoomAndCenter(centerPosition);
+        }
+        else {
+            console.error("The configured zoomMode: " + zoomMode + " does not exist. Please use the params 'once' or 'always'!");
         }
     },
     onError: function () {
@@ -209,14 +212,18 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
             kategorie: "alert-danger"
         });
         this.setIsGeolocationDenied(true);
-        this.untrack();
+        if (this.get("geolocation") !== null) {
+            this.untrack();
+        }
     },
     onPOIError: function (evt) {
         Radio.trigger("Alert", "alert", {
             text: "<strong>" + i18next.t("common:modules.controls.orientation.trackingDeniedText") + " </strong>" + evt.message,
             kategorie: "alert-danger"
         });
-        this.untrack();
+        if (this.get("geolocation") !== null) {
+            this.untrack();
+        }
         Radio.trigger("Util", "hideLoader");
     },
     trackPOI: function () {
@@ -231,14 +238,15 @@ const OrientationModel = Backbone.Model.extend(/** @lends OrientationModel.proto
             geolocation = this.get("geolocation");
             this.callGetPOI();
         }
+
         geolocation.once("change", this.callGetPOI, this);
-        geolocation.once("error", this.onPOIError, this);
+        geolocation.once("error", this.onPOIError.bind(this), this);
     },
     untrackPOI: function () {
         const geolocation = this.get("geolocation");
 
         geolocation.un("change", this.callGetPOI, this);
-        geolocation.un("error", this.onPOIError, this);
+        geolocation.un("error", this.onPOIError.bind(this), this);
     },
     callGetPOI: function () {
         Radio.trigger("POI", "showPOIModal");

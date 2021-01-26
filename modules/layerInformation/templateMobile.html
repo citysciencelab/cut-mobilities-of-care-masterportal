@@ -3,68 +3,55 @@
     <div class="modal-content layerinformation-modal">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Informationen und Legende</h4>
+            <h4 class="modal-title"><%= informationAndLegend %></h4>
         </div>
         <div class="modal-body">
             <h4 class="subtitle"><%= title %></h4>
             <p><%= abstractText %></p>
 
-            <% if (!_.isNull(metaURL)) { %>
-              <% _.each(metaURL, function (url) { %>
+            <% if (metaURL !== null) { %>
+              <% metaURL.forEach(function (url) { %>
                   <br>
-                  <p class="pull-right"><a href="<%= url %>" target="_blank">weitere Metadaten</a></p>
+                  <p class="pull-right"><a href="<%= url %>" target="_blank"><%= additionalMetadata %></a></p>
               <% }); %>
             <% } %>
-
             <% if (typeof datePublication !== "undefined" && datePublication !== null) { %>
-                <p>Publikation / Erstellung: <%= datePublication %></p>
+                <p><%= publicationCreation %>: <%= datePublication %></p>
             <% } %>
             <% if (typeof dateRevision !== "undefined" && dateRevision !== null) { %>
-                <p>Letzte Änderung: <%= dateRevision %></p>
+                <p><%= lastModified %>: <%= dateRevision %></p>
             <% } %>
-            <% if (typeof periodicity !== "undefined" && periodicity !== null) { %>
-                <p>Periodizität: <%= periodicity %></p>
+            <% if (periodicity !== "") { %>
+                <p><%= periodicityTitle %>: <%= periodicity %></p>
             <% } %>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#legende">Legende</a></li>
-                    <% if (!_.isNull(downloadLinks)) { %>
-                    <li><a data-toggle="tab" href="#LayerInfoDataDownload">Datensatz herunterladen</a></li>
+                    <li value="layerinfo-legend" class="active"><a data-toggle="tab" href="#layerinfo-legend"><%= legend %></a></li>
+                    <% if (downloadLinks !== null) { %>
+                    <li><a data-toggle="tab" href="#LayerInfoDataDownload"><%= downloadDataset %></a></li>
                     <% } %>
-                    <% if (!_.isNull(url)) { %>
-                    <li><a data-toggle="tab" href="#url"><%= typ %>-Adresse</a></li>
+                    <% if (url !== null) { %>
+                    <li><a data-toggle="tab" href="#url"><%= typ %>-<%= addressSuffix %></a></li>
                     <% } %>
                 </ul>
                 <br>
                 <div class="tab-content">
-                    <div id="legende" class="tab-pane fade in active">
-                      <p>
-                        <% if (_.isEmpty(legend.legend) || legend.legend[0].img === "") {
-                            print ("<p>Legende wird erst beim aktivieren des Layers geladen</p>");                    
-                        }
-                        else if (_.isNull(legend.legend)) {
-                            print ("<p>Keine Legende vorhanden</p>");   
-                        }
-                        else {
-                            _.each(legend.legend, function (legend) {
-                                print (legend.html);
-                            });
-                        } %>
-                      </p>
-                    </div>
+                    <div id="layerinfo-legend" class="tab-pane fade in active"></div>
                     <div id="LayerInfoDataDownload" class="tab-pane fade">
                         <ul class="list-unstyled">
-                            <% _.each(downloadLinks, function (downloadLink) { %>
-                                <li><a href="<%= downloadLink[1] %>" target="_blank"><%= downloadLink[0] %> </a><li>
-                            <% }); %>
+                            <% if (downloadLinks !== null) { %>
+                                <% downloadLinks.forEach(function (downloadLink) { %>
+                                    <li><a href="<%= downloadLink.link %>" target="_blank"><%= downloadLink.linkName %> </a><li>
+                                <% }); %>
+                            <% } %>
                         </ul>
                     </div>
                     <div id="url" class="tab-pane fade">
-                      <ul class="list-unstyled">
-                        <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
-                      </ul>
+                        <ul class="list-unstyled">
+                            <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
+                        </ul>
                   </div>
                 </div>
         </div>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
+    </div>
+</div>

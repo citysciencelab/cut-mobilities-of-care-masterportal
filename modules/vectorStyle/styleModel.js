@@ -3,24 +3,13 @@ import PointStyle from "./pointStyle";
 import TextStyle from "./textStyle";
 import PolygonStyle from "./polygonStyle";
 import LinestringStyle from "./linestringStyle";
+import CesiumStyle from "./cesiumStyle";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
 
 const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.prototype */{
     defaults: {
-        /**
-         * @type {string}
-         * styleId is set in style.json
-         */
         "styleId": null,
-        /**
-         * @type {object[]}
-         * Array with styling rules and its conditions.
-         */
         "rules": null,
-        /**
-         * @type {object[]}
-         * list of used styling rules for legend grafic
-         */
         "legendInfos": []
     },
 
@@ -30,6 +19,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @extends Backbone.Model
      * @memberof VectorStyle
      * @constructs
+     * @param {String} styleId styleId is set in style.json
+     * @param {Object[]} rules Array with styling rules and its conditions.
+     * @param {Object[]} legendInfos list of used styling rules for legend grafic
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function () {
@@ -71,9 +63,10 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @param   {string} wfsURL url from layer
      * @param   {string} version wfs version from layer
      * @param   {string} featureType wfs feature type from layer
+     * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
      * @returns {void}
      */
-    getGeometryTypeFromWFS: function (wfsURL, version, featureType) {
+    getGeometryTypeFromWFS: function (wfsURL, version, featureType, styleGeometryType) {
         const params = {
             "SERVICE": "WFS",
             "VERSION": version,
@@ -91,7 +84,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
             .then(responseAsString => new window.DOMParser().parseFromString(responseAsString, "text/xml"))
             .then(responseXML => {
                 const subElements = this.getSubelementsFromXML(responseXML, featureType),
-                    geometryTypes = this.getTypeAttributesFromSubelements(subElements);
+                    geometryTypes = this.getTypeAttributesFromSubelements(subElements, styleGeometryType);
 
                 this.createLegendInfo(geometryTypes);
             })
@@ -125,22 +118,26 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
 
     /**
      * Parses the geometry types from the subelements
-     * @param   {object[]} subElements xml subelements
+     * @param   {object[]} [subElements=[]] xml subelements
+     * @param   {string[] | string} styleGeometryType The configured geometry type of the layer
      * @returns {string[]} geometry types of the layer
      */
-    getTypeAttributesFromSubelements: function (subElements = []) {
+    getTypeAttributesFromSubelements: function (subElements = [], styleGeometryType) {
         const geometryType = [];
 
         subElements.forEach(elements => {
             const typeAttribute = elements.getAttribute("type");
-            let geomType;
+            let geomType = styleGeometryType;
 
             if (typeAttribute && typeAttribute.includes("gml")) {
-                geomType = typeAttribute.split("gml:")[1].replace("PropertyType", "");
+                geomType = styleGeometryType || typeAttribute.split("gml:")[1].replace("PropertyType", "");
                 if (geomType === "Geometry") {
                     geometryType.push("Point");
                     geometryType.push("Polygon");
                     geometryType.push("LineString");
+                }
+                else if (Array.isArray(geomType)) {
+                    geomType.forEach(singleGeomType => geometryType.push(singleGeomType));
                 }
                 else {
                     geometryType.push(geomType);
@@ -179,7 +176,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {Boolean} is geometrytype a multiGeometry
      */
     isMultiGeometry: function (geometryType) {
-        return geometryType === "MultiPoint" || geometryType === "MultiLineString" || geometryType === "MultiPolygon" || geometryType === "GeometryCollection";
+        return geometryType === "MultiPoint" || geometryType === "MultiLineString" || geometryType === "MultiPolygon" || geometryType === "GeometryCollection" || geometryType === "Cesium";
     },
 
     /**
@@ -190,7 +187,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {ol/style/Style}    style is always returned
      */
     getGeometryStyle: function (feature, rules, isClustered) {
-        const geometryType = feature.getGeometry().getType(),
+        const geometryType = feature ? feature.getGeometry().getType() : "Cesium",
             isMultiGeometry = this.isMultiGeometry(geometryType);
 
         // For simple geometries the first styling rule is used.
@@ -236,6 +233,11 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         else if (geometryType === "Polygon") {
             styleObject = new PolygonStyle(feature, style, isClustered);
             this.addLegendInfo("Polygon", styleObject, rule);
+            return styleObject.getStyle();
+        }
+        else if (geometryType === "Cesium") {
+            styleObject = new CesiumStyle(rule);
+            this.addLegendInfo("Cesium", styleObject, rule);
             return styleObject.getStyle();
         }
         else if (geometryType === "Circle") {
@@ -287,7 +289,14 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                     simpleStyle.setGeometry(geometry);
                     olStyle.push(simpleStyle);
                 }
-            }, this);
+            });
+        }
+        else if (geometryType === "Cesium") {
+            rules.forEach(rule => {
+                const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rule, isClustered);
+
+                olStyle.push(simpleStyle);
+            });
         }
         else {
             const simpleStyle = this.getSimpleGeometryStyle(geometryType, feature, rules, isClustered);
@@ -434,7 +443,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * Returns the reference value. If necessary it loops through the feature properties object structure.
      * @param   {object} featureProperties properties of the feature
      * @param   {string} value attribute value or object path to check
-     * @returns {undefined} attribute property can be of any type
+     * @returns {void} attribute property can be of any type
      */
     getReferenceValue: function (featureProperties, value) {
         const valueIsObjectPath = this.isObjectPath(value);
@@ -461,7 +470,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * Returns feature value identified by key. If necessary it loops through the feature properties object structure.
      * @param   {object} featureProperties properties of the feature
      * @param   {string} key attribute name or object path to check
-     * @returns {undefined} attribute property can be of any type
+     * @returns {void} attribute property can be of any type
      */
     getFeatureValue: function (featureProperties, key) {
         const keyIsObjectPath = this.isObjectPath(key);
@@ -599,7 +608,6 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
                 "styleObject": styleObject,
                 "label": this.createLegendLabel(rule, styleObject)
             });
-            Radio.trigger("Legend", "setLayerList");
         }
     },
 
@@ -610,8 +618,8 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
      * @returns {String | null} label for this styleObject
      */
     createLegendLabel: function (rule, styleObject) {
-        if (styleObject.hasOwnProperty("legendValue")) {
-            return styleObject.legendValue.toString();
+        if (styleObject?.attributes?.hasOwnProperty("legendValue")) {
+            return styleObject.attributes.legendValue.toString();
         }
         else if (rule.hasOwnProperty("conditions")) {
             let label = "";

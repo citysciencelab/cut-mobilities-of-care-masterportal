@@ -54,26 +54,24 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
         const visibleGroupLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "GROUP"}),
             layerTypes = this.get("layerTypes");
 
-        let prepSearchString = "",
-            vectorLayerModels = [],
+        let vectorLayerModels = [],
             foundMatchingFeatures = [],
             filteredModels = [];
 
         if (this.get("inUse") === false && searchString.length >= this.get("minChars")) {
             this.setInUse(true);
-            prepSearchString = searchString.replace(" ", "");
 
-            _.each(layerTypes, function (layerType) {
+            layerTypes.forEach(layerType => {
                 vectorLayerModels = vectorLayerModels.concat(Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: layerType}));
-            }, this);
+            });
 
             vectorLayerModels = vectorLayerModels.concat(this.filterVisibleGroupLayer(visibleGroupLayers, layerTypes));
 
-            filteredModels = _.union(vectorLayerModels).filter(function (model) {
+            filteredModels = vectorLayerModels.filter(model => {
                 return model.has("searchField") === true && model.get("searchField") !== "";
             });
 
-            foundMatchingFeatures = this.findMatchingFeatures(filteredModels, prepSearchString);
+            foundMatchingFeatures = this.findMatchingFeatures(filteredModels, searchString);
             Radio.trigger("Searchbar", "pushHits", "hitList", foundMatchingFeatures);
 
             Radio.trigger("Searchbar", "createRecommendedList", "visibleVector");
@@ -107,7 +105,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
      * @returns {boolean} Flag if feature is a cluster
      */
     isClusteredFeature: function (oFeature) {
-        return _.isArray(oFeature.get("features")) && oFeature.get("features").length > 0;
+        return Array.isArray(oFeature.get("features")) && oFeature.get("features").length > 0;
     },
 
     /**
@@ -126,26 +124,26 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
 
     /**
      * Filters (clustered) features according to given search string.
-     * @param {array} aFeatures Array of features to filter
-     * @param {string} sSearchField Feature field key to look for value
-     * @param {string} sSearchString Given string to search inside features
+     * @param {array} features Array of features to filter
+     * @param {string} searchField Feature field key to look for value
+     * @param {string} searchString Given string to search inside features
      * @returns {array} Array of features containing searched string
      */
-    filterFeaturesArrayRec: function (aFeatures, sSearchField, sSearchString) {
-        let aFilteredFeatures = [];
+    filterFeaturesArrayRec: function (features, searchField, searchString) {
+        let filteredFeatures = [];
 
-        aFilteredFeatures = aFeatures.filter(function (oFeature) {
-            let aFilteredSubFeatures = [],
-                sTestFieldValue = "";
+        filteredFeatures = features.filter(feature => {
+            let filteredSubFeatures = [],
+                testFieldValue = "";
 
             // if feature is clustered
-            if (this.isClusteredFeature(oFeature)) {
+            if (this.isClusteredFeature(feature)) {
                 // enter recursion
-                aFilteredSubFeatures = this.filterFeaturesArrayRec(oFeature.get("features"), sSearchField, sSearchString);
+                filteredSubFeatures = this.filterFeaturesArrayRec(feature.get("features"), searchField, searchString);
 
                 // set sub features for this cluster
-                if (aFilteredSubFeatures.length > 0) {
-                    oFeature.set("features", aFilteredSubFeatures);
+                if (filteredSubFeatures.length > 0) {
+                    feature.set("features", filteredSubFeatures);
                     return true;
                 }
                 // filter this feature when no sub feature is left
@@ -153,15 +151,17 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             }
 
             // if this key is not set, filter
-            if (_.isUndefined(oFeature.get(sSearchField))) {
+            if (feature.get(searchField) === undefined) {
                 return false;
             }
 
-            sTestFieldValue = oFeature.get(sSearchField).toString().toUpperCase();
+            testFieldValue = feature.get(searchField).toString().toUpperCase();
+
             // test if property value contains searched string as substring
-            return sTestFieldValue.indexOf(sSearchString.toUpperCase()) !== -1;
-        }, this);
-        return aFilteredFeatures;
+            return testFieldValue.indexOf(searchString.toUpperCase()) !== -1;
+        });
+
+        return filteredFeatures;
     },
 
     /**
@@ -174,21 +174,21 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     findMatchingFeatures: function (models, searchString) {
         const resultFeatures = [];
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             const features = model.get("layer").getSource().getFeatures();
 
             let filteredFeatures,
                 searchFields = model.get("searchField");
 
-            if (_.isArray(searchFields) === false) {
+            if (Array.isArray(searchFields) === false) {
                 searchFields = [searchFields];
             }
 
-            _.each(searchFields, function (searchField) {
+            searchFields.forEach(searchField => {
                 filteredFeatures = this.filterFeaturesArrayRec(features, searchField, searchString, []);
                 resultFeatures.push(this.getFeatureObject(searchField, filteredFeatures, model));
-            }, this);
-        }, this);
+            });
+        });
 
         return resultFeatures;
     },
@@ -203,14 +203,14 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     getFeatureObject: function (searchField, filteredFeatures, model) {
         const featureArray = [];
 
-        _.each(filteredFeatures, function (feature) {
+        filteredFeatures.forEach(feature => {
             const featureObject = {
                 // "bezeichnung" hard coded? Or use searchField?
                 name: this.getWithClusterFallback(feature, searchField),
                 type: model.get("name"),
                 coordinate: this.getCentroidPoint(feature.getGeometry()),
                 imageSrc: this.getImageSource(feature, model),
-                id: _.uniqueId(model.get("name")),
+                id: Radio.request("Util", "uniqueId", model.get("name")),
                 layer_id: model.get("id"),
                 additionalInfo: this.getAdditionalInfo(model, feature),
                 feature: feature,
@@ -225,7 +225,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
             }
 
             featureArray.push(featureObject);
-        }, this);
+        });
         return featureArray;
     },
 
@@ -237,9 +237,8 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     getCentroidPoint: function (geometry) {
         let coordinates;
 
-
         if (geometry.getType() === "Point") {
-            coordinates = geometry.getCoordinates();
+            coordinates = geometry.getCoordinates().slice(0, 2);
         }
         else {
             coordinates = this.getCenterFromExtent(geometry.getExtent());
@@ -275,11 +274,11 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
         if (feature.getGeometry().getType() === "Point" || feature.getGeometry().getType() === "MultiPoint") {
             layerStyle = model.get("layer").getStyle(feature);
 
-            if (_.isFunction(layerStyle)) {
+            if (typeof layerStyle === "function") {
                 layerStyle = layerStyle(feature);
             }
 
-            if (_.isArray(layerStyle)) {
+            if (Array.isArray(layerStyle)) {
                 imageSource = this.getImageSourceFromStyle(layerStyle[0]);
             }
             else {
@@ -316,7 +315,7 @@ const VisibleVectorModel = Backbone.Model.extend(/** @lends VisibleVectorModel.p
     getAdditionalInfo: function (model, feature) {
         let additionalInfo;
 
-        if (!_.isUndefined(model.get("additionalInfoField"))) {
+        if (model.get("additionalInfoField") !== undefined) {
             additionalInfo = this.getWithClusterFallback(feature, model.get("additionalInfoField"));
         }
 

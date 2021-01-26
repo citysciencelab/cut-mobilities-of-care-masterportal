@@ -1,9 +1,12 @@
 import WfsQueryModel from "./query/source/wfs";
 import GeoJsonQueryModel from "./query/source/geojson";
 import Tool from "../../core/modelList/tool/model";
+import "./RadioBridge.js";
+import store from "../../../src/app-store";
 
 const FilterModel = Tool.extend({
     defaults: Object.assign({}, Tool.prototype.defaults, {
+        initialized: false,
         isGeneric: false,
         isInitOpen: false,
         isVisible: false,
@@ -17,7 +20,8 @@ const FilterModel = Tool.extend({
         renderToSidebar: true,
         renderToWindow: false,
         glyphicon: "glyphicon-filter",
-        uiStyle: "DEFAULT"
+        uiStyle: "DEFAULT",
+        saveToUrl: true
     }),
     initialize: function () {
         const channel = Radio.channel("Filter");
@@ -26,6 +30,10 @@ const FilterModel = Tool.extend({
         this.listenTo(channel, {
             "resetFilter": this.resetFilter
         });
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang();
 
         channel.reply({
             "getIsInitialLoad": function () {
@@ -77,7 +85,17 @@ const FilterModel = Tool.extend({
             }
         }, this);
     },
-
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "name": i18next.t("common:menu.filter"),
+            "currentLng": lng
+        });
+    },
     resetFilter: function (feature) {
         if (feature && feature.getStyleFunction() === null) {
             this.deselectAllModels();
@@ -180,7 +198,9 @@ const FilterModel = Tool.extend({
             });
             filterObjects.push({name: query.get("name"), isSelected: query.get("isSelected"), rules: ruleList});
         });
-        Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
+        if (this.get("saveToUrl")) {
+            Radio.trigger("ParametricURL", "updateQueryStringParam", "filter", JSON.stringify(filterObjects));
+        }
     },
 
     /**
@@ -310,7 +330,7 @@ const FilterModel = Tool.extend({
     },
     closeGFI: function () {
         Radio.trigger("GFI", "setIsVisible", false);
-        Radio.trigger("MapMarker", "hideMarker");
+        store.dispatch("MapMarker/removePointMarker");
     },
     collapseOpenSnippet: function () {
         const selectedQuery = this.get("queryCollection").findWhere({isSelected: true});

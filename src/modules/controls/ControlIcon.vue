@@ -33,7 +33,9 @@ export default {
         }
     },
     computed: {
-        /** @returns {string} glyphicon name with added prefix 'glyphicon-' if it was missing */
+        /**
+         * @returns {String} glyphicon name with added prefix 'glyphicon-' if it was missing
+         */
         glyphiconClass () {
             return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
         }
@@ -48,7 +50,7 @@ export default {
         :class="['control-icon', 'glyphicon', glyphiconClass, inline ? 'inline' : 'standalone']"
         :title="title"
         :disabled="disabled"
-        @click="onClick"
+        @click.stop="onClick"
         @keyup.space.stop.prevent="onClick"
     >
         <!-- children should usually be placed absolutely in relation to ControlIcon -->

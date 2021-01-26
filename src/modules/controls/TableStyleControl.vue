@@ -37,7 +37,9 @@ export default {
         }
     },
     computed: {
-        /** @returns {string} string with prefixed "glyphicon-" if it was missing */
+        /**
+         * @returns {String} string with prefixed "glyphicon-" if it was missing
+         */
         glyphiconClass () {
             return this.iconName.startsWith("glyphicon-") ? this.iconName : `glyphicon-${this.iconName}`;
         }
@@ -47,7 +49,7 @@ export default {
          * of it instead of this current cross-rendering. Another mechanism is then needed to make the
          * ControlBar not render the affected controls.
          */
-        $("#table-tools-menu").append(this.$el);
+        document.querySelector("#table-tools-menu").appendChild(this.$el);
     }
 };
 </script>

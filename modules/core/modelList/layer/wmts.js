@@ -27,11 +27,13 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     initialize: function () {
         this.checkForScale(Radio.request("MapView", "getOptions"));
         this.listenTo(this, "change:layerSource", () => {
-            if (this.get("optionsFromCapabilities")) {
+            const hasOptionsFromCapabilities = Boolean(this.get("optionsFromCapabilities"));
+
+            if (hasOptionsFromCapabilities) {
                 this.updateLayerSource();
             }
-            if (this.get("layerSource").getState() === "ready") {
-                // state of wmts source is ready, trigger removeloadinglayer
+            if (hasOptionsFromCapabilities && this.get("layerSource").getState() === "ready") {
+                // state of optionsFromCapabilities wmts source is ready, trigger removeloadinglayer
                 Radio.trigger("Map", "removeLoadingLayer");
             }
         });
@@ -204,36 +206,51 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
     /**
      * If no legendURL is set an Error is written on the console.
      * For the OptionsFromCapabilities way:
-     * If legendURL is empty, WMTS-Capabilities will be searched for a legendURL (OGC Standard)
-     * If a legendURL is found, legend will be rebuild
+     * If legend is empty, WMTS-Capabilities will be searched for a legendURL (OGC Standard)
+     * If a legend is found, legend will be rebuild
      *
      * @returns {void}
      */
-    createLegendURL: function () {
-        let legendURL = this.get("legendURL");
+    createLegend: function () {
+        let legend = this.get("legend");
         const capabilitiesUrl = this.get("capabilitiesUrl");
 
-        if ((this.get("optionsFromCapabilities") === undefined) && (legendURL === "" || legendURL === undefined)) {
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if ((this.get("optionsFromCapabilities") === undefined) && (legend === true)) {
             console.error("WMTS: No legendURL is specified for the layer!");
         }
 
-        else if (this.get("optionsFromCapabilities") && !legendURL) {
+        else if (this.get("optionsFromCapabilities") && !legend) {
             this.fetchWMTSCapabilities(capabilitiesUrl)
                 .then(function (result) {
                     result.Contents.Layer.forEach(function (layer) {
                         if (layer.Identifier === this.get("layers")) {
-                            const getLegendURL = Radio.request("Util", "searchNestedObject", layer, "LegendURL");
+                            const getLegend = Radio.request("Util", "searchNestedObject", layer, "LegendURL");
 
-                            if (getLegendURL !== null && getLegendURL !== undefined) {
-                                legendURL = getLegendURL.LegendURL[0].href;
+                            if (getLegend !== null && getLegend !== undefined) {
+                                legend = getLegend.Legend[0].href;
 
-                                this.setLegendURL(legendURL);
+                                this.setLegend(legend);
 
                                 // rebuild Legend
                                 Radio.trigger("Legend", "setLayerList");
                             }
                             else {
-                                this.setLegendURL(null);
+                                this.setLegend(null);
                                 console.warn("no legend url found for layer " + this.get("layers"));
                             }
 

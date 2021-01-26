@@ -6,14 +6,22 @@
         <% } else { %>
             <span class="glyphicon glyphicon-unchecked pull-left" title="<%=showTopicText%>"></span>
         <% } %>
+        <% if (isSecured) { %>
+            <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+        <% } %>
         <span class="title" title="<%= name %>"><%= name.substr(0,35)%><%if(name.length >= 35) {%>... <% }  %></span>
     </span>
 </span>
 <span class="pull-right">
     <% if (typeof styleable !== "undefined" && styleable === true) { %>
-            <span class="glyphicon glyphicon-tint" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
+            <span class="glyphicon glyphicon-tint styleWMS" data-toggle="tooltip" data-placement="bottom" title="<%=changeClassDivisionText%>"></span>
     <% } %>
-    <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
+    <% if (typeof typ !== "undefined" && typ === "VectorTile" && vtStyles && vtStyles.length > 1) { %>
+        <span class="glyphicon glyphicon-tint styleVT" data-toggle="tooltip" data-placement="bottom" title="Style für Layer auswählen"></span>
+    <% } %>
+    <% if (typeof datasets !== "undefined" && datasets !== false) { %>
+        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="<%=infosAndLegendText%>"></span>
+    <% } %>
     <% if (showSettings === true) { %>
         <span class="glyphicon glyphicon-cog rotate settings" title="<%=settingsText%>"></span>
     <% } %>

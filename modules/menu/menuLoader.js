@@ -2,6 +2,7 @@ import LightMenu from "./desktop/listViewLight";
 import Menu from "./desktop/listView";
 import MobileMenu from "./mobile/listView";
 import TableMenu from "./table/view";
+import store from "../../src/app-store/index";
 
 const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
     defaults: {
@@ -27,6 +28,14 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
                 }
             }, this);
         }
+
+        this.listenTo(Radio.channel("Util"), {
+            "isViewMobileChanged": function (isViewMobile) {
+                if (!isViewMobile) {
+                    $(".modal-backdrop").remove();
+                }
+            }
+        });
 
         this.listenTo(Radio.channel("i18next"), {
             "languageChanged": function () {
@@ -77,7 +86,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
         }
         $("div.collapse.navbar-collapse ul.nav-menu").empty();
         $("div.collapse.navbar-collapse .breadcrumb-mobile").empty();
-        this.loadMenu();
+        this.loadMenu(true);
     },
 
     /**
@@ -99,6 +108,7 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
                         return;
                     }
                     model.set(key, value);
+                    store.dispatch("Tools/languageChanged", {id: model.id, name: value});
                 });
             }
         }, this);
@@ -106,11 +116,11 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
 
     /**
      * Prüft initial und nach jedem Resize, ob und welches Menü geladen werden muss und lädt bzw. entfernt Module.
-     * @param  {Object} caller this MenuLoader
+     * @param  {boolean} isReload if true, this is a  reload
      * @return {Object}        this
      * @fires Map#RadioTriggerMapUpdateSize
      */
-    loadMenu: function () {
+    loadMenu: function (isReload = false) {
         const isMobile = Radio.request("Util", "isViewMobile"),
             channel = Radio.channel("Menuloader");
 
@@ -144,7 +154,9 @@ const MenuLoader = Backbone.Model.extend(/** @lends MenuLoader.prototype */{
             }
             // Nachdem die MapSize geändert wurde, muss die Map aktualisiert werden.
             channel.trigger("ready", this.currentMenu.id);
-            Radio.trigger("Map", "updateSize");
+            if (!isReload) {
+                Radio.trigger("Map", "updateSize");
+            }
         }
     }
 });

@@ -98,7 +98,7 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         const thislayerId = model.get("id");
 
         if (!model.get("isSelected")) {
-            _.each(layerCollection, function (layer) {
+            layerCollection.forEach(layer => {
                 if (layer.get("id") !== thislayerId) {
                     layer.set("isSettingVisible", false);
                 }

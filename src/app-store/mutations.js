@@ -1,53 +1,66 @@
-const mutations = {
+import actions from "../app-store/actions"; // https://stackoverflow.com/questions/40487627/can-i-call-commit-from-one-of-mutations-in-vuex-store
+
+// The objects deprecatedParamsConfigJson and deprecatedParamsConfigJs store the current respectively new parameters and the related deprecated parameters.
+// The key describes the current parameter or more precisely the path to the new/current path.
+// The corresponding value describes the old path with the deprecated parameter.
+// Later on the algorithm takes the old path, estimates the content and rewrites the content to the new path / new parameter.
+// The old deprecated path will be removed.
+// Please notice that the replacement only effects the state. This means that the changes only have impact on the vue-components.
+// Nevertheless you can or even should specify deprecated backbone parameters here.
+
+const deprecatedParamsConfigJson = {
+        "Portalconfig.portalTitle.title": ["Portalconfig.PortalTitle"],
+        "Portalconfig.portalTitle.logo": ["Portalconfig.PortalLogo"],
+        "Portalconfig.portalTitle.link": ["Portalconfig.LogoLink"],
+        "Portalconfig.portalTitle.toolTip": ["Portalconfig.portalTitle.tooltip", "Portalconfig.LogoToolTip"],
+        "Portalconfig.searchBar.bkg.zoomToResultOnHover": ["Portalconfig.searchBar.bkg.zoomToResult"],
+        "Portalconfig.treeType": ["Portalconfig.Baumtyp"],
+        "Portalconfig.controls.overviewMap.layerId": ["Portalconfig.controls.overviewMap.baselayer"],
+        "Portalconfig.mapView.startResolution": ["Portalconfig.mapView.resolution"],
+        "Portalconfig.searchBar.startZoomLevel": ["Portalconfig.searchBar.zoomLevel"],
+        "Portalconfig.menu.tools.children.fileImport": ["Portalconfig.menu.tools.children.kmlimport", "Portalconfig.Portalconfig.menu.kmlimport"],
+        "Portalconfig.menu.tools.children.supplyCoord": ["Portalconfig.menu.tools.children.coord", "Portalconfig.Portalconfig.menu.coord"]
+    },
+    deprecatedParamsConfigJs = {
+        "startUpModul": ["isInitOpen"]
+    };
+
+export default {
+
     /**
      * Sets config.json.
-     * @param {object} state store state
-     * @param {object} config config.json
+     * @param {Object} state store state
+     * @param {Object} config config.json
      * @returns {void}
      */
     setConfigJson (state, config) {
-        state.configJson = config;
+        state.configJson = actions.checkWhereDeprecated(deprecatedParamsConfigJson, config);
     },
     /**
      * Sets config.js.
-     * @param {object} state store state
-     * @param {object} config config.js
+     * @param {Object} state store state
+     * @param {Object} config config.js
      * @returns {void}
      */
     setConfigJs (state, config) {
-        state.configJs = config;
+        state.configJs = actions.checkWhereDeprecated(deprecatedParamsConfigJs, config);
     },
     /**
      * Sets mobile flag.
-     * @param {object} state store state
-     * @param {boolean} mobile whether browser resolution indicates mobile device
+     * @param {Object} state store state
+     * @param {Boolean} mobile whether browser resolution indicates mobile device
      * @returns {void}
      */
     setMobile (state, mobile) {
         state.mobile = mobile;
     },
-    setToolConfig (state, payload) {
-        Object.keys(state.Tools).forEach(toolId => {
-            const tool = state.Tools[toolId];
-
-            if (tool && tool.id === payload.id) {
-                if (payload.name) {
-                    // special handling of attribute name, is a reserved keyword in vue -> use title
-                    tool.title = payload.name;
-                }
-                Object.assign(tool, payload);
-            }
-        });
-    },
-    setToolActive (state, payload) {
-        Object.keys(state.Tools).forEach(toolId => {
-            const tool = state.Tools[toolId];
-
-            if (tool && tool.id === payload.id) {
-                tool.active = payload.active;
-            }
-        });
+    /**
+     * Sets i18NextInitialized flag. Is done after languages for addons are loaded.
+     * @param {Object} state store state
+     * @param {Boolean} isInitialized whether i18Next is initialized
+     * @returns {void}
+     */
+    setI18Nextinitialized (state, isInitialized) {
+        state.i18NextInitialized = isInitialized;
     }
 };
-
-export default mutations;

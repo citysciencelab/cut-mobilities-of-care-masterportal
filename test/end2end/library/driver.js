@@ -1,6 +1,5 @@
 const {until, By} = require("selenium-webdriver"),
-    {getResolution} = require("./scripts"),
-    {isBasic, isMaster, isCustom, isDefault} = require("../settings");
+    {getResolution, isInitalLoadingFinished} = require("./scripts");
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -42,25 +41,10 @@ async function prepareOB (driver) {
 async function loadUrl (driver, url, mode) {
     await driver.get(url);
 
-    if (isBasic(url) || isMaster(url)) {
-        await driver.wait(until.elementLocated(By.id("loader")), 90000);
-        if (isBasic(url)) {
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
-        }
-        if (isMaster(url)) {
-            // wait for logo to disappear (only appears in master)
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("portal-logo"))));
-        }
-    }
-
-    if (isCustom(url) || isDefault(url)) {
-        const loading = await driver.wait(until.elementLocated(By.className("loading")), 90000);
-
-        await driver.wait(until.elementIsNotVisible(loading), 90000);
-    }
+    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000);
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
-    await driver.wait(async () => await driver.executeScript(getResolution) !== null);
+    await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
 
     // prepare 3D resp. OB mode for tests - 2D mode is initial mode, nothing to do
     if (mode === "3D") {
@@ -82,6 +66,13 @@ async function getUnnavigatedDriver (builder, resolution) {
         widthHeight = resolution.split("x").map(x => parseInt(x, 10));
 
     await driver.manage().window().setRect({width: widthHeight[0], height: widthHeight[1]});
+    await driver.manage().setTimeouts(
+        {
+            implicit: 5000,
+            pageLoad: 60000,
+            script: 30000
+        }
+    );
 
     return driver;
 }

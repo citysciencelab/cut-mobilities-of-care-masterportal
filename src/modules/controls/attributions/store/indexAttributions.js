@@ -8,11 +8,11 @@
 /**
  * Finds all models in the ModelList that have the layerAttribution parameter,
  * including children of group layers.
- * @param {Array} modelList list with all models
- * @param {Array} found already found models; used for recursion
- * @returns {Array} all models with configured layer attributions
+ * @param {Object[]} [modelList=[]] list with all models
+ * @param {Object[]} [found=[]] already found models; used for recursion
+ * @returns {Object[]} all models with configured layer attributions
  */
-function getModelsWithLayerAttributionsFrom (modelList, found = []) {
+function getModelsWithLayerAttributionsFrom (modelList = [], found = []) {
     modelList.forEach(model => {
         if (model.has("layerAttribution") && model.get("layerAttribution") !== "nicht vorhanden") {
             found.push(model);
@@ -49,13 +49,13 @@ export default {
     state: {
         /** @type {AttributionListItem[]} list of active attributions */
         attributionList: [],
-        /** @type {?boolean} whether the flyout is to be rendered */
+        /** @type {?Boolean} whether the flyout is to be rendered */
         open: null
     },
     actions: {
         /**
          * Re-fetches all currently active layer attributions. Preserves attributions with type unequal to "layer".
-         * @param {object} params vuex action parameter object
+         * @param {Object} params vuex action parameter object
          * @returns {void}
          */
         updateAttributions ({commit, getters}) {
@@ -68,7 +68,7 @@ export default {
         },
         /**
          * Adds an attribution if no samey object is already present.
-         * @param {object} context action context
+         * @param {Object} context action context
          * @param {AttributionListItem} item to be added
          * @returns {void}
          */
@@ -84,7 +84,7 @@ export default {
         },
         /**
          * Remove item from attributionList if name, text, and type are equal.
-         * @param {object} context action context
+         * @param {Object} context action context
          * @param {AttributionListItem} item to be removed
          * @returns {void}
          */
@@ -99,7 +99,7 @@ export default {
          * Replaces current attribution array with a new one.
          * If list was extended, attributions flyout is also opened.
          * If list was cleared, attributions flyout is also closed.
-         * @param {object} state previous state
+         * @param {Object} state previous state
          * @param {AttributionListItem[]} attributionList new list
          * @returns {void}
          */
@@ -114,8 +114,8 @@ export default {
         },
         /**
          * Used to open/close the attributions flyout.
-         * @param {object} state previous state
-         * @param {boolean} open whether the flyout should be rendered
+         * @param {Object} state previous state
+         * @param {Boolean} open whether the flyout should be rendered
          * @returns {void}
          */
         setOpen (state, open) {
@@ -125,9 +125,9 @@ export default {
     getters: {
         /** @returns {AttributionListItem[]} currently active attributions */
         attributionList: ({attributionList}) => attributionList,
-        /** @returns {?boolean} whether the flyout is to be rendered */
+        /** @returns {?Boolean} whether the flyout is to be rendered */
         open: ({open}) => open,
-        /** @returns {boolean} whether attributions element is openable */
+        /** @returns {Boolean} whether attributions element is openable */
         openable: ({attributionList}) => attributionList.length > 0
     }
 };

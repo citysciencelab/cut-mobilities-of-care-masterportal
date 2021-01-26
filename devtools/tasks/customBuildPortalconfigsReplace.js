@@ -19,6 +19,12 @@ module.exports = function (destination, stableVersionNumber) {
         "from": /\/*(\.+\/)*build\/js\/masterportal\.js/g,
         "to": "./js/masterportal.js"
     });
+    replacements.push({
+        "files": destination + "/js/masterportal.js",
+        "from": /\/img\/tools\/draw\/circle_/g,
+        "to": "/Mastercode/" + stableVersionNumber + "/img/tools/draw/circle_"
+    });
+
 
     replacements.forEach(function (replacement) {
         replace.sync({

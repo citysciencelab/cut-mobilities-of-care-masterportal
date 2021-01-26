@@ -1,293 +1,267 @@
-Die Kommunikationsschnittstelle (Remote-Interface) bietet Zugriff auf festgelegte Events und Funktionen in unterschiedlichen Modulen. Sie ist mit **[Backbone.Radio](https://github.com/marionettejs/backbone.radio)** umgesetzt. Backbone.Radio wird als Radio in den globalen Namespace importiert.
+# Remote interface
 
-Die Kommunikationsschnittstelle kann erst verwendet werden, wenn alle notwendigen Module geladen sind. Hierfür wird per window.postMessage() ein MessageEvent bereitgestellt, auf das sich wie folgt registriert werden kann:
+The remote interface allows programmatic interaction with the Masterportal. It gives access to all registered VueX actions and a set of dedicated additional functions.
 
-```
-#!js
-window.addEventListener("message", function (messageEvent) {
-      if (messageEvent.data === "portalReady") {
-         Radio.request("RemoteInterface", "getZoomLevel");
-      }
-}, false);
+## Generic remote interface to call VueX actions
 
-```
+|Name|Type|Explanation|
+|-|-|-|
+|namespace|String|Namespace of VueX module|
+|action|String|Name of action to call on module|
+|args|Object|Parameter object provided as payload to action|
 
-Eine vollständige Auflistung aller Events erfolgt nachfolgend. Die Syntax unterscheidet sich zwischen *Triggern* zum Verändern von Kartenzuständen und Auslösen von Operationen, *Requests* zum Abfragen von Kartenzuständen und *Events*, auf die sich registriert werden kann. Sie ist nachfolgend beschrieben.
+### Example
+Any VueX action may be called as follows:
 
-
-**Syntax Trigger**
-```
-#!js
-Radio.trigger("RemoteInterface", eventName [, parameter])
-```
-
-**Syntax Request**
-```
-#!js
-Radio.request("RemoteInterface", eventName);
-```
-
-**Syntax Event**
-```
-Radio.on("RemoteInterface", eventName, function (eventObject) {
-   console.log(eventObject);
-});
-
-Radio.once("RemoteInterface", eventName, function (eventObject) {
-   console.log(eventObject);
+```js
+const myIframe = document.getElementById("my-iframe");
+myIframe.contentWindow.postMessage({
+    namespace: "Name/Space/Of/VueX/Store",
+    action: "nameOfAction",
+    args: {
+        "param1": "value1",
+        "paramX": "valueX"
+    }
 });
 ```
 
----
-**Inhaltsverzeichnis:**
+The remote interface will interpret the message given and produce the following call:
 
-[TOC]
-
----
-# **RemoteHost**
-
-Über die hier genannten Aufrufe kann das Masterportal, sofern es als iFrame eingebunden ist, mit dem parentObject kommunizieren.
-
-## Nachricht senden
-*(postMessage)*
-
-Sendet eine Nachricht an das parent-Object über postMessage-API.
-
-**Parameter**
-
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|content|Object|der zu sendende Content.|
-
-**Beispiel-Aufruf**
-```
-Radio.request("RemoteInterface", "postMessage", {...});
-```
-Das Portal kann auch per PostMessage Funktionsaufrufe und Daten entgegen nehmen und entsprechend reagieren.
-Dabei ist es wichtig, dass im mitgesendeten JSON ein Key so heißt wie die Funktion die ausgeführt werden soll.
-
-### Mögliche Funktionen sind:
-### showPositionByExtent
-Wird diese Funktion angetriggered, so wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt und die Karte auf diese Koordinate zentriert.
-
-**Beispiel-Aufruf von extern**
 ```js
-var iframe = document.getElementById("id").contentWindow;
-iframe.postMessage({"showPositionByExtent": [xMin, yMin, xMax, yMax]}, domain);
+store.dispatch(
+    "Name/Space/Of/VueX/Store/nameOfAction",
+    {
+        "param1": "value1",
+        "paramX": "valueX"
+    },
+    { root: true }
+);
 ```
-Attribute des JSON-Objektes:
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|showPositionByExtent|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+## Calling a dedicated function via remote interface
 
-### showPositionByExtentNoScroll
-Wird diese Funktion angetriggered, so wird ein Marker an die Zentrumskoordinate des übergebenen Extents gesetzt. Allerdings wird die Karte **nicht** auf diese Koordinate zentriert.
+The singular key given to `.postMessage()`'s parameter object is to correspond to a function name. The value of this key must be an array and will be spread to be the call's parameters.
 
-**Beispiel-Aufruf von extern**
+|Name|Type|Explanation|
+|-|-|-|
+|`${nameOfFunction}`|Array|Parameters to call `${nameOfFunction}` with|
+|domain|String|Receiver window's domain|
+
+### Example
+
+A function may be called as follows:
+
 ```js
-var iframe = document.getElementById("id").contentWindow;
-iframe.postMessage({"showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]}, domain);
+const myIframe = document.getElementById("my-iframe");
+const nameOfFunction = "this should be the name of a function";
+myIframe.contentWindow.postMessage(
+    { [nameOfFunction]: ["param1", "param2", "paramX"] },
+    domain
+);
 ```
-Attribute des JSON-Objektes:
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|showPositionByExtentNoScroll|Array|Extent an dessen Zentrumskoordiante ein Marker gesetzt wird.|
+### List of dedicated functions
 
-### transactFeatureById
-Wird diese Funktion angetriggered, so wird ein Feature eines gegebenen WFST-Layers modifiziert.
+#### showPositionByExtent
 
-**Beispiel-Aufruf von extern**
+A map marker will be placed at the center of the given extent, and the map's view will center on it.
+
+|Name|Type|Explanation|
+|-|-|-|
+|showPositionByExtent|Array|extent; map marker will be set to its center|
+|domain|String|receiver window's domain|
+
+##### Example
+
 ```js
-var iframe = document.getElementById("id").contentWindow;
-iframe.postMessage({"transactFeatureById": "id", "layerId": layerId, "attributes": attrs, "mode": "update"}, domain);
+const myIframe = document.getElementById("my-iframe").contentWindow;
+iframe.postMessage({
+    "showPositionByExtent": [xMin, yMin, xMax, yMax]
+}, domain);
 ```
-Attribute des JSON-Objektes:
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|transactFeaturesById|String|Id des Features.|
-|layerId|String|Id des Layers.|
-|attributes|String|JSON mit den Attributes des Features.|
-|mode|String|auszuführende Operation. Momentan nur "update" implementiert.|
+#### showPositionByExtentNoScroll
 
-### zoomToExtent
-Wird diese Funktion angetriggered, so wird die Karte auf den übergebenen Extent gezoomt.
+A map marker will be placed at the center of the given extent. The map is **not** center to it, hence it may remain outside of the user's view.
 
-**Beispiel-Aufruf von extern**
+|Name|Type|Explanation|
+|-|-|-|
+|showPositionByExtent|Array|extent; map marker will be set to its center|
+|domain|String|receiver window's domain|
+
+##### Example
+
 ```js
-var iframe = document.getElementById("id").contentWindow;
-iframe.postMessage({"zoomToExtent": [xmin, ymin, xmax, ymax]}, domain);
+const myIframe = document.getElementById("my-iframe").contentWindow;
+iframe.postMessage({
+    "showPositionByExtentNoScroll": [xMin, yMin, xMax, yMax]
+}, domain);
 ```
-Attribute des JSON-Objektes:
+#### transactFeatureById
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|zoomToExtent|Array|Extent.|
+Modify a WFS-T layer's feature, triggering a server interaction.
 
-### highlightfeature
-Wird diese Funktion angetriggered, so wird ein Vektor-Feature in der Karte gehighlightet.
+|Name|Type|Explanation|
+|-|-|-|
+|transactFeaturesById|String|feature id|
+|layerId|String|WFS-T layer id|
+|attributes|String|JSON containing feature attributes|
+|mode|String|name of the WFS-T operation that is to be executed; Currently only "update" is available|
+|domain|String|receiver window's domain|
 
-**Beispiel-Aufruf von extern**
+##### Example
 ```js
-var iframe = document.getElementById("id").contentWindow;
-iframe.postMessage({"highlightfeature": "layerid,featureId"}, domain);
+const myIframe = document.getElementById("my-iframe").contentWindow;
+const id = "the id of the feature to modify";
+iframe.postMessage({
+    "transactFeatureById": id,
+    "layerId": layerId,
+    "attributes": attrs,
+    "mode": "update"
+}, domain);
 ```
-Attribute des JSON-Objektes:
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|highlightfeature|String|LayerId und FeatureId in einem String per Komma separiert|
+#### zoomToExtent
 
-### hidePosition
-Wird diese Funktion angetriggered, so wird der Marker versteckt.
+The map's view will fit the given extent.
 
-**Beispiel-Aufruf von extern**
+|Name|Type|Explanation|
+|-|-|-|
+|zoomToExtent|Array|extent|
+|domain|String|receiver window's domain|
+
+##### Example
 ```js
-var iframe = document.getElementById("id").contentWindow;
+const myIframe = document.getElementById("my-iframe").contentWindow;
+iframe.postMessage({
+    "zoomToExtent": [xmin, ymin, xmax, ymax]
+}, domain);
+```
+
+#### highlightfeature
+
+Highlight a vector feature on the map.
+
+|Name|Type|Explanation|
+|-|-|-|
+|highlightfeature|String|id of layer and feature as comma-separated string|
+|domain|String|receiver window's domain|
+
+##### Example
+
+```js
+const myIframe = document.getElementById("my-iframe").contentWindow;
+iframe.postMessage({
+    "highlightfeature": "layerid,featureId"
+}, domain);
+```
+
+#### hidePosition
+
+Hide the map marker.
+
+|Name|Type|Explanation|
+|-|-|-|
+|hidePosition|String|used standalone (not in object)|
+|domain|String|receiver window's domain|
+
+##### Example
+
+```js
+const myIframe = document.getElementById("my-iframe").contentWindow;
 iframe.postMessage("hidePosition", domain);
 ```
-|Name|Typ|Beschreibung|
+
+## Generic remote interface for `Backbone.Radio` (deprecated)
+
+The functions registered to the `Backbone.Radio` element may also be used via `postMessage()`. They are called by channel and function name.
+
+> Please mind that the usage of Backbone.Radio itself is currently deprecated. Backbone will eventually be removed.
+
+|Name|Type|Explanation|
 |----|---|------------|
-|hidePosition|String|"hidePosition". Dadurch wird der Marker versteckt.|
+|radio_channel|String|radio channel to target|
+|radio_function|String|radio channel function to call|
+|radio_para_object|Object|optional parameter object forwarded to the called function|
+|domain|String|receiver window's domain|
 
-## Nachricht ans Radio senden
-Eine Möglichkeit, via postMessage direkt das Radio des Masterportals anzusprechen ist, den Radio-Channel und die anzutriggernde Funktion zu übergeben.
-
-**Beispiel-Aufruf von extern**
+### Example
 ```js
-var iframe = document.getElementById("id").contentWindow;
-iframe.postMessage({"radio_channel": "Draw", "radio_function": "initWithoutGUI", "radio_para_object": {"drawType": "Polygon"}}, domain);
-```
-Attribute des JSON-Objektes:
-
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|radio_channel|String|Der Radio-Channel, der angesprochen werden soll.|
-|radio_function|String|Die Funktion des Radio-Channels, die angesprochen werden soll.|
-|radio_para_object|Object|(optional) Ein Parameter-Objekt, das an die Radio-Funktion übergeben wird.|
-
-# **Karte**
-
-Über die hier genannten Aufrufe können bestimmte Kartenzustände gesetzt oder abgefragt werden und die Sichtbarkeit von Layern verändert werden.
-
-## URL der aktuellen View zurückgeben
-*(getMapState)*
-
-Gibt die parametrisierte URL zurück, mit der die aktuelle Ausprägung der Karte mit dargestellten Layern und deren Sichtbarkeit und Transparenz zentriert und im selben Maßstab geöffnet werden kann.
-
-
-**Returns** *URL* String
-
-
-**Beispiel-Aufruf**
-```
-#!js
-Radio.request("RemoteInterface", "getMapState");
+const myIframe = document.getElementById("my-iframe").contentWindow;
+iframe.postMessage({
+    "radio_channel": "MyRadioChannel",
+    "radio_function": "myRequestedFunction",
+    "radio_para_object": {
+        "param1": "param1",
+        "paramX": "paramX"
+    }
+}, domain);
 ```
 
-## BoundingBox WGS84 abfragen
-*(getWGS84MapSizeBBOX)*
+This will construct and execute the following call.
 
-Gibt den aktuellen Extent (BoundingBox) der Karte im WGS84 zurück.
-
-
-**Returns** *[Rechtswert Min, Hochwert Max, Rechtswert Max, Hochwert Min]* (Array mit Rechts- und Hochwerten)
-
-
-**Beispiel-Aufruf**
-```
-#!js
-Radio.request("RemoteInterface", "getWGS84MapSizeBBOX");
+```js
+Radio.request(
+    "MyRadioChannel",
+    "myRequestedFunction",
+    {
+        "param1": "param1",
+        "paramX": "paramX"
+    }
+);
 ```
 
-## Setzt die View der Map zurück
-*(resetView)*
+## Masterportal communication to the parent window
 
-Zoomt die View der Map auf den Ausgangsmaßstab und -ausschnitt und entfernt den MapMarker.
+Previously the *top-down* communication (parent to Masterportal) has been shown. The Masterportal may also communicate in the opposite direction.
 
-**Beispiel-Aufruf**
-```
-#!js
-Radio.request("RemoteInterface", "resetView");
-```
+|Name|Type|Explanation|
+|-|-|-|
+|params|Object|parameter object sent to parent window|
 
-## Übernimmt Attribute an einen Layer
-*(setModelAttributesById)*
+### Examples
 
-Übernimmt das attributes-Object an speziellen Layer.
-
-**Parameter**
-
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|id|String|LayerID des Layers, dem Attribute zegeordnet werden.|
-|attributes|Object|Attribute|
-
-
-**Beispiel-Aufruf**
-```
-#!js
-Radio.trigger("RemoteInterface", "setModelAttributesById", {...});
+```js
+// From a Vue component
+this.$remoteInterface.sendMessage({
+    "param1": "param1",
+    "paramX": "paramX"
+});
 ```
 
----
-# **Vektorfeatures**
-
-Über die hier genannten Aufrufe können spezielle Methoden und Funktionen für Vektorfeatures aufgerufen werden.
-
-## Zeige alle Features in speziellem Layer
-*(showAllFeatures)*
-
-Zeigt alle Vektorfeatures des genannten Layers an.
-
-**Parameter**
-
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|value|String|Layername mit den Vektorfeatures|
-
-
-**Beispiel-Aufruf**
-```
-#!js
-Radio.trigger("RemoteInterface", "showAllFeatures", "Anliegen");
+```js
+// From a VueX action
+this._vm.$remoteInterface.sendMessage({
+    "param1": "param1",
+    "paramX": "paramX"
+});
 ```
 
-## Zeige spezielle Features in speziellem Layer
-*(showFeaturesById)*
+The remote interface translates both to the following call:
 
-Zeigt alle Vektorfeatures des genannten Layers an.
-
-**Parameter**
-
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|value|String|Layername mit den Vektorfeatures|
-|featureIds|[id]|Array mit FeautureIDs|
-
-
-**Beispiel-Aufruf**
-```
-#!js
-Radio.trigger("RemoteInterface", "showFeaturesById", "Anliegen", ["1", "2"]);
+```js
+parent.postMessage({
+    "param1": "param1",
+    "paramX": "paramX"
+}, options.postMessageUrl);
 ```
 
-## Zeige Marker im gegebenen Extent
-*(showPositionByExtent)*
+## Masterportal communication to the parent window via `Backbone.Radio` (deprecated)
 
-Positioniert einen Marker auf der Karte im Zentrum des übergebenen Extents.
+> Please mind that the usage of Backbone.Radio itself is currently deprecated. Backbone will eventually be removed.
 
-**Parameter**
+|Name|Type|Explanation|
+|-|-|-|
+|params|Object|parameter object sent to parent window|
 
-|Name|Typ|Beschreibung|
-|----|---|------------|
-|extent|Array|Extent|
+### Example
 
-
-**Beispiel-Aufruf**
-```
-#!js
-Radio.trigger("RemoteInterface", "showPositionByExtent", [minX, minY, maxX, maxY]);
+```js
+Radio.trigger(
+    "RemoteInterface",
+    "postMessage", {
+        "param1": "param1",
+        "paramX": "paramX"
+    }
+);
 ```

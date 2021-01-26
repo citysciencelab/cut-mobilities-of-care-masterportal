@@ -1,6 +1,7 @@
 import {Select, Modify, Draw} from "ol/interaction.js";
 import WfstTemplate from "text-loader!./template.html";
 import Collection from "ol/Collection.js";
+import store from "../../../src/app-store/index";
 import "bootstrap-datepicker";
 import "bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min";
 
@@ -60,17 +61,6 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
                 Radio.trigger("Map", "addInteraction", this.model.get("interaction"));
             }
         });
-
-        this.listenTo(Radio.channel("Alert"), {
-            "confirmed": function (id) {
-                if (id === "delete") {
-                    this.model.delete();
-                }
-                else if (id === "alertCases") {
-                    this.model.get("alertCases").splice(0, this.model.get("alertCases").length);
-                }
-            }
-        });
     },
     template: _.template(WfstTemplate),
 
@@ -103,11 +93,11 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             else {
                 initialAlertCases.forEach(function (alert) {
                     message = this.model.getAlertMessage(alert);
-                    Radio.trigger("Alert", "alert", {
-                        id: "initialAlertCases",
-                        kategorie: "alert-danger",
-                        text: message,
-                        confirmable: false
+                    store.dispatch("Alerting/addSingleAlert", {
+                        category: "Fehler",
+                        displayClass: "error",
+                        content: message,
+                        mustBeConfirmed: true
                     });
                 }, this);
             }
@@ -117,11 +107,11 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             if (alertCases.length) {
                 alertCases.forEach(function (alert) {
                     message = this.model.getAlertMessage(alert);
-                    Radio.trigger("Alert", "alert", {
-                        id: "alertCases",
-                        kategorie: "alert-warning",
-                        text: message,
-                        confirmable: true
+                    store.dispatch("Alerting/addSingleAlert", {
+                        category: "Warnung",
+                        displayClass: "warning",
+                        content: message,
+                        mustBeConfirmed: false
                     });
                 }, this);
             }
@@ -143,7 +133,6 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             if (this.model.get("toggleLayer")) {
                 this.hideFeatures(false);
             }
-            Radio.trigger("Alert", "alert:remove");
         }
         return this;
     },
@@ -270,11 +259,11 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             // if the wfstFields are incorrect trigger a warning
             else {
                 message = this.model.getAlertMessage("wfstFields");
-                Radio.trigger("Alert", "alert", {
-                    id: "wfstFields",
-                    kategorie: "alert-warning",
-                    text: message,
-                    confirmable: false
+                store.dispatch("Alerting/addSingleAlert", {
+                    category: "Warnung",
+                    displayClass: "warning",
+                    content: message,
+                    mustBeConfirmed: false
                 });
                 console.error("Please check if the DescribeFeatureType Request was successful.");
             }
@@ -468,11 +457,11 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             that.model.setCurrentFeature(event.feature);
             if (that.model.getCurrentLayer().get("isOutOfRange")) {
                 message = that.model.getAlertMessage("isOutOfRange");
-                Radio.trigger("Alert", "alert", {
-                    id: "isOutOfRange",
-                    kategorie: "alert-info",
-                    text: message,
-                    confirmable: false
+                store.dispatch("Alerting/addSingleAlert", {
+                    category: "Info",
+                    displayClass: "info",
+                    content: message,
+                    mustBeConfirmed: false
                 });
             }
             Radio.trigger("Map", "removeInteraction", that.model.get("interaction"));
@@ -517,11 +506,11 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
                 if (featureLayerId !== undefined && currentLayerId !== featureLayerId) {
                     that.model.setShowAttrTable(false);
                     message = that.model.getAlertMessage("editNotActiveLayer");
-                    Radio.trigger("Alert", "alert", {
-                        id: "notActiveLayer",
-                        kategorie: "alert-warning",
-                        text: message,
-                        confirmable: false
+                    store.dispatch("Alerting/addSingleAlert", {
+                        category: "Warnung",
+                        displayClass: "warning",
+                        content: message,
+                        mustBeConfirmed: false
                     });
                 }
                 // checks whether the selected feature belongs to the current layer
@@ -555,41 +544,44 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
     setDeleteInteraction: function () {
         const deleteButton = $("#wfst-module-recordButton-delete")[0],
             that = this,
-            alertId = "delete",
             wfsLayers = Radio.request("ModelList", "getModelsByAttributes", {isVisibleInMap: true, typ: "WFS"});
         let currentLayerId,
             featureLayerId,
-            message;
+            message,
+            confirmActionSettings;
 
         if (!deleteButton.classList.contains("record-active")) {
             deleteButton.classList.add("record-active");
             this.registerListener(deleteButton);
 
             this.model.setInteractions(new Select());
-            Radio.trigger("Map", "addInteraction", this.model.get("interaction"));
             // happens when a geometry is selected for deleting
             this.model.get("interaction").on("select", function (event) {
                 currentLayerId = that.model.get("currentLayerId");
                 featureLayerId = that.model.inheritModelListAttributes(event.selected[0].getId(), wfsLayers);
+
+                confirmActionSettings = {
+                    actionConfirmedCallback: that.confirmCallback.bind(that),
+                    actionDeniedCallback: that.denyCallback.bind(that),
+                    confirmCaption: "Löschen",
+                    textContent: "Sind Sie sich sicher, dass Sie diese Geometrie löschen möchten?",
+                    headline: "Achtung"
+                };
                 // checks whether the selected feature belongs to the current layer
                 if (currentLayerId === featureLayerId) {
                     if (event.selected.length) {
-                        Radio.trigger("Alert", "alert", {
-                            id: alertId,
-                            kategorie: "alert-info",
-                            text: "Sind Sie sich sicher, dass Sie diese Geometrie löschen möchten?",
-                            confirmable: true
-                        });
+                        store.dispatch("ConfirmAction/addSingleAction", confirmActionSettings);
+                        that.model.setCurrentFeature(event.selected[0]);
                     }
                 }
                 // if not, create a warning message
                 else {
                     message = that.model.getAlertMessage("editNotActiveLayer");
-                    Radio.trigger("Alert", "alert", {
-                        id: alertId,
-                        kategorie: "alert-warning",
-                        text: message,
-                        confirmable: false
+                    store.dispatch("Alerting/addSingleAlert", {
+                        category: "Warnung",
+                        displayClass: "warning",
+                        content: message,
+                        mustBeConfirmed: false
                     });
                 }
             }, this);
@@ -620,22 +612,22 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             // triggers a success message if discarding was successfull
             if (this.model.get("activeButton") === "wfst-module-recordButton-discard") {
                 message = this.model.getAlertMessage("SuccessfullDiscard");
-                Radio.trigger("Alert", "alert", {
-                    id: "successfullDiscard",
-                    kategorie: "alert-success",
-                    text: message,
-                    confirmable: false
+                store.dispatch("Alerting/addSingleAlert", {
+                    category: "Info",
+                    displayClass: "info",
+                    content: message,
+                    mustBeConfirmed: false
                 });
             }
         }
         // triggers a error message if discarding was not successfull
         else if (this.model.get("activeButton") === "wfst-module-recordButton-discard") {
             message = this.model.getAlertMessage("failedDiscard");
-            Radio.trigger("Alert", "alert", {
-                id: "failedDiscard",
-                kategorie: "alert-danger",
-                text: message,
-                confirmable: true
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Fehler",
+                displayClass: "error",
+                content: message,
+                mustBeConfirmed: true
             });
             console.error("The discard could not be applied to a feature.");
         }
@@ -658,9 +650,26 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
             Radio.trigger("Map", "removeInteraction", this.model.get("editInteraction"));
             this.model.set("editInteraction", new Select());
             this.unregisterCursorGlyph();
-            Radio.trigger("Alert", "alert:remove");
             this.render();
         }
+    },
+
+    /**
+     * Triggers the delete function
+     * @returns {void}
+     */
+    confirmCallback: function () {
+        const feature = this.model.get("interaction").getFeatures().item(0);
+
+        this.model.delete(feature);
+    },
+
+    /**
+     * Handles what happens when deleting a feature was canceld
+     * @returns {void}
+     */
+    denyCallback: function () {
+        this.model.get("interaction").getFeatures().remove(this.model.get("currentFeature"));
     },
 
     /**

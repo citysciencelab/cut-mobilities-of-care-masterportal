@@ -79,7 +79,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         "circleBarCircleFillColor": [0, 0, 0, 1],
         "circleBarCircleStrokeColor": [0, 0, 0, 1],
         "circleBarCircleStrokeWidth": 1,
-        "circleBarLineStrokeColor": [0, 0, 0, 1]
+        "circleBarLineStrokeColor": [0, 0, 0, 1],
+        // legendInfos
+        "legendInfos": []
     },
 
     /**
@@ -1453,6 +1455,9 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
         svg = svg + "</svg>";
 
         return svg;
+    },
+    getLegendInfos: function () {
+        return this.get("legendInfos");
     },
 
     /**

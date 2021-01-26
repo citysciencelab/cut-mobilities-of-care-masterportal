@@ -1,10 +1,12 @@
 import Layer from "./model";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
-        selectionIDX: -1
+        selectionIDX: -1,
+        useProxy: false
     }),
     /**
      * @description Class to render Cesium Entities
@@ -13,6 +15,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
      * @memberof Core.ModelList.Layer
      * @constructs
      * @property {Object} entities
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      */
     initialize: function () {
         Layer.prototype.initialize.apply(this);
@@ -28,7 +31,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
 
     /**
      * toggles the layer and creates the necessary resources and adds it to the 3d map
-     * @returns {void} -
+     * @returns {void}
      * @override
      */
     toggleLayerOnMap: function () {
@@ -93,29 +96,35 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
             heading = 0,
             pitch = 0,
             roll = 0;
-
-        const allowPicking = _.isBoolean(model.allowPicking) ? model.allowPicking : true,
+        const allowPicking = typeof model.allowPicking === "boolean" ? model.allowPicking : true,
             attributes = model.attributes ? model.attributes : {};
 
-        if (!_.isString(model.url)) {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        model.url = this.get("useProxy") ? getProxyUrl(model.url) : model.url;
+
+        if (typeof model.url !== "string") {
             return null;
         }
 
-        if (![model.longitude, model.latitude, model.height].every(num => _.isNumber(num))) {
+        if (![model.longitude, model.latitude, model.height].every(num => typeof num === "number")) {
             return null;
         }
 
         position = Cesium.Cartesian3.fromDegrees(model.longitude, model.latitude, model.height);
 
-        if (_.isNumber(model.heading)) {
+        if (typeof model.heading === "number") {
             heading = model.heading / 180 * Math.PI;
         }
 
-        if (_.isNumber(model.pitch)) {
+        if (typeof model.pitch === "number") {
             pitch = model.pitch / 180 * Math.PI;
         }
 
-        if (_.isNumber(model.roll)) {
+        if (typeof model.roll === "number") {
             roll = model.roll / 180 * Math.PI;
         }
         headingPitchRoll = new Cesium.HeadingPitchRoll(heading, pitch, roll);
@@ -123,7 +132,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
 
         modelOptions = Object.assign(model.modelOptions || {}, {
             uri: model.url,
-            scale: _.isNumber(model.scale) ? model.scale : 1,
+            scale: typeof model.scale === "number" ? model.scale : 1,
             show: true
         });
 
@@ -131,7 +140,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
             name: model.url,
             position,
             orientation,
-            show: _.isBoolean(model.show) ? model.show : true,
+            show: typeof model.show === "boolean" ? model.show : true,
             model: modelOptions
         };
 
@@ -176,7 +185,7 @@ const EntitiesLayer = Layer.extend(/** @lends EntitiesLayer.prototype */{
      * @override
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("customDatasource"));
+        return this.get("customDatasource") !== undefined;
     },
 
     /**

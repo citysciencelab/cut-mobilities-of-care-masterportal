@@ -59,7 +59,10 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
 
             // external Folder
             if (this.model.get("parentId") === "ExternalLayer") {
-                $("#" + this.model.get("parentId")).append(this.$el.html(this.template(attr)));
+                const parentEl = $("#" + this.model.get("parentId"));
+
+                parentEl.css("height", "auto");
+                parentEl.append(this.$el.html(this.template(attr)));
             }
             else {
                 // Folder ab der ersten Ebene
@@ -80,6 +83,10 @@ const FolderViewTree = Backbone.View.extend(/** @lends FolderViewTree.prototype 
 
                 $(this.$el).css("padding-left", paddingLeftValue + "px");
             }
+        }
+        else if (this.model.get("parentId") === "ExternalLayer") {
+            // fixes Bug BG-750: IE11 height was negative
+            $("#" + this.model.get("parentId")).css("height", "0px");
         }
         return this;
     },

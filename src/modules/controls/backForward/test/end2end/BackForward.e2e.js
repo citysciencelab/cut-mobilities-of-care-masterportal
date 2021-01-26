@@ -4,13 +4,19 @@ const webdriver = require("selenium-webdriver"),
     {onMoveEnd} = require("../../../../../../test/end2end/library/scriptsAsync"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {until, By} = webdriver;
 
 /**
- * @param {e2eTestParams} params parameter set
+ * @param {Object} params e2eTestParams
+ * @param {module:selenium-webdriver.Builder} params.builder the selenium.Builder object
+ * @param {String} params.url the url to test
+ * @param {String} params.resolution formatted as "AxB" with A, B integers
+ * @param {String} params.browsername the name of the broser (to use chrome put "chrome" into the name)
+ * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
  * @returns {void}
  */
-function BackForwardTests ({builder, url, resolution, browsername}) {
+function BackForwardTests ({builder, url, resolution, browsername, capability}) {
     const testIsApplicable = !isMobile(resolution) && // buttons not visible mobile
         (isCustom(url) || isMaster(url)); // backForward active in these portals
 
@@ -19,10 +25,19 @@ function BackForwardTests ({builder, url, resolution, browsername}) {
             let driver, forwardButton, backwardButton;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
             });
 

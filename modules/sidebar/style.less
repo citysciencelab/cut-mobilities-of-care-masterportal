@@ -2,16 +2,14 @@
 @background_color_2: rgba(0, 0, 0, 0.5);
 
 .sidebar {
-    height: calc(100% - 50px);
-    float: right;
-    display: none;
-    position: relative;
-    width: 30%;
     background-color: @background_color_1;
     z-index: 2;
-    .dragable {
-        width: calc(100% - 25px);
+    height:100%;
+    overflow-y: auto;
+    .draggable {
+        padding-left: 25px;
     }
+    display:none;
 }
 .sidebar-mobile {
     position: fixed;
@@ -37,21 +35,15 @@
     z-index: 1040;
     background-color: @background_color_2;
 }
-#sidebar-content {
-    overflow: auto;
-    height: 100%;
-    width: 100%;
-}
 .drag-bar {
     position:absolute;
     display: inline-block;
-    height: calc(100vh - 50px);
+    height: calc(100vh - 120px);
     line-height: calc(100vh - 50px);
     vertical-align: top;
     width:20px;
     text-align: center;
     font-size: 24px;
-    border-right: 1px solid #fafafa;
     cursor: grab;
     &:hover {
         background: rgb(250, 250, 250);

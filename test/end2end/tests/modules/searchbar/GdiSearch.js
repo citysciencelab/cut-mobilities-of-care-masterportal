@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
-    {reclickUntilNotStale} = require("../../../library/utils"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function GdiSearch ({builder, url, resolution}) {
+async function GdiSearch ({builder, url, resolution, capability}) {
     describe.skip("Gdi Search", function () {
         const searchInputSelector = By.css("#searchInput"),
             searchString = "Alt",
@@ -20,12 +20,21 @@ async function GdiSearch ({builder, url, resolution}) {
         let driver, searchInput;
 
         before(async function () {
+            if (capability) {
+                capability.name = this.currentTest.fullTitle();
+                builder.withCapabilities(capability);
+            }
             driver = await initDriver(builder, url, resolution);
-            await driver.wait(until.elementLocated(searchInputSelector));
+            await driver.wait(until.elementLocated(searchInputSelector), 5000);
             searchInput = await driver.findElement(searchInputSelector);
         });
 
         after(async function () {
+            if (capability) {
+                driver.session_.then(function (sessionData) {
+                    logBrowserstackUrlToTest(sessionData.id_);
+                });
+            }
             await driver.quit();
         });
 
@@ -36,7 +45,7 @@ async function GdiSearch ({builder, url, resolution}) {
                 await searchInput.sendKeys(searchString);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
-                await driver.wait(until.elementLocated(topicSelector));
+                await driver.wait(until.elementLocated(topicSelector), 5000);
             });
         }
 
@@ -92,7 +101,7 @@ async function GdiSearch ({builder, url, resolution}) {
 
             it("selects the layer as first layer in 'Selected Layers'", async function () {
                 await (await driver.findElement(selectedLayerGlyphSelector)).click();
-                await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector));
+                await driver.wait(until.elementLocated(selectedLayerFirstEntrySelector), 5000);
                 expect(await (await driver.findElement(selectedLayerFirstEntrySelector)).getText()).to.contain(layerName);
             });
         }

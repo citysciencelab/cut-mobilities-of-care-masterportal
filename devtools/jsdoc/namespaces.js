@@ -436,201 +436,9 @@
  */
 
 /**
- * @namespace GetCoord
- * @memberof Tools
- * @description Tool to request the coordinates of a click point in the map.
- */
-
-/**
- * @namespace GFI
- * @memberof Tools
- * @description Tool to show result of GetFeatureInfo-request.
- */
-
-/**
- * @namespace Desktop
- * @memberof Tools.GFI
- * @description Desktop representation of the GFI-popup.
- */
-
-/**
- * @namespace Attached
- * @memberof Tools.GFI.Desktop
- * @description GFI-popup fixed on the corresponding feature on the map.
- */
-
-/**
- * @namespace Detached
- * @memberof Tools.GFI.Desktop
- * @description GFI-popup not fixed on the corresponding feature on the map, but movable.
- */
-
-/**
- * @namespace Mobile
- * @memberof Tools.GFI
- * @description Mobile representation of the GFI-popup.
- */
-
-/**
- * @namespace Objects
- * @memberof Tools.GFI
- * @description Special objects in the GFI-popup.
- */
-
-/**
- * @namespace Image
- * @memberof Tools.GFI.Objects
- * @description Images in the GFI-popup.
- */
-
-/**
- * @namespace RoutingButton
- * @memberof Tools.GFI.Objects
- * @description Routing button in the GFI-popup.
- */
-
-/**
- * @namespace Video
- * @memberof Tools.GFI.Objects
- * @description Videos in the GFI-popup.
- */
-
-/**
- * @namespace Table
- * @memberof Tools.GFI
- * @description Table representation of the GFI-popup.
- */
-
-/**
- * @namespace Themes
- * @memberof Tools.GFI
- * @description GFI Themes for several use cases.
- */
-
-/**
- * @namespace ActiveCityMaps
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ActiveCityMaps
- */
-
-/**
- * @namespace Bildungsatlas
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Bildungsatlas
- */
-
-/**
- * @namespace Buildings3D
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Buildings3D
- */
-
-/**
- * @namespace ContiniuousCountingBikeTheme
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ContiniuousCountingBike
- */
-
-/**
- * @namespace Default
- * @memberof Tools.GFI.Themes
- * @description Default GFI Theme
- */
-
-/**
- * @namespace Dipas
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for DIPAS (touch table)
- */
-
-/**
- * @namespace Elektroladesaeulen
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ElektroladeSaeulen
- */
-
-/**
- * @namespace FlaechenInfo
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for FlaechenInfo
- */
-
-/**
- * @namespace Itgbm
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for itgbm
- */
-
-/**
- * @namespace MietenSpiegel
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for MietenSpiegel
- */
-
-/**
- * @namespace ReiseZeiten
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for ReiseZeiten
- */
-
-/**
- * @namespace SchulInfo
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for SchulInfo
- */
-
-/**
- * @namespace SvgOnline
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for SvgOnline
- */
-
-/**
- * @namespace SolarAtlas
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for SolarAtlas
- */
-
-/**
- * @namespace Sensor
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Sensordata
- */
-
-/**
- * @namespace Table
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Touch-Table
- */
-
-/**
- * @namespace Trinkwasser
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for Trinkwasser
- */
-
-/**
- * @namespace VerkehrsStaerken
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for VerkehrsStaerken
- */
-
-/**
- * @namespace TrafficCount
- * @memberof Tools.GFI.Themes
- * @description GFI Theme for traffic counter
- */
-
-/**
  * @namespace Graph
  * @memberof Tools
  * @description Module for generating graphics via d3
- */
-
-/**
- * @namespace KmlImport
- * @memberof Tools
- * @description Module for import of KML data to the map.
  */
 
 /**
@@ -708,6 +516,12 @@
  */
 
 /**
+ * @namespace StyleVT
+ * @memberof Tools
+ * @description Tool that can modify vtl styles with external style documents
+ */
+
+/**
  * @namespace ViomRouting
  * @memberof Tools
  * @description Tool to route on viom data.
@@ -723,6 +537,12 @@
  * @namespace Wfst
  * @memberof Tools
  * @description Tool to visualize, insert, edit, delete and update WFS features.
+ */
+
+/**
+ * @namespace SelectFeatures
+ * @memberof Tools
+ * @description Tool to select multiple Features from the map by using a box for selection.
  */
 
 /**
@@ -830,9 +650,19 @@
  */
 
 /**
+ * @namespace SelectFeatures
+ * @description Module that allows selecting features cross-wfs
+ */
+
+/**
  * @namespace FeatureLister
  * @description foobar
  */
+
+/**
+  * @namespace FeatureViaURL
+  * @description Creates a new GeoJSON layer on the basis of the given features by the user via the URL.
+  */
 
 /**
  * @namespace Footer
@@ -852,23 +682,6 @@
 /**
  * @namespace LayerInformation
  * @description Shows the layer-information in a popup on the map.
- */
-
-/**
- * @namespace Legend
- * @description Shows the legend of all activated layers in a popup on the map.
- */
-
-/**
- * @namespace Desktop
- * @memberof Legend
- * @description Desktop specific version of the legend popup.
- */
-
-/**
- * @namespace Mobile
- * @memberof Legend
- * @description Mobile specific version of the legend popup.
  */
 
 /**
@@ -913,7 +726,7 @@
 /**
  * @namespace SensorThingsMqtt
  * @memberof Core.ModelList.Layer
- * @description SensorThingsMqtt is the software layer to handle the special needs of the SensorThingsAPI regarding the mqtt protocol.
+ * @description SensorThingsMqtt is a software layer to standardize the handling of mqtt v3.1, v3.1.1 and v5.0 for SensorThingsApi.
  */
 
 /**

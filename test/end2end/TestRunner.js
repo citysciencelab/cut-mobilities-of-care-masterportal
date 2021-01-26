@@ -101,7 +101,7 @@ function runTests (browsers) {
                             usingWebDriverProxy(proxy);
 
                         resolutions.forEach(resolution => {
-                            tests(builder, completeUrl, "browserstack / " + capability.browserName, resolution, config, mode);
+                            tests(builder, completeUrl, "browserstack / " + capability.browserName, resolution, config, mode, capability);
                         });
                     });
                 }

@@ -1,12 +1,23 @@
-import {scaleBand, scaleLinear} from "d3-scale";
-import {axisBottom, axisLeft} from "d3-axis";
-import {line} from "d3-shape";
-import {select, event} from "d3-selection";
-import {formatDefaultLocale} from "d3-format";
-import "d3-transition";
+import * as d3 from "d3";
 
 const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
-    defaults: {},
+    defaults: {
+        currentGraphConfig: null,
+        localeFormatKeys: [
+            "decimal",
+            "thousands",
+            "grouping",
+            "currency",
+            "dateTime",
+            "date",
+            "time",
+            "periods",
+            "days",
+            "shortDays",
+            "months",
+            "shortMonths"
+        ]
+    },
 
     /**
      * @class GraphModel
@@ -27,22 +38,32 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return this.get("graphParams");
             }
         }, this);
-
-        // axis values are us english by default - this is the german setup
-        formatDefaultLocale({
-            "decimal": ",",
-            "thousands": ".",
-            "grouping": [3],
-            "currency": ["€", ""],
-            "dateTime": "%a %b %e %X %Y",
-            "date": "%d.%m.%Y",
-            "time": "%H:%M:%S",
-            "periods": ["AM", "PM"],
-            "days": ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-            "shortDays": ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-            "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-            "shortMonths": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLanguage
         });
+
+        this.changeLanguage(i18next.language);
+    },
+
+    /**
+     * Switches d3 default locale.
+     * @param {string} languageKey language to be set active
+     * @returns {void}
+     */
+    changeLanguage: function (languageKey) {
+        // may be called initially without language key; skip in that case
+        if (languageKey) {
+            const locales = this.get("localeFormatKeys").reduce((accumulator, current) => {
+                accumulator[current] = i18next.t(`common:modules.tools.graph.localeFormat.${current}`, {returnObjects: true});
+                return accumulator;
+            }, {});
+
+            d3.formatDefaultLocale(locales);
+        }
+
+        if (this.get("currentGraphConfig")) {
+            this.createGraph(this.get("currentGraphConfig"));
+        }
     },
 
     /**
@@ -53,12 +74,55 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Void}  -
      */
     createGraph: function (graphConfig) {
-        if (graphConfig.graphType === "Linegraph") {
-            this.createLineGraph(graphConfig);
+        const d3Div = d3.select(graphConfig.selector).nodes()[0];
+
+        if (d3Div) {
+            this.setCurrentGraphConfig(graphConfig);
+            const translatedGraphConfig = this.translateGraphConfig(graphConfig);
+
+            d3Div.innerHTML = "<div class=\"graph-tooltip-div\"></div>";
+
+            if (translatedGraphConfig.graphType === "Linegraph") {
+                this.createLineGraph(translatedGraphConfig);
+            }
+            else if (translatedGraphConfig.graphType === "BarGraph") {
+                this.createBarGraph(translatedGraphConfig);
+            }
+            else {
+                console.error(`Unknown graphType '${translatedGraphConfig.graphType}' in graph/model.js.`);
+            }
         }
-        else if (graphConfig.graphType === "BarGraph") {
-            this.createBarGraph(graphConfig);
+        else {
+            this.setCurrentGraphConfig(null);
         }
+    },
+
+    /**
+     * Translate function goes over all potentially to-be-translated strings and returns
+     * a translated version of it without touching the original element.
+     * @param {object} graphConfig graph configuration
+     * @returns {object} graph configuration, but translated where entries were keys
+     */
+    translateGraphConfig: function (graphConfig) {
+        // works in this case as clone deep
+        const newConfig = JSON.parse(JSON.stringify(graphConfig));
+
+        if (newConfig.legendData) {
+            newConfig.legendData = graphConfig.legendData.map(data => {
+                data.text = i18next.t(data.text);
+                return data;
+            });
+        }
+
+        if (newConfig.xAxisLabel) {
+            newConfig.xAxisLabel.label = i18next.t(newConfig.xAxisLabel.label);
+            newConfig.yAxisLabel.label = i18next.t(newConfig.yAxisLabel.label);
+        }
+        if (newConfig.xAxisTicks) {
+            newConfig.xAxisTicks.unit = i18next.t(newConfig.xAxisTicks.unit);
+        }
+
+        return newConfig;
     },
 
     /**
@@ -219,7 +283,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             });
         }
 
-        return scaleBand()
+        return d3.scaleBand()
             .range(rArray)
             .domain(values);
     },
@@ -240,7 +304,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             rArray = [rArray];
         }
 
-        return scaleLinear()
+        return d3.scaleLinear()
             .range(rArray)
             .domain([minValue, maxValue])
             .nice();
@@ -257,17 +321,17 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         let d3Object;
 
         if (xAxisTicks === undefined) {
-            d3Object = axisBottom(scale);
+            d3Object = d3.axisBottom(scale);
         }
         else if (xAxisTicks.hasOwnProperty("values") && !xAxisTicks.hasOwnProperty("factor")) {
-            d3Object = axisBottom(scale)
+            d3Object = d3.axisBottom(scale)
                 .tickValues(xAxisTicks.values)
                 .tickFormat(function (d) {
                     return d + unit;
                 });
         }
         else if (xAxisTicks.hasOwnProperty("values") && xAxisTicks.hasOwnProperty("factor")) {
-            d3Object = axisBottom(scale)
+            d3Object = d3.axisBottom(scale)
                 .ticks(xAxisTicks.values, xAxisTicks.factor)
                 .tickFormat(function (d) {
                     return d + unit;
@@ -287,11 +351,17 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         let d3Object;
 
         if (yAxisTicks && yAxisTicks.hasOwnProperty("ticks") && yAxisTicks.hasOwnProperty("factor")) {
-            d3Object = axisLeft(scale)
+            d3Object = d3.axisLeft(scale)
+                .tickFormat(function (d) {
+                    if (d % 1 === 0) {
+                        return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    }
+                    return false;
+                })
                 .ticks(yAxisTicks.ticks, yAxisTicks.factor);
         }
         else {
-            d3Object = axisLeft(scale)
+            d3Object = d3.axisLeft(scale)
                 .tickFormat(function (d) {
                     if (d % 1 === 0) {
                         return d.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -300,7 +370,6 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
                 });
         }
-
         return d3Object;
     },
 
@@ -313,7 +382,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {Object}  - valueLine.
      */
     createValueLine: function (scaleX, scaleY, xAttr, yAttrToShow) {
-        return line()
+        return d3.line()
             .x(function (d) {
                 return scaleX(d[xAttr]) + (scaleX.bandwidth() / 2);
             })
@@ -328,13 +397,14 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Creates the basic structure of a graph.
      * @param {SVG} svg The svg.
-     * @param {Object[]} data Data for graph.
+     * @param {Object[]} [data=[]] Data for graph.
      * @param {String} className Class name of point.
      * @param {Object} d3line D3 line object.
-     * @returns {Void}  -
+     * @param {Number} legendHeight height for the legend in px, if not available it is calculated by bbox
+     * @returns {void}
      */
-    appendDataToSvg: function (svg, data, className, d3line) {
-        const dataToAdd = data.filter(function (obj) {
+    appendDataToSvg: function (svg, data = [], className, d3line, legendHeight) {
+        const dataToAdd = data.filter(obj => {
             return obj.yAttrToShow !== "-";
         });
 
@@ -345,7 +415,9 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
                 if (svg.select(".graph-legend").size() > 0) {
                     y = svg.select(".graph-legend").node().getBBox().height;
-
+                    if (y === 0 && legendHeight) {
+                        y = legendHeight;
+                    }
                     return "translate(0, " + y + ")";
                 }
                 return "translate(0, 0)";
@@ -448,7 +520,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Appends line points to created line.
      * @param {SVG} svg Svg.
-     * @param {Object[]} data Data for graph.
+     * @param {Object[]} [data=[]] Data for graph.
      * @param {Object} scaleX Scale for x-axis.
      * @param {Object} scaleY Scale for y-axis.
      * @param {String} xAttr Attribute name for x-axis.
@@ -458,7 +530,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Function} [setTooltipValue] (optional) a function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
-    appendLinePointsToSvg: function (svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
+    appendLinePointsToSvg: function (svg, data = [], scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue) {
         const dat = data.filter(function (obj) {
                 return obj[yAttrToShow] !== undefined && obj[yAttrToShow] !== "-";
             }),
@@ -550,7 +622,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @returns {SVG} - SVG
      */
     createSvg: function (selector, left, top, width, height, svgClass) {
-        return select(selector).append("svg")
+        return d3.select(selector).append("svg")
             .attr("width", width)
             .attr("height", height)
             .attr("class", svgClass)
@@ -634,10 +706,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} graphConfig.data Data for graph.
      * @param {String} graphConfig.xAttr Attribute name for x-axis.
      * @param {Object} graphConfig.xAxisLabel Object to define the label for x-axis.
-     * @param {String} graphConfig.xAxisLabel.label Label for x-axis.
+     * @param {String} graphConfig.xAxisLabel.label Label for x-axis; may be a locale key.
      * @param {Number} graphConfig.xAxisLabel.translate Translation offset for label for x-axis.
      * @param {Object} graphConfig.yAxisLabel Object to define the label for y-axis.
-     * @param {String} graphConfig.yAxisLabel.label Label for y-axis.
+     * @param {String} graphConfig.yAxisLabel.label Label for y-axis; may be a locale key.
      * @param {Number} graphConfig.yAxisLabel.offset Offset for label for y-axis.
      * @param {Object/String[]} graphConfig.attrToShowArray Array of attribute names or objects to be shown on y-axis.
      * @param {Object/String[]} graphConfig.attrToShowArray.attrName Name of attribute to be shown.
@@ -650,7 +722,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Number} graphConfig.width Width of SVG.
      * @param {Number} graphConfig.height Height of SVG.
      * @param {Object} graphConfig.xAxisTicks Ticks for x-axis.
-     * @param {String} graphConfig.xAxisTicks.unit Unit of x-axis-ticks.
+     * @param {String} graphConfig.xAxisTicks.unit Unit of x-axis-ticks; may be a locale key.
      * @param {Number/String[]} graphConfig.xAxisTicks.values Values for x-axis-ticks.
      * @param {Number} graphConfig.xAxisTicks.factor Factor for x-axis-ticks.
      * @param {Object} graphConfig.yAxisTicks Ticks for y-axis.
@@ -660,7 +732,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {String} graphConfig.selectorTooltip Selector for tooltip div.
      * @param {Object[]} graphConfig.legendData Data for legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
-     * @param {String} graphConfig.legendData.text Text for legend object.
+     * @param {String} graphConfig.legendData.text Text for legend object; may be a locale key.
      * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a point - if not set or left undefined: default is >(...).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")< due to historic reasons
      * @returns {Void}  -
      */
@@ -687,7 +759,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
             svgClass = graphConfig.svgClass,
             svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
-            tooltipDiv = select(graphConfig.selectorTooltip),
+            tooltipDiv = d3.select(graphConfig.selectorTooltip),
             offset = 10,
             dotSize = graphConfig.dotSize || 5,
             setTooltipValue = graphConfig.setTooltipValue;
@@ -700,13 +772,13 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
         attrToShowArray.forEach(function (yAttrToShow) {
             if (typeof yAttrToShow === "object") {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow.attrName);
-                this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine);
+                this.appendDataToSvg(svg, data, yAttrToShow.attrClass, valueLine, graphConfig.legendHeight);
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow.attrName, tooltipDiv, dotSize, setTooltipValue);
             }
             else {
                 valueLine = this.createValueLine(scaleX, scaleY, xAttr, yAttrToShow);
-                this.appendDataToSvg(svg, data, "line", valueLine);
+                this.appendDataToSvg(svg, data, "line", valueLine, graphConfig.legendHeight);
                 // Add the scatterplot for each point in line
                 this.appendLinePointsToSvg(svg, data, scaleX, scaleY, xAttr, yAttrToShow, tooltipDiv, dotSize, setTooltipValue);
             }
@@ -760,10 +832,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object[]} graphConfig.data Data for graph.
      * @param {String} graphConfig.xAttr Attribute name for x-axis.
      * @param {Object} graphConfig.xAxisLabel Object to define the label for x-axis.
-     * @param {String} graphConfig.xAxisLabel.label Label for x-axis.
+     * @param {String} graphConfig.xAxisLabel.label Label for x-axis; may be a locale key.
      * @param {Number} graphConfig.xAxisLabel.translate Translation offset for label for x-axis.
      * @param {Object} graphConfig.yAxisLabel Object to define the label for y-axis.
-     * @param {String} graphConfig.yAxisLabel.label Label for y-axis.
+     * @param {String} graphConfig.yAxisLabel.label Label for y-axis; may be a locale key.
      * @param {Number} graphConfig.yAxisLabel.offset Offset for label for y-axis.
      * @param {String[]} graphConfig.attrToShowArray Array of attribute names to be shown on y-axis.
      * @param {Object} graphConfig.margin Margin object for graph.
@@ -774,7 +846,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Number} graphConfig.width Width of SVG.
      * @param {Number} graphConfig.height Height of SVG.
      * @param {Object} graphConfig.xAxisTicks Ticks for x-axis.
-     * @param {String} graphConfig.xAxisTicks.unit Unit of x-axis-ticks.
+     * @param {String} graphConfig.xAxisTicks.unit Unit of x-axis-ticks; may be a locale key.
      * @param {Number/String[]} graphConfig.xAxisTicks.values Values for x-axis-ticks.
      * @param {Number} graphConfig.xAxisTicks.factor Factor for x-axis-ticks.
      * @param {Object} graphConfig.yAxisTicks Ticks for y-axis.
@@ -782,8 +854,10 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
      * @param {Object} graphConfig.yAxisTicks.factor Factor for y-axis-ticks.
      * @param {String} graphConfig.svgClass Class of SVG.
      * @param {Object[]} graphConfig.legendData Data for legend.
+     * @param {Number} graphConfig.legendHeight height of the legend.
      * @param {String} graphConfig.legendData.class CSS class for legend object.
-     * @param {String} graphConfig.legendData.text Text for legend object.
+     * @param {String} graphConfig.legendData.text Text for legend object; may be a locale key.
+     * @param {Number} graphConfig.legendHeight height of the legend.
      * @param {Function} graphConfig.setTooltipValue an optional function value:=function(value, xAxisAttr) to set/convert the tooltip value that is shown hovering a bar - if not set or left undefined: default is >(Math.round(d[attrToShowArray[0]] * 1000) / 10) + " %"< due to historic reasons
      * @returns {Void}  -
      */
@@ -803,12 +877,12 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
             yAxisTicks = graphConfig.yAxisTicks,
             scaleX = this.createScaleX(data, width, scaleTypeX, xAttr, xAxisTicks),
             scaleY = this.createScaleY(data, height, scaleTypeY, attrToShowArray, yAxisTicks),
+            svgClass = graphConfig.svgClass,
+            barWidth = width / data.length,
+            setTooltipValue = graphConfig.setTooltipValue,
             xAxis = this.createAxisBottom(scaleX, xAxisTicks),
             yAxis = this.createAxisLeft(scaleY, yAxisTicks),
-            svgClass = graphConfig.svgClass,
-            svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass),
-            barWidth = width / data.length,
-            setTooltipValue = graphConfig.setTooltipValue;
+            svg = this.createSvg(selector, margin.left, margin.top, graphConfig.width, graphConfig.height, svgClass);
 
         if (graphConfig.hasOwnProperty("legendData")) {
             this.appendLegend(svg, graphConfig.legendData);
@@ -816,8 +890,8 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
 
         this.drawBars(svg, data, scaleX, scaleY, selector, xAttr, attrToShowArray, barWidth, setTooltipValue);
         this.appendYAxisToSvg(svg, yAxis, yAxisLabel, height);
-
         this.appendXAxisToSvg(svg, xAxis, xAxisLabel, width, scaleY);
+
     },
 
     /**
@@ -879,7 +953,7 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
                 return y(0) - y(d[attrToShowArray[0]]);
             })
             .on("mouseover", function () {
-                select(this);
+                d3.select(this);
             }, this)
             .append("title")
             .text(function (d) {
@@ -895,10 +969,19 @@ const GraphModel = Backbone.Model.extend(/** @lends GraphModel.prototype */{
     /**
      * Setter for attribute "graphParams".
      * @param {Object} value Graph params.
-     * @returns {Void}  -
+     * @returns {void}
      */
     setGraphParams: function (value) {
         this.set("graphParams", value);
+    },
+
+    /**
+     * Setter for attribute "currentGraphConfig".
+     * @param {Object} value currentGraphConfig
+     * @returns {void}
+     */
+    setCurrentGraphConfig: function (value) {
+        this.set("currentGraphConfig", value);
     }
 });
 

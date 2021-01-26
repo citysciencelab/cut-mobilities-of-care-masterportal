@@ -29,10 +29,7 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
      * @property {Boolean} glyphicon="glyphicon-share" todo
      * @property {String} saveSelectionText="", filled with "Speichern Sie diese URL als Lesezeichen ab"- translated
      * @constructs
-     * @listens Tools.GetCoord#RadioTriggerChangeIsActive
-     * @fires MapMarker#RadioTriggerMapMarkerHideMarker
      * @fires Core#RadioTriggerMapRegisterListener
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      */
     initialize: function () {
         const channel = Radio.channel("SaveSelection");
@@ -120,7 +117,17 @@ const SaveSelection = Tool.extend(/** @lends SaveSelection.prototype */{
     },
 
     setLayerList: function (value) {
-        this.set("layerList", value);
+        const getIds = [];
+        let withoutUrlFeatures = [];
+
+        if (Config.featureViaURL !== undefined) {
+            Config.featureViaURL.layers.forEach(element => {
+                getIds.push(element.id);
+            });
+        }
+        withoutUrlFeatures = value.filter((v) => !getIds.includes(v.id));
+
+        this.set("layerList", withoutUrlFeatures);
     },
 
     setZoomLevel: function (zoomLevel) {

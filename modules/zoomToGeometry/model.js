@@ -2,6 +2,7 @@ import {WFS} from "ol/format.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 import {fetch as fetchPolyfill} from "whatwg-fetch";
+import store from "../../src/app-store/index";
 
 const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype */{
     defaults: {
@@ -81,8 +82,8 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
             .catch(error => {
                 console.warn("The fetch of the data failed with the following error message: " + error);
                 Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong> <br>"
-                        + "<small>Details: Ein benötigter Dienst antwortet nicht.</small>",
+                    text: "<strong>" + i18next.t("modules.zoomToGeometry.alertParameterizedAccess") + "</strong> <br>"
+                    + "<small>" + i18next.t("modules.zoomToGeometry.alertRequiredService") + "</small>",
                     kategorie: "alert-warning"
                 });
             });
@@ -101,10 +102,7 @@ const ZoomToGeometry = Backbone.Model.extend(/** @lends ZoomToGeometry.prototype
         let extent;
 
         if (foundFeature === undefined) {
-            Radio.trigger("Alert", "alert", {
-                text: "<strong>Leider konnten die Objekte zu denen gezommt werden soll nicht geladen werden</strong> <br> <small>Details: Kein Objekt gefunden, dessen Attribut \"" + attribute + "\" den Wert \"" + name + "\" einnimmt.</small>",
-                kategorie: "alert-warning"
-            });
+            store.dispatch("Alerting/addSingleAlert", i18next.t("modules.zoomToGeometry.alertNoFoundFeature"));
         }
         else {
             extent = this.calcExtent(foundFeature);

@@ -2,9 +2,10 @@ import Tool from "../../core/modelList/tool/model";
 import {Icon} from "ol/style.js";
 import {Circle, Polygon} from "ol/geom.js";
 import {DEVICE_PIXEL_RATIO} from "ol/has.js";
+import "../print_/RadioBridge.js";
 
 const PrintModel = Tool.extend({
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         printID: "99999",
         MM_PER_INCHES: 25.4,
         POINTS_PER_INCH: 72,
@@ -96,9 +97,7 @@ const PrintModel = Tool.extend({
 
     // Setzt den Maßstab für den Ausdruck über das Zoomen in der Karte.
     setScaleByMapView: function () {
-        const newScale = _.find(this.get("scales"), function (scale) {
-            return scale.valueInt === Radio.request("MapView", "getOptions").scale;
-        });
+        const newScale = this.get("scales") !== undefined ? this.get("scales").find(scale => scale.valueInt === Radio.request("MapView", "getOptions").scale) : undefined;
 
         this.set("scale", newScale);
     },
@@ -118,13 +117,13 @@ const PrintModel = Tool.extend({
                 this.fetch({
                     cache: false,
                     success: function (model) {
-                        _.each(model.get("scales"), function (scale) {
+                        model.get("scales").forEach(scale => {
                             scale.valueInt = parseInt(scale.value, 10);
                             scaletext = scale.valueInt.toString();
                             scaletext = scaletext < 10000 ? scaletext : scaletext.substring(0, scaletext.length - 3) + " " + scaletext.substring(scaletext.length - 3);
                             scale.name = "1: " + scaletext;
                         });
-                        model.set("layout", _.findWhere(model.get("layouts"), {name: "A4 Hochformat"}));
+                        model.set("layout", model.get("layouts").find(layout => layout.name === "A4 Hochformat"));
                         model.setScaleByMapView();
                         model.set("isCollapsed", false);
                         model.set("fetched", true);
@@ -148,10 +147,10 @@ const PrintModel = Tool.extend({
     updatePrintPage: function () {
         if (this.has("scale") && this.has("layout")) {
             if (this.get("isActive")) {
-                if (_.isEmpty(this.get("precomposeListener"))) {
+                if (Object.keys(this.get("precomposeListener")).length === 0) {
                     this.setPrecomposeListener(Radio.request("Map", "registerListener", "precompose", this.handlePreCompose.bind(this)));
                 }
-                if (_.isEmpty(this.get("postcomposeListener"))) {
+                if (Object.keys(this.get("postcomposeListener")).length === 0) {
                     this.setPostcomposeListener(Radio.request("Map", "registerListener", "postcompose", this.handlePostCompose.bind(this)));
                 }
             }
@@ -177,15 +176,12 @@ const PrintModel = Tool.extend({
     },
 
     setGROUPLayerToPrint: function (layers) {
-        let sortedLayers = "";
+        layers.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX"));
 
-        sortedLayers = _.sortBy(layers, function (layer) {
-            return layer.get("selectionIDX");
-        });
-        _.each(sortedLayers, function (groupLayer) {
+        layers.forEach(groupLayer => {
             const layerList = groupLayer.get("layerSource");
 
-            _.each(layerList, function (layer) {
+            layerList.forEach(layer => {
                 const params = {},
                     style = [];
 
@@ -216,17 +212,14 @@ const PrintModel = Tool.extend({
                         styles: style
                     });
                 }
-            }, this);
-        }, this);
+            });
+        });
     },
 
     setWMSLayerToPrint: function (layers) {
+        layers.sort((layerA, layerB) => layerA.get("selectionIDX") - layerB.get("selectionIDX"));
 
-        const sortedLayers = _.sortBy(layers, function (layer) {
-            return layer.get("selectionIDX");
-        });
-
-        _.each(sortedLayers, function (layer) {
+        layers.forEach(layer => {
             // nur wichtig für treeFilter
             const params = {},
                 style = [];
@@ -273,7 +266,7 @@ const PrintModel = Tool.extend({
                 customParams: params,
                 styles: style
             });
-        }, this);
+        });
     },
 
     setLayer: function (layer) {
@@ -286,27 +279,27 @@ const PrintModel = Tool.extend({
             printStyleObj = {},
             styleModel;
 
-        if (!_.isUndefined(layer)) {
+        if (layer !== undefined) {
             // get styleModel if layerId is defined.
             // layer id is not defined for portal-internal layer like animationLayer and import_draw_layer
             // then the style is located directly at the feature, see line 312
-            if (!_.isUndefined(layerId)) {
+            if (layerId !== undefined) {
                 layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId});
-                isClustered = !_.isUndefined(layerModel.get("clusterDistance"));
+                isClustered = layerModel.get("clusterDistance") !== undefined;
                 styleModel = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             }
             // Alle features die eine Kreis-Geometrie haben
-            _.each(layer.getSource().getFeatures(), function (feature) {
+            layer.getSource().getFeatures().forEach(feature => {
                 if (feature.getGeometry() instanceof Circle) {
                     // creates a regular polygon from a circle with 32(default) sides
                     feature.setGeometry(Polygon.fromCircle(feature.getGeometry()));
                 }
             });
 
-            _.each(layer.getSource().getFeatures(), function (feature, index) {
+            layer.getSource().getFeatures().forEach((feature, index) => {
                 const type = feature.getGeometry().getType(),
-                    styles = !_.isUndefined(feature.getStyleFunction()) ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
-                    style = _.isArray(styles) ? styles[0] : styles,
+                    styles = feature.getStyleFunction() !== undefined ? feature.getStyleFunction().call(feature) : styleModel.createStyle(feature, isClustered),
+                    style = Array.isArray(styles) ? styles[0] : styles,
                     coordinates = feature.getGeometry().getCoordinates();
 
                 features.push({
@@ -334,7 +327,7 @@ const PrintModel = Tool.extend({
                         strokeWidth: style.getStroke().getWidth()
                     };
                 }
-            }, this);
+            });
             this.push("layerToPrint", {
                 type: "Vector",
                 styles: featureStyles,
@@ -351,19 +344,19 @@ const PrintModel = Tool.extend({
             imgName = style.getImage() instanceof Icon ? style.getImage().getSrc() : undefined;
 
         // Punkte ohne Text
-        if (_.isNull(style.getText()) || _.isUndefined(style.getText())) {
+        if (style.getText() === null || style.getText() === undefined) {
             // style image is an Icon
-            if (!_.isUndefined(imgName)) {
+            if (imgName !== undefined) {
                 // get imagename from src path
                 imgName = imgName.match(/(?:[^/]+)$/g)[0];
                 imgPath += imgName;
                 imgPath = encodeURI(imgPath);
                 pointStyleObject = {
                     externalGraphic: imgPath,
-                    graphicWidth: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 20,
-                    graphicHeight: _.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 20,
-                    graphicXOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[0] : 0,
-                    graphicYOffset: !_.isNull(style.getImage().getAnchor()) ? -style.getImage().getAnchor()[1] : 0
+                    graphicWidth: Array.isArray(style.getImage().getSize()) ? style.getImage().getSize()[0] * style.getImage().getScale() : 20,
+                    graphicHeight: Array.isArray(style.getImage().getSize()) ? style.getImage().getSize()[1] * style.getImage().getScale() : 20,
+                    graphicXOffset: style.getImage().getAnchor() !== null ? -style.getImage().getAnchor()[0] : 0,
+                    graphicYOffset: style.getImage().getAnchor() !== null ? -style.getImage().getAnchor()[1] : 0
                 };
             }
             // style is an Circle or Point without Icon
@@ -410,9 +403,9 @@ const PrintModel = Tool.extend({
         if (animationLayer.length > 0) {
             this.setLayer(animationLayer[0]);
         }
-        _.each(wfsLayer, function (layer) {
+        wfsLayer.forEach(layer => {
             this.setLayer(layer);
-        }, this);
+        });
         specification = {
             layout: this.get("layout").name,
             srs: Radio.request("MapView", "getProjection").getCode(),
@@ -433,9 +426,10 @@ const PrintModel = Tool.extend({
         };
 
         if (gfiPosition !== null) {
-            _.each(_.flatten(this.get("gfiParams")), function (element, index) {
+            (Array.isArray(this.get("gfiParams")) ? this.get("gfiParams").reduce((acc, val) => acc.concat(val), []) : this.get("gfiParams")).forEach((element, index) => {
                 specification.pages[0]["attr_" + index] = element;
-            }, this);
+            });
+
             specification.pages[0].layerName = this.get("gfiTitle");
         }
         this.set("specification", specification);
@@ -491,9 +485,9 @@ const PrintModel = Tool.extend({
     */
     getGfiForPrint: function () {
         const gfis = Radio.request("GFI", "getIsVisible") === true ? Radio.request("GFI", "getGfiForPrint") : null,
-            gfiParams = _.isArray(gfis) === true ? _.pairs(gfis[0]) : null, // Parameter
-            gfiTitle = _.isArray(gfis) === true ? gfis[1] : "", // Layertitel
-            gfiPosition = _.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
+            gfiParams = Array.isArray(gfis) === true ? Object.entries(gfis[0]) : null, // Parameter
+            gfiTitle = Array.isArray(gfis) === true ? gfis[1] : "", // Layertitel
+            gfiPosition = Array.isArray(gfis) === true ? gfis[2] : null, // Koordinaten des GFI
             // printGFI = this.get("printGFI"), // soll laut config Parameter gedruckt werden?
             printGFI = this.get("gfi"), // soll laut config Parameter gedruckt werden?
             printurl = this.get("printurl"); // URL des Druckdienstes
@@ -501,7 +495,7 @@ const PrintModel = Tool.extend({
         this.set("gfiParams", gfiParams);
         this.set("gfiTitle", gfiTitle);
         // Wenn eine GFIPos vorhanden ist, und die Anzahl der gfiParameter != 0 ist
-        if (!_.isNull(gfiPosition) && printGFI === true && gfiParams && gfiParams.length > 0) {
+        if (gfiPosition !== null && printGFI === true && gfiParams && gfiParams.length > 0) {
             this.set("createURL", printurl + "_gfi_" + this.get("gfiParams").length.toString() + "/create.json");
         }
         else {
@@ -557,10 +551,10 @@ const PrintModel = Tool.extend({
      * @returns {void}
      */
     push: function (attribute, value) {
-        const tempArray = _.clone(this.get(attribute));
+        const tempArray = {...this.get(attribute)};
 
         tempArray.push(value);
-        this.set(attribute, _.flatten(tempArray));
+        this.set(attribute, Array.isArray(tempArray) ? tempArray.reduce((acc, val) => acc.concat(val), []) : tempArray);
     },
 
     // Prüft ob es sich um einen rgb(a) oder hexadezimal String handelt.

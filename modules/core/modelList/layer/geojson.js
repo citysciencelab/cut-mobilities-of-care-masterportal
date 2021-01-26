@@ -3,12 +3,14 @@ import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {GeoJSON} from "ol/format.js";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         isClustered: false,
-        altitudeMode: "clampToGround"
+        altitudeMode: "clampToGround",
+        useProxy: false
     }),
 
     /**
@@ -19,6 +21,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @memberof Core.ModelList.Layer
      * @property {String[]} supported=["2D", "3D"] Supported modes "2D" and / or "3D"
      * @property {Boolean} isClustered=[false] Distance to group features to clusters
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires StyleList#RadioRequestReturnModelById
      * @fires MapView#RadioRequestGetProjection
      * @fires Alerting#RadioTriggerAlertAlert
@@ -75,18 +78,20 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             gfiAttributes: this.get("gfiAttributes"),
             routable: this.get("routable"),
             gfiTheme: this.get("gfiTheme"),
+            // gfiIconPath: this.get("gfiIconPath"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode"),
             hitTolerance: this.get("hitTolerance")
         }));
         if (this.get("isSelected")) {
-            if (_.isUndefined(this.get("geojson"))) {
+            if (this.get("geojson") === undefined) {
                 this.updateSource();
             }
             else {
                 this.handleData(this.get("geojson"), Radio.request("MapView", "getProjection").getCode());
             }
         }
+        this.createLegend();
     },
 
     /**
@@ -104,11 +109,15 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * @returns {void}
      */
     updateSource: function (showLoader) {
-        const typ = this.get("typ"),
-            url = Radio.request("Util", "getProxyURL", this.get("url")),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            typ = this.get("typ"),
             xhr = new XMLHttpRequest(),
             that = this;
-
         let paramUrl;
 
         if (typ === "WFS") {
@@ -163,7 +172,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
     /**
      * Takes the response, parses the geojson and creates ol.features.
      * @fires RemoteInterface#RadioTriggerPostMessage
-     * @param   {string} data   response as GeoJson
+     * @param   {(string | object)} data   response as GeoJson
      * @returns {void}
      */
     handleData: function (data) {
@@ -191,7 +200,7 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
 
                 if (geometry) {
                     feature.set("extent", geometry.getExtent());
-                    newFeatures.push(_.omit(feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
+                    newFeatures.push(Radio.request("Util", "omit", feature.getProperties(), ["geometry", "geometry_EPSG_25832", "geometry_EPSG_4326"]));
                 }
             });
             Radio.trigger("RemoteInterface", "postMessage", {"allFeatures": JSON.stringify(newFeatures), "layerId": this.get("id")});
@@ -242,20 +251,28 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      * For downward compatibility a crs tag can be used.
      * @see https://tools.ietf.org/html/rfc7946
      * @see https://geojson.org/geojson-spec#named-crs
-     * @param   {string} data   response as GeoJson
+     * @param   {(string | object)} data   response as GeoJson
      * @returns {string} epsg definition
      */
     getJsonProjection: function (data) {
-        // using indexOf method to increase performance
-        const dataString = data.replace(/\s/g, ""),
-            startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
+        if (typeof data === "object") {
+            if (data.crs !== undefined) {
+                const regExp = /\d+/;
 
-        if (startIndex !== -1) {
-            const endIndex = dataString.indexOf("\"", startIndex + 43);
-
-            return dataString.substring(startIndex + 43, endIndex);
+                return "EPSG:" + data.crs.properties.href.match(regExp)[0];
+            }
         }
+        else {
+            // using indexOf method to increase performance
+            const dataString = data.replace(/\s/g, ""),
+                startIndex = dataString.indexOf("\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"");
 
+            if (startIndex !== -1) {
+                const endIndex = dataString.indexOf("\"", startIndex + 43);
+
+                return dataString.substring(startIndex + 43, endIndex);
+            }
+        }
         return "EPSG:4326";
     },
 
@@ -327,7 +344,12 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             boxId = feature.get("_id");
         let url = "https://api.opensensemap.org/boxes/" + boxId + "/data/" + sensorId;
 
-        url = Radio.request("Util", "getProxyURL", url);
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        url = this.get("useProxy") ? getProxyUrl(url) : url;
         xhr.open("GET", url, async);
         xhr.onload = function (event) {
             let response = JSON.parse(event.currentTarget.responseText);
@@ -362,26 +384,44 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
      */
     addId: function (features) {
         features.forEach(function (feature) {
-            const id = feature.get("id") || _.uniqueId();
+            const id = feature.get("id") || Radio.request("Util", "uniqueId");
 
             feature.setId(id);
         });
     },
 
     /**
-     * creates the legendUrl used by layerinformation
-     * @fires StyleList#RadioRequestReturnModelById
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
-    createLegendURL: function () {
-        let style;
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
 
-        if (!_.isUndefined(this.get("legendURL")) && !this.get("legendURL").length) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-
-            if (!_.isUndefined(style)) {
-                this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            if (this.get("legendURL") === "") {
+                legend = true;
             }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
         }
     },
 
@@ -395,14 +435,14 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
         const features = [];
 
         this.hideAllFeatures();
-        _.each(featureIdList, function (id) {
+        featureIdList.forEach(id => {
             const feature = this.get("layerSource").getFeatureById(id);
 
             if (feature !== null) {
                 feature.setStyle(undefined);
                 features.push(feature);
             }
-        }, this);
+        });
         Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
     },
 

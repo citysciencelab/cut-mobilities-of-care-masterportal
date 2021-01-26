@@ -1,17 +1,25 @@
 import ToolTemplate from "text-loader!./tooltemplate.html";
+import store from "../../../../src/app-store/index";
 
 const ToolView = Backbone.View.extend({
     events: {
         "click": "checkItem"
     },
     initialize: function () {
+        this.render();
+
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
                 this.toggleSupportedVisibility(mode);
             }
         });
 
-        this.render();
+        this.listenTo(this.model, {
+            "change:currentLng": () => {
+                this.updateAttributes();
+            }
+        });
+
         this.toggleSupportedVisibility(Radio.request("Map", "getMapMode"));
     },
     id: "table-tool",
@@ -21,6 +29,13 @@ const ToolView = Backbone.View.extend({
         const attr = this.model.toJSON();
 
         $("#table-tools-menu").append(this.$el.html(this.template(attr)));
+
+        return this;
+    },
+    updateAttributes: function () {
+        const attr = this.model.toJSON();
+
+        this.$el.html(this.template(attr));
 
         return this;
     },
@@ -34,7 +49,9 @@ const ToolView = Backbone.View.extend({
                 // In that case 'this.model' of this class has not full content, e.g. collection is undefined --> replace it by the new model in the list
                 this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
             }
+            Radio.trigger("ModelList", "setActiveToolsToFalse", this.model);
             this.model.setIsActive(true);
+            store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
         }
     },
     /**

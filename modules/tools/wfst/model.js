@@ -4,6 +4,7 @@ import {WFS} from "ol/format.js";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import {Feature} from "ol";
+import getProxyUrl from "../../../src/utils/getProxyUrl";
 
 const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -43,7 +44,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         vectorLayer: new VectorLayer(),
         source: new VectorSource(),
         toggleLayer: false,
-        isDeselectedLayer: false
+        isDeselectedLayer: false,
+        useProxy: false
     }),
 
     /**
@@ -88,6 +90,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @property {ol.VectorSource} source=new VectorSource() - VectorSource
      * @property {Boolean} toggleLayer=false - Flag if the current layer should be toggled
      * @property {Boolean} isDeselectedLayer=false - Flag if the current layer is deselected in the layer tree
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioTriggerUtilShowLoader
@@ -304,9 +307,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         let activeLayers = selectedLayers;
 
         // tests if the configuration of the active layers is incorrect and remove the incorrect layers
-        if (activeLayers !== undefined && activeLayers !== null) {
+        if (activeLayers !== undefined && activeLayers !== null && Object.entries(activeLayers).length > 0) {
             Object.entries(activeLayers).forEach(([key]) => {
-                if (incorrectConfigLayers.includes(key)) {
+                if (incorrectConfigLayers.length > 0 && incorrectConfigLayers.includes(key)) {
                     delete activeLayers[key];
                 }
             });
@@ -538,8 +541,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             method: "GET",
             context: this,
             success: this.handleResponse,
-            error: function (jqXHR) {
-                this.handleError(jqXHR);
+            error: function () {
+                this.handleError();
             }
         });
     },
@@ -583,20 +586,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
 
     /**
      * Handles a not successfull DescribeFeaturType request
-     * @param {Object} jqXHR - response object
      * @returns {void}
      */
-    handleError: function (jqXHR) {
-        let exceptionText,
-            exceptionCode;
-
-        if (jqXHR.responseText.includes("Exception")) {
-            exceptionCode = this.getSubstring(jqXHR.responseText, ["exceptionCode", "\"", "\""]);
-            if (jqXHR.responseText.indexOf("ExceptionText") > 0) {
-                exceptionText = this.getExceptionText(jqXHR);
-                console.error("Saving has failed. \n ExceptionCode:" + exceptionCode + "\n StatusCode: " + jqXHR.statusText + "\n error message: " + exceptionText);
-            }
-        }
+    handleError: function () {
         this.addInitialAlertCases("FailedDFT");
     },
 
@@ -619,6 +611,12 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             attrElement = $(response).find("*").filter(function () {
                 return $(this).attr("name") === featureTypename;
             });
+            // if there is no element with the featureTypename and the featureTypename has a prefix
+            if (attrElement.length === 0 && featureTypename.indexOf(":") > 0) {
+                attrElement = $(response).find("*").filter(function () {
+                    return $(this).attr("name") === featureTypename.slice(featureTypename.indexOf(":") + 1);
+                });
+            }
             if (attrElement.length > 0) {
                 complexType = $(attrElement).find("*").filter(function () {
                     return this.localName === "complexType";
@@ -1056,10 +1054,10 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
 
     /**
      * Deletes a geometry from the map and from the database
+     * @param {Object} target - target feature to delete
      * @returns {void}
      */
-    delete: function () {
-        const target = this.get("interaction").getFeatures().item(0);
+    delete: function (target) {
         let xmlString;
 
         if (typeof target === "object" && target !== null) {
@@ -1359,12 +1357,18 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     sendTransaction: function (xmlString) {
-        const that = this;
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            that = this;
 
         Radio.trigger("Util", "showLoader");
         if (xmlString.length > 0) {
             $.ajax({
-                url: this.get("url"),
+                url: url,
                 method: "POST",
                 processData: false,
                 contentType: "text/xml",
@@ -1738,7 +1742,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     setIncorrectConfigLayers: function (value) {
-        this.get("incorrectConfigLayers").push(value);
+        this.set("incorrectConfigLayers", value);
     },
 
     /**

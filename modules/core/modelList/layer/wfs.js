@@ -3,6 +3,7 @@ import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -10,7 +11,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         showSettings: true,
         isClustered: false,
         allowedVersions: ["1.1.0"],
-        altitudeMode: "clampToGround"
+        altitudeMode: "clampToGround",
+        useProxy: false
     }),
     /**
      * @class WFSLayer
@@ -21,6 +23,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @property {Boolean} showSettings=true Flag if settings selectable.
      * @property {Boolean} isClustered=false Flag if layer is clustered.
      * @property {String[]} allowedVersions=["1.1.0"] Allowed Version of WFS requests.
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires Layer#RadioTriggerVectorLayerResetFeatures
      * @listens Layer#RadioRequestVectorLayerGetFeatures
      */
@@ -69,8 +72,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (!allowedVersions.includes(version)) {
             isVersionValid = false;
 
-            console.error("An attempt is made to load WFS-Layer: \"" + name + "\" with version: \"" + allowedVersions[0] + "\"!"
-                + " Please use for wfs only the versions: " + allowedVersions + ", because only these are accepted by openlayers!");
+            console.warn(`The WFS layer: "${name}" is configured in version: ${version}.`
+             + ` OpenLayers accepts WFS only in the versions: ${allowedVersions},`
+             + ` It tries to load the layer: "${name}" in version ${allowedVersions[0]}!`);
         }
         return isVersionValid;
     },
@@ -82,7 +86,14 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     createClusterLayerSource: function () {
         this.setClusterLayerSource(new Cluster({
             source: this.get("layerSource"),
-            distance: this.get("clusterDistance")
+            distance: this.get("clusterDistance"),
+            geometryFunction: function (feature) {
+                // do not cluster invisible features; can't rely on style since it will be null initially
+                if (feature.get("hideInClustering") === true) {
+                    return null;
+                }
+                return feature.getGeometry();
+            }
         }));
     },
 
@@ -107,7 +118,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
         if (this.get("isSelected")) {
             this.updateSource(true);
         }
-        this.createLegendURL();
+        this.createLegend();
     },
 
     /**
@@ -127,7 +138,13 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     updateSource: function (showLoader) {
-        const params = {
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
@@ -144,7 +161,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                     Radio.trigger("Util", "showLoader");
                 }
             },
-            url: Radio.request("Util", "getProxyURL", this.get("url")),
+            url: url,
             data: params,
             async: true,
             type: "GET",
@@ -217,39 +234,63 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     styling: function () {
-        const stylelistmodel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-        let isClusterfeature;
+        const styleId = this.get("styleId"),
+            styleModel = Radio.request("StyleList", "returnModelById", styleId);
+        let isClusterFeature = false;
 
-        if (stylelistmodel !== undefined) {
+        if (styleModel !== undefined) {
             this.setStyle(function (feature) {
                 // in manchen Fällen war feature undefined und in "this" geschrieben.
                 // konnte nicht nachvollziehen, wann das so ist.
                 const feat = feature !== undefined ? feature : this;
 
-                isClusterfeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
+                isClusterFeature = typeof feat.get("features") === "function" || typeof feat.get("features") === "object" && Boolean(feat.get("features"));
 
-                return stylelistmodel.createStyle(feat, isClusterfeature);
+                return styleModel.createStyle(feat, isClusterFeature);
             });
+        }
+        else {
+            console.error(i18next.t("common:modules.core.modelList.layer.wrongStyleId", {styleId}));
         }
 
         this.get("layer").setStyle(this.get("style"));
     },
 
     /**
-     * Generates a legend url.
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
      * @returns {void}
      */
-    createLegendURL: function () {
-        let style;
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
 
-        if (this.get("legendURL") !== undefined && !this.get("legendURL").length) {
-            style = Radio.request("StyleList", "returnModelById", this.get("styleId"));
-            if (style !== undefined) {
-                if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
-                    style.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"));
-                }
-                this.setLegendURL([style.get("imagePath") + style.get("imageName")]);
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            if (this.get("legendURL") === "") {
+                legend = true;
             }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
+            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+            }
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
         }
     },
 
@@ -258,13 +299,20 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     hideAllFeatures: function () {
-        const collection = this.get("layerSource").getFeatures();
+        const layerSource = this.get("layerSource"),
+            features = this.get("layerSource").getFeatures();
 
-        collection.forEach(function (feature) {
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
+
+        features.forEach(function (feature) {
+            feature.set("hideInClustering", true);
             feature.setStyle(function () {
                 return null;
             });
         }, this);
+
+        layerSource.addFeatures(features);
     },
 
     /**
@@ -289,19 +337,25 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     showFeaturesByIds: function (featureIdList) {
-        const features = [];
+        const layerSource = this.get("layerSource"),
+            // featuresToShow is a subset of allLayerFeatures
+            allLayerFeatures = layerSource.getFeatures(),
+            featuresToShow = featureIdList.map(id => layerSource.getFeatureById(id));
 
         this.hideAllFeatures();
-        featureIdList.forEach(id => {
-            const feature = this.get("layerSource").getFeatureById(id);
-            let style = [];
 
-            style = this.getStyleAsFunction(this.get("style"));
+        // optimization - clear and re-add to prevent cluster updates on each change
+        layerSource.clear();
 
+        featuresToShow.forEach(feature => {
+            const style = this.getStyleAsFunction(this.get("style"));
+
+            feature.set("hideInClustering", false);
             feature.setStyle(style(feature));
-            features.push(feature);
         }, this);
-        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), features);
+
+        layerSource.addFeatures(allLayerFeatures);
+        Radio.trigger("VectorLayer", "resetFeatures", this.get("id"), allLayerFeatures);
     },
 
     /**
@@ -310,7 +364,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {function} - style as function.
      */
     getStyleAsFunction: function (style) {
-        if (style && {}.toString.call(style) === "[object Function]") {
+        if (typeof style === "function") {
             return style;
         }
 

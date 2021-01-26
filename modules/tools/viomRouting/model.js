@@ -60,7 +60,7 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
      * @property {String} startAdresse="" todo
      * @property {String} zielAdresse="" todo
      * @property {String} bbox="" todo
-     * @property {Object} routelayer=null todo
+     * @property {(ol/VectorLayer|null)} [routelayer=null] the vector layer with the route received from viomRoutingURL
      * @property {Boolean} isGeolocationPossible=Radio.request("geolocation", "isGeoLocationPossible") === true todo
      * @property {Boolean} renderToWindow=true todo
      * @property {string} glyphicon="glyphicon-road" todo
@@ -134,10 +134,10 @@ const RoutingModel = Tool.extend(/** @lends RoutingModel.prototype */{
         this.set("epsgCode", epsgCode);
     },
     deleteRouteFromMap: function () {
-        if (this.get("routelayer") !== "") { // Funktion WÜRDE bei jeder Window-Aktion ausgeführt
+        if (this.get("routelayer") !== null) {
             this.removeOverlay();
             Radio.trigger("Map", "removeLayer", this.get("routelayer"));
-            this.set("routelayer", "");
+            this.set("routelayer", null);
             this.set("description", "");
             this.set("endDescription", "");
             this.set("sumLength", "");

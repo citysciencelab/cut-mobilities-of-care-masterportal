@@ -1,12 +1,11 @@
-import * as moment from "moment";
+import uniqueId from "../../src/utils/uniqueId.js";
+import LoaderOverlay from "../../src/utils/loaderOverlay";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
         config: "",
         ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
         uiStyle: "DEFAULT",
-        proxy: true,
-        proxyHost: "",
         loaderOverlayTimeoutReference: null,
         loaderOverlayTimeout: 40,
         // the loaderOverlayCounter has to be set to 1 initialy, because it is shown on start and hidden at the end of app.js
@@ -21,13 +20,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @property {String} config="" todo
      * @property {String[]} ignoredKeys=["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"] List of ignored attribute names when displaying attribute information of all layer types.
      * @property {String} uiStyle="DEFAULT" Controls the layout of the controls.
-     * @property {String} proxy=true Specifies whether points should be replaced by underscores in URLs. This prevents CORS errors. Attention: A reverse proxy must be set up on the server side.
-     * @property {String} proxyHost="" Hostname of a remote proxy (CORS must be activated there).
      * @property {String} loaderOverlayTimeoutReference=null todo
      * @property {String} loaderOverlayTimeout="20" Timeout for the loadergif.
-     * @listens Core#RadioRequestUtilChangeTimeZone
      * @listens Core#RadioRequestUtilIsViewMobile
-     * @listens Core#RadioRequestUtilGetProxyURL
      * @listens Core#RadioRequestUtilIsApple
      * @listens Core#RadioRequestUtilIsAndroid
      * @listens Core#RadioRequestUtilIsOpera
@@ -38,10 +33,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetConfig
      * @listens Core#RadioRequestUtilGetUiStyle
      * @listens Core#RadioRequestUtilGetIgnoredKeys
-     * @listens Core#RadioRequestUtilPunctuate
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
-     * @listens Core#RadioRequestUtilGetPathFromLoader
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
@@ -66,7 +59,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
                 return this.get("isViewMobile");
             },
             "getMasterPortalVersionNumber": this.getMasterPortalVersionNumber,
-            "getProxyURL": this.getProxyURL,
             "isApple": this.isApple,
             "isAndroid": this.isAndroid,
             "isOpera": this.isOpera,
@@ -83,11 +75,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "getIgnoredKeys": function () {
                 return this.get("ignoredKeys");
             },
-            "punctuate": this.punctuate,
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
-            "getPathFromLoader": this.getPathFromLoader,
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
@@ -103,8 +93,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "toObject": this.toObject,
             "isEmpty": this.isEmpty,
             "setUrlQueryParams": this.setUrlQueryParams,
-            "searchNestedObject": this.searchNestedObject,
-            "changeTimeZone": this.changeTimeZone
+            "searchNestedObject": this.searchNestedObject
         }, this);
 
         channel.on({
@@ -124,7 +113,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
         });
 
-        $(window).on("resize", _.bind(this.toggleIsViewMobile, this));
+        $(window).on("resize", this.toggleIsViewMobile.bind(this));
         this.parseConfigFromURL();
     },
 
@@ -134,31 +123,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     getMasterPortalVersionNumber: function () {
         return require("../../package.json").version;
-    },
-
-    /**
-     * converts value to String and rewrites punctuation rules. The 1000 separator is "." and the decimal separator is a ","
-     * @param  {String} value - feature attribute values
-     * @returns {string} punctuated value
-     */
-    punctuate: function (value) {
-        const pattern = /(-?\d+)(\d{3})/,
-            stringValue = value.toString();
-
-        let decimals,
-            predecimals = stringValue;
-
-        if (stringValue.indexOf(".") !== -1) {
-            predecimals = stringValue.split(".")[0];
-            decimals = stringValue.split(".")[1];
-        }
-        while (pattern.test(predecimals)) {
-            predecimals = predecimals.replace(pattern, "$1.$2");
-        }
-        if (decimals) {
-            return predecimals + "," + decimals;
-        }
-        return predecimals;
     },
 
     /**
@@ -444,24 +408,37 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
 
     /**
      * Sorts Objects not as address.
-     * @param {Object[]} input Array with object to be sorted.
+     * @param {Object[]} [input=[]] Array with object to be sorted.
      * @param {String} first First attribute to sort by.
      * @param {String} second Second attribute to sort by.
      * @returns {Object[]} - Sorted array of objects.
      */
-    sortObjectsNonAddress: function (input, first, second) {
-        let sortedObj = input;
+    sortObjectsNonAddress: function (input = [], first, second) {
+        const sortedOjectSecond = input.sort((elementA, elementB) => this.compareInputs(elementA, elementB, second)),
+            sortedObjectFirst = sortedOjectSecond.sort((elementA, elementB) => this.compareInputs(elementA, elementB, first));
 
-        sortedObj = _.chain(input)
-            .sortBy(function (element) {
-                return element[second];
-            })
-            .sortBy(function (element) {
-                return parseInt(element[first], 10);
-            })
-            .value();
+        return sortedObjectFirst;
+    },
 
-        return sortedObj;
+    /**
+     * Compare two elements.
+     * @param {object} elementA - The first object.
+     * @param {object} elementB - The second object.
+     * @param {string|number} value - value by sort.
+     * @returns {number} Sort sequence in numbers
+     */
+    compareInputs: function (elementA, elementB, value) {
+        const firstElement = isNaN(parseInt(elementA[value], 10)) ? elementA[value] : parseInt(elementA[value], 10),
+            secondElement = isNaN(parseInt(elementB[value], 10)) ? elementB[value] : parseInt(elementB[value], 10);
+
+        if (firstElement < secondElement) {
+            return -1;
+        }
+        else if (firstElement > secondElement) {
+            return 1;
+        }
+
+        return 0;
     },
 
     /**
@@ -597,13 +574,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     showLoader: function () {
-        this.incLoaderOverlayCounter();
-        clearTimeout(this.get("loaderOverlayTimeoutReference"));
-        this.setLoaderOverlayTimeoutReference(setTimeout(function () {
-            Radio.trigger("Util", "hideLoader");
-            this.setLoaderOverlayCounter(0);
-        }.bind(this), 1000 * this.get("loaderOverlayTimeout")));
-        $("#loader").show();
+        LoaderOverlay.show();
     },
 
     /**
@@ -611,10 +582,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoader: function () {
-        this.decLoaderOverlayCounter();
-        if (this.get("loaderOverlayCounter") <= 0) {
-            $("#loader").hide();
-        }
+        LoaderOverlay.hide();
     },
 
     /**
@@ -623,67 +591,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     hideLoadingModule: function () {
         $(".loading").fadeOut(this.get("fadeOut"));
-    },
-
-    /**
-     * Setter for loaderOverlayTimeoutReference
-     * @param {*} timeoutReference todo
-     * @returns {void}
-     */
-    setLoaderOverlayTimeoutReference: function (timeoutReference) {
-        this.set("loaderOverlayTimeoutReference", timeoutReference);
-    },
-
-    /**
-     * search the path from the loader gif
-     * @returns {String} path to loader gif
-     */
-    getPathFromLoader: function () {
-        return $("#loader").children("img").first().attr("src");
-    },
-
-    /**
-     * rewrites the URL by replacing the dots with underlined
-     * @param {Stirng} url url to rewrite
-     * @returns {String} proxy URL
-     */
-    getProxyURL: function (url) {
-        const parser = document.createElement("a");
-        let protocol = "",
-            result = url,
-            hostname = "",
-            port = "";
-
-        if (this.get("proxy")) {
-            parser.href = url;
-            protocol = parser.protocol;
-
-            if (protocol.indexOf("//") === -1) {
-                protocol += "//";
-            }
-
-            port = parser.port;
-
-            if (!parser.hostname) {
-                parser.hostname = window.location.hostname;
-            }
-
-            if (parser.hostname === "localhost" || !parser.hostname) {
-                return url;
-            }
-
-            if (port) {
-                result = url.replace(":" + port, "");
-            }
-
-            result = url.replace(protocol, "");
-            // www und www2 usw. raus
-            // hostname = result.replace(/www\d?\./, "");
-            hostname = parser.hostname.split(".").join("_");
-            result = this.get("proxyHost") + "/" + result.replace(parser.hostname, hostname);
-
-        }
-        return result;
     },
 
     /**
@@ -725,8 +632,8 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             result[item[0].toUpperCase()] = decodeURIComponent(item[1]); // item[0] = key; item[1] = value;
         });
 
-        if (_.has(result, "CONFIG")) {
-            config = _.values(_.pick(result, "CONFIG"))[0];
+        if (result.hasOwnProperty("CONFIG")) {
+            config = result.CONFIG;
 
             if (config.slice(-5) === ".json") {
                 this.setConfig(config);
@@ -751,7 +658,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     convertArrayOfObjectsToCsv: function (data, colDeli, lineDeli) {
         const keys = Object.keys(data[0]),
-            columnDelimiter = colDeli || ",",
+            columnDelimiter = colDeli || ";",
             lineDelimiter = lineDeli || "\n";
 
         // header line
@@ -835,11 +742,11 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * Groups the elements of an array based on the given function.
      * Use Array.prototype.map() to map the values of an array to a function or property name.
      * Use Array.prototype.reduce() to create an object, where the keys are produced from the mapped results.
-     * @param {array} arr - elements to group
+     * @param {array} [arr=[]] - elements to group
      * @param {function} fn - reducer function
      * @returns {object} - the grouped object
      */
-    groupBy: function (arr, fn) {
+    groupBy: function (arr = [], fn) {
         return arr.map(typeof fn === "function" ? fn : val => val[fn]).reduce((acc, val, i) => {
             acc[val] = (acc[val] || []).concat(arr[i]);
             return acc;
@@ -852,28 +759,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {String}  a globally-unique id
      */
     uniqueId: function (prefix) {
-        const idCounter = String(this.getIdCounter());
-
-        this.incIdCounter();
-
-        return prefix ? prefix + idCounter : idCounter;
-    },
-
-    /**
-     * gets the current idCounter
-     * @returns {Integer}  the current idCounter
-     */
-    getIdCounter: function () {
-        return Util.idCounter;
-    },
-
-    /**
-     * increments the idCounter
-     * @post the static idCounter (Util.idCounter) is incremented by 1
-     * @returns {Void}  -
-     */
-    incIdCounter: function () {
-        Util.idCounter++;
+        return uniqueId(prefix);
     },
 
     /**
@@ -987,7 +873,9 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     convertArrayElementsToString: function (array = []) {
         const arrayWithStrings = [];
 
-        array.forEach(element => arrayWithStrings.push(String(element)));
+        for (const element of array) {
+            arrayWithStrings.push(String(element));
+        }
         return arrayWithStrings;
     },
 
@@ -1152,48 +1040,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             }
         }
         return result;
-    },
-
-    /*
-     * change the timzone for the historicalData
-     *
-     * @param  {Object[]} historicalData data from feature
-     * @param  {Object[]} utc timezone
-     * @return {Object[]} data
-     */
-    changeTimeZone: function (historicalData, utc) {
-        const data = historicalData === undefined ? [] : historicalData;
-
-        data.forEach(loadingPointData => {
-            if (loadingPointData.Observations !== undefined) {
-                loadingPointData.Observations.forEach(obs => {
-                    const phenomenonTime = obs.phenomenonTime,
-                        utcAlgebraicSign = utc.substring(0, 1),
-                        utcString = utc === undefined ? "+1" : utc;
-                    let utcSub,
-                        utcNumber;
-
-                    if (utcString.length === 2) {
-                        // check for winter- and summertime
-                        utcSub = parseInt(utcString.substring(1, 2), 10);
-                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
-                        utcNumber = "0" + utcSub + "00";
-                    }
-                    else if (utcString.length > 2) {
-                        utcSub = parseInt(utcString.substring(1, 3), 10);
-                        utcSub = moment(phenomenonTime).isDST() ? utcSub + 1 : utcSub;
-                        utcNumber = utc.substring(1, 3) + "00";
-                    }
-
-                    obs.phenomenonTime = moment(phenomenonTime).utcOffset(utcAlgebraicSign + utcNumber).format("YYYY-MM-DDTHH:mm:ss");
-                });
-            }
-        });
-        return data;
     }
-}, {
-    // globally-unique id for Util.uniqueId([prefix]) - this is a static backbone variable (Util.idCounter)
-    idCounter: 1
 });
 
 export default Util;

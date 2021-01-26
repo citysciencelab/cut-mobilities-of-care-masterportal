@@ -1,5 +1,6 @@
 import WFSStyle from "./model";
 import StyleModel from "./styleModel";
+import store from "../../src/app-store";
 
 const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     /**
@@ -115,17 +116,24 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      */
     parseStyles: function (data) {
         const layers = Radio.request("Parser", "getItemsByAttributes", {type: "layer"}),
-            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"});
+            tools = Radio.request("Parser", "getItemsByAttributes", {type: "tool"}),
+            dataWithDefaultValue = [...data];
         let styleIds = [],
             filteredData = [];
+
+        dataWithDefaultValue.push({styleId: "default", rules: [{style: {}}]});
+        dataWithDefaultValue.push(this.getMapmarkerPointDefaultStyle());
+        dataWithDefaultValue.push(this.getMapmarkerPolygonDefaultStyle());
 
         styleIds.push(this.getStyleIdsFromLayers(layers));
         styleIds.push(this.getStyleIdForZoomToFeature());
         styleIds.push(this.getStyleIdForMapMarkerPoint());
+        styleIds.push(this.getStyleIdForMapMarkerPolygon());
         styleIds.push(this.getStyleIdsFromTools(tools));
+        styleIds.push(this.getFeatureViaURLStyles());
 
         styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
-        filteredData = data.filter(function (styleModel) {
+        filteredData = dataWithDefaultValue.filter(function (styleModel) {
             /**
              * filter for .layerId and styleId as well
              * @deprecated since v 3.0
@@ -138,9 +146,25 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         });
 
         this.add(filteredData);
+
         return filteredData;
     },
+    /**
+     * Checks whether the module featureViaURL is activated and retrieves the styleIds.
+     *
+     * @returns {String[]} Array of styleIds for the layers for the features given via the URL.
+     */
+    getFeatureViaURLStyles: function () {
+        const styleIds = [],
+            layers = Config?.featureViaURL?.layers;
 
+        if (layers !== undefined) {
+            layers.forEach(layer => {
+                styleIds.push(layer.styleId);
+            });
+        }
+        return styleIds;
+    },
     /**
      * Gathers the styleIds of the layers.
      * @param {Object[]} layers The configured layers.
@@ -151,7 +175,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
 
         if (layers) {
             layers.forEach(layer => {
-                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings") {
+                if (layer.typ === "WFS" || layer.typ === "GeoJSON" || layer.typ === "SensorThings" || layer.typ === "TileSet3D") {
                     if (layer.hasOwnProperty("styleId")) {
                         styleIds.push(layer.styleId);
                     }
@@ -212,14 +236,69 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
     },
 
     /**
+     * Gets the default style for mapmarker as point.
+     * @returns {Object} The default style for mapMarker point Style.
+     */
+    getMapmarkerPointDefaultStyle: function () {
+        return {
+            styleId: "defaultMapMarkerPoint",
+            rules: [{
+                style:
+                {
+                    type: "icon",
+                    imageName: "mapMarker.svg",
+                    imagePath: "../../img/",
+                    imageScale: 1,
+                    imageWidth: 34,
+                    imageHeight: 48,
+                    imageOffsetY: 46,
+                    imageOffsetYUnit: "pixels"
+                }
+            }]
+        };
+    },
+
+    /**
+     * Gets the default style for mapmarker as polygon.
+     * @returns {Object} The default style for mapMarker polygon Style.
+     */
+    getMapmarkerPolygonDefaultStyle: function () {
+        return {
+            styleId: "defaultMapMarkerPolygon",
+            rules: [{
+                style:
+                {
+                    polygonStrokeColor: [8, 119, 95, 1],
+                    polygonStrokeWidth: 4,
+                    polygonFillColor: [8, 119, 95, 0.3],
+                    polygonStrokeDash: [8]
+                }
+            }]
+        };
+    },
+
+    /**
      * gets style id from MapMarker
      * @returns {String} - Style id of mapMarker.
      */
     getStyleIdForMapMarkerPoint: function () {
         let styleId;
 
-        if (Config && Config.hasOwnProperty("mapMarker") && Config.mapMarker.hasOwnProperty("mapMarkerStyleId")) {
-            styleId = Config.mapMarker.mapMarkerStyleId;
+        if (store.getters["MapMarker/pointStyleId"]) {
+            styleId = store.getters["MapMarker/pointStyleId"];
+        }
+        return styleId;
+    },
+
+    /**
+     * gets style id from MapMarker
+     * @returns {String} - Style id of mapMarker.
+     */
+    getStyleIdForMapMarkerPolygon: function () {
+        let styleId;
+
+        if (store.getters["MapMarker/polygonStyleId"]) {
+            styleId = store.getters["MapMarker/polygonStyleId"];
         }
         return styleId;
     }

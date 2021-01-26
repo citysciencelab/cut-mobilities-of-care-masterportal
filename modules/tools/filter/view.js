@@ -25,9 +25,11 @@ const FilterView = Backbone.View.extend({
                     this.$el.remove();
                     Radio.trigger("Sidebar", "toggle", false);
                 }
-            }
+            },
+            "change:currentLng": this.rerender
         });
         this.listenTo(this.model.get("queryCollection"), {
+            "change:currentLng": this.rerender,
             "change:isSelected": function (model, value) {
                 if (value === true) {
                     this.renderDetailView();
@@ -62,7 +64,7 @@ const FilterView = Backbone.View.extend({
             Radio.trigger("TableMenu", "appendFilter", this.el);
         }
         else {
-            Radio.trigger("Sidebar", "append", this.el);
+            Radio.trigger("Sidebar", "append", this.el, false, 450);
             Radio.trigger("Sidebar", "toggle", true);
         }
         this.renderSimpleViews();
@@ -90,15 +92,33 @@ const FilterView = Backbone.View.extend({
 
         if (queryCollectionModels.length > 1) {
             queryCollectionModels.forEach(function (queryCollectionModel) {
-                const query = this.model.regulateInitialActivating(queryCollectionModel, predefinedQueriesModels);
+                // must only be called on initial render, else user selection will be overridden on translate
+                const query = this.model.get("initialized")
+                    ? queryCollectionModel
+                    : this.model.regulateInitialActivating(queryCollectionModel, predefinedQueriesModels);
 
                 view = new QuerySimpleView({model: query});
                 this.$el.find(".simple-views-container").append(view.render().$el);
             }, this);
+
+            if (!this.model.get("initialized")) {
+                this.model.set("initialized", true);
+            }
         }
         else {
             this.model.activateLayer(queryCollectionModels);
             this.$el.find(".simple-views-container").remove();
+        }
+    },
+    /**
+     * Rerender method that keeps filter state except for language.
+     * To be used on changeLang.
+     * @returns {void}
+     */
+    rerender: function () {
+        if (this.model.get("isActive")) {
+            this.render(this.model, true);
+            this.renderDetailView();
         }
     },
     closeFilter: function () {

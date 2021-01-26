@@ -11,4 +11,7 @@
             <span class="glyphicon glyphicon-unchecked selectall" title="<%= showAllTopicsText %>"></span>
         <%}%>
     <%}%>
+    <% if (isSecured) { %>
+        <span class="glyphicon glyphicon-lock" title="<%=securedAllTopicsText%>"></span>
+    <% } %>
     <span class="title"><%= name %></span>

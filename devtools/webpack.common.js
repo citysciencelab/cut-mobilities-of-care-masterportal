@@ -1,24 +1,16 @@
+/* eslint-disable no-process-env */
 const webpack = require("webpack"),
     MiniCssExtractPlugin = require("mini-css-extract-plugin"),
     path = require("path"),
     fse = require("fs-extra"),
     VueLoaderPlugin = require("vue-loader/lib/plugin"),
-    MomentTimezoneDataPlugin = require("moment-timezone-data-webpack-plugin"),
 
     rootPath = path.resolve(__dirname, "../"),
-    addonPath = path.resolve(rootPath, "addons/"),
-    addonConfigPath = path.resolve(addonPath, "addonsConf.json"),
-    portalconfigsIdaPath = path.resolve(rootPath, "portalconfigs/ida/main.js"),
+    addonBasePath = path.resolve(rootPath, "addons"),
+    addonConfigPath = path.resolve(addonBasePath, "addonsConf.json"),
     entryPoints = {masterportal: path.resolve(rootPath, "js/main.js")};
 
 let addonEntryPoints = {};
-
-if (!fse.existsSync(portalconfigsIdaPath)) {
-    console.warn("NOTICE: " + portalconfigsIdaPath + " not found. Skipping entrypoint for \"IDA\"");
-}
-else {
-    entryPoints.ida = portalconfigsIdaPath;
-}
 
 if (!fse.existsSync(addonConfigPath)) {
     console.warn("NOTICE: " + addonConfigPath + " not found. Skipping all addons.");
@@ -28,22 +20,53 @@ else {
 }
 
 module.exports = function () {
-    const addonsRelPaths = {};
+    const addonsRelPaths = {},
+        vueAddonsRelPaths = {};
 
     for (const addonName in addonEntryPoints) {
-        if (typeof addonEntryPoints[addonName] !== "string") {
-            console.error("############\n------------");
-            throw new Error("ERROR: WRONG ENTRY IN \"" + addonConfigPath + "\" at key \"" + addonName + "\"\nABORTED...");
+        let isVueAddon = false,
+            addonPath = addonName,
+            entryPointFileName = "";
+
+        if (typeof addonEntryPoints[addonName] === "string") {
+            entryPointFileName = addonEntryPoints[addonName];
         }
 
-        const addonFilePath = path.resolve(addonPath, addonName, addonEntryPoints[addonName]);
+        // An addon is recognized as Vue-Addon, if:
+        // - its configuration value is an object
+        // - with at least a key named "type"
+        if (typeof addonEntryPoints[addonName] === "object" && addonEntryPoints[addonName].type !== undefined) {
+            isVueAddon = true;
 
-        if (!fse.existsSync(addonFilePath)) {
-            console.error("############\n------------");
-            throw new Error("ERROR: FILE DOES NOT EXIST \"" + addonFilePath + "\"\nABORTED...");
+            if (typeof addonEntryPoints[addonName].entryPoint === "string") {
+                entryPointFileName = addonEntryPoints[addonName].entryPoint;
+            }
+            else {
+                entryPointFileName = "index.js";
+            }
+
+            if (typeof addonEntryPoints[addonName].path === "string") {
+                addonPath = addonEntryPoints[addonName].path;
+            }
         }
 
-        addonsRelPaths[addonName] = [addonName, addonEntryPoints[addonName]].join("/");
+        const addonCombinedRelpath = [addonPath, entryPointFileName].join("/");
+
+        // Now check if file exists
+        if (!fse.existsSync(path.resolve(addonBasePath, addonCombinedRelpath))) {
+            console.error("############\n------------");
+            throw new Error("ERROR: FILE DOES NOT EXIST \"" + path.resolve(addonBasePath, addonCombinedRelpath) + "\"\nABORTED...");
+        }
+
+        if (isVueAddon) {
+            vueAddonsRelPaths[addonName] = Object.assign({
+                "entry": addonCombinedRelpath
+            }, addonEntryPoints[addonName]);
+        }
+        else {
+            addonsRelPaths[addonName] = addonCombinedRelpath;
+        }
+
     }
 
     return {
@@ -108,8 +131,7 @@ module.exports = function () {
                     use: [
                         {
                             loader: MiniCssExtractPlugin.loader,
-                            options: {
-                            }
+                            options: {}
                         },
                         "css-loader",
                         "less-loader"
@@ -162,14 +184,8 @@ module.exports = function () {
             new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|de/),
             // create global constant at compile time
             new webpack.DefinePlugin({
-                ADDONS: JSON.stringify(addonsRelPaths)
-            }),
-            // import only a very limited number of timezones
-            // @see https://www.npmjs.com/package/moment-timezone-data-webpack-plugin
-            new MomentTimezoneDataPlugin({
-                matchZones: /Europe\/(Berlin|London)/,
-                startYear: 2019,
-                endYear: new Date().getFullYear()
+                ADDONS: JSON.stringify(addonsRelPaths),
+                VUE_ADDONS: JSON.stringify(vueAddonsRelPaths)
             })
         ]
     };

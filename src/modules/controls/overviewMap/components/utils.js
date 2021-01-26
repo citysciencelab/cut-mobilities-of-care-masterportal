@@ -2,6 +2,7 @@ import ImageWMS from "ol/source/ImageWMS.js";
 import Image from "ol/layer/Image.js";
 import View from "ol/View.js";
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import store from "../../../../app-store/index";
 
 /*
  * NOTE I'm unsure where these belong.
@@ -13,7 +14,7 @@ import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
 
 /**
  * @param {module:ol/Map} map openlayers map
- * @param {?number} resolution resolution to be set, if any @deprecated
+ * @param {?Number} resolution resolution to be set, if any @deprecated
  * @returns {module:ol/View} prepared view for overview map
  */
 export function getOverviewMapView (map, resolution) {
@@ -27,7 +28,7 @@ export function getOverviewMapView (map, resolution) {
 }
 
 /**
- * @param {string} id id of layer to use from services.json
+ * @param {String} id id of layer to use from services.json
  * @returns {?module:ol/layer/Image} image layer
  */
 export function getOverviewMapLayer (id) {
@@ -36,18 +37,18 @@ export function getOverviewMapLayer (id) {
 
     if (!layerId) {
         console.error("Missing layerId for control overviewMap. Could not infer initially visible base layer id.");
-        Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden.");
+        store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.controls.overviewMap.missingLayerId"));
     }
     else if (!ovmLayer) {
         console.error(`Could not create overviewMap for (inferred?) id "${layerId}". Given id: "${id}".`);
-        Radio.trigger("Alert", "alert", "Die Overviewmap konnte nicht erstellt werden.");
+        store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.controls.overviewMap.missingLayerId"));
     }
 
     return ovmLayer;
 }
 
 /**
- * @returns {?string} id of initially visible base layer
+ * @returns {?String} id of initially visible base layer
  */
 function getInitialVisibleBaseLayerId () {
     const layer = Radio.request("Parser", "getInitVisibBaselayer");
@@ -57,8 +58,8 @@ function getInitialVisibleBaseLayerId () {
 
 /**
  * @description Derives the baselayer parameters from the global layer collection.
- * @param {string} id id of base layer to get parameters for
- * @returns {?object} parameter object
+ * @param {String} id id of base layer to get parameters for
+ * @returns {?Object} parameter object
  */
 function getLayerParameters (id) {
     const model = getLayerWhere({id});
@@ -83,7 +84,7 @@ function getLayerParameters (id) {
 }
 
 /**
- * @param {string} id id of baselayer to use
+ * @param {String} id id of baselayer to use
  * @returns {ol/Image} image layer to use for overviewMap
  */
 function getOvmLayer (id) {

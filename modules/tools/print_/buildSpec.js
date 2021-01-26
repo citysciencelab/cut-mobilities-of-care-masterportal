@@ -4,6 +4,10 @@ import {fromCircle} from "ol/geom/Polygon.js";
 import Feature from "ol/Feature.js";
 import {GeoJSON} from "ol/format.js";
 import {Image, Tile, Vector, Group} from "ol/layer.js";
+import store from "../../../src/app-store/index";
+import "./RadioBridge.js";
+import isObject from "../../../src/utils/isObject";
+import Geometry from "ol/geom/Geometry";
 
 const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype */{
     defaults: {
@@ -20,7 +24,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     initialize: function () {
         this.listenTo(Radio.channel("CswParser"), {
-            "fetchedMetaData": this.fetchedMetaData
+            "fetchedMetaDataForPrint": this.fetchedMetaData
         });
     },
 
@@ -34,6 +38,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (this.isOwnMetaRequest(this.get("uniqueIdList"), cswObj.uniqueId)) {
             this.removeUniqueIdFromList(this.get("uniqueIdList"), cswObj.uniqueId);
             this.updateMetaData(cswObj.layerName, cswObj.parsedData);
+            if (this.get("uniqueIdList").length === 0) {
+                Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+            }
         }
     },
 
@@ -182,7 +189,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getDrawLayerInfo: function (layer, extent) {
         const featuresInExtent = layer.getSource().getFeaturesInExtent(extent),
             features = Radio.request("Util", "sortBy", featuresInExtent, function (feature) {
-                return feature.getStyle().getZIndex();
+                if (feature.getStyle() && typeof feature.getStyle === "function" && typeof feature.getStyle().getZIndex === "function") {
+                    return feature.getStyle().getZIndex();
+                }
+                return 0;
             });
 
         if (features.length > 0) {
@@ -354,7 +364,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         symbolizers: []
                     };
                     if (geometryType === "Point" || geometryType === "MultiPoint") {
-                        styleObject.symbolizers.push(this.buildPointStyle(style, layer));
+                        if (style.getImage() !== null || style.getText() !== null) {
+                            styleObject.symbolizers.push(this.buildPointStyle(style, layer));
+                        }
                     }
                     else if (geometryType === "Polygon" || geometryType === "MultiPolygon") {
                         styleObject.symbolizers.push(this.buildPolygonStyle(style, layer));
@@ -386,7 +398,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         if (style.getImage() instanceof CircleStyle) {
             return this.buildPointStyleCircle(style.getImage());
         }
-        else if (style.getImage() instanceof Icon) {
+        else if (style.getImage() instanceof Icon && style.getImage().getScale() > 0) {
             return this.buildPointStyleIcon(style.getImage(), layer);
         }
         return this.buildTextStyle(style.getText());
@@ -426,7 +438,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             type: "point",
             graphicWidth: style.getSize()[0] * style.getScale(),
             graphicHeight: style.getSize()[1] * style.getScale(),
-            externalGraphic: this.buildGraphicPath() + this.getImageName(style.getSrc()),
+            externalGraphic: this.buildGraphicPath(style.getSrc()),
             graphicOpacity: layer.getOpacity()
         };
     },
@@ -434,14 +446,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * derives the url of the image from the server the app is running on
      * if the app is running on localhost the images from test.geoportal-hamburg.de are used
-     * @return {String} path to image directory
+     * @param {object} src the image source
+     * @return {String} path or url to image directory
      */
-    buildGraphicPath: function () {
-        let url = "https://test.geoportal-hamburg.de/lgv-config/img";
+    buildGraphicPath: function (src) {
         const origin = window.location.origin;
+        let url = Config.wfsImgPath + this.getImageName(src);
 
-        if (origin.indexOf("localhost") === -1) {
-            url = origin + "/lgv-config/img";
+        if (src.indexOf("http") === 0 && src.indexOf("localhost") === -1) {
+            url = src;
+        }
+        else if (src.charAt(0) === "/") {
+            url = origin + src;
+        }
+        else if (origin.indexOf("localhost") === -1) {
+            // backwards-compatibility:
+            url = origin + "/lgv-config/img" + this.getImageName(src);
         }
         return url;
     },
@@ -453,11 +473,13 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @returns {Object} - Text Style for mapfish print.
      */
     buildTextStyle: function (style) {
-        // There are different kinds of font definitions: One sets size and font and an other sets only the name. Both are used in masterportal.
-        const isFontSizeInFont = style.getFont().split(" ").length === 2 && style.getFont().split(" ")[0].endsWith("px"),
+        // use openlayers kml default font, if not set
+        const font = style.getFont() ? style.getFont() : "bold 16px Helvetica",
+            size = this.getFontSize(font),
+            isFontSizeInFont = size !== null,
             textScale = style.getScale() ? style.getScale() : 1,
-            fontSize = isFontSizeInFont ? style.getFont().split(" ")[0] : 10 * textScale,
-            fontFamily = isFontSizeInFont ? style.getFont().split(" ")[1] : style.getFont(),
+            fontSize = isFontSizeInFont ? size : 10 * textScale,
+            fontFamily = isFontSizeInFont ? this.getFontFamily(font, fontSize) : font,
             fontColor = style.getFill().getColor();
 
         return {
@@ -472,6 +494,34 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             fontFamily: fontFamily,
             labelAlign: this.getLabelAlign(style)
         };
+    },
+
+    /**
+     * Inspects the given fontDef for family.
+     * @param {String} fontDef the defined font
+     * @param {String} fontSize the size incuding in the font
+     * @returns {String} the font-family or an empty String if not contained
+     */
+    getFontFamily: function (fontDef, fontSize) {
+        const index = fontDef ? fontDef.indexOf(" ", fontDef.indexOf(fontSize)) : -1;
+
+        if (index > -1) {
+            return fontDef.substring(index + 1);
+        }
+        return "";
+    },
+    /**
+     * Inspects the given fontDef for numbers (=size).
+     * @param {String} fontDef the defined font
+     * @returns {String} the font-size or null if not contained
+     */
+    getFontSize: function (fontDef) {
+        const size = fontDef ? fontDef.match(/\d/g) : null;
+
+        if (Array.isArray(size) && size.length > 0) {
+            return size.join("");
+        }
+        return null;
     },
 
     /**
@@ -622,7 +672,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     getImageName: function (imageSrc) {
         const start = imageSrc.lastIndexOf("/");
 
-        return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start) : "/" + imageSrc;
+        return imageSrc.indexOf("/") !== -1 ? imageSrc.substr(start + 1) : "/" + imageSrc;
     },
 
     /**
@@ -662,6 +712,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             geojsonFormat = new GeoJSON();
         let convertedFeature;
 
+        // remove all object properties except geometry. Otherwise mapfish runs into an error
+        Object.keys(clonedFeature.getProperties()).forEach(property => {
+            if (isObject(clonedFeature.get(property)) && clonedFeature.get(property) instanceof Geometry === false) {
+                clonedFeature.unset(property);
+            }
+        });
         // take over id from feature because the feature id is not set in the clone.
         clonedFeature.setId(feature.getId());
         // circle is not suppported by geojson
@@ -688,7 +744,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         let styles;
 
         if (feature.getStyleFunction() !== undefined) {
-            styles = feature.getStyleFunction().call(feature);
+            try {
+                styles = feature.getStyleFunction().call(feature);
+            }
+            catch (e) {
+                styles = feature.getStyleFunction().call(this, feature);
+            }
         }
         else {
             styles = layer.getStyleFunction().call(layer, feature);
@@ -817,35 +878,37 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return hex.length === 1 ? "0" + hex : hex;
     },
     /**
-     * gets legendParams and builds legend object for mapfish print
+     * gets legend from legend vue store and builds legend object for mapfish print
      * @param  {Boolean} isLegendSelected flag if legend has to be printed
-     * @param  {Object[]}  legendParams params derived from legend module
      * @param {Boolean} isMetaDataAvailable flag to print metadata
      * @return {void}
      */
-    buildLegend: function (isLegendSelected, legendParams, isMetaDataAvailable) {
+    buildLegend: function (isLegendSelected, isMetaDataAvailable) {
         const legendObject = {},
-            metaDataLayerList = [];
+            metaDataLayerList = [],
+            legends = store.state.Legend.legends;
 
-        if (isLegendSelected && legendParams.length > 0) {
+        if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
-            legendParams.forEach(function (layerParam) {
+            legends.forEach(function (legendObj) {
+                const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
+
                 if (isMetaDataAvailable) {
-                    metaDataLayerList.push(layerParam.layername);
+                    metaDataLayerList.push(legendObj.name);
                 }
 
-                if (layerParam.legend && Array.isArray(layerParam.legend) && layerParam.legend.length > 0 && layerParam.legend[0].hasOwnProperty("img") && layerParam.legend[0].img.indexOf(".pdf") !== -1) {
+                if (legendContainsPdf) {
                     Radio.trigger("Alert", "alert", {
                         kategorie: "alert-info",
-                        text: "<b>Der Layer \"" + layerParam.layername + "\" enthält eine als PDF vordefinierte Legende. " +
+                        text: "<b>Der Layer \"" + legendObj.name + "\" enthält eine als PDF vordefinierte Legende. " +
                             "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
-                            "Sie können sich die vordefinierte Legende <a href='" + layerParam.legend[0].img + "' target='_blank'><b>hier</b></a> separat herunterladen."
+                            "Sie können sich die vordefinierte Legende aus der Legende im Menü separat herunterladen."
                     });
                 }
                 else {
                     legendObject.layers.push({
-                        layerName: layerParam.layername,
-                        values: this.prepareLegendAttributes(layerParam)
+                        layerName: legendObj.name,
+                        values: this.prepareLegendAttributes(legendObj.legend)
                     });
                 }
             }.bind(this));
@@ -853,11 +916,28 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         this.setShowLegend(isLegendSelected);
         this.setLegend(legendObject);
-        if (isMetaDataAvailable) {
+        if (isMetaDataAvailable && metaDataLayerList.length > 0) {
             metaDataLayerList.forEach(function (layerName) {
                 this.getMetaData(layerName);
             }.bind(this));
         }
+        else {
+            Radio.trigger("Print", "createPrintJob", encodeURIComponent(JSON.stringify(this.toJSON())));
+        }
+    },
+
+    legendContainsPdf: function (legend) {
+        return legend.some(legendPart => {
+            let isPdf = false;
+
+            if (typeof legendPart === "object") {
+                isPdf = legendPart.graphic.endsWith(".pdf");
+            }
+            else {
+                isPdf = legendPart.endsWith(".pdf");
+            }
+            return isPdf;
+        });
     },
 
     /**
@@ -879,163 +959,58 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             cswObj.keyList = ["date", "orgaOwner", "address", "email", "tel", "url"];
             cswObj.uniqueId = uniqueId;
 
-            Radio.trigger("CswParser", "getMetaData", cswObj);
+            Radio.trigger("CswParser", "getMetaDataForPrint", cswObj, layer);
         }
     },
 
     /**
      * Prepares Attributes for legend in mapfish-print template
-     * @param {Object} layerParam Params of layer.
+     * @param {Object} legend Legend of layer.
      * @returns {Object[]} - prepared legend attributes.
      */
-    prepareLegendAttributes: function (layerParam) {
-        const valuesArray = [],
-            typ = layerParam.legend && Array.isArray(layerParam.legend) && layerParam.legend.length > 0 ? layerParam.legend[0].typ : "";
+    prepareLegendAttributes: function (legend) {
+        const valuesArray = [];
 
-        if (typ === "WMS") {
-            valuesArray.push(this.createWmsLegendList(layerParam.legend[0].img));
-        }
-        else if (typ === "WFS") {
-            valuesArray.push(this.createWfsLegendList(layerParam.legend[0].img, layerParam.legend[0].legendname, layerParam.layerName));
-        }
-        else if (typ === "styleWMS") {
-            valuesArray.push(this.createStyleWmsLegendList(layerParam.legend[0].params));
-        }
+        legend.forEach(legendPart => {
+            const legendObj = {
+                    legendType: "",
+                    geometryType: "",
+                    imageUrl: "",
+                    color: "",
+                    label: legendPart.name
+                },
+                graphic = typeof legendPart === "object" ? legendPart.graphic : legendPart;
 
+            if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+                legendObj.legendType = "wmsGetLegendGraphic";
+                legendObj.imageUrl = graphic;
+            }
+            else if (graphic.indexOf("<svg") !== -1) {
+                legendObj.color = this.getFillColorFromSVG(graphic);
+                legendObj.legendType = "geometry";
+                legendObj.geometryType = "polygon";
+            }
+            else {
+                legendObj.legendType = "wfsImage";
+                legendObj.imageUrl = graphic;
+            }
+            if (typeof legendObj.color !== "undefined") {
+                valuesArray.push(legendObj);
+            }
+        });
         return [].concat(...valuesArray);
     },
 
     /**
-     * Creates the wms legend list for mapfish print
-     * @param {String[]} urls params for wms legend cration.
-     * @returns {Object[]} - prepared wms legens for mapfish print.
-     */
-    createWmsLegendList: function (urls) {
-        const wmsLegendList = [];
-        let legendUrls = urls;
-
-        if (typeof urls === "string") {
-            legendUrls = [legendUrls];
-        }
-
-        legendUrls.forEach(function (url) {
-            const wmsLegendObject = {
-                legendType: "wmsGetLegendGraphic",
-                geometryType: "",
-                imageUrl: url,
-                color: "",
-                label: ""
-            };
-
-            wmsLegendList.push(wmsLegendObject);
-        });
-        return wmsLegendList;
-    },
-
-    /**
-     * Creates wfs legend list for mapfish print
-     * @param {String|String[]} urls Urls of legends.
-     * @param {String[]} legendNames Names of legend.
-     * @param {String} layerName Name of layer.
-     * @returns {Object[]} - List of wfs legends to mapfish print template.
-     */
-    createWfsLegendList: function (urls, legendNames, layerName) {
-        const wfsLegendList = [];
-        let wfsLegendObject;
-
-        if (Array.isArray(urls)) {
-            urls.forEach(function (url, index) {
-                wfsLegendObject = this.createWfsLegendObject(url, legendNames[index]);
-                wfsLegendList.push(wfsLegendObject);
-            }.bind(this));
-        }
-        else {
-            wfsLegendObject = this.createWfsLegendObject(urls, layerName);
-            wfsLegendList.push(wfsLegendObject);
-        }
-
-        return wfsLegendList;
-    },
-
-    /**
-     * Creates legend object for wfs layer for mapfish print
-     * @param {String} url Url of image.
-     * @param {String} label Label.
-     * @returns {Object} - wfs legend object
-     */
-    createWfsLegendObject: function (url, label) {
-        const wfsLegendObject = {
-            legendType: "",
-            geometryType: "",
-            imageUrl: "",
-            color: "",
-            label: label
-        };
-
-        if (url.indexOf("<svg") !== -1) {
-            wfsLegendObject.color = this.getFillFromSVG(url);
-            wfsLegendObject.legendType = "geometry";
-            wfsLegendObject.geometryType = "polygon";
-        }
-        else {
-            wfsLegendObject.legendType = "wfsImage";
-            wfsLegendObject.imageUrl = this.createLegendImageUrl(url);
-        }
-
-        return wfsLegendObject;
-    },
-
-    /**
-     * Creates a legend list for all style wms styyled layers.
-     * @param {Object[]} legendObjects Special styleWMS params
-     * @returns {Object[]} - legend list from stlyed wms layer for mapfish print.
-     */
-    createStyleWmsLegendList: function (legendObjects) {
-        const styleWmsLegendList = [];
-
-        legendObjects.forEach(function (styleWmsParam) {
-            styleWmsLegendList.push({
-                legendType: "geometry",
-                geometryType: "polygon",
-                imageUrl: "",
-                color: styleWmsParam.color,
-                label: styleWmsParam.startRange + " - " + styleWmsParam.stopRange
-            });
-        });
-        return styleWmsLegendList;
-    },
-    /**
      * Returns Fill color from SVG as hex.
      * @param {String} svgString String of SVG.
-     * @returns {String} - Fill color as hex.
+     * @returns {String} - Fill color from SVG.
      */
-    getFillFromSVG: function (svgString) {
-        const indexOfFill = svgString.indexOf("fill:") + 5,
-            hexLength = 6 + 1;
-        let hexColor = "#000000";
-
-        if (svgString.indexOf("fill:") !== -1) {
-            hexColor = svgString.substring(indexOfFill, indexOfFill + hexLength);
+    getFillColorFromSVG: function (svgString) {
+        if (svgString.split(/fill:(.+)/)[1]) {
+            return svgString.split(/fill:(.+)/)[1].split(/;(.+)/)[0];
         }
-        return hexColor;
-    },
-
-    /**
-     * Creates the legend image url.
-     * @param {String} path Path.
-     * @returns {String} - Url for legend path.
-     */
-    createLegendImageUrl: function (path) {
-        let url = path,
-            image;
-
-        if (url.indexOf("http") === -1) {
-            url = this.buildGraphicPath();
-            image = path.substring(path.lastIndexOf("/"));
-            url = url + image;
-        }
-
-        return url;
+        return undefined;
     },
 
     /**

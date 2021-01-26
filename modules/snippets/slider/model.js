@@ -12,7 +12,11 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         displayName: undefined,
         ticks: [],
         withLabel: true,
-        errorMessage: "Text"
+        errorMessage: "Text",
+        // translations:
+        incorrectEntry: "",
+        from: "",
+        to: ""
     }),
 
     /**
@@ -37,6 +41,10 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
 
         // parent (SnippetModel) initialize
         this.superInitialize();
+        this.listenTo(Radio.channel("i18next"), {
+            "languageChanged": this.changeLang
+        });
+        this.changeLang(i18next.language);
         this.addValueModels(Math.min(...parsedValues), Math.max(...parsedValues));
         if (this.get("preselectedValues") !== null) {
             this.updateValues(this.get("preselectedValues"));
@@ -53,6 +61,19 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
             }
         });
     },
+    /**
+     * change language - sets default values for the language
+     * @param {String} lng - new language to be set
+     * @returns {Void} -
+     */
+    changeLang: function (lng) {
+        this.set({
+            "incorrectEntry": i18next.t("common:snippets.slider.incorrectEntry"),
+            "from": i18next.t("common:snippets.slider.from"),
+            "to": i18next.t("common:snippets.slider.to"),
+            "currentLng": lng
+        });
+    },
 
     /**
      * Add minValueModel and maxValueModel to valuesCollection
@@ -64,14 +85,14 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
         this.get("valuesCollection").add([
             new ValueModel({
                 attr: this.get("name"),
-                displayName: this.get("displayName") + " ab",
+                displayName: this.get("displayName") + this.get("from"),
                 value: min,
                 type: this.get("type"),
                 isMin: true
             }),
             new ValueModel({
                 attr: this.get("name"),
-                displayName: this.get("displayName") + " bis",
+                displayName: this.get("displayName") + this.get("to"),
                 value: max,
                 type: this.get("type"),
                 isMin: false
@@ -233,8 +254,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
      */
     errorMessage: function () {
         Radio.trigger("Alert", "alert", {
-            text: "<strong>Fehlerhafte Eingabe,"
-                + " Bitte eine ganze Zahl eingeben!</strong>",
+            text: "<strong>" + this.get("incorrectEntry") + "</strong>",
             kategorie: "alert-danger"
         });
     },
@@ -252,7 +272,7 @@ const SliderModel = SnippetModel.extend(/** @lends SliderModel.prototype */{
             return moment(value).format("HH:mm");
         }
         else if (type === "date") {
-            return moment(value).locale("de").format("D. MMMM YYYY");
+            return moment(value).locale(this.get("currentLng")).format("D. MMMM YYYY");
         }
         return value.toString();
     },

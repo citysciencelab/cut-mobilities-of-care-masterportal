@@ -11,6 +11,9 @@ const LayerView = Backbone.View.extend({
             "updateLightTree": function () {
                 this.$el.find("ul.layers").html("");
                 this.renderList();
+            },
+            "change:currentLng": () => {
+                this.render();
             }
         });
 
@@ -39,24 +42,22 @@ const LayerView = Backbone.View.extend({
         return this;
     },
     renderList: function () {
-        let models = this.collection.where({type: "layer"});
+        const models = this.collection.where({type: "layer"});
 
-        models = _.sortBy(models, function (model) {
-            return model.get("selectionIDX");
-        });
+        models.sort((modelA, modelB) => modelA.get("selectionIDX") - modelB.get("selectionIDX"));
         this.addViews(models);
     },
     addViews: function (models) {
         let childElement = {};
 
-        _.each(models, function (model) {
+        models.forEach(model => {
             if (!model.get("isNeverVisibleInTree")) {
                 if (model.get("isVisibleInTree") === true) {
                     childElement = new SingleLayerView({model: model}).render().$el;
                     this.$el.find("ul.layers").prepend(childElement);
                 }
             }
-        }, this);
+        });
     }
 });
 

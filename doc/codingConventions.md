@@ -1,109 +1,238 @@
-# Code-Konventionen
+# Coding conventions
 
-## Einleitung
-Als EntwicklerIn bist du natürlich stets motiviert, deinen Code nicht nur voll funktionstüchtig zu erstellen, sondern auch so nachhaltig wie möglich zu gestalten. Nachhaltigkeit umfasst eine Kombination aus Eigenschaften, welche auf den Prinzipien des "Clean Code" basieren und auch auf deinen Code zutreffen werden. Um möglichst objektiv entscheiden zu können, ob dein Code im ersten Anlauf die Hürde des Pull-Requests meistert, haben wir einen Linter sowie einige Konventionen definiert. Bei dem Linter handelt es sich um **[ESLint](https://eslint.org/)**. Die Konfigurationsdatei **[.eslintrc](../.eslintrc)** ist im Repository. Bei jedem Push werden automatisch Linter sowie Unittests ausgeführt. Beim Auftreten eines Fehlers wird ein Push verhindert. Die Konventionen sind in zwei Teile unterteilt. Ein Verstoß gegen eine Konvention aus Teil A führt zum Decline des Pull Requests. In Teil B sind Leitlinien formuliert, durch deren Einhaltung das Nachnutzen und Warten des Codes verbessert wird. Es wäre wünschenswert, wenn diese Leitlinien beachtet werden, sie sind aber nicht zwingend einzuhalten.
+## Introduction
 
-## Konventionen
+As developer, you're motivated to write your code not only fully functional, but as sustainable as possible. This encompasses a wide range of properties based on the "Clean Code" principles - which will hold true for your code.
 
-### Teil A
-Folgende Punkte müssen alle mit Ja beantwortet werden können:
+To decide as objectively as possible whether your code will pass its pull request, we're using a linter and defined a set of function.
 
-#### A.1 Linter und Funktionalität
-A.1.1 Der Code funktioniert im Internet Exporer 11+, Chrome und Firefox.  
-A.1.2 Der Code funktioniert in der mobilen Ansicht der jeweiligen Browser aus A.1.1.  
-A.1.3 Der Linter ist nicht deaktiviert.  
-A.1.4 Der Linter wirft keinen Fehler.  
-A.1.5 Dateien sind im Encoding "UTF-8".  
-A.1.6 Backbone: In Templates werden keine Pfeil-Funktionen genutzt.  
+For the linter, we use **[ESLint](https://eslint.org/)**, with its configuration file **[.eslintrc](../.eslintrc)** included in the repository. On each push, the linter and unit tests will run automatically. Should an error occur, the push is prevented.
+
+Our conventions are divided into two parts. Any violation of a section A convention does result in a pull request declined. Section B covers guidelines. Compliance with those improve the reusability and maintainability of the code. While not mandatory, please consider following these rules, too.
+
+## Conventions
+
+### Section A
+
+All the following rules must hold.
+
+#### A.1 Linter and functionality
+
+* A.1.1 The code works on Internet Explorer 11+, Chrome, and Firefox.
+* A.1.2 The code works on the mobile view of the browsers mentioned in A.1.1.
+* A.1.3 The linter is active.
+* A.1.4 The linter detects no errors.
+* A.1.5 Files are encoded `UTF-8`.
+* A.1.6 Backbone: No arrow functions are used in templates.
 
 ---
 
-#### A.2 Packages und Libraries
-A.2.1 Der Code nutzt die von *Geowerkstatt* eingesetzten Frameworks und Libraries und umgeht diese nicht.  
-A.2.2 Es wird kein *Underscore.js* benutzt, außer für den Aufruf _.template().  
-A.2.3 Es werden keine redundanten Packages eingebunden.  
-A.2.4 JQuery wird nur noch im Zusammenhang mit Backbone.js verwendet.  
-A.2.5 Das Hinzufügen großer Packages/Libraries ist mit dem Team *LGV* abgesprochen.  
+#### A.2 Packages and libraries
+
+* A.2.1 The code uses the frameworks and libraries set by *Geowerkstatt*; they are not bypassed.
+* A.2.2 No methods of *Underscore.js* are in use, except for calls to `_.template()`.
+* A.2.3 No redundant packages are installed.
+* A.2.4 JQuery is only to be used in combination with Backbone.js.
+* A.2.5 The addition of large packages/libraries has to be agreed on by the *LGV* team.
 
 ---
 
 #### A.3 Code
-A.3.1 Neue Dateien wurden gemäß der vorhandenen Struktur angelegt.  
-A.3.2 Variablen, Funktionen, Ordner, Dateien haben sprechende englische Namen.  
-A.3.3 Kommentare sind in englischer Sprache verfasst.  
-A.3.4 Block-Kommentare von Funktionen beschreiben stets deren Zweck.  
-A.3.5 Styles sind im .less Format verfasst.  
-A.3.6 Es wird kein !important in Styles benutzt.  
-A.3.7 Module und Komponenten beeinflussen lediglich das Verhalten und die Styles ihrer eigenen (Kind-) Elemente.  
-A.3.8 Es werden keine Styles mit JavaScript verändert.  
-A.3.9 Alle Styles haben eine modulabhängige ID als Präfix oder sind im "scoped" Modus verfasst.  
-A.3.10 Es gibt keine Inline-Styles.  
+
+* A.3.1 New files are created in accordance with the existing structure.
+* A.3.2 Names for variables, functions, folders, and files are in English and speaking.
+* A.3.3 Comments are written in English.
+* A.3.4 A function's block comment always describes its use.
+* A.3.5 Styles are written in the `.less` dialect.
+* A.3.6 No use of `important!` in styles.
+* A.3.7 Modules and components must only influence behavior and style of their own and child elements.
+* A.3.8 No style changes may happen via JavaScript.
+* A.3.9 All styles have a module dependant ID as prefix or are written in `scoped` mode.
+* A.3.10 No inline styles exist.
 
 ---
 
-#### A.4 Dokumentation im Code (JS-Doc)
-A.4.1 Die Dokumentationssprache ist Englisch.  
-A.4.2 Das Erstellen der Dokumentation mit npm run buildJsDoc wirft keine Fehler.  
-A.4.3 Backbone: Jede Funktion hat einen JSDoc-Block mit Beschreibung, Übergabeparametern, Rückgabewert und ggf. Events.  
-A.4.4 Backbone: Die Klassendefinition befindet sich über initialize() mit Angabe der Default-Werte. Alle Event-Listener, -Trigger und -Requests, die in der Klasse vorkommen, sind ebenfalls in der Klassendefinition dokumentiert.  
-A.4.5 Backbone: Wird von einer Klasse geerbt, existiert ein *lend* Kommentar.  
-A.4.6 Backbone: Namespaces wurden in der Datei **[namespaces.js](../devtools/jsdoc/namespaces.js)** definiert. Sie repräsentieren die Ordnerstruktur/Module des Codes.  
-A.4.7 Backbone: Events sind in der Datei **[events.js](../devtools/jsdoc/events.js)** definiert.  
+#### A.4 Code documentation (via JSDoc)
+
+* A.4.1 The documentation is written in English.
+* A.4.2 The documentation build via `npm run buildJsDoc` does not throw an error.
+* A.4.3 Backbone: For each function a JSDoc block comment with description, parameters, return value, and possibly events, is provided.
+* A.4.4 Backbone: Class definitions are located above the `initialize()` with specification of all default values. All event listeners, event triggers, and event requests occurring are part of the class documentation.
+* A.4.5 Backbone: If a class is inherited from, a *lend* comment exists.
+* A.4.6 Backbone: Namespaces are defined in **[namespaces.js](../devtools/jsdoc/namespaces.js)**. They represent the folder structure and modules of the code.
+* A.4.7 Backbone: Events are defined in **[events.js](../devtools/jsdoc/events.js)**.
 
 ---
 
-#### A.5 Unit-Tests
-A.5.1 Zu jeder unittestbaren Funktion existieren Unit-Tests.  
-A.5.2 Jedes Model hat eine Test-Datei, die mit **.test.js** (Backbone) oder **.spec.js** (Vue) endet und unter **[test/unittests/modules](../test/unittests/modules)** in der selben Ordnerstruktur wie der Code abgelegt wurde.  
-A.5.3 Jede Funktion hat mindestens einen Positiv-Test (Funktionsaufruf mit plausiblen Werten) und einen Negativ-Test (Funktionsaufruf mit unplausiblen Werten, z.B. *undefined*, *[]*, *{}*, *""*, ...).  
+#### A.5 Unit tests
+
+* A.5.1 Unit tests exist for each testable function.
+* A.5.2 For each module a test file exists with file extension `.test.js` (Backbone) or `.spec.js` (Vue). It lives in **[test/unittests/modules](../test/unittests/modules)** within a folder structure mirroring the code folder structure.
+* A.5.3 For each function a positive test (call with plausible values) and a negative test (call with bad values, e.g. `undefined`, `[]`, `{}`, `""`, ...).
 
 ---
 
-#### A.6 Abwärts-Kompatibilität und Konfigurierbarkeit
-A.6.1 Es gibt keine hartcodierten URL's und Pfade zu externen Quellen.  
-A.6.2 Konfigurierbare Parameter sind in den .md Dateien dokumentiert.  
-A.6.3 Alle bisherigen Konfigurationsparameter sind weiterhin verwendbar.  
-A.6.4 Parameter die umbenannt oder gelöscht werden sollen, sind als ```Deprecated``` markiert.  
+#### A.6 Backwards compatibility and configurability
+
+* A.6.1 No hard-coded URLs or paths to external sources exist.
+* A.6.2 Configurable parameters are documented in the `.md` files.
+* A.6.3 All previously noted configuration parameters can still be used as described.
+* A.6.4 Renamed or deleted parameters are marked `Deprecated`.
 
 ---
 
-#### A.7 Mehrsprachigkeit
-A.7.1 In allen relevanten Dateien ist die Mehrsprachigkeit erweitert oder hinzugefügt.  
-A.7.2 Sprachdateien sind in mindestens Englisch und Deutsch gepflegt.  
-A.7.3 Die Fallback-Sprache ist Deutsch.  
-A.7.4 Die Dokumentation (z.B. languages_de.md und languages_en.md) ist auf Englisch, Deutsch und der entsprechenden Sprache gepflegt.  
+#### A.7 Languages
+
+* A.7.1 Locales are extended in or added to all relevant files.
+* A.7.2 Locale files are maintained in at least English and German.
+* A.7.3 The fallback language is German.
+* A.7.4 The documentation is maintained in English, with the only exception being the `config.json.md`, which is also maintained in German as `config.json.de.md`.
 
 ---
 
 #### A.8 Changelog
-A.8.1 Die Sprache für Einträge im Changelog ist Deutsch.  
-A.8.2 Das Löschen oder Hinzufügen eines Features ist im Changelog erfasst.  
-A.8.3 Änderungen, welche das UI, Schnittstellen oder Konfigurationen ändern, sind im Changelog erfasst.  
-A.8.4 Einträge sind einer der folgenden Kategorien zugeordnet: Added, Changed, Deprecated, Removed, Fixed.   
+
+* A.8.1 The changelog language is English.
+* A.8.2 Deleting and adding features as well as fixing bugs is recorded in the changelog.
+* A.8.3 Changes regarding UI, interfaces, or configuration are recorded in the changelog.
+* A.8.4 Entries are assigned to one of the following categories: Added, Changed, Deprecated, Removed, Fixed.
+* A.8.5 Entries are to be written in simple language. Avoid jargon. The changelog is read by users and developers alike.
 
 ---
 
+#### A.9 File structure
+A.9.1 The file structure of new modules is to be created according to the following scheme:
+
+```bash
+src
+|--app-store
+|   |-- utils
+|   |-- actions.js
+|   |-- getters.js
+|   |-- index.js
+|   |-- mutations.js
+|   |-- state.js
+|   |-- test
+|
+|-- modules
+|   |-- exampleModule
+|   |   |-- components
+|   |   |   |-- ExampleModule.vue
+|   |   |   |-- ...
+|   |   |-- store
+|   |   |   |-- actionsExampleModule.js
+|   |   |   |-- constantsExampleModule.js
+|   |   |   |-- gettersExampleModule.js
+|   |   |   |-- indexExampleModule.js
+|   |   |   |-- mutationsExampleModule.js
+|   |   |   |-- stateExampleModule.js
+|   |   |
+|   |   |-- test
+|   |   |   |-- unit
+|   |   |   |   |-- components
+|   |   |   |   |   |-- exampleModule.spec.js
+|   |   |   |   |-- store
+|   |   |   |   |   |-- actionsExampleModule.spec.js
+|   |   |   |   |   |-- gettersExampleModule.spec.js
+|   |   |   |   |   |-- mutationsExampleModule.spec.js
+|   |   |   |-- end2end	(module-specific)
+|   |   |   |   |-- ExampleModule.e2e.js
+|   |
+|   |-- controls
+|   |   |-- ControlBar.vue
+|   |   |-- ControlIcon.vue
+|   |   |-- gettersControls.js
+|   |   |-- indexControls.js
+|   |   |-- mutationsControls.js
+|   |   |-- ...
+|   |   |-- exampleControl
+|   |   |   |-- components
+|   |   |   |-- store
+|   |   |   |-- test
+|   |
+|   |-- tools
+|   |   |-- actionsTool.js
+|   |   |-- indexTools.js
+|   |   |-- Tool.vue
+|   |   |-- exampleTool
+|   |   |   |-- components
+|   |   |   |-- store
+|   |   |   |-- test
+|   |
+|-- share-components
+|   |-- exampleShareComponent.vue
+|
+|-- test
+|   |--end2end
+|   |   |--exampleGlobalTest.e2e.js
+|
+|-- utils
+|   |-- exampleGlobalFunction.js
+|
+|-- addons.js
+|-- App.vue
+|-- MainNav.vue
+|-- MapRegion.vue
+```
+
 ---
 
-### Teil B (optional)
-Der Code ist so lesbar und verständlich wie möglich geschrieben. Das Ziel ist nicht, Zeilen zu sparen, sondern die Zeit der nachfolgenden EntwicklerInnen.
-#### B.1 Struktur
-B.1.1 Markup (Templates), Styles (CSS) und Logik (Controller) sind sauber voneinander getrennt.  
-B.1.2 Im Controller wird kein HTML erzeugt.  
-B.1.3 Der Code hat keine Redundanzen. ([No duplicated code / DRY](https://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself))  
-B.1.4 Funktionen, welche eine allgemeine, globale Verwendbarkeit aufweisen, sind in eine Helper Datei ausgelagert.  
-B.1.5 Jede Funktion erledigt nur *eine* und klar definierte Aufgabe. ([Curly's Law](https://de.wikipedia.org/wiki/Single-Responsibility-Prinzip))  
-B.1.6 Selbstdefinierte Funktionen verändern Werte nie per Referenz, sondern geben stets den ermittelten Wert zurück.  
-B.1.7 In Templates befindet sich keine Datenverändernde Logik und Geschäftslogik.  
-B.1.8 Vue: Datenpersistierung und Kommunikation erfolgt per VueX Store.  
+### Section B (optional)
+
+The code is written as readable and understandable as possible. The goal is not to save lines, but the time of future developers working on the code.
+
+#### B.1 Structure
+
+* B.1.1 Markup (templates), styles (CSS), and logic (controller) are written with clean separation of concerns.
+* B.1.2 The controller does not produce any HTML.
+* B.1.3 The code holds no redundancies. ([No duplicated code / DRY](https://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself))
+* B.1.4 Common functions with global applicability are store in a helper file.
+* B.1.5 Each function has *one* well-defined task. ([Curly's Law](https://de.wikipedia.org/wiki/Single-Responsibility-Prinzip))
+* B.1.6 Self-defined functions never change values by reference, but returns the calculated value.
+* B.1.7 Templates contain no data-modifying logic or business logic.
+* B.1.8 Vue: Persisting data and communicating is done via the VueX Store.
 
 ---
 
-#### B.2 Lesbarkeit und Nachvollziehbarkeit
-B.2.1 Der Code wurde so einfach wie möglich geschrieben. ([KISS](https://de.wikipedia.org/wiki/KISS-Prinzip))  
-B.2.2 Im Code werden wenn möglich Pfeil-Funktionen genutzt. Es gibt kein unnötiges Mitschleifen des This-Contextes.  
-B.2.3 Funktionsparameter und Properties haben wenn möglich definierte Standardwerte.  
-B.2.4 Es werden native Ecma-Script Funktionen und Objekte genutzt.  
-B.2.5 Die Typprüfung erfolgt mit typeof, instanceof und Array.isArray() sowie "===".  
+#### B.2 Readability and comprehensibility
+
+* B.2.1 The code is written as simple as possible. ([KISS](https://de.wikipedia.org/wiki/KISS-Prinzip))
+* B.2.2 Arrow functions are used whenever possible. The `this` context is not dragged along unnecessarily.
+* B.2.3 Function parameters and properties have defined default values where applicable.
+* B.2.4 Native ECMAScript functions and objects are used.
+* B.2.5 Type checks are done with `typeof`, `instanceof`, `Array.isArray()`, and `===`.
+
+---
+
+#### B.3 Vue Best Practice
+
+* B.3.1 Vue components in the `share-components` folder contain comments according to the [Vue Styleguidist](https://vue-styleguidist.github.io/).
+* B.3.2 Backbone Radio - New Vue modules should avoid using the `Backbone.Radio` where possible. Radio events in old modules can be replaced with VueX store interaction.
+* B.3.3 For requests it is recommended to use the library Axios.
+
+---
+
+#### B.4 Vue Best Practice - State management
+* B.4.1 For simple getters and mutations the generator functions provided in `./src/app-store/utils/generator.js` are used.
+* B.4.2 The VueX helper functions (`mapGetters`, `mapMutations`, ...) are used to integrate store data into components.
+
+---
+
+#### B.5 Vue Best Practice - Style
+
+* B.5.1 Use `scoped` within the style tag whenever possible.
+* B.5.2 Avoid usage of the `!important` keyword.
+* B.5.3 Avoid setting `width` and `height` to absolute values, as this hinders designing responsively.
+* B.5.4 The global less file `variables.less` contains all variables required by *BootstrapV3* and the Masterportal. All theming variables (fonts, colors, ...) are maintained here. The file `variables.less` must only contain variables, mixins, and functions. Adding CSS rules would result in a repetition per import, bloating the CSS size. The `variables.less` is imported to a component's style tag by using the `import` command.
+
+---
+
+#### B.6 Error message output
+
+* B.6.1 Make use of the module *Alerting*.
+* B.6.2 Write a speaking error that describes to the user what has gone wrong. Provide the message in multiple languages.
+* B.6.3 Only display errors when relevant to the user and the user's current work step.
+* B.6.4 When communicating an error to the user, include what went wrong, why it went wrong, and what can be done to resolve the situation. If the user has no option to rectify the situation, reconsider whether the error needs to be communicated at all.
+* B.6.5 For technical details use `console.error()` or `console.warn()` and print information in English for your fellow developers.
 
 ---

@@ -1,5 +1,6 @@
 import Layer from "./model";
 import {getTilesetStyle} from "./tilesetHelper";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 /**
  * @type {symbol}
@@ -17,14 +18,15 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @constructs
      * @memberof Core.ModelList.Layer.Tileset
      * @property {Object} [vectorStyle="undefined"] vectorStyle
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @listens Core#RadioTriggerMapChange
      * @fires Core#RadioRequestIsMap3d
      * @fires Core#RadioRequestGetMap3d
      */
-    defaults: _.extend({}, Layer.prototype.defaults, {
+    defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["3D"],
         showSettings: false,
-        selectionIDX: -1,
+        useProxy: false,
         /**
          * [cesium3DTilesetDefaults description]
          * @link https://cesiumjs.org/Cesium/Build/Documentation/Cesium3DTileset.html
@@ -108,6 +110,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
             if (this.get("isSelected") === true) {
                 if (!map3d.getCesiumScene().primitives.contains(tileset)) {
                     map3d.getCesiumScene().primitives.add(tileset);
+                    this.createLegend();
                 }
             }
         }
@@ -119,9 +122,16 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     prepareLayerObject: function () {
-        const options = this.combineOptions(this.get("cesium3DTilesetOptions"), this.get("url")),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            options = this.combineOptions(this.get("cesium3DTilesetOptions"), url),
             tileset = new Cesium.Cesium3DTileset(options);
 
+        tileset.style = this.styling();
         this.setTileSet(tileset);
 
         tileset.tileVisible.addEventListener(this.applyStyle.bind(this));
@@ -130,21 +140,66 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
         });
     },
 
+    styling: function () {
+        const styleModel = this.get("styleId") ? Radio.request("StyleList", "returnModelById", this.get("styleId")) : undefined;
+        let style;
+
+        if (styleModel) {
+            style = new Cesium.Cesium3DTileStyle({
+                color: {
+                    conditions: styleModel.createStyle()
+                }
+            });
+        }
+        return style;
+    },
+
     /**
-     * Combines default and config settings
+     * Creates the legend
+     * @fires VectorStyle#RadioRequestStyleListReturnModelById
+     * @returns {void}
+     */
+    createLegend: function () {
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        let legend = this.get("legend");
+
+        /**
+         * @deprecated in 3.0.0
+         */
+        if (this.get("legendURL")) {
+            if (this.get("legendURL") === "") {
+                legend = true;
+            }
+            else if (this.get("legendURL") === "ignore") {
+                legend = false;
+            }
+            else {
+                legend = this.get("legendURL");
+            }
+        }
+
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
+            this.setLegend(styleModel.getLegendInfos());
+        }
+        else if (typeof legend === "string") {
+            this.setLegend([legend]);
+        }
+    },
+
+    /**
+     * Combines default and config settings ignoring optional url parameter.
      * @param   {object} cesium3DTilesetOptions config settings
-     * @param   {string} url                    url
+     * @param   {string} fullurl fullurl
      * @returns {object} combinedOptions
      */
-    combineOptions: function (cesium3DTilesetOptions, url) {
-        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions);
+    combineOptions: function (cesium3DTilesetOptions, fullurl) {
+        const options = Object.assign(this.get("cesium3DTilesetDefaults"), cesium3DTilesetOptions),
+            url = fullurl.split("?")[0] + "/tileset.json";
 
-        if (url && url.endsWith("tileset.json")) {
-            options.url = url;
-        }
-        else {
-            options.url = url + "/tileset.json";
-        }
+        options.url = url;
 
         return options;
     },
@@ -174,7 +229,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     isLayerValid: function () {
-        return this.get("tileset") !== undefined;
+        return this.get("tileSet") !== undefined;
     },
 
     /**
@@ -183,7 +238,7 @@ TileSetLayer = Layer.extend(/** @lends TileSetLayer.prototype */{
      * @override
      */
     isLayerSourceValid: function () {
-        return !_.isUndefined(this.get("tileset"));
+        return this.isLayerValid();
     },
 
     /**

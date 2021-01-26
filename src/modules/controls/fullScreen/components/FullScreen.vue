@@ -55,7 +55,10 @@ function closeFullScreen () {
 }
 
 
-/** @returns {boolean} whether the browser is currently in fullscreen mode */
+/**
+ * checks if the browser is currently in fullscreen
+ * @returns {Boolean}  true - the browser is currently in fullscreen mode
+ */
 function isFullScreen () {
     return Boolean(
         document.fullscreenElement ||

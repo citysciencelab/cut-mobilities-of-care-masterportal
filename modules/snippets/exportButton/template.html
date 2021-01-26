@@ -1,1 +1,3 @@
-<button type="button" class="btn btn-primary"><span id="glyphicon" class="glyphicon glyphicon-export" style="margin-right: 5px;"></span><%= tag %></button>
+<button type="button" style="outline:none;" class="btn btn-primary" <% if(disabled) { print('disabled');} %>>
+    <span id="glyphicon" class="glyphicon glyphicon-download" style="margin-right: 5px;"></span><%= tag %>
+</button>

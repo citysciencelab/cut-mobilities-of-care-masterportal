@@ -1,5 +1,6 @@
 import {unByKey as unlistenByKey} from "ol/Observable.js";
 import VectorLayer from "ol/layer/Vector.js";
+import Cluster from "ol/source/Cluster.js";
 import {Group as LayerGroup} from "ol/layer.js";
 import VectorSource from "ol/source/Vector.js";
 import MapView from "./mapView";
@@ -11,13 +12,14 @@ import {createMap} from "masterportalAPI";
 import {getLayerList} from "masterportalAPI/src/rawLayerList";
 import {transformToMapProjection} from "masterportalAPI/src/crs";
 import {transform as transformCoord, transformFromMapProjection, getMapProjection} from "masterportalAPI/src/crs";
-import Store from "../../src/app-store";
+import store from "../../src/app-store";
 import WMTSLayer from "./modelList/layer/wmts";
 
 const map = Backbone.Model.extend(/** @lends map.prototype */{
     defaults: {
         initialLoading: 0,
-        shadowTime: null
+        shadowTime: null,
+        timeoutReference: null
     },
 
     /**
@@ -63,16 +65,13 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * @fires Core.ModelList#RadioTriggerModelListAddInitiallyNeededModels
      * @fires Core#RadioRequestParametricURLGetZoomToExtent
      * @fires Core#RadioTriggerMapIsReady
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
      * @fires Core#RadioTriggerMapViewSetCenter
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @fires Core#RadioTriggerMapChange
      * @fires Core#RadioTriggerObliqueMapDeactivate
      * @fires Core#RadioTriggerMapBeforeChange
-     * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core#RadioRequestMapViewGetProjection
      * @fires Core#RadioRequestMapClickedWindowPosition
-     * @fires Alerting#RadioTriggerAlertAlertRemove
      * @fires Core#RadioTriggerMapCameraChanged
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @fires Core#RadioTriggerUtilHideLoadingModule
@@ -120,11 +119,16 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             "setBBox": this.setBBox,
             "render": this.render,
             "zoomToExtent": this.zoomToExtent,
+            "zoomToProjExtent": this.zoomToProjExtent,
             "zoomToFilteredFeatures": this.zoomToFilteredFeatures,
             "registerListener": this.registerListener,
             "unregisterListener": this.unregisterListener,
             "updateSize": function () {
-                this.get("map").updateSize();
+                // avoid expensive updateSize() spamming
+                clearTimeout(this.get("timeoutReference"));
+                this.set("timeoutReference", setTimeout(() => {
+                    this.get("map").updateSize();
+                }, 100));
             }
         }, this);
 
@@ -171,10 +175,8 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         Radio.trigger("ModelList", "addInitiallyNeededModels");
 
         if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
-            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"));
+            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"), {}, Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
-
-        this.showMouseMoveText();
 
         Radio.trigger("Map", "isReady", "gfi", false);
 
@@ -203,8 +205,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      * Function is registered as an event listener if the config-parameter "inputMap" is present
      * and always sets a mapMarker at the clicked position without activating it.
      * Also triggers the RemoteInterface with the marker coordinates.
-     * @param  {event} event - The MapBrowserPointerEvent
-     * @fires MapMarker#RadioTriggerMapMarkerShowMarker
+     * @param  {event} event - The MapBrowserPointerEventShowMarker
      * @fires Core#RadioTriggerMapViewSetCenter
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      * @returns {void}
@@ -212,8 +213,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     addMarker: function (event) {
         let coords = event.coordinate;
 
-        // Set the marker on the map.
-        Radio.trigger("MapMarker", "showMarker", coords);
+        store.dispatch("MapMarker/placingPointMarker", coords);
 
         // If the marker should be centered, center the map around it.
         if (Config.inputMap.setCenter) {
@@ -442,7 +442,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         let layerModel;
 
         if (layer) {
-            layerModel = Radio.request("ModelList", "getModelByAttributes", {"name": layer.get("name")});
+            layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
         }
 
         // if the layer is already at the correct position, do nothing
@@ -456,12 +456,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         // Laden des Layers überwachen
         if (layer instanceof LayerGroup) {
             layer.getLayers().forEach(function (singleLayer) {
+                /* NOTE
+                 * Broken. channel.trigger is called immediately and returns undefined.
+                 * However, depending on the config, the loader will not disappear without this toggle.
+                 * (e.g. if only one WMTS without optionsFromCapabilities is set)
+                 */
                 singleLayer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
                 singleLayer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
             });
         }
         else if (layerModel instanceof WMTSLayer) {
-            if (layerModel.attributes.optionsFromCapabilities) {
+            if (layerModel.attributes.optionsFromCapabilities && !layerModel.hasBeenActivatedOnce) {
+                /* Additional guard: "addLayerToIndex" is called about 3 times on startup,
+                 * but addLoadingLayer should only be called once */
+                layerModel.hasBeenActivatedOnce = true;
                 // wmts source will load asynchonously
                 // -> source=null at this step
                 // listener to remove loading layer is set in WMTS class (on change:layerSource)
@@ -469,6 +477,11 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             }
         }
         else {
+            /* NOTE
+             * Broken. channel.trigger is called immediately and returns undefined.
+             * However, depending on the config, the loader will not disappear without this toggle.
+             * (e.g. if only one WMTS without optionsFromCapabilities is set)
+             */
             layer.getSource().on("wmsloadend", channel.trigger("removeLoadingLayer"), this);
             layer.getSource().on("wmsloadstart", channel.trigger("addLoadingLayer"), this);
         }
@@ -508,24 +521,40 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} extent - todo
-     * @param {*} options - todo
+     * Zoom to a given extent
+     * @param {String[]} extent - The extent to zoom.
+     * @param {Object} options - Options for zoom.
+     * @param {string} urlProjection - The projection from RUL parameter.
      * @returns {void}
      */
-    zoomToExtent: function (extent, options) {
-        let extentToUse = extent;
-        const projectionGiven = Radio.request("ParametricURL", "getProjectionFromUrl");
+    zoomToExtent: function (extent, options, urlProjection) {
+        let extentToZoom = extent;
 
-        if (typeof projectionGiven !== "undefined") {
+        if (urlProjection !== undefined) {
             const leftBottom = extent.slice(0, 2),
                 topRight = extent.slice(2, 4),
-                transformedLeftBottom = transformToMapProjection(this.get("map"), projectionGiven, leftBottom),
-                transformedTopRight = transformToMapProjection(this.get("map"), projectionGiven, topRight);
+                transformedLeftBottom = transformToMapProjection(this.get("map"), urlProjection, leftBottom),
+                transformedTopRight = transformToMapProjection(this.get("map"), urlProjection, topRight);
 
-            extentToUse = transformedLeftBottom.concat(transformedTopRight);
+            extentToZoom = transformedLeftBottom.concat(transformedTopRight);
         }
-        this.get("view").fit(extentToUse, {size: this.get("map").getSize(), ...options});
+
+        this.get("view").fit(extentToZoom, {
+            size: this.get("map").getSize(),
+            duration: options && options.hasOwnProperty("duration") ? options.duration : 800,
+            ...options
+        });
+    },
+
+    /**
+     * Zoom to a given extent, this function allows to give projection of extent via remote interface
+     * @param {Object} data - contains extent as String[], options as Object and projection as string
+     * @returns {void}
+     */
+    zoomToProjExtent: function (data) {
+        if (data.extent !== undefined && data.options !== undefined && data.projection !== undefined) {
+            this.zoomToExtent(data.extent, data.options, data.projection);
+        }
     },
 
     /**
@@ -549,12 +578,20 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
             });
         }
         else if (layer !== undefined && olLayer.getSource() !== undefined) {
-            layerFeatures = olLayer.getSource().getFeatures();
+            let source = olLayer.getSource();
+
+            // if source is cluster, the ids to filter by in the following code are one source deeper
+            if (source instanceof Cluster) {
+                source = source.getSource();
+            }
+
+            layerFeatures = source.getFeatures();
         }
 
         features = layerFeatures.filter(function (feature) {
             return ids.indexOf(feature.getId()) > -1;
         });
+
         if (features.length > 0) {
             extent = this.calculateExtent(features);
             this.zoomToExtent(extent);
@@ -668,28 +705,6 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         return this.get("map").getOverlayById(id);
     },
 
-    /** This function allows the hover text to be hovered so that the text could be copied
-     * a new class "hoverText" will be inserted by mouseover and removed by mouseout
-     * @returns {void}
-     */
-    showMouseMoveText: function () {
-    // Firefox & Safari.
-        $(".ol-overlaycontainer-stopevent").on("mousemove, touchmove, pointermove", function () {
-            const overlayContainer = $(this).find(".ol-overlay-container.ol-selectable"),
-                tooltip = overlayContainer.find(".tooltip");
-
-            overlayContainer.mouseover(function () {
-                overlayContainer.addClass("hoverText");
-            });
-
-            tooltip.mouseout(function () {
-                if (overlayContainer.hasClass("hoverText")) {
-                    overlayContainer.removeClass("hoverText");
-                }
-            });
-        });
-    },
-
     /**
      * Setter for the map.
      * @param {ol/map} value - The map.
@@ -697,7 +712,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
      */
     setMap: function (value) {
         this.set("map", value);
-        Store.dispatch("Map/setMap", {map: value});
+        store.dispatch("Map/setMap", {map: value});
     }
 
 });

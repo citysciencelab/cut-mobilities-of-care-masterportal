@@ -5,6 +5,7 @@
 *.sass-cache
 .DS_Store
 .env
+.idea
 .vscode
 /img/*.db
 /jsdoc
@@ -26,6 +27,9 @@ dist
 examples*
 
 examples.zip
+portal/master
+portal/masterCustom
+portal/masterDefault
 
 jshintrc
 lgv-config
@@ -42,3 +46,10 @@ debug.log
 devtools/proxyconf.json
 lintfixed.html
 npm-debug.log
+
+# ignore all dev portals except the four standard portals
+/portal/*
+!/portal/basic
+!/portal/master
+!/portal/masterCustom
+!/portal/masterDefault

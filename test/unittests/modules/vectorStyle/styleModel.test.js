@@ -212,7 +212,7 @@ describe("vectorStyleModel", function () {
     before(function () {
         styleModel = new Model();
         utilModel = new Util();
-        xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse();
+        xmlDescribeFeatureType = utilModel.getDescribeFeatureTypeResponse("resources/testDescribeFeatureTypeResponse.xml");
         jsonObjects = geojsonReader.readFeatures(jsonFeatures);
     });
 
@@ -501,7 +501,7 @@ describe("vectorStyleModel", function () {
             expect(styleModel.createLegendLabel(rules2[1], {})).to.equal("test1");
         });
         it("should return label from legendValue", function () {
-            expect(styleModel.createLegendLabel(rules2[1], {legendValue: "myLabel"})).to.equal("myLabel");
+            expect(styleModel.createLegendLabel(rules2[1], {attributes: {legendValue: "myLabel"}})).to.equal("myLabel");
         });
         it("should return null without conditions or legendValue", function () {
             expect(styleModel.createLegendLabel(rules2[2], {})).to.be.null;

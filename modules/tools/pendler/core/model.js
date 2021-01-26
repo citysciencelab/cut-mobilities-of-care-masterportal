@@ -1,8 +1,14 @@
 import Tool from "../../../core/modelList/tool/model";
+import {Stroke, Style, Text} from "ol/style.js";
+import {extend as olExpandExtent} from "ol/extent.js";
+import {Point} from "ol/geom.js";
+import Feature from "ol/Feature.js";
 import {WFS} from "ol/format.js";
+import store from "../../../../src/app-store";
+import getProxyUrl from "../../../../src/utils/getProxyUrl";
 
 const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
-    defaults: _.extend({}, Tool.prototype.defaults, {
+    defaults: Object.assign({}, Tool.prototype.defaults, {
         kreis: "",
         kreise: [],
         pendlerLegend: [],
@@ -16,12 +22,14 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             VERSION: "1.1.0",
             maxFeatures: "10000"
         },
-        featureType: "mrh_einpendler_gemeinde",
+        wfsappGemeinde: "mrh_einpendler_gemeinde",
+        wfsappKreise: "mrh_pendler_kreise",
+        featureType: "mrh_pendler_kreise",
+        trefferAnzahl: "top5",
         attrAnzahl: "anzahl_einpendler",
         attrGemeinde: "wohnort",
-        alertId: "",
-        attributionText: "<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
-            "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>"
+        attrGemeindeContrary: "arbeitsort",
+        useProxy: false
     }),
     /**
      * @class PendlerCoreModel
@@ -44,9 +52,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @property {String} featureType= "mrh_einpendler_gemeinde" name of a feature type
      * @property {String} attrAnzahl="anzahl_einpendler" name of the attribute for count of commuter
      * @property {String} attrGemeinde="wohnort" name of the attribute called 'gemeinde'
-     * @property {String} alertId="" id of an alert before download
-     * @property {String} attributionText="<b>Die Daten dürfen nicht für gewerbliche Zwecke genutzt werden.</b><br>" +
-            "Quelle: Bundesagentur für Arbeit - <a href='https://statistik.arbeitsagentur.de/' target='_blank'>https://statistik.arbeitsagentur.de/</a>" text to show as an attribution
+     * @property {Boolean} useProxy=false Attribute to request the URL via a reverse proxy.
      * @fires //todo
      * @listens Alerting#RadioTriggerAlertConfirmed
      */
@@ -64,18 +70,19 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             "change:isActive": function (model, value) {
                 if (value) {
                     this.resetWindow();
-                    Radio.trigger("Attributions", "createAttribution", model.get("name"), this.get("attributionText"), "Pendler");
+                    Radio.trigger("Attributions", "createAttribution", model.get("name"), i18next.t("common:modules.tools.pendler.general.attributionText"), "Pendler");
                 }
                 else {
-                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), this.get("attributionText"), "Pendler");
+                    Radio.trigger("Attributions", "removeAttribution", model.get("name"), i18next.t("common:modules.tools.pendler.general.attributionText"), "Pendler");
                 }
             }
         });
 
         this.listenTo(this, {
             "change:kreis": function (model, value) {
-                this.unset("gemeinde");
+                this.setFeatureType(this.get("wfsappKreise"));
                 this.unset("direction", {silent: true});
+                this.unset("gemeinde");
                 this.clear();
                 this.setParams({
                     REQUEST: "GetFeature",
@@ -86,8 +93,12 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                 });
                 this.sendRequest("GET", this.get("params"), this.parseGemeinden);
             },
+            "change:featureType": function () {
+                this.unset("gemeinde", {silent: true});
+                this.unset("direction");
+                this.clear();
+            },
             "change:gemeinde": function () {
-                this.unset("trefferAnzahl", {silent: true});
                 this.unset("direction", {silent: true});
                 this.clear();
             },
@@ -101,22 +112,21 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
                 this.clear();
                 if (value === "arbeitsort") {
                     this.setAttrGemeinde("wohnort");
+                    this.setAttrGemeindeContrary("arbeitsort");
                 }
                 else {
                     this.setAttrGemeinde("arbeitsort");
+                    this.setAttrGemeindeContrary("wohnort");
                 }
-                this.createPostBody(value);
+
+                const literal = this.get("featureType") === this.get("wfsappGemeinde") ? this.get("gemeinde") : this.get("kreis");
+
+                this.createPostBody(this.get("featureType"), value, literal);
             },
             "change:postBody": function (model, value) {
-                this.sendRequest("POST", value, this.parseFeatures);
-            }
-        });
-        this.listenTo(Radio.channel("Alert"), {
-            "confirmed": function (id) {
-                if (id === this.get("alertId")) {
-                    this.download();
-                }
-                this.setAlertId("");
+                this.sendRequest("POST", value, data => {
+                    this.parseFeatures(data, this.get("featureType"));
+                });
             }
         });
         this.sendRequest("GET", this.get("params"), this.parseKreise);
@@ -130,10 +140,15 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @returns {void}
      */
     sendRequest: function (type, data, successFunction) {
-        const url = this.get("url");
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url");
 
         $.ajax({
-            url: Radio.request("Util", "getProxyURL", url),
+            url: url,
             data: data,
             contentType: "text/xml",
             type: type,
@@ -163,7 +178,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         Radio.trigger("MapView", "setCenter", coords, this.get("zoomLevel"));
 
         if (setMarker) {
-            Radio.trigger("MapMarker", "showMarker", coords);
+            store.dispatch("MapMarker/placingPointMarker", coords);
         }
     },
 
@@ -178,11 +193,12 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             hits = $("gml\\:featureMember,featureMember", data);
         let kreis;
 
-        _.each(hits, function (hit) {
+        hits.toArray().forEach(hit => {
             kreis = $(hit).find("app\\:kreisname,kreisname")[0].textContent;
             kreise.push(kreis);
         });
-        this.setKreise(_.without(kreise.sort(), "Bremen", "Berlin", "Kiel", "Hannover"));
+
+        this.setKreise(kreise.sort().filter(feature => !["Bremen", "Berlin", "Kiel", "Hannover"].includes(feature)));
         if (this.get("isActive")) {
             this.trigger("render", this, true);
         }
@@ -198,7 +214,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
             hits = $("wfs\\:member,member", data);
         let gemeinde;
 
-        _.each(hits, function (hit) {
+        hits.toArray().forEach(hit => {
             gemeinde = $(hit).find("app\\:gemeinde,gemeinde")[0].textContent;
             gemeinden.push(gemeinde);
         });
@@ -207,13 +223,14 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
     /**
      * Success Funktion für die Features
-     * @param  {ojbect} data - Response
+     * @param  {Object} data - Response
+     * @param {String} featureType the featureType to use as Query typeName, without app-prefix
      * @returns {void}
      */
-    parseFeatures: function (data) {
+    parseFeatures: function (data, featureType) {
         const wfsReader = new WFS({
             featureNS: "http://www.deegree.org/app",
-            featureType: this.get("featureType")
+            featureType
         });
 
         this.setLineFeatures(wfsReader.readFeatures(data));
@@ -247,7 +264,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         }
 
         // Gebe eine nach <limit> Einträgen abgeschnittene Liste zurück
-        return _.first(features, limit);
+        return features.slice(0, limit);
     },
 
     /**
@@ -257,28 +274,27 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     selectFeatures: function (rawFeatures) {
         // Sortiere nach Anzahl der Pendler
-        const sortedFeatures = _.sortBy(rawFeatures, function (feature) {
-            // Verwende die Gegenzahl als Wert zur Sortierung, um absteigende Reihenfolge zu erhalten.
-            return feature.get(this.get("attrAnzahl")) * -1;
-        }, this);
+        rawFeatures.sort((featureA, featureB) => (featureA.get(this.get("attrAnzahl")) * -1) - (featureB.get(this.get("attrAnzahl")) * -1));
 
         // Schneide Liste gemäß gewähltem Top ab
-        return this.truncateFeatureList(sortedFeatures, this.get("trefferAnzahl"));
+        return this.truncateFeatureList(rawFeatures, this.get("trefferAnzahl"));
     },
 
     /**
      * Bereite den Inhalt der Abfrage an den WFS vor.
+     * @param {String} featureType the featureType to use as Query typeName, without app-prefix
      * @param {String} value Abzufragender Schlüssel (im Falle des Pendler-Tools: "Wohnort" oder "Arbeitsplatz")
+     * @param {String} literal the location to lookup
      * @returns {void} Kein Rückgabewert
      */
-    createPostBody: function (value) {
+    createPostBody: function (featureType, value, literal) {
         const postBody = "<?xml version='1.0' encoding='UTF-8' ?>" +
             "<wfs:GetFeature service='WFS' version='1.1.0' xmlns:app='http://www.deegree.org/app' xmlns:wfs='http://www.opengis.net/wfs' xmlns:ogc='http://www.opengis.net/ogc'>" +
-            "<wfs:Query typeName='app:" + this.get("featureType") + "'>" +
+            "<wfs:Query typeName='app:" + featureType + "'>" +
             "<ogc:Filter>" +
             "<ogc:PropertyIsEqualTo>" +
             "<ogc:PropertyName>app:" + value + "</ogc:PropertyName>" +
-            "<ogc:Literal>" + this.get("gemeinde") + "</ogc:Literal>" +
+            "<ogc:Literal>" + literal + "</ogc:Literal>" +
             "</ogc:PropertyIsEqualTo>" +
             "</ogc:Filter>" +
             "</wfs:Query>" +
@@ -294,18 +310,17 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         this.setPostBody(postBody);
     },
     /**
-     * Creates a confirmable alert with the 'attributionText'
+     * Creates a confirmable alert with the csvDownloadConfirm text
      * @returns {void}
      */
     createAlertBeforeDownload: function () {
-        const alertId = "PendlerDownload";
-
-        this.setAlertId(alertId);
         Radio.trigger("Alert", "alert", {
-            id: alertId,
-            text: this.get("attributionText"),
-            dismissable: false,
-            confirmable: true
+            category: "common:modules.alerting.categories.warning",
+            confirmText: "common:button.download",
+            content: this.get("attributionText"),
+            displayClass: "warning",
+            legacy_onConfirm: this.download.bind(this),
+            mustBeConfirmed: true
         });
     },
     /**
@@ -319,8 +334,8 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         let csv = "",
             blob = "";
 
-        features.forEach(function (feature) {
-            featurePropertyList.push(_.omit(feature.getProperties(), "geom_line"));
+        features.forEach(feature => {
+            featurePropertyList.push(Radio.request("Util", "omit", feature.getProperties(), ["geom_line"]));
         });
         csv = Radio.request("Util", "convertArrayOfObjectsToCsv", featurePropertyList);
         blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
@@ -359,6 +374,139 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
         }
     },
+
+    /**
+     * adds the label for the center of the lines/animations
+     * @param {Function} getLabelText a function (ol/Feature) to get the text for the label with
+     * @param {ol/Feature[]} features an array of ol/Feature - the first entry is used to determine the center point (using this.get("direction"))
+     * @param {ol/layer/Vector} layer the layer to add the new feature to
+     * @returns {void}
+     */
+    addCenterLabelToLayer: function (getLabelText, features, layer) {
+        if (typeof getLabelText !== "function" || !Array.isArray(features)) {
+            return;
+        }
+        const feature = features[0],
+            coordinates = feature.getGeometry().getCoordinates(),
+            // Ob die Features bei der Startposition oder der Endposition gezeichnet werden müssen,
+            // ist abhängig von der Anzahl der Durchgänge
+            drawIndex = this.get("direction") === "wohnort" ? 0 : coordinates.length - 1,
+            currentPoint = new Point(coordinates[drawIndex]),
+            newFeature = new Feature(currentPoint);
+
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        newFeature.setStyle(new Style({
+            text: new Text({
+                text: getLabelText(feature),
+                font: "10pt sans-serif",
+                placement: "point",
+                stroke: new Stroke({
+                    color: [255, 255, 255, 0.9],
+                    width: 5
+                })
+            })
+        }));
+
+        layer.getSource().addFeature(newFeature);
+    },
+    /**
+     * adds the label to the ends of the lines/animations (not the center)
+     * @param {String} labelText the label text to place
+     * @param {ol/Feature} feature the ol/Feature - the placement is determined using coordinates of features and this.get("direction")
+     * @param {ol/layer/Vector} layer the layer to add the new features to
+     * @returns {void}
+     */
+    addLabelFeatureToLayer: function (labelText, feature, layer) {
+        const coordinates = feature.getGeometry().getCoordinates(),
+            drawIndex = this.get("direction") !== "wohnort" ? 0 : coordinates.length - 1,
+            currentPoint = new Point(coordinates[drawIndex]),
+            newFeature = new Feature(currentPoint);
+
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        newFeature.setStyle(new Style({
+            text: new Text({
+                text: labelText,
+                font: "10pt sans-serif",
+                placement: "point",
+                stroke: new Stroke({
+                    color: [255, 255, 255, 0.9],
+                    width: 5
+                })
+            })
+        }));
+
+        layer.getSource().addFeature(newFeature);
+    },
+    /**
+     * adds lines (beams) into the given layer
+     * @param {ol/Feature} feature the ol/Feature to place
+     * @param {ol/layer/Vector} layer the layer to add the new features to
+     * @param {Object} [styleOpt=null] an assignment to the stroke style
+     * @returns {void}
+     */
+    addBeamFeatureToLayer: function (feature, layer, styleOpt = null) {
+        // Erzeuge die Strahlen
+        const newFeature = new Feature({
+            geometry: feature.getGeometry()
+        });
+
+        newFeature.setStyle(new Style({
+            stroke: new Stroke(Object.assign({
+                color: [192, 9, 9, 1],
+                width: "3"
+            }, styleOpt))
+        }));
+        // "styleId" neccessary for print, that style and feature can be linked
+        newFeature.set("styleId", Radio.request("Util", "uniqueId"));
+        layer.getSource().addFeature(newFeature);
+    },
+
+    /**
+     * zooms to the extent the given features are fitting in
+     * @fires Core#RadioTriggerMapZoomToExtent
+     * @param {ol/Feature[]} features an array of ol/Feature to calculate with
+     * @pre the zoom of the ol map is somewhere
+     * @post the zoom of the ol map is in an extent the given features are fitting in
+     * @returns {void}
+     */
+    zoomToExtentOfFeatureGroup: function (features) {
+        const extents = features.map(feature => {
+                if (!(feature instanceof Feature)) {
+                    return [];
+                }
+                return feature.getGeometry().getExtent();
+            }),
+            extent = this.getMaximumExtentOfGroupOfExtents(extents);
+
+        if (extent) {
+            Radio.trigger("Map", "zoomToExtent", extent, {padding: [20, 20, 20, 400]});
+        }
+    },
+    /**
+     * calculates the maximum extent to fit all the given extents into
+     * @param {Array[]} extents an array of an array of numbers to calculate with
+     * @returns {Number[]}  an array of 4 numbers as maximum extent or null if no extent could be calculated
+     */
+    getMaximumExtentOfGroupOfExtents: function (extents) {
+        let result = null;
+
+        if (!Array.isArray(extents)) {
+            return null;
+        }
+        extents.forEach(extent => {
+            if (!result) {
+                result = extent;
+            }
+            else {
+                olExpandExtent(result, extent);
+            }
+        });
+
+        return result;
+    },
+
     /**
      * resets the window by unsetting 'kreis', 'pendlerLegend' and 'postbody'
      * @returns {void}
@@ -425,6 +573,14 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         this.set("attrGemeinde", value);
     },
     /**
+     * Sets the attribute for 'GemeindeContrary'
+     * @param {String} value the attribute name
+     * @returns {void}
+     */
+    setAttrGemeindeContrary: function (value) {
+        this.set("attrGemeindeContrary", value);
+    },
+    /**
      * Sets the 'Landkreise'
      * @param {String[]} value names of the 'Landkreise'
      * @returns {void}
@@ -479,14 +635,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      */
     setZoomLevel: function (value) {
         this.set("zoomLevel", value);
-    },
-    /**
-     * Sets the id of the alert
-     * @param {String} value alert-id
-     * @returns {void}
-     */
-    setAlertId: function (value) {
-        this.set("alertId", value);
     }
 });
 

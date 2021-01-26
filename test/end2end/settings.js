@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "80", acceptSslCerts: true, acceptInsecureCerts: true},
+        chrome: {"browserName": "chrome", version: "87", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
     /** TODO
@@ -10,7 +10,7 @@ const webdriver = require("selenium-webdriver"),
      * effectively changing indices lots of time; do this when all e2e tests have been written
      */
     resolutions = [
-        "1024x768"
+        "1920x1080"
         // "600x800"
     ],
     configs = new Map([
@@ -123,21 +123,27 @@ function isFirefox (browsername) {
  */
 function getBsCapabilities (browserstackuser, browserstackkey) {
     const base = {
-        "seleniumVersion": "4.0.0-alpha.5",
+        // do not set selenium version here, then selenium uses the detected_language, see "Input Capabilities" of each test in browserstack
         "acceptSslCerts": true,
         "project": "MasterPortal",
         "browserstack.local": true,
         "browserstack.user": browserstackuser,
         "browserstack.key": browserstackkey,
         // resolution of device, not resolution of browser window
-        "resolution": "1024x768"
+        "resolution": "1920x1080",
+        "browserstack.debug": false,
+        "browserstack.networkLogs": true,
+        "browserstack.console": "verbose",
+        "browserstack.idleTimeout": 300,
+        // Use this capability to specify a custom delay between the execution of Selenium commands
+        "browserstack.autoWait": 50
     };
 
     return [
         {
             ...base,
             "browserName": "Chrome",
-            "browser_version": "80.0",
+            "browser_version": "87.0",
             "os": "Windows",
             "os_version": "10"
         }/*

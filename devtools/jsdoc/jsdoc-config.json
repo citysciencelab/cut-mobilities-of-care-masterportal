@@ -4,7 +4,7 @@
     "source": {
         "include": ["./devtools/jsdoc", "./js", "./modules", "./addons"],
         "includePattern": ".+\\.js(doc|x)?$",
-        "excludePattern": "(^|\\/|\\\\)__"
+        "excludePattern": "(node_modules\\/)|(addons(\\/|\\\\).*(\\/|\\\\)node_modules(\\/|\\\\))|((^|\\/|\\\\)__)"
     },
     "tags": {
         "allowUnknownTags": true,

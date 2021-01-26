@@ -14,7 +14,13 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
         sliderType: "player",
         dataSliderMin: "0",
         dataSliderMax: "",
-        dataSliderTicks: ""
+        dataSliderTicks: "",
+        // translations
+        displayLayers: "",
+        titleNotConfigured: "",
+        serviceOne: "",
+        serviceTwo: "",
+        serviceThree: ""
     }),
 
     /**
@@ -72,6 +78,12 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
      */
     changeLang: function (lng) {
         this.set({
+            "displayLayers": i18next.t("common:modules.tools.layerSlider.displayLayers"),
+            "title": i18next.t("common:modules.tools.layerSlider.title"),
+            "titleNotConfigured": i18next.t("common:modules.tools.layerSlider.titleNotConfigured"),
+            "serviceOne": i18next.t("common:modules.tools.layerSlider.serviceOne"),
+            "serviceTwo": i18next.t("common:modules.tools.layerSlider.serviceTwo"),
+            "serviceThree": i18next.t("common:modules.tools.layerSlider.serviceThree"),
             "currentLng": lng
         });
     },
@@ -89,7 +101,12 @@ const LayerSliderModel = Tool.extend(/** @lends LayerSliderModel.prototype */{
             this.initHandle();
         }
         else {
-            Radio.trigger("Alert", "alert", "Konfiguration von Werkzeug <b>" + this.get("name") + "</b> fehlerhaft: <b>sliderType</b> \"" + sliderType + "\" ist noch nicht implementiert!");
+            const alertMessage = {
+                x: this.get("name"),
+                y: sliderType
+            };
+
+            Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.layerSlider.key", {alertMessage}));
         }
     },
 

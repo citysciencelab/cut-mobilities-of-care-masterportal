@@ -1,11 +1,13 @@
 import {getLayerWhere} from "masterportalAPI/src/rawLayerList";
+import store from "../../src/app-store/index";
 
 const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype */{
     defaults: {
         layerParams: [],
         isInitOpen: [],
         zoomToGeometry: "",
-        zoomToFeatureIds: []
+        zoomToFeatureIds: [],
+        featureViaURL: []
     },
 
     /**
@@ -18,6 +20,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @property {String[]} isInitOpen="" Tool to be opened initially.
      * @property {string} zoomToGeometry=[] Geoemtry to be zoomed on.
      * @property {String[]} zoomToFeatureIds=[] Features to be zoomed in on.
+     * @property {Object[]} featureViaURL=[] The features given by the user via the URL.
      * @listens Core#RadioRequestParametricURLGetResult
      * @listens Core#RadioRequestParametricURLGetLayerParams
      * @listens Core#RadioRequestParametricURLGetIsInitOpen
@@ -29,13 +32,12 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @listens Core#RadioRequestParametricURLGetZoomToExtent
      * @listens Core#RadioRequestParametricURLGetStyle
      * @listens Core#RadioRequestParametricURLGetFilter
+     * @listens Core#RadioRequestParametricURLGetFeatureViaURL
      * @listens Core#RadioRequestParametricURLGetHighlightFeature
      * @listens Core#RadioRequestParametricURLGetZoomToFeatureIds
      * @listens Core#RadioRequestParametricURLGetBrwId
      * @listens Core#RadioRequestParametricURLGetBrwLayerName
-     * @listens Core#RadioRequestParametricURLGetMarkerFromUrl
      * @listens Core#RadioTriggerParametricURLUpdateQueryStringParam
-     * @listens Core#RadioTriggerParametricURLPushToIsInitOpen
      * @fires Core#RadioTriggerParametricURLReady
      * @fires Alerting#RadioTriggerAlertAlert
      * @fires Core.ConfigLoader#RadioRequestParserGetItemByAttributes
@@ -43,7 +45,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      * @fires RemoteInterface#RadioTriggerRemoteInterfacePostMessage
      */
     initialize: function () {
-        const channel = Radio.channel("ParametricURL");
+        const channel = Radio.channel("ParametricURL"),
+            query = location.search.substr(1);
 
         channel.reply({
             "getResult": function () {
@@ -77,6 +80,9 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "getFilter": function () {
                 return this.get("filter");
             },
+            "getFeatureViaURL": function () {
+                return this.get("featureViaURL");
+            },
             "getHighlightFeature": function () {
                 return this.get("highlightfeature");
             },
@@ -88,19 +94,29 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             },
             "getBrwLayerName": function () {
                 return this.get("brwLayerName");
-            },
-            "getMarkerFromUrl": function () {
-                return this.get("markerFromUrl");
             }
         }, this);
 
         channel.on({
-            "updateQueryStringParam": this.updateQueryStringParam,
-            "pushToIsInitOpen": this.pushToIsInitOpen
+            "updateQueryStringParam": this.updateQueryStringParam
         }, this);
 
-        this.parseURL(location.search.substr(1), this.possibleUrlParameters());
+        if (this.checkisURLQueryValid(query)) {
+            this.parseURL(query, this.possibleUrlParameters());
+        }
+        else {
+            console.warn("The URL-parameters contain illegal information!");
+        }
         channel.trigger("ready");
+    },
+
+    /**
+     * Checks if the query contains html content, if so it is not valid.
+     * @param {string} query - The URL-Parameters
+     * @return {boolean} Is the query valid.
+     */
+    checkisURLQueryValid: function (query) {
+        return !(/(<([^>]+)>)/g).test(decodeURIComponent(query));
     },
 
     /**
@@ -126,6 +142,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                     console.warn("The URL-Parameter: " + parameterNameUpperCase + " is not supported in The Masterportal!");
                 }
             });
+
             this.setResult(result);
             Object.keys(result).forEach(param => {
                 if (possibleUrlParameters.hasOwnProperty(param)) {
@@ -151,13 +168,13 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             "CENTER": this.setCenter.bind(this),
             "CLICKCOUNTER": this.setClickCounter.bind(this),
             "FEATUREID": this.setZoomToFeatureIds.bind(this),
+            "FEATUREVIAURL": this.setFeatureViaURL.bind(this),
             "FILTER": this.setFilter.bind(this),
             "HEADING": this.evaluateCameraParameters.bind(this),
             "HIGHLIGHTFEATURE": this.setHighlightfeature.bind(this),
             "ISINITOPEN": this.parseIsInitOpen.bind(this),
             "LAYERIDS": this.createLayerParams.bind(this),
             "MAP": this.adjustStartingMap3DParameter.bind(this),
-            "MARKER": this.setMarkerFromUrl.bind(this),
             "MDID": this.parseMDID.bind(this),
             "PROJECTION": this.parseProjection.bind(this),
             "QUERY": this.parseQuery.bind(this),
@@ -211,32 +228,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
 
     /**
      * todo
-     * @param {*} value - todo
-     * @returns {void}
-     */
-    pushToIsInitOpen: function (value) {
-        const isInitOpenArray = this.get("isInitOpen"),
-            msg = "";
-
-        isInitOpenArray.push(value);
-        isInitOpenArray = [...new Set(isInitOpenArray)];
-
-        if (isInitOpenArray.length > 1) {
-            msg += "Fehlerhafte Kombination von Portalkonfiguration und parametrisiertem Aufruf.<br>";
-            isInitOpenArray.forEach((tool, index) => {
-                msg += tool;
-                if (index < isInitOpenArray.length - 1) {
-                    msg += " und ";
-                }
-            });
-            msg += " können nicht gleichzeitig geöffnet sein";
-            Radio.trigger("Alert", "alert", msg);
-        }
-        this.setIsInitOpenArray(isInitOpenArray);
-    },
-
-    /**
-     * todo
      * @param {string} layerIdString - The layerIds.
      * @fires Alerting#RadioTriggerAlertAlert
      * @returns {void}
@@ -246,7 +237,8 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
             visibilityListString = result.hasOwnProperty("VISIBILITY") ? result.VISIBILITY : "",
             transparencyListString = result.hasOwnProperty("TRANSPARENCY") ? result.TRANSPARENCY : "",
             layerIdList = layerIdString.indexOf(",") !== -1 ? layerIdString.split(",") : new Array(layerIdString),
-            layerParams = [];
+            layerParams = [],
+            wrongIdsPositions = [];
         let visibilityList,
             transparencyList;
 
@@ -284,10 +276,18 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
         layerIdList.forEach((val, index) => {
             const layerConfigured = Radio.request("Parser", "getItemByAttributes", {id: val}),
                 layerExisting = getLayerWhere({id: val}),
-                treeType = Radio.request("Parser", "getTreeType");
+                treeType = Radio.request("Parser", "getTreeType"),
+                optionsOfLayer = {
+                    id: val,
+                    visibility: visibilityList[index]
+                };
+
             let layerToPush;
 
-            layerParams.push({id: val, visibility: visibilityList[index], transparency: transparencyList[index]});
+            if (transparencyList[index] !== null) {
+                optionsOfLayer.transparency = transparencyList[index];
+            }
+            layerParams.push(optionsOfLayer);
 
             if (layerConfigured === undefined && layerExisting !== null && treeType === "light") {
                 layerToPush = Object.assign({
@@ -299,11 +299,28 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 Radio.trigger("Parser", "addItemAtTop", layerToPush);
             }
             else if (layerConfigured === undefined) {
-                Radio.trigger("Alert", "alert", {text: "<strong>Parametrisierter Aufruf fehlerhaft!</strong> Es sind LAYERIDS in der URL enthalten, die nicht existieren. Die Ids werden ignoriert.(" + val + ")", kategorie: "alert-warning"});
+                wrongIdsPositions.push(index + 1);
             }
         });
 
+        this.alertWrongLayerIds(wrongIdsPositions);
         this.setLayerParams(layerParams);
+    },
+
+    /**
+     * Build alert for wrong layerids
+     * @param {string[]} wrongIdsPositions - The positions from wrong layerids.
+     * @returns {void}
+     */
+    alertWrongLayerIds: function (wrongIdsPositions) {
+        if (wrongIdsPositions.length > 0) {
+            let wrongIdsPositionsConcat = wrongIdsPositions.shift();
+
+            wrongIdsPositions.forEach(position => {
+                wrongIdsPositionsConcat = wrongIdsPositionsConcat + ", " + String(position);
+            });
+            store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.parametricURL.alertWrongLayerIds", {wrongIdsPositionsConcat: wrongIdsPositionsConcat}));
+        }
     },
 
     /**
@@ -412,12 +429,7 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
                 gemometryToZoom = geometries[parseInt(gemometryFromUrl, 10) - 1];
             }
             else {
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!</strong>"
-                    + "<br>"
-                    + "<small>Der Parameter " + property + "=" + gemometryFromUrl + " existiert nicht.</small>",
-                    kategorie: "alert-warning"
-                });
+                store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.core.parametricURL.alertZoomToGeometry"));
             }
         }
 
@@ -651,15 +663,6 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
     },
 
     /**
-     * Setter for markerFromUrl.
-     * @param {String} coordinate - Coordinate for the marker.
-     * @returns {void}
-     */
-    setMarkerFromUrl: function (coordinate) {
-        this.set("markerFromUrl", this.parseCoordinates(coordinate, "MARKER"));
-    },
-
-    /**
      * Setter for projectionFromUrl.
      * @param {String} value - todo
      * @returns {void}
@@ -712,6 +715,15 @@ const ParametricURL = Backbone.Model.extend(/** @lends ParametricURL.prototype *
      */
     setZoomToExtent: function (value) {
         this.set("zoomToExtent", value);
+    },
+
+    /**
+     * Sets the array for the features via the URL.
+     * @param {String} value The given features from the URL which is parsed to JSON.
+     * @returns {void}
+     */
+    setFeatureViaURL: function (value) {
+        this.set("featureViaURL", JSON.parse(value));
     }
 });
 

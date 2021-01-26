@@ -1,5 +1,6 @@
 import proj4 from "proj4";
 import Tool from "../../core/modelList/tool/model";
+import store from "../../../src/app-store";
 
 const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -16,7 +17,8 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
         cartesianEastingLabel: "",
         cartesianNorthingLabel: "",
         exampleAcronym: "",
-        searchButtonText: ""
+        searchButtonText: "",
+        zoomLevel: 7
     }),
 
     /**
@@ -54,11 +56,11 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
      */
     changeLang: function () {
         this.set({
-            coordSystemField: i18next.t("common:modules.tools.getCoord.coordSystemField"),
-            hdmsEastingLabel: i18next.t("common:modules.tools.getCoord.hdms.eastingLabel"),
-            hdmsNorthingLabel: i18next.t("common:modules.tools.getCoord.hdms.northingLabel"),
-            cartesianEastingLabel: i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"),
-            cartesianNorthingLabel: i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"),
+            coordSystemField: i18next.t("common:modules.tools.supplyCoord.coordSystemField"),
+            hdmsEastingLabel: i18next.t("common:modules.tools.supplyCoord.hdms.eastingLabel"),
+            hdmsNorthingLabel: i18next.t("common:modules.tools.supplyCoord.hdms.northingLabel"),
+            cartesianEastingLabel: i18next.t("common:modules.tools.supplyCoord.cartesian.eastingLabel"),
+            cartesianNorthingLabel: i18next.t("common:modules.tools.supplyCoord.cartesian.northingLabel"),
             exampleAcronym: i18next.t("common:modules.tools.searchByCoord.exampleAcronym"),
             searchButtonText: i18next.t("common:button.search")
         });
@@ -193,7 +195,7 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
             coordinateArray = [{"coord": easting, "key": i18next.t("common:modules.tools.searchByCoord.hdmsEastingText"), "example": "10.01234°"}, {"coord": northing, "key": i18next.t("common:modules.tools.searchByCoord.hdmsNorthingText"), "example": "53.55555°"}];
         }
         else {
-            coordinateArray = [{"coord": easting, "key": i18next.t("common:modules.tools.getCoord.cartesian.eastingLabel"), "example": "564459.13"}, {"coord": northing, "key": i18next.t("common:modules.tools.getCoord.cartesian.northingLabel"), "example": "5935103.67"}];
+            coordinateArray = [{"coord": easting, "key": i18next.t("common:modules.tools.supplyCoord.cartesian.eastingLabel"), "example": "564459.13"}, {"coord": northing, "key": i18next.t("common:modules.tools.supplyCoord.cartesian.northingLabel"), "example": "5935103.67"}];
         }
         this.setCoordinatesEasting(easting);
         this.setCoordinatesNorthing(northing);
@@ -231,7 +233,8 @@ const SearchByCoord = Tool.extend(/** @lends SearchByCoord.prototype */{
 
             this.set("newCenter", [easting, northing]);
         }
-        Radio.trigger("MapMarker", "zoomTo", {type: "SearchByCoord", coordinate: this.get("newCenter")});
+        store.dispatch("MapMarker/placingPointMarker", this.get("newCenter"));
+        Radio.trigger("MapView", "setCenter", this.get("newCenter"), this.get("zoomLevel"));
     },
     // setter for coordinatesEasting
     setCoordinatesEasting: function (value) {

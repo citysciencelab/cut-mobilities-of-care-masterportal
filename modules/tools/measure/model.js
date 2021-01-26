@@ -7,6 +7,8 @@ import Tool from "../../core/modelList/tool/model";
 import * as Proj from "ol/proj.js";
 import Feature from "ol/Feature.js";
 import SnippetDropdownModel from "../../snippets/dropdown/model";
+import {getArea, getLength} from "ol/sphere";
+import store from "../../../src/app-store/index";
 const Measure = Tool.extend(/** @lends Measure.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
         source: new VectorSource(),
@@ -105,6 +107,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             "3D Messen": "3d"
         },
         geomtype: "LineString",
+        drawingFeature: false,
         unit: "m",
         decimal: 1,
         hits3d: [],
@@ -129,7 +132,8 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         findFurtherInf: "",
         deleteMeasurements: "",
         stretch: "",
-        area: ""
+        area: "",
+        earthRadius: 6378137
     }),
     /**
      * @class Measure
@@ -436,6 +440,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     createInteraction: function (drawType) {
         const that = this,
             value = this.getLocalizedValues()[drawType];
+
         let textPoint;
 
         Radio.trigger("Map", "removeInteraction", this.get("draw"));
@@ -451,6 +456,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 style: this.get("styles")
             }));
             this.get("draw").on("drawstart", function (evt) {
+                that.set("drawingFeature", evt.feature);
                 that.setIsDrawing(true);
                 textPoint = that.generateTextPoint(evt.feature);
                 that.get("layer").getSource().addFeatures([textPoint]);
@@ -459,6 +465,18 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
                 that.registerClickListener(that);
             }, this);
             this.get("draw").on("drawend", function (evt) {
+                if (that.get("uiStyle") === "TABLE") {
+                    const point = that.get("textPoint");
+
+                    if (point) {
+                        const styles = point.getStyle();
+
+                        if (styles && styles[1] && styles[1].getText()) {
+                            styles[1].getText().setText("");
+                        }
+                    }
+                }
+                that.set("drawingFeature", false);
                 that.setIsDrawing(false);
                 evt.feature.set("styleId", evt.feature.ol_uid);
                 that.unregisterPointerMoveListener(that);
@@ -510,8 +528,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
     moveTextPoint: function (evt) {
         const point = this.get("textPoint"),
             geom = point.getGeometry(),
-            currentLine = this.get("draw").getOverlay().getSource().getFeatures()[0],
-            styles = this.generateTextStyles(currentLine);
+            styles = this.generateTextStyles();
 
         geom.setCoordinates(evt.coordinate);
         point.setStyle(styles);
@@ -575,8 +592,9 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @param {object} feature - geometry feature
      * @returns {object} styles
      */
-    generateTextStyles: function (feature) {
-        const fill = new Fill({
+    generateTextStyles: function () {
+        const feature = this.get("drawingFeature"),
+            fill = new Fill({
                 color: [0, 0, 0, 1]
             }),
             stroke = new Stroke({
@@ -590,7 +608,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             output = {},
             styles = [];
 
-        if (feature !== undefined) {
+        if (feature !== false) {
             geom = feature.getGeometry();
         }
 
@@ -665,7 +683,7 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
             pointFeature.setStyle(this.generate3dTextStyles(distance, heightDiff));
         }
         else {
-            pointFeature.setStyle(this.generateTextStyles(feature));
+            pointFeature.setStyle(this.generateTextStyles());
         }
         pointFeature.set("styleId", this.uniqueId("measureStyle"));
         return pointFeature;
@@ -763,34 +781,28 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @return {undefined}
      */
     formatLength: function (line) {
-        const length = line.getLength(),
-            output = {},
+        const output = {},
             coords = line.getCoordinates(),
-            scaleError = this.get("scale") / 1000; // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
+            scaleError = this.get("scale") / 1000, // Berechnet den Maßstabsabhängigen Fehler bei einer Standardabweichung von 1mm
+            earthRadius = this.get("earthRadius"),
+            projection = store.getters["Map/projection"].getCode(),
+            fehler = Math.sqrt((coords.length - 1) * Math.pow(scaleError, 2));
 
-        let lengthRed = "",
-            fehler = 0,
-            rechtswertMittel = 0;
+        let lengthRed = "";
 
-        for (let i = 0; i < coords.length; i++) {
-            rechtswertMittel += coords[i][0];
-            if (i < coords.length - 1) {
-                // http://www.physik.uni-erlangen.de/lehre/daten/NebenfachPraktikum/Anleitung%20zur%20Fehlerrechnung.pdf
-                // Seite 5:
-                fehler += Math.pow(scaleError, 2);
-            }
-        }
-        fehler = Math.sqrt(fehler);
-        rechtswertMittel = rechtswertMittel / coords.length / 1000;
-        lengthRed = length - (0.9996 * length * (Math.pow(rechtswertMittel - 500, 2) / (2 * Math.pow(6381, 2)))) - (0.0004 * length);
+        // get length on sphere
+        lengthRed = getLength(line, {
+            projection: projection,
+            radius: earthRadius
+        });
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km") {
                 output.measure = (lengthRed / 1000).toFixed(1) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelklick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
             else {
                 output.measure = lengthRed.toFixed(0) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelklick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
         }
         else if (this.get("unit") === "km") {
@@ -810,17 +822,16 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
      * @return {undefined}
      */
     formatArea: function (polygon) {
-        const area = polygon.getArea(),
-            output = {},
+        const output = {},
             coords = polygon.getLinearRing(0).getCoordinates(),
-            scaleError = this.get("scale") / 1000;
+            projection = store.getters["Map/projection"].getCode(),
+            scaleError = this.get("scale") / 1000,
+            earthRadius = this.get("earthRadius");
 
         let areaRed = "",
-            rechtswertMittel = 0,
             fehler = 0;
 
         for (let i = 0; i < coords.length; i++) {
-            rechtswertMittel += parseInt(coords[i][0], 10);
             if (i === coords.length - 1) {
                 fehler += this.calcDeltaPow(coords, i, 0);
             }
@@ -830,17 +841,21 @@ const Measure = Tool.extend(/** @lends Measure.prototype */{
         }
 
         fehler = 0.5 * scaleError * Math.sqrt(fehler);
-        rechtswertMittel = (rechtswertMittel / coords.length) / 1000;
-        areaRed = area - (Math.pow(0.9996, 2) * area * (Math.pow(rechtswertMittel - 500, 2) / Math.pow(6381, 2))) - (0.0008 * area);
+
+        // get area on sphere
+        areaRed = getArea(polygon, {
+            projection: projection,
+            radius: earthRadius
+        });
 
         if (this.get("uiStyle") === "TABLE") {
             if (this.get("unit") === "km²") {
                 output.measure = (areaRed / 1000000).toFixed(1) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelklick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
             else {
                 output.measure = areaRed.toFixed(0) + " " + this.get("unit");
-                output.deviance = "Abschließen mit Doppelclick";
+                output.deviance = i18next.t("common:modules.tools.measure.finishWithDoubleClick");
             }
         }
         else if (this.get("unit") === "km²") {

@@ -1,260 +1,155 @@
 <script>
 import Tool from "../../Tool.vue";
+import getComponent from "../../../../utils/getComponent";
 import {Pointer} from "ol/interaction.js";
-import {toStringHDMS, toStringXY} from "ol/coordinate.js";
-import {getProjections, transformFromMapProjection} from "masterportalAPI/src/crs";
-import {mapActions, mapState} from "vuex";
+import {getProjections} from "masterportalAPI/src/crs";
+import {mapGetters, mapActions, mapMutations} from "vuex";
+import getters from "../store/gettersSupplyCoord";
+import mutations from "../store/mutationsSupplyCoord";
 
 export default {
     name: "SupplyCoord",
     components: {
         Tool
     },
-    data () {
-        return {
-            coordinatesEastingField: "",
-            coordinatesNorthingField: "",
-            storePath: this.$store.state.Tools.SupplyCoord
-        };
-    },
     computed: {
-        ...mapState([
-            "configJson"
-        ]),
-        ...mapState("Tools/SupplyCoord", [
-            "renderToWindow",
-            "resizableWindow",
-            "glyphicon",
-            "title"
-        ]),
-        active: {
-            get () {
-                return this.storePath.active;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/active", val);
-            }
-        },
-        currentProjectionName: {
-            get () {
-                return this.storePath.currentProjectionName;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/currentProjectionName", val);
-            }
-        },
+        ...mapGetters("Tools/SupplyCoord", Object.keys(getters)),
+        ...mapGetters("Map", ["projection", "mouseCoord"]),
+        /**
+         * Must be a two-way computed property, because it is used as v-model for select-Element, see https://vuex.vuejs.org/guide/forms.html.
+         */
         currentSelection: {
             get () {
-                return this.storePath.currentSelection;
+                return this.$store.state.Tools.SupplyCoord.currentSelection;
             },
             set (newValue) {
-                this.$store.commit("Tools/SupplyCoord/currentSelection", newValue);
-            }
-        },
-        mapProjection: {
-            get () {
-                return this.storePath.mapProjection;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/mapProjection", val);
-            }
-        },
-        projections: {
-            get () {
-                return this.storePath.projections;
-            },
-            set (val) {
-                // set currect projection to one in the list of projections
-                const found = val.filter(projection => projection.name === this.currentProjectionName);
-
-                if (found.length === 0) {
-                    this.currentProjectionName = val[0].name;
-                    this.currentSelection = val[0].name;
-                }
-                this.$store.commit("Tools/SupplyCoord/projections", val);
-            }
-        },
-        positionMapProjection: {
-            get () {
-                return this.storePath.positionMapProjection;
-            }, set (val) {
-                this.$store.commit("Tools/SupplyCoord/positionMapProjection", val);
-            }
-        },
-        selectPointerMove: {
-            get () {
-                return this.storePath.selectPointerMove;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/selectPointerMove", val);
-            }
-        },
-        updatePosition: {
-            get () {
-                return this.storePath.updatePosition;
-            },
-            set (val) {
-                this.$store.commit("Tools/SupplyCoord/updatePosition", val);
+                this.setCurrentSelection(newValue);
             }
         }
     },
     watch: {
         /**
-         * since the parsing of the configJson happens after mount,
-         * we need to wait with initialize until configJson is parsed to store
-         * either here or centrally in App / MapRegionlistening
-         * if mounting occurs after config parsing, put the init function to mounted lifecycle hook
-         * @listens mapState#configJson
+         * Sets the active property of the state to the given value.
+         * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
          * @returns {void}
          */
-        configJson () {
-            // this.initialize();
-        },
-        active (newValue) {
-            const myBus = Backbone.Events;
+        active (value) {
+            this.removePointMarker();
 
-            Radio.trigger("MapMarker", "hideMarker");
-            Radio.trigger("Map", "registerListener", "pointermove", this.setCoordinates.bind(this), this);
-            if (newValue) {
-                // active is true
-                myBus.listenTo(Radio.channel("Map"), {
-                    clickedWindowPosition: function (evt) {
-                        this.positionClicked(evt.coordinate);
-                    }
-                });
+            if (value) {
+                this.addPointerMoveHandlerToMap(this.setCoordinates);
                 this.createInteraction();
+                this.setPositionMapProjection(this.mouseCoord);
                 this.changedPosition();
             }
             else {
-                this.updatePosition = true;
+                this.removePointerMoveHandlerFromMap(this.setCoordinates);
+                this.setUpdatePosition(true);
                 this.removeInteraction();
-                myBus.stopListening(Radio.channel("Map", "clickedWindowPosition"));
             }
         }
     },
     created () {
         this.$on("close", this.close);
     },
-    /**
-     * Put initialize here if mounting occurs after config parsing
-     * @returns {void}
-     */
-    mounted () {
-        this.initialize();
-    },
     methods: {
+        ...mapMutations("Tools/SupplyCoord", Object.keys(mutations)),
         ...mapActions("Tools/SupplyCoord", [
-            "initialize"
+            "checkPosition",
+            "changedPosition",
+            "positionClicked",
+            "setCoordinates",
+            "newProjectionSelected"
         ]),
+        ...mapActions("MapMarker", ["removePointMarker"]),
+        ...mapActions("Alerting", ["addSingleAlert"]),
+        ...mapActions("Map", {
+            addPointerMoveHandlerToMap: "addPointerMoveHandler",
+            removePointerMoveHandlerFromMap: "removePointerMoveHandler",
+            addInteractionToMap: "addInteraction",
+            removeInteractionFromMap: "removeInteraction"
+        }),
+        /**
+         * Function to initiate the copying of the coordinates from the inputfields.
+         * @fires Util#RadioTriggerUtilCopyToClipboard
+         * @param {Event} evt Click Event
+         * @returns {void}
+         */
+        copyToClipboard ({target}) {
+            this.addSingleAlert(i18next.t("common:modules.tools.supplyCoord.copyToClipboard"));
+            target.select();
+            // seems to be required for mobile devices
+            target.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        },
+        /**
+         * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
+         * @param {Event} event changed selection event
+         * @returns {void}
+         */
         selectionChanged (event) {
-            this.currentSelection = event.target.value;
+            this.setCurrentSelection(event.target.value);
+            this.newProjectionSelected();
             this.changedPosition(event.target.value);
         },
-        positionClicked: function (position) {
-            const isViewMobile = Radio.request("Util", "isViewMobile"),
-                updatePosition = isViewMobile ? true : this.updatePosition;
-
-            this.positionMapProjection = position;
-            this.changedPosition(position);
-            this.updatePosition = !updatePosition;
-            Radio.trigger("MapMarker", "showMarker", position);
-        },
-        setCoordinates: function (evt) {
-            const position = evt.coordinate;
-
-            if (this.updatePosition) {
-                this.positionMapProjection = position;
-                this.changedPosition(position);
-            }
-        },
+        /**
+         * Stores the projections and adds interaction pointermove to map.
+         * @returns {void}
+         */
         createInteraction () {
-            this.projections = getProjections();
-            this.mapProjection = Radio.request("MapView", "getProjection");
-            const pointerMove = new Pointer(
+            const pr = getProjections();
+            let pointerMove = null;
+
+            this.setProjections(pr);
+            this.setMapProjection(this.projection);
+            pointerMove = new Pointer(
                 {
                     handleMoveEvent: function (evt) {
                         this.checkPosition(evt.coordinate);
                     }.bind(this),
                     handleDownEvent: function (evt) {
-                        this.positionClicked(evt.coordinate);
+                        this.positionClicked(evt);
                     }.bind(this)
                 },
                 this
             );
 
-            this.selectPointerMove = pointerMove;
-            Radio.trigger("Map", "addInteraction", pointerMove);
+            this.setSelectPointerMove(pointerMove);
+            this.addInteractionToMap(pointerMove);
         },
+        /**
+         * Removes the interaction from map.
+         * @returns {void}
+         */
         removeInteraction () {
-            Radio.trigger("Map", "removeInteraction", this.selectPointerMove);
-            this.selectPointerMove = null;
+            this.removeInteractionFromMap(this.selectPointerMove);
+            this.setSelectPointerMove(null);
         },
-        checkPosition (position) {
-            if (this.updatePosition) {
-                Radio.trigger("MapMarker", "showMarker", position);
-                this.positionMapProjection = position;
-            }
-        },
-        changedPosition () {
-            const targetProjectionName = this.currentSelection,
-                position = this.returnTransformedPosition(targetProjectionName),
-                targetProjection = this.returnProjectionByName(targetProjectionName);
-
-            this.currentProjectionName = targetProjectionName;
-            if (position) {
-                this.adjustPosition(position, targetProjection);
-            }
-        },
-        returnTransformedPosition (targetProjection) {
-            let positionTargetProjection = [0, 0];
-
-            if (this.positionMapProjection.length > 0) {
-                positionTargetProjection = transformFromMapProjection(
-                    Radio.request("Map", "getMap"),
-                    targetProjection,
-                    this.positionMapProjection
-                );
-            }
-            return positionTargetProjection;
-        },
-        returnProjectionByName (name) {
-            const projections = this.projections;
-
-            return _.find(projections, function (projection) {
-                return projection.name === name;
-            });
-        },
-        adjustPosition (position, targetProjection) {
-            let coord, easting, northing;
-
-            // geographische Koordinaten
-            if (targetProjection.projName === "longlat") {
-                coord = toStringHDMS(position);
-                easting = coord.substr(0, 13);
-                northing = coord.substr(14);
-            }
-            // kartesische Koordinaten
-            else {
-                coord = toStringXY(position, 2);
-                easting = coord.split(",")[0].trim();
-                northing = coord.split(",")[1].trim();
-            }
-            this.coordinatesEastingField = easting;
-            this.coordinatesNorthingField = northing;
-        },
+        /**
+         * Closes this tool window by setting active to false
+         * @returns {void}
+         */
         close () {
-            this.active = false;
+            this.setActive(false);
+
+            // TODO replace trigger when Menu is migrated
             // set the backbone model to active false for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = Radio.request("ModelList", "getModelByAttributes", {id: this.storePath.id});
+            // else the menu-entry for this tool is always highlighted
+            const model = getComponent(this.$store.state.Tools.SupplyCoord.id);
 
             if (model) {
                 model.set("isActive", false);
             }
         },
+        /**
+         * Returns the label mame depending on the selected projection.
+         * @param {String} key in the language files
+         * @returns {String} the name of the label
+         */
         label (key) {
             const type = this.currentProjectionName === "EPSG:4326" ? "hdms" : "cartesian";
 
-            return "modules.tools.getCoord." + type + "." + key;
+            return "modules.tools.supplyCoord." + type + "." + key;
         }
     }
 };
@@ -262,76 +157,83 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('modules.tools.getCoord.title')"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
+        :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
-            <form
+            <div
                 v-if="active"
-                class="form-horizontal"
-                role="form"
+                id="supply-coord"
             >
-                <div class="form-group form-group-sm">
-                    <label
-                        for="coordSystemField"
-                        class="col-md-5 col-sm-5 control-label"
-                    >{{ $t("modules.tools.getCoord.coordSystemField") }}</label>
-                    <div class="col-md-7 col-sm-7">
-                        <select
-                            id="coordSystemField"
-                            v-model="currentSelection"
-                            class="font-arial form-control input-sm pull-left"
-                            @change="selectionChanged($event)"
-                        >
-                            <option
-                                v-for="(projection, i) in projections"
-                                :key="i"
-                                :value="projection.name"
-                                :SELECTED="projection.name === currentProjectionName"
+                <form
+                    class="form-horizontal"
+                    role="form"
+                >
+                    <div class="form-group form-group-sm">
+                        <label
+                            for="coordSystemField"
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t("modules.tools.supplyCoord.coordSystemField") }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <select
+                                id="coordSystemField"
+                                v-model="currentSelection"
+                                class="font-arial form-control input-sm pull-left"
+                                @change="selectionChanged($event)"
                             >
-                                {{ projection.title ? projection.title : projection.name }}
-                            </option>
-                        </select>
+                                <option
+                                    v-for="(projection, i) in projections"
+                                    :key="i"
+                                    :value="projection.name"
+                                    :SELECTED="projection.name === currentProjectionName"
+                                >
+                                    {{ projection.title ? projection.title : projection.name }}
+                                </option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label
-                        id="coordinatesEastingLabel"
-                        for="coordinatesEastingField"
-                        class="col-md-5 col-sm-5 control-label"
-                    >{{ $t(label("eastingLabel")) }}</label>
-                    <div class="col-md-7 col-sm-7">
-                        <input
-                            id="coordinatesEastingField"
-                            v-model="coordinatesEastingField"
-                            type="text"
-                            class="form-control"
-                            readonly
-                            contenteditable="false"
-                        >
+                    <div class="form-group form-group-sm">
+                        <label
+                            id="coordinatesEastingLabel"
+                            for="coordinatesEastingField"
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t(label("eastingLabel")) }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <input
+                                id="coordinatesEastingField"
+                                v-model="coordinatesEastingField"
+                                type="text"
+                                class="form-control"
+                                readonly
+                                contenteditable="false"
+                                @click="copyToClipboard"
+                            >
+                        </div>
                     </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <label
-                        id="coordinatesNorthingLabel"
-                        for="coordinatesNorthingField"
-                        class="col-md-5 col-sm-5 control-label"
-                    >{{ $t(label("northingLabel")) }}</label>
-                    <div class="col-md-7 col-sm-7">
-                        <input
-                            id="coordinatesNorthingField"
-                            v-model="coordinatesNorthingField"
-                            type="text"
-                            class="form-control"
-                            readonly
-                            contenteditable="false"
-                        >
+                    <div class="form-group form-group-sm">
+                        <label
+                            id="coordinatesNorthingLabel"
+                            for="coordinatesNorthingField"
+                            class="col-md-5 col-sm-5 control-label"
+                        >{{ $t(label("northingLabel")) }}</label>
+                        <div class="col-md-7 col-sm-7">
+                            <input
+                                id="coordinatesNorthingField"
+                                v-model="coordinatesNorthingField"
+                                type="text"
+                                class="form-control"
+                                readonly
+                                contenteditable="false"
+                                @click="copyToClipboard"
+                            >
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </template>
     </Tool>
 </template>

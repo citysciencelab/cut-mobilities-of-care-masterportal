@@ -1,7 +1,7 @@
 const Config = {
+    addons: ["trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     clickCounter: {},
     footer: {
-        visibility: true,
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",
@@ -11,11 +11,15 @@ const Config = {
             }
         ]
     },
-    gfiWindow: "attached",
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
+    },
+    metadata: {
+        useProxy: [
+            "https://metaver.de/csw"
+        ]
     },
     namedProjections: [
         // GK DHDN
@@ -37,7 +41,8 @@ const Config = {
     },
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
+    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
+    useVectorStyleBeta: true,
     wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",

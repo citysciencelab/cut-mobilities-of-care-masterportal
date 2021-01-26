@@ -118,7 +118,8 @@ const RoutingView = Backbone.View.extend({
         Radio.trigger("Window", "showTool", Radio.request("ModelList", "getModelByAttributes", {id: "routing"}));
         this.model.set("toStrassenname", coordinate.toString());
         this.model.set("toCoord", coordinate);
-        this.model.set("zielAdresse", "gewähltes Ziel");
+        this.model.set("zielAdresse", i18next.t("common:modules.tools.viomRouting.selectedDestination"));
+
     },
     addDescription: function () {
         if (this.model.get("description") !== null) {
