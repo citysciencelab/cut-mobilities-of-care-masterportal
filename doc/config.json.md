@@ -967,6 +967,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:measure]: # (Portalconfig.menu.tool.measure)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:legend]: # (Portalconfig.menu.legend)
+[type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
@@ -1401,7 +1402,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
 
 ***
 
-#### Portcalconfig.menu.tool.saveSelection
+#### Portalconfig.menu.tool.saveSelection
 
 [inherits]: # (Portalconfig.menu.tool)
 
