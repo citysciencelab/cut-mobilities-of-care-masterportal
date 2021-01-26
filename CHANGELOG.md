@@ -15,7 +15,7 @@
 ### Changed
 - The language of the changelog has been changed to English.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
-- Migrated the StyleVT from Backbone.js to Vue.js.
+- Migrated the StyleVT Tool from Backbone.js to Vue.js.
 ### Deprecated
 
 ### Removed
