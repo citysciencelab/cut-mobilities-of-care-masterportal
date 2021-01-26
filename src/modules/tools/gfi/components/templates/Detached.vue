@@ -160,7 +160,7 @@ export default {
         <BasicDragHandle
             targetEl=".gfi-detached"
             :margin="20"
-            >
+        >
             <!-- header -->
             <div class="gfi-header">
                 <button
@@ -178,7 +178,7 @@ export default {
                     {{ $t(title) }}
                 </h5>
             </div>
-         </BasicDragHandle>
+        </BasicDragHandle>
         <!-- theme -->
         <div
             class="gfi-content"
