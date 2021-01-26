@@ -405,10 +405,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 let allThings;
 
                 if (urlParams?.root === "Datastreams") {
-                    allThings = this.changeSensordataRoot(result, this.get("datastreamAttributes"), this.get("thingAttributes"));
+                    allThings = this.parseDatastreams(result, this.get("datastreamAttributes"), this.get("thingAttributes"));
+                }
+                else {
+                    allThings = this.flattenArray(result);
                 }
 
-                allThings = this.flattenArray(result);
                 allThings = this.getNewestSensorData(allThings);
 
                 allThings = this.aggregatePropertiesOfThings(allThings);
@@ -419,7 +421,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }.bind(this),
             /**
              * a function to call before calling anything
-             * @returns {Void}  -
+             * @returns {void}
              */
             httpOnStart = function () {
                 // on start
@@ -427,7 +429,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }.bind(this),
             /**
              * A function that is executed when the http call is completed, regardless of whether there is a success or a failure.
-             * @returns {Void}  -
+             * @returns {void}
              */
             httpOnComplete = function () {
                 // on complete
@@ -436,7 +438,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             /**
              * a function to call on error
              * @param {Error} error the occuring error
-             * @returns {Void}  -
+             * @returns {void}
              */
             httpOnError = function (error) {
                 // on error
@@ -454,6 +456,26 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         else {
             http.getInExtent(requestUrl, currentExtent, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
         }
+    },
+
+    /**
+     * Parse the sensorThings-API data with datastreams as root.
+     * The datastreams are merged based on the Id of the thing if the Ids exist multiple times.
+     * @param {Object[]} sensordata the sensordata with datastream as root.
+     * @param {String[]} datastreamAttributes  The datastreamattributes.
+     * @param {String[]} thingAttributes The thing attributes.
+     * @returns {Object[]} The sensordata with merged things as root.
+     */
+    parseDatastreams: function (sensordata, datastreamAttributes, thingAttributes) {
+        let allThings = this.changeSensordataRoot(sensordata, datastreamAttributes, thingAttributes);
+        const thingIds = allThings.map(thing => thing["@iot.id"]),
+            uniqeThingIds = [... new Set(thingIds)];
+
+        if (thingIds.length > uniqeThingIds.length) {
+            allThings = this.mergeDatastreamsByThingId(allThings, uniqeThingIds);
+        }
+
+        return allThings;
     },
 
     /**
@@ -484,6 +506,31 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         return things;
+    },
+
+    /**
+     * Merge datastreams based on the id of the thing if the ids exist multiple times.
+     * @param {Object[]} allThings The sensordata with things as root.
+     * @param {Number[]} uniqueIds The unique ids from the sensordata things.
+     * @returns {Object[]} The sensordata with merged things as root.
+     */
+    mergeDatastreamsByThingId: function (allThings, uniqueIds) {
+        const mergedThings = [];
+
+        uniqueIds.forEach((thingId, thingIdIndex) => {
+            const filterThings = allThings.filter(thing => thing["@iot.id"] === thingId);
+
+            filterThings.forEach((thing, index) => {
+                if (index === 0) {
+                    mergedThings.push(thing);
+                }
+                else {
+                    mergedThings[thingIdIndex].Datastreams = [...mergedThings[thingIdIndex].Datastreams, ...thing.Datastreams];
+                }
+            });
+        });
+
+        return mergedThings;
     },
 
     /**

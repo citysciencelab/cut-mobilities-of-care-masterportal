@@ -169,7 +169,7 @@ describe("core/modelList/layer/sensor", function () {
         });
     });
 
-    describe("changeSensordataRoot", function () {
+    describe("parseDatastreams", function () {
         it("should return an object[] with Thing data in the root and datastream data in the second level", function () {
             const sensordata = [
                     {
@@ -210,9 +210,12 @@ describe("core/modelList/layer/sensor", function () {
                     "@iot.id",
                     "name",
                     "properties"
-                ];
+                ],
+                parseDatastreams = sensorLayer.parseDatastreams(sensordata, datastreamAttributes, thingAttributes);
 
-            expect(sensorLayer.changeSensordataRoot(sensordata, datastreamAttributes, thingAttributes)).to.be.an("array").to.deep.includes(
+            expect(parseDatastreams).to.be.an("array");
+            expect(parseDatastreams.length).equals(1);
+            expect(parseDatastreams).to.deep.nested.include(
                 {
                     "@iot.id": 999,
                     "name": "Thing",
@@ -232,6 +235,136 @@ describe("core/modelList/layer/sensor", function () {
                             "Observations": [
                                 {
                                     "@iot.id": 123,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ],
+                    Thing: {
+                        "@iot.id": 999,
+                        "name": "Thing",
+                        "properties": {
+                            "requestUrl": "https:sensorTestUrl"
+                        }
+                    }
+                }
+            );
+        });
+    });
+
+    describe("mergeDatastreamsByThingId", function () {
+        it("should return a thing array with merged datastreams", function () {
+            const sensordata = [{
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10492,
+                            "@iot.selfLink": "https://sensorUrlTest",
+                            "Observations": [
+                                {
+                                    "@iot.id": 123,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ],
+                    Thing: {
+                        "@iot.id": 999,
+                        "name": "Thing",
+                        "properties": {
+                            "requestUrl": "https:sensorTestUrl"
+                        }
+                    }
+                },
+                {
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10493,
+                            "@iot.selfLink": "https://sensorUrlTest1",
+                            "Observations": [
+                                {
+                                    "@iot.id": 456,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ],
+                    Thing: {
+                        "@iot.id": 999,
+                        "name": "Thing",
+                        "properties": {
+                            "requestUrl": "https:sensorTestUrl"
+                        }
+                    }
+                }],
+                uniqueIds = [999],
+                parseDatastreams = sensorLayer.mergeDatastreamsByThingId(sensordata, uniqueIds);
+
+            expect(parseDatastreams).to.be.an("array");
+            expect(parseDatastreams.length).equals(1);
+            expect(parseDatastreams).to.deep.nested.include(
+                {
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10492,
+                            "@iot.selfLink": "https://sensorUrlTest",
+                            "Observations": [
+                                {
+                                    "@iot.id": 123,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        },
+                        {
+                            "@iot.id": 10493,
+                            "@iot.selfLink": "https://sensorUrlTest1",
+                            "Observations": [
+                                {
+                                    "@iot.id": 456,
                                     "result": "testResult",
                                     "phenomenonTime": "2021-01-22T05:11:31.222Z"
                                 }
