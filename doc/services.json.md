@@ -404,7 +404,7 @@ Enables filtering SensorThingsAPI requests.
 |----|--------|----|-------|-----------|-------|
 |filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
 |expand|no|String/Array||See [full documentation](sensorThings.md)|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
-|root|no|String|"Things"|The root element in the URL to which the query is applied. possible are `"Things"` or `"Datastreams"`|"Datastreams|
+|root|no|String|"Things"|The root element in the URL to which the query is applied. possible are `"Things"` or `"Datastreams"`|"Datastreams"|
 
 **urlParameter example:** Show all Things where the name starts with `"Charging"`, and all Datastreams belonging to those Things. Show each Datastream's latest Observation.
 
@@ -413,7 +413,7 @@ Enables filtering SensorThingsAPI requests.
     "urlParameter" : {
         "filter" : "startswith(Things/name,'Charging')",
         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-        "root": "Datastreams
+        "root": "Datastreams"
     }
 }
 ```
