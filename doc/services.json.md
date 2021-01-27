@@ -356,7 +356,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |mqttOptions|no|**[mqttOptions](#markdown-header-mqtt_options)**||mqtt web socket connection configuration||
-|mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription.. For more information see **[sensorThings](sensorThings.md)**|0|
+|mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription. For more information see **[sensorThings](sensorThings.md)**|0|
 |mqttQos|no|Number|2|Quality of service subscription level. For more information see **[sensorThings](sensorThings.md)**|0|
 
 **Sensor example:**
@@ -413,7 +413,7 @@ Enables filtering SensorThingsAPI requests.
     "urlParameter" : {
         "filter" : "startswith(Things/name,'Charging')",
         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-        "root": "Datasreams
+        "root": "Datastreams
     }
 }
 ```

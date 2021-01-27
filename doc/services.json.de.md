@@ -402,7 +402,7 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
 |----|-------------|---|-------|------------|--------|
 |filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
-|root|nein|String|"Things"|Das Wurzelelement in der URL, auf dem die Query angewendet wird. möglich sind `"Things"` oder `"Datastreams"`|"Datastreams|
+|root|nein|String|"Things"|Das Wurzelelement in der URL, auf dem die Query angewendet wird. Möglich sind `"Things"` oder `"Datastreams"`|"Datastreams|
 
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
 
@@ -413,7 +413,7 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-         "root": "Datasreams
+         "root": "Datastreams
       }
    }
 ```
