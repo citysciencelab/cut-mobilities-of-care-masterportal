@@ -440,7 +440,8 @@
                 },
                 "themes": {
                     "default": {
-                      "imgAlt": "No image could be loaded."
+                      "imgAlt": "No image could be loaded.",
+                      "noAttributeAvailable": "No attribute available!"
                     },
                     "sensor": {
                       "sensor": {

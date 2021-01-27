@@ -603,7 +603,6 @@ describe("tools/print_/HighResolutionPlotService", function () {
     describe("createImagePath", function () {
         it("should return the path of an image", function () {
             // Sonderlocke da create imagePath auf das window zugreift. dies gibt es aber im consolen test nicht
-            // var result = "http://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/";
             const result = "null/lgv-config/img/";
 
             expect(print2Model.createImagePath()).to.deep.equal(result);

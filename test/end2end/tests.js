@@ -78,7 +78,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
                     // modules/tools
                     require("./tests/modules/tools/Contact.js"),
-                    // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
+                    require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                     require("./tests/modules/tools/ExtendedFilter.js"),
                     // require("./tests/modules/tools/Gfi.js"),
                     require("./tests/modules/Legend.js"),

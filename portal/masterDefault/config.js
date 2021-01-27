@@ -95,7 +95,7 @@ const Config = {
     ],
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v2.json",
+    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
     isMenubarVisible: true,
     gemarkungen: "https://geoportal-hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
@@ -122,7 +122,13 @@ const Config = {
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
         loadPath: "/locales/{{lng}}/{{ns}}.json"
-    }
+    },
+    /**
+     * @deprecated to be deleted with version 3.0
+     * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
+     * @default false
+     */
+    useVectorStyleBeta: true
 };
 
 // conditional export to make config readable by e2e tests

@@ -1,4 +1,6 @@
 const {until, By} = require("selenium-webdriver"),
+    {closeSingleAlert} = require("./utils"),
+    {isMaster} = require("../settings"),
     {getResolution, isInitalLoadingFinished} = require("./scripts");
 
 /**
@@ -79,6 +81,7 @@ async function getUnnavigatedDriver (builder, resolution) {
 
 /**
  * Prepares the driver for testing; build, set resolution, activate mode, get url.
+ * If testing master, the initial alert is closed.
  * @param {selenium-webdriver.Builder} builder builder for current driver
  * @param {String} url to get
  * @param {String} resolution formatted as "AxB" with A, B integers
@@ -89,6 +92,10 @@ async function initDriver (builder, url, resolution, mode) {
     const driver = await getUnnavigatedDriver(builder, resolution);
 
     await loadUrl(driver, url, mode);
+
+    if (isMaster(url)) {
+        await closeSingleAlert(driver);
+    }
 
     return driver;
 }

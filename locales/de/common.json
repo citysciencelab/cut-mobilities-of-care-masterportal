@@ -441,7 +441,8 @@
                 },
                 "themes": {
                     "default": {
-                      "imgAlt": "Es konnte kein Bild geladen werden."
+                      "imgAlt": "Es konnte kein Bild geladen werden.",
+                      "noAttributeAvailable": "Kein Attribut vorhanden!"
                     },
                     "sensor": {
                       "sensor": {
