@@ -915,4 +915,23 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.flattenArray({id: "123"})).to.deep.equal({id: "123"});
         });
     });
+
+    describe("createAssociationObject", function () {
+        it("should return an empty object for empty arry as input", function () {
+            expect(sensorLayer.createAssociationObject([])).to.deep.equal({});
+        });
+        it("should return an object with values from input array as keys", function () {
+            const array = [
+                "Test",
+                "Sensor",
+                "Iot"
+            ];
+
+            expect(sensorLayer.createAssociationObject(array)).to.deep.equal({
+                Test: true,
+                Sensor: true,
+                Iot: true
+            });
+        });
+    });
 });

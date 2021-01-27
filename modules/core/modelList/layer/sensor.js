@@ -486,26 +486,43 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {Object[]} The sensordata with things as root.
      */
     changeSensordataRoot: function (sensordata, datastreamAttributes, thingAttributes) {
-        const things = [...sensordata];
+        const things = [...sensordata],
+            datastreamAttributesAssociation = this.createAssociationObject(datastreamAttributes),
+            thingAttributesAssociation = this.createAssociationObject(thingAttributes);
 
         sensordata.forEach((stream, index) => {
             const datastreamNewAttributes = {};
 
             Object.keys(stream).forEach(key => {
-                if (datastreamAttributes.includes(key)) {
+                if (datastreamAttributesAssociation.hasOwnProperty(key)) {
                     datastreamNewAttributes[key] = stream[key];
                     delete things[index][key];
                 }
             });
             things[index].Datastreams = [datastreamNewAttributes];
             Object.keys(stream.Thing).forEach(key => {
-                if (thingAttributes.includes(key)) {
+                if (thingAttributesAssociation.hasOwnProperty(key)) {
                     things[index][key] = stream.Thing[key];
                 }
             });
         });
 
         return things;
+    },
+
+    /**
+     * Converts elments of an array to keys in an object with values to be true.
+     * @param {String[]} [array=[]] Array with values to be convert to an object.
+     * @returns {Object} The object with values of the given array as keys.
+     */
+    createAssociationObject: function (array = []) {
+        const associationObject = {};
+
+        array.forEach(key => {
+            associationObject[key] = true;
+        });
+
+        return associationObject;
     },
 
     /**
