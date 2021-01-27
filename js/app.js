@@ -41,7 +41,7 @@ import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
-import vueI18Next from "./vueI18Next";
+import {initiateVueI18Next} from "./vueI18Next";
 
 /**
  * WFSFeatureFilterView
@@ -97,7 +97,8 @@ async function loadApp () {
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         layerInformationModelSettings = {},
-        style = Radio.request("Util", "getUiStyle");
+        style = Radio.request("Util", "getUiStyle"),
+        vueI18Next = initiateVueI18Next();
     /* eslint-disable no-undef */
     let app = {},
         searchbarAttributes = {};

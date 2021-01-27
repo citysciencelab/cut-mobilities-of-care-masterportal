@@ -6,7 +6,7 @@ import MeasureTooltip from "../components/MeasureTooltip.vue";
 import style from "./measureStyle";
 import source from "./measureSource";
 
-import i18next from "../../../../../js/vueI18Next";
+import vueI18Next from "../../../../../js/vueI18Next";
 
 let store; // hack - would normally be an import from app-store, but that doesn't work in mochapack
 
@@ -34,7 +34,7 @@ function createTooltip (map, featureId) {
                 }
             }),
             store,
-            i18n: i18next
+            i18n: vueI18Next.instance
         });
 
     map.addOverlay(overlay);
