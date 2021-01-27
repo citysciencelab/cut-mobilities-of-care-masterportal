@@ -16,7 +16,7 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
-        ...mapGetters(["isTableStyle", "isDefaultStyle", "isQuickHelpActive"]),
+        ...mapGetters(["isTableStyle", "isDefaultStyle"]),
         ...mapGetters("Map", ["layerById", "map"])
     },
     watch: {
@@ -39,6 +39,11 @@ export default {
     created () {
         this.$on("close", this.close);
         this.addLayerToMap(this.layer);
+    },
+    mounted () {
+        if (this.active) {
+            this.createDrawInteraction();
+        }
     },
     methods: {
         ...mapMutations("Tools/Measure", Object.keys(mutations)),

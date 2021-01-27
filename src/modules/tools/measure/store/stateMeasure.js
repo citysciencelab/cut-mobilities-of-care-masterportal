@@ -17,7 +17,7 @@ import source from "../util/measureSource";
  * @property {Number} earthRadius earth radius to assume for length/area calculations (config-param)
  * @property {Object<String, module:ol/Feature>} lines line features by ol_uid
  * @property {Object<String, module:ol/Feature>} polygons polygon features by ol_uid
- * @property {module:ol/Overlay[]} overlays currently visible overlays with measurements
+ * @property {MeasureOverlay[]} overlays currently visible overlays with measurements
  * @property {String[]} geometryValues Available geometry values for measurement selection
  * @property {String[]} geometryValues3d Available geometry values for measurement selection in 3D mode
  * @property {String[]} lineStringUnits Available units for line measurement

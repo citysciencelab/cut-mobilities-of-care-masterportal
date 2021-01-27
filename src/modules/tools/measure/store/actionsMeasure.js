@@ -33,7 +33,7 @@ export default {
      * interaction created by this tool.
      * @returns {void}
      */
-    createDrawInteraction ({state, dispatch, commit, rootGetters, getters}) {
+    createDrawInteraction ({state, dispatch, commit, rootGetters, rootState, getters}) {
         dispatch("removeDrawInteraction");
 
         let interaction = null;
@@ -43,7 +43,8 @@ export default {
             interaction = makeDraw3d(
                 rootGetters["Map/map3d"],
                 rootGetters["Map/projectionCode"],
-                unlistener => commit("addUnlistener", unlistener)
+                unlistener => commit("addUnlistener", unlistener),
+                rootState._store
             );
         }
         else {
@@ -59,7 +60,8 @@ export default {
                 selectedGeometry,
                 feature => commit("addFeature", feature),
                 overlay => commit("addOverlay", overlay),
-                flag => commit("setIsDrawing", flag)
+                flag => commit("setIsDrawing", flag),
+                rootState._store
             );
             map.addInteraction(interaction);
         }

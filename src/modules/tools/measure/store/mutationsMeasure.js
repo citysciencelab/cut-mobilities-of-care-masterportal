@@ -22,7 +22,7 @@ const mutations = {
     /**
      * Adds an overlay to the overlays array.
      * @param {object} state vuex state
-     * @param {module:ol/Overlay} payload added overlay
+     * @param {MeasureOverlay} payload added overlay
      * @returns {void}
      */
     addOverlay (state, payload) {

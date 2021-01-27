@@ -15,7 +15,6 @@ export default {
     },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
-        ...mapGetters(["isTableStyle"]),
         /**
          * @returns {MeasureCalculation} calculation to display results of
          */
