@@ -8,6 +8,9 @@ export default {
     computed: {
         ...mapGetters("Tools/Draw", constants.keyStore.getters)
     },
+    mounted () {
+        this.setDownloadSelectedFormat(this.download.preSelectedFormat);
+    },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions)
@@ -34,7 +37,7 @@ export default {
                     <select
                         id="tool-draw-download-format"
                         class="form-control"
-                        @change="setDownloadSelectedFormat"
+                        @change="setDownloadSelectedFormat($event.target.value)"
                     >
                         <option value="none">
                             {{ $t("common:modules.tools.draw.download.pleaseChoose") }}
@@ -43,6 +46,7 @@ export default {
                             v-for="format in download.formats"
                             :key="'tool-draw-download-format-' + format"
                             :value="format"
+                            :selected="format === download.preSelectedFormat"
                         >
                             {{ format }}
                         </option>
