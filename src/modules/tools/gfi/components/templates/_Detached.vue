@@ -7,7 +7,7 @@ import BasicDragHandle from "../../../../../share-components/BasicDragHandle.vue
 import BasicResizeHandle from "../../../../../share-components/BasicResizeHandle.vue";
 
 export default {
-    name: "Detached",
+    name: "_Detached",
     components: {
         BasicDragHandle,
         BasicResizeHandle,
