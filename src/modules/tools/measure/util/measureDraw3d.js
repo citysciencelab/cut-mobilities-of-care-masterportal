@@ -4,12 +4,12 @@ import Feature from "ol/Feature";
 import * as Proj from "ol/proj.js";
 
 import source from "./measureSource";
+import store from "../../../../app-store";
 
 // variables to keep half-done measurements in quick access
 let firstPoint = null,
     firstPointFeature = null,
-    idCounter = 0,
-    store; // hack - would normally be an import from app-store, but that doesn't work in mochapack
+    idCounter = 0;
 
 // display font style
 const fill = new Fill({
@@ -214,12 +214,9 @@ function handle3DClicked (map, projectionCode, addUnlistener, obj) {
  * @param {module:ol/Map} map ol/Map
  * @param {string} projectionCode current map projection
  * @param {function} addUnlistener function to register unlisteners
- * @param {object} _store vuex store
  * @returns {MeasureDraw3d} measurement-interaction representing object (no real module:ol/interaction)
  */
-function makeDraw (map, projectionCode, addUnlistener, _store) {
-    store = _store;
-
+function makeDraw (map, projectionCode, addUnlistener) {
     /* TODO
      * when the 3d module is moved from backbone, this function must be updated
      * to listen to the new click mechanism; 3d measure may also be fully integrated

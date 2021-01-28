@@ -45,8 +45,6 @@ const store = new Vuex.Store({
     actions
 });
 
-store.commit("setStore", store);
-
 export default store;
 
 /**

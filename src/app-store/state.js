@@ -5,7 +5,6 @@ import isDevMode from "../utils/isDevMode";
 import masterPortalVersionNumber from "../utils/masterPortalVersionNumber";
 
 const state = {
-    _store: null,
     configJson: null,
     configJs: null,
     mobile: isMobile(), // resize update in ./index.js
