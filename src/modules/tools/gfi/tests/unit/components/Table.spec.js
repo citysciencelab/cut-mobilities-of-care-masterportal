@@ -148,7 +148,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
         const wrapper = shallowMount(Table, {
                 propsData,
                 slots: {
-                    footer: "<div>Footer</div>"
+                    footer: "<div class=\"gfi-footer\">Footer</div>"
                 },
                 components,
                 computed,

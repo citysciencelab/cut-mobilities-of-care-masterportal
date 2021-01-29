@@ -333,17 +333,19 @@ export default {
                 v-if="gfiFeatures.length > 1"
                 #footer
             >
-                <div
-                    :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
-                    @click="decreasePagerIndex"
-                >
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </div>
-                <div
-                    :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
-                    @click="increasePagerIndex"
-                >
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                <div class="gfi-footer">
+                    <div
+                        :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
+                        @click="decreasePagerIndex"
+                    >
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </div>
+                    <div
+                        :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
+                        @click="increasePagerIndex"
+                    >
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </div>
                 </div>
             </template>
         </component>

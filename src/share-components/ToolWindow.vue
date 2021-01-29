@@ -16,11 +16,6 @@ export default {
             required: false
         }
     },
-    data: function () {
-        return {
-            foo: "bar"
-        };
-    },
     computed: {
         /**
          * Calculates initial width of sidebar or window.
