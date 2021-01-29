@@ -143,7 +143,9 @@ export default {
                 :is="theme"
                 :feature="feature"
             />
-            <slot name="footer" />
+            <div class="gfi-footer">
+                <slot name="footer" />
+            </div>
         </template>
     </ToolWindow>
 </template>
