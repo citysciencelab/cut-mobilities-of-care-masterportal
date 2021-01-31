@@ -248,20 +248,27 @@
                 "checkVersion": "Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0."
             },
             "contact": {
-                "textPlaceholder": "Please write down your message in here and press \"$t(common:modules.tools.contact.textSendButton)\"",
-                "userNamePlaceholder": "Your name",
-                "textSendButton": "send message",
-                "emailAddressPlaceholder": "Your E-mail Address",
-                "telephonePlaceholder": "Your phone number",
-                "errorName": "Please input your name",
-                "errorEmail": "Please input a valid E-mail address",
-                "errorNumber": "Please input your phone number",
-                "errorMessage": "Sending Email failed!",
-                "errorIncompleteDeclarations": "Please fill out all fields of the contact form correctly so that your request can be sent.",
-                "successMessage": "Your request was sent successfully.",
-                "successTicket": "Your ticket number is: ",
-                "emailSubject": "Support request for the portal ",
-                "termsOfPrivacy": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">privacy policy</a>."
+              "error": {
+                "mail": "Please input a valid E-mail address",
+                "message": "Sending Email failed!",
+                "phone": "Please input your phone number",
+                "username": "Please input your name"
+              },
+              "placeholder": {
+                "mail": "Your E-mail Address",
+                "message": "Please write down your message in here and press \"$t(common:modules.tools.contact.sendButton)\"",
+                "messageInput": "Your message has to be at least {{length}} characters long.",
+                "phone": "Your phone number",
+                "username": "Your name"
+              },
+              "errorIncompleteDeclarations": "Please fill out all fields of the contact form correctly so that your request can be sent.",
+              "mailSubject": "Support request for the portal ",
+              "messageLabel": "Your message",
+              "privacyPolicy": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">privacy policy</a>.",
+              "sendButton": "send message",
+              "successMessage": "Your request was sent successfully.",
+              "successTicket": "Your ticket number is: "
+
             },
             "print": {
                 "titleLabel": "Title",

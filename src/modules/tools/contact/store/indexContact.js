@@ -1,21 +1,12 @@
-import GenericTool from "../../indexTools";
-import composeModules from "../../../../app-store/utils/composeModules";
-import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import {generateSimpleMutations} from "../../../../app-store/utils/generators";
-import state from "./stateContact.js";
+import state from "./stateContact";
+import actions from "./actionsContact";
+import getters from "./gettersContact";
+import mutations from "./mutationsContact";
 
-export default composeModules([GenericTool, {
+export default {
     namespaced: true,
-    state: state,
-    getters: {
-        ...generateSimpleGetters(state)
-    },
-    mutations: {
-        ...generateSimpleMutations(state)
-    },
-    actions: {
-        setActive ({commit}, value) {
-            commit("setActive", value);
-        }
-    }
-}]);
+    state,
+    actions,
+    getters,
+    mutations
+};

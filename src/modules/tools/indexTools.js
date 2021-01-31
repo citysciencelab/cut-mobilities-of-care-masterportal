@@ -6,7 +6,7 @@ import actions from "./actionsTools";
 /**
  * The imported tools.
  */
-import Contact from "../modules/tools/contact/store/indexContact";
+import Contact from "./contact/store/indexContact";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";

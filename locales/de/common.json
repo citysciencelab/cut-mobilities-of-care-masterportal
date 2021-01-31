@@ -249,20 +249,26 @@
                 "checkVersion": "WMS hinzufügen ist nur möglich wenn die Version des externen WMS Layers gleich oder größer als 1.3.0 ist."
             },
             "contact": {
-                "textPlaceholder": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf \"$t(common:modules.tools.contact.textSendButton)\"",
-                "userNamePlaceholder": "Ihr Name",
-                "textSendButton": "Abschicken",
-                "emailAddressPlaceholder": "Ihre Emailadresse",
-                "telephonePlaceholder": "Ihre Telefonnummer",
-                "errorName": "Bitte nennen Sie uns Ihren Namen.",
-                "errorEmail": "Bitte geben Sie eine gültige Emailadresse ein.",
-                "errorNumber": "Unter welcher Telefonnummer können wir Sie erreichen?",
-                "errorMessage": "Emailversand fehlgeschlagen!",
+                "error": {
+                    "mail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+                    "message": "Versendung der E-Mail fehlgeschlagen!",
+                    "messageInput": "Ihre Nachricht muss mindestens eine Länge von {{length}} Zeichen aufweisen.",
+                    "phone": "Unter welcher Telefonnummer können wir Sie erreichen?",
+                    "username": "Bitte nennen Sie uns Ihren Namen."
+                },
+                "placeholder": {
+                    "mail": "Ihre E-Mail-Adresse",
+                    "message": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf \"$t(common:modules.tools.contact.sendButton)\"",
+                    "phone": "Ihre Telefonnummer",
+                    "username": "Ihr Name"
+                },
                 "errorIncompleteDeclarations": "Bitte füllen Sie alle Felder des Kontaktformulars korrekt aus damit Ihre Anfrage verschickt werden kann.",
+                "mailSubject": "Supportanfrage zum Portal ",
+                "messageLabel": "Ihre Nachricht",
+                "privacyPolicy": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">Datenschutzerklärung</a>.",
+                "sendButton": "Abschicken",
                 "successMessage": "Ihre Anfrage wurde erfolgreich versendet.",
-                "successTicket": "Ihre Ticketnummer lautet: ",
-                "emailSubject": "Supportanfrage zum Portal ",
-                "termsOfPrivacy": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">Datenschutzerklärung</a>."
+                "successTicket": "Ihre Ticketnummer lautet: "
             },
             "print": {
                 "titleLabel": "Titel",

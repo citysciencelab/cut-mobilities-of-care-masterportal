@@ -251,17 +251,21 @@
                 "checkVersion": "Aggiungere WMS è possibile solo se la versione del WMS esterno è uguale o superiore a 1.3.0."
             },
             "contact": {
-                "textPlaceholder": "Si prega di formulare qui la vostra richiesta e premere &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
-                "userNamePlaceholder": "Nome",
-                "textSendButton": "Invia",
-                "emailAddressPlaceholder": "Indirizzo e-mail",
-                "telephonePlaceholder": "Numero di telefono",
-                "errorName": "Si prega di indicare il vostro nome.",
-                "errorEmail": "Si prega di inserire un indirizzo e-mail valido.",
-                "errorNumber": "A quale numero di telefono possiamo contattarvi?",
-                "errorMessage": "Trasmissione e-mail non riuscita!",
-                "successMessage": "La vostra richiesta è stata inviata con successo",
-                "successTicket": "Il vostro numero di ticket è: "
+              "error": {
+                  "mail": "Si prega di inserire un indirizzo e-mail valido.",
+                  "message": "Trasmissione e-mail non riuscita!",
+                  "phone": "A quale numero di telefono possiamo contattarvi?",
+                  "username": "Si prega di indicare il vostro nome."
+              },
+              "placeholder": {
+                  "mail": "Indirizzo e-mail",
+                  "message": "Si prega di formulare qui la vostra richiesta e premere &quot;$t(common:modules.tools.contact.sendButton)&quot;",
+                  "phone": "Numero di telefono",
+                  "username": "Nome"
+              },
+              "sendButton": "Invia",
+              "successMessage": "La vostra richiesta è stata inviata con successo",
+              "successTicket": "Il vostro numero di ticket è: "
             },
             "print": {
                 "titleLabel": "Titolo",
