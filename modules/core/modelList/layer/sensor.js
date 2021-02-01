@@ -32,7 +32,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
         intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 1000,
+        delayLoadingThingsInExtent: 0,
         useProxy: false,
         mqttRh: 2,
         mqttQos: 2,
@@ -236,6 +236,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 features = this.createFeatures(sensorData, epsg),
                 isClustered = this.has("clusterDistance");
 
+            this.clearLayerSource();
             // Add features to vectorlayer
             if (Array.isArray(features) && features.length) {
                 this.get("layerSource").addFeatures(features);
@@ -557,7 +558,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     loadSensorThingsStart: function () {
-        Radio.trigger("Util", "showLoader");
+        // Radio.trigger("Util", "showLoader");
     },
 
     /**
@@ -566,7 +567,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {void}
      */
     loadSensorThingsComplete: function () {
-        Radio.trigger("Util", "hideLoader");
+        // Radio.trigger("Util", "hideLoader");
     },
 
     /**
@@ -968,8 +969,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         }
 
         this.set("intvLoadingThingsInExtent", setInterval(function () {
-            this.clearLayerSource();
-
             this.unsubscribeFromSensorThings();
             this.initializeConnection(function () {
                 this.subscribeToSensorThings();
