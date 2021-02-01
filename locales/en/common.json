@@ -256,7 +256,7 @@
               },
               "placeholder": {
                 "mail": "Your E-mail Address",
-                "message": "Please write down your message in here and press \"$t(common:modules.tools.contact.sendButton)\"",
+                "message": "Please write down your message in here and press \"$t(common:modules.tools.contact.sendButton)\".",
                 "messageInput": "Your message has to be at least {{length}} characters long.",
                 "phone": "Your phone number",
                 "username": "Your name"
@@ -264,7 +264,10 @@
               "errorIncompleteDeclarations": "Please fill out all fields of the contact form correctly so that your request can be sent.",
               "mailSubject": "Support request for the portal ",
               "messageLabel": "Your message",
-              "privacyPolicy": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">privacy policy</a>.",
+              "privacyPolicy": {
+                "info": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">privacy policy</a>.",
+                "label": "Please accept the privacy policy."
+              },
               "sendButton": "send message",
               "successMessage": "Your request was sent successfully.",
               "successTicket": "Your ticket number is: "

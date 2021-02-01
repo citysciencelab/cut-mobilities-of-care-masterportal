@@ -43,7 +43,6 @@ const actions = {
         const {closeAfterSend, deleteAfterSend, withTicketNo} = state;
         let content = i18next.t("common:modules.tools.contact.successMessage");
 
-        // TODO: Is this if statement used before the dispatch?
         if (withTicketNo) {
             content += "\r\n";
             content += i18next.t("common:modules.tools.contact.successTicket");

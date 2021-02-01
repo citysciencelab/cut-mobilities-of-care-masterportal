@@ -1,20 +1,19 @@
 <script>
+import {minMessageLength} from "../store/constantsContact";
+
 export default {
     name: "ContactInput",
     props: {
         changeFunction: {
             type: Function,
-            default: null,
             required: true
         },
-        labelText: {
+        htmlElement: {
             type: String,
-            default: "",
-            required: true
+            default: "input"
         },
         inputName: {
             type: String,
-            default: "",
             required: true
         },
         inputType: {
@@ -23,14 +22,23 @@ export default {
         },
         inputValue: {
             type: String,
-            default: "",
             required: true
+        },
+        labelText: {
+            type: String,
+            required: true
+        },
+        rows: {
+            type: Number,
+            default: 5
         },
         validInput: {
             type: Boolean,
-            default: false,
             required: true
         }
+    },
+    computed: {
+        minMessageLength: () => minMessageLength
     }
 };
 </script>
@@ -39,20 +47,22 @@ export default {
     <div
         :class="['form-group', 'has-feedback', validInput ? 'has-success' : (!inputValue ? '' : 'has-error')]"
     >
-        <div class="input-group">
+        <div :class="htmlElement === 'input' ? 'input-group' : ''">
             <label
                 class="control-label input-group-addon"
                 :for="`tool-contact-${inputName}-input`"
             >{{ labelText }}</label>
-            <input
+            <component
+                :is="htmlElement"
                 :id="`tool-contact-${inputName}-input`"
                 :value="inputValue"
-                :type="inputType"
+                :type="htmlElement === 'input' ? inputType : ''"
                 class="form-control"
                 :aria-describedby="`tool-contact-${inputName}-help`"
                 :placeholder="$t(`common:modules.tools.contact.placeholder.${inputName}`)"
+                :rows="htmlElement === 'textarea' ? rows : ''"
                 @change="changeFunction($event.currentTarget.value)"
-            >
+            />
         </div>
         <span
             v-if="validInput"
@@ -64,7 +74,7 @@ export default {
             :id="`tool-contact-${inputName}-help`"
             class="help-block"
         >
-            {{ $t(`common:modules.tools.contact.error.${inputName}`) }}
+            {{ $t(`common:modules.tools.contact.error.${inputName + (inputName === "message" ? "Input" : "")}`, {length: minMessageLength}) }}
         </span>
     </div>
 </template>

@@ -259,7 +259,7 @@
               },
               "placeholder": {
                   "mail": "Indirizzo e-mail",
-                  "message": "Si prega di formulare qui la vostra richiesta e premere &quot;$t(common:modules.tools.contact.sendButton)&quot;",
+                  "message": "Si prega di formulare qui la vostra richiesta e premere \"$t(common:modules.tools.contact.sendButton)\".",
                   "phone": "Numero di telefono",
                   "username": "Nome"
               },

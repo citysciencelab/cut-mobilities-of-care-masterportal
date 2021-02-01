@@ -20,7 +20,7 @@ export default {
                 if (typeof this.menuConfig[tool.key] !== "undefined") {
                     res[tool.key] = this.menuConfig[tool.key].renderToWindow === false;
                 }
-                if (typeof this.menuConfig.tools !== "undefined") {
+                else if (typeof this.menuConfig.tools !== "undefined") {
                     res[tool.key] = this.menuConfig.tools.children[tool.key].renderToWindow === false;
                 }
             });

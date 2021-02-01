@@ -1,4 +1,3 @@
-// TODO: Check all the changed parameters and give information, that the old one is deprecated
 // TODO: Update the tests
 /**
  * Contact tool state definition.
@@ -11,29 +10,30 @@
  * @property {Boolean} resizableWindow If true, window is resizable. (config-param)
  * @property {Boolean} isVisibleInMenu If true, tool is selectable in menu. (config-param)
  * @property {Boolean} deactivateGFI Flag if tool should deactivate GFI. (config-param)
- * TODO(roehlipa): Take a closer look at the to and from parts, as they should not have the lgv-mails --> these should be required and empty in state at first
  * @property {Object[]} from Default sender for the e-mail. (config-param)
- * @property {String} from.email The mail address. (config-param)
+ * @property {String} from.mail The mail address. (config-param)
  * @property {String} from.name The name to be displayed for the mail address. (config-param)
- * @property {Object[]} to Default recipient of the e-mail. (config-param)
- * @property {String} to.email The mail address. (config-param)
- * @property {String} to.name The name to be displayed for the mail address. (config-param)
  * @property {String} serviceId The id of the service (rest-services.json) that contains the url of the mail service. (config-param)
+ * @property {Object[]} to Default recipient of the e-mail. (config-param)
+ * @property {String} to.mail The mail address. (config-param)
+ * @property {String} to.name The name to be displayed for the mail address. (config-param)
  * @property {Boolean} [closeAfterSend=false] Flag if the contact window should be closed after an E-Mail has been sent. (config-param)
  * @property {String} [contactInfo=""] Additional text shown above the contact form. (config-param)
  * @property {Boolean} [deleteAfterSend=false] Flag if the input fields should be emptied after an E-Mail has been sent. (config-param)
  * @property {Boolean} [includeSystemInfo=false] Flag if information of the the system of the user should be included in the E-Mail. (config-param)
  * @property {String} [locationOfCustomerService="de"] The timezone the customer service is based in. The parameter is used for the date in the ticketId. (config-param)
  * @property {Number} [maxLines=5] Amount of lines (height) for the textArea of the form. (config-param)
- * @property {Boolean} [showTermsOfPrivacy=true] Flag if a checkbox should be displayed for agreeing to the privacy policy. (config-param) TODO(roehlipa): Deprecate this and change it to showPrivacyPolicy
+ * @property {Boolean} [showPrivacyPolicy=true] Flag if a checkbox should be displayed for agreeing to the privacy policy. (config-param)
  * @property {String} [subject=""] The subject to be used for the E-Mail. (config-param)
  * @property {Boolean} [withTicketNo=true] Flag if the ticketId should be shown to the user after an E-Mail has been sent. (config-param)
- * @property {String} mail TODO
- * @property {String} message TODO
- * @property {Boolean} privacyPolicyChecked TODO
- * @property {String} phone TODO
- * @property {String} username TODO
- * @property {?Object} systemInfo TODO
+ * @property {String} mail The mail address that the user entered.
+ * @property {String} message The message that the user entered.
+ * @property {Boolean} privacyPolicyAccepted Whether the user has accepted the privacy policy or not.
+ * @property {String} phone The phone number that the user has entered.
+ * @property {String} username The name of the user.
+ * @property {?Object} systemInfo Information about the system of the user. Only used, if the parameter includeSystemInfo is set to true.
+ * @deprecated The following parameters ist deprecated in the next major release.
+ * @property {String} serviceID The id of the service (rest-services.json) that contains the url of the mail service. (config-param)
  */
 const state = {
     active: false,
@@ -45,32 +45,23 @@ const state = {
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: true,
+    from: [],
+    serviceId: null,
+    to: [],
     closeAfterSend: true,
     contactInfo: "",
     deleteAfterSend: true,
-    from: [
-        {
-            email: "lgvgeoportal-hilfe@gv.hamburg.de",
-            name: "LGVGeoportalHilfe"
-        }
-    ],
     includeSystemInfo: false,
     locationOfCustomerService: "de",
     maxLines: 5,
-    serviceId: null,
-    showTermsOfPrivacy: false,
+    showPrivacyPolicy: false,
     subject: "",
-    to: [
-        {
-            email: "lgvgeoportal-hilfe@gv.hamburg.de",
-            name: "LGVGeoportalHilfe"
-        }
-    ],
     withTicketNo: true,
+    serviceID: null,
     // contact state
     mail: "",
     message: "",
-    privacyPolicyChecked: false,
+    privacyPolicyAccepted: false,
     phone: "",
     username: "",
     systemInfo: null

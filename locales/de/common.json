@@ -258,14 +258,17 @@
                 },
                 "placeholder": {
                     "mail": "Ihre E-Mail-Adresse",
-                    "message": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf \"$t(common:modules.tools.contact.sendButton)\"",
+                    "message": "Bitte formulieren Sie hier Ihre Frage und drücken Sie auf \"$t(common:modules.tools.contact.sendButton)\".",
                     "phone": "Ihre Telefonnummer",
                     "username": "Ihr Name"
                 },
                 "errorIncompleteDeclarations": "Bitte füllen Sie alle Felder des Kontaktformulars korrekt aus damit Ihre Anfrage verschickt werden kann.",
                 "mailSubject": "Supportanfrage zum Portal ",
                 "messageLabel": "Ihre Nachricht",
-                "privacyPolicy": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">Datenschutzerklärung</a>.",
+                "privacyPolicy": {
+                  "info": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">Datenschutzerklärung</a>.",
+                  "label": "Bitte akzeptieren Sie die Datenschutzerklärung."
+                },
                 "sendButton": "Abschicken",
                 "successMessage": "Ihre Anfrage wurde erfolgreich versendet.",
                 "successTicket": "Ihre Ticketnummer lautet: "
