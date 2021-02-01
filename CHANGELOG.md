@@ -12,10 +12,15 @@
 - On tools Imported Layer in theme tree integrated function under Addons
 - On tools Geometrie/Gebäude Analyse funtion on tools under Addons
 - On tools Taktische Zeichen on tools under Addons
+- Added the parameters 'contactInfo', 'includeSystemInfo', 'locationOfCustomerService', 'maxLines', 'showPrivacyPolicy' and 'subject' to the configuration of the contact tool.
+
 ### Changed
 - The language of the changelog has been changed to English.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
+- Migrated the Contact Tool from Backbone.js to Vue.js. In doing so, the functionality of the config parameter 'deleteAfterSend' was split into two parameters; 'closeAfterSend' and 'deleteAfterSend'.
+
 ### Deprecated
+- Deprecated the parameter 'serviceID' for the contact tool; 'serviceId' should be used instead.
 
 ### Removed
 

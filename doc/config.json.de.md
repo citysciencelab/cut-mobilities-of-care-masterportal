@@ -1898,41 +1898,49 @@ Werkzeug, wodurch der Nutzer/die Nutzerin mit einem definierten Postfach Kontakt
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|serviceID|ja|String||Id des Emaildienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|from|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Absender der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
-|to|nein|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Adressat der Email. Bitte den **[Hinweis zur Email-Sicherheit](#markdown-header-hinweis-zur-email-sicherheit)** beachten.|false|
-|textPlaceholder|nein|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Platzhaltertext im Freitextfeld.|false|
-|includeSystemInfo|nein|Boolean|false|Flag, ob Systeminfos des Absendern mitgeschickt werden sollen.|false|
-|deleteAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden der Nachricht geschlossen und der Inhalt gelöscht werden soll.|false|
+|serviceId|ja|String||Id des E-Mail-Dienstes der verwendet werden soll. Wird aus der **[rest-services.json](rest-services.json.md)** bezogen.|false|
+|serviceID|nein|String||_Deprecated im nächsten Major Release. Bitte nutzen Sie stattdessen **serviceId**._ Id des E-Mail-Dienstes der verwendet werden soll. Wird aus der **[rest-services.json](rest-services.json.md)** bezogen.|false|
+|from|ja|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Absender der E-Mail. Bitte den **[Hinweis zur E-Mail-Sicherheit](#markdown-header-hinweis-zur-e-mail-sicherheit)** beachten.|false|
+|to|ja|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Adressat der E-Mail. Bitte den **[Hinweis zur E-Mail-Sicherheit](#markdown-header-hinweis-zur-e-mail-sicherheit)** beachten.|false|
+|closeAfterSend|nein|Boolean|false|Flag, ob das Kontaktfenster nach erfolgreichem Versenden einer Nachricht geschlossen werden soll.|false|
+|contactInfo|nein|String||Weitere Informationen, welche oberhalb des Kontaktformulars angezeigt werden würden.|false|
+|deleteAfterSend|nein|Boolean|false|Flag, ob der Inhalt des Kontaktfensters nach erfolgreichem Versenden der Nachricht gelöscht werden soll.|false|
+|includeSystemInfo|nein|Boolean|false|Flag, ob Systeminformationen des Absenders mitgeschickt werden sollen.|false|
+|locationOfCustomerService|nein|String|"de"|Land, in welchem sich der Kundensupport befindet. Wird verwendet für das Datum innerhalb der ticketId.|false|
+|maxLines|nein|Number|5|Anzahl der Zeilen (Höhe) des Textbereiches des Formulars.|false|
+|showPrivacyPolicy|nein|Boolean|false|Flag, ob eine Checkbox angezeigt werden soll, um der Datenschutzerklärung zuzustimmen.|false|
+|subject|nein|String||Der Betreff, welcher für die E-Mail verwendet wird.|false|
 |withTicketNo|nein|Boolean|true|Flag, ob bei erfolgreichem Versand der Anfrage eine Ticketnummer zurückgegeben werden soll.|false|
 
 **Beispiel**
-```
-#!json
-"contact":{
-    "name": "Kontakt",
-    "glyphicon": "glyphicon-envelope",
-    "serviceID": "123",
-    "from": [
-        {
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-            "name":"LGVGeoportalHilfe"
-        }
-    ],
-    "to": [
-        {
-            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
-            "name":"LGVGeoportalHilfe"
-        }
-    ],
-    "textPlaceholder": "Hier Text eingeben.",
-    "includeSystemInfo": true,
-    "deleteAfterSend": true,
-    "withTicketNo": false
+
+```json
+{
+    "contact": {
+        "name": "common:menu.contact",
+        "glyphicon": "glyphicon-envelope",
+        "serviceId": "123",
+        "from": [
+            {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+            }
+        ],
+        "to": [
+            {
+                "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                "name": "LGVGeoportalHilfe"
+            }
+        ],
+        "includeSystemInfo": true,
+        "closeAfterSend": true,
+        "deleteAfterSend": true,
+        "withTicketNo": false
+    }
 }
 ```
 
->Hinweis zur Email-Sicherheit
+>Hinweis zur E-Mail-Sicherheit
 
 Von der ungeprüften Übernahme von *Sender (FROM)*, *Empfänger (TO)*, *Kopie (CC)* und *Blindkopie (BCC)* durch den SMTP-Server wird hiermit aus Sicherheitsgründen **ausdrücklich abgeraten**.
 Vor der ungeprüften Übernahme durch den SMTP-Server der Kunden-Email als *Antwort an* (REPLY-TO) wird gewarnt.
@@ -1956,7 +1964,8 @@ Wir warnen vor der automatischen Einstellung der Kunden-Mail als *REPLY-TO*.
 ***
 
 #### Portalconfig.menu.tool.contact.email
-Email Objekt bestehend aus der email und aus dem Anzeigename.
+
+E-Mail Objekt bestehend aus der E-Mail und dem Anzeigenamen.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1964,8 +1973,8 @@ Email Objekt bestehend aus der email und aus dem Anzeigename.
 |name|nein|String||Anzeigename.|false|
 
 **Beispiel**
-```
-#!json
+
+```json
 {
     "email": "lgvgeoportal-hilfe@gv.hamburg.de",
     "name":"LGVGeoportalHilfe"

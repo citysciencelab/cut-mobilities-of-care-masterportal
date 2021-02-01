@@ -1998,12 +1998,18 @@ The contact form allows users to send messages to a configured mail address.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|serviceID|yes|String||Email service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
-|from|no|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name":"LGVGeoportalHilfe"}]|Email sender. Please mind our **[hints regarding mail safety](#markdown-header-hints-regarding-email-safety)**.|false|
-|to|no|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]|[{"email": "lgvgeoportal-hilfe@gv.hamburg.de","name": "LGVGeoportalHilfe"}]|Email receiver. Please mind out **[hints regarding mail safety](#markdown-header-hints-regarding-email-safety)**.|false|
-|textPlaceholder|no|String|"Bitte formulieren Sie hier Ihre Frage und drücken Sie auf &quot;Abschicken&quot;"|Placeholder text for the user message input element.|false|
-|includeSystemInfo|no|Boolean|false|Flag determining if the sender's system information is to be included in the email.|false|
-|deleteAfterSend|no|Boolean|false|Flag determining whether the contact form is emptied and closed after successfully sending a message.|false|
+|serviceId|yes|String||Email service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|serviceID|no|String||_Deprecated in the next major release. Please use **serviceId** instead._ Email service id. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
+|from|yes|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Email sender. Please mind our **[hints regarding E-Mail safety](#markdown-header-hints-regarding-e-mail-safety)**.|false|
+|to|yes|**[email](#markdown-header-portalconfigmenutoolcontactemail)**[]||Recipient of the E-Mail. Please mind our **[hints regarding E-Mail safety](#markdown-header-hints-regarding-e-mail-safety)**.|false|
+|closeAfterSend|no|Boolean|false|Flag determining if the contact window should be closed after successfully sending a message.|false|
+|contactInfo|no|String||Additional text shown above the contact form.|false|
+|deleteAfterSend|no|Boolean|false|Flag determining whether the contact form is emptied after successfully sending a message.|false|
+|includeSystemInfo|no|Boolean|false|Flag determining if the senders system information should be included in the E-Mail.|false|
+|locationOfCustomerService|no|String|"de"|The country the customer service is based in. The parameter is used for the date in the ticketId.|false|
+|maxLines|no|Number|5|Amount of lines (height) for the textArea of the form|false|
+|showPrivacyPolicy|no|Boolean|false|Flag determining if a checkbox should be displayed for agreeing to the privacy policy.|false|
+|subject|no|String||The subject to be used for the E-Mail.|false|
 |withTicketNo|no|Boolean|true|Whether successfully sending a email retrieves a ticket number for the user.|false|
 
 **Example**
@@ -2011,9 +2017,9 @@ The contact form allows users to send messages to a configured mail address.
 ```json
 {
     "contact": {
-        "name": "Kontakt",
+        "name": "common:menu.contact",
         "glyphicon": "glyphicon-envelope",
-        "serviceID": "123",
+        "serviceId": "123",
         "from": [
             {
                 "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -2026,15 +2032,15 @@ The contact form allows users to send messages to a configured mail address.
                 "name":"LGVGeoportalSupport"
             }
         ],
-        "textPlaceholder": "Please enter your message in this field.",
         "includeSystemInfo": true,
+        "closeAfterSend": true,
         "deleteAfterSend": true,
         "withTicketNo": false
     }
 }
 ```
 
->Hints regarding email safety
+>Hints regarding E-Mail safety
 
 The unchecked usage of *sender (FROM)*, *recipient (TO)*, *copy (CC)*, and *blind copy (BCC)* by the SMTP server is hereby **expressly discouraged** for security reasons. The unchecked usage of the customer email as a *reply to (REPLY-TO)* by the SMTP server is warned against.
 
@@ -2058,11 +2064,11 @@ We warn against automatically setting the customer email as *REPLY-TO*.
 
 #### Portalconfig.menu.tool.contact.email
 
-Email object containing a mail address and a display name.
+E-Mail object containing a mail address, and a display name.
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|email|no|String||Email address.|false|
+|email|no|String||E-Mail address.|false|
 |name|no|String||Display name.|false|
 
 **Example**
