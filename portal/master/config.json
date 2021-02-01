@@ -441,7 +441,7 @@
       "contact": {
         "name": "translate#common:menu.contact",
         "glyphicon": "glyphicon-envelope",
-        "serviceID": "80001",
+        "serviceId": "80001",
         "includeSystemInfo": true
       },
       "info": {

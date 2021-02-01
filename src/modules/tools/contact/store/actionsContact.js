@@ -4,12 +4,12 @@ import {httpClient, onSendComplete} from "../utils/messageFunctions";
 /**
  * Retrieves and returns the url of the mail service.
  *
- * @param {String} serviceId Id of the backend e-mail service.
+ * @param {String} id Id of the backend e-mail service.
  * @fires RestReader#RadioRequestRestReaderGetServiceById
  * @returns {?String} Returns the url of the mail service if it is configured.
  */
-function getServiceUrl ({serviceId}) {
-    return Radio.request("RestReader", "getServiceById", serviceId)?.get("url");
+function getServiceUrl (id) {
+    return Radio.request("RestReader", "getServiceById", id)?.get("url");
 }
 
 const actions = {
@@ -69,8 +69,10 @@ const actions = {
      * @returns {void}
      */
     send: async ({state, dispatch, getters}) => {
-        const content = i18next.t("common:modules.tools.contact.errorMessage");
-        let data = null,
+        const content = i18next.t("common:modules.tools.contact.errorMessage"),
+            {to, from, serviceId, serviceID} = state;
+        let id = serviceId,
+            data = null,
             mailService = null,
             ticketId = "";
 
@@ -80,20 +82,24 @@ const actions = {
             onSendComplete();
             return;
         }
+        if (serviceID !== "") {
+            console.warn("Contact: The parameter 'serviceID' is deprecated in the next major release! Please use serviceId instead.");
+            id = serviceID;
+        }
 
         dispatch("getSystemInfo");
 
         ticketId = createTicketId();
         mailService = getServiceUrl(state);
         data = {
-            from: state.from,
-            to: state.to,
+            from,
+            to,
             subject: createSubject(ticketId, state.subject || (i18next.t("common:modules.tools.contact.mailSubject") + state.systemInfo.portalTitle)),
             text: createMessage(state)
         };
 
         if (mailService === undefined) {
-            console.warn("An error occurred sending an e-mail: serviceId " + state.serviceId + " is unknown to RestReader.");
+            console.warn(`"An error occurred sending an e-mail: serviceId ${id} is unknown to the RestReader.`);
             dispatch("Alerting/addSingleAlert", {content, category: "Warning"}, {root: true});
             onSendComplete();
             return;
@@ -109,13 +115,13 @@ const actions = {
                     dispatch("onSendSuccess", ticketId);
                 }
                 else {
-                    console.warn("An error occured sending an email - server response is: " + response.message);
+                    console.warn(`An error occured sending an email - server response is: ${response.message}`);
                     dispatch("Alerting/addSingleAlert", {content, category: "Warning"}, {root: true});
                     onSendComplete();
                 }
             },
             err => {
-                console.warn("An error occurred sending an email: " + err);
+                console.warn(`An error occurred sending an email: ${err}`);
                 dispatch("Alerting/addSingleAlert", {content, category: "Warning"}, {root: true});
                 onSendComplete();
             }

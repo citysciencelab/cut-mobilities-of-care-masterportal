@@ -10,10 +10,10 @@ function createSystemInfo (systemInfo) {
 
     info += "<br>";
     info += "==================<br>";
-    info += "Referrer: <a href='" + systemInfo.referrer + "'>" + systemInfo.portalTitle + "</a><br>";
-    info += "Platform: " + systemInfo.platform + "<br>";
-    info += "Cookies enabled: " + systemInfo.cookieEnabled + "<br>";
-    info += "UserAgent: " + systemInfo.userAgent + "<br>";
+    info += `Referrer: <a href="${systemInfo.referrer}">${systemInfo.portalTitle}</a><br>`;
+    info += `Platform: ${systemInfo.platform} <br>`;
+    info += `Cookies enabled: ${systemInfo.cookiesEnabled} <br>`;
+    info += `UserAgent: ${systemInfo.userAgent}<br>`;
 
     return info;
 }
@@ -36,11 +36,11 @@ function createMessage ({username, mail, phone, message, includeSystemInfo, syst
     const info = includeSystemInfo ? createSystemInfo(systemInfo) : "";
     let msg = "";
 
-    msg += "Name: " + username + "<br>";
-    msg += "E-Mail: " + mail + "<br>";
-    msg += "Tel: " + phone + "<br>";
+    msg += `Name: ${username}<br>`;
+    msg += `E-Mail: ${mail}<br>`;
+    msg += `Tel.:: ${phone}<br>`;
     msg += "==================<br>";
-    msg += message + "<br>";
+    msg += `${message}<br>`;
     msg += info;
 
     return msg;
@@ -54,7 +54,7 @@ function createMessage ({username, mail, phone, message, includeSystemInfo, syst
  * @returns {String} The subject that will be used for the E-Mail.
  */
 function createSubject (ticketId, subject) {
-    return ticketId + ": " + subject;
+    return `${ticketId}: ${subject}`;
 }
 
 /**
