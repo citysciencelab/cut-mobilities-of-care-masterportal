@@ -8,7 +8,7 @@ import source from "./measureSource";
 
 import vueI18Next from "../../../../../js/vueI18Next";
 
-import store from "../../../../app-store";
+let store; // hack - would normally be an import from app-store, but that doesn't work in mochapack
 
 /**
  * Creates measurement tooltip.
@@ -48,9 +48,12 @@ function createTooltip (map, featureId) {
  * @param {function} addFeature callback for features to put into store
  * @param {function} addOverlay callback to add overlay to store
  * @param {function} setIsDrawing sets whether tool is currently drawing (i.e. sketch exists)
+ * @param {object} _store vuex store
  * @returns {module:ol/interaction/Draw} draw interaction
  */
-function makeDraw (map, type, addFeature, addOverlay, setIsDrawing) {
+function makeDraw (map, type, addFeature, addOverlay, setIsDrawing, _store) {
+    store = _store;
+
     const draw = new Draw({
         source,
         type,

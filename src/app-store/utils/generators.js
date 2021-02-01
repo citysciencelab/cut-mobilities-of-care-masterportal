@@ -7,7 +7,7 @@
  * @param {Object} state state to generate mutations for
  * @returns {Object.<String, Function>} object of mutations
  */
-export function generateSimpleMutations (state = {}) {
+export function generateSimpleMutations (state) {
     return Object.keys(state)
         .reduce((acc, key) => {
             const mutationKey = `set${key[0].toUpperCase()}${key.slice(1)}`;
@@ -30,7 +30,7 @@ export function generateSimpleMutations (state = {}) {
  * @param {Object} state state to generate getters for
  * @returns {Object.<String, Function>} object of getters
  */
-export function generateSimpleGetters (state = {}) {
+export function generateSimpleGetters (state) {
     return Object.keys(state)
         .reduce((acc, key) => ({
             ...acc,
