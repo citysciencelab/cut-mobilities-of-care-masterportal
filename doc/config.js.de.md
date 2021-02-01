@@ -40,7 +40,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Messen (MeasureTool)).||
 |**[remoteInterface](#markdown-header-remoteinterface)**|nein|object||Optionale Konfiguration für das remoteInterface.||
 |scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten rechts auf der Karte angezeigt wird.|`true`|
-|simpleMap|nein|Boolean|false|_Deprecated im nächsten Mayor-Release. Bitte nutzen Sie den Parameter `simpleMap` als Teil der Konfiguration des Tools `saveSelection` in der **[config.json](config.json.md)**._ Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
+|simpleMap|nein|Boolean|false|_Deprecated im nächsten Major-Release. Bitte nutzen Sie den Parameter `simpleMap` als Teil der Konfiguration des Tools `saveSelection` in der **[config.json](config.json.md)**._ Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
 |startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
 |**[tree](#tree)**|nein|Object||||
 |uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
