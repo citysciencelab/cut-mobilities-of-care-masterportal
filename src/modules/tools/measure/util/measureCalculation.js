@@ -8,7 +8,7 @@ import {getArea, getLength} from "ol/sphere";
  * @param {Number} selectedUnit index of unit
  * @return {MeasureCalculation[]} calculated value for display
  */
-export function calculateLinesLength (projection, lines, radius, selectedUnit) {
+export function calculateLineLengths (projection, lines, radius, selectedUnit) {
     return Object.keys(lines).reduce((accumulator, lineKey) => {
         const line = lines[lineKey],
             length = getLength(line.getGeometry(), {projection, radius});
@@ -29,7 +29,7 @@ export function calculateLinesLength (projection, lines, radius, selectedUnit) {
  * @param {Number} selectedUnit index of unit
  * @return {MeasureCalculation[]} calculated value for display
  */
-export function calculatePolygonsArea (projection, polygons, radius, selectedUnit) {
+export function calculatePolygonAreas (projection, polygons, radius, selectedUnit) {
     return Object.keys(polygons).reduce((accumulator, polygonKey) => {
         const polygon = polygons[polygonKey],
             area = getArea(polygon.getGeometry(), {projection, radius});

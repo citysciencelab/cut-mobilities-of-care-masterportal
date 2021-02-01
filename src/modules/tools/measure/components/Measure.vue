@@ -55,10 +55,7 @@ export default {
          */
         close () {
             this.setActive(false);
-
-            // TODO replace trigger when ModelList is migrated
-            // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = getComponent(this.$store.state.Tools.Measure.id);
+            const model = getComponent(this.id);
 
             if (model) {
                 model.set("isActive", false);
@@ -91,7 +88,7 @@ export default {
                             for="measure-tool-geometry-select"
                             class="col-md-5 col-sm-5 control-label"
                         >
-                            {{ $t('modules.tools.measure.geometry') }}
+                            {{ $t("modules.tools.measure.geometry") }}
                         </label>
                         <div class="col-md-7 col-sm-7">
                             <select
@@ -108,7 +105,7 @@ export default {
                                 >
                                     {{ is3d
                                         ? selectedGeometry
-                                        : $t('modules.tools.measure.' +
+                                        : $t("modules.tools.measure." +
                                             (geometryValue === "LineString" ? "stretch" : "area"))
                                     }}
                                 </option>
@@ -120,7 +117,7 @@ export default {
                             for="measure-tool-unit-select"
                             class="col-md-5 col-sm-5 control-label"
                         >
-                            {{ $t('modules.tools.measure.measure') }}
+                            {{ $t("modules.tools.measure.measure") }}
                         </label>
                         <div class="col-md-7 col-sm-7">
                             <select
@@ -144,13 +141,13 @@ export default {
                         class="form-group form-group-sm"
                     >
                         <div class="col-md-12 col-sm-12 inaccuracy-list">
-                            {{ $t('modules.tools.measure.influenceFactors') }}
+                            {{ $t("modules.tools.measure.influenceFactors") }}
                             <ul>
-                                <li>{{ $t('modules.tools.measure.scale') }}</li>
-                                <li>{{ $t('modules.tools.measure.resolution') }}</li>
-                                <li>{{ $t('modules.tools.measure.screenResolution') }}</li>
-                                <li>{{ $t('modules.tools.measure.inputAccuracy') }}</li>
-                                <li>{{ $t('modules.tools.measure.measureDistance') }}</li>
+                                <li>{{ $t("modules.tools.measure.scale") }}</li>
+                                <li>{{ $t("modules.tools.measure.resolution") }}</li>
+                                <li>{{ $t("modules.tools.measure.screenResolution") }}</li>
+                                <li>{{ $t("modules.tools.measure.inputAccuracy") }}</li>
+                                <li>{{ $t("modules.tools.measure.measureDistance") }}</li>
                             </ul>
                         </div>
                     </div>

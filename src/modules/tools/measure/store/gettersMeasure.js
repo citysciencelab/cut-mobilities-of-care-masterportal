@@ -1,48 +1,43 @@
 import stateMeasure from "./stateMeasure";
-import {calculateLinesLength, calculatePolygonsArea} from "../util/measureCalculation";
+import {calculateLineLengths, calculatePolygonAreas} from "../util/measureCalculation";
 
-import {MapMode} from "../../../map/store/enums";
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 
 const getters = {
     ...generateSimpleGetters(stateMeasure),
     /**
-     * @param {object} _ measure store state
-     * @param {object} __ measure store getters
-     * @param {object} ___ root state
-     * @param {object} rootGetters root getters
-     * @return {boolean} whether the portal is currently in 3D mode
-     */
-    is3d (_, __, ___, rootGetters) {
-        return rootGetters["Map/mapMode"] === MapMode.MODE_3D;
-    },
-    /**
      * @param {object} state measure store state
-     * @param {object} getters measure store getters
+     * @param {object} _ measure store getters
+     * @param {object} __ root state
+     * @param {object} rootGetters root getters
      * @returns {String[]} options for geometry selection
      */
-    geometryValues ({geometryValues3d, geometryValues}, {is3d}) {
-        return is3d
+    geometryValues ({geometryValues3d, geometryValues}, _, __, rootGetters) {
+        return rootGetters["Map/is3d"]
             ? geometryValues3d
             : geometryValues;
     },
     /**
      * @param {object} state measure store state
-     * @param {object} getters measure store getters
+     * @param {object} _ measure store getters
+     * @param {object} __ root state
+     * @param {object} rootGetters root getters
      * @returns {String} selected geometry selection option
      */
-    selectedGeometry ({geometryValues3d, selectedGeometry}, {is3d}) {
-        return is3d
+    selectedGeometry ({geometryValues3d, selectedGeometry}, _, __, rootGetters) {
+        return rootGetters["Map/is3d"]
             ? geometryValues3d[0] // 3D mode only has one option
             : selectedGeometry;
     },
     /**
      * @param {object} state measure store state
-     * @param {object} getters measure store getters
+     * @param {object} _ measure store getters
+     * @param {object} __ root state
+     * @param {object} rootGetters root getters
      * @returns {String[]} options for measurement units
      */
-    currentUnits ({selectedGeometry, lineStringUnits, polygonUnits}, {is3d}) {
-        return is3d || selectedGeometry === "LineString"
+    currentUnits ({selectedGeometry, lineStringUnits, polygonUnits}, _, __, rootGetters) {
+        return rootGetters["Map/is3d"] || selectedGeometry === "LineString"
             ? lineStringUnits
             : polygonUnits;
     },
@@ -54,8 +49,8 @@ const getters = {
      * @param {object} rootGetters root getters
      * @return {String[]} calculated display values
      */
-    linesLength ({lines, earthRadius, selectedUnit}, _, __, rootGetters) {
-        return calculateLinesLength(
+    lineLengths ({lines, earthRadius, selectedUnit}, _, __, rootGetters) {
+        return calculateLineLengths(
             rootGetters["Map/projection"].getCode(),
             lines,
             earthRadius,
@@ -70,8 +65,8 @@ const getters = {
      * @param {object} rootGetters root getters
      * @return {String[]} calculated display values
      */
-    polygonsArea ({polygons, earthRadius, selectedUnit}, _, __, rootGetters) {
-        return calculatePolygonsArea(
+    polygonAreas ({polygons, earthRadius, selectedUnit}, _, __, rootGetters) {
+        return calculatePolygonAreas(
             rootGetters["Map/projection"].getCode(),
             polygons,
             earthRadius,

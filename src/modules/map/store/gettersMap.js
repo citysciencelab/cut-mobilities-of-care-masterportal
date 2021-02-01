@@ -1,10 +1,19 @@
 import stateMap from "./stateMap";
+import {MapMode} from "./enums";
 import {generateSimpleGetters} from "../../../app-store/utils/generators";
 import {createGfiFeature} from "../../../api/gfi/getWmsFeaturesByMimeType";
 import {getGfiFeaturesByTileFeature} from "../../../api/gfi/getGfiFeaturesByTileFeature";
 
 const gettersMap = {
     ...generateSimpleGetters(stateMap),
+
+    /**
+     * @param {Object} state the map state
+     * @return {boolean} whether the portal is currently in 3D mode
+     */
+    is3d ({mapMode}) {
+        return mapMode === MapMode.MODE_3D;
+    },
 
     /**
      * gets all visible layers

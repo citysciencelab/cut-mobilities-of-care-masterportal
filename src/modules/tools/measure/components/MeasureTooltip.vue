@@ -19,7 +19,7 @@ export default {
          * @returns {MeasureCalculation} calculation to display results of
          */
         featureMeasurement () {
-            return this.linesLength[this.featureId] || this.polygonsArea[this.featureId];
+            return this.lineLengths[this.featureId] || this.polygonAreas[this.featureId];
         },
         /**
          * Required to decide when tooltip "double click to finish" can be hidden in table style.

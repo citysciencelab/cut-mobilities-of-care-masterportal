@@ -5,7 +5,6 @@ export default {
     mobile: state => state.mobile,
     dpi: state => state.dpi,
     idCounter: state => state?.idCounter,
-    isQuickHelpActive: state => Boolean(state?.configJs?.quickHelp),
     // configJS destructuring
     footerConfig: state => state?.configJs?.footer || null,
     loaderText: state => state?.configJs?.loaderText || "",

@@ -32,8 +32,8 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
                                         isBeingDrawn: false
                                     })[key]
                                 }}),
-                                linesLength: () => ({lineId: "500 m"}),
-                                polygonsArea: () => ({polygonId: "500 m²"})
+                                lineLengths: () => ({lineId: "500 m"}),
+                                polygonAreas: () => ({polygonId: "500 m²"})
                             }
                         }
                     }
