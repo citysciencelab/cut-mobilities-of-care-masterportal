@@ -184,18 +184,18 @@ describe("core/modelList/layer/sensor", function () {
                         ],
                         "description": "Lalala",
                         "name": "abc",
-                        Locations: [
-                            {
-                                "@iot.id": 777,
-                                "name": "location"
-                            }
-                        ],
                         Thing: {
                             "@iot.id": 999,
                             "name": "Thing",
                             "properties": {
                                 "requestUrl": "https:sensorTestUrl"
-                            }
+                            },
+                            Locations: [
+                                {
+                                    "@iot.id": 777,
+                                    "name": "location"
+                                }
+                            ]
                         }
                     }
                 ],
@@ -208,6 +208,7 @@ describe("core/modelList/layer/sensor", function () {
                 ],
                 thingAttributes = [
                     "@iot.id",
+                    "Locations",
                     "name",
                     "properties"
                 ],
@@ -242,14 +243,7 @@ describe("core/modelList/layer/sensor", function () {
                             "description": "Lalala",
                             "name": "abc"
                         }
-                    ],
-                    Thing: {
-                        "@iot.id": 999,
-                        "name": "Thing",
-                        "properties": {
-                            "requestUrl": "https:sensorTestUrl"
-                        }
-                    }
+                    ]
                 }
             );
         });
@@ -283,14 +277,7 @@ describe("core/modelList/layer/sensor", function () {
                             "description": "Lalala",
                             "name": "abc"
                         }
-                    ],
-                    Thing: {
-                        "@iot.id": 999,
-                        "name": "Thing",
-                        "properties": {
-                            "requestUrl": "https:sensorTestUrl"
-                        }
-                    }
+                    ]
                 },
                 {
                     "@iot.id": 999,
@@ -318,14 +305,7 @@ describe("core/modelList/layer/sensor", function () {
                             "description": "Lalala",
                             "name": "abc"
                         }
-                    ],
-                    Thing: {
-                        "@iot.id": 999,
-                        "name": "Thing",
-                        "properties": {
-                            "requestUrl": "https:sensorTestUrl"
-                        }
-                    }
+                    ]
                 }],
                 uniqueIds = [999],
                 parseDatastreams = sensorLayer.mergeDatastreamsByThingId(sensordata, uniqueIds);
@@ -372,14 +352,7 @@ describe("core/modelList/layer/sensor", function () {
                             "description": "Lalala",
                             "name": "abc"
                         }
-                    ],
-                    Thing: {
-                        "@iot.id": 999,
-                        "name": "Thing",
-                        "properties": {
-                            "requestUrl": "https:sensorTestUrl"
-                        }
-                    }
+                    ]
                 }
             );
         });

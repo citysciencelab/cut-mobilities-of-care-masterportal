@@ -32,7 +32,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
         intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 500,
+        delayLoadingThingsInExtent: 1000,
         useProxy: false,
         mqttRh: 2,
         mqttQos: 2,
@@ -51,7 +51,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         ],
         thingAttributes: [
             "@iot.id",
-            "@indexTools.selfLink",
+            "@iot.selfLink",
             "Locations",
             "description",
             "name",
@@ -486,13 +486,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {Object[]} The sensordata with things as root.
      */
     changeSensordataRoot: function (sensordata, datastreamAttributes, thingAttributes) {
-        const things = [...sensordata],
+        const things = [],
             datastreamAttributesAssociation = this.createAssociationObject(datastreamAttributes),
             thingAttributesAssociation = this.createAssociationObject(thingAttributes);
 
         sensordata.forEach((stream, index) => {
             const datastreamNewAttributes = {};
 
+            things.push({});
             Object.keys(stream).forEach(key => {
                 if (datastreamAttributesAssociation.hasOwnProperty(key)) {
                     datastreamNewAttributes[key] = stream[key];
