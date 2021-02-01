@@ -47,7 +47,7 @@ export default {
             this.setActive(false);
 
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = getComponent(this.$store.state.Tools.SaveSelection.id);
+            const model = getComponent(this.id);
 
             if (model) {
                 model.set("isActive", false);
