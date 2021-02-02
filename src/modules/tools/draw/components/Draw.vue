@@ -1,16 +1,19 @@
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
-import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
-import DownloadView from "../../../../../modules/tools/download/view";
+import Download from "../components/Download.vue";
 import DrawFeaturesFilter from "./DrawFeaturesFilter.vue";
+
+import getComponent from "../../../../utils/getComponent";
+
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import Tool from "../../Tool.vue";
 
 export default {
     name: "Draw",
     components: {
-        Tool,
-        DrawFeaturesFilter
+        DrawFeaturesFilter,
+        Download,
+        Tool
     },
     data () {
         return {
@@ -48,7 +51,7 @@ export default {
         drawCircleMethods () {
             if (this.currentInteraction === "draw") {
                 // remember: true means disable, false means enable
-                return !(this.getStyleSettings()?.circleMethod === "defined");
+                return !(this.styleSettings?.circleMethod === "defined");
             }
             return this.drawHTMLElementsModifyFeature;
         },
@@ -60,10 +63,10 @@ export default {
              * @returns {Number} the current radius
              */
             get () {
-                if (this.getStyleSettings()?.unit === "km") {
-                    return this.getStyleSettings()?.circleRadius / 1000;
+                if (this.styleSettings?.unit === "km") {
+                    return this.styleSettings?.circleRadius / 1000;
                 }
-                return this.getStyleSettings()?.circleRadius;
+                return this.styleSettings?.circleRadius;
             },
             /**
              * setter for the computed property circleRadius of the current drawType
@@ -72,7 +75,7 @@ export default {
              * @returns {void}
              */
             set (value) {
-                if (this.getStyleSettings()?.unit === "km") {
+                if (this.styleSettings?.unit === "km") {
                     this.setCircleRadius(parseInt(value, 10) * 1000);
                 }
                 else {
@@ -87,10 +90,10 @@ export default {
              * @returns {Number} the current radius
              */
             get () {
-                if (this.getStyleSettings()?.unit === "km") {
-                    return this.getStyleSettings()?.circleOuterRadius / 1000;
+                if (this.styleSettings?.unit === "km") {
+                    return this.styleSettings?.circleOuterRadius / 1000;
                 }
-                return this.getStyleSettings()?.circleOuterRadius;
+                return this.styleSettings?.circleOuterRadius;
             },
             /**
              * setter for the computed property circleOuterRadius of the current drawType
@@ -99,7 +102,7 @@ export default {
              * @returns {void}
              */
             set (value) {
-                if (this.getStyleSettings()?.unit === "km") {
+                if (this.styleSettings?.unit === "km") {
                     this.setCircleOuterRadius(parseInt(value, 10) * 1000);
                 }
                 else {
@@ -112,77 +115,77 @@ export default {
          * @returns {String} "defined" or "interactive"
          */
         circleMethodComputed () {
-            return this.getStyleSettings()?.circleMethod;
+            return this.styleSettings?.circleMethod;
         },
         /**
          * computed property for the unit of the current drawType
          * @returns {String} "m" or "km"
          */
         unitComputed () {
-            return this.getStyleSettings()?.unit;
+            return this.styleSettings?.unit;
         },
         /**
          * computed property for the text of the current drawType
          * @returns {String} the current text
          */
         textComputed () {
-            return this.getStyleSettings()?.text;
+            return this.styleSettings?.text;
         },
         /**
          * computed property for the font-size of the current drawType
          * @returns {Number} the current font-size as number
          */
         fontSizeComputed () {
-            return this.getStyleSettings()?.fontSize;
+            return this.styleSettings?.fontSize;
         },
         /**
          * computed property for the font family of the current drawType
          * @returns {Number} the current font family
          */
         fontComputed () {
-            return this.getStyleSettings()?.font;
+            return this.styleSettings?.font;
         },
         /**
          * computed property for the stroke width of the current drawType
          * @returns {Number} the current width as number
          */
         strokeWidthComputed () {
-            return this.getStyleSettings()?.strokeWidth;
+            return this.styleSettings?.strokeWidth;
         },
         /**
          * computed property for the opacity linked to color of the current drawType
          * @returns {Number} the current opacity as css range [0..1] - this is the value, not the caption (!)
          */
         opacityComputed () {
-            return this.getStyleSettings()?.opacity;
+            return this.styleSettings?.opacity;
         },
         /**
          * computed property for the opacity linked to colorContour of the current drawType
          * @returns {Number} the current opacity (of colorContour) as css range [0..1] - this is the value, not the caption (!)
          */
         opacityContourComputed () {
-            return this.getStyleSettings()?.opacityContour;
+            return this.styleSettings?.opacityContour;
         },
         /**
          * computed property for the color of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorContourComputed () {
-            return this.getStyleSettings()?.colorContour;
+            return this.styleSettings?.colorContour;
         },
         /**
          * computed property for the outer color of a double circle
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         outerColorContourComputed () {
-            return this.getStyleSettings()?.outerColorContour;
+            return this.styleSettings?.outerColorContour;
         },
         /**
          * computed property for the colorContour of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorComputed () {
-            return this.getStyleSettings()?.color;
+            return this.styleSettings?.color;
         },
         /**
          * computed property of the label for the normal colorContour - in case this is a double circle
@@ -230,7 +233,6 @@ export default {
          */
         active (value) {
             if (value) {
-                new DownloadView(this.$store);
                 this.setActive(value);
                 this.setCanvasCursorByInteraction(this.currentInteraction);
             }
@@ -346,6 +348,7 @@ export default {
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
+        :initialWidth="500"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
@@ -710,7 +713,7 @@ export default {
                             @change="setColor"
                         >
                             <option
-                                v-for="option in constants.pointColorOptions"
+                                v-for="option in constants.colorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
                                 :selected="isEqualColorArrays(option.value, colorComputed)"
@@ -806,18 +809,6 @@ export default {
                 <div class="form-group form-group-sm">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <button
-                            id="tool-draw-downloadInteraction"
-                            class="btn btn-sm btn-block btn-lgv-grey"
-                            @click="startDownloadTool"
-                        >
-                            <span class="glyphicon glyphicon-floppy-disk" />
-                            {{ $t("common:button.download") }}
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button
                             id="tool-draw-deleteInteraction"
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
@@ -841,7 +832,22 @@ export default {
                         </button>
                     </div>
                 </div>
+                <div class="form-group form-group-sm">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button
+                            id="tool-draw-openDownload"
+                            class="btn btn-sm btn-block"
+                            :class="download.enabled ? 'btn-primary' : 'btn-lgv-grey'"
+                            @click="setDownloadEnabled"
+                        >
+                            <span class="glyphicon glyphicon-floppy-disk" />
+                            {{ $t("common:button.download") }}
+                        </button>
+                    </div>
+                </div>
             </div>
+            <hr v-if="download.enabled">
+            <Download v-if="download.enabled" />
         </template>
     </Tool>
 </template>

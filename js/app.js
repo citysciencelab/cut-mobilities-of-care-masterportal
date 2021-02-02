@@ -1,5 +1,4 @@
 import Vue from "vue";
-import VueI18Next from "@panter/vue-i18next";
 import App from "../src/App.vue";
 import store from "../src/app-store";
 import loadAddons from "../src/addons";
@@ -30,7 +29,6 @@ import MouseHoverPopupView from "../modules/mouseHover/view";
 import QuickHelpView from "../modules/quickHelp/view";
 import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
-import MeasureView from "../modules/tools/measure/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
 import LineView from "../modules/tools/pendler/lines/view";
@@ -42,6 +40,7 @@ import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
+import {initiateVueI18Next} from "./vueI18Next";
 
 /**
  * WFSFeatureFilterView
@@ -97,7 +96,8 @@ async function loadApp () {
     const legacyAddons = Object.is(ADDONS, {}) ? {} : ADDONS,
         utilConfig = {},
         layerInformationModelSettings = {},
-        style = Radio.request("Util", "getUiStyle");
+        style = Radio.request("Util", "getUiStyle"),
+        vueI18Next = initiateVueI18Next();
     /* eslint-disable no-undef */
     let app = {},
         searchbarAttributes = {};
@@ -130,14 +130,12 @@ async function loadApp () {
 
     store.commit("setConfigJs", Config);
 
-    Vue.use(VueI18Next);
-
     app = new Vue({
         el: "#masterportal-root",
         name: "VueApp",
         render: h => h(App),
         store,
-        i18n: new VueI18Next(i18next, {namespaces: ["additional", "common"]})
+        i18n: vueI18Next
     });
 
 
@@ -216,10 +214,6 @@ async function loadApp () {
             }
             case "shadow": {
                 new ShadowView({model: tool});
-                break;
-            }
-            case "measure": {
-                new MeasureView({model: tool});
                 break;
             }
             case "print": {
@@ -373,7 +367,7 @@ async function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        const i18nextLanguages = i18next && i18next.options.hasOwnProperty("getLanguages") ? i18next.options.getLanguages() : {};
+        const i18nextLanguages = vueI18Next && vueI18Next.options.hasOwnProperty("getLanguages") ? vueI18Next.options.getLanguages() : {};
         let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
@@ -393,7 +387,7 @@ async function loadApp () {
                         /* webpackInclude: /[\\\/]additional.json$/ */
                         `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            i18next.addResourceBundle(lng, "additional", additionalLocales, true);
+                            vueI18Next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
                             checkInitCounter(initCounter, legacyAddons);
                         }).catch(error => {

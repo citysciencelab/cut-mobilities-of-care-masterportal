@@ -20,6 +20,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
 |gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |gutter|nein|String|"0"|Wert in Pixel, mit dem bei gekachelten Anfragen die Kacheln überlagert werden. Dient zur Vermeidung von abgeschnittenen Symbolen an Kachelgrenzen.|`"0"`|
 |id|ja|String||Frei wählbare Layer-ID|`"8"`|
+|infoFormat|nein|String|"text/xml"|Wert aus **[services.json](services.json.de.md)**. Format in dem die WMS-GetFeatureInfo ausgegeben werden soll. Die Formate: `"text/xml"`, `"text/html"` und `"application/vnd.ogc.gml"` werden unterstützt. Beim text/html Format wird die Antwort des Dienstes auf eine Tabelle überprüft und nur bei gefüllter Tabelle angezeigt.|`"text/xml"`|
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |layers|ja|String||Layername im Dienst. Dieser muss dem Wert aus den Dienste-Capabilities unter *Layer/Layer/Name* entsprechen.|`"1"`|
 |legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
@@ -54,6 +55,7 @@ Es können auch lokale GeoJSON-Dateien in das Portal geladen werden (Siehe Beisp
       "gutter" : "0",
       "minScale" : "0",
       "maxScale" : "1000000",
+      "infoFormat": "text/html",
       "gfiAttributes" : "ignore",
       "gfiTheme" : "default",
       "layerAttribution" : "nicht vorhanden",
@@ -343,7 +345,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
 |**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-|version|nein|String||Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
+|version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 |loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
 |showNoDataValue|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
 |noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
@@ -353,6 +355,8 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |***[mqttOptions](#markdown-header-mqtt_options)**|nein|Object||Konfiuration der Websocket-Verbindung für mqtt||
 **Beispiel Sensor:**
+|mqttRh|nein|Number|2|Diese Option gibt an, ob beim Einrichten des Abonnements retained messages gesendet werden. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
+|mqttQos|nein|Number|2|Quality of service subscription level. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
 
 
 ```
@@ -398,6 +402,7 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
 |----|-------------|---|-------|------------|--------|
 |filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|root|nein|String|"Things"|Das Wurzelelement in der URL, auf dem die Query angewendet wird. Möglich sind `"Things"` oder `"Datastreams"`|"Datastreams"|
 
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
 
@@ -407,7 +412,8 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
    {
       "urlParameter" : {
          "filter" : "startswith(Things/name,'Charging')",
-         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
+         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
+         "root": "Datastreams"
       }
    }
 ```

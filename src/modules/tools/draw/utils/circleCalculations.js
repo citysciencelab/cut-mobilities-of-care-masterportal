@@ -5,7 +5,7 @@ const earthRadius = 6378137;
 
 /**
  * Helper Function to coordinate the calculation of a circle.
- * @param {Event} event Event sent when drawing a feature on the map.
+ * @param {(Event | Object)} event Event sent when drawing a feature on the map or a simple object.
  * @param {module:ol/coordinate~Coordinate} circleCenter The center of the circle to be calculated.
  * @param {Number} circleRadius The radius of the circle to be calculated.
  * @param {module:ol/Map} map Map object.

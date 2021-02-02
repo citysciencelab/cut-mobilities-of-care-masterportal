@@ -336,24 +336,25 @@
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
+            "renderToWindow": false,
             "iconList": [
-                {
-                  "id": "iconPoint",
-                  "type": "simple_point",
-                  "value": "simple_point"
-                },
-                {
-                  "id": "iconMeadow",
-                  "type": "image",
-                  "scale": 0.8,
-                  "value": "wiese.png"
-                },
-                {
-                  "id": "gelber Pin",
-                  "type": "image",
-                  "scale": 0.5,
-                  "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
-                }
+              {
+                "id": "iconPoint",
+                "type": "simple_point",
+                "value": "simple_point"
+              },
+              {
+                "id": "iconMeadow",
+                "type": "image",
+                "scale": 0.8,
+                "value": "wiese.png"
+              },
+              {
+                "id": "gelber Pin",
+                "type": "image",
+                "scale": 0.5,
+                "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+              }
             ]
           },
           "styleWMS": {

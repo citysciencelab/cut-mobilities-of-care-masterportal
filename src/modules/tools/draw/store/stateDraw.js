@@ -5,16 +5,23 @@ const symbol = {
     },
     /**
      * @property {Boolean} active Current status of the Tool.
-     * @property {Object} addFeatureListener Listens to the the event "addfeature" which is fired after a feature has been added to the map.
+     * @property {Object} addFeatureListener Listens to the the event "addFeature" which is fired after a feature has been added to the map.
      * @property {String} currentInteraction The current interaction. Could be either "draw", "modify" or "delete"
      * @property {Object[]} deactivatedDrawInteractions Array of draw interactions which are deactivated in the process of the tool. Can be used to reactivate them from another point.
      * @property {Boolean} deactivateGFI If set to true, the activation of the tool deactivates the GFI tool.
+     * @property {String} download.dataString Data that will be written to the file for the Download.
+     * @property {module:ol/Feature[]} download.features Features that are drawn on the Map.
+     * @property {String} download.file Name of the file including thr suffix.
+     * @property {String} download.fileName Name for the to be downloaded file.
+     * @property {String} download.fileUrl The URL encoded dataString.
+     * @property {String[]} download.formats Choosable formats for the download of the features.
+     * @property {String} download.selectedFormat The format selected by the user for the download of the features.
      * @property {module:ol/interaction/Draw} drawInteraction The draw interaction of the draw tool.
      * @property {module:ol/interaction/Draw} drawInteractionTwo The second draw interaction of the draw tool needed if a double circle is to be drawn.
      * @property {Object} drawType The type of the draw interaction. The first parameter represents the type unique identifier of the draw interaction as a String and the second parameter represents the geometry of the drawType as a String.
      * @property {Number} fId ID of the last feature that was added to the redoArray.
-     * @property {Object[]} filterList Filter to show and hide featuers based on their drawtype.
-     * @property {String[]} filterList.drawTypes The drawtypes to be filtered.
+     * @property {Object[]} filterList Filter to show and hide features based on their drawType.
+     * @property {String[]} filterList.drawTypes The drawTypes to be filtered.
      * @property {String} filterList.name The name of the corresponding filter.
      * @property {Boolean} freeHand Distinction between a freeHand line drawing or a static one.
      * @property {String} glyphicon Glyphicon used in the header of the window.
@@ -22,9 +29,10 @@ const symbol = {
      * @property {String} id Internal Identifier for the Tool.
      * @property {Integer} idCounter Amount of features drawn.
      * @property {String} innerBorderColor The color of the border of the dropdown menu for the selection of the inner radius of a circle.
-     * @property {Boolean} isVisibleInMenu TODO: Currently has no use. Update this comment when there is a usage.
+     * @property {Boolean} isVisibleInMenu If true, the draw tool is listed in the menu.
      * @property {module:ol/layer/Vector} layer The layer in which the features are drawn.
      * @property {module:ol/interaction/Modify} modifyInteraction The modify interaction of the draw tool.
+     * @property {String} name Title of the Tool. Can be configured through the config.json.
      * @property {String} outerBorderColor The color of the border of the dropdown menu for the selection of the outer radius of a circle.
      * @property {Number} pointSize The size of the point.
      * @property {Number[]} redoArray Array of the IDs of features removed through the undo button.
@@ -85,6 +93,16 @@ const symbol = {
         currentInteraction: "draw",
         deactivatedDrawInteractions: [],
         deactivateGFI: true,
+        download: {
+            dataString: "",
+            enabled: false,
+            features: [],
+            file: "",
+            fileName: "",
+            fileUrl: "",
+            formats: ["KML", "GEOJSON", "GPX"], // NOTE(roehlipa): If this can't be configured, then it may be moved out of the state IMO.
+            selectedFormat: ""
+        },
         drawInteraction: null,
         drawInteractionTwo: null,
         drawType: {
@@ -113,7 +131,7 @@ const symbol = {
         outerBorderColor: "",
         pointSize: 16,
         redoArray: [],
-        renderToWindow: true,
+        renderToWindow: false,
         resizableWindow: true,
         selectInteraction: null,
         selectInteractionModify: null,
@@ -124,7 +142,9 @@ const symbol = {
         zIndex: 0,
         name: "common:menu.tools.draw",
         imgPath: "",
-
+        // // // // // //
+        // UI SETTINGS //
+        // // // // // //
         drawSymbolSettings: {
             color: [55, 126, 184, 1],
             opacity: 1

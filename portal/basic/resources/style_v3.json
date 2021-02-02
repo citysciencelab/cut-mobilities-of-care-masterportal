@@ -155,24 +155,14 @@
   {
     "styleId": "2003",
     "rules": [
+
       {
-        "conditions": {
-          "properties": {
-            "hektar": [0,5, 1,5]
-          }
-        },
-        "style": {
-          "polygonStrokeColor": [100, 100, 50, 1],
-          "polygonStrokeWidth": 5,
-          "polygonFillColor": [100, 100, 100, 0.8]
-        }
-      },
-      {
-        "style": {
+        "style":
+          {
           "polygonStrokeColor": [0, 0, 0, 1],
           "polygonStrokeWidth": 1,
           "polygonFillColor": [10, 200, 0, 0.2]
-        }
+          }
       }
     ]
   },

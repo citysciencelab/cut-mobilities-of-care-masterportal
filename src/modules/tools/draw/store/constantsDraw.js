@@ -12,7 +12,6 @@ const colorOptions = [
         {color: "white", value: [255, 255, 255]},
         {color: "yellow", value: [255, 255, 51]}
     ],
-    pointColorOptions = colorOptions,
     colorContourOptions = [
         colorOptions[1],
         colorOptions[0],
@@ -81,7 +80,6 @@ const colorOptions = [
 
 export {
     colorOptions,
-    pointColorOptions,
     colorContourOptions,
     drawTypeOptions,
     fontOptions,

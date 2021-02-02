@@ -26,7 +26,15 @@ const deprecatedParamsConfigJson = {
     };
 
 export default {
-
+    /**
+     * Sets store to store.
+     * @param {Object} state store state
+     * @param {Object} store vuex store
+     * @returns {void}
+     */
+    setStore (state, store) {
+        state._store = store;
+    },
     /**
      * Sets config.json.
      * @param {Object} state store state

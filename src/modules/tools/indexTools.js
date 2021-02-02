@@ -13,6 +13,7 @@ import Gfi from "./gfi/store/indexGfi";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
+import Measure from "./measure/store/indexMeasure";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -26,7 +27,8 @@ export default {
         Gfi,
         ScaleSwitcher,
         SupplyCoord,
-        SearchByCoord
+        SearchByCoord,
+        Measure
     },
     state,
     getters,

@@ -1,4 +1,4 @@
-import {getDrawTypeByGeometryType} from "../../../utils/getDrawTypeByGeometryType";
+import getDrawTypeByGeometryType from "../../../utils/getDrawTypeByGeometryType";
 
 import {expect} from "chai";
 
