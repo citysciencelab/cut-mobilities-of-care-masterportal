@@ -9,6 +9,7 @@ import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
 import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
+import store from "../../../../src/app-store";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -31,8 +32,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         isSubscribed: false,
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
-        intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 0,
         useProxy: false,
         mqttRh: 2,
         mqttQos: 2,
@@ -421,41 +420,20 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }
             }.bind(this),
             /**
-             * a function to call before calling anything
-             * @returns {void}
-             */
-            httpOnStart = function () {
-                // on start
-                this.loadSensorThingsStart();
-            }.bind(this),
-            /**
-             * A function that is executed when the http call is completed, regardless of whether there is a success or a failure.
-             * @returns {void}
-             */
-            httpOnComplete = function () {
-                // on complete
-                this.loadSensorThingsComplete();
-            }.bind(this),
-            /**
              * a function to call on error
              * @param {Error} error the occuring error
              * @returns {void}
              */
             httpOnError = function (error) {
-                // on error
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
-                        this.get("name") + " aufgetreten</strong>",
-                    kategorie: "alert-danger"
-                });
+                store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.modelList.layer.sensor.httpOnError", {name: this.get("name")}));
                 console.warn(error);
             }.bind(this);
 
         if (!this.get("loadThingsOnlyInCurrentExtent")) {
-            http.get(requestUrl, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
+            http.get(requestUrl, httpOnSucess, null, null, httpOnError);
         }
         else {
-            http.getInExtent(requestUrl, currentExtent, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
+            http.getInExtent(requestUrl, currentExtent, httpOnSucess, null, null, httpOnError);
         }
     },
 
@@ -550,24 +528,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         });
 
         return mergedThings;
-    },
-
-    /**
-     * to call on starting of loadSensorThings
-     * @fires Core#RadioTriggerUtilShowLoader
-     * @returns {void}
-     */
-    loadSensorThingsStart: function () {
-        // Radio.trigger("Util", "showLoader");
-    },
-
-    /**
-     * to call on ending of loadSensorThings
-     * @fires Core#RadioTriggerUtilHideLoader
-     * @returns {void}
-     */
-    loadSensorThingsComplete: function () {
-        // Radio.trigger("Util", "hideLoader");
     },
 
     /**
@@ -958,25 +918,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * loading things only in the current extent and updating the subscriptions
-     * delays before reloading stuff - maybe other moves will trigger in the midtime, so delay...
+     * Loading things only in the current extent and updating the subscriptions.
      * @returns {void}
      */
     loadFeaturesInExtentAndUpdateSubscription: function () {
-        if (this.get("intvLoadingThingsInExtent") !== 0) {
-            // stop any other action requested
-            clearInterval(this.get("intvLoadingThingsInExtent"));
-        }
-
-        this.set("intvLoadingThingsInExtent", setInterval(function () {
-            this.unsubscribeFromSensorThings();
-            this.initializeConnection(function () {
-                this.subscribeToSensorThings();
-            }.bind(this));
-
-            clearInterval(this.get("intvLoadingThingsInExtent"));
-            this.set("intvLoadingThingsInExtent", 0);
-        }.bind(this), this.get("delayLoadingThingsInExtent")));
+        this.unsubscribeFromSensorThings();
+        this.initializeConnection(() => {
+            this.subscribeToSensorThings();
+        });
     },
 
     /**
