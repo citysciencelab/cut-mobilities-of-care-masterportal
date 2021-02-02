@@ -1892,7 +1892,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|earthRadius|no|Number|6378137|Earth radius in meters.|false|
+|earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
 
 **Example**
 

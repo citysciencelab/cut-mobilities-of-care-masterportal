@@ -54,18 +54,30 @@ describe("core/modelList/layer/sensor", function () {
     describe("buildSensorThingsUrl", function () {
         it("should return an url as string for a specific input", function () {
             const testUrl = "https://www.example.com:1234/foo/bar",
-                testVersion = "1.0",
+                testVersion = "1.1",
                 testUrlParams = {
                     "baz": 1234,
                     "qux": "foobar"
                 },
-                expectedOutput = "https://www.example.com:1234/foo/bar/v1.0/Things?$baz=1234&$qux=foobar";
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.1/Things?$baz=1234&$qux=foobar";
+
+            expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, testUrlParams)).to.equal(expectedOutput);
+        });
+        it("should return an url with datastreams as root", function () {
+            const testUrl = "https://www.example.com:1234/foo/bar",
+                testVersion = "1.1",
+                testUrlParams = {
+                    "filter": "fi",
+                    "expand": "ex",
+                    "root": "Datastreams"
+                },
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.1/Datastreams?$filter=fi&$expand=ex";
 
             expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, testUrlParams)).to.equal(expectedOutput);
         });
         it("should return an url as string for a specific input including nested urlParams", function () {
             const testUrl = "https://www.example.com:1234/foo/bar",
-                testVersion = "1.0",
+                testVersion = "1.1",
                 testUrlParams = {
                     "baz": 1234,
                     "qux": [
@@ -74,15 +86,15 @@ describe("core/modelList/layer/sensor", function () {
                         "subParamC"
                     ]
                 },
-                expectedOutput = "https://www.example.com:1234/foo/bar/v1.0/Things?$baz=1234&$qux=subParamA,subParamB,subParamC";
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.1/Things?$baz=1234&$qux=subParamA,subParamB,subParamC";
 
             expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, testUrlParams)).to.equal(expectedOutput);
         });
 
         it("should return an url without query if no params as object are given", function () {
             const testUrl = "https://www.example.com:1234/foo/bar",
-                testVersion = "1.0",
-                expectedOutput = "https://www.example.com:1234/foo/bar/v1.0/Things?";
+                testVersion = "1.1",
+                expectedOutput = "https://www.example.com:1234/foo/bar/v1.1/Things?";
 
             expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, false)).to.equal(expectedOutput);
             expect(sensorLayer.buildSensorThingsUrl(testUrl, testVersion, undefined)).to.equal(expectedOutput);
@@ -97,13 +109,13 @@ describe("core/modelList/layer/sensor", function () {
                 "foo": "bar"
             };
 
-            expect(sensorLayer.buildSensorThingsUrl("", "1.0", testUrlParams)).to.equal("/v1.0/Things?$foo=bar");
-            expect(sensorLayer.buildSensorThingsUrl("http://", "1.0", testUrlParams)).to.equal("http:///v1.0/Things?$foo=bar");
-            expect(sensorLayer.buildSensorThingsUrl("wfs://baz", "1.0", testUrlParams)).to.equal("wfs://baz/v1.0/Things?$foo=bar");
-            expect(sensorLayer.buildSensorThingsUrl("foobar://baz////", "1.0", testUrlParams)).to.equal("foobar://baz/////v1.0/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("", "1.1", testUrlParams)).to.equal("/v1.1/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("http://", "1.1", testUrlParams)).to.equal("http:///v1.1/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("wfs://baz", "1.1", testUrlParams)).to.equal("wfs://baz/v1.1/Things?$foo=bar");
+            expect(sensorLayer.buildSensorThingsUrl("foobar://baz////", "1.1", testUrlParams)).to.equal("foobar://baz/////v1.1/Things?$foo=bar");
         });
         it("should take any version as string unchecked", function () {
-            expect(sensorLayer.buildSensorThingsUrl("", "1.0", false)).to.equal("/v1.0/Things?");
+            expect(sensorLayer.buildSensorThingsUrl("", "1.1", false)).to.equal("/v1.1/Things?");
             expect(sensorLayer.buildSensorThingsUrl("", "foo", false)).to.equal("/vfoo/Things?");
             expect(sensorLayer.buildSensorThingsUrl("", "foo.bar.baz", false)).to.equal("/vfoo.bar.baz/Things?");
         });
@@ -131,10 +143,10 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.getFirstPhenomenonTime({})).to.be.undefined;
         });
         it("should return time", function () {
-            expect(sensorLayer.getFirstPhenomenonTime("2020-04-02T14:00:01.000Z")).to.equal("2020-04-02T14:00:01.000Z");
+            expect(sensorLayer.getFirstPhenomenonTime("2020-04-02T14:00:01.100Z")).to.equal("2020-04-02T14:00:01.100Z");
         });
         it("should return first time if interval is given", function () {
-            expect(sensorLayer.getFirstPhenomenonTime("2020-04-02T14:00:01.000Z/2020-04-02T14:15:00.000Z")).to.equal("2020-04-02T14:00:01.000Z");
+            expect(sensorLayer.getFirstPhenomenonTime("2020-04-02T14:00:01.100Z/2020-04-02T14:15:00.000Z")).to.equal("2020-04-02T14:00:01.100Z");
         });
     });
 
@@ -154,6 +166,195 @@ describe("core/modelList/layer/sensor", function () {
             const winterTime = "2018-01-01T12:11:47.922Z";
 
             expect(sensorLayer.getLocalTimeFormat(winterTime, "Europe/Berlin")).to.have.string("1. Januar 2018 13:11");
+        });
+    });
+
+    describe("parseDatastreams", function () {
+        it("should return an object[] with Thing data in the root and datastream data in the second level", function () {
+            const sensordata = [
+                    {
+                        "@iot.id": 10492,
+                        "@iot.selfLink": "https://sensorUrlTest",
+                        "Observations": [
+                            {
+                                "@iot.id": 123,
+                                "result": "testResult",
+                                "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                            }
+                        ],
+                        "description": "Lalala",
+                        "name": "abc",
+                        Thing: {
+                            "@iot.id": 999,
+                            "name": "Thing",
+                            "properties": {
+                                "requestUrl": "https:sensorTestUrl"
+                            },
+                            Locations: [
+                                {
+                                    "@iot.id": 777,
+                                    "name": "location"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                datastreamAttributes = [
+                    "@iot.id",
+                    "@iot.selfLink",
+                    "Observations",
+                    "description",
+                    "name"
+                ],
+                thingAttributes = [
+                    "@iot.id",
+                    "Locations",
+                    "name",
+                    "properties"
+                ],
+                parseDatastreams = sensorLayer.parseDatastreams(sensordata, datastreamAttributes, thingAttributes);
+
+            expect(parseDatastreams).to.be.an("array");
+            expect(parseDatastreams.length).equals(1);
+            expect(parseDatastreams).to.deep.nested.include(
+                {
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10492,
+                            "@iot.selfLink": "https://sensorUrlTest",
+                            "Observations": [
+                                {
+                                    "@iot.id": 123,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ]
+                }
+            );
+        });
+    });
+
+    describe("mergeDatastreamsByThingId", function () {
+        it("should return a thing array with merged datastreams", function () {
+            const sensordata = [{
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10492,
+                            "@iot.selfLink": "https://sensorUrlTest",
+                            "Observations": [
+                                {
+                                    "@iot.id": 123,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ]
+                },
+                {
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10493,
+                            "@iot.selfLink": "https://sensorUrlTest1",
+                            "Observations": [
+                                {
+                                    "@iot.id": 456,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ]
+                }],
+                uniqueIds = [999],
+                parseDatastreams = sensorLayer.mergeDatastreamsByThingId(sensordata, uniqueIds);
+
+            expect(parseDatastreams).to.be.an("array");
+            expect(parseDatastreams.length).equals(1);
+            expect(parseDatastreams).to.deep.nested.include(
+                {
+                    "@iot.id": 999,
+                    "name": "Thing",
+                    "properties": {
+                        "requestUrl": "https:sensorTestUrl"
+                    },
+                    Locations: [
+                        {
+                            "@iot.id": 777,
+                            "name": "location"
+                        }
+                    ],
+                    Datastreams: [
+                        {
+                            "@iot.id": 10492,
+                            "@iot.selfLink": "https://sensorUrlTest",
+                            "Observations": [
+                                {
+                                    "@iot.id": 123,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        },
+                        {
+                            "@iot.id": 10493,
+                            "@iot.selfLink": "https://sensorUrlTest1",
+                            "Observations": [
+                                {
+                                    "@iot.id": 456,
+                                    "result": "testResult",
+                                    "phenomenonTime": "2021-01-22T05:11:31.222Z"
+                                }
+                            ],
+                            "description": "Lalala",
+                            "name": "abc"
+                        }
+                    ]
+                }
+            );
         });
     });
 
@@ -435,9 +636,9 @@ describe("core/modelList/layer/sensor", function () {
             sensorLayer.subscribeToSensorThings();
 
             expect(topics).to.deep.equal([
-                "v1.0/Datastreams(1)/Observations",
-                "v1.0/Datastreams(2)/Observations",
-                "v1.0/Datastreams(3)/Observations"
+                "v1.1/Datastreams(1)/Observations",
+                "v1.1/Datastreams(2)/Observations",
+                "v1.1/Datastreams(3)/Observations"
             ]);
         });
         it("should not subscribe on a topic that has already been subscribed", function () {
@@ -473,7 +674,7 @@ describe("core/modelList/layer/sensor", function () {
             sensorLayer.set("subscriptionTopics", {"foo": true}, {silent: true});
             sensorLayer.unsubscribeFromSensorThings();
 
-            expect(topics).to.deep.equal(["v1.0/Datastreams(foo)/Observations"]);
+            expect(topics).to.deep.equal(["v1.1/Datastreams(foo)/Observations"]);
         });
         it("should not unsubscribe from a topic that is already unsubscribed", function () {
             topics = [];
@@ -603,13 +804,13 @@ describe("core/modelList/layer/sensor", function () {
                         description: "bar",
                         "@iot.id": "quix",
                         requestUrl: "http://example.com",
-                        versionUrl: "1.0",
+                        versionUrl: "1.1",
                         Datastreams: [{"foobar": 1}]
                     }
                 }];
 
             sensorLayer.set("url", "http://example.com", {silent: true});
-            sensorLayer.set("version", "1.0", {silent: true});
+            sensorLayer.set("version", "1.1", {silent: true});
 
             expect(sensorLayer.aggregatePropertiesOfThings(allThings)).to.deep.equal(expectedOutcome);
         });
@@ -661,12 +862,12 @@ describe("core/modelList/layer/sensor", function () {
                         description: "bar | rab",
                         "@iot.id": "quix | xiuq",
                         requestUrl: "http://example.com",
-                        versionUrl: "1.0"
+                        versionUrl: "1.1"
                     }
                 }];
 
             sensorLayer.set("url", "http://example.com", {silent: true});
-            sensorLayer.set("version", "1.0", {silent: true});
+            sensorLayer.set("version", "1.1", {silent: true});
 
             expect(sensorLayer.aggregatePropertiesOfThings(allThings)).to.deep.equal(expectedOutcome);
         });
@@ -685,6 +886,25 @@ describe("core/modelList/layer/sensor", function () {
             expect(sensorLayer.flattenArray(123)).to.equal(123);
             expect(sensorLayer.flattenArray("123")).to.equal("123");
             expect(sensorLayer.flattenArray({id: "123"})).to.deep.equal({id: "123"});
+        });
+    });
+
+    describe("createAssociationObject", function () {
+        it("should return an empty object for empty arry as input", function () {
+            expect(sensorLayer.createAssociationObject([])).to.deep.equal({});
+        });
+        it("should return an object with values from input array as keys", function () {
+            const array = [
+                "Test",
+                "Sensor",
+                "Iot"
+            ];
+
+            expect(sensorLayer.createAssociationObject(array)).to.deep.equal({
+                Test: true,
+                Sensor: true,
+                Iot: true
+            });
         });
     });
 });

@@ -2,6 +2,7 @@ import Contact from "./contact/components/Contact.vue";
 import Draw from "./draw/components/Draw.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
+import Measure from "./measure/components/Measure.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 
@@ -17,6 +18,7 @@ const state = {
         draw: Draw,
         fileImport: FileImport,
         gfi: Gfi,
+        measure: Measure,
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord
     },

@@ -12,6 +12,7 @@ import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
+import Measure from "./measure/store/indexMeasure";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -25,7 +26,8 @@ export default {
         FileImport,
         Gfi,
         ScaleSwitcher,
-        SupplyCoord
+        SupplyCoord,
+        Measure
     },
     state,
     getters,

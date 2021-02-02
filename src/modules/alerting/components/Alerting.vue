@@ -194,7 +194,10 @@ export default {
                             last: singleAlertIndex === alertCategory.content.length-1
                         }"
                     >
-                        <div v-html="singleAlert.content"></div>
+                        <div
+                            class="singleAlertMessage"
+                            v-html="singleAlert.content"
+                        ></div>
 
                         <p
                             v-if="singleAlert.mustBeConfirmed"

@@ -385,6 +385,7 @@ const Map3dModel = Backbone.Model.extend(/** @lends Map3dModel.prototype*/{
      */
     setMap3d: function (map3d) {
         this.set("map3d", map3d);
+        Store.commit("Map/setMap3d", map3d);
     }
 
 });

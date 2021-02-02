@@ -134,7 +134,7 @@ async function CoordTests ({builder, url, resolution, capability}) {
             // Darunter folgt §Größe der abgefragten Fläche:” mit dem Wert ganz rechts. -> Darunter ist der Hinweistext zu sehen: “Hinweis: Aus Datenschutzgründen werden kleine Fallzahlen unter 3 verändert.
             // Datenquelle Hamburg: Einwohner mit Hauptwohnsitz, Melderegister 31.12.2017.
             // Quelle FHH”
-            // -> Die Quelle ist ein Link zu http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=B3FD9BD5-F614-433F-A762-E14003C300BF.
+            // -> Die Quelle ist ein Link zu http://metaver.de/trefferanzeige?docuuid=B3FD9BD5-F614-433F-A762-E14003C300BF.
             /*
                 <div class="result"><div>
                     <div class="heading additional-text">Unter Berücksichtigung der Geheimhaltung wurde folgender Wert berechnet:</div>
