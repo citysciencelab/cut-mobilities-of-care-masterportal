@@ -25,7 +25,6 @@ import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-// import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
 import SaveSelection from "../../tools/saveSelection/model";
 import Routing from "../../tools/viomRouting/model";
@@ -293,9 +292,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
             }
-            /* else if (attrs.id === "contact") {
-                return new Contact(attrs, options);
-            }*/
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0
