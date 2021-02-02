@@ -3,7 +3,6 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
 import constants from "../store/constantsSaveSelection";
-import copyToClipboard from "../../../../utils/copyToClipboard";
 
 export default {
     name: "SaveSelection",
@@ -52,8 +51,7 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
-        },
-        copyToClipboard
+        }
     }
 };
 </script>

@@ -6,7 +6,6 @@ import {getProjections} from "masterportalAPI/src/crs";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersSupplyCoord";
 import mutations from "../store/mutationsSupplyCoord";
-import copyToClipboard from "../../../../utils/copyToClipboard";
 
 export default {
     name: "SupplyCoord",
@@ -70,7 +69,6 @@ export default {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
-        copyToClipboard,
         /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
          * @param {Event} event changed selection event

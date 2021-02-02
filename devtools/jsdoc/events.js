@@ -1492,7 +1492,7 @@
 /**
  * @event Core#RadioTriggerUtilCopyToClipboard
  * @description todo
- * @example Radio.request("Util", "copyToClipboard");
+ * @example Radio.trigger("Util", "copyToClipboard");
  */
 
 /**

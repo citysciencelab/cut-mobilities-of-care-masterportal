@@ -1,6 +1,6 @@
 import uniqueId from "../../src/utils/uniqueId.js";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
-import copyToClipboard from "../../src/utils/copyToClipboard";
+import store from "../../src/app-store/index";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -102,7 +102,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "hideLoadingModule": this.hideLoadingModule,
             "showLoader": this.showLoader,
             "setUiStyle": this.setUiStyle,
-            "copyToClipboard": copyToClipboard
+            "copyToClipboard": el => store.dispatch("copyToClipboard", el)
         }, this);
 
         // initial isMobileView setzen
