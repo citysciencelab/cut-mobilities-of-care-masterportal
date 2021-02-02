@@ -10,7 +10,11 @@ export default {
         },
         htmlElement: {
             type: String,
-            default: "input"
+            default: "input",
+            validator: function (value) {
+                // only these are explicitly supported
+                return ["input", "textarea"].indexOf(value) !== -1;
+            }
         },
         inputName: {
             type: String,
@@ -37,15 +41,20 @@ export default {
             required: true
         }
     },
-    computed: {
-        minMessageLength: () => minMessageLength
+    data: function () {
+        return {minMessageLength};
     }
 };
 </script>
 
 <template>
     <div
-        :class="['form-group', 'has-feedback', validInput ? 'has-success' : (!inputValue ? '' : 'has-error')]"
+        :class="[
+            'form-group',
+            'has-feedback',
+            validInput ? 'has-success' : '',
+            !validInput && inputValue ? 'has-error' : ''
+        ]"
     >
         <div :class="htmlElement === 'input' ? 'input-group' : ''">
             <label
@@ -74,7 +83,10 @@ export default {
             :id="`tool-contact-${inputName}-help`"
             class="help-block"
         >
-            {{ $t(`common:modules.tools.contact.error.${inputName + (inputName === "message" ? "Input" : "")}`, {length: minMessageLength}) }}
+            {{ $t(
+                `common:modules.tools.contact.error.${inputName + (inputName === "message" ? "Input" : "")}`,
+                {length: minMessageLength}
+            ) }}
         </span>
     </div>
 </template>

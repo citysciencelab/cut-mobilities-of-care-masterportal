@@ -32,8 +32,7 @@
  * @property {String} phone The phone number that the user has entered.
  * @property {String} username The name of the user.
  * @property {?Object} systemInfo Information about the system of the user. Only used, if the parameter includeSystemInfo is set to true.
- * @deprecated The following parameters ist deprecated in the next major release.
- * @property {String} serviceID The id of the service (rest-services.json) that contains the url of the mail service. (config-param)
+ * @property {String} serviceID _Deprecated. This field will no longer be used in the next major release._ The id of the service (rest-services.json) that contains the url of the mail service. (config-param)
  */
 const state = {
     active: false,
@@ -55,6 +54,7 @@ const state = {
     locationOfCustomerService: "de",
     maxLines: 5,
     showPrivacyPolicy: false,
+    privacyPolicyLink: "https://www.masterportal.org/datenschutz.html",
     subject: "",
     withTicketNo: true,
     serviceID: null,

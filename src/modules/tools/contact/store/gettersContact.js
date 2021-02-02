@@ -7,7 +7,7 @@ const getters = {
     validForm: ({showPrivacyPolicy, privacyPolicyAccepted},
         {validMail, validMessage, validPhone, validUsername}) => (!showPrivacyPolicy || privacyPolicyAccepted) && validMail && validMessage && validPhone && validUsername,
     validMail: ({mail}) => regexMail.test(mail),
-    validMessage: ({message}) => message.length > minMessageLength,
+    validMessage: ({message}) => message.length >= minMessageLength,
     validPhone: ({phone}) => regexPhone.test(phone),
     validUsername: ({username}) => regexUsername.test(username)
 };

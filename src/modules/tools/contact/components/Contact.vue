@@ -102,8 +102,11 @@ export default {
                         id="tool-contact-privacyPolicy-input"
                         :value="privacyPolicyAccepted"
                         type="checkbox"
-                    > <!-- TODO(roehlipa): Should the link in the translation be configurable? -->
-                    <span>{{ $t("common:modules.tools.contact.privacyPolicy.info") }}</span>
+                    >
+                    <span>{{ $t(
+                        "common:modules.tools.contact.privacyPolicy.info",
+                        {privacyPolicyLink}
+                    ) }}</span>
                 </div>
                 <button
                     type="submit"

@@ -240,7 +240,7 @@
                 "mailSubject": "Supportanfrage zum Portal ",
                 "messageLabel": "Ihre Nachricht",
                 "privacyPolicy": {
-                  "info": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">Datenschutzerklärung</a>.",
+                  "info": "Sie erklären sich damit einverstanden, dass Ihre Daten zur Bearbeitung Ihres Anliegens verwendet werden. Weitere Informationen und Widerrufshinweise finden Sie in der <a href=\"{{privacyPolicyLink}}\" target=\"_blank\">Datenschutzerklärung</a>.",
                   "label": "Bitte akzeptieren Sie die Datenschutzerklärung."
                 },
                 "sendButton": "Abschicken",

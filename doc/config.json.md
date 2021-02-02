@@ -2009,6 +2009,7 @@ The contact form allows users to send messages to a configured mail address.
 |locationOfCustomerService|no|String|"de"|The country the customer service is based in. The parameter is used for the date in the ticketId.|false|
 |maxLines|no|Number|5|Amount of lines (height) for the textArea of the form|false|
 |showPrivacyPolicy|no|Boolean|false|Flag determining if a checkbox should be displayed for agreeing to the privacy policy.|false|
+|privacyPolicyLink|no|String|"https://www.masterportal.org/datenschutz.html"|Link to the full privacy policy. Should be given if `showPrivacyPolicy` is set to true.|false|
 |subject|no|String||The subject to be used for the E-Mail.|false|
 |withTicketNo|no|Boolean|true|Whether successfully sending a email retrieves a ticket number for the user.|false|
 

@@ -239,7 +239,7 @@
               "mailSubject": "Support request for the portal ",
               "messageLabel": "Your message",
               "privacyPolicy": {
-                "info": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"https://www.masterportal.org/datenschutz.html\" target=\"_blank\">privacy policy</a>.",
+                "info": "You agree that your data may be used to process your request. You will find further information and revocation notices in the <a href=\"{{privacyPolicyLink}}\" target=\"_blank\">privacy policy</a>.",
                 "label": "Please accept the privacy policy."
               },
               "sendButton": "send message",
