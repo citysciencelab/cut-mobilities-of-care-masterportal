@@ -17,7 +17,7 @@ export default {
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
         ...mapGetters(["isTableStyle", "isDefaultStyle"]),
-        ...mapGetters("Map", ["layerById", "map"])
+        ...mapGetters("Map", ["layerById", "map", "is3d"])
     },
     watch: {
         /**

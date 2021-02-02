@@ -38,7 +38,7 @@ export default {
 
         let interaction = null;
 
-        if (getters.is3d) {
+        if (rootGetters["Map/is3d"]) {
             dispatch("deleteFeatures");
             interaction = makeDraw3d(
                 rootGetters["Map/map3d"],

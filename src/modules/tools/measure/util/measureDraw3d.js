@@ -9,6 +9,7 @@ import source from "./measureSource";
 let firstPoint = null,
     firstPointFeature = null,
     idCounter = 0,
+    currentUnit = null,
     store; // hack - would normally be an import from app-store, but that doesn't work in mochapack
 
 // display font style
@@ -18,7 +19,16 @@ const fill = new Fill({
     stroke = new Stroke({
         color: [0, 0, 0, 1],
         width: 2
-    });
+    }),
+    textStyleBase = {
+        text: "",
+        textAlign: "left",
+        font: "18px sans-serif",
+        fill,
+        stroke,
+        offsetY: -50,
+        offsetX: 10
+    };
 
 /**
  * Update function to translate/update feature measurement.
@@ -32,6 +42,26 @@ function updateTextPoint (textPoint) {
 }
 
 /**
+ * Updates text nodes on language change.
+ * @param {object} lengthText olcs length text object
+ * @param {object} heightText olcs height text object
+ * @param {number} distance measured horizontal distance
+ * @param {number} heightDiff measured vertical distance
+ * @returns {void}
+ */
+function updateText (lengthText, heightText, distance, heightDiff) {
+    lengthText.setText(i18next.t("modules.tools.measure.3dLength", {
+        length: currentUnit === "1"
+            ? `${(distance / 1000).toFixed(1)}km`
+            : `${distance.toFixed(0)}m`
+    }));
+
+    heightText.setText(i18next.t("modules.tools.measure.3dHeight", {
+        height: `${heightDiff.toFixed(0)}m`
+    }));
+}
+
+/**
  * Generates style for text in 3D view.
  * @param {number} distance distance between two points
  * @param {number} heightDiff height difference
@@ -39,43 +69,13 @@ function updateTextPoint (textPoint) {
  * @returns {object} styles
  */
 function generate3dTextStyles (distance, heightDiff, addUnlistener) {
-    const lengthText = new Text({
-            text: "",
-            textAlign: "left",
-            font: "18px sans-serif",
-            fill,
-            stroke,
-            offsetY: -50,
-            offsetX: 10
-        }),
-        heightText = new Text({
-            text: "",
-            textAlign: "left",
-            font: "18px sans-serif",
-            fill,
-            stroke,
-            offsetY: -30,
-            offsetX: 10
-        });
+    currentUnit = store.getters["Tools/Measure/selectedUnit"];
 
-    let currentUnit = store.getters["Tools/Measure/selectedUnit"];
+    const lengthText = new Text({...textStyleBase}),
+        heightText = new Text({...textStyleBase, offsetY: -30}),
+        boundUpdateText = updateText.bind(null, lengthText, heightText, distance, heightDiff);
 
-    /**
-     * Updates text nodes on language change.
-     * @returns {void}
-     */
-    function updateText () {
-        lengthText.setText(i18next.t("modules.tools.measure.3dLength", {
-            length: currentUnit === "1"
-                ? `${(distance / 1000).toFixed(1)}km`
-                : `${distance.toFixed(0)}m`
-        }));
-
-        heightText.setText(i18next.t("modules.tools.measure.3dHeight", {
-            height: `${heightDiff.toFixed(0)}m`
-        }));
-    }
-    updateText();
+    boundUpdateText();
 
     /*
      * update text elements when the language OR measurement unit is changed;
@@ -83,14 +83,14 @@ function generate3dTextStyles (distance, heightDiff, addUnlistener) {
      * the ol text elements are re-added to update with the boundUpdateTextPoint in a next step
      * (see handle3DClicked for that)
      */
-    i18next.on("languageChanged", updateText);
-    addUnlistener(() => i18next.off("languageChanged", updateText));
+    i18next.on("languageChanged", boundUpdateText);
+    addUnlistener(() => i18next.off("languageChanged", boundUpdateText));
 
     // store.subscribe returns an unlistener function
     addUnlistener(store.subscribe(({type, payload}) => {
         if (type === "Tools/Measure/setSelectedUnit") {
             currentUnit = payload;
-            updateText();
+            boundUpdateText();
         }
     }));
 
@@ -115,6 +115,44 @@ function generateTextPoint (distance, heightDiff, coords, addUnlistener) {
     pointFeature.set("styleId", `__measureStyle_${idCounter++}`);
 
     return pointFeature;
+}
+
+/**
+ * Returns coordinates of clicked position both as three-numbered array
+ * and cartesian coordinates.
+ * @param {object} map cesium map
+ * @param {object} obj cesium click object
+ * @param {string} projectionCode EPSG code
+ * @returns {object} holds "coords" and "cartesian"
+ */
+function getClickCoords (map, obj, projectionCode) {
+    const scene = map.getCesiumScene(),
+        object = scene.pick(obj.position);
+
+    let cartesian,
+        cartographic,
+        coords;
+
+    if (object) {
+        cartesian = scene.pickPosition(obj.position);
+        cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+    }
+    else {
+        const ray = scene.camera.getPickRay(obj.position);
+
+        cartesian = scene.globe.pick(ray, scene);
+        cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+        cartographic.height = scene.globe.getHeight(cartographic);
+    }
+
+    coords = [
+        Cesium.Math.toDegrees(cartographic.longitude),
+        Cesium.Math.toDegrees(cartographic.latitude),
+        cartographic.height
+    ];
+    coords = Proj.transform(coords, Proj.get("EPSG:4326"), projectionCode);
+
+    return {coords, cartesian};
 }
 
 /**
@@ -144,6 +182,52 @@ function createPointFeature (coords) {
 }
 
 /**
+ * Handles the first point of a 3d mode line measurement.
+ * @param {Array} coords point coords (three numbers)
+ * @param {Object} cartesian cartesian coords x, y, z
+ * @returns {void}
+ */
+function handleFirstPoint (coords, cartesian) {
+    firstPointFeature = createPointFeature(coords);
+    source.addFeature(firstPointFeature);
+    firstPoint = {cartesian, coords};
+}
+
+/**
+ * Handles the second point of a 3d mode line measurement
+ * by calculating the measurement, displaying the result as line
+ * with text, deleting the points initially made, and
+ * resetting this module's state for the next measurement.
+ * @param {Array} coords point coords (three numbers)
+ * @param {Object} cartesian cartesian coords x, y, z
+ * @param {Function} addUnlistener call with unlisteners to execute on leaving 3D mode
+ * @returns {void}
+ */
+function handleSecondPoint (coords, cartesian, addUnlistener) {
+    const distance = Cesium.Cartesian3.distance(firstPoint.cartesian, cartesian),
+        heightDiff = Math.abs(coords[2] - firstPoint.coords[2]),
+        feature = createLineFeature(firstPoint.coords, coords),
+        textPoint = generateTextPoint(distance, heightDiff, coords, addUnlistener),
+        boundUpdateTextPoint = updateTextPoint.bind(null, textPoint);
+
+    source.removeFeature(firstPointFeature);
+    source.addFeature(feature);
+    source.addFeature(textPoint);
+
+    // update text points by re-adding - olcs won't notice updates
+    i18next.on("languageChanged", boundUpdateTextPoint);
+    addUnlistener(() => i18next.off("languageChanged", boundUpdateTextPoint));
+    addUnlistener(store.subscribe(({type}) => {
+        if (type === "Tools/Measure/setSelectedUnit") {
+            boundUpdateTextPoint();
+        }
+    }));
+
+    firstPoint = null;
+    firstPointFeature = null;
+}
+
+/**
  * Handler for 3D clicks.
  * @param {module:ol/Map} map ol 3d map
  * @param {string} projectionCode current map projection code
@@ -152,61 +236,13 @@ function createPointFeature (coords) {
  * @returns {void}
  */
 function handle3DClicked (map, projectionCode, addUnlistener, obj) {
-    const scene = map.getCesiumScene(),
-        object = scene.pick(obj.position);
-
-    let cartesian,
-        cartographic,
-        ray,
-        coords;
-
-    if (object) {
-        cartesian = scene.pickPosition(obj.position);
-        cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-    }
-    else {
-        ray = scene.camera.getPickRay(obj.position);
-        cartesian = scene.globe.pick(ray, scene);
-        cartographic = scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-        cartographic.height = scene.globe.getHeight(cartographic);
-    }
-
-    coords = [
-        Cesium.Math.toDegrees(cartographic.longitude),
-        Cesium.Math.toDegrees(cartographic.latitude),
-        cartographic.height
-    ];
-    coords = Proj.transform(coords, Proj.get("EPSG:4326"), projectionCode);
+    const {coords, cartesian} = getClickCoords(map, obj, projectionCode);
 
     if (!firstPoint) {
-        // no point set => draw point
-        firstPointFeature = createPointFeature(coords);
-        source.addFeature(firstPointFeature);
-        firstPoint = {cartesian, coords};
+        handleFirstPoint(coords, cartesian);
     }
     else {
-        // point already set => create line between points, delete points
-        const distance = Cesium.Cartesian3.distance(firstPoint.cartesian, cartesian),
-            heightDiff = Math.abs(coords[2] - firstPoint.coords[2]),
-            feature = createLineFeature(firstPoint.coords, coords),
-            textPoint = generateTextPoint(distance, heightDiff, coords, addUnlistener),
-            boundUpdateTextPoint = updateTextPoint.bind(null, textPoint);
-
-        source.removeFeature(firstPointFeature);
-        source.addFeature(feature);
-        source.addFeature(textPoint);
-
-        // update text points by re-adding - olcs won't notice else
-        i18next.on("languageChanged", boundUpdateTextPoint);
-        addUnlistener(() => i18next.off("languageChanged", boundUpdateTextPoint));
-        addUnlistener(store.subscribe(({type}) => {
-            if (type === "Tools/Measure/setSelectedUnit") {
-                boundUpdateTextPoint();
-            }
-        }));
-
-        firstPoint = null;
-        firstPointFeature = null;
+        handleSecondPoint(coords, cartesian, addUnlistener);
     }
 }
 
