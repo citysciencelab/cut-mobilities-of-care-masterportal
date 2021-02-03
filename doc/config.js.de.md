@@ -10,7 +10,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |----|-------------|---|-------|------------|--------|
 |layerConf|ja|String||Pfad zur **[services.json](services.json.de.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme (**[siehe Syntax](http://proj4js.org/#named-projections)**).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
-|proxyUrl|ja|String||Deprecated im nächsten Major-Release, bitte nutzen Sie den Mapfish-Print 3. Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe **[print](#markdown-header-print)**).|`"/cgi-bin/proxy.cgi"`|
+|proxyUrl|ja|String||_Deprecated im nächsten Major-Release, bitte nutzen Sie den Mapfish-Print 3._ Absoluter Server-Pfad zu einem Proxy-Skript, dass mit *"?url="* aufgerufen wird. Notwendig, wenn der Druck-Dienst konfiguriert ist (siehe **[print](#markdown-header-print)**).|`"/cgi-bin/proxy.cgi"`|
 |restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.de.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
 |styleConf|ja|String||Pfad zur **[style.json](style.json.de.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
 |addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
@@ -23,7 +23,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |featureViaURL|nein|**[featureViaURL](#markdown-header-featureviaurl)**||Optionale Konfigurationseinstellungen für den URL-Parameter *featureViaURL*. Siehe **[URL-Parameter](urlParameter.de.md)**. Implementiert für den treeType *light* und *custom*.||
 |**[footer](#markdown-header-footer)**|nein|Object||Zeigt einen Footer-Bereich an und konfiguriert diesen.||
 |gfiWindow|nein|String|"detached"|Deprecated im nächsten Major-Release, bitte das Attribut "Portalconfig.menu.tool.gfi.desktopType" in der **[config.json](config.json.de.md)** verwenden. Darstellungsart der Attributinformationen für alle Layertypen. **attached**: das Fenster mit Attributinformationen wird am Klickpunkt geöffnet. **detached**: das Fenster mit Attributinformationen wird oben rechts auf der Karte geöffnet. Der Klickpunkt wird zusätzlich mit einem Marker gekennzeichnet.|`"attached"`|
-|ignoredKeys|nein|Array[String]|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|
+|ignoredKeys|nein|Array[String]|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|Liste der ignorierten Attributnamen bei der Anzeige von Attributinformationen aller Layertypen. Wird nur verwendet bei "gfiAttributes": "showAll".|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|
 |infoJson|nein|String|"info.json"|Pfad zur info.json, die Zusatzinformationen für Snippets enthält. Der Pfad ist relativ zur index.html.|`"info.json"`|
 |inputMap|nein|Object|`{}`|Ist dieses Objekt vorhanden und ist setMarker darin auf true gesetzt, dann wird das Masterportal als Eingabeelement für Daten konfiguriert. Das bedeutet, dass jeder Klick auf die Karte einen Map Marker setzt und die Koordinaten des Markers via RemoteInterface im gewünschten Koordninatensystem sendet.|`{setMarker: true, targetProjection: "EPSG:4326", setCenter: false}`|
 |inputMap.setCenter|nein|Boolean|false|Soll die Karte nach dem setzen eines Markers um den Marker zentriert werden?|`setCenter: true`|
@@ -40,7 +40,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |[quickHelp]|nein|Object|`{}`|Aktiviert das QuickHelp-Modul. Dieses zeigt ein Hilfefenster für die verfügbaren Funktionen des jeweiligen Modul an. Bisher verfügbar für den Themenbaum (CustomTree), die Suchleiste (Searchbar) und für das Werkzeug: Messen (MeasureTool)).||
 |**[remoteInterface](#markdown-header-remoteinterface)**|nein|object||Optionale Konfiguration für das remoteInterface.||
 |scaleLine|nein|Boolean|false|Steuert, ob eine Maßstabsleiste unten rechts auf der Karte angezeigt wird.|`true`|
-|simpleMap|nein|Boolean|false|Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
+|simpleMap|nein|Boolean|false|_Deprecated im nächsten Major-Release. Bitte nutzen Sie den Parameter `simpleMap` als Teil der Konfiguration des Tools `saveSelection` in der **[config.json](config.json.md)**._ Fügt dem *„Auswahl speichern“-Dialog* eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht für Portale mit Baumtyp: *„light“*.|`false`|
 |startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
 |**[tree](#tree)**|nein|Object||||
 |uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
@@ -130,12 +130,6 @@ footer: {
             "url": "http://www.geoinfo.hamburg.de/",
             "alias": "Landesbetrieb Geoniformation und Vermessung",
             "alias_mobil": "LGV"
-        },
-        {
-            "bezeichnung": "",
-            "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-            "alias": "SDP Download",
-            "alias_mobil": "SDP"
         },
         {
             "bezeichnung": "",

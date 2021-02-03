@@ -125,7 +125,7 @@ export class SensorThingsMqtt {
      * subscribe to a topic
      * @param {String} topic the SensorThings topic to subscribe for
      * @param {Object} [optionsOpt] the options for this subscription
-     * @param {Number} [optionsOpt.qos=0] quality of service subscription level (see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)
+     * @param {Number} [optionsOpt.qos=0] quality of service subscription level (see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901234)
      * @param {Number} [optionsOpt.rh=2] "This option specifies whether retained messages are sent when the subscription is established." (see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)
      * @param {Function} [onsuccess] a function(topic, qos) to call if the subscription is granted with topic and qos is the granted QoS level on it
      * @param {Function} [onerror] as function(error) - "a subscription error or an error that occurs when client is disconnecting" (see: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901169)

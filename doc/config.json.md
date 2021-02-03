@@ -967,6 +967,7 @@ A folder object defined by a name, glyphicon, and its children.
 [type:measure]: # (Portalconfig.menu.tool.measure)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:legend]: # (Portalconfig.menu.legend)
+[type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 
 List of all configurable tools. Each tool inherits the properties of **[tool](#markdown-header-portalconfigmenutool)** and can (or must, respectively) provide the defined attributes as mentioned in that definition.
@@ -993,7 +994,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
 |routing|no|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Tool to compute routes.|true|
-|saveSelection|no|**[tool](#markdown-header-portalconfigmenutool)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
+|saveSelection|no|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Tool that allows saving the map's current state as sharable URL. This will list all currently visible layers in order, transparency, and visibility, as well as saving the center coordinate.|false|
 |searchByCoord|no|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Coordinate search with switchable coordinate reference system. The tool will zoom to any given coordinate and set a marker on it.|false|
 |selectFeatures|no|**[tool](#markdown-header-portalconfigmenutool)**||Allows selecting a set of vector features by letting the user draw a box on the map. Features in that box will be displayed with GFI information.|false|
 |shadow|no|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Configuration object for the 3D mode shadow time.|false|
@@ -1398,6 +1399,18 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
     }
 }
 ```
+
+***
+
+#### Portalconfig.menu.tool.saveSelection
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Tool to save the current map content as a url.
+
+|Name|Required|Type|Default|Description|Expert|
+|----|--------|----|-------|-----------|------|
+|simpleMap|no|Boolean|false|Adds a SimpleMap URL to the component. When calling this URL, the menu bar, layer tree, and map controls are deactivated.|false|
 
 ***
 
@@ -1892,7 +1905,7 @@ The measure tool allows measuring distances and areas. This includes the specifi
 
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
-|earthRadius|no|Number|6378137|Earth radius in meters.|false|
+|earthRadius|no|Number|6378137|Earth radius in meters. Please mind that the earth radius should be chosen in accordance with the reference ellipsoid. E.g., GRS80 should be used for ETRS89 (EPSG:25832).|false|
 
 **Example**
 

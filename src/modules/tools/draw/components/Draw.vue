@@ -348,7 +348,7 @@ export default {
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
-        initialWidth="500"
+        :initialWidth="500"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
@@ -832,22 +832,8 @@ export default {
                         </button>
                     </div>
                 </div>
-                <div class="form-group form-group-sm">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button
-                            id="tool-draw-openDownload"
-                            class="btn btn-sm btn-block"
-                            :class="download.enabled ? 'btn-primary' : 'btn-lgv-grey'"
-                            @click="setDownloadEnabled"
-                        >
-                            <span class="glyphicon glyphicon-floppy-disk" />
-                            {{ $t("common:button.download") }}
-                        </button>
-                    </div>
-                </div>
+                <Download v-if="download.enabled" />
             </div>
-            <hr v-if="download.enabled">
-            <Download v-if="download.enabled" />
         </template>
     </Tool>
 </template>

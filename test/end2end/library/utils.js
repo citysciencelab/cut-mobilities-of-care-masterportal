@@ -257,6 +257,20 @@ async function getOrderedTitleTexts (driver) {
         return visible ? title : false;
     }))).filter(x => x !== false);
 }
+/**
+ * Closes a single alert with className 'singleAlertMessage'.
+ * If a message is given it is included in the xpath to search for the el.
+ * @param {object} driver driver object
+ * @param {string} message shown in the alert or null, if not known
+ * @returns {void}
+ */
+async function closeSingleAlert (driver, message) {
+    const part = message ? "[contains(text(),'" + message + "')]" : "",
+        selector = By.xpath("//div[@class='singleAlertMessage']" + part + "//parent::div//parent::div//parent::div//parent::div//parent::div//preceding-sibling::span"),
+        element = await driver.findElement(selector);
+
+    await element.click();
+}
 
 module.exports = {
     getTextOfElements,
@@ -268,5 +282,6 @@ module.exports = {
     clickFeature,
     hoverFeature,
     reclickUntilNotStale,
-    logBrowserstackUrlToTest
+    logBrowserstackUrlToTest,
+    closeSingleAlert
 };

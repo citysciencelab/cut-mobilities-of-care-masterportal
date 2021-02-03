@@ -165,7 +165,7 @@ export class SensorThingsHttp {
             query += coord.x + " " + coord.y;
         });
 
-        return "st_within(Locations/location,geography'POLYGON ((" + query + "))')";
+        return "st_within(Thing/Locations/location,geography'POLYGON ((" + query + "))')";
     }
 
     /**

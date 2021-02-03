@@ -25,7 +25,7 @@ In the following, all configuration options are described. For all configuration
 |featureViaURL|no|**[featureViaURL](#markdown-header-featureviaurl)**||Optional configuration for the URL parameter `featureViaURL`. See **[urlParameter](urlParameter.md)** for details. Implemented for treeTypes *light* and *custom*.||
 |footer|no|**[footer](#markdown-header-footer)**||If set, a footer is shown and configured with this object.||
 |gfiWindow|no|String|`"detached"`|_Deprecated in the next major release. Please use the attribute "Portalconfig.menu.tool.gfi.desktopType" of the **[config.json](#config.json.md)** instead._ Display type and attribute information for all layer types. **attached**: the attribute information window is opened at click position **detached**: the attribute information window is opened at the top right of the map; a marker is set to the click position.|`"attached"`|
-|ignoredKeys|no|String[]|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]|List of attribute names to be ignored for attribute information lists of all layer types.|["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
+|ignoredKeys|no|String[]|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|List of attribute names to be ignored for attribute information lists of all layer types. Only used with "gfiAttributes": "showAll".|`["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH","GEOM"]`|
 |infoJson|no|String|`"info.json"`|Path to the `info.json` file containing additional information on snippets. The path is relative to the *index.html*.|`"info.json"`|
 |inputMap|no|Object|`{}`|If this object is set, and its field `setMarker` is set to true, the Masterportal is configured as input element for data. In that case, each click sets a Map Marker and communicates the coordinates via **[remoteInterface](remoteInterface.md)** in the chosen coordinate reference system.|`{setMarker: true, targetProjection: "EPSG:4326", setCenter: false}`|
 |inputMap.setCenter|no|Boolean|`false`|Center on a marker after producing it?|`setCenter: true`|
@@ -42,7 +42,7 @@ In the following, all configuration options are described. For all configuration
 |quickHelp|no|Object|`{}`|Activates the QuickHelp module. This displays a window containing help text for supported functions of the modules. Available for the layer tree (CustomTree), the search bar (Searchbar), and the measuring tool (MeasureTool).||
 |remoteInterface|no|**[remoteInterface](#markdown-header-remoteinterface)**||Optional remote interface configuration.||
 |scaleLine|no|Boolean|`false`|Controls whether a scale line is displayed at the bottom right of the map.|`true`|
-|simpleMap|no|Boolean|`false`|Adds a SimpleMap URL to the `Save selection` dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type *„light“*.|`false`|
+|simpleMap|no|Boolean|`false`|_Deprecated in the next major release. Please use the parameter `simpleMap` as part of the configuration of the `saveSelection` tool in the **[config.json](config.json.md)**._ Adds a SimpleMap URL to the `Save selection` dialogue. When calling this URL, the menu bar, layer tree, and map controls are deactivated. Not implemented for tree type *„light“*.|`false`|
 |startingMap3D|bi|Boolean|`false`|Controls whether the map should start in 3D mode.||
 |tree|no|**[tree](#tree)**||||
 |uiStyle|no|String|`"default"`|Sets the control element layout. |`table`|
@@ -131,12 +131,6 @@ In the following, all configuration options are described. For all configuration
                 "url": "http://www.geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoniformation und Vermessung",
                 "alias_mobil": "LGV"
-            },
-            {
-                "bezeichnung": "",
-                "url": "http://geofos.fhhnet.stadt.hamburg.de/sdp-daten-download/index.php",
-                "alias": "SDP Download",
-                "alias_mobil": "SDP"
             },
             {
                 "bezeichnung": "",

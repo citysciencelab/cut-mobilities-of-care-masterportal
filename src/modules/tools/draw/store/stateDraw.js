@@ -95,7 +95,7 @@ const symbol = {
         deactivateGFI: true,
         download: {
             dataString: "",
-            enabled: false,
+            enabled: true,
             features: [],
             file: "",
             fileName: "",
