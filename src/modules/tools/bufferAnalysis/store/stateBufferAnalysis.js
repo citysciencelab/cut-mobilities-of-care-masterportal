@@ -3,9 +3,9 @@ import {Fill, Stroke, Style} from "ol/style";
 
 /**
  * User type definition
- * @typedef {Object} LayerOverlapAnalysisState
- * @property {Boolean} active if true, LayerOverlapAnalysis will rendered
- * @property {String} id id of the LayerOverlapAnalysis component
+ * @typedef {Object} BufferAnalysisState
+ * @property {Boolean} active if true, BufferAnalysis will rendered
+ * @property {String} id id of the BufferAnalysis component
  * @property {String} name displayed as title (config-param)
  * @property {String} glyphicon icon next to title (config-param)
  * @property {Boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
@@ -15,8 +15,8 @@ import {Fill, Stroke, Style} from "ol/style";
  */
 const state = {
     active: false,
-    id: "layerOverlapAnalysis",
-    name: "Layer-Überschneidung analysieren",
+    id: "bufferAnalysis",
+    name: "BufferAnalysis",
     glyphicon: "glyphicon-resize-full",
     timerId: null,
     renderToWindow: true,
@@ -32,6 +32,8 @@ const state = {
     selectOptions: [],
     map: null,
     parser: new jsts.io.OL3Parser(),
+    geoJSONWriter: new jsts.io.GeoJSONWriter(),
+    savedUrl: null,
     resultLayerStyle: new Style({
         fill: new Fill({
             color: ["105", "175", "105", "0.7"]

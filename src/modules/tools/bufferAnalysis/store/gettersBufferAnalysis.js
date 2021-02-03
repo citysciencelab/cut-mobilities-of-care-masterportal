@@ -1,5 +1,5 @@
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
-import state from "./stateLayerOverlapAnalysis";
+import state from "./stateBufferAnalysis";
 
 const getters = {
     ...generateSimpleGetters(state),

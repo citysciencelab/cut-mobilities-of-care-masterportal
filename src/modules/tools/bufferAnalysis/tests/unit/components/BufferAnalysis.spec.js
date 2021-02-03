@@ -1,7 +1,7 @@
 import Vuex from "vuex";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
-import LayerOverlapAnalysisComponent from "../../../components/LayerOverlapAnalysis.vue";
-import LayerOverlapAnalysis from "../../../store/indexLayerOverlapAnalysis";
+import BufferAnalysisComponent from "../../../components/BufferAnalysis.vue";
+import BufferAnalysis from "../../../store/indexBufferAnalysis";
 import {expect} from "chai";
 import sinon from "sinon";
 import Layer from "../../../../../../../modules/core/modelList/layer/model";
@@ -11,11 +11,12 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAnalysis.vue", () => {
+describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
     const mockMapGetters = {
+            map: () => ({removeLayer: sinon.spy()})
         },
         mockMapActions = {
-            checkIntersection: sinon.stub()
+            // checkIntersection: sinon.stub()
         },
         mockMapMutations = {
         },
@@ -24,9 +25,9 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
                 menu: {
                     tools: {
                         children: {
-                            layerOverlapAnalysis:
+                            bufferAnalysis:
                             {
-                                "name": "translate#common:menu.tools.layerOverlapAnalysis",
+                                "name": "translate#common:menu.tools.bufferAnalysis",
                                 "glyphicon": "glyphicon-random"
                             }
                         }
@@ -37,13 +38,17 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
     let store;
 
     beforeEach(() => {
+
+        BufferAnalysis.actions.checkIntersection = sinon.spy();
+        BufferAnalysis.actions.applyBufferRadius = sinon.spy();
+
         store = new Vuex.Store({
             namespaces: true,
             modules: {
                 Tools: {
                     namespaced: true,
                     modules: {
-                        LayerOverlapAnalysis
+                        BufferAnalysis
                     }
                 },
                 Map: {
@@ -57,43 +62,43 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
                 configJson: mockConfigJson
             }
         });
-        store.commit("Tools/LayerOverlapAnalysis/setActive", true);
+        store.commit("Tools/BufferAnalysis/setActive", true);
     });
 
-    it("renders the layerOverlapAnalysis", () => {
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
+    it("renders the bufferAnalysis", () => {
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
         expect(wrapper.find("#layer-analysis").exists()).to.be.true;
     });
 
-    it("do not render the layerOverlapAnalysiss select if not active", () => {
-        store.commit("Tools/LayerOverlapAnalysis/setActive", false);
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
+    it("do not render the bufferAnalysiss select if not active", () => {
+        store.commit("Tools/BufferAnalysis/setActive", false);
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
         expect(wrapper.find("#layer-analysis").exists()).to.be.false;
     });
 
     it("has initially set nothing to layer-analysis-select", () => {
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue}),
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             select = wrapper.find("#layer-analysis-select");
 
         expect(select.element.value).to.equals("");
     });
 
-    it("has initially set two available options to select", async () => {
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue}),
+    it("has initially set eight available options to select", async () => {
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             layers = [];
         let options = [];
 
         for (let i = 0; i <= 2; i++) {
-            const layer = new Layer();
+            const layer = new Layer(); // javascript object
 
             layer.set("name", "Layer" + i);
             layer.set("id", i);
             layers.push(layer);
         }
 
-        await store.commit("Tools/LayerOverlapAnalysis/setSelectOptions", layers);
+        await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
         await wrapper.vm.$nextTick();
 
         options = wrapper.findAll("option");
@@ -101,20 +106,20 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
     });
 
     it("sets selected to layer when it is selected via input", async () => {
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue}),
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             select = wrapper.find("#layer-analysis-select"),
             layers = [];
 
         for (let i = 0; i <= 2; i++) {
-            const layer = new Layer();
+            const layer = new Layer(); // javascript object Testen: {setIsSelected: sinon.spy()}
 
             layer.set("name", "Layer" + i);
             layer.set("id", i);
-            sinon.stub(layer, "setIsSelected");
+            sinon.stub(layer, "setIsSelected").callsFake(sinon.spy());
             layers.push(layer);
         }
 
-        await store.commit("Tools/LayerOverlapAnalysis/setSelectOptions", layers);
+        await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
         await wrapper.vm.$nextTick();
         select.setValue(layers[0]);
         await wrapper.vm.$nextTick();
@@ -124,9 +129,37 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
         expect(layers[2].setIsSelected.calledTwice).to.equal(true);
     });
 
+    it("bla", async (done) => {
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
+            select = wrapper.find("#layer-analysis-select"),
+            select2 = wrapper.find("#layer-analysis-select-target"),
+            input = wrapper.find("#layer-analysis-range"),
+            layers = [];
+
+        for (let i = 0; i <= 2; i++) {
+            const layer = new Layer(); // javascript object Testen: {setIsSelected: sinon.spy()}
+
+            layer.set("name", "Layer" + i);
+            layer.set("id", i);
+            sinon.stub(layer, "setIsSelected").callsFake(sinon.spy());
+            layers.push(layer);
+        }
+
+        await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
+        await wrapper.vm.$nextTick();
+        select.setValue(layers[0]);
+        input.setValue(2000);
+        select2.setValue(layers[2]);
+        await wrapper.vm.$nextTick();
+        setTimeout(() => {
+            expect(BufferAnalysis.actions.checkIntersection.calledOnce).to.equal(true);
+            done();
+        }, 1500);
+    });
+
 
     it("renders the correct value when select is changed", async () => {
-        const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue}),
+        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             select = wrapper.find("#layer-analysis-select"),
             options = select.findAll("option"),
             layers = [];
@@ -140,21 +173,26 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
             layers.push(layer);
         }
 
-        await store.commit("Tools/LayerOverlapAnalysis/setSelectOptions", layers);
+        await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
 
-        options.at(1).setSelected();
+        // geometrySelect.element.value = "Polygon";
+        // geometrySelect.trigger("change");
+        // options.at(1).setSelected();
 
-        await wrapper.vm.$nextTick();
-        // console.log(wrapper.get("sourceLayerSelection"));
-        // expect(wrapper.get("sourceLayerSelection")).to.eql(layers[0]);
+        // select.element.value = layers[0];
+        // select.trigger("change");
+
+        // await wrapper.vm.$nextTick();
+        // console.log(wrapper.computed.selectedSourceLayer);
+        // expect(wrapper.computed.selectedSourceLayer).to.eql(layers[0]);
         // select.setValue(layers[2]);
         // await wrapper.vm.$nextTick();
         // expect(select.element.innerHTML).to.equals("Layer2");
     });
-    //
+
     //
     // it("calls store action setResolutionByIndex when select is changed", async () => {
-    //     const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue}),
+    //     const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
     //         select = wrapper.find("select"),
     //         options = wrapper.findAll("option");
     //
@@ -165,12 +203,12 @@ describe.only("src/modules/tools/layerOverlapAnalysis/components/LayerOverlapAna
     // });
     //
     // it("method close sets active to false", async () => {
-    //     const wrapper = shallowMount(LayerOverlapAnalysisComponent, {store, localVue});
+    //     const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
     //
     //     wrapper.vm.close();
     //     await wrapper.vm.$nextTick();
     //
-    //     expect(store.state.Tools.LayerOverlapAnalysis.active).to.be.false;
+    //     expect(store.state.Tools.BufferAnalysis.active).to.be.false;
     //     expect(wrapper.find("#layer-analysis").exists()).to.be.false;
     // });
 });

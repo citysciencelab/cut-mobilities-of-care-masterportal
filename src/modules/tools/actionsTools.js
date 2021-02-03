@@ -1,5 +1,7 @@
 import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
 import getComponent from "../../utils/getComponent";
+import store from "../../app-store";
+
 
 const actions = {
     /**
@@ -65,13 +67,16 @@ const actions = {
 
     /**
      * Control the activation of the tools.
-     * Deactivate all activated tools and then activate the given tool if it is available.
+     * Deactivate all activated tools except the gfi tool and then activate the given tool if it is available.
      * @param {String} activeToolName - Name of the tool to be activated.
      * @returns {void}
      */
     controlActivationOfTools: ({getters, commit, dispatch}, activeToolName) => {
-        getters.getActiveToolNames.forEach(tool => commit(tool + "/setActive", false));
-
+        getters.getActiveToolNames.forEach(tool => {
+            if (tool !== "Gfi") {
+                commit(tool + "/setActive", false);
+            }
+        });
         if (getters.getConfiguredToolNames.includes(activeToolName)) {
             commit(activeToolName + "/setActive", true);
             dispatch("activateToolInModelList", activeToolName);
@@ -86,6 +91,38 @@ const actions = {
     activateByUrlParam: ({rootState, dispatch}, toolName) => {
         if (rootState.queryParams instanceof Object && toolName?.toLowerCase() === rootState?.queryParams?.isinitopen?.toLowerCase()) {
             dispatch("controlActivationOfTools", toolName);
+            dispatch("setToolInitValues", toolName);
+        }
+    },
+
+    /**
+     * Checks if a tool should be open initially controlled by the url param "initvalues".
+     * @param {String} toolName - Name from the toolComponent
+     * @returns {void}
+     */
+    setToolInitValues: ({rootState, commit, dispatch}, toolName) => {
+        if (rootState.queryParams instanceof Object && rootState?.queryParams?.initvalues) {
+            const toolState = JSON.parse(rootState?.queryParams?.initvalues);
+
+            for (const state in toolState) {
+                if (store._actions["Tools/" + toolName + "/" + state]) {
+                    try {
+                        dispatch(toolName + "/" + state, toolState[state]);
+                    }
+                    catch (e) {
+                        Radio.trigger("Alert", "alert", {
+                            text: e.message, // i18next.t("common:modules.tools.saveSelection.contentSaved"),
+                            kategorie: "alert-warning",
+                            position: "top-center",
+                            fadeOut: 5000
+                        });
+                        break;
+                    }
+                }
+                else {
+                    commit(toolName + "/" + state, toolState[state]);
+                }
+            }
         }
     },
 

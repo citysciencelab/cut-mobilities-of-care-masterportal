@@ -2,48 +2,48 @@
 import Tool from "../../Tool.vue";
 import getComponent from "../../../../utils/getComponent";
 import {mapGetters, mapActions, mapMutations} from "vuex";
-import getters from "../store/gettersLayerOverlapAnalysis";
-import mutations from "../store/mutationsLayerOverlapAnalysis";
-import actions from "../store/actionsLayerOverlapAnalysis";
+import getters from "../store/gettersBufferAnalysis";
+import mutations from "../store/mutationsBufferAnalysis";
+import actions from "../store/actionsBufferAnalysis";
 
 /**
  * Tool to check if a subset of features associated to a target layer are located within or outside an applied radius to all features of a source layer.
  */
 export default {
-    name: "LayerOverlapAnalysis",
+    name: "BufferAnalysis",
     components: {
         Tool
     },
     computed: {
-        ...mapGetters("Tools/LayerOverlapAnalysis", Object.keys(getters)),
+        ...mapGetters("Tools/BufferAnalysis", Object.keys(getters)),
         ...mapGetters("Map", ["map"]),
-        sourceLayerSelection: {
+        selectedSourceLayer: {
             get () {
-                return this.selectedSourceLayer;
+                return this.$store.state.Tools.BufferAnalysis.selectedSourceLayer;
             },
             set (newLayerSelection) {
                 this.applySelectedSourceLayer(newLayerSelection);
             }
         },
-        targetLayerSelection: {
+        selectedTargetLayer: {
             get () {
-                return this.selectedTargetLayer;
+                return this.$store.state.Tools.BufferAnalysis.selectedTargetLayer;
             },
             set (newLayerSelection) {
                 this.applySelectedTargetLayer(newLayerSelection);
             }
         },
-        inputResultType: {
+        resultType: {
             get () {
-                return this.resultType;
+                return this.$store.state.Tools.BufferAnalysis.resultType;
             },
             set (newType) {
                 this.setResultType(newType);
             }
         },
-        inputBufferRadius: {
+        bufferRadius: {
             get () {
-                return this.bufferRadius;
+                return this.$store.state.Tools.BufferAnalysis.bufferRadius;
             },
             set (newRadius) {
                 this.applyInputBufferRadius(newRadius);
@@ -51,12 +51,12 @@ export default {
         }
     },
     watch: {
-        targetLayerSelection (layer, prev) {
+        selectedTargetLayer (layer, prev) {
             if (prev && layer) {
                 prev.setIsSelected(false);
             }
         },
-        sourceLayerSelection (layer, prev) {
+        selectedSourceLayer (layer, prev) {
             if (prev && !layer) {
                 prev.setIsSelected(false);
             }
@@ -71,21 +71,42 @@ export default {
         this.$on("close", this.close);
     },
     methods: {
-        ...mapMutations("Tools/LayerOverlapAnalysis", Object.keys(mutations)),
-        ...mapActions("Tools/LayerOverlapAnalysis", Object.keys(actions)),
+        ...mapMutations("Tools/BufferAnalysis", Object.keys(mutations)),
+        ...mapActions("Tools/BufferAnalysis", Object.keys(actions)),
         ...mapActions("Map", ["toggleLayerVisibility"]),
         resetModule () {
-            this.inputBufferRadius = 0;
-            this.sourceLayerSelection = null;
-            this.targetLayerSelection = null;
+            this.bufferRadius = 0;
+            if (this.selectedSourceLayer) {
+                this.selectedSourceLayer.get("layer").setOpacity(1);
+                this.selectedSourceLayer = null;
+            }
+
+            if (this.selectedTargetLayer) {
+                this.selectedTargetLayer.get("layer").setOpacity(1);
+                this.selectedTargetLayer = null;
+            }
+
             this.removeGeneratedLayers();
         },
-        // saveLayer () {
-        //     const geoJson = new GeoJSON(),
-        //         text = geoJson.writeFeatures(this.resultLayer.getSource().getFeatures());
-        //     console.log(text);
-        //
-        // },
+
+        saveLayer () {
+            const toolState = {
+                applySelectedSourceLayer: this.selectedSourceLayer.id,
+                applyInputBufferRadius: this.bufferRadius,
+                setResultType: this.resultType,
+                applySelectedTargetLayer: this.selectedTargetLayer.id
+            };
+
+            this.setSavedUrl(location.origin +
+                location.pathname +
+                "?isinitopen=" +
+                this.id +
+                "&initvalues=" +
+                JSON.stringify(toolState));
+        },
+        copyUrl (evt) {
+            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
+        },
         /**
          * Sets active to false.
          * @returns {void}
@@ -94,7 +115,7 @@ export default {
             this.setActive(false);
             // TODO replace trigger when ModelList is migrated
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = getComponent(this.$store.state.Tools.LayerOverlapAnalysis.id);
+            const model = getComponent(this.$store.state.Tools.BufferAnalysis.id);
 
             if (model) {
                 model.set("isActive", false);
@@ -121,11 +142,11 @@ export default {
                 <label
                     for="layer-analysis-select"
                     class="col-md-5 col-sm-5 control-label"
-                >{{ $t("modules.tools.layerOverlapAnalysis.sourceSelectLabel") }}</label>
+                >{{ $t("modules.tools.bufferAnalysis.sourceSelectLabel") }}</label>
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
                         id="layer-analysis-select"
-                        v-model="sourceLayerSelection"
+                        v-model="selectedSourceLayer"
                         class="font-arial form-control input-sm pull-left"
                     >
                         <option
@@ -140,13 +161,13 @@ export default {
                 <label
                     for="layer-analysis-range"
                     class="col-md-5 col-sm-5 control-label"
-                >{{ $t("modules.tools.layerOverlapAnalysis.rangeLabel") }}</label>
+                >{{ $t("modules.tools.bufferAnalysis.rangeLabel") }}</label>
 
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <input
                         id="layer-analysis-range-text"
-                        v-model="inputBufferRadius"
-                        :disabled="!sourceLayerSelection || targetLayerSelection"
+                        v-model="bufferRadius"
+                        :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
                         class="font-arial form-control input-sm pull-left"
@@ -154,8 +175,8 @@ export default {
                     >
                     <input
                         id="layer-analysis-range"
-                        v-model="inputBufferRadius"
-                        :disabled="!sourceLayerSelection || targetLayerSelection"
+                        v-model="bufferRadius"
+                        :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
                         step="10"
@@ -167,24 +188,24 @@ export default {
                 <label
                     for="layer-analysis-result-type"
                     class="col-md-5 col-sm-5 control-label"
-                >{{ $t("modules.tools.layerOverlapAnalysis.resultTypeLabel") }}</label>
+                >{{ $t("modules.tools.bufferAnalysis.resultTypeLabel") }}</label>
 
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
                         id="layer-analysis-result-type"
-                        v-model="inputResultType"
+                        v-model="resultType"
                         class="font-arial form-control input-sm pull-left"
-                        :disabled="!sourceLayerSelection || !inputBufferRadius || targetLayerSelection"
+                        :disabled="!selectedSourceLayer || !bufferRadius || selectedTargetLayer"
                     >
                         <option
                             :value="true"
                         >
-                            {{ $t("modules.tools.layerOverlapAnalysis.overlapping") }}
+                            {{ $t("modules.tools.bufferAnalysis.overlapping") }}
                         </option>
                         <option
                             :value="false"
                         >
-                            {{ $t("modules.tools.layerOverlapAnalysis.notOverlapping") }}
+                            {{ $t("modules.tools.bufferAnalysis.notOverlapping") }}
                         </option>
                     </select>
                 </div>
@@ -192,14 +213,14 @@ export default {
                 <label
                     for="layer-analysis-select-target"
                     class="col-md-5 col-sm-5 control-label"
-                >{{ $t("modules.tools.layerOverlapAnalysis.targetSelectLabel") }}</label>
+                >{{ $t("modules.tools.bufferAnalysis.targetSelectLabel") }}</label>
 
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
                         id="layer-analysis-select-target"
-                        v-model="targetLayerSelection"
+                        v-model="selectedTargetLayer"
                         class="font-arial form-control input-sm pull-left"
-                        :disabled="!sourceLayerSelection || !inputBufferRadius || targetLayerSelection"
+                        :disabled="!selectedSourceLayer || !bufferRadius || selectedTargetLayer"
                     >
                         <option
                             v-for="layer in selectOptions"
@@ -214,24 +235,36 @@ export default {
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <button
                         id="layer-analysis-reset-button"
-                        class="btn-primary pull-right"
-                        :disabled="!sourceLayerSelection"
+                        class="pull-right"
+                        :class="!selectedSourceLayer ? 'btn-lgv-grey' : 'btn-primary'"
+                        :disabled="!selectedSourceLayer"
                         @click="resetModule()"
                     >
-                        {{ $t("modules.tools.layerOverlapAnalysis.clearBtn") }}
+                        {{ $t("modules.tools.bufferAnalysis.clearBtn") }}
                     </button>
                 </div>
 
-                <!--                <div class="col-md-12 col-sm-12 form-group form-group-sm">-->
-                <!--                    <button-->
-                <!--                        id="layer-analysis-save-button"-->
-                <!--                        class="btn-primary pull-right"-->
-                <!--                        :disabled="!sourceLayerSelection || !targetLayerSelection || !inputBufferRadius"-->
-                <!--                        @click="saveLayer()"-->
-                <!--                    >-->
-                <!--                        {{ $t("modules.tools.layerOverlapAnalysis.saveBtn") }}-->
-                <!--                    </button>-->
-                <!--                </div>-->
+                <div class="col-md-12 col-sm-12 form-group form-group-sm">
+                    <button
+                        id="layer-analysis-save-button"
+                        class="pull-right"
+                        :class="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius ? 'btn-lgv-grey' : 'btn-primary'"
+                        :disabled="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius"
+                        @click="saveLayer()"
+                    >
+                        {{ $t("modules.tools.bufferAnalysis.saveBtn") }}
+                    </button>
+                </div>
+                <input
+                    id="layer-analysis-saved-url"
+                    ref="savedUrl"
+                    v-model="savedUrl"
+                    class="col-md-12 col-sm-12 form-group form-group-sm"
+                    readonly
+                    :hidden="!savedUrl"
+                    type="text"
+                    @click="copyUrl"
+                >
             </div>
         </template>
     </Tool>

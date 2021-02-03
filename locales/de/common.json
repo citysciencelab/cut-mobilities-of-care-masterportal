@@ -49,7 +49,7 @@
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
-            "layerOverlapAnalysis": "Layer-Überschneidung analysieren"
+            "bufferAnalysis": "Buffer Analyse"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -606,7 +606,7 @@
             "scaleSwitcher": {
                 "label": "Maßstab"
             },
-            "layerOverlapAnalysis": {
+            "bufferAnalysis": {
                 "sourceSelectLabel": "Quell-Layer",
                 "targetSelectLabel": "Ziel-Layer",
                 "resultTypeLabel": "Ergebnistyp",

@@ -48,7 +48,7 @@
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
-            "layerOverlapAnalysis": "Analyse Layer Overlapping"
+            "bufferAnalysis": "Buffer Analysis"
         },
         "contact": "Mail",
         "info": "Information"
@@ -605,7 +605,7 @@
             "scaleSwitcher": {
                 "label": "Scale"
             },
-          "layerOverlapAnalysis": {
+          "bufferAnalysis": {
             "sourceSelectLabel": "source layer",
             "targetSelectLabel": "target layer",
             "resultTypeLabel": "result type",

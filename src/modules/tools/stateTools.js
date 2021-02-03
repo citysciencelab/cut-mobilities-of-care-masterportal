@@ -3,7 +3,7 @@ import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
-import LayerOverlapAnalysis from "./layerOverlapAnalysis/components/LayerOverlapAnalysis.vue";
+import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -17,7 +17,7 @@ const state = {
         supplyCoord: SupplyCoord,
         fileImport: FileImport,
         gfi: Gfi,
-        layerOverlapAnalysis: LayerOverlapAnalysis
+        bufferAnalysis: BufferAnalysis
     },
     configuredTools: []
 };
