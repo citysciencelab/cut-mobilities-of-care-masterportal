@@ -1,23 +1,6 @@
-import Vuex from "vuex";
-import {shallowMount, createLocalVue} from "@vue/test-utils";
-import Contact from "../../components/Contact.vue";
-import IndexContact from "../../store/indexContact";
-import {configContact} from "../../store/configContact";
-import {expect} from "chai";
+// TODO recycle/refactor these tests
 
-const localVue = createLocalVue(),
-    mocks = {
-        $t: key => key,
-        $i18n: {
-            i18next: {
-                t: key => key
-            }
-        }
-    };
-
-localVue.use(Vuex);
-
-// test Contact
+/*
 describe("Contact.vue", () => {
     let contact,
         store;
@@ -62,81 +45,6 @@ describe("Contact.vue", () => {
         contact = shallowMount(Contact, {store, localVue, mocks});
     });
 
-    describe("getSystemInfo", () => {
-        it("should return an object with portalTitle, referrer, platform, cookieEnabled and userAgent", () => {
-            const systemInfo = contact.vm.getSystemInfo("foo");
-
-            expect(systemInfo.portalTitle).to.equal("foo");
-            expect(systemInfo.referrer).to.be.a("string");
-            expect(systemInfo.platform).to.be.a("string");
-            expect(systemInfo.cookieEnabled).to.be.a("boolean");
-            expect(systemInfo.userAgent).to.be.a("string");
-        });
-    });
-/*
-    describe("createTicketId", () => {
-        it("should create a ticketId with a prefix and a random four-digit number", () => {
-            const ticketId = contact.vm.createTicketId("foo-"),
-                expectedExpression = /^foo-[1-9]{1}[0-9]{3}$/g;
-
-            // in this case to.not.be.null (which is not recommended) is ok because of the random ticket number
-            expect(ticketId.match(expectedExpression)).to.not.be.null;
-        });
-    });
-
-    describe("createSubject", () => {
-        it("should join the given ticketId and subject with \": \"", () => {
-            expect(contact.vm.createSubject("foo", "bar")).to.equal("foo: bar");
-        });
-    });
-
-    describe("callServer", () => {
-        it("should call the given httpClient with an object made for the php mailer", () => {
-            const url = "foo",
-                from = "bar",
-                to = "baz",
-                subject = "qix",
-                message = "foobar",
-                expectedData = {
-                    from: from,
-                    to: to,
-                    subject: subject,
-                    text: message
-                };
-            let receivedUrl = false,
-                receivedData = false;
-
-            contact.vm.callServer(url, from, to, subject, message, null, null, null, (link, data) => {
-                receivedUrl = link;
-                receivedData = data;
-            });
-
-            expect(receivedUrl).to.equal(url);
-            expect(receivedData).to.deep.equal(expectedData);
-        });
-    });
-
-    describe("send", () => {
-        const goodRestReader = {
-                // restReaders response
-                get: (what) => {
-                    if (what === "url") {
-                        return "goodRestReaderBar";
-                    }
-                    return "goodRestReaderBaz";
-                }
-            },
-            impotentCallbacks = [
-                () => {
-                    // onstart
-                }, () => {
-                    // onsuccess
-                }, () => {
-                    // onerror
-                }, () => {
-                    // oncomplete
-                }
-            ];
         let receivedUrl = false,
             receivedData = false;
 
@@ -340,5 +248,4 @@ describe("Contact.vue", () => {
             });
         });
     });
-    */
-});
+});*/

@@ -31,8 +31,7 @@ function createSystemInfo (systemInfo) {
  * @param {ContactSystemInfo} systemInfo Information about the system of the user.
  * @returns {String} The prepared message as HTML.
  */
-function createMessage ({username, mail, phone, message, includeSystemInfo}, systemInfo) {
-    const info = includeSystemInfo ? createSystemInfo(systemInfo) : "";
+function createMessage ({username, mail, phone, message}, systemInfo) {
     let msg = "";
 
     msg += `Name: ${username}<br>`;
@@ -40,7 +39,7 @@ function createMessage ({username, mail, phone, message, includeSystemInfo}, sys
     msg += `Tel.:: ${phone}<br>`;
     msg += "==================<br>";
     msg += `${message}<br>`;
-    msg += info;
+    msg += createSystemInfo(systemInfo);
 
     return msg;
 }

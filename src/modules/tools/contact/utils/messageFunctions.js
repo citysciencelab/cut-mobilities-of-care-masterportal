@@ -33,11 +33,7 @@ function onSendComplete () {
 export function httpClient (url, data, onSuccess, onError) {
     onSendStart();
 
-    axios({
-        url,
-        method: "post",
-        data
-    })
+    axios.post(url, data)
         .then(response => {
             if (response.status === 200) {
                 onSuccess();
