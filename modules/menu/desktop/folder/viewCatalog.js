@@ -1,4 +1,5 @@
 import CatalogTemplate from "text-loader!./templateCatalog.html";
+import store from "../../../../src/app-store";
 
 /**
  * @member CatalogTemplate
@@ -19,6 +20,7 @@ const FolderCatalogView = Backbone.View.extend(/** @lends FolderCatalogView.prot
         "click .layer-selection-save": function () {
             this.model.collection.setActiveToolsToFalse(this.model);
             this.model.collection.get("saveSelection").setIsActive(true);
+            store.dispatch("Tools/setToolActive", {id: "saveSelection", active: true});
             // Schließt den Baum
             $(".nav li:first-child").removeClass("open");
             // Schließt die Mobile Navigation

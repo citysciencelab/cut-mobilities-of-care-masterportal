@@ -27,7 +27,6 @@ import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
 import SearchByCoord from "../../tools/searchByCoord/model";
-import SaveSelection from "../../tools/saveSelection/model";
 import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
@@ -274,9 +273,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "searchByCoord") {
                 return new SearchByCoord(attrs, options);
-            }
-            else if (attrs.id === "saveSelection") {
-                return new SaveSelection(Object.assign(attrs, Config.hasOwnProperty("simpleMap") ? {simpleMap: Config.simpleMap} : {}), options);
             }
             else if (attrs.id === "lines") {
                 return new Lines(attrs, options);

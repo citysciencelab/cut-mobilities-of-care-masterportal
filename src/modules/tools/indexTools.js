@@ -10,6 +10,7 @@ import actions from "./actionsTools";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
+import SaveSelection from "./saveSelection/store/indexSaveSelection";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import Measure from "./measure/store/indexMeasure";
@@ -24,6 +25,7 @@ export default {
         Draw,
         FileImport,
         Gfi,
+        SaveSelection,
         ScaleSwitcher,
         SupplyCoord,
         Measure

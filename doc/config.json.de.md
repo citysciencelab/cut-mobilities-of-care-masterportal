@@ -909,6 +909,7 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:measure]: # (Portalconfig.menu.tool.measure)
 [type:styleWMS]: # (Portalconfig.menu.tool.styleWMS)
 [type:legend]: # (Portalconfig.menu.legend)
+[type:saveSelection]: # (Portalconfig.menu.tool.saveSelection)
 [type:searchByCoord]: # (Portalconfig.menu.tool.searchByCoord)
 
 Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdown-header-portalconfigmenutool)** und kann/muss somit auch die dort angegebenen attribute konfiguiert bekommen.
@@ -935,7 +936,7 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
 |routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
-|saveSelection|nein|**[tool](#markdown-header-portalconfigmenutool)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
+|saveSelection|nein|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
 |searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
 |shadow|nein|**[shadow](#markdown-header-portalconfigmenutoolshadow)**||Konfigurationsobjekt für die Schattenzeit im 3D-Modus.|false|
@@ -1319,6 +1320,18 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
     "styleId": "flaecheninfo"
 }
 ```
+
+***
+
+#### Portalconfig.menu.tool.saveSelection
+
+[inherits]: # (Portalconfig.menu.tool)
+
+Abspeicherung des aktuellen Karteninhalts.
+
+|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
+|----|-------------|---|-------|------------|------|
+|simpleMap|nein|Boolean|false|Fügt der Komponente eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls).|false|
 
 ***
 
