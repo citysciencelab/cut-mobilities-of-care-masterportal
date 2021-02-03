@@ -8,9 +8,9 @@ const keyStore = {
         mutations: Object.keys(mutations)
     },
     minMessageLength = 10,
-    regexMail = /^[A-Z0-9._%+-]+@{1}[A-Z0-9.-]+\.{1}[A-Z]{2,7}$/im,
-    regexPhone = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/,
-    regexUsername = /^[A-Za-z\xC0-\xFF][A-Za-z\xC0-\xFF'-]*([ A-Za-z\xC0-\xFF][A-Za-z\xC0-\xFF'-.]+)*$/u;
+    regexMail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,7}$/im,
+    regexPhone = /^[+]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/,
+    regexUsername = /^[A-Za-z\xC0-\xFF][A-Za-z\xC0-\xFF'-]*([ A-Za-z\xC0-\xFF][A-Za-z\xC0-\xFF'.-]+)*$/u;
 
 export {
     keyStore,
