@@ -1803,9 +1803,10 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|earthRadius|nein|Number|6378137|Erdradius in Meter.|false|
+|earthRadius|nein|Number|6378137|Erdradius in Metern. Bitte beachten Sie, dass der Erdradius in Abhängigkeit zum Bezugsellipsoiden gewählt werden sollte. Für ETRS89 (EPSG:25832) ist dies beispielsweise GRS80.|false|
 
 **Beispiel**
+
 ```
 #!json
 "measure": {

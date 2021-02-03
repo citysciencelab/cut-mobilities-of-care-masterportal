@@ -83,7 +83,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // require("./tests/modules/tools/Gfi.js"),
                     require("./tests/modules/Legend.js"),
                     require("./tests/modules/tools/List.js"),
-                    require("./tests/modules/tools/Measure.js"),
+                    require("../../src/modules/tools/measure/test/end2end/Measure.e2e.js"),
                     // require("./tests/modules/tools/ParcelSearch.js"),
                     // require("./tests/modules/tools/SearchByCoord.js"),
 
