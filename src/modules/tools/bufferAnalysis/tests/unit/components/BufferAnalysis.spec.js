@@ -129,33 +129,33 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
         expect(layers[2].setIsSelected.calledTwice).to.equal(true);
     });
 
-    it("bla", async (done) => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            select = wrapper.find("#layer-analysis-select"),
-            select2 = wrapper.find("#layer-analysis-select-target"),
-            input = wrapper.find("#layer-analysis-range"),
-            layers = [];
-
-        for (let i = 0; i <= 2; i++) {
-            const layer = new Layer(); // javascript object Testen: {setIsSelected: sinon.spy()}
-
-            layer.set("name", "Layer" + i);
-            layer.set("id", i);
-            sinon.stub(layer, "setIsSelected").callsFake(sinon.spy());
-            layers.push(layer);
-        }
-
-        await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
-        await wrapper.vm.$nextTick();
-        select.setValue(layers[0]);
-        input.setValue(2000);
-        select2.setValue(layers[2]);
-        await wrapper.vm.$nextTick();
-        setTimeout(() => {
-            expect(BufferAnalysis.actions.checkIntersection.calledOnce).to.equal(true);
-            done();
-        }, 1500);
-    });
+    // it("bla", async (done) => {
+    //     const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
+    //         select = wrapper.find("#layer-analysis-select"),
+    //         select2 = wrapper.find("#layer-analysis-select-target"),
+    //         input = wrapper.find("#layer-analysis-range"),
+    //         layers = [];
+    //
+    //     for (let i = 0; i <= 2; i++) {
+    //         const layer = new Layer(); // javascript object Testen: {setIsSelected: sinon.spy()}
+    //
+    //         layer.set("name", "Layer" + i);
+    //         layer.set("id", i);
+    //         sinon.stub(layer, "setIsSelected").callsFake(sinon.spy());
+    //         layers.push(layer);
+    //     }
+    //
+    //     await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
+    //     await wrapper.vm.$nextTick();
+    //     select.setValue(layers[0]);
+    //     input.setValue(2000);
+    //     select2.setValue(layers[2]);
+    //     await wrapper.vm.$nextTick();
+    //     setTimeout(() => {
+    //         expect(BufferAnalysis.actions.checkIntersection.calledOnce).to.equal(true);
+    //         done();
+    //     }, 1500);
+    // });
 
 
     it("renders the correct value when select is changed", async () => {
