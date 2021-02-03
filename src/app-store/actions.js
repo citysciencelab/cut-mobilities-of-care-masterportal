@@ -31,19 +31,10 @@ export default {
 
         try {
             document.execCommand("copy");
-            dispatch("Alerting/addSingleAlert", {
-                content: i18next.t("common:modules.util.copyToClipboard.contentSaved"),
-                kategorie: "alert-info",
-                position: "top-center",
-                fadeOut: 5000
-            }, {root: true});
+            dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.util.copyToClipboard.contentSaved")}, {root: true});
         }
         catch (err) {
-            dispatch("Alerting/addSingleAlert", {
-                content: i18next.t("common:modules.util.copyToClipboard.contentNotSaved"),
-                kategorie: "alert-info",
-                position: "top-center"
-            }, {root: true});
+            dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.util.copyToClipboard.contentNotSaved")}, {root: true});
             console.error(`CopyToClipboard: ${err}`);
         }
     },

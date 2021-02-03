@@ -17,8 +17,8 @@
 - The language of the changelog has been changed to English.
 - The measure tool has been migrated to Vue.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
-- Migrated the SaveSelection Tool from Backbone.js to Vue.js.
-- copyToClipboard is now a reusable action.
+- Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
+- copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 
 ### Deprecated
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.

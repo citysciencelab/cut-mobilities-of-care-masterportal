@@ -43,15 +43,6 @@ const actions = {
 
         commit("setLayerList", filteredLayerList);
         dispatch("createUrlParams");
-    },
-    /**
-     * Updates the current url based on the current map state and returns the current url.
-     *
-     * @returns {String} The Url that can be copied by the user.
-     */
-    getMapState ({dispatch, getters}) {
-        dispatch("filterExternalLayer", Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
-        return getters.url;
     }
 };
 

@@ -1,6 +1,5 @@
 import uniqueId from "../../src/utils/uniqueId.js";
 import LoaderOverlay from "../../src/utils/loaderOverlay";
-import store from "../../src/app-store/index";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -45,7 +44,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
-     * @listens Core#RadioTriggerUtilCopyToClipboard
      * @listens Core#event:changeIsViewMobile
      * @fires Core#RadioTriggerIsViewMobileChanged
      * @fires Alerting#RadioTriggerAlertAlert
@@ -101,8 +99,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "hideLoader": this.hideLoader,
             "hideLoadingModule": this.hideLoadingModule,
             "showLoader": this.showLoader,
-            "setUiStyle": this.setUiStyle,
-            "copyToClipboard": el => store.dispatch("copyToClipboard", el)
+            "setUiStyle": this.setUiStyle
         }, this);
 
         // initial isMobileView setzen

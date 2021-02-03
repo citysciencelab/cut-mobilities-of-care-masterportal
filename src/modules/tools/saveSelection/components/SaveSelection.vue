@@ -23,11 +23,6 @@ export default {
         }
     },
     created () {
-        const channel = Radio.channel("SaveSelection");
-
-        channel.reply({
-            "getMapState": this.getMapState
-        });
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": this.filterExternalLayer
         });
