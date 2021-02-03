@@ -1331,7 +1331,7 @@ Abspeicherung des aktuellen Karteninhalts.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
-|simpleMap|nein|Boolean|false|Fügt der Komponente eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls). Nicht implementiert für Portale mit treeType *„light“*.|false|
+|simpleMap|nein|Boolean|false|Fügt der Komponente eine SimpleMap-URL hinzu (ohne Menüleiste, Layerbau, Map Controls).|false|
 
 ***
 
