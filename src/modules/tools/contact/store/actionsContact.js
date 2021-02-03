@@ -1,5 +1,7 @@
 import {createMessage, createSubject, createTicketId} from "../utils/createFunctions";
-import {httpClient, onSendComplete} from "../utils/messageFunctions";
+import {httpClient} from "../utils/messageFunctions";
+import getSystemInfo from "../utils/getSystemInfo";
+import getComponent from "../../../../utils/getComponent";
 
 /**
  * Retrieves and returns the url of the mail service.
@@ -14,24 +16,6 @@ function getServiceUrl (id) {
 
 const actions = {
     /**
-     * Retrieves information about the system of the user and
-     * commits it to the state.
-     *
-     * @returns {void}
-     */
-    getSystemInfo: ({commit, rootState}) => {
-        const title = rootState.configJson.Portalconfig?.portalTitle?.title,
-            {platform, cookieEnabled, userAgent} = navigator;
-
-        commit("setSystemInfo", {
-            portalTitle: title ? title : document.title,
-            referrer: window.location.href,
-            platform,
-            cookieEnabled,
-            userAgent
-        });
-    },
-    /**
      * This action gets called after an e-mail has successfully been sent.
      * If configured, the ticketId is included in the Alert for the user.
      * If configured, the input is cleared and the tool is closed afterwards.
@@ -40,7 +24,7 @@ const actions = {
      * @return {void}
      */
     onSendSuccess: ({state, commit, dispatch}, ticketId) => {
-        const {closeAfterSend, deleteAfterSend, withTicketNo} = state;
+        const {closeAfterSend, deleteAfterSend, withTicketNo, id} = state;
         let content = i18next.t("common:modules.tools.contact.successMessage");
 
         if (withTicketNo) {
@@ -48,10 +32,11 @@ const actions = {
             content += i18next.t("common:modules.tools.contact.successTicket");
             content += ticketId;
         }
+
         dispatch("Alerting/addSingleAlert", {content}, {root: true});
 
         // Always uncheck the privacy policy
-        commit("setPrivacyPolicyChecked", false);
+        commit("setPrivacyPolicyAccepted", false);
 
         if (deleteAfterSend) {
             commit("setMail", "");
@@ -61,70 +46,67 @@ const actions = {
         }
         if (closeAfterSend) {
             commit("setActive", false);
+            // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
+            const model = getComponent(id);
+
+            if (model) {
+                model.set("isActive", false);
+            }
         }
+    },
+    /**
+     * Dispatch delegator to avoid code repetition. Dispatches single warning alert.
+     *
+     * @param {String} content String or locale key to show.
+     * @returns {void}
+     */
+    showWarningAlert ({dispatch}, content) {
+        dispatch(
+            "Alerting/addSingleAlert",
+            {content: i18next.t(content), category: "Warning"},
+            {root: true}
+        );
     },
     /**
      * Builds a HTML E-Mail and sends it via the backend mail server.
      *
      * @returns {void}
      */
-    send: async ({state, dispatch, getters}) => {
-        const content = i18next.t("common:modules.tools.contact.errorMessage"),
-            {to, from, serviceId, serviceID} = state;
-        let id = serviceId,
-            data = null,
-            mailService = null,
-            ticketId = "";
+    send: ({state, dispatch, getters, rootGetters}) => {
+        const {to, from, serviceId, serviceID} = state,
+            id = serviceId || serviceID,
+            systemInfo = getSystemInfo(rootGetters.portalTitle),
+            mailServiceUrl = getServiceUrl(id),
+            ticketId = createTicketId();
 
+        // stop sending if form is not valid
         if (!getters.validForm) {
             console.warn("An error occurred sending an email: send with incorrect fields aborted");
-            dispatch("Alerting/addSingleAlert", {content: i18next.t("common:modules.tools.contact.errorIncompleteDeclarations"), category: "Warning"}, {root: true});
-            onSendComplete();
+            dispatch("showWarningAlert", "common:modules.tools.contact.errorIncompleteDeclarations");
             return;
         }
-        if (serviceID !== "") {
-            console.warn("Contact: The parameter 'serviceID' is deprecated in the next major release! Please use serviceId instead.");
-            id = serviceID;
-        }
 
-        dispatch("getSystemInfo");
-
-        ticketId = createTicketId();
-        mailService = getServiceUrl(state);
-        data = {
-            from,
-            to,
-            subject: createSubject(ticketId, state.subject || (i18next.t("common:modules.tools.contact.mailSubject") + state.systemInfo.portalTitle)),
-            text: createMessage(state)
-        };
-
-        if (mailService === undefined) {
+        // stop sending if mail service is not defined
+        if (!mailServiceUrl) {
             console.warn(`"An error occurred sending an e-mail: serviceId ${id} is unknown to the RestReader.`);
-            dispatch("Alerting/addSingleAlert", {content, category: "Warning"}, {root: true});
-            onSendComplete();
+            dispatch("showWarningAlert", "common:modules.tools.contact.error.message");
             return;
         }
 
         // Show the loader when the dispatch of the e-mail is initiated.
-        Radio.trigger("Util", "showLoader");
         httpClient(
-            mailService,
-            data,
-            response => {
-                if (response.success) {
-                    dispatch("onSendSuccess", ticketId);
-                }
-                else {
-                    console.warn(`An error occured sending an email - server response is: ${response.message}`);
-                    dispatch("Alerting/addSingleAlert", {content, category: "Warning"}, {root: true});
-                    onSendComplete();
-                }
+            mailServiceUrl,
+            {
+                from,
+                to,
+                subject: createSubject(
+                    ticketId,
+                    state.subject || (i18next.t("common:modules.tools.contact.mailSubject") + systemInfo.portalTitle)
+                ),
+                text: createMessage(state, systemInfo)
             },
-            err => {
-                console.warn(`An error occurred sending an email: ${err}`);
-                dispatch("Alerting/addSingleAlert", {content, category: "Warning"}, {root: true});
-                onSendComplete();
-            }
+            () => dispatch("onSendSuccess", ticketId),
+            () => dispatch("showWarningAlert", "common:modules.tools.contact.error.message")
         );
     }
 };

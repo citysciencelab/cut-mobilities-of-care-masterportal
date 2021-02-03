@@ -58,7 +58,11 @@ export default {
     >
         <div :class="htmlElement === 'input' ? 'input-group' : ''">
             <label
-                class="control-label input-group-addon"
+                :class="[
+                    'control-label',
+                    'input-group-addon',
+                    htmlElement === 'textarea' ? 'force-border' : ''
+                ]"
                 :for="`tool-contact-${inputName}-input`"
             >{{ labelText }}</label>
             <component
@@ -70,12 +74,17 @@ export default {
                 :aria-describedby="`tool-contact-${inputName}-help`"
                 :placeholder="$t(`common:modules.tools.contact.placeholder.${inputName}`)"
                 :rows="htmlElement === 'textarea' ? rows : ''"
-                @change="changeFunction($event.currentTarget.value)"
+                @keyup="changeFunction($event.currentTarget.value)"
             />
         </div>
         <span
             v-if="validInput"
-            class="glyphicon glyphicon-ok form-control-feedback"
+            :class="[
+                'glyphicon',
+                'glyphicon-ok',
+                'form-control-feedback',
+                htmlElement === 'textarea' ? 'lift-tick' : ''
+            ]"
             aria-hidden="true"
         />
         <span
@@ -91,8 +100,33 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
+.input-group-addon:first-child.force-border {
+    border-right: 1px solid #ccc;
+}
+
+.has-error .input-group-addon:first-child.force-border {
+    border-right: 1px solid #a94442;
+}
+
+.has-success .input-group-addon:first-child.force-border {
+    border-right: 1px solid #3c763d;
+}
+
+.lift-tick {
+    margin-top: -4px;
+}
+
+.form-control {
+    resize: none;
+}
+
 .control-label {
     min-width: 65px;
+}
+
+.help-block {
+    /* avoids making the form broader */
+    max-width: 270px;
 }
 </style>

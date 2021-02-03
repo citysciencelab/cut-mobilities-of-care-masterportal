@@ -11,15 +11,14 @@ function createSystemInfo (systemInfo) {
     info += "<br>";
     info += "==================<br>";
     info += `Referrer: <a href="${systemInfo.referrer}">${systemInfo.portalTitle}</a><br>`;
-    info += `Platform: ${systemInfo.platform} <br>`;
-    info += `Cookies enabled: ${systemInfo.cookiesEnabled} <br>`;
+    info += `Platform: ${systemInfo.platform}<br>`;
+    info += `Cookies enabled: ${systemInfo.cookieEnabled}<br>`;
     info += `UserAgent: ${systemInfo.userAgent}<br>`;
 
     return info;
 }
 
 /**
- * /**
  * Creates HTML with the message of the user.
  * Includes the username, mail-address, phone number and, if configured, information about the system of the user.
  *
@@ -29,10 +28,10 @@ function createSystemInfo (systemInfo) {
  * @param {String} state.phone Phone number of the user.
  * @param {String} state.message Message the user wants to be sent.
  * @param {Boolean} state.includeSystemInfo If true, information about the system of the user is included.
- * @param {Object} state.systemInfo Information about the system of the user.
+ * @param {ContactSystemInfo} systemInfo Information about the system of the user.
  * @returns {String} The prepared message as HTML.
  */
-function createMessage ({username, mail, phone, message, includeSystemInfo, systemInfo}) {
+function createMessage ({username, mail, phone, message, includeSystemInfo}, systemInfo) {
     const info = includeSystemInfo ? createSystemInfo(systemInfo) : "";
     let msg = "";
 
@@ -59,16 +58,16 @@ function createSubject (ticketId, subject) {
 
 /**
  * Creates a unique id for the ticket of a user.
- * It is formatted as 'MMDD-[uniqueID]', if not prefix is given.
+ * It is formatted as 'MMDD-[numbers]-[numbers]', if not prefix is given.
  *
- * @param {?String} [prefixOpt = null] If given, this prefix is used instead of the date format.
  * @returns {String} The generated unique Id.
  */
-function createTicketId (prefixOpt = null) {
-    const prefix = prefixOpt || moment().format("MMDD-"),
-        randomNumber = String(Math.floor(Math.random() * 9000) + 1000);
+function createTicketId () {
+    const prefix = moment().format("MMDD"),
+        randomNumber = String(Math.floor(Math.random() * 9000) + 1000),
+        anotherRandomNumber = String(Math.floor(Math.random() * 9000) + 1000);
 
-    return prefix + randomNumber;
+    return prefix + "-" + randomNumber + "-" + anotherRandomNumber;
 }
 
 export {

@@ -4,8 +4,14 @@ import {minMessageLength, regexMail, regexPhone, regexUsername} from "./constant
 
 const getters = {
     ...generateSimpleGetters(initialState),
-    validForm: ({showPrivacyPolicy, privacyPolicyAccepted},
-        {validMail, validMessage, validPhone, validUsername}) => (!showPrivacyPolicy || privacyPolicyAccepted) && validMail && validMessage && validPhone && validUsername,
+    validForm: (
+        {showPrivacyPolicy, privacyPolicyAccepted},
+        {validMail, validMessage, validPhone, validUsername}
+    ) => (!showPrivacyPolicy || privacyPolicyAccepted) &&
+        validMail &&
+        validMessage &&
+        validPhone &&
+        validUsername,
     validMail: ({mail}) => regexMail.test(mail),
     validMessage: ({message}) => message.length >= minMessageLength,
     validPhone: ({phone}) => regexPhone.test(phone),

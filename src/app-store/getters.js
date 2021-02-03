@@ -18,6 +18,7 @@ export default {
     // proxyHost is deprecated in the next major-release
     proxyHost: state => state?.configJs?.proxyHost || "",
     // configJSON desctructuring
+    portalTitle: state => state?.configJson?.Portalconfig?.portalTitle?.title || null,
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     legendConfig: state => state?.configJson?.Portalconfig?.menu.legend || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
