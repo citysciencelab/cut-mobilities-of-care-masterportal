@@ -159,10 +159,10 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
 
 
     it("renders the correct value when select is changed", async () => {
-        const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            select = wrapper.find("#layer-analysis-select"),
-            options = select.findAll("option"),
-            layers = [];
+        // const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
+        // select = wrapper.find("#layer-analysis-select"),
+        // options = select.findAll("option"),
+        // layers = [];
 
         for (let i = 0; i <= 2; i++) {
             const layer = new Layer();
@@ -170,10 +170,10 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
             layer.set("name", "Layer" + i);
             layer.set("id", i);
             sinon.stub(layer, "setIsSelected");
-            layers.push(layer);
+            // layers.push(layer);
         }
 
-        await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
+        // await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
 
         // geometrySelect.element.value = "Polygon";
         // geometrySelect.trigger("change");
