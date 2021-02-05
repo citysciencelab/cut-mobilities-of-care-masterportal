@@ -30,7 +30,7 @@ function onSendComplete () {
  * @param {Function} onError Function call to trigger further dispatchments on error.
  * @returns {void}
  */
-export function httpClient (url, data, onSuccess, onError) {
+function httpClient (url, data, onSuccess, onError) {
     onSendStart();
 
     axios.post(url, data)
@@ -51,3 +51,5 @@ export function httpClient (url, data, onSuccess, onError) {
         })
         .finally(onSendComplete);
 }
+
+export default httpClient;

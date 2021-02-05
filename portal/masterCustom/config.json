@@ -326,10 +326,22 @@
           "showCollapseAllButton": true
         },
         "contact":{
-         "name": "translate#common:menu.contact",
-           "glyphicon":"glyphicon-envelope",
-           "serviceId":"80001",
-           "includeSystemInfo":true
+          "name": "translate#common:menu.contact",
+          "glyphicon":"glyphicon-envelope",
+          "serviceId":"80001",
+          "includeSystemInfo":true,
+          "from": [
+              {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+              }
+          ],
+          "to": [
+              {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+              }
+          ]
         },
         "info":{
          "name": "translate#common:menu.info",

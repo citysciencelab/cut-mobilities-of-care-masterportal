@@ -20,7 +20,7 @@ export default {
         // Change time to the location where customer service is based (see generateTicketId)
         moment.locale(this.locationOfCustomerService);
         // warn if deprecated param is used
-        if (this.serviceID !== "") {
+        if (this.serviceID) {
             console.warn("Contact Tool: The parameter 'serviceID' is deprecated in the next major release! Please use serviceId instead.");
         }
     },
@@ -54,11 +54,14 @@ export default {
             <div
                 v-if="contactInfo"
                 id="tool-contact-addionalInformation"
-                class="form-group"
+                class="form-group contents"
             >
                 {{ contactInfo }}
             </div>
-            <form @submit.prevent="send">
+            <form
+                class="contents"
+                @submit.prevent="send"
+            >
                 <ContactInput
                     :change-function="setUsername"
                     input-name="username"
@@ -100,19 +103,19 @@ export default {
                         id="tool-contact-privacyPolicy-label"
                         for="tool-contact-privacyPolicy-input"
                     >
-                        {{ $t("common: modules.tools.contact.privacyPolicy.label") }}
+                        <input
+                            id="tool-contact-privacyPolicy-input"
+                            :value="privacyPolicyAccepted"
+                            type="checkbox"
+                            @click="togglePrivacyPolicyAccepted"
+                        >
+                        {{ $t("common:modules.tools.contact.privacyPolicy.label") }}
                     </label>
-                    <input
-                        id="tool-contact-privacyPolicy-input"
-                        :value="privacyPolicyAccepted"
-                        type="checkbox"
-                    >
-                    <span>{{ $t(
-                        "common:modules.tools.contact.privacyPolicy.info",
-                        {privacyPolicyLink}
-                    ) }}</span>
+                    <p v-html="$t('common:modules.tools.contact.privacyPolicy.info', {privacyPolicyLink})">
+                    </p>
                 </div>
                 <button
+                    id="tool-contact-send-message"
                     type="submit"
                     class="btn btn-default pull-right"
                     :disabled="!validForm"
@@ -127,9 +130,18 @@ export default {
 <style lang="less" scoped>
     @import "~variables";
 
+    input[type="checkbox"] {
+        cursor: pointer;
+    }
+
     #tool-contact-privacyPolicy {
         label, span {
             cursor: pointer;
         }
+    }
+
+    .contents {
+        /* avoids making the form broader */
+        max-width: 300px;
     }
 </style>

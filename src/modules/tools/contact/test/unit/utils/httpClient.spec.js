@@ -1,9 +1,9 @@
 import sinon from "sinon";
 import axios from "axios";
 
-import {httpClient} from "../../../utils/messageFunctions";
+import httpClient from "../../../utils/httpClient";
 
-describe("tools/contact/utils/messageFunctions", function () {
+describe("tools/contact/utils/httpClient", function () {
     describe("httpClient", function () {
         beforeEach(() => {
             sinon.stub(Radio, "trigger");

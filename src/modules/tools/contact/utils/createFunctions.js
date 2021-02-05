@@ -28,7 +28,7 @@ function createSystemInfo (systemInfo) {
  * @param {String} state.phone Phone number of the user.
  * @param {String} state.message Message the user wants to be sent.
  * @param {Boolean} state.includeSystemInfo If true, information about the system of the user is included.
- * @param {ContactSystemInfo} systemInfo Information about the system of the user.
+ * @param {?ContactSystemInfo} systemInfo Information about the system of the user.
  * @returns {String} The prepared message as HTML.
  */
 function createMessage ({username, mail, phone, message}, systemInfo) {
@@ -39,7 +39,7 @@ function createMessage ({username, mail, phone, message}, systemInfo) {
     msg += `Tel.:: ${phone}<br>`;
     msg += "==================<br>";
     msg += `${message}<br>`;
-    msg += createSystemInfo(systemInfo);
+    msg += systemInfo ? createSystemInfo(systemInfo) : "";
 
     return msg;
 }

@@ -1,5 +1,5 @@
 import {createMessage, createSubject, createTicketId} from "../utils/createFunctions";
-import {httpClient} from "../utils/messageFunctions";
+import httpClient from "../utils/httpClient";
 import getSystemInfo from "../utils/getSystemInfo";
 import getComponent from "../../../../utils/getComponent";
 
@@ -45,6 +45,7 @@ const actions = {
             commit("setUsername", "");
         }
         if (closeAfterSend) {
+            // TODO dedupe as action
             commit("setActive", false);
             // The value "isActive" of the Backbone model is also set to false to change the CSS class in the menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = getComponent(id);
@@ -73,7 +74,7 @@ const actions = {
      * @returns {void}
      */
     send: ({state, dispatch, getters, rootGetters}) => {
-        const {to, from, serviceId, serviceID} = state,
+        const {to, from, serviceId, serviceID, includeSystemInfo} = state,
             id = serviceId || serviceID,
             systemInfo = getSystemInfo(rootGetters.portalTitle),
             mailServiceUrl = getServiceUrl(id),
@@ -103,7 +104,7 @@ const actions = {
                     ticketId,
                     state.subject || (i18next.t("common:modules.tools.contact.mailSubject") + systemInfo.portalTitle)
                 ),
-                text: createMessage(state, systemInfo)
+                text: createMessage(state, includeSystemInfo ? systemInfo : null)
             },
             () => dispatch("onSendSuccess", ticketId),
             () => dispatch("showWarningAlert", "common:modules.tools.contact.error.message")

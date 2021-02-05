@@ -124,9 +124,4 @@ export default {
 .control-label {
     min-width: 65px;
 }
-
-.help-block {
-    /* avoids making the form broader */
-    max-width: 270px;
-}
 </style>

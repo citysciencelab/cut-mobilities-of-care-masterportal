@@ -123,8 +123,7 @@
             "contact": {
                 "name": "translate#common:menu.contact",
                 "glyphicon": "glyphicon-envelope",
-                "email": "LGVGeoPortal-Hilfe@gv.hamburg.de",
-                "serviceID": "80002",
+                "serviceId": "80002",
                 "from": [
                     {
                         "email": "lgvgeoportal-hilfe@gv.hamburg.de",
@@ -137,10 +136,6 @@
                         "name": "LGVGeoportalHilfe"
                     }
                 ],
-                "ccToUser": true,
-                "cc": [],
-                "bcc": [],
-                "textPlaceholder": "Bitte formulieren",
                 "includeSystemInfo": true
             }
         },
