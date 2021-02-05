@@ -2,7 +2,6 @@ import {Draw} from "ol/interaction.js";
 import {getMapProjection, transform} from "masterportalAPI/src/crs";
 
 import * as actionsDownload from "./actions/actionsDownload";
-import convertFeaturesToKml from "./actions/convertFeaturesToKml";
 import {drawInteractionOnDrawEvent} from "./actions/drawInteractionOnDrawEvent";
 import * as setters from "./actions/settersDraw";
 import * as withoutGUI from "./actions/withoutGUIDraw";
@@ -96,7 +95,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
             rootState.Map.map.un("pointermove", tooltip.get("mapPointerMoveEvent"));
             rootState.Map.map.removeOverlay(tooltip);
         },
-        convertFeaturesToKml,
         /**
          * Returns the center point of a Line or Polygon or a point itself.
          * If a targetprojection is given, the values are transformed.

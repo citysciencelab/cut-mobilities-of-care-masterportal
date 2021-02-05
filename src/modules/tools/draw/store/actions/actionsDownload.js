@@ -1,6 +1,7 @@
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 import {GeoJSON, GPX} from "ol/format.js";
+import convertFeaturesToKml from "../../../../../../src/utils/convertFeaturesToKml.js";
 
 import {transform, transformPoint} from "../../utils/download/transformGeometry";
 
@@ -55,7 +56,7 @@ async function prepareData ({state, commit, dispatch}) {
             features = await dispatch("convertFeatures", new GPX());
             break;
         case "KML":
-            features = await dispatch("convertFeaturesToKml");
+            features = await convertFeaturesToKml(state.download.features);
             break;
         case "none":
             commit("setDownloadSelectedFormat", "");
