@@ -92,7 +92,10 @@
         "core": {
           "modelList": {
             "layer": {
-              "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used."
+              "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used.",
+              "sensor": {
+                "httpOnError": "<strong>Unexpected error occurred while loading sensor data of layer {{name}}</strong>"
+              }
             }
           },
           "parametricURL": {
@@ -378,9 +381,7 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Save this URL as a bookmark",
-                "contentSaved": "Content was copied to the clipboard.",
-                "contenNotSaved": "Content could not be copied to the clipboard."
+                "infoText": "Save this URL as a bookmark."
             },
             "fileImport": {
                 "captions": {
@@ -430,7 +431,6 @@
             "supplyCoord": {
                 "title": "Query Coordinates",
                 "coordSystemField": "Coordinate system",
-                "copyToClipboard": "Content was copied to the clipboard.",
                 "hdms": {
                     "eastingLabel": "Longitude",
                     "northingLabel": "Latitude"
@@ -741,6 +741,12 @@
           "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
           "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
           "alertRequiredService": "Details: A required service is not responding."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Content was copied to the clipboard.",
+                "contentNotSaved": "Content could not be copied to the clipboard."
+            }
         }
     },
     "snippets": {

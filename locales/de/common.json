@@ -87,7 +87,10 @@
         "core": {
           "modelList": {
             "layer": {
-              "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist."
+              "wrongStyleId": "Unter der angegeben StyleId: {{styleId}} konnte kein Styleobjekt gefunden werden. Bitte stellen Sie sicher, dass in der verwendeten Style.json ein Style mit der StyleId: {{styleId}} konfiguriert ist.",
+              "sensor": {
+                "httpOnError": "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers {{name}} aufgetreten</strong>"
+              }
             }
           },
           "parametricURL": {
@@ -378,9 +381,7 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Speichern Sie diese URL als Lesezeichen ab",
-                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
-                "contenNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
+                "infoText": "Speichern Sie diese URL als Lesezeichen ab,"
             },
             "fileImport": {
                 "captions": {
@@ -430,7 +431,6 @@
             "supplyCoord": {
                 "title": "Koordinaten abfragen",
                 "coordSystemField": "Koordinatensystem",
-                "copyToClipboard": "Inhalt wurde in die Zwischenablage kopiert.",
                 "hdms": {
                     "eastingLabel": "Länge",
                     "northingLabel": "Breite"
@@ -741,6 +741,12 @@
           "alertNoFoundFeature" : "Es wurde kein Objekt gefunden! Bitte überprüfen Sie die Eingabeparameter.",
           "alertParameterizedAccess": "Der parametrisierte Aufruf des Portals ist leider schief gelaufen!",
           "alertRequiredService": "Details: Ein benötigter Dienst antwortet nicht."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Inhalt wurde in die Zwischenablage kopiert.",
+                "contentNotSaved": "Inhalt konnte nicht in die Zwischenablage kopiert werden."
+            }
         }
     },
     "snippets": {

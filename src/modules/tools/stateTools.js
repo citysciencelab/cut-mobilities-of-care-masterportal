@@ -3,6 +3,7 @@ import Draw from "./draw/components/Draw.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
 import Measure from "./measure/components/Measure.vue";
+import SaveSelection from "./saveSelection/components/SaveSelection.vue";
 import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
 import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 
@@ -19,6 +20,7 @@ const state = {
         fileImport: FileImport,
         gfi: Gfi,
         measure: Measure,
+        saveSelection: SaveSelection,
         scaleSwitcher: ScaleSwitcher,
         supplyCoord: SupplyCoord
     },

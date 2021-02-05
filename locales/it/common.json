@@ -372,9 +372,7 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Salva questo URL come segnalibro",
-                "contentSaved": "Il contenuto è stato copiato negli appunti.",
-                "contenNotSaved": "Il contenuto non è stato copiato negli appunti."
+                "infoText": "Salva questo URL come segnalibro."
             },
             "fileImport": {
                 "captions": {
@@ -726,6 +724,12 @@
         },
         "zoomToGeometry": {
           "alertNoFoundFeature" : "Nessun oggetto è stato trovato! Si prega di controllare i parametri di ingresso."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Il contenuto è stato copiato negli appunti.",
+                "contentNotSaved": "Il contenuto non è stato copiato negli appunti."
+            }
         }
     },
     "snippets": {
