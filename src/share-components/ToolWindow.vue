@@ -45,14 +45,14 @@ export default {
 
 <template>
     <div
-        id="tool-window-vue"
+        class="tool-window-vue"
         :style="{width: initialToolWidth}"
     >
         <div id="win-heading">
             <slot name="leftOfTitle" />
 
             <BasicDragHandle
-                targetEl="#tool-window-vue"
+                targetSel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
                 <p id="win-heading-title">
@@ -79,7 +79,7 @@ export default {
             :id="'basic-resize-handle-' + hPos"
             :key="hPos"
             :hPos="hPos"
-            targetEl="#tool-window-vue"
+            targetSel=".tool-window-vue"
             :minW="200"
             :minH="100"
         />
@@ -92,7 +92,7 @@ export default {
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     @background_color_1: rgb(255, 255, 255);
 
-    #tool-window-vue {
+    .tool-window-vue {
         background-color: @background_color_1;
         display: block;
         position: absolute;
