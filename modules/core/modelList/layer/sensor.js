@@ -9,6 +9,7 @@ import {buffer, containsExtent} from "ol/extent";
 import {GeoJSON} from "ol/format.js";
 import changeTimeZone from "../../../../src/utils/changeTimeZone.js";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
+import store from "../../../../src/app-store";
 
 const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -21,7 +22,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          * @enum webpack.MomentTimezoneDataPlugin.matchZones
          */
         timezone: "Europe/Berlin",
-        version: "1.0",
+        version: "1.1",
         mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
@@ -31,9 +32,30 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         isSubscribed: false,
         moveendListener: null,
         loadThingsOnlyInCurrentExtent: false,
-        intvLoadingThingsInExtent: 0,
-        delayLoadingThingsInExtent: 1000,
-        useProxy: false
+        useProxy: false,
+        mqttRh: 2,
+        mqttQos: 2,
+        datastreamAttributes: [
+            "@iot.id",
+            "@iot.selfLink",
+            "Observations",
+            "description",
+            "name",
+            "observationType",
+            "observedArea",
+            "phenomenonTime",
+            "properties",
+            "resultTime",
+            "unitOfMeasurement"
+        ],
+        thingAttributes: [
+            "@iot.id",
+            "@iot.selfLink",
+            "Locations",
+            "description",
+            "name",
+            "properties"
+        ]
     }),
 
     /**
@@ -213,6 +235,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 features = this.createFeatures(sensorData, epsg),
                 isClustered = this.has("clusterDistance");
 
+            this.clearLayerSource();
             // Add features to vectorlayer
             if (Array.isArray(features) && features.length) {
                 this.get("layerSource").addFeatures(features);
@@ -376,12 +399,18 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             /**
              * a function to receive the response of a http call
              * @param {Object} result the response from the http request as array buffer
-             * @returns {Void}  -
+             * @returns {void}
              */
             httpOnSucess = function (result) {
                 let allThings;
 
-                allThings = this.flattenArray(result);
+                if (urlParams?.root === "Datastreams") {
+                    allThings = this.parseDatastreams(result, this.get("datastreamAttributes"), this.get("thingAttributes"));
+                }
+                else {
+                    allThings = this.flattenArray(result);
+                }
+
                 allThings = this.getNewestSensorData(allThings);
 
                 allThings = this.aggregatePropertiesOfThings(allThings);
@@ -391,60 +420,114 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 }
             }.bind(this),
             /**
-             * a function to call before calling anything
-             * @returns {Void}  -
-             */
-            httpOnStart = function () {
-                // on start
-                this.loadSensorThingsStart();
-            }.bind(this),
-            /**
-             * A function that is executed when the http call is completed, regardless of whether there is a success or a failure.
-             * @returns {Void}  -
-             */
-            httpOnComplete = function () {
-                // on complete
-                this.loadSensorThingsComplete();
-            }.bind(this),
-            /**
              * a function to call on error
              * @param {Error} error the occuring error
-             * @returns {Void}  -
+             * @returns {void}
              */
             httpOnError = function (error) {
-                // on error
-                Radio.trigger("Alert", "alert", {
-                    text: "<strong>Unerwarteter Fehler beim Laden der Sensordaten des Layers " +
-                        this.get("name") + " aufgetreten</strong>",
-                    kategorie: "alert-danger"
-                });
+                store.dispatch("Alerting/addSingleAlert", i18next.t("modules.core.modelList.layer.sensor.httpOnError", {name: this.get("name")}));
                 console.warn(error);
             }.bind(this);
 
         if (!this.get("loadThingsOnlyInCurrentExtent")) {
-            http.get(requestUrl, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
+            http.get(requestUrl, httpOnSucess, null, null, httpOnError);
         }
         else {
-            http.getInExtent(requestUrl, currentExtent, httpOnSucess, httpOnStart, httpOnComplete, httpOnError);
+            http.getInExtent(requestUrl, currentExtent, httpOnSucess, null, null, httpOnError);
         }
     },
 
     /**
-     * to call on starting of loadSensorThings
-     * @fires Core#RadioTriggerUtilShowLoader
-     * @returns {void}
+     * Parse the sensorThings-API data with datastreams as root.
+     * The datastreams are merged based on the Id of the thing if the Ids exist multiple times.
+     * @param {Object[]} sensordata the sensordata with datastream as root.
+     * @param {String[]} datastreamAttributes  The datastreamattributes.
+     * @param {String[]} thingAttributes The thing attributes.
+     * @returns {Object[]} The sensordata with merged things as root.
      */
-    loadSensorThingsStart: function () {
-        Radio.trigger("Util", "showLoader");
+    parseDatastreams: function (sensordata, datastreamAttributes, thingAttributes) {
+        let allThings = this.changeSensordataRoot(sensordata, datastreamAttributes, thingAttributes);
+        const thingIds = allThings.map(thing => thing["@iot.id"]),
+            uniqeThingIds = [... new Set(thingIds)];
+
+        if (thingIds.length > uniqeThingIds.length) {
+            allThings = this.mergeDatastreamsByThingId(allThings, uniqeThingIds);
+        }
+
+        return allThings;
     },
 
     /**
-     * to call on ending of loadSensorThings
-     * @fires Core#RadioTriggerUtilHideLoader
-     * @returns {void}
+     * Changes the root in the sensordata from datastream to thing.
+     * @param {Object[]} sensordata the sensordata with datastream as root.
+     * @param {String[]} datastreamAttributes  The datastreamattributes.
+     * @param {String[]} thingAttributes The thing attributes.
+     * @returns {Object[]} The sensordata with things as root.
      */
-    loadSensorThingsComplete: function () {
-        Radio.trigger("Util", "hideLoader");
+    changeSensordataRoot: function (sensordata, datastreamAttributes, thingAttributes) {
+        const things = [],
+            datastreamAttributesAssociation = this.createAssociationObject(datastreamAttributes),
+            thingAttributesAssociation = this.createAssociationObject(thingAttributes);
+
+        sensordata.forEach((stream, index) => {
+            const datastreamNewAttributes = {};
+
+            things.push({});
+            Object.keys(stream).forEach(key => {
+                if (datastreamAttributesAssociation.hasOwnProperty(key)) {
+                    datastreamNewAttributes[key] = stream[key];
+                    delete things[index][key];
+                }
+            });
+            things[index].Datastreams = [datastreamNewAttributes];
+            Object.keys(stream.Thing).forEach(key => {
+                if (thingAttributesAssociation.hasOwnProperty(key)) {
+                    things[index][key] = stream.Thing[key];
+                }
+            });
+        });
+
+        return things;
+    },
+
+    /**
+     * Converts elments of an array to keys in an object with values to be true.
+     * @param {String[]} [array=[]] Array with values to be convert to an object.
+     * @returns {Object} The object with values of the given array as keys.
+     */
+    createAssociationObject: function (array = []) {
+        const associationObject = {};
+
+        array.forEach(key => {
+            associationObject[key] = true;
+        });
+
+        return associationObject;
+    },
+
+    /**
+     * Merge datastreams based on the id of the thing if the ids exist multiple times.
+     * @param {Object[]} allThings The sensordata with things as root.
+     * @param {Number[]} uniqueIds The unique ids from the sensordata things.
+     * @returns {Object[]} The sensordata with merged things as root.
+     */
+    mergeDatastreamsByThingId: function (allThings, uniqueIds) {
+        const mergedThings = [];
+
+        uniqueIds.forEach((thingId, thingIdIndex) => {
+            const filterThings = allThings.filter(thing => thing["@iot.id"] === thingId);
+
+            filterThings.forEach((thing, index) => {
+                if (index === 0) {
+                    mergedThings.push(thing);
+                }
+                else {
+                    mergedThings[thingIdIndex].Datastreams = [...mergedThings[thingIdIndex].Datastreams, ...thing.Datastreams];
+                }
+            });
+        });
+
+        return mergedThings;
     },
 
     /**
@@ -546,17 +629,16 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @return {String} URL to request sensorThings
      */
     buildSensorThingsUrl: function (url, version, urlParams) {
-        let query = "",
-            versionAsString = version,
-            key;
-
-        if (typeof version === "number") {
-            versionAsString = version.toFixed(1);
-        }
+        const root = urlParams?.root || "Things",
+            versionAsString = typeof version === "number" ? version.toFixed(1) : version;
+        let query = "";
 
         if (typeof urlParams === "object") {
-            for (key in urlParams) {
-                if (query !== "") {
+            for (const key in urlParams) {
+                if (key === "root") {
+                    continue;
+                }
+                else if (query !== "") {
                     query += "&";
                 }
 
@@ -571,7 +653,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             }
         }
 
-        return String(url) + "/v" + String(versionAsString) + "/Things?" + query;
+        return `${url}/v${versionAsString}/${root}?${query}`;
     },
 
     /**
@@ -582,7 +664,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
      * @returns {object|null} Json object or null
      */
     getJsonGeometry: function (thing, index) {
-        const Locations = thing && thing.hasOwnProperty("Locations") ? thing.Locations : null,
+        const Locations = thing?.Locations || thing?.Thing?.Locations,
             location = Locations && Locations.hasOwnProperty(index) && Locations[index].hasOwnProperty("location") ? Locations[index].location : null;
 
         if (location && location.hasOwnProperty("geometry") && location.geometry.hasOwnProperty("type")) {
@@ -783,11 +865,13 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             dataStreamIds = this.getDataStreamIds(features),
             version = this.get("version"),
             client = this.get("mqttClient"),
-            subscriptionTopics = this.get("subscriptionTopics");
+            subscriptionTopics = this.get("subscriptionTopics"),
+            rh = this.get("mqttRh"),
+            qos = this.get("mqttQos");
 
-        dataStreamIds.forEach(function (id) {
+        dataStreamIds.forEach(id => {
             if (client && id && !subscriptionTopics[id]) {
-                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {rh: 0});
+                client.subscribe("v" + version + "/Datastreams(" + id + ")/Observations", {rh, qos});
                 subscriptionTopics[id] = true;
             }
         });
@@ -834,27 +918,14 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
     },
 
     /**
-     * loading things only in the current extent and updating the subscriptions
-     * delays before reloading stuff - maybe other moves will trigger in the midtime, so delay...
+     * Loading things only in the current extent and updating the subscriptions.
      * @returns {void}
      */
     loadFeaturesInExtentAndUpdateSubscription: function () {
-        if (this.get("intvLoadingThingsInExtent") !== 0) {
-            // stop any other action requested
-            clearInterval(this.get("intvLoadingThingsInExtent"));
-        }
-
-        this.set("intvLoadingThingsInExtent", setInterval(function () {
-            this.clearLayerSource();
-
-            this.unsubscribeFromSensorThings();
-            this.initializeConnection(function () {
-                this.subscribeToSensorThings();
-            }.bind(this));
-
-            clearInterval(this.get("intvLoadingThingsInExtent"));
-            this.set("intvLoadingThingsInExtent", 0);
-        }.bind(this), this.get("delayLoadingThingsInExtent")));
+        this.unsubscribeFromSensorThings();
+        this.initializeConnection(() => {
+            this.subscribeToSensorThings();
+        });
     },
 
     /**

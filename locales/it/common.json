@@ -188,32 +188,6 @@
                 "topicsHelp": "Nella ricerca per livelli è possibile inserire i parametri di ricerca (ad es. aree protette, abitazioni, ecc.) e cercare i geodati disponibili su questo livello.  Quando si seleziona un risultato, esso viene visualizzato direttamente sulla mappa.",
                 "parcelHelp": "È possibile cercare i pacchi di terreno utilizzando il numero di parcella e il numero del quartiere. Basta inserire il numero del quartiere seguito dal numero del pacco <strong>(1)</strong> (con o senza spazi) nella maschera di ricerca e premere il tasto Invio o fare clic sulla lente d'ingrandimento. A questo punto la mappa è centrata sul pacco cercato <strong>(2)</strong>."
             },
-            "measureTool": {
-                "title": "Guida - Misura distanza / area",
-                "statisticalApprox": "Approssimazione statistica",
-                "equalizationUTM": "Rettificazione in UTM",
-                "conversionInMap": "Conversioni nella mappa",
-                "influenceFactors": "I valori visualizzati sono soggetti a imprecisioni che sono influenzate, tra l'altro, dai seguenti fattori:",
-                "scale": "Scala",
-                "resolution": "Risoluzione della mappa",
-                "screenResolution": "Risoluzione dello schermo",
-                "inputAccuracy": "Precisione di digitazione e numero di punti digitalizzati e",
-                "measureDistance": "Lunghezza della linea o misura dell'area",
-                "standardDeviation": "Poiché le dimensioni di errore precedentemente indicate possono variare da una stazione di lavoro all'altra, si assume una deviazione standard di 1 mm per clic sulla mappa. Per ogni punto digitalizzato sulla mappa, si ottiene un errore dipendente dalla scala di:",
-                "spotDefects": "Errore del punto [m]",
-                "errorPropagationLaw": "Secondo la legge di propagazione degli errori da coordinate senza tener conto delle correlazioni e della deviazione standard uniforme secondo la formula del triangolo gaussiano si ottiene:",
-                "forDistances": "Per distanze:",
-                "forAreas": "Per aree:",
-                "errorReason": "L'errore dipende quindi dalla deviazione standard del singolo errore, dalla scala e dal numero di punti.",
-                "example": "Esempio:",
-                "exampleContent": "Per un poligono quadrato di 10 m di lato (superficie: 100 m²), una scala di 1:1000 risulta in un errore previsto di 10,00 m². Questo errore è il risultato di misurazioni imprecise effettuate dall'utente sullo schermo.",
-                "UTMHelp1": "Il sistema di coordinate UTM è un sistema di coordinate globale che rappresenta la superficie terrestre in strisce larghe 6°. Ogni striscia rappresenta una zona, numerata consecutivamente da 180° ovest a 180° est. La Germania si trova per lo più nella zona 32 (6°-12° longitudine est). Una proiezione trasversale di Mercator è utilizzata per proiettare la superficie curva della terra su una mappa piana. Qui, il cilindro di proiezione (<font color=\"red\">red</font>) interseca la superficie terrestre, creando una striscia tagliata larga 360 km che sporge \"sopra\"il cilindro di proiezione. Le coordinate all'interno della striscia di taglio vengono di conseguenza mappate abbreviate, mentre le coordinate all'esterno della striscia di taglio vengono allungate.",
-                "UTM6": "Immagine UTM a 6° di larghezza",
-                "imageDistortion1": "Distorsione dell'immagine UTM",
-                "imageDistortion2": "Questa distorsione deve essere contrastata, poiché le distanze/aree misurate sono distorte e quindi errate quando vengono misurate direttamente sulla mappa. Per Amburgo, ad esempio, la distorsione ammonta già a circa 40 cm per una misurazione della distanza di 1000m. Si tratta di un errore non trascurabile, che va ben oltre le tolleranze degli strumenti di misurazione odierni. Con l'aiuto delle seguenti formule, le distanze e le aree misurate possono essere nuovamente equalizzate:",
-                "formulas": "Formule per la correzione di aree/distanze misurate in UTM",
-                "useInMapHelp": "L'errore assoluto massimo viene visualizzato dietro l'area/la distanza misurata e contrassegnato da un simbolo più-meno (\"+/-\"). Ciò significa che il valore reale si discosta dal valore misurato per un massimo dell'errore assoluto. L'errore assoluto visualizzato è quindi l'imprecisione dell'area/distanza misurata. In questa applicazione, le aree e le distanze misurate vengono immediatamente rettificate in modo che i valori visualizzati corrispondano alla realtà. Non è necessario calcolare un'ulteriore equalizzazione."
-            },
             "topicTree": {
                 "title": "Guida - Albero di livelli",
                 "topics": "Come è strutturato l'albero dei livelli sotto i dati specialistici?",
@@ -394,9 +368,7 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Salva questo URL come segnalibro",
-                "contentSaved": "Il contenuto è stato copiato negli appunti.",
-                "contenNotSaved": "Il contenuto non è stato copiato negli appunti."
+                "infoText": "Salva questo URL come segnalibro."
             },
             "fileImport": {
                 "captions": {
@@ -604,9 +576,12 @@
             "measure": {
                 "geometry": "Geometria",
                 "measure": "Unità",
-                "plzConsider": "Si prega di notare",
-                "valuesNotExact": "I valori visualizzati contengono imprecisioni",
-                "findFurtherInf": "Ulteriori informazioni si trovano qui",
+                "influenceFactors": "I valori visualizzati sono soggetti a imprecisioni che sono influenzate, tra l'altro, dai seguenti fattori:",
+                "scale": "Scala",
+                "resolution": "Risoluzione della mappa",
+                "screenResolution": "Risoluzione dello schermo",
+                "inputAccuracy": "Precisione di digitazione e numero di punti digitalizzati e",
+                "measureDistance": "Lunghezza della linea o misura dell'area",
                 "deleteMeasurements": "Cancella misure",
                 "stretch": "Linea",
                 "area": "Area"
@@ -745,6 +720,12 @@
         },
         "zoomToGeometry": {
           "alertNoFoundFeature" : "Nessun oggetto è stato trovato! Si prega di controllare i parametri di ingresso."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Il contenuto è stato copiato negli appunti.",
+                "contentNotSaved": "Il contenuto non è stato copiato negli appunti."
+            }
         }
     },
     "snippets": {
