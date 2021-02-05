@@ -1490,12 +1490,6 @@
  */
 
 /**
- * @event Core#RadioTriggerUtilCopyToClipboard
- * @description todo
- * @example Radio.request("Util", "copyToClipboard");
- */
-
-/**
  * @event Core#RadioTriggerUtilPick
  * @description Return a copy of the object, filtered to only have values for the whitelisted keys (or array of valid keys).
  * @example Radio.request("Util", "pick");

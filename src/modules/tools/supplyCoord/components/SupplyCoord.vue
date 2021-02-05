@@ -70,19 +70,6 @@ export default {
             removeInteractionFromMap: "removeInteraction"
         }),
         /**
-         * Function to initiate the copying of the coordinates from the inputfields.
-         * @fires Util#RadioTriggerUtilCopyToClipboard
-         * @param {Event} evt Click Event
-         * @returns {void}
-         */
-        copyToClipboard ({target}) {
-            this.addSingleAlert(i18next.t("common:modules.tools.supplyCoord.copyToClipboard"));
-            target.select();
-            // seems to be required for mobile devices
-            target.setSelectionRange(0, 99999);
-            document.execCommand("copy");
-        },
-        /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
          * @param {Event} event changed selection event
          * @returns {void}
@@ -210,7 +197,7 @@ export default {
                                 class="form-control"
                                 readonly
                                 contenteditable="false"
-                                @click="copyToClipboard"
+                                @click="copyToClipboard($event.currentTarget)"
                             >
                         </div>
                     </div>
@@ -228,7 +215,7 @@ export default {
                                 class="form-control"
                                 readonly
                                 contenteditable="false"
-                                @click="copyToClipboard"
+                                @click="copyToClipboard($event.currentTarget)"
                             >
                         </div>
                     </div>

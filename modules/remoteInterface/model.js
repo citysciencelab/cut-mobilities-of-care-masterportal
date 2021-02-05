@@ -121,7 +121,8 @@ const RemoteInterface = Backbone.Model.extend({
         store.dispatch("MapMarker/removePointMarker");
     },
     getMapState: function () {
-        return Radio.request("SaveSelection", "getMapState");
+        store.dispatch("Tools/SaveSelection/filterExternalLayer", Radio.request("ModelList", "getModelsByAttributes", {isSelected: true, type: "layer"}));
+        return store.getters["Tools/SaveSelection/url"];
     },
     getWGS84MapSizeBBOX: function () {
         return Radio.request("Map", "getWGS84MapSizeBBOX");
