@@ -179,7 +179,14 @@ export default {
             }
 
             this.targetElement.style.left = Math.round(newLeft) + "px";
+            if (this.targetElement.style.right !== "auto") {
+                this.targetElement.style.right = "auto";
+            }
+
             this.targetElement.style.top = Math.round(newTop) + "px";
+            if (this.targetElement.style.bottom !== "auto") {
+                this.targetElement.style.bottom = "auto";
+            }
         },
         /**
          * Calculates and sets positioning limitations based on bounding client rect. This is needed

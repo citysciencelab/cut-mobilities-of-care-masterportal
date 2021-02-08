@@ -141,10 +141,7 @@ export default {
                 :feature="feature"
             />
         </div>
-        <!-- footer -->
-        <div class="gfi-footer">
-            <slot name="footer" />
-        </div>
+        <slot name="footer" />
     </div>
 </template>
 

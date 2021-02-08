@@ -3,14 +3,14 @@ import Default from "../themes/default/components/Default.vue";
 import Sensor from "../themes/sensor/components/Sensor.vue";
 import getTheme from "../../utils/getTheme";
 import {mapGetters, mapMutations, mapActions} from "vuex";
-import "jquery-ui/ui/widgets/draggable";
-import "jquery-ui/ui/widgets/resizable";
+import ToolWindow from "../../../../../share-components/ToolWindow.vue";
 
 export default {
     name: "Detached",
     components: {
         Default,
-        Sensor
+        Sensor,
+        ToolWindow
     },
     props: {
         feature: {
@@ -42,43 +42,6 @@ export default {
          */
         theme: function () {
             return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
-        },
-
-        /**
-         * Returns the custom style for the gfi window.
-         * it will always show the window on the top right.
-         * @returns {Object} the style in the object
-         */
-        styleAll: function () {
-            const rightBarWidth = document.getElementsByClassName("right-bar")[0].offsetWidth;
-
-            if (document.getElementsByClassName("sidebar")[0]) {
-                return {
-                    "right": rightBarWidth + 10 + document.getElementsByClassName("sidebar")[0].offsetWidth + "px"
-                };
-            }
-
-            return {
-                "right": rightBarWidth + 10 + "px"
-            };
-        },
-
-        /**
-         * Returns the custom style for the gfi content.
-         * it will make the content croll.
-         * @returns {Object} the style in the object
-         */
-        styleContent: function () {
-            if (this.isContentHtml) {
-                return {
-                    "max-width": "inherit",
-                    "max-height": "inherit"
-                };
-            }
-            return {
-                "max-width": Math.round(document.getElementById("map").offsetWidth / 2.2) + "px",
-                "max-height": window.innerHeight - 100 - 34 - 83 + "px" // 100 pixer for the navi. 34 for header, 83 is the distance from bottom
-            };
         }
     },
     watch: {
@@ -95,19 +58,6 @@ export default {
         });
     },
     mounted: function () {
-        this.$nextTick(function () {
-            $(".gfi-detached").draggable({
-                containment: "#map",
-                handle: ".gfi-header",
-                drag: function (evt, ui) {
-                    ui.helper[0].style.right = "inherit";
-                },
-                stop: function (evt, ui) {
-                    ui.helper[0].style.left = (ui.position.left + 1) + "px";
-                }
-            });
-        });
-
         this.highlightVectorFeature();
         this.setMarker();
     },
@@ -184,72 +134,16 @@ export default {
 </script>
 
 <template>
-    <div
-        class="gfi-detached"
-        :style="styleAll"
-    >
-        <!-- header -->
-        <div class="gfi-header">
-            <button
-                type="button"
-                class="close"
-                aria-label="Close"
-                @click="close"
-            >
-                <span
-                    class="glyphicon glyphicon-remove"
-                >
-                </span>
-            </button>
-            <h5>
-                {{ $t(title) }}
-            </h5>
-        </div>
-        <!-- theme -->
-        <div
-            class="gfi-content"
-            :style="styleContent"
-        >
+    <ToolWindow @close="close">
+        <template v-slot:title>
+            <span>{{ $t(title) }}</span>
+        </template>
+        <template v-slot:body>
             <component
                 :is="theme"
                 :feature="feature"
             />
-        </div>
-        <!-- footer -->
-        <div class="gfi-footer">
             <slot name="footer" />
-        </div>
-    </div>
+        </template>
+    </ToolWindow>
 </template>
-
-<style lang="less" scoped>
-    .gfi-detached {
-        position: absolute;
-        min-width: 250px;
-        top: 50px;
-        margin: 10px 10px 30px 10px;
-        background-color: #ffffff;
-        box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
-    }
-    .gfi-header {
-        font-size: 13px;
-        font-weight: normal;
-        line-height: 17px;
-        color: #646262;
-        padding: 0px 15px;
-        border-bottom: 1px solid #e5e5e5;
-        &.ui-draggable-handle {
-            cursor: move;
-        }
-        button {
-            font-size: 16px;
-            opacity: 0.6;
-        }
-    }
-    .gfi-content {
-        overflow: auto;
-        table {
-            margin-bottom: 0;
-        }
-    }
-</style>
