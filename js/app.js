@@ -367,7 +367,7 @@ async function loadApp () {
 
     if (Config.addons !== undefined) {
         Radio.channel("Addons");
-        const i18nextLanguages = vueI18Next && vueI18Next.options.hasOwnProperty("getLanguages") ? vueI18Next.options.getLanguages() : {};
+        const i18nextLanguages = vueI18Next?.i18next?.options?.getLanguages() ? vueI18Next.i18next.options.getLanguages() : {};
         let initCounter = 0;
 
         Config.addons.forEach((addonKey) => {
@@ -387,7 +387,7 @@ async function loadApp () {
                         /* webpackInclude: /[\\\/]additional.json$/ */
                         `../addons/${addonKey}/locales/${lng}/additional.json`)
                         .then(({default: additionalLocales}) => {
-                            vueI18Next.addResourceBundle(lng, "additional", additionalLocales, true);
+                            vueI18Next.i18next.addResourceBundle(lng, "additional", additionalLocales, true);
                             initCounter--;
                             checkInitCounter(initCounter, legacyAddons);
                         }).catch(error => {
