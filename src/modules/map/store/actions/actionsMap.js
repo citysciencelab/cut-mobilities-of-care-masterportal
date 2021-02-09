@@ -41,8 +41,12 @@ const actions = {
             unsubscribes = [];
         }
 
-        const mapView = map.getView();
+        const mapView = map.getView(),
+            channel = Radio.channel("VectorLayer");
 
+        channel.on({"featuresLoaded": id => {
+            commit("addLoadedLayerId", id);
+        }});
         // set map to store
         commit("setMap", map);
         commit("setLayerList", map.getLayers().getArray());

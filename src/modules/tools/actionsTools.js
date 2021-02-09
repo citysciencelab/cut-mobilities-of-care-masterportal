@@ -96,7 +96,8 @@ const actions = {
     },
 
     /**
-     * Checks if a tool should be open initially controlled by the url param "initvalues".
+     * Checks if a tool should initialized with certain values controlled by the url param "initvalues".
+     * @param {Object} context - context object for actions
      * @param {String} toolName - Name from the toolComponent
      * @returns {void}
      */
@@ -111,7 +112,7 @@ const actions = {
                     }
                     catch (e) {
                         Radio.trigger("Alert", "alert", {
-                            text: e.message, // i18next.t("common:modules.tools.saveSelection.contentSaved"),
+                            text: e.message,
                             kategorie: "alert-warning",
                             position: "top-center",
                             fadeOut: 5000

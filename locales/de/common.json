@@ -614,7 +614,9 @@
                 "notOverlapping": "außerhalb Radien",
                 "rangeLabel": "Radius (m)",
                 "clearBtn": "Zurücksetzen",
-                "saveBtn": "Speichern"
+                "saveBtn": "Speichern",
+                "sourceLayerNotFound": "Der ausgewählte Quell-Layer wurde nicht gefunden.",
+                "targetLayerNotFound": "Der ausgewählte Ziel-Layer wurde nicht gefunden."
             }
         },
         "controls": {

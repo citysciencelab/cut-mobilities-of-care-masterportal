@@ -5,6 +5,7 @@ import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersBufferAnalysis";
 import mutations from "../store/mutationsBufferAnalysis";
 import actions from "../store/actionsBufferAnalysis";
+import {ResultType} from "../store/enums";
 
 /**
  * Tool to check if a subset of features associated to a target layer are located within or outside an applied radius to all features of a source layer.
@@ -14,6 +15,7 @@ export default {
     components: {
         Tool
     },
+    data: () => ({resultTypeEnum: ResultType}),
     computed: {
         ...mapGetters("Tools/BufferAnalysis", Object.keys(getters)),
         ...mapGetters("Map", ["map"]),
@@ -22,7 +24,17 @@ export default {
                 return this.$store.state.Tools.BufferAnalysis.selectedSourceLayer;
             },
             set (newLayerSelection) {
-                this.applySelectedSourceLayer(newLayerSelection);
+                try {
+                    this.applySelectedSourceLayer(newLayerSelection);
+                }
+                catch (e) {
+                    Radio.trigger("Alert", "alert", {
+                        text: e.message,
+                        kategorie: "alert-warning",
+                        position: "top-center",
+                        fadeOut: 5000
+                    });
+                }
             }
         },
         selectedTargetLayer: {
@@ -30,7 +42,17 @@ export default {
                 return this.$store.state.Tools.BufferAnalysis.selectedTargetLayer;
             },
             set (newLayerSelection) {
-                this.applySelectedTargetLayer(newLayerSelection);
+                try {
+                    this.applySelectedTargetLayer(newLayerSelection);
+                }
+                catch (e) {
+                    Radio.trigger("Alert", "alert", {
+                        text: e.message,
+                        kategorie: "alert-warning",
+                        position: "top-center",
+                        fadeOut: 5000
+                    });
+                }
             }
         },
         resultType: {
@@ -46,7 +68,7 @@ export default {
                 return this.$store.state.Tools.BufferAnalysis.bufferRadius;
             },
             set (newRadius) {
-                this.applyInputBufferRadius(newRadius);
+                this.applyBufferRadius(newRadius);
             }
         }
     },
@@ -68,27 +90,14 @@ export default {
      * @returns {void}
      */
     created () {
+        this.initJSTSParser();
+        this.loadSelectOptions();
         this.$on("close", this.close);
     },
     methods: {
         ...mapMutations("Tools/BufferAnalysis", Object.keys(mutations)),
         ...mapActions("Tools/BufferAnalysis", Object.keys(actions)),
         ...mapActions("Map", ["toggleLayerVisibility"]),
-        resetModule () {
-            this.bufferRadius = 0;
-            if (this.selectedSourceLayer) {
-                this.selectedSourceLayer.get("layer").setOpacity(1);
-                this.selectedSourceLayer = null;
-            }
-
-            if (this.selectedTargetLayer) {
-                this.selectedTargetLayer.get("layer").setOpacity(1);
-                this.selectedTargetLayer = null;
-            }
-
-            this.removeGeneratedLayers();
-        },
-
         saveLayer () {
             const toolState = {
                 applySelectedSourceLayer: this.selectedSourceLayer.id,
@@ -198,12 +207,12 @@ export default {
                         :disabled="!selectedSourceLayer || !bufferRadius || selectedTargetLayer"
                     >
                         <option
-                            :value="true"
+                            :value="resultTypeEnum.WITHIN"
                         >
                             {{ $t("modules.tools.bufferAnalysis.overlapping") }}
                         </option>
                         <option
-                            :value="false"
+                            :value="resultTypeEnum.OUTSIDE"
                         >
                             {{ $t("modules.tools.bufferAnalysis.notOverlapping") }}
                         </option>
@@ -257,7 +266,6 @@ export default {
                 </div>
                 <input
                     id="layer-analysis-saved-url"
-                    ref="savedUrl"
                     v-model="savedUrl"
                     class="col-md-12 col-sm-12 form-group form-group-sm"
                     readonly

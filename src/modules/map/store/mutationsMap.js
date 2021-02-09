@@ -73,6 +73,15 @@ const mutations = {
         if (state.map) {
             state.map.removeLayer(layer);
         }
+    },
+    /**
+     * Adds a layerId to the array of all complete loaded layers.
+     * @param {Object} state The state object.
+     * @param {String} layerId The ID of the layer that is loaded completely
+     * @returns {void}
+     */
+    addLoadedLayerId (state, layerId) {
+        state.loadedLayers.push(layerId);
     }
 };
 

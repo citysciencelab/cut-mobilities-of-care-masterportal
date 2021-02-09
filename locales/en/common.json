@@ -613,7 +613,9 @@
             "notOverlapping": "outside radius",
             "rangeLabel": "radius (m)",
             "clearBtn": "Reset",
-            "saveBtn": "Save"
+            "saveBtn": "Save",
+            "sourceLayerNotFound": "Selected source layer not found.",
+            "targetLayerNotFound": "Selected target layer not found."
           }
         },
         "controls": {

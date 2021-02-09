@@ -1,5 +1,6 @@
 import * as jsts from "jsts/dist/jsts";
 import {Fill, Stroke, Style} from "ol/style";
+import {ResultType} from "./enums";
 
 /**
  * User type definition
@@ -12,38 +13,42 @@ import {Fill, Stroke, Style} from "ol/style";
  * @property {Boolean} resizableWindow if true, window is resizable (config-param)
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @property {?Object} selectedSourceLayer data binding for source layer selection
+ * @property {?Object} selectedTargetLayer data binding for target layer selection
+ * @property {?String} savedUrl data binding for saved url field
+ * @property {ResultType} resultType possible values: "OUTSIDE" or "WITHIN"
+ * @property {Number} bufferRadius data binding for the buffer radius input
+ * @property {Object} bufferLayer holds the layer with buffer features
+ * @property {Object} resultLayer holds the layer with result features
+ * @property {Object[]} selectOptions holds the options for layer select elements
+ * @property {Object[]} intersections holds the intersection polygons after calculation
+ * @property {Object[]} resultFeatures holds the result features before they are added to a new layerSource
+ * @property {Object} jstsParser holds the JSTS parser
+ * @property {Object} geoJSONWriter holds the JSTS geoJSON writer
+ * @property {Object} bufferStyle holds the default style for buffer features
  */
 const state = {
     active: false,
     id: "bufferAnalysis",
     name: "BufferAnalysis",
     glyphicon: "glyphicon-resize-full",
-    timerId: null,
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: false,
     selectedSourceLayer: null,
     selectedTargetLayer: null,
+    savedUrl: null,
+    resultType: ResultType.OUTSIDE,
+    bufferRadius: 0,
     bufferLayer: {},
     resultLayer: {},
-    bufferRadius: 0,
-    resultType: false,
     selectOptions: [],
-    map: null,
-    parser: new jsts.io.OL3Parser(),
+    intersections: [],
+    resultFeatures: [],
+    jstsParser: new jsts.io.OL3Parser(),
     geoJSONWriter: new jsts.io.GeoJSONWriter(),
-    savedUrl: null,
-    resultLayerStyle: new Style({
-        fill: new Fill({
-            color: ["105", "175", "105", "0.7"]
-        }),
-        stroke: new Stroke({
-            color: ["0", "135", "255", "0.7"],
-            width: 2
-        })
-    }),
-    bufferLayerStyle: new Style({
+    bufferStyle: new Style({
         fill: new Fill({
             color: ["255", "230", "65", "0.3"]
         }),
