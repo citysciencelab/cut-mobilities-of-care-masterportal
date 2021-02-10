@@ -235,10 +235,6 @@ async function loadApp () {
                 new ParcelSearchView({model: tool});
                 break;
             }
-            case "saveSelection": {
-                new SaveSelectionView({model: tool});
-                break;
-            }
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0
