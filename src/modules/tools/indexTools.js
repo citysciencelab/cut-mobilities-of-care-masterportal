@@ -13,6 +13,7 @@ import Gfi from "./gfi/store/indexGfi";
 import SaveSelection from "./saveSelection/store/indexSaveSelection";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
+import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import Measure from "./measure/store/indexMeasure";
 
 /**
@@ -28,6 +29,7 @@ export default {
         SaveSelection,
         ScaleSwitcher,
         SupplyCoord,
+        SearchByCoord,
         Measure
     },
     state,

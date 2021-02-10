@@ -311,7 +311,8 @@
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },
-          "searchByCoord": {
+          "searchByCoord":
+          {
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },

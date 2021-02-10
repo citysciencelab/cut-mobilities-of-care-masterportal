@@ -15,6 +15,7 @@
 
 ### Changed
 - The language of the changelog has been changed to English.
+- Migrated the SearchByCoord Tool from Backbone.js to Vue.js.
 - The measure tool has been migrated to Vue.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 - Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
