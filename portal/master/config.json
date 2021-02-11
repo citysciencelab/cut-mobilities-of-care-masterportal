@@ -332,11 +332,6 @@
             "bkgGeosearchID": "5",
             "isInitOpen": false
           },
-        "SdpDownload": {
-            "name": "SDP-DownloadVue",
-            "glyphicon": "glyphicon-download",
-            "renderToWindow": false
-        },
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
