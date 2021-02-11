@@ -540,11 +540,6 @@
     "Fachdaten": {
       "Layer": [
         {
-                    "id": "13717",
-                    "name": "lgv_kachel_dk5_1km_utm",
-                    "layerAttribution": "<span>Hier Text angeben, der angezeigt wird sobald der Layer sichtbar ist.</span>"
-                },         
-        {
           "id": "1132",
           "styleId": "1132",
           "name": "100 Jahre Stadtgruen POIs",
