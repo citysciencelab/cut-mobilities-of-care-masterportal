@@ -132,7 +132,7 @@ const symbol = {
         outerBorderColor: "",
         pointSize: 16,
         redoArray: [],
-        renderToWindow: false,
+        renderToWindow: true,
         resizableWindow: true,
         selectInteraction: null,
         selectInteractionModify: null,
