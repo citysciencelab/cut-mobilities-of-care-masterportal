@@ -27,7 +27,7 @@ function buildSinglePortal (allPortalPaths) {
     sourcePortalPath = allPortalPaths.pop();
 
     /* eslint-disable-next-line no-process-env */
-    const appendix = process.env.BITBUCKET_BRANCH ? "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, '_') : "",
+    const appendix = process.env.BITBUCKET_BRANCH ? "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_") : "",
         portalName = sourcePortalPath.split(path.sep).pop(),
         distPortalPath = path.resolve(distPath, portalName + appendix);
 

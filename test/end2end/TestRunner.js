@@ -98,7 +98,7 @@ function runTests (browsers) {
                     const bsCapabilities = getBsCapabilities(browserstackuser, browserstackkey);
 
                     /* eslint-disable-next-line no-process-env */
-                    completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, '_');
+                    completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");
 
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().
