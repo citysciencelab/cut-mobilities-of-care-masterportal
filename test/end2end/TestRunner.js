@@ -80,7 +80,7 @@ function setLocalProxy (currentBrowser, builder) {
 function runTests (browsers) {
     browsers.forEach(currentBrowser => {
         configs.forEach((pathEnd, config) => {
-            const completeUrl = url + (urlPart === "/" ? "" : urlPart) + pathEnd;
+            let completeUrl = url + urlPart + pathEnd;
 
             modes.forEach(mode => {
                 if (currentBrowser !== "bs") {
@@ -96,6 +96,9 @@ function runTests (browsers) {
                 }
                 else {
                     const bsCapabilities = getBsCapabilities(browserstackuser, browserstackkey);
+
+                    /* eslint-disable-next-line no-process-env */
+                    completeUrl += "_" + process.env.BITBUCKET_BRANCH;
 
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().

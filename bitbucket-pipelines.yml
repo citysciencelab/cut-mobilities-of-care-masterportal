@@ -20,5 +20,5 @@ pipelines:
                     # - git ftp init -vv
                     - git ftp push -b $BITBUCKET_BRANCH --all
                     # run e2e tests
-                    - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest
+                    # - ./devtools/scripts/run_browserstack_local.bash
+                    # - npm run browsertestOnGeoportalTest
