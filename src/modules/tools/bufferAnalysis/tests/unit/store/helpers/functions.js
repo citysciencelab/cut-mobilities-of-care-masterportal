@@ -22,6 +22,12 @@ function createLayersArray (count) {
     }
     return layers;
 }
+
+/**
+ * Resolves pending promises
+ *
+ * @return {Promise<unknown>} resolved promise
+ */
 function tick () {
     return new Promise(resolve => {
         setTimeout(resolve, 0);
