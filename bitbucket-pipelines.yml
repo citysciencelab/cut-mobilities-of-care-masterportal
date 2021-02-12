@@ -23,7 +23,8 @@ pipelines:
                     # - git add .git-ftp-include
                     # - git commit .git-ftp-include -m "Add new content for e2e test"
                     # - git ftp push -b $BITBUCKET_BRANCH --all
-                    - chmod +x ./devtools/scripts/transfer_server_test_geoportal.sh 
+                    - chmod +x ./devtools/scripts/transfer_server_test_geoportal.sh
+                    - git commit devtools/scripts/transfer_server_test_geoportal.sh -m "made transfer_server_test_geoportal.sh executable " 
                     - ./devtools/scripts/transfer_server_test_geoportal.sh
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash

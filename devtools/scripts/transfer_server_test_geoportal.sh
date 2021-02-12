@@ -11,5 +11,4 @@ STR=$'!dist/master_'$BITBUCKET_BRANCH$'\n!dist/basic_'$BITBUCKET_BRANCH$'\n!dist
 echo "$STR"  >> .git-ftp-include
 git add .git-ftp-include
 git commit .git-ftp-include -m "Add new content for e2e test"
-git status -uno --porcelain
 git ftp push -b $BITBUCKET_BRANCH --all
