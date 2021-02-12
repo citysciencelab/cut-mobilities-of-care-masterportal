@@ -11,21 +11,10 @@ pipelines:
                     - npm run buildPortal
                     - apt-get update
                     - apt-get install unzip
-                    # - apt-get -qq install git-ftp
-                    # - git config git-ftp.user $LGV_TEST_FTP_USERNAME
-                    # - git config git-ftp.password $LGV_TEST_FTP_PASSWORD
-                    # - git config git-ftp.syncroot dist
-                    # - git config git-ftp.url ftp://$LGV_TEST_FTP_HOST
-                    # # do init once per ftp target-folder to create and transport the .git-ftp.log file containing the SHA1 of the latest commit, after that do always push.
-                    # # - git ftp init -vv
-                    # - STR=$'!dist/master_'$BITBUCKET_BRANCH$'\n!dist/basic_'$BITBUCKET_BRANCH$'\n!dist/masterCustom_'$BITBUCKET_BRANCH$'\n!dist/masterDefault_'$BITBUCKET_BRANCH$'\n!dist/mastercode'
-                    # - echo "$STR"  >> .git-ftp-include
-                    # - git add .git-ftp-include
-                    # - git commit .git-ftp-include -m "Add new content for e2e test"
-                    # - git ftp push -b $BITBUCKET_BRANCH --all
-                    - chmod +x ./devtools/scripts/transfer_server_test_geoportal.sh
-                    - git commit devtools/scripts/transfer_server_test_geoportal.sh -m "made transfer_server_test_geoportal.sh executable " 
-                    - ./devtools/scripts/transfer_server_test_geoportal.sh
+                    # make script executable and commit the change, else git-ftp does not work
+                    - chmod +x ./devtools/scripts/transfer_to_test_geoportal.sh
+                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable" 
+                    - ./devtools/scripts/transfer_to_test_geoportal.sh
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
                     - npm run browsertestOnGeoportalTest
