@@ -1,48 +1,14 @@
-import VectorSource from "ol/source/Vector.js";
+import VectorSource from "ol/source/Vector";
 import {Vector as VectorLayer} from "ol/layer";
-import {GeoJSON} from "ol/format.js";
+import {GeoJSON} from "ol/format";
 import Feature from "ol/Feature";
 import {ResultType} from "./enums";
-import {
-    LineString,
-    MultiLineString,
-    MultiPoint,
-    MultiPolygon,
-    LinearRing,
-    Point,
-    Polygon
-} from "ol/geom";
+import * as setters from "./settersBufferAnalysis";
+import * as initializers from "./initializersBufferAnalysis";
 
 const actions = {
-    /**
-     * Injects OpenLayers geom classes to JSTS Parser
-     *
-     * @param {Object} context - context object for actions
-     *
-     * @returns {void}
-     */
-    initJSTSParser ({getters}) {
-        // inject possible geometries to jsts parser
-        getters.jstsParser.inject(
-            Point,
-            LineString,
-            LinearRing,
-            Polygon,
-            MultiPoint,
-            MultiLineString,
-            MultiPolygon
-        );
-    },
-    loadSelectOptions ({commit}) {
-        const layers = Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "WFS"}) || [];
-
-        layers.forEach(layer => {
-            if (layer.get("layerSource").getFeatures().length > 100) {
-                layer.set("performanceWarning", true);
-            }
-            commit("addSelectOption", layer);
-        });
-    },
+    ...initializers,
+    ...setters,
     /**
      * Triggers several actions to check for intersections.
      * Includes checks between created buffers and features of selected target layer
@@ -53,10 +19,10 @@ const actions = {
      *
      * @return {void}
      */
-    async checkIntersection ({getters, dispatch}) {
-        const bufferFeatures = getters.bufferLayer.getSource().getFeatures();
-
+    checkIntersection ({getters, dispatch}) {
         dispatch("areLayerFeaturesLoaded", getters.selectedTargetLayer.get("id")).then(() => {
+            const bufferFeatures = getters.bufferLayer.getSource().getFeatures();
+
             dispatch("checkIntersectionWithBuffers", bufferFeatures);
             dispatch("checkIntersectionsWithIntersections", bufferFeatures);
             dispatch("convertIntersectionsToPolygons");
@@ -110,7 +76,7 @@ const actions = {
      *
      * @return {void}
      */
-    removeGeneratedLayers ({getters, rootGetters, commit}) {
+    removeGeneratedLayers ({commit, getters, rootGetters}) {
         rootGetters["Map/map"].removeLayer(getters.resultLayer);
         commit("setResultLayer", null);
         rootGetters["Map/map"].removeLayer(getters.bufferLayer);
@@ -126,7 +92,7 @@ const actions = {
      *
      * @return {void}
      */
-    resetModule ({getters, commit, dispatch}) {
+    resetModule ({commit, getters, dispatch}) {
         commit("setBufferRadius", 0);
 
         if (getters.selectedSourceLayer) {
@@ -141,96 +107,6 @@ const actions = {
         dispatch("removeGeneratedLayers");
     },
     /**
-     * Selects given layer by object or ID
-     * Also unselects all previous selected layers and
-     * shows buffers if a buffer radius was provided previously
-     *
-     * @param {Object} context - context object for actions
-     * @param {Object|String} selectedSourceLayer - layer object or ID string to select corresponding layer
-     *
-     * @throws Error
-     * @return {void}
-     */
-    applySelectedSourceLayer ({commit, dispatch, getters}, selectedSourceLayer) {
-        // unselect target layer if it is already selected
-        if (getters.selectedTargetLayer) {
-            getters.selectedTargetLayer.setIsSelected(false);
-            commit("setSelectedTargetLayer", null);
-        }
-
-        let selectedLayer = selectedSourceLayer;
-
-        // find the layer in select options if selected layer is provided by id
-        if (typeof selectedLayer === "string") {
-            // selectedLayer = rootGetters["Tools/BufferAnalysis/selectOptions"].find(item => item.id === selectedLayer);
-            selectedLayer = getters.selectOptions.find(item => item.id === selectedLayer);
-        }
-
-        // select only the new source layer and deselect all previous selected layers
-        if (selectedLayer) {
-            getters.selectOptions.forEach(option => {
-                option.setIsSelected(selectedLayer.get("id") === option.get("id"));
-            });
-        }
-        // throw error if no selected layer is provided and it is not a valid null value
-        else if (selectedLayer !== null) {
-            throw new Error(i18next.t("common:modules.tools.bufferAnalysis.sourceLayerNotFound"));
-        }
-
-        commit("setSelectedSourceLayer", selectedLayer);
-        // remove previously generated layers and show buffer
-        if (getters.bufferRadius && selectedLayer) {
-            dispatch("areLayerFeaturesLoaded", selectedLayer.get("id")).then(() => {
-                dispatch("removeGeneratedLayers");
-                dispatch("showBuffer");
-            });
-        }
-    },
-    /**
-     * Selects given layer by object or ID
-     * triggers also the intersection check action
-     *
-     * @param {Object} context - context object for actions
-     * @param {Object|String} selectedTargetLayer - layer object or ID string to select corresponding layer
-     *
-     * @throws Error
-     * @return {void}
-     */
-    applySelectedTargetLayer ({getters, commit, dispatch}, selectedTargetLayer) {
-        let selectedLayer = selectedTargetLayer;
-
-        // find the layer in select options if selected layer is provided by id
-        if (typeof selectedLayer === "string") {
-            selectedLayer = getters.selectOptions.find(item => item.id === selectedTargetLayer);
-        }
-        commit("setSelectedTargetLayer", selectedLayer);
-        // select the new target layer and check for intersections
-        if (selectedLayer) {
-            selectedLayer.setIsSelected(selectedLayer.get("id"));
-            dispatch("checkIntersection");
-        }
-        // throw error if no selected layer is provided and it is not a valid null value
-        else if (selectedLayer !== null) {
-            throw new Error(i18next.t("common:modules.tools.bufferAnalysis.targetLayerNotFound"));
-        }
-    },
-    /**
-     * Applies the input buffer radius which triggers the show buffer action
-     *
-     * @param {Object} context - context object for actions
-     * @param {Number} selectedBufferRadius - layer object or ID string to select corresponding layer
-     *
-     * @return {void}
-     */
-    applyBufferRadius ({commit, dispatch}, selectedBufferRadius) {
-        // remove previous generated layers and show buffer only when a truthy value is provided
-        commit("setBufferRadius", selectedBufferRadius);
-        if (selectedBufferRadius) {
-            dispatch("removeGeneratedLayers");
-            dispatch("showBuffer");
-        }
-    },
-    /**
      * Checks intersections between buffers and features of the selected target layer
      * Also triggers the actions to create intersection polygons and to add the new intersection result features
      *
@@ -239,7 +115,7 @@ const actions = {
      *
      * @return {void}
      */
-    checkIntersectionWithBuffers ({getters, dispatch, commit}, bufferFeatures) {
+    checkIntersectionWithBuffers ({commit, getters, dispatch}, bufferFeatures) {
         const targetFeatures = getters.selectedTargetLayer.get("layerSource").getFeatures();
 
         targetFeatures.forEach(targetFeature => {
@@ -291,7 +167,7 @@ const actions = {
      *
      * @returns {void}
      */
-    generateIntersectionPolygon ({getters, commit}, {sourcePoly, targetPoly, properties = {}}) {
+    generateIntersectionPolygon ({commit, getters}, {sourcePoly, targetPoly, properties = {}}) {
         let subsetPoly;
 
         // calculate subset polygon due to selected result type
@@ -334,7 +210,7 @@ const actions = {
      *
      * @return {void}
      */
-    convertIntersectionsToPolygons ({getters, commit}) {
+    convertIntersectionsToPolygons ({commit, getters}) {
         if (getters.intersections.length) {
             getters.intersections.forEach(intersection => {
                 const geojsonFormat = new GeoJSON(),
@@ -356,7 +232,7 @@ const actions = {
      *
      * @return {void}
      */
-    addNewFeaturesToMap ({getters, commit, rootGetters}) {
+    addNewFeaturesToMap ({commit, getters, rootGetters}) {
         // check if there are result features in array
         if (getters.resultFeatures.length) {
             // create new vector source and get gfi attributes
@@ -386,6 +262,28 @@ const actions = {
     },
     /**
      * Verifies if all features of a given layerId are loaded
+     *
+     * @param {Object} context - context object for actions
+     *
+     * @return {void}
+     */
+    buildUrlFromToolState ({commit, getters}) {
+        const toolState = {
+            applySelectedSourceLayer: getters.selectedSourceLayer.id,
+            applyBufferRadius: getters.bufferRadius,
+            setResultType: getters.resultType,
+            applySelectedTargetLayer: getters.selectedTargetLayer.id
+        };
+
+        commit("setSavedUrl", location.origin +
+            location.pathname +
+            "?isinitopen=" +
+            getters.id +
+            "&initvalues=" +
+            JSON.stringify(toolState));
+    },
+    /**
+     * Verifies if all features of a given layerId are loaded
      * and waits if the layer has not been loaded previously
      *
      * @param {Object} context - context object for actions
@@ -393,7 +291,7 @@ const actions = {
      *
      * @return {void}
      */
-    async areLayerFeaturesLoaded ({rootGetters, commit}, layerId) {
+    async areLayerFeaturesLoaded ({commit, rootGetters}, layerId) {
         await new Promise(resolve => {
             if (rootGetters["Map/loadedLayers"].find(id => id === layerId)) {
                 resolve();

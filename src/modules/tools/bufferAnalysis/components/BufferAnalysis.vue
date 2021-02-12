@@ -98,21 +98,6 @@ export default {
         ...mapMutations("Tools/BufferAnalysis", Object.keys(mutations)),
         ...mapActions("Tools/BufferAnalysis", Object.keys(actions)),
         ...mapActions("Map", ["toggleLayerVisibility"]),
-        saveLayer () {
-            const toolState = {
-                applySelectedSourceLayer: this.selectedSourceLayer.id,
-                applyInputBufferRadius: this.bufferRadius,
-                setResultType: this.resultType,
-                applySelectedTargetLayer: this.selectedTargetLayer.id
-            };
-
-            this.setSavedUrl(location.origin +
-                location.pathname +
-                "?isinitopen=" +
-                this.id +
-                "&initvalues=" +
-                JSON.stringify(toolState));
-        },
         copyUrl (evt) {
             Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         },
@@ -149,12 +134,12 @@ export default {
                 id="layer-analysis"
             >
                 <label
-                    for="layer-analysis-select"
+                    for="layer-analysis-select-source"
                     class="col-md-5 col-sm-5 control-label"
                 >{{ $t("modules.tools.bufferAnalysis.sourceSelectLabel") }}</label>
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
-                        id="layer-analysis-select"
+                        id="layer-analysis-select-source"
                         v-model="selectedSourceLayer"
                         class="font-arial form-control input-sm pull-left"
                     >
@@ -229,7 +214,6 @@ export default {
                         id="layer-analysis-select-target"
                         v-model="selectedTargetLayer"
                         class="font-arial form-control input-sm pull-left"
-                        :disabled="!selectedSourceLayer || !bufferRadius || selectedTargetLayer"
                     >
                         <option
                             v-for="layer in selectOptions"
@@ -259,7 +243,7 @@ export default {
                         class="pull-right"
                         :class="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius ? 'btn-lgv-grey' : 'btn-primary'"
                         :disabled="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius"
-                        @click="saveLayer()"
+                        @click="buildUrlFromToolState()"
                     >
                         {{ $t("modules.tools.bufferAnalysis.saveBtn") }}
                     </button>
