@@ -98,7 +98,6 @@ const Config = {
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
     isMenubarVisible: true,
     gemarkungen: "https://geoportal-hamburg.de/lgv-config/gemarkung.json",
-    useVectorStyleBeta: true,
     obliqueMap: true,
     cesiumParameter: {
         tileCacheSize: 20,
