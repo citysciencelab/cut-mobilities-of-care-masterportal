@@ -66,7 +66,7 @@ describe("tools/contact/store/gettersContact", function () {
             expect(validMail({mail: "email@example.museum"})).to.be.true;
             expect(validMail({mail: "email@example.co.jp"})).to.be.true;
             expect(validMail({mail: "firstname-lastname@example.com"})).to.be.true;
-            expect(validMail({mail: "much.”more\ unusual”@example.com"})).to.be.true;
+            expect(validMail({mail: "much.”more unusual”@example.com"})).to.be.true;
             expect(validMail({mail: "very.unusual.”@”.unusual.com@example.com"})).to.be.true;
             expect(validMail({mail: "very.”(),:;<>[]”.VERY.”very@\\\\ \"very”\\.unusual@strange.example.com"})).to.be.true;
 
