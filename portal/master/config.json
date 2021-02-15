@@ -335,7 +335,6 @@
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
-            "renderToWindow": false,
             "iconList": [
               {
                 "id": "iconPoint",
