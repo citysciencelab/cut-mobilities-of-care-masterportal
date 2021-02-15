@@ -274,12 +274,20 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
         this.$("#featurelist-details").show();
     },
     /**
+     * Of an event's target's minus-separated id, the last element is retrieved.
+     * @param {Event} evt event of which the target id shall be interpreted
+     * @returns {String} last id part
+     */
+    getLastIdPart: function (evt) {
+        return evt.currentTarget.id.split("-").pop();
+    },
+    /**
      * Sets featureId when clicked on a feature in the table
      * @param {Event} evt Event, which feature has been clicked
      * @return {void}
      */
     selectTr: function (evt) {
-        const featureid = evt.currentTarget.id;
+        const featureid = this.getLastIdPart(evt);
 
         this.model.set("featureid", featureid);
     },
@@ -289,7 +297,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     hoverTr: function (evt) {
-        const featureid = evt.currentTarget.id;
+        const featureid = this.getLastIdPart(evt);
 
         this.model.checkVisibleLayer();
         this.model.downlightFeature();
@@ -301,7 +309,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
      * @return {void}
      */
     newTheme: function (evt) {
-        this.model.set("layerid", evt.currentTarget.id);
+        this.model.set("layerid", this.getLastIdPart(evt));
 
         this.$(evt.currentTarget.parentElement.children).toArray().forEach(li => {
             this.$(li).removeClass("active");
@@ -379,7 +387,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
 
         // Schreibe jedes Feature in tbody
         features.forEach(feature => {
-            properties += "<tr id='" + feature.id + "' class='featurelist-list-table-tr'>";
+            properties += "<tr id='featurelist-feature-" + feature.id + "' class='featurelist-list-table-tr'>";
             // entsprechend der Reihenfolge der Überschriften...
             headers.forEach(header => {
                 let attvalue = "";
@@ -433,7 +441,7 @@ const FeatureListerView = Backbone.View.extend(/** @lends FeatureListerView.prot
 
         this.$("#featurelist-themes-ul").empty();
         ll.forEach(layer => {
-            this.$("#featurelist-themes-ul").append("<li id='" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
+            this.$("#featurelist-themes-ul").append("<li id='featurelist-layer-" + layer.id + "' class='featurelist-themes-li' role='presentation'><a href='#'>" + layer.name + "</a></li>");
         });
     },
     /**

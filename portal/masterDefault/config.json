@@ -105,6 +105,7 @@
                     },
                     "saveSelection": {
                         "name": "translate#common:menu.tools.saveSelection",
+                        "simpleMap": true,
                         "glyphicon": "glyphicon-share"
                     },
                     "shadow":
