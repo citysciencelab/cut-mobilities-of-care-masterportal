@@ -82,7 +82,10 @@ function runTests (browsers) {
         /* eslint-disable-next-line no-process-env */
         build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
 
-    console.warn("Running build on browserstack with name:\"" + build + "\" on Urls:");
+    /* eslint-disable-next-line no-process-env */
+    if (process.env.BITBUCKET_BRANCH) {
+        console.warn("Running build on browserstack with name:\"" + build + "\" on Urls:");
+    }
 
     browsers.forEach(currentBrowser => {
         configs.forEach((pathEnd, config) => {
