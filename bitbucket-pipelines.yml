@@ -12,7 +12,8 @@ pipelines:
                     - git clone https://DudekIn@bitbucket.org/geowerkstatt-hamburg/addons.git
                     - cd addons/cosi
                     - npm install
-                    - cd ../addons/sdpdownload
+                    - ls -al
+                    - cd ../sdpdownload
                     - npm install
                     - cd ..                    
                     - npm install
