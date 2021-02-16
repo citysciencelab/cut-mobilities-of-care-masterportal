@@ -7,6 +7,8 @@ pipelines:
                 caches:
                     - node
                 script:
+                    - rm -rf ./addons/readme.txt
+                    - git clone https://DudekIn@bitbucket.org/geowerkstatt-hamburg/addons.git
                     - npm install
                     - npm run buildPortal
                     - apt-get update
