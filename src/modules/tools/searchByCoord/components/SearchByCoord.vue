@@ -165,6 +165,7 @@ export default {
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <button
                                 class="btn btn-block"
+                                :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
                             >
                                 {{ $t("common:modules.tools.searchByCoord.search") }}

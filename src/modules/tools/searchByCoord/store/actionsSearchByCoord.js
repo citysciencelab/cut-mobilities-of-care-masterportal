@@ -40,22 +40,13 @@ export default {
         commit("Map/setCenter", newCoords, {root: true});
     },
     /**
-     * Validates the user-input depending on the selected projection and sets the error messages.
-     * If valid, the coordinates will be pushed in the selectedCoordinates String[].
+     * Pushes the formatted coordinates in the selectedCoordinates String[].
      * @param {Object} context actions context object.
      * @param {String[]} coords the coordinates the user entered
      * @returns {void}
      */
-    validateInput ({state, commit, getters}, coords) {
-        const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
-            validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}\s*$/,
-            validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
-            {currentSelection} = state,
-            validators = {
-                ETRS89: validETRS89,
-                WGS84: validWGS84,
-                "WGS84(Dezimalgrad)": validWGS84_dez
-            },
+    formatInput ({state, commit, getters}, coords) {
+        const {currentSelection} = state,
             formatters = {
                 ETRS89: coord=>coord.value,
                 WGS84: coord=>coord.value.split(/[\s°′″'"´`]+/),
@@ -63,31 +54,20 @@ export default {
             };
 
         commit("setSelectedCoordinates", []);
-
         for (const coord of coords) {
-            if (coord.value === "") {
-                if (coord.id === "easting") {
-                    commit("setEastingNoCoord", true);
-                }
-                else if (coord.id === "northing") {
-                    commit("setNorthingNoCoord", true);
-                }
-            }
-            else if (!coord.value.match(validators[currentSelection])) {
-                if (coord.id === "easting") {
-                    commit("setEastingNoMatch", true);
-                }
-                else if (coord.id === "northing") {
-                    commit("setNorthingNoMatch", true);
-                }
-            }
-            else if (!getters.getEastingError && !getters.getNorthingError) {
+            if (!getters.getEastingError && !getters.getNorthingError) {
                 commit("resetErrorMessages");
                 commit("pushCoordinates", formatters[currentSelection](coord));
             }
         }
     },
-    validateLiveInput ({state, commit, getters}, coord) {
+    /**
+     * Validates the user-input depending on the selected projection and sets the error messages.
+     * @param {Object} context actions context object.
+     * @param {Object} coord the coordinate the user entered
+     * @returns {void}
+     */
+    validateLiveInput ({state, commit}, coord) {
         const validETRS89 = /^[0-9]{6,7}[.,]{0,1}[0-9]{0,3}\s*$/,
             validWGS84 = /^\d[0-9]{0,2}[°]{1}\s*[0-9]{0,2}['`´′]{0,1}\s*[0-9]{0,2}['`´′]{0,2}["″]{0,2}\s*$/,
             validWGS84_dez = /[0-9]{1,3}[.,][0-9]{0,5}[\s]{0,1}[°]\s*$/,
@@ -168,7 +148,7 @@ export default {
         const coords = [state.coordinatesEasting, state.coordinatesNorthing];
 
         commit("resetErrorMessages");
-        dispatch("validateInput", coords);
+        dispatch("formatInput", coords);
         dispatch("transformCoordinates");
     },
     /**

@@ -39,10 +39,20 @@ const mutations = {
         state.northingNoCoord = false;
         state.northingNoMatch = false;
     },
+    /**
+     * Resets the easting error messages in the state which is used for live validation of input.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
     resetEastingMessages: (state) => {
         state.eastingNoCoord = false;
         state.eastingNoMatch = false;
     },
+    /**
+     * Resets the northing error messages  in the state which is used for live validation of input.
+     * @param {Object} state the state of searchByCoord-module
+     * @returns {void}
+     */
     resetNorthingMessages: (state) => {
         state.northingNoCoord = false;
         state.northingNoMatch = false;
