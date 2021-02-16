@@ -38,10 +38,6 @@ function loadSelectOptions ({commit}) {
     const layers = Radio.request("ModelList", "getModelsByAttributes", {type: "layer", typ: "WFS"}) || [];
 
     layers.forEach(layer => {
-        // @Todo: add performance warning
-        if (layer.get("layerSource").getFeatures().length > 100) {
-            layer.set("performanceWarning", true);
-        }
         commit("addSelectOption", layer);
     });
 }

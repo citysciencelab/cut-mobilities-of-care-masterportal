@@ -20,9 +20,18 @@ export default {
         ...mapGetters("Tools/BufferAnalysis", Object.keys(getters)),
         ...mapGetters("Map", ["map"]),
         selectedSourceLayer: {
+            /**
+             * getter for the computed property selectedSourceLayer
+             * @returns {Object} the current selected source layer
+             */
             get () {
                 return this.$store.state.Tools.BufferAnalysis.selectedSourceLayer;
             },
+            /**
+             * setter for the computed property selectedSourceLayer
+             * @param {Object} newLayerSelection the new selected source layer
+             * @returns {void}
+             */
             set (newLayerSelection) {
                 try {
                     this.applySelectedSourceLayer(newLayerSelection);
@@ -38,9 +47,18 @@ export default {
             }
         },
         selectedTargetLayer: {
+            /**
+             * getter for the computed property selectedTargetLayer
+             * @returns {Object} the current selected target layer
+             */
             get () {
                 return this.$store.state.Tools.BufferAnalysis.selectedTargetLayer;
             },
+            /**
+             * setter for the computed property selectedTargetLayer
+             * @param {Object} newLayerSelection the new selected target layer
+             * @returns {void}
+             */
             set (newLayerSelection) {
                 try {
                     this.applySelectedTargetLayer(newLayerSelection);
@@ -56,37 +74,71 @@ export default {
             }
         },
         resultType: {
+            /**
+             * getter for the computed property resultType
+             * @returns {ResultType} the current selected result type
+             */
             get () {
                 return this.$store.state.Tools.BufferAnalysis.resultType;
             },
+            /**
+             * setter for the computed property resultType
+             * @param {ResultType} newType the new selected result type
+             * @returns {void}
+             */
             set (newType) {
                 this.setResultType(newType);
             }
         },
         bufferRadius: {
+            /**
+             * getter for the computed property bufferRadius
+             * @returns {Number} the current adjusted buffer radius
+             */
             get () {
                 return this.$store.state.Tools.BufferAnalysis.bufferRadius;
             },
+            /**
+             * setter for the computed property bufferRadius
+             * @param {Number} newRadius the new adjusted buffer radius
+             * @returns {void}
+             */
             set (newRadius) {
                 this.applyBufferRadius(newRadius);
             }
         }
     },
     watch: {
+        /**
+         * Watches the value of selectedTargetLayer
+         * deselects the previous selected target layer if it exists and a new selection is made
+         * @param {Object} layer the new selected target layer
+         * @param {Object} prev the previous selected target layer
+         * @returns {void}
+         */
         selectedTargetLayer (layer, prev) {
             if (prev && layer) {
                 prev.setIsSelected(false);
             }
         },
+        /**
+         * Watches the value of selectedSourceLayer
+         * deselects the previous selected source layer if it exists and the new selection falsy
+         * @param {Object} layer the new selected source layer
+         * @param {Object} prev the previous selected source layer
+         * @returns {void}
+         */
         selectedSourceLayer (layer, prev) {
             if (prev && !layer) {
                 prev.setIsSelected(false);
             }
         }
     },
-
     /**
-     * Lifecycle hook: adds a "close"-Listener to close the tool.
+     * Lifecycle hook:
+     * - initializes the JTST parser
+     * - loads available options for selections
+     * - adds a "close"-Listener to close the tool.
      * @returns {void}
      */
     created () {
@@ -98,6 +150,11 @@ export default {
         ...mapMutations("Tools/BufferAnalysis", Object.keys(mutations)),
         ...mapActions("Tools/BufferAnalysis", Object.keys(actions)),
         ...mapActions("Map", ["toggleLayerVisibility"]),
+        /**
+         * Triggers the copyToClipboard util
+         * @param {Event} evt the click event
+         * @returns {void}
+         */
         copyUrl (evt) {
             Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
         },

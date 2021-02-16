@@ -13,7 +13,6 @@ import {
     Polygon
 } from "ol/geom";
 
-
 describe("src/modules/tools/draw/store/actionsDraw.js", () => {
     let commit, dispatch, rootGetters, state;
 
@@ -154,14 +153,4 @@ describe("src/modules/tools/draw/store/actionsDraw.js", () => {
             expect(commit.calledOnce).to.be.true;
         });
     });
-    // describe("checkIntersectionWithBuffers", () => {
-    //     it("calls dispatch three times and commit once", async () => {
-    //         const features = [{}, {}, {}];
-    //
-    //         actions.checkIntersectionWithBuffers({commit, getters: state, dispatch}, features);
-    //
-    //         expect(dispatch.callCount).to.equal(3);
-    //         expect(commit.calledOnce).to.be.true;
-    //     });
-    // });
 });
