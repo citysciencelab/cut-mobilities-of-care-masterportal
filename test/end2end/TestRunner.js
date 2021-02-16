@@ -78,6 +78,12 @@ function setLocalProxy (currentBrowser, builder) {
  * @returns {void}
  */
 function runTests (browsers) {
+    const date = new Date().toLocaleString(),
+        /* eslint-disable-next-line no-process-env */
+        build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
+
+    console.warn("Running \"" + build + "\"");
+
     browsers.forEach(currentBrowser => {
         configs.forEach((pathEnd, config) => {
             let completeUrl = url + urlPart + pathEnd;
@@ -100,6 +106,7 @@ function runTests (browsers) {
                     /* eslint-disable-next-line no-process-env */
                     completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");
                     console.warn("Url: ", completeUrl);
+                    console.warn("=======================================================================================================");
 
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().
@@ -107,6 +114,9 @@ function runTests (browsers) {
                             usingServer("http://hub-cloud.browserstack.com/wd/hub").
                             withCapabilities(capability).
                             usingWebDriverProxy(proxy);
+
+                        capability.build = build;
+                        builder.withCapabilities(capability);
 
                         resolutions.forEach(resolution => {
                             tests(builder, completeUrl, "browserstack / " + capability.browserName, resolution, config, mode, capability);
