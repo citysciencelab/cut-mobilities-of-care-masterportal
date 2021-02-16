@@ -17,7 +17,7 @@ async function EinwohnerAbfrageTests ({builder, url, resolution, capability}) {
             const selectors = {
                 tools: By.css("ul#root li.dropdown:nth-child(4)"),
                 // todo sprachunabhaengig machen
-                toolResidentCounter: By.xpath("//a[contains(.,'Einwohneranzahl abfragen')]"),
+                toolResidentCounter: By.xpath("//a[contains(.,'Population figures')]"),
                 modal: By.xpath("//div[@id='window']"),
                 viewport: By.css(".ol-viewport")
             };
