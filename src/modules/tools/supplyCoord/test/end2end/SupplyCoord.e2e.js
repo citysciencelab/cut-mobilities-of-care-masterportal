@@ -1,12 +1,13 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {reclickUntilNotStale, logBrowserstackUrlToTest, closeSingleAlert} = require("../../../../../../test/end2end/library/utils"),
     {isMobile, isBasic} = require("../../../../../../test/end2end/settings"),
     namedProjectionsBasic = require("../../../../../../portal/basic/config").namedProjections,
     namedProjectionsMaster = require("../../../../../../portal/master/config").namedProjections,
     namedProjectionsCustom = require("../../../../../../portal/masterCustom/config").namedProjections,
     namedProjectionsDefault = require("../../../../../../portal/masterDefault/config").namedProjections,
+    {isMarkerPointVisible, getMarkerPointCoord} = require("../../../../../../test/end2end/library/scripts"),
     {By, until, Key} = webdriver;
 
 /**
@@ -24,8 +25,8 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
             toolCoord: By.css("ul#tools span.glyphicon-screenshot"),
-            modal: By.css("div.tool-window-vue"),
-            header: By.css("div.tool-window-vue p.title span"),
+            modal: By.css(".tool-window-vue"),
+            header: By.css(".tool-window-vue p.title span"),
             coordSystemLabel: By.xpath("//label[@for='coordSystemField']"),
             coordSystemSelect: By.css("select#coordSystemField"),
             eastingLabel: By.css("label#coordinatesEastingLabel"),
@@ -34,11 +35,9 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
             northingField: By.css("input#coordinatesNorthingField"),
             wgs84Option: By.xpath("//option[contains(.,'WGS 84 (long/lat)')]"),
             utm32nOption: By.xpath("//option[contains(.,'ETRS89/UTM 32N')]"),
-            searchMarker: By.css("div#searchMarker"),
-            searchMarkerContainer: By.xpath("//div[div[@id='searchMarker']]"),
             viewport: By.css(".ol-viewport")
         };
-        let driver, searchMarkerContainer, viewport, eastingField, northingField;
+        let driver, viewport, eastingField, northingField;
 
         /**
          * Repeatable parameterized workflow.
@@ -48,8 +47,11 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
          * @returns {void}
          */
         async function moveAndClickAndCheck ({clickAfterFirstMove = false, expectUnchanged = false}) {
-            let firstMove = driver.actions({bridge: true})
-                .move({origin: viewport, x: -50, y: -50});
+            let markerVisible = null,
+                markerCoord = null,
+
+                firstMove = driver.actions({bridge: true})
+                    .move({origin: viewport, x: 150, y: 150});
 
             firstMove = clickAfterFirstMove ? firstMove.click() : firstMove;
 
@@ -57,7 +59,6 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
 
             const eastValue = await eastingField.getAttribute("value"),
                 northValue = await northingField.getAttribute("value"),
-                searchMarkerPosition = await searchMarkerContainer.getAttribute("style"),
                 expectPhrase = expectUnchanged ? "to" : "not";
 
             await driver.actions({bridge: true})
@@ -66,7 +67,13 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
 
             expect(eastValue)[expectPhrase].equal(await eastingField.getAttribute("value"));
             expect(northValue)[expectPhrase].equal(await northingField.getAttribute("value"));
-            expect(searchMarkerPosition)[expectPhrase].equal(await searchMarkerContainer.getAttribute("style"));
+
+            markerCoord = await driver.executeScript(getMarkerPointCoord);
+            markerVisible = await driver.executeScript(isMarkerPointVisible);
+
+            expect(markerVisible).equals(true);
+            expect(eastValue)[expectPhrase].equal(markerCoord[0].toFixed(2));
+            expect(northValue)[expectPhrase].equal(markerCoord[1].toFixed(2));
         }
 
         before(async function () {
@@ -108,7 +115,6 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
             await driver.wait(until.elementLocated(selectors.northingLabel), 5000);
             northingField = await driver.wait(until.elementLocated(selectors.northingField), 5000);
 
-            searchMarkerContainer = await driver.findElement(selectors.searchMarkerContainer);
             viewport = await driver.findElement(selectors.viewport);
 
             // /portal/basic sometimes requires setup time until all events are registered
@@ -151,9 +157,9 @@ async function CoordTests ({builder, url, resolution, config, capability}) {
             for (const field of [northingField, eastingField]) {
                 const value = await field.getAttribute("value");
 
-                // first click sometimes ignored as driver tends to get stuck on search field
                 await field.click();
-                await field.click();
+                await closeSingleAlert(driver, "Inhalt wurde in die Zwischenablage kopiert.");
+
                 await driver.wait(new Promise(r => setTimeout(r, 100)));
                 await searchInput.sendKeys(Key.CONTROL, "v");
 

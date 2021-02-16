@@ -50,7 +50,6 @@ const Config = {
         wfsId: "4560"
     },
     scaleLine: true,
-    simpleMap: false,
     startingMap3D: false,
     obliqueMap: true,
     cesiumParameter: {

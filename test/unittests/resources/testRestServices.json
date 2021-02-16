@@ -2,20 +2,27 @@
   {
     "id": "1",
     "name": "CSW HMDK Summary",
-    "url": "http://hmdk.fhhnet.stadt.hamburg.de/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=summary",
+    "url": "http://metaver.de/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=summary",
+    "typ": "CSW"
+  },
+  {
+    "id": "3",
+    "name": "CSW HMDK Full",
+    "url": "http://metaver.de/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=full",
     "typ": "CSW"
   },
   {
     "id" : "2",
     "name" : "Metadaten-URL",
-    "url" : "http://hmdk.fhhnet.stadt.hamburg.de/trefferanzeige?docuuid=",
+    "url" : "http://metaver.de/trefferanzeige?docuuid=",
     "typ" : "URL"
   },
   {
-    "id": "3",
-    "name": "CSW HMDK Full",
-    "url": "http://hmdk.fhhnet.stadt.hamburg.de/csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&elementsetname=full",
-    "typ": "CSW"
+    "id" : "7",
+    "name" : "Routing Service VIOM",
+    "url" : "/viomRouting",
+    "providerID" : "HHBWVI",
+    "typ" : "ID"
   },
   {
     "id" : "4",
@@ -36,33 +43,16 @@
     "typ" : "WFS"
   },
   {
-    "id" : "7",
-    "name" : "Routing Service VIOM",
-    "url" : "/viomRouting",
-    "providerID" : "HHBWVI",
-    "typ" : "ID"
-  },
-  {
     "id" : "8",
     "name" : "Hamburg Gazetteer",
     "url" : "/geodienste_hamburg_de/HH_WFS_GAGES?service=WFS&request=GetFeature&version=2.0.0",
     "typ" : "WFS"
   },
   {
-    "id" : "9",
-    "name" : "Jasperserver",
-    "url" : "http://wfalgpa005.fhhnet.stadt.hamburg.de/jasperserver/flow.html",
-    "typ" : "Jasperserver",
-    "params": {
-      "_flowId":"viewReportFlow",
-      "reportUnit": "/Berichte/Flaechenmanagement",
-      "j_username": "LGV",
-      "j_password": "LGV",
-      "standAlone": true,
-      "ParentFolderUri": "/Berichte/",
-      "decorate": "no",
-      "output":"pdf"
-    }
+    "id" : "88",
+    "name" : "Hamburg Gazetteer",
+    "url" : "https://geodienste.hamburg.de/HH_WFS_GAGES",
+    "typ" : "WFS"
   },
   {
     "id" : "10",
@@ -80,49 +70,97 @@
   {
     "id" : "1002",
     "name" : "Deegree WPS RZ2 Test",
-    "url" : "http://wfalgqa003.dpaorins.de/deegree-wps/services/wps",
+    "url" : "https://geodienste.hamburg.de/HH_WPS_Test",
     "typ" : "WPS"
   },
   {
     "id" : "80001",
     "name" : "Email Service by PHP",
-    "url" : "https://test-geofos.fhhnet.stadt.hamburg.de/smtp/sendmail.php",
+    "url" : "https://geoportal-hamburg.de/smtp/sendmail.php",
     "typ" : "EmailService"
   },
   {
     "id" : "80002",
     "name" : "Email Service by PHP",
-    "url" : "https://geofos.fhhnet.stadt.hamburg.de/smtp/sendmail.php",
+    "url" : "https://geoportal-hamburg.de/smtp/sendmail.php",
     "typ" : "EmailService"
   },
   {
-    "id" : "99998",
+    "id" : "99999",
     "name" : "Print Service",
-    "url" : "http://dienste.schulung.deegree-enterprise.de/plot-service",
+    "url" : "https://geodienste.hamburg.de/mapfish_print_2_internet",
     "typ" : "PrintService"
   },
   {
-    "id": "99999",
-    "name": "Print Service Prod",
-    "url": "http://wfalgpa005.fhhnet.stadt.hamburg.de/mapfish_print_2.0",
-    "typ": "Print"
-  },
-  {
-    "id": "printqs",
-    "name": "Print Service QS",
-    "url": "http://wfalgqw001.fhhnet.stadt.hamburg.de/mapfish_print_2.0",
-    "typ": "Print"
+    "id" : "99998",
+    "name" : "Print Service Test",
+    "url" : "https://geoportaltest.metropolregion.hamburg.de/mapfish_print_2.0",
+    "typ" : "PrintService"
   },
   {
     "id": "mapfish_qs",
     "name": "Print Service QS",
-    "url": "https://test-geofos.fhhnet.stadt.hamburg.de/mapfish_print/print/",
+    "url": "https://geoportaltest.metropolregion.hamburg.de/mapfish_print/print/",
     "typ": "Print"
   },
   {
     "id": "mapfish",
     "name": "Print Service Prod",
-    "url": "http://wfalgpa005.fhhnet.stadt.hamburg.de/mapfish_print/print/",
+    "url": "https://geodienste.hamburg.de/mapfish_print_internet/print/",
     "typ": "Print"
+  },
+  {
+    "id": "elastic",
+    "name": "Elastic Prod",
+    "url": "https://geodienste.hamburg.de/layers-internet/_search",
+    "typ": "Search"
+  },
+  {
+    "id" : "virtualcityPLANNER",
+    "name" : "virtualcityPLANNER",
+    "url": "https://devel.virtualcityplanner.de",
+    "scenarioId": "BjtEA4zwBEiZeG2CX"
+  },
+  {
+    "id": "elastic",
+    "name": "Elastic Prod",
+     "url": "https://geodienste.hamburg.de/layers/_search/template",
+     "typ": "Search"
+  },
+  {
+    "id": "elastic_qs",
+    "name": "Elastic QS",
+     "url": "https://test-geodienste.hamburg.de/layers/_search/template",
+     "typ": "Search"
+  },
+  {
+    "id": "elastic_test",
+    "name": "Elastic Test",
+     "url": "https://test-geodienste.hamburg.de/layers/_search/template?source_content_type=application/json&source=",
+     "typ": "Search"
+  },
+  {
+    "id": "elastic_mrh",
+    "name": "Elastic mrh Prod",
+     "url": "https://geodienste.hamburg.de/layers-mrh/_search/template",
+     "typ": "Search"
+  },
+  {
+    "id": "elastic_mrh_qs",
+    "name": "Elastic mrh QS",
+     "url": "https://test-geodienste.hamburg.de/layers-mrh/_search/template",
+     "typ": "Search"
+  },
+  {
+    "id": "elastic_all",
+    "name": "Elastic All Prod",
+     "url": "https://geodienste.hamburg.de/layers-all/_search/template",
+     "typ": "Search"
+  },
+  {
+    "id": "elastic_all_qs",
+    "name": "Elastic All QS",
+     "url": "https://test-geodienste.hamburg.de/layers-all/_search/template",
+     "typ": "Search"
   }
 ]

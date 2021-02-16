@@ -1,9 +1,12 @@
 import Draw from "./draw/components/Draw.vue";
-import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
-import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
 import Gfi from "./gfi/components/Gfi.vue";
+import Measure from "./measure/components/Measure.vue";
+import SaveSelection from "./saveSelection/components/SaveSelection.vue";
+import ScaleSwitcher from "./scaleSwitcher/components/ScaleSwitcher.vue";
+import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
 import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
+
 /**
  * User type definition
  * @typedef {Object} ToolsState
@@ -13,10 +16,12 @@ import BufferAnalysis from "./bufferAnalysis/components/BufferAnalysis.vue";
 const state = {
     componentMap: {
         draw: Draw,
-        scaleSwitcher: ScaleSwitcher,
-        supplyCoord: SupplyCoord,
         fileImport: FileImport,
         gfi: Gfi,
+        measure: Measure,
+        saveSelection: SaveSelection,
+        scaleSwitcher: ScaleSwitcher,
+        supplyCoord: SupplyCoord,
         bufferAnalysis: BufferAnalysis
     },
     configuredTools: []

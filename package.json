@@ -6,7 +6,7 @@
     "url": "https://www.masterportal.org"
   },
   "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
-  "version": "2.5.5-dev",
+  "version": "2.6.1-dev",
   "license": "MIT",
   "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
@@ -22,9 +22,11 @@
     "test:vue:watch": "npm run test:vue -- --watch",
     "test:all": "npm run test && npm run test:vue",
     "test:all:watch": "npm-run-all --parallel test:watch test:vue:watch",
-    "browsertestWithServer": "env NODE_ENV=e2eTest env browser=bs webpack-dev-server --config devtools/webpack.browsertest.js",
-    "browsertest": "./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
+    "browsertestWithDevServer": "env NODE_ENV=e2eTest env browser=bs webpack-dev-server --config devtools/webpack.browsertest.js",
+    "browsertestOnGeoportalTest": "env browser=bs env urlPart=/ env url=https://test.geoportal-hamburg.de ./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
+    "browsertest": "env urlPart=portal/ ./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
+    "buildPortal": "node devtools/tasks/buildPortal.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
     "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
   },
@@ -41,7 +43,7 @@
     "bootstrap-toggle": "2.x.x",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
-    "d3": "4.9.x",
+    "d3": "4.13.x",
     "d3-scale-chromatic": "^1.5.0",
     "dom-parser": "^0.1.5",
     "dom-storage": "^2.1.0",
@@ -59,11 +61,13 @@
     "mqtt": "4.x",
     "object-hash": "^2.0.3",
     "ol-mapbox-style": "^6.1.2",
-    "olcs": "^2.10.0",
-    "rbush": "^3.0.1",
-    "vcs-oblique": "^2.0.1",
+    "olcs": "^2.12.0",
+    "polyfill-object.fromentries": "^1.0.1",
+    "rbush": "^2.0.2",
+    "rbush-knn": "^2.1.0",
+    "vcs-oblique": "^2.0.2",
     "vue": "^2.6.11",
-    "vue-loader": "^15.7.2",
+    "vue-loader": "^15.9.6",
     "vue-template-compiler": "^2.6.10",
     "vuex": "^3.1.2"
   },
@@ -71,7 +75,7 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@intlify/vue-i18n-loader": "^0.6.1",
-    "@masterportal/mpconfigparser": "^1.0.0",
+    "@masterportal/mpconfigparser": "^1.1.1",
     "@vue/test-utils": "^1.0.2",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
@@ -101,7 +105,7 @@
     "mocha": "^6.2.0",
     "mocha-loader": "^2.0.0",
     "mocha-webpack": "^2.0.0-beta.0",
-    "mochapack": "^2.0.0",
+    "mochapack": "^2.0.6",
     "mock-local-storage": "^1.1.15",
     "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
@@ -114,7 +118,7 @@
     "sinon-chai": "^3.3.0",
     "text-loader": "0.0.1",
     "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.43.0",
+    "webpack": "^4.46.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
@@ -129,7 +133,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
+      "pre-push": "node ./node_modules/@masterportal/mpconfigparser/cli.js ./doc/config.json.md ./doc/config.json.de.md && eslint --max-warnings 0 \"./**/*.{vue,js}\" && npm run buildJsDoc && npm run test:all"
     }
   }
 }

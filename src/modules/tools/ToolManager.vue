@@ -3,9 +3,33 @@ import {mapGetters, mapMutations, mapActions} from "vuex";
 
 export default {
     name: "ToolManager",
+    props: {
+        showInSidebar: {
+            type: Boolean,
+            default: false,
+            required: false
+        }
+    },
     computed: {
         ...mapGetters(["menuConfig"]),
-        ...mapGetters("Tools", ["configuredTools"])
+        ...mapGetters("Tools", ["configuredTools"]),
+        toolsInSidebar: function () {
+            const res = {};
+
+            this.configuredTools.forEach(tool => {
+                if (typeof this.$store.state.Tools[tool.component.name] !== "undefined") {
+                    res[tool.component.name] = this.$store.state.Tools[tool.component.name].renderToWindow !== true;
+                }
+                else if (typeof this.$store.state[tool.component.name] !== "undefined") {
+                    res[tool.component.name] = this.$store.state[tool.key].renderToWindow !== true;
+                }
+                else {
+                    res[tool.component.name] = false;
+                }
+            });
+
+            return res;
+        }
     },
     created () {
         this.setConfiguredTools(this.menuConfig);
@@ -13,15 +37,21 @@ export default {
     mounted () {
         /** Push the configured attributes to store from all configured tools. */
         this.configuredTools.forEach(configuredTool => this.pushAttributesToStoreElements(configuredTool));
-
         this.setToolActiveByConfig();
-        this.configuredTools.forEach(configuredTool => this.activateByUrlParam(configuredTool?.component?.name));
+
+        this.configuredTools.forEach(configuredTool => {
+            const toolName = configuredTool?.component?.name;
+
+            this.activateByUrlParam(toolName);
+            this.addToolNameAndGlyphiconToModelList(toolName);
+        });
     },
     methods: {
         ...mapActions("Tools", [
             "pushAttributesToStoreElements",
             "activateByUrlParam",
-            "setToolActiveByConfig"
+            "setToolActiveByConfig",
+            "addToolNameAndGlyphiconToModelList"
         ]),
         ...mapMutations("Tools", [
             "setConfiguredTools"
@@ -31,10 +61,11 @@ export default {
 </script>
 
 <template lang="html">
-    <div id="tool-manager">
+    <div class="tool-manager">
         <template v-for="tool in configuredTools">
             <component
                 :is="tool.component"
+                v-if="toolsInSidebar[tool.component.name] === showInSidebar"
                 :key="'tool-' + tool.key"
             />
         </template>

@@ -61,8 +61,11 @@ const state = {
     layers: null,
     overlayIds: null,
     overlays: null,
-    loadedLayers: [],
-    mapMode: MapMode.MODE_2D
+    mapMode: MapMode.MODE_2D,
+    highlightedFeature: null,
+    highlightedFeatureStyle: null,
+    vectorFeaturesLoaded: false,
+    loadedLayers: []
 };
 
 export default state;

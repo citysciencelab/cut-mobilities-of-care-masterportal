@@ -15,12 +15,16 @@ export default {
     },
     computed: {
         ...mapGetters("Legend", Object.keys(getters)),
-        ...mapGetters(["mobile"])
+        ...mapGetters(["mobile", "uiStyle"])
     },
     watch: {
+        /**
+         * Closes the mobile menu and create the legend.
+         * @param {Boolean} showLegend Should be show the legend.
+         * @returns {void}
+         */
         showLegend (showLegend) {
             if (showLegend) {
-                // closes the mobile menu
                 document.getElementsByClassName("navbar-collapse")[0].classList.remove("in");
                 this.createLegend();
             }
@@ -50,9 +54,9 @@ export default {
     updated () {
         $(this.$el).draggable({
             containment: "#map",
-            handle: ".legend-title",
+            handle: this.uiStyle === "TABLE" ? ".legend-title-table" : ".legend-title",
             stop: function (event, ui) {
-                const legendElem = ui.helper[0].querySelector(".legend-window"),
+                const legendElem = ui.helper[0].querySelector(".legend-window") || ui.helper[0].querySelector(".legend-window-table"),
                     legendOuterWidth = legendElem.offsetWidth,
                     legendOuterHeight = legendElem.offsetHeight,
                     mapWidth = document.getElementById("map").offsetWidth,
@@ -617,7 +621,7 @@ export default {
                 return legend.id === layerId;
             })[0];
 
-            if (btoa(JSON.stringify(layerLegend)) !== btoa(JSON.stringify(legendObj))) {
+            if (encodeURIComponent(JSON.stringify(layerLegend)) !== encodeURIComponent(JSON.stringify(legendObj))) {
                 isLegendChanged = true;
             }
 
@@ -717,9 +721,9 @@ export default {
     >
         <div
             v-if="showLegend"
-            :class="mobile ? 'legend-window-mobile' : 'legend-window'"
+            :class="mobile ? 'legend-window-mobile' : (uiStyle === 'TABLE' ? 'legend-window-table': 'legend-window')"
         >
-            <div class="legend-title">
+            <div :class="uiStyle === 'TABLE' ? 'legend-title-table': 'legend-title'">
                 <span
                     :class="glyphicon"
                     class="glyphicon hidden-sm"
@@ -766,6 +770,11 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+    @color_1: #000000;
+    @color_2: rgb(255, 255, 255);
+    @font_family_2: "MasterPortalFont", sans-serif;
+    @background_color_3: #f2f2f2;
+    @background_color_4: #646262;
 
     #legend.legend-mobile {
         width: 100%;
@@ -805,6 +814,54 @@ export default {
             overflow: auto;
             .layer-title {
                 padding: 5px;
+                font-weight: bold;
+                background-color: #e7e7e7;
+                span {
+                    vertical-align: -webkit-baseline-middle;
+                }
+            }
+            .layer {
+                border: unset;
+                margin: 2px;
+                padding: 5px;
+            }
+        }
+    }
+
+    .legend-window-table {
+        position: absolute;
+        right: 0px;
+        font-family: @font_family_2;
+        border-radius: 12px;
+        background-color: @background_color_4;
+        width: 300px;
+        margin: 10px 10px 30px 10px;
+        z-index: 9999;
+        .legend-title-table {
+            font-family: @font_family_2;
+            font-size: 14px;
+            color: @color_2;
+            padding: 10px;
+            cursor: move;
+            .close-legend {
+                cursor: pointer;
+            };
+            .toggle-collapse-all {
+                padding-right: 10px;
+                cursor: pointer;
+            }
+        }
+        .legend-content {
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            background-color: @background_color_3;
+            .panel {
+                background-color: @background_color_3;
+            }
+            .layer-title {
+                border-radius: 12px;
+                padding: 5px;
+                color: @color_1;
                 font-weight: bold;
                 background-color: #e7e7e7;
                 span {

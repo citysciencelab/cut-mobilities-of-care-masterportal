@@ -80,73 +80,32 @@
                         "glyphicon": "glyphicon-import"
                     },
                     "draw": {
-                        "name": "translate#common:menu.tools.draw",
-                        "glyphicon": "glyphicon-pencil",
-						"iconList": [
-                            {
-                               "id": "iconPoint",
-                               "type": "simple_point",
-                               "value": "simple_point"
-                            },
-                            {
-                               "id": "iconLeaf",
-                               "type": "glyphicon",
-                               "value": "\ue103"
-                            },
-                            {
-                               "id": "iconCD",
-                               "type": "glyphicon",
-                               "value": "\ue201"
-                            },
-                            {
-                               "id": "iconHat",
-                               "type": "glyphicon",
-                               "value": "\ue233"
-                            },
-                            {
-                               "id": "iconFire",
-                               "type": "glyphicon",
-                               "value": "\ue104"
-                            },
-                            {
-                               "id": "iconMovie",
-                               "type": "glyphicon",
-                               "value": "\ue009"
-                            },
-                            {
-                               "id": "iconFlag",
-                               "type": "glyphicon",
-                               "value": "\ue034"
-                            },
-                            {
-                               "id": "iconGlobe",
-                               "type": "glyphicon",
-                               "value": "\ue135"
-                            },
-                            {
-                               "id": "iconMusic",
-                               "type": "glyphicon",
-                               "value": "\ue002"
-                            },
-                            {
-                               "id": "iconStreet",
-                               "type": "glyphicon",
-                               "value": "\ue024"
-                            },
-                            {
-                               "id": "iconCloud",
-                               "type": "image",
-                               "value": "/img/tools/draw/cloud.png"
-                            },
-                            {
-                               "id": "iconTent",
-                               "type": "glyphicon",
-                               "value": "\u26fa"
-                            }
-                        ]
+                      "name": "translate#common:menu.tools.draw",
+                      "glyphicon": "glyphicon-pencil",
+                      "renderToWindow": false,
+                      "iconList": [
+                        {
+                          "id": "iconPoint",
+                          "type": "simple_point",
+                          "value": "simple_point"
+                        },
+                        {
+                          "id": "iconMeadow",
+                          "type": "image",
+                          "scale": 0.8,
+                          "value": "wiese.png"
+                        },
+                        {
+                          "id": "gelber Pin",
+                          "type": "image",
+                          "scale": 0.5,
+                          "value": "https://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png"
+                        }
+                      ]
                     },
                     "saveSelection": {
                         "name": "translate#common:menu.tools.saveSelection",
+                        "simpleMap": true,
                         "glyphicon": "glyphicon-share"
                     },
                     "shadow":

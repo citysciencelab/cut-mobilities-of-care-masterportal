@@ -5,6 +5,7 @@
 *.sass-cache
 .DS_Store
 .env
+.idea
 .vscode
 /img/*.db
 /jsdoc
@@ -26,6 +27,9 @@ dist
 examples*
 
 examples.zip
+portal/master
+portal/masterCustom
+portal/masterDefault
 
 jshintrc
 lgv-config

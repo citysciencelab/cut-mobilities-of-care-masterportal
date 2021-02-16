@@ -81,24 +81,44 @@ export function parseDocumentString (documentString, mimeType, parseFromStringOp
 }
 
 /**
- * Parses the response into openlayers features
- * @throws will throw an error
- * @param {XMLDocument} doc - data to be parsed
- * @returns {module:ol/Feature[]} array of openlayers features
+ * Parses the response into openlayers features.
+ * A distinction is made between ESRI services and OGC-conform services.
+ * OpenLayers supports OGC-conform services that have the root element `FeatureCollection` or `msGMLOutput`.
+ * @throws Will throw an error.
+ * @param {XMLDocument} doc Data to be parsed.
+ * @returns {module:ol/Feature[]} Collection of openlayers features.
  */
-function parseFeatures (doc) {
-    if (!(doc instanceof XMLDocument)) {
-        console.warn("requestGfi, parseFeatures: doc", doc);
-        throw Error("requestGfi, parseFeatures: the received doc is no valid XMLDocument");
+export function parseFeatures (doc) {
+    const firstChild = doc.firstChild.tagName;
+    let features = [];
+
+    if (firstChild.includes("FeatureCollection") || firstChild.includes("msGMLOutput")) {
+        features = parseOgcConformFeatures(doc);
+    }
+    else {
+        features = parseEsriFeatures(doc);
     }
 
-    // OGC-conform
-    if (doc.firstChild.tagName === "FeatureCollection") {
-        const gfiFormat = new WMSGetFeatureInfo();
+    return features;
+}
 
-        return gfiFormat.readFeatures(doc).flat();
-    }
-    // ESRI...
+/**
+ * Parse the response of a gfi from an OGC-conform service.
+ * @param {XMLDocument} doc Data to be parsed.
+ * @returns {module:ol/Feature[]} Collection of openlayers features.
+ */
+function parseOgcConformFeatures (doc) {
+    const gfiFormat = new WMSGetFeatureInfo();
+
+    return gfiFormat.readFeatures(doc);
+}
+
+/**
+ * Parse the response of a gfi from an ESRi service.
+ * @param {XMLDocument} doc Data to be parsed.
+ * @returns {module:ol/Feature[]} Collection of openlayers features.
+ */
+function parseEsriFeatures (doc) {
     const features = [];
 
     doc.getElementsByTagName("FIELDS").forEach(element => {
@@ -109,7 +129,8 @@ function parseFeatures (doc) {
         });
         features.push(feature);
     });
+
     return features;
 }
 
-export default {requestGfi, handleResponseAxios, parseDocumentString};
+export default {requestGfi, handleResponseAxios, parseDocumentString, parseFeatures};

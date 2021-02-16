@@ -16,5 +16,8 @@
     <% } else { %>
         <span class="glyphicon glyphicon-unchecked" title="<%=showTopicText%>"></span>
     <% } %>
+    <% if (isSecured) { %>
+        <span class="glyphicon glyphicon-lock" title="<%=securedTopicText%>"></span>
+    <% } %>
     <span class="title" title="<%= name %>"><%= name %></span>
 </div>

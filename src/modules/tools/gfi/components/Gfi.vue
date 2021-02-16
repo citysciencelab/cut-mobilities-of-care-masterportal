@@ -175,16 +175,12 @@ export default {
         },
         /**
          * Maps the feature properties by the given object.
-         * @param {Object} properties - the feature properties
-         * @param {Object} mappingObject - "gfiAttributes" from the layer
-         * @returns {Object} mapped properties
+         * @param {Object} properties The feature properties.
+         * @param {Object} [mappingObject={}] "gfiAttributes" from the layer.
+         * @returns {Object} The mapped properties.
          */
-        mapProperties: function (properties, mappingObject) {
+        mapProperties: function (properties, mappingObject = {}) {
             const mappedProperties = {};
-
-            if (mappingObject === undefined) {
-                return mappedProperties;
-            }
 
             Object.keys(mappingObject).forEach(key => {
                 let newKey = mappingObject[key],
@@ -295,7 +291,7 @@ export default {
          */
         prepareGfiValue: function (gfi, key) {
             const isPath = key.startsWith("@");
-            let value = gfi[key];
+            let value = gfi[Object.keys(gfi).find(gfiKey => gfiKey.toLowerCase() === key.toLowerCase())];
 
             if (isPath) {
                 value = this.getValueFromPath(gfi, key);
@@ -337,17 +333,19 @@ export default {
                 v-if="gfiFeatures.length > 1"
                 #footer
             >
-                <div
-                    :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
-                    @click="decreasePagerIndex"
-                >
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </div>
-                <div
-                    :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
-                    @click="increasePagerIndex"
-                >
-                    <span class="glyphicon glyphicon-chevron-right"></span>
+                <div class="gfi-footer">
+                    <div
+                        :class="[pagerIndex < 1 ? 'disabled' : '', 'pager-left', 'pager']"
+                        @click="decreasePagerIndex"
+                    >
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </div>
+                    <div
+                        :class="[pagerIndex === gfiFeatures.length - 1 ? 'disabled' : '', 'pager-right', 'pager']"
+                        @click="increasePagerIndex"
+                    >
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </div>
                 </div>
             </template>
         </component>
@@ -360,6 +358,9 @@ export default {
 
 .gfi {
     color: @secondary_contrast;
+    .tool-window-vue {
+        max-width: 600px;
+    }
 }
 .bold{
     font-weight: bold;

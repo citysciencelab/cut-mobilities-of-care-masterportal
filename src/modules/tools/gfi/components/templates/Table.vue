@@ -94,6 +94,13 @@ export default {
             this.$el.style.MozTransform = width - 20 + "px " + headerHeight + "px";
 
         },
+
+        /**
+         * Calculates the new position for the gfi-header container by touchmove event.
+         * draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport.
+         * @param {Event} evt The touch event.
+         * @returns {void}
+         */
         move: function (evt) {
             const touch = evt.touches[0],
                 headerWidth = this.$el.getElementsByClassName("gfi-header")[0].offsetWidth,
@@ -110,51 +117,47 @@ export default {
             if (rotAngle === 0) {
                 x = touch.clientX - width - 20;
                 y = touch.clientY - headerHeight;
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
                 if (x >= 0 && x < (map.offsetWidth - gfiConent.offsetWidth - 10) && y >= 0 && y < (map.offsetHeight - gfiConent.offsetHeight - 75)) {
-                    this.$el.style.left = x + "px";
-                    this.$el.style.top = y + "px";
-                    this.$el.style.msTransformOrigin = transformOrigin;
-                    this.$el.style.webkitTransformOrigin = transformOrigin;
-                    this.$el.style.mozTransformOrigin = transformOrigin;
+                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
                 }
             }
             else if (rotAngle === -90) {
                 x = touch.clientX - headerWidth + 20;
                 y = touch.clientY - width + 20;
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
                 if (x + height >= 0 && x < (map.offsetWidth - 1.5 * headerWidth - 75) && y >= 0 + headerHeight && y < (map.offsetHeight - headerWidth - 10)) {
-                    this.$el.style.left = x + "px";
-                    this.$el.style.top = y + "px";
-                    this.$el.style.msTransformOrigin = transformOrigin;
-                    this.$el.style.webkitTransformOrigin = transformOrigin;
-                    this.$el.style.mozTransformOrigin = transformOrigin;
+                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
                 }
             }
             else if (rotAngle === -180) {
                 x = touch.clientX - headerWidth - width + 20;
                 y = touch.clientY - headerHeight;
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
                 if (x + 1.5 * width >= 0 && x < (map.offsetWidth - 2 * headerWidth) && y - height >= 0 && y < (map.offsetHeight - height / 2)) {
-                    this.$el.style.left = x + "px";
-                    this.$el.style.top = y + "px";
-                    this.$el.style.msTransformOrigin = transformOrigin;
-                    this.$el.style.webkitTransformOrigin = transformOrigin;
-                    this.$el.style.mozTransformOrigin = transformOrigin;
+                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
                 }
             }
             else if (rotAngle === -270) {
                 x = touch.clientX - headerWidth;
                 y = touch.clientY + width - 20;
-                // draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport
                 if (x + height / 2 - headerHeight >= 0 && x < (map.offsetWidth - headerWidth - 50) && y - headerWidth >= 0 && y < (map.offsetHeight - headerWidth + width)) {
-                    this.$el.style.left = x + "px";
-                    this.$el.style.top = y + "px";
-                    this.$el.style.msTransformOrigin = transformOrigin;
-                    this.$el.style.webkitTransformOrigin = transformOrigin;
-                    this.$el.style.mozTransformOrigin = transformOrigin;
+                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
                 }
             }
+        },
+
+        /**
+         * Sets the position on the screen for the gfi-Header container by move that.
+         * @param {Number} x The position on the x-axis.
+         * @param {Number} y The position on the y-axis.
+         * @param {String} transformOrigin The transform origin.
+         * @returns {void}
+         */
+        movedGfiHeaderPositionBy: function (x, y, transformOrigin) {
+            this.$el.style.left = x + "px";
+            this.$el.style.top = y + "px";
+            this.$el.style.msTransformOrigin = transformOrigin;
+            this.$el.style.webkitTransformOrigin = transformOrigin;
+            this.$el.style.mozTransformOrigin = transformOrigin;
+            this.$el.style.right = "inherit";
         }
     }
 };
@@ -180,7 +183,7 @@ export default {
                 </span>
             </p>
             <p class="title">
-                <span class="gfi-title">{{ title }}</span>
+                <span class="gfi-title">{{ $t(title) }}</span>
             </p>
         </div>
         <!-- theme -->
@@ -190,10 +193,7 @@ export default {
                 :feature="feature"
             />
         </div>
-        <!-- footer -->
-        <div class="gfi-footer">
-            <slot name="footer" />
-        </div>
+        <slot name="footer" />
     </div>
 </template>
 

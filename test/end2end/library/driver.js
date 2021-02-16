@@ -1,6 +1,5 @@
 const {until, By} = require("selenium-webdriver"),
-    {getResolution} = require("./scripts"),
-    {isBasic, isMaster, isCustom, isDefault} = require("../settings");
+    {basicAuth, getResolution, isInitalLoadingFinished} = require("./scripts");
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -42,27 +41,14 @@ async function prepareOB (driver) {
 async function loadUrl (driver, url, mode) {
     await driver.get(url);
 
-    if (isBasic(url) || isMaster(url)) {
-        await driver.wait(until.elementLocated(By.id("loader")), 90000);
-        if (isBasic(url)) {
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("loader"))));
-            await driver.wait(until.elementLocated(By.css(".loading")), 90000);
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css(".loading"))));
-        }
-        if (isMaster(url)) {
-            // wait for logo to disappear (only appears in master)
-            await driver.wait(until.elementIsNotVisible(await driver.findElement(By.id("portal-logo"))));
-        }
+    if (url.indexOf("localhost") === -1) {
+        driver.executeScript(basicAuth("lgv", "test"));
     }
 
-    if (isCustom(url) || isDefault(url)) {
-        const loading = await driver.wait(until.elementLocated(By.className("loading")), 90000);
-
-        await driver.wait(until.elementIsNotVisible(loading), 90000);
-    }
+    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000).catch(err => console.warn("isInitalLoadingFinished err:", err));
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
-    await driver.wait(async () => await driver.executeScript(getResolution) !== null);
+    await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
 
     // prepare 3D resp. OB mode for tests - 2D mode is initial mode, nothing to do
     if (mode === "3D") {
@@ -97,6 +83,7 @@ async function getUnnavigatedDriver (builder, resolution) {
 
 /**
  * Prepares the driver for testing; build, set resolution, activate mode, get url.
+ * If testing master, the initial alert is closed.
  * @param {selenium-webdriver.Builder} builder builder for current driver
  * @param {String} url to get
  * @param {String} resolution formatted as "AxB" with A, B integers
@@ -107,7 +94,6 @@ async function initDriver (builder, url, resolution, mode) {
     const driver = await getUnnavigatedDriver(builder, resolution);
 
     await loadUrl(driver, url, mode);
-
     return driver;
 }
 

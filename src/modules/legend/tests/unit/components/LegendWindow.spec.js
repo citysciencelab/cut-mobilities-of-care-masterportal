@@ -22,11 +22,15 @@ describe("LegendWindow.vue", () => {
             }
         },
         getters = {
-            mobile: state => state.mobile
+            mobile: state => state.mobile,
+            uiStyle: state => state.uiStyle
         },
         mutations = {
             setMobile (state, mobile) {
                 state.mobile = mobile;
+            },
+            setUiStyle (state, uiStyle) {
+                state.uiStyle = uiStyle;
             }
         };
     let store,
@@ -62,11 +66,19 @@ describe("LegendWindow.vue", () => {
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
 
                 expect(wrapper.find(".legend-window").exists()).to.be.true;
+                expect(wrapper.find(".legend-title").exists()).to.be.true;
             });
             it("renders the legend window in mobile view", () => {
                 store.commit("setMobile", true);
                 wrapper = shallowMount(LegendWindowComponent, {store, localVue});
                 expect(wrapper.find(".legend-window-mobile").exists()).to.be.true;
+                expect(wrapper.find(".legend-title").exists()).to.be.true;
+            });
+            it("renders the legend window in table view", () => {
+                store.commit("setUiStyle", "TABLE");
+                wrapper = shallowMount(LegendWindowComponent, {store, localVue});
+                expect(wrapper.find(".legend-window-table").exists()).to.be.true;
+                expect(wrapper.find(".legend-title-table").exists()).to.be.true;
             });
         });
         describe("showCollapseAllButton", () => {
@@ -218,6 +230,12 @@ describe("LegendWindow.vue", () => {
                     name: "layer_1",
                     legend: ["link_to_legend"],
                     position: 1
+                })).to.be.equals(true);
+                expect(wrapper.vm.isLegendChanged(legendObj.id, {
+                    id: "2042",
+                    name: "Festgestellte Änderungen – Berichtigungen – Nachrichtliche Übernahmen seit 1997",
+                    legend: ["https://geodienste.hamburg.de/HH_WMS_FNP_Aend?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=fnp_aenderungsuebersicht_aenderungen_festgestellt"],
+                    position: 2
                 })).to.be.equals(true);
             });
             it("returns false if legend doesn't changed", () => {

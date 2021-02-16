@@ -60,6 +60,7 @@
         "pinTopicsTree": "Fix/remove topic tree",
         "hideAllTopics": "Hide all topics",
         "showAllTopics": "Show all topics",
+        "securedAllTopics": "Secured topics",
         "category": "Category",
         "backgroundMaps": "Background maps",
         "subjectData": "Subject data",
@@ -69,6 +70,7 @@
         "infosAndLegend": "Information und explanations",
         "removeTopic": "Remove topic",
         "showTopic": "Present topic",
+        "securedTopic": "Secured topic",
         "changeClassDivision": "Change class division",
         "settings": "Settings",
         "transparency": "Transparency",
@@ -85,12 +87,16 @@
         "language": {
             "languageTitle": "Please choose a language",
             "de": "German",
-            "en": "English"
+            "en": "English",
+            "it": "Italian"
         },
         "core": {
           "modelList": {
             "layer": {
-              "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used."
+              "wrongStyleId": "No style object could be found with the specified StyleId: {{styleId}}. Please make sure that a style with the StyleId: {{styleId}} is configured in the Style.json used.",
+              "sensor": {
+                "httpOnError": "<strong>Unexpected error occurred while loading sensor data of layer {{name}}</strong>"
+              }
             }
           },
           "parametricURL": {
@@ -142,13 +148,15 @@
           "noMetadataMessage": "$t(modules.cswParser.noMetadataMessage)",
           "periodicityTitle": "Periodicity",
           "publicationCreation": "Publication / Creation",
-          "buildings":"Buildings",
-          "roofType":"Roof type",
-          "roofHeight":"Roof height",
-          "objectType":"Object type"
+          "buildings":"Buildings"
         },
         "mapMarker": {
           "noStyleModel": "No style could be found for the specified StyleId: {{styleId}}. Please check your configuration."
+        },
+        "menu": {
+            "layer": {
+                "basicAuthError": "Sorry, the secured layer could not be loaded. Please contact the administrator and let him know if you were prompted to enter a username and password. </br> Secured layer: "
+            }
         },
         "featureViaURL": {
             "coordLabel": "Coordinates",
@@ -180,32 +188,6 @@
                 "houseNumberHelp": "Enter the corresponding street in the search mask. As soon as the address search results in only one street, the house number search is performed automatically and the proposal list is filled with addresses. By pressing the Enter/Return key or the magnifying glass, all house numbers of the street are listed.",
                 "topicsHelp": "With the topic search you can enter search terms (e.g. protected areas, elections, housing construction, etc.) and search for available geodata on this topic. When you select a result, it is displayed directly on the map.",
                 "parcelHelp": "You can search for parcels of land using the cadastral number and the district number. Simply enter the cadastral district number followed by the parcel number <strong>(1)</strong> (with or without spaces) in the search mask and press the enter/return key or the magnifying glass. The map is then centred on the parcel you are looking for <strong>(2)</strong>."
-            },
-            "measureTool": {
-                "title": "Help - Measure distance/area",
-                "statisticalApprox": "Statistical approximation",
-                "equalizationUTM": "Equalization in UTM",
-                "conversionInMap": "Conversions in the map",
-                "influenceFactors": "The displayed values are subject to inaccuracies that are influenced by factors such as the following:",
-                "scale": "Scale",
-                "resolution": "Resolution of the map",
-                "screenResolution": "Screen resolution",
-                "inputAccuracy": "input accuracy and number of digitized points and",
-                "measureDistance": "Distance of the measuring line or size of the measuring surface",
-                "standardDeviation": "Since the above mentioned error sizes can vary from workstation to workstation, a standard deviation of 1mm per click on the map is assumed. This results in a scale-dependent point error of :",
-                "spotDefects": "Spot defects [m]",
-                "errorPropagationLaw": "According to the error propagation law from coordinates without consideration of correlations and uniform standard deviation according to the Gaussian triangle formula applies:",
-                "forDistances": "For distances:",
-                "forAreas": "For surfaces:",
-                "errorReason": "The error is therefore dependent on the standard deviation of the single error, the scale and the number of points.",
-                "example": "Example:",
-                "exampleContent": "For a square polygon with a side length of 10m (area: 100 m²), a scale of 1:1000 results in an expected error of 10.00 m². This error is caused by inaccurate measurements made by the user on the screen.",
-                "UTMHelp1": "The UTM coordinate system is a global coordinate system that represents the earth's surface in 6° wide stripes. Each strip represents a zone, which are numbered consecutively from 180° West to 180° East. Germany is largely located in zone 32 (6° to 12° eastern longitude). A transverse Mercator projection is used to project the curved surface of the earth on a flat map. The projection cylinder (<font color=\"red\">red</font>) cuts the earth's surface so that a 360km wide cutting strip is created, which protrudes \"above\" the projection cylinder. The coordinates of the cutting strip are therefore displayed in a shortened form on the image plane, whereas the coordinates outside the cutting strip are stretched.",
-                "UTM6": "UTM image 6° wide",
-                "imageDistortion1": "Image distortion in UTM imaging",
-                "imageDistortion2": "This distortion must be counteracted, because when measuring directly in the map, the measured distances/areas are distorted and therefore incorrect. For Hamburg, for example, the distortion is about 40cm for a distance measurement of 1000m. This is a not insignificant error, which is far beyond the tolerances of today's measuring instruments. With the help of the following formulas measured distances and areas can be rectified:",
-                "formulas": "Formulas for the equalization of the areas/ distances measured in UTM",
-                "useInMapHelp": "The maximum absolute error to be expected is displayed behind the measured area/distance and marked by a plus/minus symbol (\"+/-\"). This means that the true value deviates from the measured value by the maximum absolute error. The absolute error displayed is therefore the inaccuracy of the measured area/distance.<br><br> In this application, the measured area/distance is immediately rectified so that the displayed measurement corresponds to the \"real\" area/distance on the earth's surface. No further rectification needs to be calculated."
             },
             "topicTree": {
                 "title": "Help - Topic tree",
@@ -387,9 +369,7 @@
                 }
             },
             "saveSelection": {
-                "saveSelectionText": "Save this URL as a bookmark",
-                "contentSaved": "Content was copied to the clipboard.",
-                "contenNotSaved": "Content could not be copied to the clipboard."
+                "infoText": "Save this URL as a bookmark."
             },
             "fileImport": {
                 "captions": {
@@ -461,7 +441,8 @@
                 },
                 "themes": {
                     "default": {
-                      "imgAlt": "No image could be loaded."
+                      "imgAlt": "No image could be loaded.",
+                      "noAttributeAvailable": "No attribute available!"
                     },
                     "sensor": {
                       "sensor": {
@@ -497,16 +478,16 @@
               "localeFormat": {
                 "decimal": "\".\"",
                 "thousands": "\",\"",
-                "grouping": "[3]",
-                "currency": "[\"$\", \"\"]",
+                "grouping": ["3"],
+                "currency": ["$", ""],
                 "dateTime": "\"%a %b %e %X %Y\"",
                 "date": "\"%m/%d/%Y\"",
                 "time": "\"%H:%M:%S\"",
-                "periods": "[\"AM\", \"PM\"]",
-                "days": "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]",
-                "shortDays": "[\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\"]",
-                "months": "[\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"]",
-                "shortMonths": "[\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"]"
+                "periods": ["AM", "PM"],
+                "days": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                "shortDays": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+                "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
               }
             },
             "viomRouting": {
@@ -536,11 +517,20 @@
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
+                "download": {
+                  "createFirst": "Please create a drawing or text first!",
+                  "enterFilename": "Please enter filename",
+                  "filename": "Filename",
+                  "format": "Format",
+                  "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
+                  "pleaseChoose": "Please choose",
+                  "unknownGeometry": "Unknown geometry: <strong>{{geometry}}</strong>"
+                },
                 "draw": "draw",
                 "geometryDrawFailed": "The transferred geometry could not be displayed.",
                 "undefinedTwoCircles": "Please define both circles.",
                 "undefinedInnerCircle": "Please also define the inner circle.",
-                "undefinedDiameter": "Please specify a diameter.",
+                "undefinedRadius": "Please specify a radius.",
                 "undefinedOuterCircle": "Please also define the outer circle.",
                 "limitReached": "You have already drawn {{count}} object, please delete it before continuing!",
                 "limitReached_plural": "You have already drawn {{count}} objects, please delete one before proceeding!",
@@ -551,16 +541,19 @@
                 "drawArea": "Area",
                 "drawCircle": "Circle",
                 "drawDoubleCircle": "Double circle",
-                "doubleCirclePlaceholder": "Please enter a diameter",
-                "diameter": "Diameter",
-                "outerDiameter": "Outer diameter",
+                "doubleCirclePlaceholder": "Please enter a radius",
+                "radius": "Radius",
+                "innerRadius": "Inner radius",
+                "outerRadius": "Outer radius",
                 "unit": "Unit",
                 "text": "Text",
                 "method": "Method",
                 "interactive": "interactive",
                 "defined": "defined",
                 "transparencyOutline": "Transparency Outline",
-                "outlineColor": "Outline color",
+                "colorContour": "Outline color",
+                "innerColorContour": "Inner outline color",
+                "outerColorContour": "Outer outline color",
                 "fontSize": "Font size",
                 "fontName": "Font",
                 "size": "Size (in px)",
@@ -573,7 +566,8 @@
                     "redo": "Redo",
                     "edit": "Edit geometry",
                     "delete": "Delete geometry / text",
-                    "deleteAll": "Delete all"
+                    "deleteAll": "Delete all",
+                    "saveDrawing": "Save drawing"
                 },
                 "symbol": "Symbol",
                 "iconList": {
@@ -583,24 +577,21 @@
                     "iconMeadow": "Meadow"
                 }
             },
-            "download": {
-                "format": "Format",
-                "pleaseChoose": "Please choose",
-                "filename": "Filename",
-                "enterFilename": "Please enter filename",
-                "createFirst": "Please create a drawing or text first!",
-                "formatNotSupported": "The {{selectedFormat}} format is not yet supported.",
-                "unknownGeometry": "Unknown geometry:"
-            },
             "measure": {
                 "geometry": "Geometry",
                 "measure": "Measure",
-                "plzConsider": "Please consider",
-                "valuesNotExact": "The displayed values are not exact",
-                "findFurtherInf": "You can find further information here",
                 "deleteMeasurements": "Delete measurements",
                 "stretch": "Distance",
-                "area": "Area"
+                "area": "Area",
+                "influenceFactors": "The displayed values are subject to inaccuracies that are influenced by factors such as the following:",
+                "scale": "Scale",
+                "resolution": "Resolution of the map",
+                "screenResolution": "Screen resolution",
+                "inputAccuracy": "Input accuracy and number of digitized points",
+                "measureDistance": "Distance of the measuring line or size of the measuring surface",
+                "finishWithDoubleClick": "Double click to complete",
+                "3dLength": "Length: {{length}}",
+                "3dHeight": " Height: {{height}}"
             },
             "scaleSwitcher": {
                 "label": "Scale"
@@ -665,7 +656,7 @@
                 "buttonTitle": "Oblique aerial photos",
                 "openViewOblique": "show oblique aerial photos",
                 "closeViewOblique": "close oblique aerial photos",
-                "betaWarningOblique": "The view for oblique aerial photos is currently still in the beta version!"
+                "doNotUseIE": "The display of oblique aerial images is no longer supported in Internet Explorer 11. Please use a current browser for this function."
             },
             "freeze": {
                 "freeze": "Freeze view",
@@ -747,7 +738,15 @@
             "toggleCollapseAll": "Toggle all legends"
         },
         "zoomToGeometry": {
-          "alertNoFoundFeature" : "No object was found! Please check the input parameters."
+          "alertNoFoundFeature" : "No object was found! Please check the input parameters.",
+          "alertParameterizedAccess": "Unfortunately, the parameterized access to the portal went wrong!",
+          "alertRequiredService": "Details: A required service is not responding."
+        },
+        "util": {
+            "copyToClipboard": {
+                "contentSaved": "Content was copied to the clipboard.",
+                "contentNotSaved": "Content could not be copied to the clipboard."
+            }
         }
     },
     "snippets": {

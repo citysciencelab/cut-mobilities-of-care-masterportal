@@ -35,7 +35,7 @@ const state = {
     coordinatesNorthingField: "",
 
     // defaults for config.json parameters
-    name: "Koordinaten abfragen",
+    name: "common:menu.tools.coord",
     glyphicon: "glyphicon-screenshot",
     renderToWindow: true,
     resizableWindow: true,

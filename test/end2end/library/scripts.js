@@ -123,6 +123,47 @@ function isLayerVisible () {
         ? layer.getVisible() && layer.getOpacity() === Number(expectedOpacity)
         : false;
 }
+/**
+ * Returns true, if mapMarker with name "markerPoint" is visible.
+ * @returns {boolean} true, if mapMarker is visible
+ */
+function isMarkerPointVisible () {
+    const map = Backbone.Radio.request("Map", "getMap");
+    let layer = false;
+
+    map.getLayers().forEach(l => {
+        if (l.get("name") === "markerPoint") {
+            layer = l;
+        }
+    });
+    if (layer) {
+        return layer.getVisible();
+    }
+    return false;
+}
+/**
+ * Returns the coordinates of the mapMarker with name "markerPoint" or null, if no marker exists.
+ * @returns {Array} containing the coordinates
+ */
+function getMarkerPointCoord () {
+    const map = Backbone.Radio.request("Map", "getMap");
+    let layer = false;
+
+    map.getLayers().forEach(l => {
+        if (l.get("name") === "markerPoint") {
+            layer = l;
+        }
+    });
+    if (layer) {
+        const feature = layer.getSource().getFeatures()[0];
+
+        if (feature) {
+            return feature.getGeometry().getCoordinates();
+        }
+    }
+    return null;
+}
+
 
 /**
  * @param {string} name name of layer to check features of
@@ -329,7 +370,22 @@ function getCoordinatesOfXthFeatureInLayer () {
 
     return null;
 }
-
+/**
+ * Returns true, if loader is no longer visible.
+ * @returns {void}
+ */
+function isInitalLoadingFinished () {
+    return typeof window.INITIAL_LOADING === "boolean" && window.INITIAL_LOADING === false;
+}
+/**
+ * Executes a basic auth on browserstack.
+ * @param {String} userName for login
+ * @param {String} password for login
+ * @returns {String} the execution script
+ */
+function basicAuth (userName, password) {
+    return "browserstack_executor: {\"action\": \"sendBasicAuth\", \"arguments\": {\"username\":\"" + userName + "\", \"password\": \"" + password + "\", \"timeout\": \"30000\"}}";
+}
 /**
  * @param {HTMLElement} img image to check
  * @returns {boolean} true if image loaded */
@@ -473,9 +529,13 @@ module.exports = {
     areAllLayersHidden,
     areRegExpsInMeasureLayer,
     areAllFeaturesOfLayerVisible,
+    basicAuth,
+    getMarkerPointCoord,
     isFullscreen,
     isLayerVisible,
+    isMarkerPointVisible,
     imageLoaded,
+    isInitalLoadingFinished,
     isObModeOn,
     getOrderedLayerIds,
     getObModeResolution,

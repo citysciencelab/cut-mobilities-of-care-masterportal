@@ -1,4 +1,5 @@
 import uniqueId from "../../src/utils/uniqueId.js";
+import LoaderOverlay from "../../src/utils/loaderOverlay";
 
 const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     defaults: {
@@ -34,7 +35,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioRequestUtilGetIgnoredKeys
      * @listens Core#RadioRequestUtilSort
      * @listens Core#RadioRequestUtilConvertArrayOfObjectsToCsv
-     * @listens Core#RadioRequestUtilGetPathFromLoader
      * @listens Core#RadioRequestUtilGetMasterPortalVersionNumber
      * @listens Core#RadioRequestUtilRenameKeys
      * @listens Core#RadioRequestUtilRenameValues
@@ -44,7 +44,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @listens Core#RadioTriggerUtilHideLoader
      * @listens Core#RadioTriggerUtilShowLoader
      * @listens Core#RadioTriggerUtilSetUiStyle
-     * @listens Core#RadioTriggerUtilCopyToClipboard
      * @listens Core#event:changeIsViewMobile
      * @fires Core#RadioTriggerIsViewMobileChanged
      * @fires Alerting#RadioTriggerAlertAlert
@@ -78,7 +77,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "sort": this.sort,
             "convertArrayOfObjectsToCsv": this.convertArrayOfObjectsToCsv,
             "convertArrayElementsToString": this.convertArrayElementsToString,
-            "getPathFromLoader": this.getPathFromLoader,
             "renameKeys": this.renameKeys,
             "renameValues": this.renameValues,
             "pickKeyValuePairs": this.pickKeyValuePairs,
@@ -101,8 +99,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
             "hideLoader": this.hideLoader,
             "hideLoadingModule": this.hideLoadingModule,
             "showLoader": this.showLoader,
-            "setUiStyle": this.setUiStyle,
-            "copyToClipboard": this.copyToClipboard
+            "setUiStyle": this.setUiStyle
         }, this);
 
         // initial isMobileView setzen
@@ -452,52 +449,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
     },
 
     /**
-     * Kopiert den Inhalt des Event-Buttons in die Zwischenablage, sofern der Browser das Kommando akzeptiert.
-     * behaviour of ios strange used solution from :
-     * https://stackoverflow.com/questions/34045777/copy-to-clipboard-using-javascript-in-ios
-     * @param  {el} el element to copy
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @fires Alerting#RadioTriggerAlertAlert
-     * @returns {void}
-     */
-    copyToClipboard: function (el) {
-        const oldReadOnly = el.readOnly,
-            oldContentEditable = el.contentEditable,
-            range = document.createRange(),
-            selection = window.getSelection();
-
-        el.readOnly = false;
-        el.contentEditable = true;
-
-        range.selectNodeContents(el);
-        selection.removeAllRanges();
-        if (!this.isInternetExplorer()) {
-            selection.addRange(range);
-        }
-        el.setSelectionRange(0, 999999); // A big number, to cover anything that could be inside the element.
-
-        el.readOnly = oldReadOnly;
-        el.contentEditable = oldContentEditable;
-
-        try {
-            document.execCommand("copy");
-            Radio.trigger("Alert", "alert", {
-                text: i18next.t("common:modules.tools.saveSelection.contentSaved"),
-                kategorie: "alert-info",
-                position: "top-center",
-                fadeOut: 5000
-            });
-        }
-        catch (e) {
-            Radio.trigger("Alert", "alert", {
-                text: i18next.t("common:modules.tools.saveSelection.contenNotSaved"),
-                kategorie: "alert-info",
-                position: "top-center"
-            });
-        }
-    },
-
-    /**
      * Searches the userAgent for the string android.
      * @return {Array|null} Returns an array with the results. Returns zero if nothing is found.
      */
@@ -575,13 +526,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     showLoader: function () {
-        this.incLoaderOverlayCounter();
-        clearTimeout(this.get("loaderOverlayTimeoutReference"));
-        this.setLoaderOverlayTimeoutReference(setTimeout(function () {
-            Radio.trigger("Util", "hideLoader");
-            this.setLoaderOverlayCounter(0);
-        }.bind(this), 1000 * this.get("loaderOverlayTimeout")));
-        $("#loader").show();
+        LoaderOverlay.show();
     },
 
     /**
@@ -589,10 +534,7 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      * @returns {void}
      */
     hideLoader: function () {
-        this.decLoaderOverlayCounter();
-        if (this.get("loaderOverlayCounter") <= 0) {
-            $("#loader").hide();
-        }
+        LoaderOverlay.hide();
     },
 
     /**
@@ -601,23 +543,6 @@ const Util = Backbone.Model.extend(/** @lends Util.prototype */{
      */
     hideLoadingModule: function () {
         $(".loading").fadeOut(this.get("fadeOut"));
-    },
-
-    /**
-     * Setter for loaderOverlayTimeoutReference
-     * @param {*} timeoutReference todo
-     * @returns {void}
-     */
-    setLoaderOverlayTimeoutReference: function (timeoutReference) {
-        this.set("loaderOverlayTimeoutReference", timeoutReference);
-    },
-
-    /**
-     * search the path from the loader gif
-     * @returns {String} path to loader gif
-     */
-    getPathFromLoader: function () {
-        return $("#loader").children("img").first().attr("src");
     },
 
     /**

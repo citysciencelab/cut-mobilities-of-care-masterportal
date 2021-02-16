@@ -6,6 +6,7 @@ require("jsdom-global")();
 require("proj4");
 
 global.DOMParser = window.DOMParser;
+global.XMLSerializer = window.XMLSerializer;
 
 URL.createObjectURL = function () {
     return false;

@@ -57,29 +57,19 @@ export default {
         ...mapActions("Tools/SupplyCoord", [
             "checkPosition",
             "changedPosition",
+            "copyToClipboard",
             "positionClicked",
             "setCoordinates",
             "newProjectionSelected"
         ]),
         ...mapActions("MapMarker", ["removePointMarker"]),
+        ...mapActions("Alerting", ["addSingleAlert"]),
         ...mapActions("Map", {
             addPointerMoveHandlerToMap: "addPointerMoveHandler",
             removePointerMoveHandlerFromMap: "removePointerMoveHandler",
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
-        /**
-         * Function to initiate the copying of the coordinates from the inputfields.
-         * @fires Util#RadioTriggerUtilCopyToClipboard
-         * @param {Event} evt Click Event
-         * @returns {void}
-         */
-        copyToClipboard ({target}) {
-            target.select();
-            // seems to be required for mobile devices
-            target.setSelectionRange(0, 99999);
-            document.execCommand("copy");
-        },
         /**
          * Called if selection of projection changed. Sets the current scprojectionale to state and changes the position.
          * @param {Event} event changed selection event
@@ -155,7 +145,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="name"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -208,7 +198,7 @@ export default {
                                 class="form-control"
                                 readonly
                                 contenteditable="false"
-                                @click="copyToClipboard"
+                                @click="copyToClipboard($event.currentTarget)"
                             >
                         </div>
                     </div>
@@ -226,7 +216,7 @@ export default {
                                 class="form-control"
                                 readonly
                                 contenteditable="false"
-                                @click="copyToClipboard"
+                                @click="copyToClipboard($event.currentTarget)"
                             >
                         </div>
                     </div>

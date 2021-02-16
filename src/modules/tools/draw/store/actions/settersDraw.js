@@ -1,15 +1,4 @@
 /**
- * Function to adjust the value / diameter to the units meters or kilometers.
- *
- * @param {String} diameter diameter of the circle.
- * @param {String} unit unit of the diameter.
- * @return {(String|Number)} returns value / string without comma.
- */
-function adjustValueToUnits (diameter, unit) {
-    return unit === "km" ? diameter * 1000 : diameter;
-}
-
-/**
  * sets the styleSettings for the current drawType
  *
  * @param {Object} context the dipendencies
@@ -49,20 +38,19 @@ function setActive ({state, commit, dispatch, rootState}, active) {
 }
 
 /**
- * Sets the inner diameter for the circle of the current drawType.
- *
+ * Sets the inner radius for the circle of the current drawType.
+ * @info the internal representation of circleRadius is always in meters
  * @param {Object} context actions context object.
- * @param {Event} event event fired by changing the input for the circleInnerDiameter.
- * @param {HTMLInputElement} event.target The HTML input element for the circleInnerDiameter.
+ * @param {Number} radius the radius of the inner circle in meters
  * @returns {void}
  */
-function setCircleInnerDiameter ({getters, commit}, {target}) {
-    const styleSettings = getters.getStyleSettings(),
-        adjustedInnerDiameter = adjustValueToUnits(target.value, styleSettings.unit);
+function setCircleRadius ({getters, commit, dispatch}, radius) {
+    const {styleSettings} = getters;
 
-    styleSettings.circleInnerDiameter = parseFloat(adjustedInnerDiameter);
+    styleSettings.circleRadius = radius;
 
     setStyleSettings({getters, commit}, styleSettings);
+    dispatch("updateCircleRadiusDuringModify", radius);
 }
 
 /**
@@ -75,7 +63,7 @@ function setCircleInnerDiameter ({getters, commit}, {target}) {
  */
 function setCircleMethod ({getters, commit}, {target}) {
     const circleMethod = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.circleMethod = circleMethod;
 
@@ -83,20 +71,19 @@ function setCircleMethod ({getters, commit}, {target}) {
 }
 
 /**
- * Sets the outer diameter for the circle of the current drawType.
- *
+ * Sets the outer radius for the circle of the current drawType.
+ * @info the internal representation of circleOuterRadius is always in meters
  * @param {Object} context actions context object.
- * @param {Event} event event fired by changing the input for the circleOuterDiameter.
- * @param {HTMLInputElement} event.target The HTML input element for the circleOuterDiameter.
+ * @param {Number} radius the radius of the inner circle in meters
  * @returns {void}
  */
-function setCircleOuterDiameter ({getters, commit}, {target}) {
-    const styleSettings = getters.getStyleSettings(),
-        adjustedOuterDiameter = adjustValueToUnits(target.value, styleSettings.unit);
+function setCircleOuterRadius ({getters, commit, dispatch}, radius) {
+    const {styleSettings} = getters;
 
-    styleSettings.circleOuterDiameter = parseFloat(adjustedOuterDiameter);
+    styleSettings.circleOuterRadius = radius;
 
     setStyleSettings({getters, commit}, styleSettings);
+    dispatch("updateCircleRadiusDuringModify", radius);
 }
 
 /**
@@ -110,7 +97,7 @@ function setCircleOuterDiameter ({getters, commit}, {target}) {
 function setColor ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
         colorCopy = [],
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     color.forEach(val => {
         colorCopy.push(parseInt(val, 10));
@@ -134,7 +121,7 @@ function setColor ({getters, commit, dispatch}, {target}) {
 function setColorContour ({getters, commit, dispatch}, {target}) {
     const color = target.options[target.selectedIndex].value.split(","),
         colorCopy = [],
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     color.forEach(val => {
         colorCopy.push(parseInt(val, 10));
@@ -142,6 +129,29 @@ function setColorContour ({getters, commit, dispatch}, {target}) {
     colorCopy.push(styleSettings.opacityContour);
 
     styleSettings.colorContour = colorCopy;
+
+    setStyleSettings({getters, commit}, styleSettings);
+    dispatch("updateDrawInteraction");
+}
+/**
+ * Sets the outer color of the contours of the drawType drawDoubleCircle.
+ *
+ * @param {Object} context actions context object.
+ * @param {Event} event event fired by changing the input for the colorContour.
+ * @param {HTMLSelectElement} event.target The HTML select element for the colorContour.
+ * @returns {void}
+ */
+function setOuterColorContour ({getters, commit, dispatch}, {target}) {
+    const color = target.options[target.selectedIndex].value.split(","),
+        colorCopy = [],
+        {styleSettings} = getters;
+
+    color.forEach(val => {
+        colorCopy.push(parseInt(val, 10));
+    });
+    colorCopy.push(styleSettings.opacityContour);
+
+    styleSettings.outerColorContour = colorCopy;
 
     setStyleSettings({getters, commit}, styleSettings);
     dispatch("updateDrawInteraction");
@@ -175,7 +185,7 @@ function setDrawType ({commit, dispatch}, {target}) {
  */
 function setFont ({getters, commit, dispatch}, {target}) {
     const font = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.font = font;
 
@@ -193,7 +203,7 @@ function setFont ({getters, commit, dispatch}, {target}) {
  */
 function setFontSize ({getters, commit, dispatch}, {target}) {
     const fontSize = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.fontSize = fontSize;
 
@@ -211,7 +221,7 @@ function setFontSize ({getters, commit, dispatch}, {target}) {
  */
 function setOpacity ({getters, commit, dispatch}, {target}) {
     const opacity = parseFloat(target.options[target.selectedIndex].value),
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.opacity = opacity;
     styleSettings.color[3] = opacity;
@@ -230,7 +240,7 @@ function setOpacity ({getters, commit, dispatch}, {target}) {
  */
 function setOpacityContour ({getters, commit, dispatch}, {target}) {
     const opacityContour = parseFloat(target.options[target.selectedIndex].value),
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.opacityContour = opacityContour;
     styleSettings.colorContour[3] = opacityContour;
@@ -264,7 +274,7 @@ function setPointSize ({commit, dispatch}, {target}) {
  */
 function setStrokeWidth ({getters, commit, dispatch}, {target}) {
     const strokeWidth = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.strokeWidth = parseInt(strokeWidth, 10);
 
@@ -300,7 +310,7 @@ function setSymbol ({state, commit, dispatch}, {target}) {
  */
 function setText ({getters, commit, dispatch}, {target}) {
     const text = target.value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.text = text;
 
@@ -309,7 +319,7 @@ function setText ({getters, commit, dispatch}, {target}) {
 }
 
 /**
- * Sets the unit for the diameter of the circle of the current drawType.
+ * Sets the unit for the radius of the circle of the current drawType.
  *
  * @param {Object} context actions context object.
  * @param {Event} event event fired by changing the input for the unit.
@@ -318,23 +328,23 @@ function setText ({getters, commit, dispatch}, {target}) {
  */
 function setUnit ({getters, commit, dispatch}, {target}) {
     const unit = target.options[target.selectedIndex].value,
-        styleSettings = getters.getStyleSettings();
+        {styleSettings} = getters;
 
     styleSettings.unit = unit;
 
     setStyleSettings({getters, commit}, styleSettings);
-    dispatch("setCircleInnerDiameter", {target: {value: styleSettings.circleInnerDiameter}});
-    dispatch("setCircleOuterDiameter", {target: {value: styleSettings.circleOuterDiameter}});
+    dispatch("updateDrawInteraction");
 }
 
 export {
     setStyleSettings,
     setActive,
-    setCircleInnerDiameter,
+    setCircleRadius,
     setCircleMethod,
-    setCircleOuterDiameter,
+    setCircleOuterRadius,
     setColor,
     setColorContour,
+    setOuterColorContour,
     setDrawType,
     setFont,
     setFontSize,

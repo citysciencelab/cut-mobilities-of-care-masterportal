@@ -312,6 +312,17 @@
  */
 
 /**
+ * @event Core.ConfigLoader#RadioTriggerParseraddVectorLayer
+ * @param {String} layerName - The name of the layer (can be selected alphanumerically)
+ * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
+ * @param {ol.Feature[]} features - all features generated from the imported file
+ * @param {String} [parentId] Id for the correct position of the layer in the layertree.
+ * @param {String} [styleId] Id for the styling of the features; should correspond to a style from the style.json.
+ * @param {(String | Object)} [gfiAttributes="ignore"] Attributes to be shown when clicking on the feature using the GFI tool.
+ * @example Radio.trigger("Parser", "addVectorLayer", name, id, features, parentId, styleId, gfiAttributes)
+ */
+
+/**
  * @event Core.ConfigLoader#RadioTriggerParserRemoveItem
  * @description Event that removes an item from the layertree
  * @param {String} id - id from item that be removed
@@ -1439,13 +1450,6 @@
  */
 
 /**
- * @event Core#RadioRequestUtilGetPathFromLoader
- * @description returns the path to the loader gif
- * @returns {String} - path to loader gif
- * @example Radio.request("Util", "getPathFromLoader");
- */
-
-/**
  * @event Core#RadioRequestUtilGetMasterPortalVersionNumber
  * @description returns the masterportal version number
  * @returns {String} - masterportal version number
@@ -1483,12 +1487,6 @@
  * @event Core#RadioTriggerUtilSetUiStyle
  * @description sets the ui style
  * @example Radio.request("Util", "setUiStyle");
- */
-
-/**
- * @event Core#RadioTriggerUtilCopyToClipboard
- * @description todo
- * @example Radio.request("Util", "copyToClipboard");
  */
 
 /**
@@ -2039,19 +2037,6 @@
 /**
  * @event Tools.Filter.Query#SnippetCollectionHideAllInfoText
  * @description todo
- */
-
-/** -------------------- WPS -------------------- */
-
-/**
- * @event Core#RadioTriggerWPSRequest
- * @param {string} wpsID The service id, defined in rest-services.json
- * @param {string} identifier The functionality to be invoked by the wps
- * @param {object} data Contains the Attributes to be sent
- * @param {function} responseFunction function to be called
- * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
- * @description todo
- * @example Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this), 50000);
  */
 
 /** -------------------- Snippets -------------------- */

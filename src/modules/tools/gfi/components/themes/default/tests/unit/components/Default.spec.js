@@ -24,6 +24,8 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
                             url: "https",
                             url2: "file",
                             Test_String: "Hallo Welt",
+                            emptyValue: "",
+                            undefinedValue: undefined,
                             testBrTag: "moin<br>123"
                         };
                     },
@@ -169,6 +171,37 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         });
 
         expect(wrapper2.find(".gfi-theme-images > div:nth-child(2) > a > img").attributes().src).equals("https://abc.jpeg");
+    });
+
+    it("should show no attribute is available message if getMappedProperties is empty", () => {
+        const wrapper1 = shallowMount(DefaultTheme, {
+            propsData: {
+                feature: {
+                    getProperties: () => {
+                        return {};
+                    },
+                    getMappedProperties: () => {
+                        return {};
+                    },
+                    getTheme: () => {
+                        return {
+                            name: "images",
+                            params: {
+                                imageLink: "abc"
+                            }
+                        };
+                    },
+                    getGfiUrl: () => "",
+                    getMimeType: () => "text/xml"
+                }
+            },
+            localVue,
+            mocks: {
+                $t: (msg) => msg
+            }
+        });
+
+        expect(wrapper1.find("td").text()).equals("modules.tools.gfi.themes.default.noAttributeAvailable");
     });
 
 

@@ -1,7 +1,8 @@
 import {fetchFirstModuleConfig} from "../../../utils/fetchFirstModuleConfig";
-import {getWKTGeom} from "../../../utils/getWKTGeom";
 import Point from "ol/geom/Point.js";
 import Feature from "ol/Feature.js";
+import {MapMode} from "../../map/store/enums";
+import {transform, getMapProjection} from "masterportalAPI/src/crs";
 
 /**
  * @const {String} configPaths an array of possible config locations. First one found will be used
@@ -23,13 +24,20 @@ export default {
 
     /**
      * Checks if the MapMarker should be set initially by the url param "marker".
+     * The coordinates are projected if the parameter "projection" was specified.
      * @returns {void}
      */
     activateByUrlParam: ({rootState, dispatch}) => {
-        if (rootState.queryParams instanceof Object && rootState?.queryParams?.marker) {
-            const coordinates = rootState.queryParams.marker.split(",");
+        const queryParams = rootState.queryParams;
 
-            dispatch("placingPointMarker", coordinates.map(coordinate => parseFloat(coordinate, 10)));
+        if (queryParams instanceof Object && queryParams?.marker) {
+            let coordinates = queryParams.marker.split(",").map(coordinate => parseFloat(coordinate, 10));
+
+            if (queryParams?.projection) {
+                coordinates = transform(queryParams.projection, getMapProjection(rootState?.Map?.map), coordinates);
+            }
+
+            dispatch("placingPointMarker", coordinates);
         }
     },
 
@@ -38,14 +46,24 @@ export default {
      * @param {String[]} value The array with the markable coordinate pair.
      * @returns {void}
      */
-    placingPointMarker ({state, commit, dispatch}, value) {
+    placingPointMarker ({state, rootState, commit, dispatch}, value) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.pointStyleId);
+        let coordValues = [];
 
         dispatch("removePointMarker");
 
         if (styleListModel) {
+            if (rootState.Map.mapMode === MapMode.MODE_3D) {
+                // else an error is thrown in proj4/lib/checkSanity: coordinates must be finite numbers
+                value.forEach(val => {
+                    coordValues.push(Math.round(val));
+                });
+            }
+            else {
+                coordValues = value;
+            }
             const iconfeature = new Feature({
-                    geometry: new Point(value)
+                    geometry: new Point(coordValues)
                 }),
                 featureStyle = styleListModel.createStyle(iconfeature, false);
 
@@ -72,18 +90,16 @@ export default {
 
     /**
      * Converts polygon to the wkt format and add this to the map.
-     * @param {String[]} wktcontent The polygon to highlight in the map.
-     * @param {String} geometryType The type of geometry.
+     * @param {ol/Feature} feature The ol feature that is added to the map.
      * @returns {void}
      */
-    placingPolygonMarker ({state, commit, dispatch}, {wktcontent, geometryType}) {
+    placingPolygonMarker ({state, commit, dispatch}, feature) {
         const styleListModel = Radio.request("StyleList", "returnModelById", state.polygonStyleId);
 
         dispatch("removePolygonMarker");
 
         if (styleListModel) {
-            const feature = getWKTGeom(wktcontent, geometryType),
-                featureStyle = styleListModel.createStyle(feature, false);
+            const featureStyle = styleListModel.createStyle(feature, false);
 
             feature.setStyle(featureStyle);
             commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
@@ -92,6 +108,35 @@ export default {
         }
         else {
             dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: state.polygonStyleId}), {root: true});
+        }
+    },
+
+    /**
+     * Creates a feature from the given geometry and adds it to the map.
+     * @param {Object} store.getters - The Map Marker getters.
+     * @param {Function} store.commit - Function to commit a mutation.
+     * @param {Function} store.dispatch Function to dispatch an action.
+     * @param {module:ol/geom/SimpleGeometry} geometry - The given geometry.
+     * @returns {void}
+     */
+    placingPolygonMarkerByGeom ({getters, commit, dispatch}, geometry) {
+        const styleListModel = Radio.request("StyleList", "returnModelById", getters.polygonStyleId);
+
+        dispatch("removePolygonMarker");
+
+        if (styleListModel && geometry) {
+            const feature = new Feature({
+                    geometry: geometry
+                }),
+                featureStyle = styleListModel.createStyle(feature, false);
+
+            feature.setStyle(featureStyle);
+            commit("addFeatureToMarker", {feature: feature, marker: "markerPolygon"});
+            commit("setVisibilityMarker", {visibility: true, marker: "markerPolygon"});
+            commit("Map/addLayerToMap", getters.markerPolygon, {root: true});
+        }
+        else {
+            dispatch("Alerting/addSingleAlert", i18next.t("common:modules.mapMarker.noStyleModel", {styleId: getters.polygonStyleId}), {root: true});
         }
     },
 

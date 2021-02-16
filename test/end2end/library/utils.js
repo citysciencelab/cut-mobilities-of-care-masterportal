@@ -146,13 +146,16 @@ async function logBrowserstackUrlToTest (sessionId) {
             password: process.env.bs_key
         }
     }).then(res => {
+        let logged = false;
+
         res.data.forEach(entry => {
             const build = entry.automation_build;
 
             /* eslint-disable-next-line no-process-env */
-            if (build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
+            if (!logged && build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
                 const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
 
+                logged = true;
                 console.warn(`      ${url}${sessionId}`);
             }
         });
@@ -257,6 +260,20 @@ async function getOrderedTitleTexts (driver) {
         return visible ? title : false;
     }))).filter(x => x !== false);
 }
+/**
+ * Closes a single alert with className 'singleAlertMessage'.
+ * If a message is given it is included in the xpath to search for the el.
+ * @param {object} driver driver object
+ * @param {string} message shown in the alert or null, if not known
+ * @returns {void}
+ */
+async function closeSingleAlert (driver, message) {
+    const part = message ? "[contains(text(),'" + message + "')]" : "",
+        selector = By.xpath("//div[@class='singleAlertMessage']" + part + "//parent::div//parent::div//parent::div//parent::div//parent::div//preceding-sibling::span"),
+        element = await driver.findElement(selector);
+
+    await element.click();
+}
 
 module.exports = {
     getTextOfElements,
@@ -268,5 +285,6 @@ module.exports = {
     clickFeature,
     hoverFeature,
     reclickUntilNotStale,
-    logBrowserstackUrlToTest
+    logBrowserstackUrlToTest,
+    closeSingleAlert
 };

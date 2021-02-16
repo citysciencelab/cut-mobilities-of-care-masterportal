@@ -1,13 +1,18 @@
 <script>
-import {mapActions, mapGetters, mapMutations} from "vuex";
-import getComponent from "../../../../utils/getComponent";
-import Tool from "../../Tool.vue";
 import * as constants from "../store/constantsDraw";
-import DownloadView from "../../../../../modules/tools/download/view";
+import Download from "../components/Download.vue";
+import DrawFeaturesFilter from "./DrawFeaturesFilter.vue";
+
+import getComponent from "../../../../utils/getComponent";
+
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import Tool from "../../Tool.vue";
 
 export default {
     name: "Draw",
     components: {
+        DrawFeaturesFilter,
+        Download,
         Tool
     },
     data () {
@@ -25,6 +30,7 @@ export default {
          * @returns {Boolean} currentInteraction === "draw": return false and activate the HTML elements, else: return true and deactivate the HTML elements.
          */
         drawHTMLElements () {
+            // remember: true means disable, false means enable
             return !(this.currentInteraction === "draw");
         },
         /**
@@ -35,50 +41,73 @@ export default {
             if (this.selectedFeature !== null && this.currentInteraction === "modify") {
                 return false;
             }
+            // remember: true means disable, false means enable
             return !(this.currentInteraction === "draw");
         },
         /**
-         * Disables the input for the diameter and the unit for the drawType "drawCircle" if the circleMethod is not set to "defined".
-         * @returns {Boolean} return false if drawing is enabled and circleMethod is set to "defined", else return true.
+         * Enables the input for the radius if the circleMethod is "defined", for interaction "modify" the rule of drawHTMLElementsModifyFeature takes place.
+         * @returns {Boolean} returns true to disable the input, false to enable the input
          */
         drawCircleMethods () {
-            return this.drawType.id === "drawCircle" ?
-                this.drawHTMLElements || this.getStyleSettings()?.circleMethod !== "defined"
-                : this.drawHTMLElements;
+            if (this.currentInteraction === "draw") {
+                // remember: true means disable, false means enable
+                return !(this.styleSettings?.circleMethod === "defined");
+            }
+            return this.drawHTMLElementsModifyFeature;
         },
 
-        circleInnerDiameterComputed: {
+        circleRadiusComputed: {
             /**
-             * getter for the computed property circleInnerDiameter of the current drawType
-             * @returns {Number} the current diameter
+             * getter for the computed property circleRadius of the current drawType
+             * @info the internal representation of circleRadius is always in meters
+             * @returns {Number} the current radius
              */
             get () {
-                return this.getStyleSettings()?.circleInnerDiameter;
+                if (this.styleSettings?.unit === "km") {
+                    return this.styleSettings?.circleRadius / 1000;
+                }
+                return this.styleSettings?.circleRadius;
             },
             /**
-             * setter for the computed property circleInnerDiameter of the current drawType
+             * setter for the computed property circleRadius of the current drawType
+             * @info the internal representation of circleRadius is always in meters
              * @param {Number} value the value to set the target to
              * @returns {void}
              */
             set (value) {
-                this.setCircleInnerDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+                if (this.styleSettings?.unit === "km") {
+                    this.setCircleRadius(parseInt(value, 10) * 1000);
+                }
+                else {
+                    this.setCircleRadius(parseInt(value, 10));
+                }
             }
         },
-        circleOuterDiameterComputed: {
+        circleOuterRadiusComputed: {
             /**
-             * getter for the computed property circleOuterDiameter of the current drawType
-             * @returns {Number} the current diameter
+             * getter for the computed property circleOuterRadius of the current drawType
+             * @info the internal representation of circleOuterRadius is always in meters
+             * @returns {Number} the current radius
              */
             get () {
-                return this.getStyleSettings()?.circleOuterDiameter;
+                if (this.styleSettings?.unit === "km") {
+                    return this.styleSettings?.circleOuterRadius / 1000;
+                }
+                return this.styleSettings?.circleOuterRadius;
             },
             /**
-             * setter for the computed property circleOuterDiameter of the current drawType
+             * setter for the computed property circleOuterRadius of the current drawType
+             * @info the internal representation of circleOuterRadius is always in meters
              * @param {Number} value the value to set the target to
              * @returns {void}
              */
             set (value) {
-                this.setCircleOuterDiameter({target: {value, unit: this.getStyleSettings()?.unit}});
+                if (this.styleSettings?.unit === "km") {
+                    this.setCircleOuterRadius(parseInt(value, 10) * 1000);
+                }
+                else {
+                    this.setCircleOuterRadius(parseInt(value, 10));
+                }
             }
         },
         /**
@@ -86,70 +115,112 @@ export default {
          * @returns {String} "defined" or "interactive"
          */
         circleMethodComputed () {
-            return this.getStyleSettings()?.circleMethod;
+            return this.styleSettings?.circleMethod;
         },
         /**
          * computed property for the unit of the current drawType
          * @returns {String} "m" or "km"
          */
         unitComputed () {
-            return this.getStyleSettings()?.unit;
+            return this.styleSettings?.unit;
         },
         /**
          * computed property for the text of the current drawType
          * @returns {String} the current text
          */
         textComputed () {
-            return this.getStyleSettings()?.text;
+            return this.styleSettings?.text;
         },
         /**
          * computed property for the font-size of the current drawType
          * @returns {Number} the current font-size as number
          */
         fontSizeComputed () {
-            return this.getStyleSettings()?.fontSize;
+            return this.styleSettings?.fontSize;
         },
         /**
          * computed property for the font family of the current drawType
          * @returns {Number} the current font family
          */
         fontComputed () {
-            return this.getStyleSettings()?.font;
+            return this.styleSettings?.font;
         },
         /**
          * computed property for the stroke width of the current drawType
          * @returns {Number} the current width as number
          */
         strokeWidthComputed () {
-            return this.getStyleSettings()?.strokeWidth;
+            return this.styleSettings?.strokeWidth;
         },
         /**
          * computed property for the opacity linked to color of the current drawType
          * @returns {Number} the current opacity as css range [0..1] - this is the value, not the caption (!)
          */
         opacityComputed () {
-            return this.getStyleSettings()?.opacity;
+            return this.styleSettings?.opacity;
         },
         /**
          * computed property for the opacity linked to colorContour of the current drawType
          * @returns {Number} the current opacity (of colorContour) as css range [0..1] - this is the value, not the caption (!)
          */
         opacityContourComputed () {
-            return this.getStyleSettings()?.opacityContour;
+            return this.styleSettings?.opacityContour;
         },
         /**
          * computed property for the color of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorContourComputed () {
-            return this.getStyleSettings()?.colorContour;
+            return this.styleSettings?.colorContour;
+        },
+        /**
+         * computed property for the outer color of a double circle
+         * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
+         */
+        outerColorContourComputed () {
+            return this.styleSettings?.outerColorContour;
         },
         /**
          * computed property for the colorContour of the current drawType
          * @returns {Number[]} the current color as array of numbers - e.g. [0, 0, 0, 1]
          */
         colorComputed () {
-            return this.getStyleSettings()?.color;
+            return this.styleSettings?.color;
+        },
+        /**
+         * computed property of the label for the normal colorContour - in case this is a double circle
+         * @returns {String} the label to use for the normal colorContour
+         */
+        colorContourLabelComputed () {
+            if (this.drawType.id === "drawDoubleCircle" && this.currentInteraction !== "modify") {
+                return this.$i18n.i18next.t("common:modules.tools.draw.innerColorContour");
+            }
+            return this.$i18n.i18next.t("common:modules.tools.draw.colorContour");
+        },
+        /**
+         * computed property of the label for the normal innerRadius - in case this is a double circle
+         * @returns {String} the label to use for the normal innerRadius
+         */
+        innerRadiusLabelComputed () {
+            if (this.drawType.id === "drawDoubleCircle" && this.currentInteraction !== "modify") {
+                return this.$i18n.i18next.t("common:modules.tools.draw.innerRadius");
+            }
+            return this.$i18n.i18next.t("common:modules.tools.draw.radius");
+        },
+
+        /**
+         * Checks if the filter list is valid.
+         * @returns {boolean} True if valid.
+         */
+        isFilterListValid () {
+            if (this.filterList === null) {
+                return false;
+            }
+            if (!Array.isArray(this.filterList) || !this.filterList.length) {
+                console.warn(this.filterList, "Die Konfiguration für den Filter ist nicht valide.");
+                return false;
+            }
+            return true;
         }
 
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
@@ -162,7 +233,6 @@ export default {
          */
         active (value) {
             if (value) {
-                new DownloadView(this.$store);
                 this.setActive(value);
                 this.setCanvasCursorByInteraction(this.currentInteraction);
             }
@@ -200,6 +270,7 @@ export default {
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
         ...mapActions("Tools/Draw", constants.keyStore.actions),
+        ...mapActions("Alerting", ["addSingleAlert"]),
         /**
          * checks if both given arrays have the same number at their first 3 positions
          * note: the opacity (4th number) will be ignored - this is only about color
@@ -272,11 +343,12 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="name"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active && !withoutGUI"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
+        :initialWidth="500"
         :deactivateGFI="deactivateGFI"
     >
         <template v-slot:toolBody>
@@ -297,12 +369,20 @@ export default {
                 </option>
             </select>
             <hr>
+            <template v-if="layer.getSource().getFeatures().length > 0 && isFilterListValid">
+                <DrawFeaturesFilter
+                    :filterList="filterList"
+                    :features="layer.getSource().getFeatures()"
+                />
+                <hr>
+            </template>
             <form
                 class="form-horizontal"
                 role="form"
+                @submit.prevent
             >
                 <div
-                    v-if="drawType.id === 'drawCircle'"
+                    v-if="drawType.id === 'drawCircle' && currentInteraction !== 'modify'"
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
@@ -312,7 +392,7 @@ export default {
                         <select
                             id="tool-draw-circleMethod"
                             class="form-control input-sm"
-                            :disabled="drawHTMLElements"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setCircleMethod"
                         >
                             <option
@@ -335,18 +415,19 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.diameter") }}
+                        {{ innerRadiusLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <input
-                            id="tool-draw-circleInnerDiameter"
-                            v-model="circleInnerDiameterComputed"
+                            id="tool-draw-circleRadius"
+                            v-model="circleRadiusComputed"
                             class="form-control"
                             :style="{borderColor: innerBorderColor}"
                             type="number"
+                            step="1"
                             :placeholder="$t('common:modules.tools.draw.doubleCirclePlaceholder')"
                             :disabled="drawCircleMethods"
-                            @input="setCircleInnerDiameter"
+                            min="0"
                         />
                     </div>
                 </div>
@@ -355,18 +436,18 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.outerDiameter") }}
+                        {{ $t("common:modules.tools.draw.outerRadius") }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <input
-                            id="tool-draw-circleOuterDiameter"
-                            v-model="circleOuterDiameterComputed"
+                            id="tool-draw-circleOuterRadius"
+                            v-model="circleOuterRadiusComputed"
                             class="form-control"
                             :style="{borderColor: outerBorderColor}"
                             type="number"
                             :placeholder="$t('common:modules.tools.draw.doubleCirclePlaceholder')"
-                            :disabled="drawHTMLElements"
-                            @input="setCircleOuterDiameter"
+                            :disabled="drawCircleMethods"
+                            min="0"
                         >
                     </div>
                 </div>
@@ -381,7 +462,7 @@ export default {
                         <select
                             id="tool-draw-circleUnit"
                             class="form-control input-sm"
-                            :disabled="drawCircleMethods"
+                            :disabled="drawHTMLElementsModifyFeature"
                             @change="setUnit"
                         >
                             <option
@@ -572,7 +653,7 @@ export default {
                     class="form-group form-group-sm"
                 >
                     <label class="col-md-5 col-sm-5 control-label">
-                        {{ $t("common:modules.tools.draw.outlineColor") }}
+                        {{ colorContourLabelComputed }}
                     </label>
                     <div class="col-md-7 col-sm-7">
                         <select
@@ -586,6 +667,31 @@ export default {
                                 :key="'draw-colorContour-' + option.color"
                                 :value="option.value"
                                 :selected="isEqualColorArrays(option.value, colorContourComputed)"
+                            >
+                                {{ $t("common:colors." + option.color) }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div
+                    v-if="drawType.id === 'drawDoubleCircle'"
+                    class="form-group form-group-sm"
+                >
+                    <label class="col-md-5 col-sm-5 control-label">
+                        {{ $t("common:modules.tools.draw.outerColorContour") }}
+                    </label>
+                    <div class="col-md-7 col-sm-7">
+                        <select
+                            id="tool-draw-outerColorContour"
+                            class="form-control input-sm"
+                            :disabled="drawHTMLElementsModifyFeature"
+                            @change="setOuterColorContour"
+                        >
+                            <option
+                                v-for="option in constants.colorContourOptions"
+                                :key="'draw-outerColorContour-' + option.color"
+                                :value="option.value"
+                                :selected="isEqualColorArrays(option.value, outerColorContourComputed)"
                             >
                                 {{ $t("common:colors." + option.color) }}
                             </option>
@@ -607,7 +713,7 @@ export default {
                             @change="setColor"
                         >
                             <option
-                                v-for="option in constants.pointColorOptions"
+                                v-for="option in constants.colorOptions"
                                 :key="'draw-color-' + option.color"
                                 :value="option.value"
                                 :selected="isEqualColorArrays(option.value, colorComputed)"
@@ -703,18 +809,6 @@ export default {
                 <div class="form-group form-group-sm">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <button
-                            id="tool-draw-downloadInteraction"
-                            class="btn btn-sm btn-block btn-lgv-grey"
-                            @click="startDownloadTool"
-                        >
-                            <span class="glyphicon glyphicon-floppy-disk" />
-                            {{ $t("common:button.download") }}
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group form-group-sm">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button
                             id="tool-draw-deleteInteraction"
                             class="btn btn-sm btn-block"
                             :class="currentInteraction === 'delete' ? 'btn-primary' : 'btn-lgv-grey'"
@@ -738,6 +832,7 @@ export default {
                         </button>
                     </div>
                 </div>
+                <Download v-if="download.enabled" />
             </div>
         </template>
     </Tool>

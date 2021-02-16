@@ -1,10 +1,11 @@
 import Vuex from "vuex";
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import Attached from "../../../components/templates/Attached.vue";
 
 const localVue = createLocalVue();
 
+config.mocks.$t = key => key;
 localVue.use(Vuex);
 
 describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
@@ -16,6 +17,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     getTheme: () => "Default",
                     getMimeType: () => "text/xml",
                     getTitle: () => "Hallo"
+                }
+            },
+            components: {
+                Default: {
+                    template: "<span />"
                 }
             },
             computed: {
@@ -40,6 +46,12 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     getTitle: () => "Hallo"
                 }
             },
+            components: {
+                Default: {
+                    name: "Default",
+                    template: "<span />"
+                }
+            },
             computed: {
                 clickCoord: () => [],
                 styleContent: () => [{
@@ -60,6 +72,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     getTheme: () => "Default",
                     getMimeType: () => "text/xml",
                     getTitle: () => "Hallo"
+                }
+            },
+            components: {
+                Default: {
+                    template: "<span />"
                 }
             },
             computed: {
@@ -83,6 +100,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                         getTheme: () => "Default",
                         getMimeType: () => "text/xml",
                         getTitle: () => "Hallo"
+                    }
+                },
+                components: {
+                    Default: {
+                        template: "<span />"
                     }
                 },
                 computed: {
@@ -110,6 +132,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                         getTitle: () => "Hallo"
                     }
                 },
+                components: {
+                    Default: {
+                        template: "<span />"
+                    }
+                },
                 computed: {
                     clickCoord: () => [],
                     styleContent: () => [{
@@ -135,6 +162,11 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                         getTitle: () => "Hallo"
                     }
                 },
+                components: {
+                    Default: {
+                        template: "<span />"
+                    }
+                },
                 computed: {
                     clickCoord: () => [],
                     styleContent: () => [{
@@ -143,7 +175,7 @@ describe("src/modules/tools/gfi/components/templates/Attached.vue", () => {
                     }]
                 },
                 slots: {
-                    footer: "<div>Footer</div>"
+                    footer: "<div class=\"gfi-footer\">Footer</div>"
                 },
                 localVue
             }),

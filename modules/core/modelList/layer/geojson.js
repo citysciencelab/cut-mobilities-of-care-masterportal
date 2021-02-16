@@ -403,7 +403,6 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
          * @deprecated in 3.0.0
          */
         if (this.get("legendURL")) {
-            console.warn("legendURL ist deprecated in 3.0.0. Please use attribute \"legend\" als Boolean or String with path to legend image or pdf");
             if (this.get("legendURL") === "") {
                 legend = true;
             }
@@ -415,7 +414,10 @@ const GeoJSONLayer = Layer.extend(/** @lends GeoJSONLayer.prototype */{
             }
         }
 
-        if (styleModel && legend === true) {
+        if (Array.isArray(legend)) {
+            this.setLegend(legend);
+        }
+        else if (styleModel && legend === true) {
             this.setLegend(styleModel.getLegendInfos());
         }
         else if (typeof legend === "string") {

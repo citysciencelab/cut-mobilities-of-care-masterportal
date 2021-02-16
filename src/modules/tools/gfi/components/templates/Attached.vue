@@ -129,7 +129,7 @@ export default {
                 </span>
             </button>
             <h5>
-                {{ title }}
+                {{ $t(title) }}
             </h5>
         </div>
         <!-- theme -->
@@ -141,10 +141,7 @@ export default {
                 :feature="feature"
             />
         </div>
-        <!-- footer -->
-        <div class="gfi-footer">
-            <slot name="footer" />
-        </div>
+        <slot name="footer" />
     </div>
 </template>
 

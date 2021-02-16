@@ -128,7 +128,7 @@ describe("src/modules/tools/draw/store/actions/withoutGUIDraw.js", () => {
                     id,
                     geometry: ""
                 },
-                getStyleSettings: () => drawTypeOptions
+                styleSettings: drawTypeOptions
             }, gettersOptions);
 
             return result;

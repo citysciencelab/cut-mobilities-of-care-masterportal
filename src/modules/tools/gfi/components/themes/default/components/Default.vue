@@ -97,9 +97,9 @@ export default {
 </script>
 
 <template>
-    <div class="gfi-theme-images">
+    <div :class="mimeType === 'text/html' ? 'gfi-theme-iframe' : 'gfi-theme-images'">
         <div
-            v-if="showFavoriteIcons"
+            v-if="showFavoriteIcons && mimeType !== 'text/html'"
             class="favorite-icon-container"
         >
             <template v-for="component in importedComponents">
@@ -110,7 +110,7 @@ export default {
                 />
             </template>
         </div>
-        <div>
+        <div v-if="mimeType !== 'text/html'">
             <a
                 v-if="imageAttribute"
                 :href="imageAttribute"
@@ -123,10 +123,19 @@ export default {
                 >
             </a>
         </div>
-        <table class="table table-hover">
-            <tbody v-if="typeof feature.getMappedProperties === 'function' && mimeType !== 'text/html'">
+        <table
+            v-if="mimeType !== 'text/html'"
+            class="table table-hover"
+        >
+            <tbody v-if="typeof feature.getMappedProperties === 'function'">
+                <tr v-if="Object.entries(feature.getMappedProperties()).length === 0">
+                    <td class="bold">
+                        {{ $t("modules.tools.gfi.themes.default.noAttributeAvailable") }}
+                    </td>
+                </tr>
                 <tr
                     v-for="(value, key) in feature.getMappedProperties()"
+                    v-else
                     :key="key"
                 >
                     <td class="bold">
@@ -145,7 +154,7 @@ export default {
                         <a :href="`mailto:${value}`">{{ value }}</a>
                     </td>
                     <td
-                        v-else-if="value.includes('<br>')"
+                        v-else-if="typeof value === 'string' && value.includes('<br>')"
                         v-html="value"
                     >
                     </td>
@@ -154,25 +163,19 @@ export default {
                     </td>
                 </tr>
             </tbody>
-            <tbody v-else-if="mimeType === 'text/html'">
-                <tr colspan="1">
-                    <td>
-                        <iframe
-                            :src="feature.getGfiUrl()"
-                            class="gfi-iFrame"
-                        >
-                        </iframe>
-                    </td>
-                </tr>
-            </tbody>
         </table>
+        <iframe
+            v-if="mimeType === 'text/html'"
+            :src="feature.getGfiUrl()"
+            class="gfi-iFrame"
+        >
+        </iframe>
     </div>
 </template>
 
 
 <style lang="less" scoped>
 @import "~variables";
-
 
 .table > tbody > tr > td {
     padding: 5px 8px;
@@ -182,9 +185,21 @@ export default {
     }
 }
 .gfi-iFrame {
-    width: 100%;
-    height: 100%;
-    resize: both;
+        height: 450px;
+        resize: both;
+}
+@media (min-width: 768px) {
+    .gfi-iFrame {
+        width: 450px;
+    }
+}
+@media (max-width: 767px) {
+    .gfi-iFrame {
+        width: 100%;
+    }
+}
+.gfi-theme-iframe {
+    line-height: 1px;
 }
 .gfi-theme-images {
     height: 100%;

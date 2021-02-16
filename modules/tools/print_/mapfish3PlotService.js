@@ -6,6 +6,7 @@ import "./RadioBridge.js";
 import store from "../../../src/app-store/index";
 import thousandsSeparator from "../../../src/utils/thousandsSeparator.js";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import LoaderOverlay from "../../../src/utils/loaderOverlay";
 
 const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -69,6 +70,10 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         zoomLevel: null,
         hintInfo: "",
         spec: new BuildSpecModel(),
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         */
         useProxy: false
     }),
 
@@ -302,9 +307,11 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             spec.buildLegend(this.get("isLegendSelected"), this.get("isMetaDataAvailable"));
         }
         else {
+            spec.setLegend({});
+            spec.setShowLegend(false);
             spec = spec.toJSON();
             spec = Radio.request("Util", "omit", spec, ["uniqueIdList"]);
-            this.createPrintJob(this.get("printAppId"), encodeURIComponent(JSON.stringify(spec)), this.get("currentFormat"));
+            this.createPrintJob(encodeURIComponent(JSON.stringify(spec)), this.get("printAppId"), this.get("currentFormat"));
         }
     },
 
@@ -337,7 +344,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
             printFormat = format || this.get("currentFormat"),
             url = this.get("mapfishServiceUrl") + printId + "/report." + printFormat;
 
-        Radio.trigger("Util", "showLoader");
+        LoaderOverlay.show();
         this.sendRequest(url, "POST", this.waitForPrintJob, payload);
     },
 
@@ -356,10 +363,29 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
                 this.waitForPrintJob(response);
             }
             else {
-                Radio.trigger("Util", "hideLoader");
-                window.open(this.get("mapfishServiceUrl") + printAppId + "/report/" + response.ref);
+                LoaderOverlay.hide();
+                this.downloadFile(this.get("mapfishServiceUrl") + printAppId + "/report/" + response.ref, this.get("filename"));
             }
         });
+    },
+
+    /**
+     * Starts the download from printfile,
+     * @param {String} fileUrl The url to dwonloadfile.
+     * @param {String} filename The name of the donwloadfile.
+     * @returns {void}
+     */
+    downloadFile: function (fileUrl, filename) {
+        const link = document.createElement("a");
+
+        /**
+         * @deprecated in the next major-release!
+         * useProxy
+         * getProxyUrl()
+         */
+        link.href = this.get("useProxy") ? getProxyUrl(fileUrl) : fileUrl;
+        link.download = filename;
+        link.click();
     },
 
     /**
@@ -562,7 +588,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
      */
     getVisibleLayer: function () {
         let visibleLayerList = Radio.request("Map", "getLayers").getArray().filter(layer => {
-            return layer.getVisible() === true;
+            return layer.getVisible() === true && layer.get("name") !== "markerPoint";
         });
 
         visibleLayerList = this.sortVisibleLayerListByZindex(visibleLayerList);
@@ -587,10 +613,9 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         visibleLayer.forEach(layer => {
             const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
 
-            if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale <= layer.getMinResolution()) {
+            if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale < layer.getMinResolution()) {
                 invisibleLayer.push(layer);
                 invisibleLayerNames += "- " + layer.get("name") + "<br>";
-                layer.setVisible(false);
                 if (layerModel !== undefined) {
                     layerModel.setIsOutOfRange(true);
                 }
