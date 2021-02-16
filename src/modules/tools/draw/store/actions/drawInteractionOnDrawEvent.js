@@ -77,6 +77,9 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
             }
             return undefined;
         });
+
+        event.feature.set("invisibleStyle", createStyle(event.feature.get("drawState"), styleSettings));
+
         commit("setZIndex", state.zIndex + 1);
     }));
 
