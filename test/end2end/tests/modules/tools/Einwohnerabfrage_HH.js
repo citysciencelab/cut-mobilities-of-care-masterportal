@@ -9,8 +9,10 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function CoordTests ({builder, url, resolution, capability}) {
+async function EinwohnerAbfrageTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
+    console.warn("CoordTests url:", url);
+    console.warn("CoordTests isMaster:", testIsApplicable);
 
     if (testIsApplicable) {
         describe("Einwohnerabfrage_HH", function () {
@@ -259,4 +261,4 @@ async function CoordTests ({builder, url, resolution, capability}) {
     }
 }
 
-module.exports = CoordTests;
+module.exports = EinwohnerAbfrageTests;
