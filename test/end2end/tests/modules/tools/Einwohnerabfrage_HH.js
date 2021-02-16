@@ -15,7 +15,7 @@ async function CoordTests ({builder, url, resolution, capability}) {
     * testing addons have been taken. File is kept since notes will be helpful when addons are
     * tested later.
     */
-    describe.skip("Einwohnerabfrage_HH", function () {
+    describe.only("Einwohnerabfrage_HH", function () {
         const selectors = {
             tools: By.xpath("//span[contains(.,'Werkzeuge')]"),
             toolResidentCounter: By.xpath("//a[contains(.,'Einwohneranzahl abfragen')]"),
