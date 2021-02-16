@@ -34,7 +34,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
 
             /* eslint-disable-next-line no-process-env */
             capability.build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
-            console.warn("Running \"" + capability.branch + "\"");
+            console.warn("Running \"" + capability.build + "\"");
             console.warn("===========================================================================");
             builder.withCapabilities(capability);
         }
