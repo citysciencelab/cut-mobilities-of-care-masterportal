@@ -99,6 +99,7 @@ function runTests (browsers) {
 
                     /* eslint-disable-next-line no-process-env */
                     completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");
+                    console.warn("Url: ", completeUrl);
 
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().
