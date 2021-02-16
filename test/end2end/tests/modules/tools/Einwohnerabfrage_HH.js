@@ -11,14 +11,12 @@ const webdriver = require("selenium-webdriver"),
  */
 async function EinwohnerAbfrageTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
-    console.warn("CoordTests url:", url);
-    console.warn("CoordTests isMaster:", testIsApplicable);
 
     if (testIsApplicable) {
         describe("Einwohnerabfrage_HH", function () {
             const selectors = {
                 tools: By.css("ul#root li.dropdown:nth-child(4)"),
-                //todo sprachunabhaengig machen
+                // todo sprachunabhaengig machen
                 toolResidentCounter: By.xpath("//a[contains(.,'Einwohneranzahl abfragen')]"),
                 modal: By.xpath("//div[@id='window']"),
                 viewport: By.css(".ol-viewport")
