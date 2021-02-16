@@ -15,7 +15,8 @@ pipelines:
                     - npm install
                     - cd ../sdpdownload
                     - npm install
-                    - cd
+                    - cd ..
+                    - cd ..
                     - pwd                   
                     - npm install
                     - npm run buildPortal
