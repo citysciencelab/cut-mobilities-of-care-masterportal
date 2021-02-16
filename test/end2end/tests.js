@@ -89,6 +89,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
             for (const suite of suites) {
+                console.warn("suite:", suite);
                 suite(e2eTestParams);
             }
         });
