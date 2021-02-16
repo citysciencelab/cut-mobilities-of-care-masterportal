@@ -10,6 +10,11 @@ pipelines:
                     - rm -rf ./addons/readme.txt
                     - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
                     - git clone https://DudekIn@bitbucket.org/geowerkstatt-hamburg/addons.git
+                    - cd addons/cosi
+                    - npm install
+                    - cd addons/sdpdownload
+                    - npm install
+                    - cd ..                    
                     - npm install
                     - npm run buildPortal
                     - apt-get update
