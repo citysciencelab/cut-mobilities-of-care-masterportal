@@ -1,5 +1,18 @@
 import {KML} from "ol/format.js";
-import {colorOptions} from "../constantsDraw";
+import getProjections from "./getProjections";
+import proj4 from "proj4";
+
+const projections = getProjections("EPSG:25832", "EPSG:4326", "32"),
+    colorOptions = [
+        {color: "blue", value: [55, 126, 184]},
+        {color: "black", value: [0, 0, 0]},
+        {color: "green", value: [77, 175, 74]},
+        {color: "grey", value: [153, 153, 153]},
+        {color: "orange", value: [255, 127, 0]},
+        {color: "red", value: [228, 26, 28]},
+        {color: "white", value: [255, 255, 255]},
+        {color: "yellow", value: [255, 255, 51]}
+    ];
 
 /**
  * Adds a unique styleId to each ExtendedData Element of the converted Features.
@@ -76,21 +89,100 @@ function getKmlHotSpotOfIconStyle (anchor) {
 }
 
 /**
- * Converts the features to KML while also saving its style information.
+ * Transforms the given line or polygon coordinates from EPSG:25832 to EPSG:4326.
  *
- * @param {Object} context actions context object.
- * @returns {string} The features written in KML as a String.
-*/
-export default async function convertFeaturesToKml ({state, dispatch}) {
-    const features = state.download.features,
-        featureCount = features.length,
+ * @param {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)} coords Coordinates.
+ * @param {Boolean} isPolygon Determines whether the given coordinates are a polygon or a line.
+ * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)} Transformed coordinates.
+ */
+function transform (coords, isPolygon) {
+    const transCoords = [];
+
+    // NOTE(roehlipa): The polygon parts look like they would not work as intended. Simply copied from the old version.
+    for (const value of coords) {
+        if (isPolygon) {
+            value.forEach(point => {
+                transCoords.push(transformPoint(point));
+            });
+            continue;
+        }
+        transCoords.push(transformPoint(value));
+    }
+
+    return isPolygon ? [transCoords] : transCoords;
+}
+
+/**
+ * Transforms the given point coordinates from EPSG:25832 to EPSG:4326.
+ *
+ * @param {number[]} coords Coordinates.
+ * @returns {number[]} Transformed coordinates.
+ */
+function transformPoint (coords) {
+    return proj4(projections.sourceProj, projections.destProj, coords);
+}
+
+/**
+ * Transforms the given geometry from EPSG:25832 to EPSG:4326.
+ * If the geometry is not an instance of ol/LineString, ol/Point or ol/Polygon an Alert is send to the user.
+ *
+ * @param {module:ol/geom/Geometry} geometry Geometry to be transformed.
+ * @returns {(Array<number>|Array<Array<number>>|Array<Array<Array<number>>>)|[]} The transformed Geometry or an empty array.
+ */
+function transformCoordinates (geometry) {
+    const coords = geometry.getCoordinates(),
+        type = geometry.getType();
+
+    switch (type) {
+        case "LineString":
+            return transform(coords, false);
+        case "Point":
+            return transformPoint(coords);
+        case "Polygon":
+            return transform(coords, true);
+        default:
+            // dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.download.unknownGeometry", {geometry: type}), {root: true});
+            return [];
+    }
+}
+
+/**
+ * convert features to string
+ * @param {ol.Feature[]} features - the used features
+ * @param {object} format of the features
+ * @return {String} convertedFeatures - The features converted to KML.
+ */
+function convertFeatures (features, format) {
+    const convertedFeatures = [];
+
+    for (const feature of features) {
+        const cloned = feature.clone(),
+            transCoords = transformCoordinates(cloned.getGeometry());
+
+        if (transCoords.length === 3 && transCoords[2] === 0) {
+            transCoords.pop();
+        }
+
+        cloned.getGeometry().setCoordinates(transCoords, "XY");
+        convertedFeatures.push(cloned);
+    }
+    return format.writeFeatures(convertedFeatures);
+}
+
+/**
+ * Converts the features to KML while also saving its style information.
+ * @param {ol.Feature[]} features - the used features
+ * @returns {String} The features written in KML as a String.
+ */
+export default async function convertFeaturesToKml (features) {
+    const featureCount = features.length,
         anchors = Array(featureCount).fill(undefined),
         format = new KML({extractStyles: true}),
         hasIconUrl = Array(featureCount).fill(false),
         pointColors = Array(featureCount).fill(undefined),
         skip = Array(featureCount).fill(false),
         textFonts = Array(featureCount).fill(undefined),
-        convertedFeatures = new DOMParser().parseFromString(await dispatch("convertFeatures", format), "text/xml");
+        convertedFeatures = new DOMParser().parseFromString(convertFeatures(features, format), "text/xml");
 
     features.forEach((feature, i) => {
         const type = feature.getGeometry().getType();
@@ -156,3 +248,8 @@ export default async function convertFeaturesToKml ({state, dispatch}) {
     });
     return new XMLSerializer().serializeToString(convertedFeatures);
 }
+
+export {
+    convertFeatures,
+    transformCoordinates
+};

@@ -57,6 +57,7 @@ export default {
         ...mapActions("Tools/SupplyCoord", [
             "checkPosition",
             "changedPosition",
+            "copyToClipboard",
             "positionClicked",
             "setCoordinates",
             "newProjectionSelected"
