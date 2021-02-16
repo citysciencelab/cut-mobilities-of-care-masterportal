@@ -117,7 +117,7 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesEastingExample"
-                                @input="validateLiveInput(coordinatesEasting)"
+                                @input="validateInput(coordinatesEasting)"
                             ><p
                                 v-if="eastingNoCoord"
                                 class="error-text"
@@ -146,7 +146,7 @@ export default {
                                 type="text"
                                 class="form-control"
                                 :placeholder="$t('modules.tools.searchByCoord.exampleAcronym') + coordinatesNorthingExample"
-                                @input="validateLiveInput(coordinatesNorthing)"
+                                @input="validateInput(coordinatesNorthing)"
                             ><p
                                 v-if="northingNoCoord"
                                 class="error-text"
