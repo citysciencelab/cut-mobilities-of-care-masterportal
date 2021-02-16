@@ -13,9 +13,10 @@ async function CoordTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe.only("Einwohnerabfrage_HH", function () {
+        describe("Einwohnerabfrage_HH", function () {
             const selectors = {
                 tools: By.css("ul#root li.dropdown:nth-child(4)"),
+                //todo sprachunabhaengig machen
                 toolResidentCounter: By.xpath("//a[contains(.,'Einwohneranzahl abfragen')]"),
                 modal: By.xpath("//div[@id='window']"),
                 viewport: By.css(".ol-viewport")
