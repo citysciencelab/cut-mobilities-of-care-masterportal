@@ -378,6 +378,15 @@ function isInitalLoadingFinished () {
     return typeof window.INITIAL_LOADING === "boolean" && window.INITIAL_LOADING === false;
 }
 /**
+ * Executes a basic auth on browserstack.
+ * @param {String} userName for login
+ * @param {String} password for login
+ * @returns {String} the execution script
+ */
+function basicAuth (userName, password) {
+    return "browserstack_executor: {\"action\": \"sendBasicAuth\", \"arguments\": {\"username\":\"" + userName + "\", \"password\": \"" + password + "\", \"timeout\": \"30000\"}}";
+}
+/**
  * @param {HTMLElement} img image to check
  * @returns {boolean} true if image loaded */
 function imageLoaded () {
@@ -520,6 +529,7 @@ module.exports = {
     areAllLayersHidden,
     areRegExpsInMeasureLayer,
     areAllFeaturesOfLayerVisible,
+    basicAuth,
     getMarkerPointCoord,
     isFullscreen,
     isLayerVisible,

@@ -1,41 +1,7 @@
-const WPS = Backbone.Model.extend({
-    defaults: {
-        xmlTemplate: "<wps:Execute xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"" +
-                    " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
-                    " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
-                    " xmlns:ows=\"http://www.opengis.net/ows/1.1\"" +
-                    " service=\"WPS\"" +
-                    " version=\"1.0.0\"" +
-                    " xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd\">" +
-                    "<ows:Identifier></ows:Identifier>" +
-                    "<wps:DataInputs></wps:DataInputs>" +
-                    "</wps:Execute>",
-        dataInputXmlTemplate: "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>"
-    },
-    initialize: function () {
-        const channel = Radio.channel("WPS");
+import {parse} from "ol/xml";
+import axios from "axios";
 
-        this.listenTo(channel, {
-            "request": this.request
-        }, this);
-    },
-
-    /**
-     * @desc request to be built and sent to WPS
-     * @param {string} wpsID The service id, defined in rest-services.json
-     * @param {string} identifier The functionality to be invoked by the wps
-     * @param {object} data Contains the Attributes to be sent
-     * @param {function} responseFunction function to be called
-     * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
-     * @returns {void}
-     */
-    request: function (wpsID, identifier, data, responseFunction, timeout) {
-        const xmlString = this.buildXML(identifier, data, this.get("xmlTemplate"), this.get("dataInputXmlTemplate")),
-            url = this.buildUrl(Radio.request("RestReader", "getServiceById", wpsID));
-
-        this.sendRequest(url, xmlString, responseFunction, timeout);
-    },
-
+export default {
     /**
      * @desc sends POST request to wps
      * @param {string} url url
@@ -45,41 +11,29 @@ const WPS = Backbone.Model.extend({
      * @returns {void}
      */
     sendRequest: function (url, xmlString, responseFunction, timeout) {
-        const xhr = new XMLHttpRequest(),
-            that = this;
-
-        xhr.open("POST", url);
-        xhr.timeout = timeout && typeof timeout === "number" ? timeout : 10000;
-
-        xhr.onload = function (event) {
-            that.handleResponse(event.currentTarget.responseText, xhr.status, responseFunction);
-        };
-        xhr.ontimeout = function () {
-            that.handleResponse({}, "timeout", responseFunction);
-        };
-        xhr.onabort = function () {
-            that.handleResponse({}, "abort", responseFunction);
-        };
-        xhr.send(xmlString);
+        axios({
+            method: "post",
+            url: url,
+            data: xmlString,
+            headers: {"Content-Type": "text/xml"},
+            timeout: timeout
+        }).then(response => {
+            return this.handleResponse(response, responseFunction);
+        });
     },
-
     /**
      * @desc handles wps response
-     * @param {string} responseText XML to be sent as String
-     * @param {integer} status status of xhr-request
+     * @param {string} response XML to be sent as String
      * @param {function} responseFunction function to be called
      * @returns {void}
      */
-    handleResponse: function (responseText, status, responseFunction) {
+    handleResponse: function (response, responseFunction) {
         let obj;
 
-        if (status === 200) {
-            obj = this.parseDataString(responseText);
+        if (response.status === 200) {
+            obj = this.parseDataString(response.data);
         }
-        else {
-            Radio.trigger("Alert", "alert", "Datenabfrage fehlgeschlagen. (Technische Details: " + status + ")");
-        }
-        responseFunction(obj, status);
+        responseFunction(obj, response.status);
     },
     /**
      * Parse xml from string and turn xml into object
@@ -87,7 +41,7 @@ const WPS = Backbone.Model.extend({
      * @returns {object} xml parsed as object
      */
     parseDataString: function (dataString) {
-        const xml = $.parseXML(dataString),
+        const xml = parse(dataString),
             obj = this.parseXmlToObject(xml);
 
         return obj;
@@ -98,25 +52,24 @@ const WPS = Backbone.Model.extend({
      * @returns {object} parsed xml as js object
      */
     parseXmlToObject: function (xml) {
-        const children = $(xml).children();
-        let obj = {};
+        let children = xml?.children,
+            obj = {};
 
-        // if  element does not have any children --> leaf
-        if (children.length === 0) {
-            obj = $(xml)[0] === undefined ? undefined : $(xml)[0].textContent;
+        if (children && typeof children.forEach !== "function") {
+            children = xml?.documentElement?.childNodes;
         }
-        else {
-            children.toArray().forEach(child => {
-                const localName = $(child)[0].localName;
+        if (children?.length === 0 || !children) {
+            obj = xml?.textContent ? xml?.textContent : xml?.innerHTML;
+        }
+        else if (children) {
+            children.forEach(child => {
+                const localName = child?.localName || child.innerHTML;
                 let old;
 
-                // if object does not have key create it
-                if (!obj.hasOwnProperty(localName)) {
+                if (!obj.hasOwnProperty(localName) && localName !== undefined) {
                     obj[localName] = this.parseXmlToObject(child);
                 }
-                // key already exists.
                 else {
-                    // if value is not an array, create array, push old value and then push new value
                     if (!Array.isArray(obj[localName])) {
                         old = obj[localName];
                         obj[localName] = [];
@@ -172,7 +125,6 @@ const WPS = Backbone.Model.extend({
         }
         return newDataString;
     },
-
     /**
      * @desc creates URL using model from rest-service
      * @param {object} restModel Model retrieved from rest-services.json
@@ -185,7 +137,31 @@ const WPS = Backbone.Model.extend({
             url = restModel.get("url");
         }
         return url;
-    }
-});
+    },
+    /**
+     * @desc request to be built and sent to WPS
+     * @param {string} wpsID The service id, defined in rest-services.json
+     * @param {string} identifier The functionality to be invoked by the wps
+     * @param {object} data Contains the Attributes to be sent
+     * @param {function} responseFunction function to be called
+     * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
+     * @returns {void}
+     */
+    wpsRequest: function (wpsID, identifier, data, responseFunction, timeout) {
+        const xmlTemplate = "<wps:Execute xmlns:wps=\"http://www.opengis.net/wps/1.0.0\"" +
+            " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
+            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"" +
+            " xmlns:ows=\"http://www.opengis.net/ows/1.1\"" +
+            " service=\"WPS\"" +
+            " version=\"1.0.0\"" +
+            " xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_request.xsd\">" +
+            "<ows:Identifier></ows:Identifier>" +
+            "<wps:DataInputs></wps:DataInputs>" +
+            "</wps:Execute>",
+            dataInputXmlTemplate = "<wps:Input><ows:Identifier></ows:Identifier><wps:Data><wps:LiteralData></wps:LiteralData></wps:Data></wps:Input>",
+            xmlString = this.buildXML(identifier, data, xmlTemplate, dataInputXmlTemplate),
+            url = this.buildUrl(Radio.request("RestReader", "getServiceById", wpsID));
 
-export default WPS;
+        this.sendRequest(url, xmlString, responseFunction, timeout);
+    }
+};

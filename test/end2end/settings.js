@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "87", acceptSslCerts: true, acceptInsecureCerts: true},
+        chrome: {"browserName": "chrome", version: "88", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
     /** TODO
@@ -14,10 +14,10 @@ const webdriver = require("selenium-webdriver"),
         // "600x800"
     ],
     configs = new Map([
-        ["basic", "/portal/basic"],
-        ["master", "/portal/master"],
-        ["custom", "/portal/masterCustom"],
-        ["default", "/portal/masterDefault"]
+        ["basic", "basic"],
+        ["master", "master"],
+        ["custom", "masterCustom"],
+        ["default", "masterDefault"]
     ]),
     modes = [
         "2D"
@@ -136,14 +136,16 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         "browserstack.console": "verbose",
         "browserstack.idleTimeout": 300,
         // Use this capability to specify a custom delay between the execution of Selenium commands
-        "browserstack.autoWait": 50
+        "browserstack.autoWait": 50,
+        // is used for autologin to a webpage with a predefined username and password (login to geoportal test)
+        "unhandledPromptBehavior": "ignore"
     };
 
     return [
         {
             ...base,
             "browserName": "Chrome",
-            "browser_version": "87.0",
+            "browser_version": "88.0",
             "os": "Windows",
             "os_version": "10"
         }/*
