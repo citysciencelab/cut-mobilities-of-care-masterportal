@@ -39,6 +39,14 @@ const mutations = {
         state.northingNoCoord = false;
         state.northingNoMatch = false;
     },
+    resetEastingMessages: (state) => {
+        state.eastingNoCoord = false;
+        state.eastingNoMatch = false;
+    },
+    resetNorthingMessages: (state) => {
+        state.northingNoCoord = false;
+        state.northingNoMatch = false;
+    },
     /**
      * Resets the coordinate values in the state.
      * @param {Object} state the state of searchByCoord-module
