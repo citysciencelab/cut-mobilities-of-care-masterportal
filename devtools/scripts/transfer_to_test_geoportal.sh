@@ -4,7 +4,9 @@ apt-get -qq install git-ftp
 git config git-ftp.user $LGV_TEST_FTP_USERNAME
 git config git-ftp.password $LGV_TEST_FTP_PASSWORD
 git config git-ftp.syncroot dist
-git config git-ftp.url ftp://$LGV_TEST_FTP_HOST
+git config git-ftp.url ftp://test.geoportal-hamburg.de/
+# do init once per ftp target-folder to create and transport the .git-ftp.log file containing the SHA1 of the latest commit, after that do always push.
+git ftp init -vv
 tmp=$BITBUCKET_BRANCH
 #replace slashes in branchname with underscores
 branchname=${tmp//[\/]/_}
