@@ -67,7 +67,7 @@ function isOB (mode) {
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
-    return url.split("?")[0].indexOf("\/" + configs.get("basic") + "_") > -1 || url.split("?")[0].endsWith(configs.get("basic"));
+    return url.split("?")[0].indexOf("\\/" + configs.get("basic") + "_") > -1 || url.split("?")[0].endsWith(configs.get("basic"));
 }
 
 /**
@@ -77,7 +77,7 @@ function isBasic (url) {
  */
 function isMaster (url) {
     // e.g. "https://test.geoportal-hamburg.de/master_BG-1320
-    return url.split("?")[0].indexOf("\/" + configs.get("master") + "_") > -1 || url.split("?")[0].endsWith(configs.get("master"));
+    return url.split("?")[0].indexOf("\\/" + configs.get("master") + "_") > -1 || url.split("?")[0].endsWith(configs.get("master"));
 }
 
 /**
@@ -86,7 +86,7 @@ function isMaster (url) {
  * @returns {boolean} whether configuration is default
  */
 function isDefault (url) {
-    return url.split("?")[0].indexOf("\/" + configs.get("default") + "_") > -1 || url.split("?")[0].endsWith(configs.get("default"));
+    return url.split("?")[0].indexOf("\\/" + configs.get("default") + "_") > -1 || url.split("?")[0].endsWith(configs.get("default"));
 }
 
 /**
@@ -95,7 +95,7 @@ function isDefault (url) {
  * @returns {boolean} whether configuration is custom
  */
 function isCustom (url) {
-    return url.split("?")[0].indexOf("\/" + configs.get("custom") + "_") > -1 || url.split("?")[0].endsWith(configs.get("custom"));
+    return url.split("?")[0].indexOf("\\/" + configs.get("custom") + "_") > -1 || url.split("?")[0].endsWith(configs.get("custom"));
 }
 
 /**
