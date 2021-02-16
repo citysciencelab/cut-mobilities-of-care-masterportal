@@ -1,7 +1,7 @@
 import WPS from "../../wps.js";
 import {expect} from "chai";
 
-describe("util/WPS", function () {
+describe("api/WPS", function () {
     describe("setXMLElement", function () {
         it("should return empty String if input strings are undefined", function () {
             expect(WPS.setXMLElement(undefined, undefined, undefined)).to.be.a("string").to.have.a.lengthOf(0);
@@ -42,8 +42,6 @@ describe("util/WPS", function () {
         });
     });
     describe("parseXmlToObject", function () {
-
-
         it("return empty object if input xml string is undefined", function () {
             expect(WPS.parseXmlToObject(undefined)).to.be.undefined;
         });
@@ -53,7 +51,6 @@ describe("util/WPS", function () {
         it("return empty object if input xml string is a HTMLDocument", function () {
             const documentString = "<xml><data1>test</data1><data2>123</data2></xml>",
                 htmlDocument = new DOMParser().parseFromString(documentString, "text/xml");
-
 
             expect(WPS.parseXmlToObject(htmlDocument)).to.deep.equal({data1: "test", data2: "123"});
         });
