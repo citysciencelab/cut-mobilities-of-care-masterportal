@@ -36,6 +36,7 @@ const state = {
     resizableWindow: true,
     isVisibleInMenu: true,
     deactivateGFI: false,
+    initialWidth: 500,
     selectedSourceLayer: null,
     selectedTargetLayer: null,
     savedUrl: null,

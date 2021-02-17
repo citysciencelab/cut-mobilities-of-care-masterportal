@@ -184,6 +184,7 @@ export default {
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
+        :initialWidth="initialWidth"
     >
         <template v-slot:toolBody>
             <div
@@ -271,6 +272,7 @@ export default {
                         id="layer-analysis-select-target"
                         v-model="selectedTargetLayer"
                         class="font-arial form-control input-sm pull-left"
+                        :disabled="!selectedSourceLayer || !bufferRadius"
                     >
                         <option
                             v-for="layer in selectOptions"
