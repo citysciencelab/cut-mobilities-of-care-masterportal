@@ -13,7 +13,6 @@ branchname=${tmp//[\/]/_}
 STR=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
 echo "$STR"  >> .git-ftp-include
 git add .git-ftp-include
-git status
 git commit .git-ftp-include -m "Add new content for e2e test"
 git status
 git ftp push -b $BITBUCKET_BRANCH --all
