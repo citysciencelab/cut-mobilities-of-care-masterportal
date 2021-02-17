@@ -14,5 +14,6 @@ STR=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCusto
 echo "$STR"  >> .git-ftp-include
 git add .git-ftp-include
 git commit .git-ftp-include -m "Add new content for e2e test"
+git commit package-lock.json -m "is sometimes modified after install"
 git status
 git ftp push -b $BITBUCKET_BRANCH --all
