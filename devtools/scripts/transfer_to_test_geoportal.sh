@@ -15,5 +15,5 @@ git commit .git-ftp-include -m "Add new content for e2e test"
 git commit package-lock.json -m "is sometimes modified after install"
 git status
 # do init once per ftp target-folder to create and transport the .git-ftp.log file containing the SHA1 of the latest commit, after that do always push.
-git ftp init -vv
-#git ftp push -b $BITBUCKET_BRANCH --all
+#git ftp init -vv
+git ftp push -b $BITBUCKET_BRANCH --all
