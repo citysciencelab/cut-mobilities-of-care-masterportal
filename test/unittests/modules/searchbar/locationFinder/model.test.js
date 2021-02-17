@@ -210,7 +210,7 @@ describe("modules/searchbar/locationFinder", function () {
                                 expect(value).to.deep.include({
                                     type: "Straßenname",
                                     glyphicon: "glyphicon-road",
-                                    coordinate: [511168.58, 5403876.51, 511480.12, 5404253.75]
+                                    coordinate: [511168.58, 5403876.51, 511480.12, 5403876.51, 511480.12, 5404253.75, 511168.58, 5404253.75, 511168.58, 5403876.51]
                                 });
                                 numberOfPushedItems++;
                                 break;
