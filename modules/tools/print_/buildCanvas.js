@@ -31,7 +31,14 @@ const BuildCanvasModel = Backbone.Model.extend(/** @lends BuildCanvasModel.proto
         }.bind(this));
 
         canvasLayerList.forEach(layer => {
-            if (layer !== undefined) {
+            if (layer instanceof Vector) {
+                const visibleFeatures = layer.getSource().getFeatures().filter(feature => feature.get("isVisible"));
+
+                if (visibleFeatures.length) {
+                    canvasLayer = layer;
+                }
+            }
+            else if (layer !== undefined) {
                 canvasLayer = layer;
             }
             return canvasLayer;

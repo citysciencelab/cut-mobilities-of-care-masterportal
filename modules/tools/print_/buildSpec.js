@@ -193,10 +193,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                     return feature.getStyle().getZIndex();
                 }
                 return 0;
-            });
+            }),
+            visibleFeatures = features.filter(feature => feature.get("isVisible"));
 
-        if (features.length > 0) {
-            return this.buildVector(layer, features);
+        if (visibleFeatures.length > 0) {
+            return this.buildVector(layer, visibleFeatures);
         }
 
         return undefined;
