@@ -915,7 +915,12 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             return;
         }
         else if (hit && hit.hasOwnProperty("coordinate")) {
-            store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            if (hit.coordinate.length === 2) {
+                store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            }
+            else {
+                store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
+            }
             return;
         }
         else if (hit && hit.hasOwnProperty("type") && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {
