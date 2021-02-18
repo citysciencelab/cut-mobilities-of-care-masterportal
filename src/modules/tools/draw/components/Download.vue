@@ -10,6 +10,8 @@ export default {
     },
     mounted () {
         this.setDownloadSelectedFormat(this.download.preSelectedFormat);
+        this.setDownloadFeatures();
+
     },
     methods: {
         ...mapMutations("Tools/Draw", constants.keyStore.mutations),
