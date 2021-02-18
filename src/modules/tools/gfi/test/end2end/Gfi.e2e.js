@@ -11,7 +11,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function GfiTests ({builder, url, resolution, capability}) {
-    describe.only("Gfi", function () {
+    describe("Gfi", function () {
         /*
         NOTE: Many of the tests currently do not work consistently right now. They are commented out
         in case there's a later repair attempt.
