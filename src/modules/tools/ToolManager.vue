@@ -14,21 +14,21 @@ export default {
         ...mapGetters(["menuConfig"]),
         ...mapGetters("Tools", ["configuredTools"]),
         toolsInSidebar: function () {
-            const res = {};
+            const toolsInSidebar = {};
 
             this.configuredTools.forEach(tool => {
                 if (typeof this.$store.state.Tools[tool.component.name] !== "undefined") {
-                    res[tool.component.name] = this.$store.state.Tools[tool.component.name].renderToWindow !== true;
+                    toolsInSidebar[tool.component.name] = this.$store.state.Tools[tool.component.name].renderToWindow === false;
                 }
                 else if (typeof this.$store.state[tool.component.name] !== "undefined") {
-                    res[tool.component.name] = this.$store.state[tool.key].renderToWindow !== true;
+                    toolsInSidebar[tool.component.name] = this.$store.state[tool.key].renderToWindow === false;
                 }
                 else {
-                    res[tool.component.name] = false;
+                    toolsInSidebar[tool.component.name] = false;
                 }
             });
 
-            return res;
+            return toolsInSidebar;
         }
     },
     created () {
