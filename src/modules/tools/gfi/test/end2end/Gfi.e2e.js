@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {clickFeature, logBrowserstackUrlToTest} = require("../../../library/utils"),
-    {isMaster} = require("../../../settings"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {clickFeature, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {isMaster} = require("../../../../../../test/end2end/settings"),
     {By, until} = webdriver;
 
 /**
