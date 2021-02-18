@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import {config, shallowMount, createLocalVue} from "@vue/test-utils";
+import {config, mount, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import Table from "../../../components/templates/Table.vue";
 import sinon from "sinon";
@@ -48,7 +48,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
 
 
     it("should have a title", () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
             propsData,
             components,
             computed,
@@ -56,7 +56,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             localVue
         });
 
-        expect(wrapper.find(".gfi-title").text()).to.be.equal("Hallo");
+        expect(wrapper.find(".tool-window-heading-title span").text()).to.be.equal("Hallo");
     });
 
     it("should have the child component Default (-Theme)", () => {
@@ -72,7 +72,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
     });
 
     it("should have a close button", async () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
             propsData,
             components,
             computed,
@@ -80,18 +80,18 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
             localVue
         });
 
-        expect(wrapper.find("span.glyphicon-remove").exists()).to.be.true;
+        expect(wrapper.find("span.glyphicon.glyphicon-remove").exists()).to.be.true;
     });
 
     it("should emitted close event if button is clicked", async () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
                 propsData,
                 components,
                 computed,
                 store,
                 localVue
             }),
-            button = wrapper.find("span.glyphicon-remove");
+            button = wrapper.find("span.glyphicon.glyphicon-remove");
 
         await button.trigger("click");
         expect(wrapper.emitted()).to.have.property("close");
@@ -99,14 +99,14 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
     });
 
     it("should not emitted close event if clicked inside the content", async () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
                 propsData,
                 components,
                 computed,
                 store,
                 localVue
             }),
-            modal = wrapper.find(".gfi-content");
+            modal = wrapper.find(".vue-tool-content-body");
 
         await modal.trigger("click");
         expect(wrapper.emitted()).to.not.have.property("close");
@@ -114,7 +114,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
     });
 
     it("should rotates the gfi by 90 degrees if 'rotate-button' is clicked", async () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
                 propsData,
                 components,
                 computed,
@@ -128,7 +128,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
     });
 
     it("should rotates the gfi to the starting position if 'rotate-button' clicked four times", async () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
                 propsData,
                 components,
                 computed,
@@ -145,7 +145,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
     });
 
     it("should render the footer slot within .gfi-footer", () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
                 propsData,
                 slots: {
                     footer: "<div class=\"gfi-footer\">Footer</div>"
@@ -161,7 +161,7 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
     });
 
     it("should set the movend position for the gfi-header container", () => {
-        const wrapper = shallowMount(Table, {
+        const wrapper = mount(Table, {
                 propsData,
                 components,
                 computed,

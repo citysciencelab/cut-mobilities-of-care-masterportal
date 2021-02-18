@@ -48,14 +48,14 @@ export default {
         class="tool-window-vue"
         :style="{width: initialToolWidth}"
     >
-        <div id="win-heading">
+        <div class="tool-window-heading">
             <slot name="leftOfTitle" />
 
             <BasicDragHandle
                 targetSel=".tool-window-vue"
                 class="heading-element flex-grow"
             >
-                <p id="win-heading-title">
+                <p class="tool-window-heading-title">
                     <slot name="title" />
                 </p>
             </BasicDragHandle>
@@ -70,7 +70,7 @@ export default {
             </div>
         </div>
 
-        <div id="vue-tool-content-body">
+        <div class="vue-tool-content-body">
             <slot name="body" />
         </div>
 
@@ -116,7 +116,7 @@ export default {
         #basic-resize-handle-bl { bottom:0px; left:0px;}
     }
 
-    #win-heading{
+    .tool-window-heading{
         padding: 12px 10px 12px 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_1;
@@ -144,13 +144,13 @@ export default {
         }
     }
 
-    #win-heading-title {
+    .tool-window-heading-title {
         margin:0;
         overflow:hidden;
         white-space: nowrap;
     }
 
-    #vue-tool-content-body {
+    .vue-tool-content-body {
         position: relative;
         height: calc(100% - 58px);
         width: 100%;

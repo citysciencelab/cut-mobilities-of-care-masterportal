@@ -21,7 +21,8 @@ const state = {
     centerMapToClickPoint: false,
     showMarker: true,
     highlightVectorRules: null,
-    isVisibleInMenu: true
+    isVisibleInMenu: true,
+    renderToWindow: true
 };
 
 export default state;

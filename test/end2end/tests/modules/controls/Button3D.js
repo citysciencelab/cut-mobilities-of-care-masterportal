@@ -213,6 +213,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]"))).to.exist;
+                // korrektur mit .tool-window-heading-title span?
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[@class='gfi-title'][contains(.,'Gebäude LoD2')]"))).to.exist;
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'1000')]"))).to.exist;
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'31001_3090')]"))).to.exist;
