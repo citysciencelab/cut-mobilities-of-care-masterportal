@@ -83,6 +83,7 @@ export default {
                         @change="setFeaturesVisibility(value, $event.target.checked)"
                     > {{ key }}
                 </label>
+                <hr>
             </div>
         </template>
     </form>

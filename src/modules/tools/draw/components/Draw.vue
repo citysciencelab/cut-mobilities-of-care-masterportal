@@ -374,7 +374,6 @@ export default {
                     :filterList="filterList"
                     :features="layer.getSource().getFeatures()"
                 />
-                <hr>
             </template>
             <form
                 class="form-horizontal"
