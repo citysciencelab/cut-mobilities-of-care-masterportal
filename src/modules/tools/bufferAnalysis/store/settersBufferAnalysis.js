@@ -3,7 +3,6 @@
  * Also unselects all previous selected layers and
  * shows buffers if a buffer radius was provided previously
  *
- * @param {Object} context - context object for actions
  * @param {Object|String} selectedSourceLayer - layer object or ID string to select corresponding layer
  *
  * @throws Error
@@ -46,7 +45,6 @@ function applySelectedSourceLayer ({getters, commit, dispatch}, selectedSourceLa
  * Selects given layer by object or ID
  * triggers also the intersection check action
  *
- * @param {Object} context - context object for actions
  * @param {Object|String} selectedTargetLayer - layer object or ID string to select corresponding layer
  *
  * @throws Error
@@ -73,7 +71,6 @@ function applySelectedTargetLayer ({commit, getters, dispatch}, selectedTargetLa
 /**
  * Applies the input buffer radius which triggers the show buffer action
  *
- * @param {Object} context - context object for actions
  * @param {Number} selectedBufferRadius - layer object or ID string to select corresponding layer
  *
  * @return {void}

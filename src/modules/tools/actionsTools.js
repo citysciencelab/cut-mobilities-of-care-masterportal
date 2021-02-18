@@ -102,7 +102,7 @@ const actions = {
      * @returns {void}
      */
     setToolInitValues: ({rootState, commit, dispatch}, toolName) => {
-        if (rootState.queryParams instanceof Object && rootState?.queryParams?.initvalues) {
+        if (rootState?.queryParams?.initvalues) {
             const toolState = JSON.parse(rootState?.queryParams?.initvalues);
 
             for (const state in toolState) {

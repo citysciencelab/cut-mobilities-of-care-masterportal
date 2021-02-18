@@ -123,7 +123,7 @@ export default {
         },
         /**
          * Watches the value of selectedSourceLayer
-         * deselects the previous selected source layer if it exists and the new selection falsy
+         * deselects the previous selected source layer if it exists and the new selected layer is falsy
          * @param {Object} layer the new selected source layer
          * @param {Object} prev the previous selected source layer
          * @returns {void}
@@ -136,7 +136,7 @@ export default {
     },
     /**
      * Lifecycle hook:
-     * - initializes the JTST parser
+     * - initializes the JSTS parser
      * - loads available options for selections
      * - adds a "close"-Listener to close the tool.
      * @returns {void}
@@ -151,22 +151,16 @@ export default {
         ...mapActions("Tools/BufferAnalysis", Object.keys(actions)),
         ...mapActions("Map", ["toggleLayerVisibility"]),
         /**
-         * Triggers the copyToClipboard util
-         * @param {Event} evt the click event
-         * @returns {void}
-         */
-        copyUrl (evt) {
-            Radio.trigger("Util", "copyToClipboard", evt.currentTarget);
-        },
-        /**
          * Sets active to false.
          * @returns {void}
          */
         close () {
+            this.removeGeneratedLayers();
+            this.resetModule();
             this.setActive(false);
             // TODO replace trigger when ModelList is migrated
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = getComponent(this.$store.state.Tools.BufferAnalysis.id);
+            const model = getComponent(this.id);
 
             if (model) {
                 model.set("isActive", false);
@@ -290,7 +284,7 @@ export default {
                         class="pull-right"
                         :class="!selectedSourceLayer ? 'btn-lgv-grey' : 'btn-primary'"
                         :disabled="!selectedSourceLayer"
-                        @click="resetModule()"
+                        @click="resetModule"
                     >
                         {{ $t("modules.tools.bufferAnalysis.clearBtn") }}
                     </button>
@@ -302,20 +296,22 @@ export default {
                         class="pull-right"
                         :class="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius ? 'btn-lgv-grey' : 'btn-primary'"
                         :disabled="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius"
-                        @click="buildUrlFromToolState()"
+                        @click="buildUrlFromToolState"
                     >
                         {{ $t("modules.tools.bufferAnalysis.saveBtn") }}
                     </button>
                 </div>
-                <input
-                    id="layer-analysis-saved-url"
-                    v-model="savedUrl"
-                    class="col-md-12 col-sm-12 form-group form-group-sm"
-                    readonly
-                    :hidden="!savedUrl"
-                    type="text"
-                    @click="copyUrl"
-                >
+                <div class="col-md-12 col-sm-12 form-group form-group-sm">
+                    <input
+                        id="layer-analysis-saved-url"
+                        v-model="savedUrl"
+                        class="col-md-12 col-sm-12 form-group form-group-sm"
+                        readonly
+                        :hidden="!savedUrl"
+                        type="text"
+                        @click="copyToClipboard($event.currentTarget)"
+                    >
+                </div>
             </div>
         </template>
     </Tool>

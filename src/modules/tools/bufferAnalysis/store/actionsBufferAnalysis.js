@@ -10,12 +10,19 @@ const actions = {
     ...initializers,
     ...setters,
     /**
+     * Dispatches the action to copy the given element to the clipboard.
+     *
+     * @param {Element} el element to copy
+     * @returns {void}
+     */
+    copyToClipboard ({dispatch}, el) {
+        dispatch("copyToClipboard", el, {root: true});
+    },
+    /**
      * Triggers several actions to check for intersections.
      * Includes checks between created buffers and features of selected target layer
      * Also checks again for intersections between buffers and intersection polygons
      * Finally adds new intersection features to map
-     *
-     * @param {Object} context - context object for actions
      *
      * @return {void}
      */
@@ -31,8 +38,6 @@ const actions = {
     },
     /**
      * Creates and shows buffers associated to features of selected source layer
-     *
-     * @param {Object} context - context object for actions
      *
      * @return {void}
      */
@@ -72,8 +77,6 @@ const actions = {
      * Removes generated result layer and buffer layer
      * Also unsets the intersections and result features arrays
      *
-     * @param {Object} context - context object for actions
-     *
      * @return {void}
      */
     removeGeneratedLayers ({commit, getters, rootGetters}) {
@@ -87,8 +90,6 @@ const actions = {
     /**
      * Resets the module to default settings
      * Also restores the opacity for selected source and target layers
-     *
-     * @param {Object} context - context object for actions
      *
      * @return {void}
      */
@@ -110,7 +111,6 @@ const actions = {
      * Checks intersections between buffers and features of the selected target layer
      * Also triggers the actions to create intersection polygons and to add the new intersection result features
      *
-     * @param {Object} context - context object for actions
      * @param {Array} bufferFeatures - array with buffer features
      *
      * @return {void}
@@ -159,7 +159,6 @@ const actions = {
      * and adds the calculated polygon to the intersections array.
      * Also transfers the given properties to the new polygon.
      *
-     * @param {Object} context - context actions object
      * @param {Object} payload - payload for the action
      * @param {Polygon} payload.sourcePoly - source polygon
      * @param {Polygon} payload.targetPoly - target polygon
@@ -185,7 +184,6 @@ const actions = {
      * Checks intersections between buffers and already calculated intersections
      * Also triggers the action to create a new intersection polygon and removes the previous calculated intersection
      *
-     * @param {Object} context - context object for actions
      * @param {Array} bufferFeatures - array with features
      *
      * @return {void}
@@ -198,15 +196,16 @@ const actions = {
 
                 if (sourcePoly.intersects(intersection)) {
                     dispatch("generateIntersectionPolygon", {properties: intersection.properties, sourcePoly, targetPoly: intersection});
-                    object.splice(key, 1);
+
+                    if (getters.resultType === ResultType.WITHIN) {
+                        object.splice(key, 1);
+                    }
                 }
             });
         });
     },
     /**
      * Converts intersection polygons to Open layers features
-     *
-     * @param {Object} context - context object for actions
      *
      * @return {void}
      */
@@ -227,8 +226,6 @@ const actions = {
     /**
      * Creates a new layer for the result features and adds it to the map
      * Style and GFI config is transferred from target layer
-     *
-     * @param {Object} context - context object for actions
      *
      * @return {void}
      */
@@ -263,8 +260,6 @@ const actions = {
     /**
      * Verifies if all features of a given layerId are loaded
      *
-     * @param {Object} context - context object for actions
-     *
      * @return {void}
      */
     buildUrlFromToolState ({commit, getters}) {
@@ -286,7 +281,6 @@ const actions = {
      * Verifies if all features of a given layerId are loaded
      * and waits if the layer has not been loaded previously
      *
-     * @param {Object} context - context object for actions
      * @param {String} layerId - the layer ID to check loaded status
      *
      * @return {void}

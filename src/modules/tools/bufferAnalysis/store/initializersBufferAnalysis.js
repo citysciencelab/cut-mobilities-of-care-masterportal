@@ -11,8 +11,6 @@ import {
 /**
  * Injects OpenLayers geom classes to JSTS Parser
  *
- * @param {Object} context - context object for actions
- *
  * @returns {void}
  */
 function initJSTSParser ({getters}) {
@@ -29,8 +27,6 @@ function initJSTSParser ({getters}) {
 }
 /**
  * Initially loads all available options for select elements
- *
- * @param {Object} context - context object for actions
  *
  * @return {void}
  */
