@@ -55,19 +55,13 @@ export default {
             this.$emit("close");
         },
         rotate () {
-            const width = this.$el.getElementsByClassName("tool-window-heading")[0].offsetWidth,
-                headerHeight = this.$el.getElementsByClassName("tool-window-heading")[0].offsetHeight;
+            const className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim();
 
             this.rotateAngle = this.rotateAngle - 90;
             if (this.rotateAngle === -360) {
                 this.rotateAngle = 0;
             }
-
-            this.$el.style.transform = "rotate(" + this.rotateAngle + "deg)";
-            this.$el.style.WebkitTransform = width - 20 + "px " + headerHeight + "px";
-            this.$el.style.msTransform = width - 20 + "px " + headerHeight + "px";
-            this.$el.style.MozTransform = width - 20 + "px " + headerHeight + "px";
-
+            this.$el.className = className + " rotate" + this.rotateAngle;
         }
     }
 };
@@ -75,7 +69,7 @@ export default {
 
 <template>
     <ToolWindow
-        class="gfi-detached-table"
+        class="gfi-detached-table rotate0"
         @close="close"
     >
         <template v-slot:rightOfTitle>
@@ -103,11 +97,11 @@ export default {
 @font_family_1: "MasterPortalFont";
 @background_color_1: #F2F2F2;
 @background_color_2: #646262;
+
 .gfi .tool-window-vue
 {
   max-width: 360px !important;
 }
-
 .gfi-detached-table {
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
@@ -165,6 +159,18 @@ export default {
     span.glyphicon.glyphicon-remove::before {
         color: @background_color_1;
     }
+}
+.rotate0{
+    transform: rotate(0deg);
+}
+.rotate-90{
+    transform: rotate(-90deg);
+}
+.rotate-180{
+    transform: rotate(-180deg);
+}
+.rotate-270{
+    transform: rotate(-270deg);
 }
 
 </style>
