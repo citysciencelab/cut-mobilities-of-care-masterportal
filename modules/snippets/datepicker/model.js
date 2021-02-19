@@ -12,6 +12,7 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
      * @property {Date} preselectedValue Initial value.
      * @property {(Boolean|Number)} multidate Enable multidate picking
      * @property {Boolean} selectWeek Enable week picking
+     * @property {Boolean} readOnly the input from the datepicker is read only or not
      * @property {Date} startDate earliest selectable date
      * @property {Date} endDate latest selectable date
      * @param {object} attributes Model attributes to be used in this view
@@ -19,7 +20,8 @@ const DatepickerModel = SnippetModel.extend(/** @lends DatepickerModel.prototype
     defaults: Object.assign({}, SnippetModel.prototype.defaults, {
         preselectedValue: null,
         multidate: false,
-        selectWeek: false
+        selectWeek: false,
+        readOnly: true
     }),
 
     /**

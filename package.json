@@ -6,7 +6,7 @@
     "url": "https://www.masterportal.org"
   },
   "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
-  "version": "2.6.1-dev",
+  "version": "2.6.2-dev",
   "license": "MIT",
   "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
@@ -22,11 +22,19 @@
     "test:vue:watch": "npm run test:vue -- --watch",
     "test:all": "npm run test && npm run test:vue",
     "test:all:watch": "npm-run-all --parallel test:watch test:vue:watch",
-    "browsertestWithServer": "env NODE_ENV=e2eTest env browser=bs webpack-dev-server --config devtools/webpack.browsertest.js",
-    "browsertest": "./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
+    "browsertestWithDevServer": "env NODE_ENV=e2eTest env browser=bs webpack-dev-server --config devtools/webpack.browsertest.js",
+    "browsertestOnGeoportalTest": "env browser=bs env urlPart=/ env url=https://test.geoportal-hamburg.de ./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
+    "browsertest": "env urlPart=portal/ ./node_modules/.bin/mocha ./test/end2end/TestRunner.js",
     "build": "node devtools/tasks/build.js",
+    "buildPortal": "node devtools/tasks/buildPortal.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",
-    "buildJsDoc": "node devtools/tasks/buildJsDoc.js"
+    "buildJsDoc": "node devtools/tasks/buildJsDoc.js",
+    "versionHotfix": "npm version patch && git push --tags",
+    "versionMinor": "npm version minor && git push --tags",
+    "versionMajor": "npm version major && git push --tags",
+    "versionHotfix:all": "npm run versionHotfix && cd addons && npm run versionHotfix && cd .. && cd portalconfigs && npm run versionHotfix && cd ..",
+    "versionMinor:all": "npm run versionMinor && cd addons && npm run versionMinor && cd .. && cd portalconfigs && npm run versionMinor && cd ..",
+    "versionMajor:all": "npm run versionMajor && cd addons && npm run versionMajor && cd .. && cd portalconfigs && npm run versionMajor && cd .."
   },
   "dependencies": {
     "@panter/vue-i18next": "^0.15.2",

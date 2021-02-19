@@ -17,11 +17,14 @@ export default {
             const res = {};
 
             this.configuredTools.forEach(tool => {
-                if (typeof this.menuConfig[tool.key] !== "undefined") {
-                    res[tool.key] = this.menuConfig[tool.key].renderToWindow === false;
+                if (typeof this.$store.state.Tools[tool.component.name] !== "undefined") {
+                    res[tool.component.name] = this.$store.state.Tools[tool.component.name].renderToWindow !== true;
                 }
-                else if (typeof this.menuConfig.tools !== "undefined") {
-                    res[tool.key] = this.menuConfig.tools.children[tool.key].renderToWindow === false;
+                else if (typeof this.$store.state[tool.component.name] !== "undefined") {
+                    res[tool.component.name] = this.$store.state[tool.key].renderToWindow !== true;
+                }
+                else {
+                    res[tool.component.name] = false;
                 }
             });
 
@@ -62,7 +65,7 @@ export default {
         <template v-for="tool in configuredTools">
             <component
                 :is="tool.component"
-                v-if="toolsInSidebar[tool.key] === showInSidebar"
+                v-if="toolsInSidebar[tool.component.name] === showInSidebar"
                 :key="'tool-' + tool.key"
             />
         </template>

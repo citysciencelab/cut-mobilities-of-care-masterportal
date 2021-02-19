@@ -1,7 +1,5 @@
 const {until, By} = require("selenium-webdriver"),
-    {closeSingleAlert} = require("./utils"),
-    {isMaster} = require("../settings"),
-    {getResolution, isInitalLoadingFinished} = require("./scripts");
+    {basicAuth, getResolution, isInitalLoadingFinished} = require("./scripts");
 
 /**
  * Activates 3D mode for opened Masterportal.
@@ -43,7 +41,11 @@ async function prepareOB (driver) {
 async function loadUrl (driver, url, mode) {
     await driver.get(url);
 
-    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000);
+    if (url.indexOf("localhost") === -1) {
+        driver.executeScript(basicAuth("lgv", "test"));
+    }
+
+    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000).catch(err => console.warn("isInitalLoadingFinished err:", err));
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
     await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
@@ -92,11 +94,6 @@ async function initDriver (builder, url, resolution, mode) {
     const driver = await getUnnavigatedDriver(builder, resolution);
 
     await loadUrl(driver, url, mode);
-
-    if (isMaster(url)) {
-        await closeSingleAlert(driver);
-    }
-
     return driver;
 }
 

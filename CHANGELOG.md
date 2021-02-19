@@ -21,6 +21,7 @@
 - Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 - Migrated the Contact Tool from Backbone.js to Vue.js. In doing so, the functionality of the config parameter 'deleteAfterSend' was split into two parameters; 'closeAfterSend' and 'deleteAfterSend'.
+- WPS migrated to vue.
 
 ### Deprecated
 - Deprecated the parameter 'serviceID' for the contact tool; 'serviceId' should be used instead.

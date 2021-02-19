@@ -35,9 +35,7 @@ async function convertFeatures ({state, dispatch}, format) {
  * @returns {void}
  */
 function fileDownloaded ({state, commit}) {
-    commit("setDownloadEnabled");
-    commit("setDownloadFileName", "");
-    commit("setDownloadSelectedFormat", state.download.preSelectedFormat);
+    commit("setDownloadSelectedFormat", state.download.selectedFormat);
 }
 
 /**
@@ -111,9 +109,15 @@ function setDownloadFeatures ({state, commit, dispatch}) {
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
+        // If the feature is invisible from filter, the style will be reset by printing.
+        if (!feature.get("isVisible") && feature.get("invisibleStyle")) {
+            feature.setStyle(feature.get("invisibleStyle"));
+        }
+
         if (geometry instanceof Circle) {
             feature.setGeometry(fromCircle(geometry));
         }
+
         downloadFeatures.push(feature);
     });
 
