@@ -68,71 +68,6 @@ export default {
             this.$el.style.msTransform = width - 20 + "px " + headerHeight + "px";
             this.$el.style.MozTransform = width - 20 + "px " + headerHeight + "px";
 
-        },
-
-        /**
-         * Calculates the new position for the gfi-header container by touchmove event.
-         * draggable() does not work for Touch Event, for that reason this function must be adjusted, so that is movable within viewport.
-         * @param {Event} evt The touch event.
-         * @returns {void}
-         */
-        move: function (evt) {
-            const touch = evt.touches[0],
-                headerWidth = this.$el.getElementsByClassName("gfi-header")[0].offsetWidth,
-                width = this.$el.getElementsByClassName("gfi-header")[0].offsetWidth / 2,
-                height = this.$el.offsetHeight,
-                headerHeight = this.$el.getElementsByClassName("gfi-header")[0].offsetHeight,
-                rotAngle = this.rotateAngle,
-                transformOrigin = headerWidth - 20 + "px " + headerHeight + "px",
-                map = document.getElementById("map"),
-                gfiConent = this.$el.getElementsByClassName("gfi-content")[0];
-            let x,
-                y;
-
-            if (rotAngle === 0) {
-                x = touch.clientX - width - 20;
-                y = touch.clientY - headerHeight;
-                if (x >= 0 && x < (map.offsetWidth - gfiConent.offsetWidth - 10) && y >= 0 && y < (map.offsetHeight - gfiConent.offsetHeight - 75)) {
-                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
-                }
-            }
-            else if (rotAngle === -90) {
-                x = touch.clientX - headerWidth + 20;
-                y = touch.clientY - width + 20;
-                if (x + height >= 0 && x < (map.offsetWidth - 1.5 * headerWidth - 75) && y >= 0 + headerHeight && y < (map.offsetHeight - headerWidth - 10)) {
-                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
-                }
-            }
-            else if (rotAngle === -180) {
-                x = touch.clientX - headerWidth - width + 20;
-                y = touch.clientY - headerHeight;
-                if (x + 1.5 * width >= 0 && x < (map.offsetWidth - 2 * headerWidth) && y - height >= 0 && y < (map.offsetHeight - height / 2)) {
-                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
-                }
-            }
-            else if (rotAngle === -270) {
-                x = touch.clientX - headerWidth;
-                y = touch.clientY + width - 20;
-                if (x + height / 2 - headerHeight >= 0 && x < (map.offsetWidth - headerWidth - 50) && y - headerWidth >= 0 && y < (map.offsetHeight - headerWidth + width)) {
-                    this.movedGfiHeaderPositionBy(x, y, transformOrigin);
-                }
-            }
-        },
-
-        /**
-         * Sets the position on the screen for the gfi-Header container by move that.
-         * @param {Number} x The position on the x-axis.
-         * @param {Number} y The position on the y-axis.
-         * @param {String} transformOrigin The transform origin.
-         * @returns {void}
-         */
-        movedGfiHeaderPositionBy: function (x, y, transformOrigin) {
-            this.$el.style.left = x + "px";
-            this.$el.style.top = y + "px";
-            this.$el.style.msTransformOrigin = transformOrigin;
-            this.$el.style.webkitTransformOrigin = transformOrigin;
-            this.$el.style.mozTransformOrigin = transformOrigin;
-            this.$el.style.right = "inherit";
         }
     }
 };
@@ -168,6 +103,10 @@ export default {
 @font_family_1: "MasterPortalFont";
 @background_color_1: #F2F2F2;
 @background_color_2: #646262;
+.gfi .tool-window-vue
+{
+  max-width: 360px !important;
+}
 
 .gfi-detached-table {
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
@@ -175,6 +114,7 @@ export default {
     background-color:  @background_color_2;
     font-family: @font_family_1;
     color: @color_1;
+    touch-action: pan-x pan-y;
     .tool-window-heading{
         padding: 0;
         border-bottom: 1px solid @color_1;
@@ -192,6 +132,22 @@ export default {
     .vue-tool-content-body {
         max-height: 175px;
         overflow-x: hidden;
+    }
+    .vue-tool-content-body::-webkit-scrollbar {
+        width: 20px;
+    }
+    .vue-tool-content-body::-webkit-scrollbar-track {
+        border: 5px solid transparent;
+        border-radius: 12px;
+        background-clip: content-box;
+        background-color: #d3d3d3;
+    }
+
+    .vue-tool-content-body::-webkit-scrollbar-thumb {
+        background-color: #003063;
+        border: 6px solid transparent;
+        border-radius: 12px;
+        background-clip: content-box;
     }
     .icon-turnarticle {
         color: @background_color_1;
