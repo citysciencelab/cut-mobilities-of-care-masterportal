@@ -160,23 +160,4 @@ describe("src/modules/tools/gfi/components/templates/Table.vue", () => {
         expect(footer.text()).to.be.equal("Footer");
     });
 
-    it("should set the movend position for the gfi-header container", () => {
-        const wrapper = mount(Table, {
-                propsData,
-                components,
-                computed,
-                store,
-                localVue
-            }),
-            gfiDetachedTable = wrapper.find(".gfi-detached-table");
-
-        wrapper.vm.movedGfiHeaderPositionBy(10, 20, "230px 34px");
-
-        expect(gfiDetachedTable.attributes("style")).to.includes(
-            "left: 10px",
-            "top: 20px",
-            "webkit-transform-origin: 230px 34px"
-        );
-    });
-
 });
