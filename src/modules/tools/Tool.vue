@@ -286,6 +286,10 @@ export default {
         overflow: auto;
         min-width: 280px;
 
+        @media (max-width: 400px) {
+            right: 20px;
+        }
+
         .basic-resize-handle {
             position:absolute;
             width:6px;
