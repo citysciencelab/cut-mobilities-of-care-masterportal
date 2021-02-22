@@ -1,6 +1,7 @@
 import Vuex from "vuex";
 import {shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
+import sinon from "sinon";
 import DefaultTheme from "../../../components/Default.vue";
 
 const localVue = createLocalVue();
@@ -202,6 +203,25 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         });
 
         expect(wrapper1.find("td").text()).equals("modules.tools.gfi.themes.default.noAttributeAvailable");
+    });
+
+    it("should show an iframe if the mimeType is text/html", () => {
+        const wrapperHtml = shallowMount(DefaultTheme, {
+            propsData: {
+                feature: {
+                    getTheme: () => sinon.stub(),
+                    getDocument: () => "lalala",
+                    getMimeType: () => "text/html"
+                }
+            },
+            localVue,
+            mocks: {
+                $t: (msg) => msg
+            }
+        });
+
+        expect(wrapperHtml.find("iframe").exists()).to.be.true;
+        expect(wrapperHtml.find("iframe").classes()).includes("gfi-iFrame");
     });
 
 

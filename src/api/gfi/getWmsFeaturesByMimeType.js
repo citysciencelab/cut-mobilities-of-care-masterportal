@@ -128,6 +128,7 @@ export function getHtmlFeature (layer, url) {
     if (typeof url !== "string") {
         return [];
     }
+
     return requestGfi("text/html", url).then(document => {
         return handleHTMLResponse(document, layer, url);
     });
@@ -141,8 +142,8 @@ export function getHtmlFeature (layer, url) {
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
 export function handleHTMLResponse (document, layer, url) {
-    if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
-        return [createGfiFeature(layer, url)];
+    if (document !== null) {
+        return [createGfiFeature(layer, url, null, {document: document})];
     }
     return [];
 }
@@ -175,7 +176,8 @@ export function createGfiFeature (layer, url = "", feature, features = null) {
         getId: () => feature ? feature.getId() : "",
         getGfiUrl: () => url,
         getMimeType: () => layer.get("infoFormat"),
-        getLayerId: () => layer.get("id") ? layer.get("id") : ""
+        getLayerId: () => layer.get("id") ? layer.get("id") : "",
+        getDocument: () => features?.document || ""
     };
 }
 
