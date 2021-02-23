@@ -34,10 +34,7 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
 
     describe("createGfiFeature", () => {
         it("should return an object with specific functions to get the given params", () => {
-            const features = {
-                    document: "documentMock"
-                },
-                feature = createGfiFeature(layer, url, aFeature, features);
+            const feature = createGfiFeature(layer, url, aFeature, null, "documentMock");
 
             expect(feature).to.be.an("object");
 
