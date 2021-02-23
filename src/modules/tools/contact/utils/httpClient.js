@@ -1,11 +1,10 @@
 import axios from "axios";
 
 /**
- * Noted parameters recursively to meet the format expected by the php backend script.
- * TODO make this werk
+ * Notes parameters recursively to meet the format expected by the php backend script.
  * @param {Array} entry First entry to start with
  * @param {string[]} keys keys to use to get up to current point
- * @param {String[]} entries of entries produced by recursive function
+ * @param {String[]} entries entries produced by recursive function
  * @returns {Array} an array of parameters with constructed keys
  */
 function recursiveParamWriter ([key, value], keys, entries) {
