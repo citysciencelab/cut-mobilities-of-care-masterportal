@@ -70,7 +70,7 @@ export default {
 <template>
     <ToolWindow
         class="gfi-detached-table rotate0"
-        :initialWidth=360
+        :initialWidth="360"
         @close="close"
     >
         <template v-slot:rightOfTitle>
