@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
-    {initDriver} = require("../../../library/driver"),
-    {isMobile, isMaster, isCustom, isDefault} = require("../../../settings"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {initDriver} = require("../../../../../../test/end2end/library/driver"),
+    {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
+    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, until} = webdriver;
 
 /**
@@ -47,18 +47,16 @@ async function ContactTests ({builder, url, resolution, capability}) {
                 navBarIcon = await driver.findElement(By.css("div#navbarRow li.dropdown span.glyphicon-envelope"));
                 await navBarIcon.click();
 
-                toolWindow = await driver.wait(until.elementLocated(By.css("div#window")), 5000);
-                await driver.wait(until.elementIsVisible(toolWindow));
+                toolWindow = await driver.wait(until.elementLocated(By.css(".tool-window-vue")), 5000);
+                await driver.wait(until.elementIsVisible(toolWindow), 5000);
             });
 
             it("contact form holds fields name, mail, telephone, and text, and has submit button", async function () {
-                const cssPrefix = "div.win-body div.contact";
-
-                nameInput = (await driver.findElements(By.css(`${cssPrefix} div#contactNameDiv input#contactName`)))[0];
-                mailInput = (await driver.findElements(By.css(`${cssPrefix} div#contactEmailDiv input#contactEmail`)))[0];
-                telInput = (await driver.findElements(By.css(`${cssPrefix} div#contactTelDiv input#contactTel`)))[0];
-                textInput = (await driver.findElements(By.css(`${cssPrefix} div#textDiv textarea#contactText`)))[0];
-                submitButton = (await driver.findElements(By.css(`${cssPrefix} button.contactButton`)))[0];
+                nameInput = (await driver.findElements(By.css("#tool-contact-username-input")))[0];
+                mailInput = (await driver.findElements(By.css("#tool-contact-mail-input")))[0];
+                telInput = (await driver.findElements(By.css("#tool-contact-phone-input")))[0];
+                textInput = (await driver.findElements(By.css("#tool-contact-message-input")))[0];
+                submitButton = (await driver.findElements(By.css("#tool-contact-send-message")))[0];
 
                 expect(nameInput).to.exist;
                 expect(mailInput).to.exist;

@@ -71,7 +71,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // require("./tests/modules/searchbar/GdiSearch.js"),
 
                     // modules/tools
-                    require("./tests/modules/tools/Contact.js"),
+                    require("../../src/modules/tools/contact/test/end2end/Contact.e2e.js"),
                     // require("./tests/modules/tools/Einwohnerabfrage_HH.js"),
                     // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                     require("./tests/modules/tools/ExtendedFilter.js"),
