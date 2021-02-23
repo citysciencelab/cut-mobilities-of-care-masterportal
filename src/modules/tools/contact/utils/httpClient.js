@@ -8,7 +8,7 @@ import axios from "axios";
  * @returns {Array} an array of parameters with constructed keys
  */
 function recursiveParamWriter ([key, value], keys, entries) {
-    if (typeof value === "object" || Array.isArray(value)) {
+    if (value !== null && (typeof value === "object" || Array.isArray(value))) {
         Object.entries(value).forEach(([nextKey, nextValue]) => recursiveParamWriter(
             [nextKey, nextValue],
             keys.length

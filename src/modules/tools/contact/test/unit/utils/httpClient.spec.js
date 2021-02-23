@@ -57,7 +57,7 @@ describe("tools/contact/utils/httpClient", function () {
                             work: "they do"
                         },
                         {
-                            well: "very good"
+                            well: null
                         }
                     ]
                 },
@@ -68,7 +68,7 @@ describe("tools/contact/utils/httpClient", function () {
             sinon.assert.calledWith(
                 axios.post,
                 "url",
-                "nested%5Belements%5D%5B0%5D%5Bwork%5D=they%20do&nested%5Belements%5D%5B1%5D%5Bwell%5D=very%20good&alsoFlat=work"
+                "nested%5Belements%5D%5B0%5D%5Bwork%5D=they%20do&nested%5Belements%5D%5B1%5D%5Bwell%5D=null&alsoFlat=work"
             );
         });
     });
