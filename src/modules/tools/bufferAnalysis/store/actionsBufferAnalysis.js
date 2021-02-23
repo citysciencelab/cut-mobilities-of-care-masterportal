@@ -41,17 +41,17 @@ const actions = {
      *
      * @return {void}
      */
-    showBuffer ({commit, rootGetters, getters: {selectedSourceLayer, jstsParser, bufferRadius, bufferStyle, bufferLayer}}) {
+    showBuffer ({commit, rootGetters, getters: {selectedSourceLayer, jstsParser, bufferRadius, bufferStyle}}) {
         // get features from selected layer
         const features = selectedSourceLayer.get("layerSource").getFeatures(),
             // create new source for buffer layer
-            vectorSource = new VectorSource();
+            vectorSource = new VectorSource(),
+            bufferLayer = new VectorLayer({
+                source: vectorSource
+            });
 
         // add new buffer layer to state
-        commit("setBufferLayer", new VectorLayer({
-            source: vectorSource
-        }));
-
+        commit("setBufferLayer", bufferLayer);
         features.forEach(feature => {
             // parse feature geometry with jsts
             const jstsGeom = jstsParser.read(feature.getGeometry()),
@@ -228,7 +228,6 @@ const actions = {
         getters: {
             resultFeatures,
             selectedTargetLayer,
-            resultLayer,
             selectedSourceLayer,
             bufferLayer
         }}) {
@@ -236,13 +235,14 @@ const actions = {
         if (resultFeatures.length) {
             // create new vector source and get gfi attributes
             const vectorSource = new VectorSource(),
-                gfiAttributes = selectedTargetLayer.get("gfiAttributes");
+                gfiAttributes = selectedTargetLayer.get("gfiAttributes"),
+                resultLayer = new VectorLayer({
+                    source: vectorSource,
+                    style: selectedTargetLayer.get("style")
+                });
 
             // set new vector layer to state with same style as target layer
-            commit("setResultLayer", new VectorLayer({
-                source: vectorSource,
-                style: selectedTargetLayer.get("style")
-            }));
+            commit("setResultLayer", resultLayer);
 
             // add result features to new vector source
             vectorSource.addFeatures(resultFeatures);

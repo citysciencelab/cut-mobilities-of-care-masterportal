@@ -140,7 +140,7 @@ export default {
             this.setActive(false);
             // TODO replace trigger when ModelList is migrated
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
-            const model = getComponent(this.id);
+            const model = getComponent(this.$store.state.Tools.BufferAnalysis.id);
 
             if (model) {
                 model.set("isActive", false);

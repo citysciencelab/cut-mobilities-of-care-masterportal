@@ -62,20 +62,20 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
     it("renders the bufferAnalysis", () => {
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
-        expect(wrapper.find("#layer-analysis").exists()).to.be.true;
+        expect(wrapper.find("#tool-bufferAnalysis").exists()).to.be.true;
     });
 
     it("do not render the bufferAnalysiss select if not active", () => {
         store.commit("Tools/BufferAnalysis/setActive", false);
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue});
 
-        expect(wrapper.find("#layer-analysis").exists()).to.be.false;
+        expect(wrapper.find("#tool-bufferAnalysis").exists()).to.be.false;
     });
 
     it("has initially set nothing to layer-analysis-select-source and layer-analysis-select-target", () => {
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            selectSource = wrapper.find("#layer-analysis-select-source"),
-            selectTarget = wrapper.find("#layer-analysis-select-target");
+            selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
+            selectTarget = wrapper.find("#tool-bufferAnalysis-selectTargetInput");
 
         expect(selectSource.element.value).to.equals("");
         expect(selectTarget.element.value).to.equals("");
@@ -95,11 +95,11 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
 
     it("triggers all important actions when all inputs are set", async () => {
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
-            selectSource = wrapper.find("#layer-analysis-select-source"),
+            selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             sourceOptions = selectSource.findAll("option"),
-            selectTarget = wrapper.find("#layer-analysis-select-target"),
+            selectTarget = wrapper.find("#tool-bufferAnalysis-selectTargetInput"),
             targetOptions = selectTarget.findAll("option"),
-            range = wrapper.find("#layer-analysis-range-text"),
+            range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
             layers = createLayersArray(3);
 
         await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);

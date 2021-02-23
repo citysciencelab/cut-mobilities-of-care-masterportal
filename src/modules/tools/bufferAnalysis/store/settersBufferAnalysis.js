@@ -17,8 +17,8 @@ function applySelectedSourceLayer ({getters, commit, dispatch}, selectedSourceLa
     }
 
     // find the layer in select options if selected layer is provided by id
-    const selectedLayer = typeof selectedLayer === "string"
-        ? getters.selectOptions.find(item => item.id === selectedLayer)
+    const selectedLayer = typeof selectedSourceLayer === "string"
+        ? getters.selectOptions.find(item => item.id === selectedSourceLayer)
         : selectedSourceLayer;
 
     // select only the new source layer and deselect all previous selected layers
@@ -52,7 +52,7 @@ function applySelectedSourceLayer ({getters, commit, dispatch}, selectedSourceLa
  */
 function applySelectedTargetLayer ({commit, getters, dispatch}, selectedTargetLayer) {
     // find the layer in select options if selected layer is provided by id
-    const selectedLayer = typeof selectedLayer === "string" ?
+    const selectedLayer = typeof selectedTargetLayer === "string" ?
         getters.selectOptions.find(item => item.id === selectedTargetLayer) :
         selectedTargetLayer;
 
