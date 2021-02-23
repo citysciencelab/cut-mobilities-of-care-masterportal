@@ -14,7 +14,7 @@ describe("tools/contact/utils/httpClient", function () {
 
         it("calls onSuccess parameter on success", function (done) {
             sinon.stub(axios, "post").returns(
-                Promise.resolve({status: 200})
+                Promise.resolve({status: 200, data: {success: true}})
             );
 
             const onSuccess = sinon.spy(done),
@@ -50,10 +50,26 @@ describe("tools/contact/utils/httpClient", function () {
                 Promise.resolve({status: 200})
             );
 
-            httpClient("url", Symbol.for("data"), sinon.spy(), sinon.spy());
+            httpClient("url", {
+                nested: {
+                    elements: [
+                        {
+                            work: "they do"
+                        },
+                        {
+                            well: "very good"
+                        }
+                    ]
+                },
+                alsoFlat: "work"
+            }, sinon.spy(), sinon.spy());
 
             sinon.assert.calledOnce(axios.post);
-            sinon.assert.calledWith(axios.post, "url", Symbol.for("data"));
+            sinon.assert.calledWith(
+                axios.post,
+                "url",
+                "nested%5Belements%5D%5B0%5D%5Bwork%5D=they%20do&nested%5Belements%5D%5B1%5D%5Bwell%5D=very%20good&alsoFlat=work"
+            );
         });
     });
 });

@@ -1,6 +1,36 @@
 import axios from "axios";
 
 /**
+ * Noted parameters recursively to meet the format expected by the php backend script.
+ * TODO make this werk
+ * @param {Array} entry First entry to start with
+ * @param {string[]} keys keys to use to get up to current point
+ * @param {String[]} entries of entries produced by recursive function
+ * @returns {Array} an array of parameters with constructed keys
+ */
+function recursiveParamWriter ([key, value], keys, entries) {
+    if (typeof value === "object" || Array.isArray(value)) {
+        Object.entries(value).forEach(([nextKey, nextValue]) => recursiveParamWriter(
+            [nextKey, nextValue],
+            keys.length
+                ? [...keys, `[${nextKey}]`]
+                : [key, `[${nextKey}]`],
+            entries
+        ));
+        return entries;
+    }
+
+    entries.push([
+        `${encodeURIComponent(keys.length
+            ? `${keys.join("")}`
+            : key
+        )}=${encodeURIComponent(value)}`
+    ]);
+
+    return entries;
+}
+
+/**
  * Show the loader after the dispatch of an e-mail has been started.
  *
  * @fires Util#RadioTriggerUtilShowLoader
@@ -33,13 +63,18 @@ function onSendComplete () {
 function httpClient (url, data, onSuccess, onError) {
     onSendStart();
 
-    axios.post(url, data)
+    const preparedData = Object.entries(data)
+        .map(entry => recursiveParamWriter(entry, [], []))
+        .flat(2)
+        .join("&");
+
+    axios.post(url, preparedData)
         .then(response => {
-            if (response.status === 200) {
+            if (response.status === 200 && response.data.success) {
                 onSuccess();
             }
             else {
-                console.error(`An error occured sending an email. Server response: ${response.message}`);
+                console.error(`An error occurred sending an email. Server response: ${response.data.message}`);
                 console.error(response);
                 onError();
             }
