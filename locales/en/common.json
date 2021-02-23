@@ -101,7 +101,8 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "The parameterized call of the portal has unfortunately gone wrong!<br>Please make sure that all parameters were entered correctly.",
-            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!"
+            "alertWrongLayerIds": "<strong>The parameterized call is faulty!</strong>  The LAYERIDS at positions: <b>{{wrongIdsPositionsConcat}}</b> do not exist and are ignored!",
+            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!"
           }
         },
         "alerting": {
@@ -605,8 +606,8 @@
             "rangeLabel": "radius (m)",
             "clearBtn": "Reset",
             "saveBtn": "Save",
-            "sourceLayerNotFound": "Selected source layer not found.",
-            "targetLayerNotFound": "Selected target layer not found."
+            "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
+            "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
           }
         },
         "controls": {

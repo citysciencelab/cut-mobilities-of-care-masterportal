@@ -1,6 +1,7 @@
 import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
 import getComponent from "../../utils/getComponent";
 import store from "../../app-store";
+import ValidationError from "../../utils/customErrors/validationError";
 
 
 const actions = {
@@ -111,8 +112,12 @@ const actions = {
                         dispatch(toolName + "/" + state, toolState[state]);
                     }
                     catch (e) {
+                        const message = e instanceof ValidationError ?
+                            e.message :
+                            i18next.t("common:modules.core.parametricURL.alertWrongInitValues");
+
                         Radio.trigger("Alert", "alert", {
-                            text: e.message,
+                            text: message,
                             kategorie: "alert-warning",
                             position: "top-center",
                             fadeOut: 5000
@@ -137,7 +142,7 @@ const actions = {
 
         dispatch("controlActivationOfTools", activeTools[0]);
 
-        if (activeTools.length > 1) {
+        if (activeTools.length >= 2 && !activeTools.some(toolname => toolname === "Gfi")) {
             console.error("More than one tool has the configuration parameter 'active': true."
                 + " Only one entry is considered. Therefore the tool(s): "
                 + activeTools.slice(1)

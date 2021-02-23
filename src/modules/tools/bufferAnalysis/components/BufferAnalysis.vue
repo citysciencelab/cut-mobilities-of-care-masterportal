@@ -33,17 +33,7 @@ export default {
              * @returns {void}
              */
             set (newLayerSelection) {
-                try {
-                    this.applySelectedSourceLayer(newLayerSelection);
-                }
-                catch (e) {
-                    Radio.trigger("Alert", "alert", {
-                        text: e.message,
-                        kategorie: "alert-warning",
-                        position: "top-center",
-                        fadeOut: 5000
-                    });
-                }
+                this.applySelectedSourceLayer(newLayerSelection);
             }
         },
         selectedTargetLayer: {
@@ -60,17 +50,7 @@ export default {
              * @returns {void}
              */
             set (newLayerSelection) {
-                try {
-                    this.applySelectedTargetLayer(newLayerSelection);
-                }
-                catch (e) {
-                    Radio.trigger("Alert", "alert", {
-                        text: e.message,
-                        kategorie: "alert-warning",
-                        position: "top-center",
-                        fadeOut: 5000
-                    });
-                }
+                this.applySelectedTargetLayer(newLayerSelection);
             }
         },
         resultType: {
@@ -183,15 +163,15 @@ export default {
         <template v-slot:toolBody>
             <div
                 v-if="active"
-                id="layer-analysis"
+                id="tool-bufferAnalysis"
             >
                 <label
-                    for="layer-analysis-select-source"
+                    for="tool-bufferAnalysis-selectSourceInput"
                     class="col-md-5 col-sm-5 control-label"
                 >{{ $t("modules.tools.bufferAnalysis.sourceSelectLabel") }}</label>
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
-                        id="layer-analysis-select-source"
+                        id="tool-bufferAnalysis-selectSourceInput"
                         v-model="selectedSourceLayer"
                         class="font-arial form-control input-sm pull-left"
                     >
@@ -205,13 +185,13 @@ export default {
                     </select>
                 </div>
                 <label
-                    for="layer-analysis-range"
+                    for="tool-bufferAnalysis-radiusTextInput"
                     class="col-md-5 col-sm-5 control-label"
                 >{{ $t("modules.tools.bufferAnalysis.rangeLabel") }}</label>
 
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <input
-                        id="layer-analysis-range-text"
+                        id="tool-bufferAnalysis-radiusTextInput"
                         v-model="bufferRadius"
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
@@ -220,7 +200,7 @@ export default {
                         type="number"
                     >
                     <input
-                        id="layer-analysis-range"
+                        id="tool-bufferAnalysis-radiusRangeInput"
                         v-model="bufferRadius"
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
@@ -232,13 +212,13 @@ export default {
                 </div>
 
                 <label
-                    for="layer-analysis-result-type"
+                    for="tool-bufferAnalysis-resultTypeInput"
                     class="col-md-5 col-sm-5 control-label"
                 >{{ $t("modules.tools.bufferAnalysis.resultTypeLabel") }}</label>
 
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
-                        id="layer-analysis-result-type"
+                        id="tool-bufferAnalysis-resultTypeInput"
                         v-model="resultType"
                         class="font-arial form-control input-sm pull-left"
                         :disabled="!selectedSourceLayer || !bufferRadius || selectedTargetLayer"
@@ -257,16 +237,16 @@ export default {
                 </div>
 
                 <label
-                    for="layer-analysis-select-target"
+                    for="tool-bufferAnalysis-selectTargetInput"
                     class="col-md-5 col-sm-5 control-label"
                 >{{ $t("modules.tools.bufferAnalysis.targetSelectLabel") }}</label>
 
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <select
-                        id="layer-analysis-select-target"
+                        id="tool-bufferAnalysis-selectTargetInput"
                         v-model="selectedTargetLayer"
                         class="font-arial form-control input-sm pull-left"
-                        :disabled="!selectedSourceLayer || !bufferRadius"
+                        :disabled="!selectedSourceLayer || !bufferRadius || selectedTargetLayer"
                     >
                         <option
                             v-for="layer in selectOptions"
@@ -280,8 +260,8 @@ export default {
 
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <button
-                        id="layer-analysis-reset-button"
-                        class="pull-right"
+                        id="tool-bufferAnalysis-resetButton"
+                        class="pull-right btn btn-block"
                         :class="!selectedSourceLayer ? 'btn-lgv-grey' : 'btn-primary'"
                         :disabled="!selectedSourceLayer"
                         @click="resetModule"
@@ -292,8 +272,8 @@ export default {
 
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <button
-                        id="layer-analysis-save-button"
-                        class="pull-right"
+                        id="tool-bufferAnalysis-saveButton"
+                        class="pull-right btn btn-block"
                         :class="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius ? 'btn-lgv-grey' : 'btn-primary'"
                         :disabled="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius"
                         @click="buildUrlFromToolState"
@@ -303,7 +283,7 @@ export default {
                 </div>
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <input
-                        id="layer-analysis-saved-url"
+                        id="tool-bufferAnalysis-savedUrlText"
                         v-model="savedUrl"
                         class="col-md-12 col-sm-12 form-group form-group-sm"
                         readonly

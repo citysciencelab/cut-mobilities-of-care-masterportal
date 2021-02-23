@@ -1,3 +1,4 @@
+import ValidationError from "../../../../utils/customErrors/validationError";
 /**
  * Selects given layer by object or ID
  * Also unselects all previous selected layers and
@@ -15,22 +16,21 @@ function applySelectedSourceLayer ({getters, commit, dispatch}, selectedSourceLa
         commit("setSelectedTargetLayer", null);
     }
 
-    let selectedLayer = selectedSourceLayer;
-
     // find the layer in select options if selected layer is provided by id
-    if (typeof selectedLayer === "string") {
-        selectedLayer = getters.selectOptions.find(item => item.id === selectedLayer);
-    }
+    const selectedLayer = typeof selectedLayer === "string"
+        ? getters.selectOptions.find(item => item.id === selectedLayer)
+        : selectedSourceLayer;
 
     // select only the new source layer and deselect all previous selected layers
     if (selectedLayer) {
         getters.selectOptions.forEach(layerOption => {
             layerOption.setIsSelected(selectedLayer.get("id") === layerOption.get("id"));
         });
+        selectedLayer.get("layer").setOpacity(1);
     }
     // throw error if no selected layer is provided and it is not a valid null value
     else if (selectedLayer !== null) {
-        throw new Error(i18next.t("common:modules.tools.bufferAnalysis.sourceLayerNotFound"));
+        throw new ValidationError(i18next.t("common:modules.tools.bufferAnalysis.sourceLayerNotFound", {layerId: selectedSourceLayer}));
     }
     commit("setSelectedSourceLayer", selectedLayer);
     // remove previously generated layers and show buffer
@@ -51,12 +51,11 @@ function applySelectedSourceLayer ({getters, commit, dispatch}, selectedSourceLa
  * @return {void}
  */
 function applySelectedTargetLayer ({commit, getters, dispatch}, selectedTargetLayer) {
-    let selectedLayer = selectedTargetLayer;
-
     // find the layer in select options if selected layer is provided by id
-    if (typeof selectedLayer === "string") {
-        selectedLayer = getters.selectOptions.find(item => item.id === selectedTargetLayer);
-    }
+    const selectedLayer = typeof selectedLayer === "string" ?
+        getters.selectOptions.find(item => item.id === selectedTargetLayer) :
+        selectedTargetLayer;
+
     commit("setSelectedTargetLayer", selectedLayer);
     // select the new target layer and check for intersections
     if (selectedLayer) {
@@ -65,7 +64,7 @@ function applySelectedTargetLayer ({commit, getters, dispatch}, selectedTargetLa
     }
     // throw error if no selected layer is provided and it is not a valid null value
     else if (selectedLayer !== null) {
-        throw new Error(i18next.t("common:modules.tools.bufferAnalysis.targetLayerNotFound"));
+        throw new ValidationError(i18next.t("common:modules.tools.bufferAnalysis.targetLayerNotFound", {layerId: selectedTargetLayer}));
     }
 }
 /**

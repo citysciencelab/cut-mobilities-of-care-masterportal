@@ -26,9 +26,9 @@ const actions = {
      *
      * @return {void}
      */
-    checkIntersection ({getters, dispatch}) {
-        dispatch("areLayerFeaturesLoaded", getters.selectedTargetLayer.get("id")).then(() => {
-            const bufferFeatures = getters.bufferLayer.getSource().getFeatures();
+    checkIntersection ({dispatch, getters: {selectedTargetLayer, bufferLayer}}) {
+        dispatch("areLayerFeaturesLoaded", selectedTargetLayer.get("id")).then(() => {
+            const bufferFeatures = bufferLayer.getSource().getFeatures();
 
             dispatch("checkIntersectionWithBuffers", bufferFeatures);
             dispatch("checkIntersectionsWithIntersections", bufferFeatures);
@@ -41,9 +41,9 @@ const actions = {
      *
      * @return {void}
      */
-    showBuffer ({commit, getters, rootGetters}) {
+    showBuffer ({commit, rootGetters, getters: {selectedSourceLayer, jstsParser, bufferRadius, bufferStyle, bufferLayer}}) {
         // get features from selected layer
-        const features = getters.selectedSourceLayer.get("layerSource").getFeatures(),
+        const features = selectedSourceLayer.get("layerSource").getFeatures(),
             // create new source for buffer layer
             vectorSource = new VectorSource();
 
@@ -54,24 +54,24 @@ const actions = {
 
         features.forEach(feature => {
             // parse feature geometry with jsts
-            const jstsGeom = getters.jstsParser.read(feature.getGeometry()),
+            const jstsGeom = jstsParser.read(feature.getGeometry()),
                 // calculate buffer with selected buffer radius
-                buffered = jstsGeom.buffer(getters.bufferRadius),
+                buffered = jstsGeom.buffer(bufferRadius),
                 // create new feature with reconverted geometry
                 newFeature = new Feature({
-                    geometry: getters.jstsParser.write(buffered),
+                    geometry: jstsParser.write(buffered),
                     name: "Buffers"
                 });
 
             // set configured style
-            newFeature.setStyle(getters.bufferStyle);
+            newFeature.setStyle(bufferStyle);
             // remember origin feature
             newFeature.set("originFeature", feature);
             // add new feature to source
             vectorSource.addFeature(newFeature);
         });
         // add new layer with buffers to map
-        rootGetters["Map/map"].addLayer(getters.bufferLayer);
+        rootGetters["Map/map"].addLayer(bufferLayer);
     },
     /**
      * Removes generated result layer and buffer layer
@@ -79,10 +79,10 @@ const actions = {
      *
      * @return {void}
      */
-    removeGeneratedLayers ({commit, getters, rootGetters}) {
-        rootGetters["Map/map"].removeLayer(getters.resultLayer);
+    removeGeneratedLayers ({commit, rootGetters, getters: {resultLayer, bufferLayer}}) {
+        rootGetters["Map/map"].removeLayer(resultLayer);
         commit("setResultLayer", null);
-        rootGetters["Map/map"].removeLayer(getters.bufferLayer);
+        rootGetters["Map/map"].removeLayer(bufferLayer);
         commit("setBufferLayer", null);
         commit("setIntersections", []);
         commit("setResultFeatures", []);
@@ -93,15 +93,15 @@ const actions = {
      *
      * @return {void}
      */
-    resetModule ({commit, getters, dispatch}) {
+    resetModule ({commit, dispatch, getters: {selectedSourceLayer, selectedTargetLayer}}) {
         commit("setBufferRadius", 0);
 
-        if (getters.selectedSourceLayer) {
-            getters.selectedSourceLayer.get("layer").setOpacity(1);
+        if (selectedSourceLayer) {
+            selectedSourceLayer.get("layer").setOpacity(1);
         }
 
-        if (getters.selectedTargetLayer) {
-            getters.selectedTargetLayer.get("layer").setOpacity(1);
+        if (selectedTargetLayer) {
+            selectedTargetLayer.get("layer").setOpacity(1);
         }
         dispatch("applySelectedSourceLayer", null);
         dispatch("applySelectedTargetLayer", null);
@@ -115,8 +115,8 @@ const actions = {
      *
      * @return {void}
      */
-    checkIntersectionWithBuffers ({commit, getters, dispatch}, bufferFeatures) {
-        const targetFeatures = getters.selectedTargetLayer.get("layerSource").getFeatures();
+    checkIntersectionWithBuffers ({commit, dispatch, getters: {selectedTargetLayer, jstsParser, resultType}}, bufferFeatures) {
+        const targetFeatures = selectedTargetLayer.get("layerSource").getFeatures();
 
         targetFeatures.forEach(targetFeature => {
             const targetGeometry = targetFeature.getGeometry(),
@@ -124,8 +124,8 @@ const actions = {
                     const sourceGeometry = bufferFeature.getGeometry(),
                         // check if buffer origin feature is the same as the target feature
                         sameFeature = bufferFeature.get("originFeature").getId() === targetFeature.getId(),
-                        sourcePoly = getters.jstsParser.read(sourceGeometry),
-                        targetPoly = getters.jstsParser.read(targetGeometry);
+                        sourcePoly = jstsParser.read(sourceGeometry),
+                        targetPoly = jstsParser.read(targetGeometry);
 
                     // points do not need parsing
                     if (targetGeometry.getType() === "Point" &&
@@ -141,15 +141,15 @@ const actions = {
                             sourcePoly,
                             targetPoly
                         });
-                        return getters.resultType !== ResultType.WITHIN;
+                        return resultType !== ResultType.WITHIN;
                     }
 
                     return false;
                 });
 
             // only add target feature due to selected result type
-            if (!foundIntersection && getters.resultType === ResultType.OUTSIDE ||
-                foundIntersection && getters.resultType === ResultType.WITHIN) {
+            if (!foundIntersection && resultType === ResultType.OUTSIDE ||
+                foundIntersection && resultType === ResultType.WITHIN) {
                 commit("addResultFeature", targetFeature);
             }
         });
@@ -162,20 +162,14 @@ const actions = {
      * @param {Object} payload - payload for the action
      * @param {Polygon} payload.sourcePoly - source polygon
      * @param {Polygon} payload.targetPoly - target polygon
-     * @param {Object} payload.properties - properties to be transferred
+     * @param {Object} [payload.properties = {}] - properties to be transferred
      *
      * @returns {void}
      */
-    generateIntersectionPolygon ({commit, getters}, {sourcePoly, targetPoly, properties = {}}) {
-        let subsetPoly;
-
+    generateIntersectionPolygon ({commit, getters: {resultType}}, {sourcePoly, targetPoly, properties = {}}) {
         // calculate subset polygon due to selected result type
-        if (getters.resultType === ResultType.WITHIN) {
-            subsetPoly = sourcePoly.intersection(targetPoly);
-        }
-        else {
-            subsetPoly = targetPoly.difference(sourcePoly);
-        }
+        const subsetPoly = resultType === ResultType.WITHIN ? sourcePoly.intersection(targetPoly) : targetPoly.difference(sourcePoly);
+
         subsetPoly.properties = properties;
         // add poly to intersections array
         commit("addIntersectionPolygon", subsetPoly);
@@ -188,17 +182,17 @@ const actions = {
      *
      * @return {void}
      */
-    checkIntersectionsWithIntersections ({getters, dispatch}, bufferFeatures) {
+    checkIntersectionsWithIntersections ({dispatch, getters: {intersections, jstsParser, resultType}}, bufferFeatures) {
         bufferFeatures.forEach(buffer => {
-            getters.intersections.forEach((intersection, key, object) => {
+            intersections.forEach((intersection, key, thisArray) => {
                 const sourceGeometry = buffer.getGeometry(),
-                    sourcePoly = getters.jstsParser.read(sourceGeometry);
+                    sourcePoly = jstsParser.read(sourceGeometry);
 
                 if (sourcePoly.intersects(intersection)) {
                     dispatch("generateIntersectionPolygon", {properties: intersection.properties, sourcePoly, targetPoly: intersection});
 
-                    if (getters.resultType === ResultType.WITHIN) {
-                        object.splice(key, 1);
+                    if (resultType === ResultType.OUTSIDE) {
+                        thisArray.splice(key, 1);
                     }
                 }
             });
@@ -209,14 +203,14 @@ const actions = {
      *
      * @return {void}
      */
-    convertIntersectionsToPolygons ({commit, getters}) {
-        if (getters.intersections.length) {
-            getters.intersections.forEach(intersection => {
+    convertIntersectionsToPolygons ({commit, getters: {intersections, geoJSONWriter}}) {
+        if (intersections.length) {
+            intersections.forEach(intersection => {
                 const geojsonFormat = new GeoJSON(),
                     newFeature = geojsonFormat.readFeature({
                         type: "Feature",
                         properties: intersection.properties,
-                        geometry: getters.geoJSONWriter.write(intersection)
+                        geometry: geoJSONWriter.write(intersection)
                     });
 
                 commit("addResultFeature", newFeature);
@@ -229,51 +223,59 @@ const actions = {
      *
      * @return {void}
      */
-    addNewFeaturesToMap ({commit, getters, rootGetters}) {
+    addNewFeaturesToMap ({commit,
+        rootGetters,
+        getters: {
+            resultFeatures,
+            selectedTargetLayer,
+            resultLayer,
+            selectedSourceLayer,
+            bufferLayer
+        }}) {
         // check if there are result features in array
-        if (getters.resultFeatures.length) {
+        if (resultFeatures.length) {
             // create new vector source and get gfi attributes
             const vectorSource = new VectorSource(),
-                gfiAttributes = getters.selectedTargetLayer.get("gfiAttributes");
+                gfiAttributes = selectedTargetLayer.get("gfiAttributes");
 
             // set new vector layer to state with same style as target layer
             commit("setResultLayer", new VectorLayer({
                 source: vectorSource,
-                style: getters.selectedTargetLayer.get("style")
+                style: selectedTargetLayer.get("style")
             }));
 
             // add result features to new vector source
-            vectorSource.addFeatures(getters.resultFeatures);
+            vectorSource.addFeatures(resultFeatures);
             // apply gfi attributes to new vector layer
-            getters.resultLayer.set("gfiAttributes", gfiAttributes);
+            resultLayer.set("gfiAttributes", gfiAttributes);
             // add new layer to map
-            rootGetters["Map/map"].addLayer(getters.resultLayer);
+            rootGetters["Map/map"].addLayer(resultLayer);
         }
         // reduce opacity for source, target and buffer layers
-        const targetOlLayer = getters.selectedTargetLayer.get("layer"),
-            sourceOlLayer = getters.selectedSourceLayer.get("layer");
+        const targetOlLayer = selectedTargetLayer.get("layer"),
+            sourceOlLayer = selectedSourceLayer.get("layer");
 
         targetOlLayer.setOpacity(targetOlLayer.getOpacity() * 0.5);
         sourceOlLayer.setOpacity(sourceOlLayer.getOpacity() * 0.5);
-        getters.bufferLayer.setOpacity(0.5);
+        bufferLayer.setOpacity(0.5);
     },
     /**
      * Verifies if all features of a given layerId are loaded
      *
      * @return {void}
      */
-    buildUrlFromToolState ({commit, getters}) {
+    buildUrlFromToolState ({commit, getters: {selectedSourceLayer, bufferRadius, resultType, selectedTargetLayer, id}}) {
         const toolState = {
-            applySelectedSourceLayer: getters.selectedSourceLayer.id,
-            applyBufferRadius: getters.bufferRadius,
-            setResultType: getters.resultType,
-            applySelectedTargetLayer: getters.selectedTargetLayer.id
+            applySelectedSourceLayer: selectedSourceLayer.id,
+            applyBufferRadius: bufferRadius,
+            setResultType: resultType,
+            applySelectedTargetLayer: selectedTargetLayer.id
         };
 
         commit("setSavedUrl", location.origin +
             location.pathname +
             "?isinitopen=" +
-            getters.id +
+            id +
             "&initvalues=" +
             JSON.stringify(toolState));
     },
