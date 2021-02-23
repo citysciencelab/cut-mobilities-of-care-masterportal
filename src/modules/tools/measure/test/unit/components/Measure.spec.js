@@ -28,6 +28,7 @@ describe("src/modules/tools/measure/components/Measure.vue", () => {
                     namespaced: true,
                     getters: {
                         layerById: () => id => ({})[id],
+                        is3d: () => false,
                         map: () => ({
                             addInteraction: sinon.spy(),
                             removeInteraction: sinon.spy()
