@@ -23,11 +23,16 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
             projection: () => sinon.stub(),
             mouseCoord: () => sinon.stub()
         },
+        mockMapMarkerActions = {
+            removePointMarker: sinon.stub()
+            // ...mapActions("MapMarker", ["removePointMarker"]),
+        },
         mockMapActions = {
             addPointerMoveHandler: sinon.stub(),
             removePointerMoveHandler: sinon.stub(),
             removeInteraction: sinon.stub(),
-            addInteraction: sinon.stub()
+            addInteraction: sinon.stub(),
+            // ...mapActions("MapMarker", ["removePointMarker"]),
         },
         mockMapMutations = {
         },
@@ -64,6 +69,10 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
                     getters: mockMapGetters,
                     mutations: mockMapMutations,
                     actions: mockMapActions
+                },
+                MapMarker: {
+                    namespaced: true,
+                    actions: mockMapMarkerActions
                 }
             },
             state: {
