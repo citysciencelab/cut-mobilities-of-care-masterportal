@@ -70,6 +70,7 @@ export default {
 <template>
     <ToolWindow
         class="gfi-detached-table rotate0"
+        :initialWidth=360
         @close="close"
     >
         <template v-slot:rightOfTitle>
@@ -98,10 +99,6 @@ export default {
 @background_color_1: #F2F2F2;
 @background_color_2: #646262;
 
-.gfi .tool-window-vue
-{
-  max-width: 360px !important;
-}
 .gfi-detached-table {
     box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
