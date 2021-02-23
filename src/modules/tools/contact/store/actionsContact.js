@@ -78,7 +78,7 @@ const actions = {
             id = serviceId || serviceID,
             systemInfo = getSystemInfo(rootGetters.portalTitle),
             mailServiceUrl = getServiceUrl(id),
-            ticketId = createTicketId();
+            ticketId = createTicketId(state.locationOfCustomerService);
 
         // stop sending if form is not valid
         if (!getters.validForm) {

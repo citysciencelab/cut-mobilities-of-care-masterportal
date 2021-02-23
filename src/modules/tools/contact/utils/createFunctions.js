@@ -58,11 +58,11 @@ function createSubject (ticketId, subject) {
 /**
  * Creates a unique id for the ticket of a user.
  * It is formatted as 'MMDD-[numbers]-[numbers]', if not prefix is given.
- *
+ * @param {String} locationOfCustomerService locale key for moment
  * @returns {String} The generated unique Id.
  */
-function createTicketId () {
-    const prefix = moment().format("MMDD"),
+function createTicketId (locationOfCustomerService = "de") {
+    const prefix = moment().locale(locationOfCustomerService).format("MMDD"),
         randomNumber = String(Math.floor(Math.random() * 9000) + 1000),
         anotherRandomNumber = String(Math.floor(Math.random() * 9000) + 1000);
 

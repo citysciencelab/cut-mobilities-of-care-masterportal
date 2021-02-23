@@ -1,5 +1,4 @@
 <script>
-import moment from "moment";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
@@ -17,8 +16,6 @@ export default {
     },
     created () {
         this.$on("close", this.close);
-        // Change time to the location where customer service is based (see generateTicketId)
-        moment.locale(this.locationOfCustomerService);
         // warn if deprecated param is used
         if (this.serviceID) {
             console.warn("Contact Tool: The parameter 'serviceID' is deprecated in the next major release! Please use serviceId instead.");
