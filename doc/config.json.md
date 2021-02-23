@@ -1004,7 +1004,7 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |virtualcity|no|**[virtualcity](#markdown-header-portalconfigmenutoolvirtualcity)**||*virtualcityPLANNER* planning viewer|false|
 |wfsFeatureFilter|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `filter` instead._ Filters WFS features. This required configuring `"filterOptions"` on the WFS layer object.|false|
 |wfst|no|**[wfst](#markdown-header-portalconfigmenutoolwfst)**||WFS-T module to visualize, create, update, and delete features.|false|
-
+|bufferAnalysis|no|**[tool](#markdown-header-portalconfigmenutool)**||This buffer analysis allows the selection of a source layer, a buffer radius and a target layer. The chosen buffer radius will then be shown around features of the selected source layer. At the moment a target layer is selected, only the features of this layer will be shown, if they are outside the buffer radii. It is also possible to invert the result. In this case the resulting features will only be show if they are inside the radii.
 ***
 
 #### Portalconfig.menu.tool
@@ -2327,7 +2327,8 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 }
 ```
 
-```json
+```
+#!json
 {
     "pointButton": {
         {
@@ -2828,7 +2829,8 @@ For such cases, define `gfiAsNewWindow` manually as described above.
 
 **Example**
 
-```js
+```
+#!json
 {
     "id": "123456",
     // (...)
@@ -3049,7 +3051,8 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 
 **Example**
 
-```json
+```
+#!json
 {
     "id": "123456",
     "name": "MyVectorLayerName",
