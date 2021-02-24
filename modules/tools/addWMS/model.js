@@ -160,7 +160,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
             object.Layer.forEach(layer => {
                 this.parseLayer(layer, this.getParsedTitle(object.Title), level + 1);
             });
-            Radio.trigger("Parser", "addFolder", object.Title, this.getParsedTitle(object.Title), parentId, level);
+            Radio.trigger("Parser", "addFolder", object.Title, this.getParsedTitle(object.Title), parentId, level, false, false, object.invertLayerOrder);
         }
         else {
             Radio.trigger("Parser", "addLayer", object.Title, this.getParsedTitle(object.Title), parentId, level, object.Name, this.get("wmsUrl"), this.get("version"));

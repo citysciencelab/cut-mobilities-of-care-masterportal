@@ -2472,6 +2472,7 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
 |Layer|ja|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Definition der Layer.|false|
 |Ordner|nein|**[Ordner](#markdown-header-themenconfigordner)**[]||Definition der Ordner.|false|
 |isFolderSelectable|nein|Boolean|true|Legt fest, ob alle Layer eines Ordners auf einmal über einen Haken aktiviert bzw. deaktiviert werden dürfen.|false|
+|invertLayerOrder|nein|Boolean|false|Legt fest, ob bei Klick auf den Ordner die Reihenfolge, in der die Layer der Map hinzugefügt werden, umgekehrt werden soll.|false|
 
 **Beispiel Ordner mit einem Layer**
 ```
@@ -2537,6 +2538,31 @@ Hier werden die Ordner definiert. Ordner können auch verschachtelt konfiguriert
             ]
         }
     ]
+}
+```
+
+**Beispiel Ordner mit invertierter Layer-Reihenfolge**
+
+In diesem Beispiel wird der Layer mit der Id 123 vor dem Layer 456 der Map hinzugefügt. Das führt dazu, dass Layer 123 unter Layer 456 dargestellt wird.
+
+```json
+{
+    "Fachdaten": {
+        "Ordner": [
+            {
+                "Titel": "Mein Ordner",
+                "invertLayerOrder": true,
+                "Layer": [
+                    {
+                        "id": "123"
+                    },
+                    {
+                        "id": "456"
+                    }
+                ]
+            }
+        ]
+    }
 }
 ```
 
