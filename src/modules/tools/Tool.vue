@@ -331,10 +331,17 @@ export default {
         border-radius: 12px;
         background-color: @background_color_4;
         margin-bottom: 30px;
-        .header {
+        .win-heading {
             font-family: @font_family_2;
-            > .title { color: @color_2; }
-            > .buttons { color: @color_2; }
+            font-size: 14px;
+            .heading-element {
+                > .title {
+                    color: @color_2;
+                    font-size: 14px;
+                }
+                > .buttons { color: @color_2; }
+                > .glyphicon { color: @color_2; }
+            }
         }
         .win-body-vue {
             border-bottom-left-radius: 12px;
