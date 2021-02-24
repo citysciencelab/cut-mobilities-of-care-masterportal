@@ -20,6 +20,16 @@ const mutations = {
         }
 
         Object.assign(state, {layerModel});
+    },
+    /**
+     * Changes the style of the selected layer to the one of the one with the selected styleId.
+     *
+     * @param {Object} state State object of the module.
+     * @param {String} styleId Id of the style to be set on the layer.
+     * @returns {void}
+     */
+    triggerStyleUpdate (state, styleId) {
+        state.layerModel.setStyleById(styleId);
     }
 };
 

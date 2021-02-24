@@ -2,7 +2,9 @@
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getComponent from "../../../../utils/getComponent";
 import Tool from "../../Tool.vue";
-import * as constants from "../store/constantsStyleVT";
+import actions from "../store/actionsStyleVT";
+import getters from "../store/gettersStyleVT";
+import mutations from "../store/mutationsStyleVT";
 
 export default {
     name: "StyleVT",
@@ -10,7 +12,7 @@ export default {
         Tool
     },
     computed: {
-        ...mapGetters("Tools/StyleVT", constants.getterKeys)
+        ...mapGetters("Tools/StyleVT", Object.keys(getters))
     },
     watch: {
         /**
@@ -24,7 +26,6 @@ export default {
         }
     },
     created () {
-        // TODO(roehlipa): Is this how Vue Components should listen to Events from Backbone?
         Backbone.Events.listenTo(Radio.channel("ModelList"), {
             "updatedSelectedLayerList": this.refreshVectorTileLayerList
         });
@@ -35,8 +36,8 @@ export default {
         this.$on("close", this.close);
     },
     methods: {
-        ...mapMutations("Tools/StyleVT", constants.mutationKeys),
-        ...mapActions("Tools/StyleVT", constants.actionKeys),
+        ...mapMutations("Tools/StyleVT", Object.keys(mutations)),
+        ...mapActions("Tools/StyleVT", Object.keys(actions)),
         close () {
             this.setActive({active: false});
 
