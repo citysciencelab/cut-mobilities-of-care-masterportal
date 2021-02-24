@@ -123,6 +123,7 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
             else {
                 setTimeout(() => {
                     document.querySelector("#sidebar .tool-manager").style.display = "none";
+                    Radio.trigger("Map", "updateSize");
                 }, 300);
             }
         }
