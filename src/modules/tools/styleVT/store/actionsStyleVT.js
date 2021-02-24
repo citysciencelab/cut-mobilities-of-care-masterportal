@@ -60,6 +60,7 @@ const initialState = Object.assign({}, stateStyleVT),
 
             if (active) {
                 commit("setLayerModel", layerModel);
+                dispatch("refreshVectorTileLayerList");
             }
             else {
                 dispatch("resetModule");

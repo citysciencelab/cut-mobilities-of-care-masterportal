@@ -48,7 +48,8 @@
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
-            "selectFeatures": "Features auswählen"
+            "selectFeatures": "Features auswählen",
+            "styleVt": "Style VT"
         },
         "contact": "Kontakt",
         "info": "Informationen"

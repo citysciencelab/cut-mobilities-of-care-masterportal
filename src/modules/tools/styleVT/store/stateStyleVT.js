@@ -7,6 +7,7 @@
  * @property {String} name Title displayed at the top of the window of the Tool; can be configured through the config.json.
  * @property {Boolean} renderToWindow Decides whether the Tool should be displayed as a window or as a sidebar.
  * @property {Boolean} resizableWindow Determines whether the Tool window can be resized.
+ * @property {Number} initialWidth Initial width to be used for the window.
  * @property {VTLayer[]} vectorTileLayerList Array of visible Vector Tile Layers selectable to style.
  */
 const state = {
@@ -15,9 +16,10 @@ const state = {
     glyphicon: "glyphicon-tint",
     id: "styleVT",
     layerModel: null,
-    name: "Style VT",
+    name: "common:menu.tools.styleVt",
     renderToWindow: true,
     resizableWindow: true,
+    initialWidth: 600,
     vectorTileLayerList: []
 };
 

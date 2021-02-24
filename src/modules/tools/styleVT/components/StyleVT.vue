@@ -54,12 +54,13 @@ export default {
 
 <template>
     <Tool
-        :title="name"
+        :title="$t(name)"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
+        :initialWidth="initialWidth"
     >
         <template v-slot:toolBody>
             <p
