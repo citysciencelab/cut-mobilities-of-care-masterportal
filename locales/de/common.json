@@ -48,7 +48,8 @@
             "addWms": "WMS hinzufügen",
             "wfsTransaction": "WFS-T Tool",
             "scaleSwitcher": "Maßstab umschalten",
-            "selectFeatures": "Features auswählen"
+            "selectFeatures": "Features auswählen",
+            "legend":"Legende"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -685,7 +686,8 @@
         "searchbar": {
             "placeholder": {
                 "addressHospitalBplan": "Suche nach Adresse/Krankenhaus/B-Plan",
-                "addressTopicParcel": "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "addressTopicParcel": "Suche Adresse, Stadtteil, Themen",
+                "addressTopic": "Suche Adresse, Stadtteil, Themen, Flurstück",
                 "address": "Suche nach Adresse"
             },
             "locationFinder": {

@@ -47,7 +47,8 @@
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
-            "selectFeatures": "Select features"
+            "selectFeatures": "Select features",
+            "legend":"Legend"
         },
         "contact": "Mail",
         "info": "Information"
@@ -685,6 +686,7 @@
             "placeholder": {
                 "addressHospitalBplan": "Search for Address/Hospital/B-Plan",
                 "addressTopicParcel": "Search address, district, topics, parcel",
+                "addressTopic": "Search address, district, topics",
                 "address": "Search for Address"
             },
             "showAllResults": "Show all results",
