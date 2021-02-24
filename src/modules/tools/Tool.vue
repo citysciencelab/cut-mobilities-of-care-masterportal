@@ -329,11 +329,11 @@ export default {
     .table-tool-win-all-vue {
         font-family: @font_family_2;
         border-radius: 12px;
-        background-color: @background_color_4;
         margin-bottom: 30px;
         .win-heading {
             font-family: @font_family_2;
             font-size: 14px;
+            background-color: @background_color_4;
             .heading-element {
                 > .title {
                     color: @color_2;
