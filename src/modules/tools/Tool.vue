@@ -228,7 +228,6 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
-    @color_1: rgb(85, 85, 85);
     @color_2: rgb(255, 255, 255);
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -240,18 +239,17 @@ export default {
     #vue-tool-content-body { display:block; }
 
     .win-heading{
-        padding: 12px 10px 12px 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_1;
         display:flex;
         flex-direction:row;
         width:100%;
+        padding-left: 10px;
 
         .heading-element {
             white-space: nowrap;
-            color: @color_1;
+            color: @secondary_contrast;
             font-size: 14px;
-            padding: 6px;
 
             &.flex-grow {
                 flex-grow:99;
@@ -259,9 +257,14 @@ export default {
             }
 
             > .title {
-                margin:0;
-                overflow:hidden;
+                color: @secondary_contrast;
                 white-space: nowrap;
+                font-size: 14px;
+                padding-top: 10px;
+            }
+
+            > .glyphicon {
+                padding: 10px 8px 10px 0px;
             }
 
             > span {
@@ -308,10 +311,7 @@ export default {
             .win-heading{
                 background-color:@background_color_2;
                 border-bottom:none;
-
-                .heading-element {
-                    .title { color: @color_2; }
-                }
+                overflow: hidden;
             }
         }
     }
