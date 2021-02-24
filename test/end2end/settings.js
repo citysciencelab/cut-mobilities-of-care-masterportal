@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     capabilities = {
         firefox: {"browserName": "firefox", acceptSslCerts: true, acceptInsecureCerts: true},
-        chrome: {"browserName": "chrome", version: "87", acceptSslCerts: true, acceptInsecureCerts: true},
+        chrome: {"browserName": "chrome", version: "88", acceptSslCerts: true, acceptInsecureCerts: true},
         ie: webdriver.Capabilities.ie()
     },
     /** TODO
@@ -14,10 +14,10 @@ const webdriver = require("selenium-webdriver"),
         // "600x800"
     ],
     configs = new Map([
-        ["basic", "/portal/basic"],
-        ["master", "/portal/master"],
-        ["custom", "/portal/masterCustom"],
-        ["default", "/portal/masterDefault"]
+        ["basic", "basic"],
+        ["master", "master"],
+        ["custom", "masterCustom"],
+        ["default", "masterDefault"]
     ]),
     modes = [
         "2D"
@@ -67,7 +67,7 @@ function isOB (mode) {
  * @returns {boolean} whether configuration is basic
  */
 function isBasic (url) {
-    return url.split("?")[0].endsWith(configs.get("basic"));
+    return url.split("?")[0].indexOf(configs.get("basic") + "_") > -1 || url.split("?")[0].endsWith(configs.get("basic"));
 }
 
 /**
@@ -76,7 +76,8 @@ function isBasic (url) {
  * @returns {boolean} whether configuration is basic
  */
 function isMaster (url) {
-    return url.split("?")[0].endsWith(configs.get("master"));
+    // e.g. "https://test.geoportal-hamburg.de/master_BG-1320
+    return url.split("?")[0].indexOf(configs.get("master") + "_") > -1 || url.split("?")[0].endsWith(configs.get("master"));
 }
 
 /**
@@ -85,7 +86,7 @@ function isMaster (url) {
  * @returns {boolean} whether configuration is default
  */
 function isDefault (url) {
-    return url.split("?")[0].endsWith(configs.get("default"));
+    return url.split("?")[0].indexOf(configs.get("default") + "_") > -1 || url.split("?")[0].endsWith(configs.get("default"));
 }
 
 /**
@@ -94,7 +95,7 @@ function isDefault (url) {
  * @returns {boolean} whether configuration is custom
  */
 function isCustom (url) {
-    return url.split("?")[0].endsWith(configs.get("custom"));
+    return url.split("?")[0].indexOf(configs.get("custom") + "_") > -1 || url.split("?")[0].endsWith(configs.get("custom"));
 }
 
 /**
@@ -136,14 +137,16 @@ function getBsCapabilities (browserstackuser, browserstackkey) {
         "browserstack.console": "verbose",
         "browserstack.idleTimeout": 300,
         // Use this capability to specify a custom delay between the execution of Selenium commands
-        "browserstack.autoWait": 50
+        "browserstack.autoWait": 50,
+        // is used for autologin to a webpage with a predefined username and password (login to geoportal test)
+        "unhandledPromptBehavior": "ignore"
     };
 
     return [
         {
             ...base,
             "browserName": "Chrome",
-            "browser_version": "87.0",
+            "browser_version": "88.0",
             "os": "Windows",
             "os_version": "10"
         }/*

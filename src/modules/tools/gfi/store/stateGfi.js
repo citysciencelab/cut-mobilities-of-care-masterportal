@@ -9,6 +9,7 @@
  * @property {String} desktopType Specifies which template is used in desktop mode.
  * @property {Boolean} centerMapToClickPoint specifies if the map should be centered when clicking on a feature.
  * @property {Boolean} isVisibleInMenu Indicates whether there is a menu entry for the GFI.
+ * @property {Boolean} renderToWindow if true, content is rendered into a window
  *
  */
 const state = {
@@ -21,7 +22,8 @@ const state = {
     centerMapToClickPoint: false,
     showMarker: true,
     highlightVectorRules: null,
-    isVisibleInMenu: true
+    isVisibleInMenu: true,
+    renderToWindow: true
 };
 
 export default state;

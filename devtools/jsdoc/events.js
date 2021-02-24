@@ -2039,19 +2039,6 @@
  * @description todo
  */
 
-/** -------------------- WPS -------------------- */
-
-/**
- * @event Core#RadioTriggerWPSRequest
- * @param {string} wpsID The service id, defined in rest-services.json
- * @param {string} identifier The functionality to be invoked by the wps
- * @param {object} data Contains the Attributes to be sent
- * @param {function} responseFunction function to be called
- * @param {number} timeout if set used as timeout in milliseconds, else timeout of 10.000 msecs is used
- * @description todo
- * @example Radio.trigger("WPS", "request", "1001", "schulwegrouting_wps.fmw", requestObj, this.handleResponse.bind(this), 50000);
- */
-
 /** -------------------- Snippets -------------------- */
 
 /**

@@ -26,8 +26,10 @@ function buildSinglePortal (allPortalPaths) {
 
     sourcePortalPath = allPortalPaths.pop();
 
-    const portalName = sourcePortalPath.split(path.sep).pop(),
-        distPortalPath = path.resolve(distPath, portalName);
+    /* eslint-disable-next-line no-process-env */
+    const appendix = process.env.BITBUCKET_BRANCH ? "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_") : "",
+        portalName = sourcePortalPath.split(path.sep).pop(),
+        distPortalPath = path.resolve(distPath, portalName + appendix);
 
     fs.remove(distPortalPath).then(() => {
         // console.warn("NOTE: Deleted directory \"" + distPortalPath + "\".");

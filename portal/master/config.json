@@ -336,7 +336,6 @@
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",
-            "renderToWindow": false,
             "iconList": [
               {
                 "id": "iconPoint",
@@ -658,8 +657,8 @@
           "featureCount": 20
         },
         {
-          "id": "2404",
-          "styleId": "45",
+          "id": "10882",
+          "styleId": "10882",
           "clusterDistance": 40,
           "routable": true,
           "searchField": "bezeichnung",

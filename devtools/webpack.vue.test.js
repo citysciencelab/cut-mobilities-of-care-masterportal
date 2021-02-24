@@ -16,6 +16,11 @@ module.exports = {
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
         devtoolFallbackModuleFilenameTemplate: "[absolute-resource-path]?[hash]"
     },
+    resolve: {
+        alias: {
+            vue: "vue/dist/vue.js"
+        }
+    },
     module: {
         rules: [
             {

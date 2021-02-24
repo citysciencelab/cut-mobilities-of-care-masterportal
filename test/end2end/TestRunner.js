@@ -18,7 +18,8 @@ const webdriver = require("selenium-webdriver"),
     browser = process.env.browser || "firefox,chrome",
     browserstackuser = process.env.bs_user,
     browserstackkey = process.env.bs_key,
-    url = process.env.url || "https://localhost:9001",
+    url = process.env.url || "https://localhost:9001/",
+    urlPart = process.env.urlPart || "portal/",
     // proxy for browserstack
     proxy = process.env.proxy || "",
     // proxy for local testing
@@ -47,13 +48,16 @@ function cleanProxyUrl (proxyUrl) {
  */
 function setLocalProxy (currentBrowser, builder) {
     if (currentBrowser === "chrome") {
-        builder.setChromeOptions(
-            new webdriverChrome.Options()
-                .addArguments(`--proxy-server=${localHttpProxy}`)
-                .addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`)
-                .addArguments("--ignore-certificate-errors")
-                .addArguments("--ignore-ssl-errors")
-        );
+        let options = new webdriverChrome.Options();
+
+        options = options.addArguments(`--proxy-server=${localHttpProxy}`);
+        options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
+        options = options.addArguments("--ignore-certificate-errors");
+        options = options.addArguments("--ignore-ssl-errors");
+        if (url.indexOf("localhost") !== -1) {
+            options = options.addArguments("--no-sandbox");
+        }
+        builder.setChromeOptions(options);
     }
     else {
         builder.setProxy(
@@ -74,9 +78,18 @@ function setLocalProxy (currentBrowser, builder) {
  * @returns {void}
  */
 function runTests (browsers) {
+    const date = new Date().toLocaleString(),
+        /* eslint-disable-next-line no-process-env */
+        build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
+
+    /* eslint-disable-next-line no-process-env */
+    if (process.env.BITBUCKET_BRANCH) {
+        console.warn("Running build on browserstack with name:\"" + build + "\" on Urls:");
+    }
+
     browsers.forEach(currentBrowser => {
         configs.forEach((pathEnd, config) => {
-            const completeUrl = url + pathEnd;
+            let completeUrl = url + urlPart + pathEnd;
 
             modes.forEach(mode => {
                 if (currentBrowser !== "bs") {
@@ -93,12 +106,19 @@ function runTests (browsers) {
                 else {
                     const bsCapabilities = getBsCapabilities(browserstackuser, browserstackkey);
 
+                    /* eslint-disable-next-line no-process-env */
+                    completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");
+                    console.warn(completeUrl);
+
                     bsCapabilities.forEach(capability => {
                         const builder = new webdriver.Builder().
                             usingHttpAgent(new http.Agent({keepAlive: true})).
                             usingServer("http://hub-cloud.browserstack.com/wd/hub").
                             withCapabilities(capability).
                             usingWebDriverProxy(proxy);
+
+                        capability.build = build;
+                        builder.withCapabilities(capability);
 
                         resolutions.forEach(resolution => {
                             tests(builder, completeUrl, "browserstack / " + capability.browserName, resolution, config, mode, capability);

@@ -493,11 +493,13 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         let extent = [];
 
         if (hit.coordinate.length === 2) {
+            store.dispatch("MapMarker/removePolygonMarker");
             store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
             Radio.trigger("MapView", "setCenter", hit.coordinate, index);
         }
         else {
             store.dispatch("MapMarker/removePolygonMarker");
+            store.dispatch("MapMarker/removePointMarker");
             store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
             extent = store.getters["MapMarker/markerPolygon"].getSource().getExtent();
             Radio.trigger("Map", "zoomToExtent", extent, {maxZoom: index});
@@ -915,7 +917,15 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             return;
         }
         else if (hit && hit.hasOwnProperty("coordinate")) {
-            store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            store.dispatch("MapMarker/removePolygonMarker");
+            store.dispatch("MapMarker/removePointMarker");
+
+            if (hit.coordinate.length === 2) {
+                store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            }
+            else {
+                store.dispatch("MapMarker/placingPolygonMarker", getWKTGeom(hit));
+            }
             return;
         }
         else if (hit && hit.hasOwnProperty("type") && (hit.type === i18next.t("common:modules.searchbar.type.topic") || hit.type === i18next.t("common:modules.searchbar.type.subject"))) {

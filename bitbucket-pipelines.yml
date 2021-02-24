@@ -1,13 +1,29 @@
 image: node:12.13.1
 
 pipelines:
-    custom:
-        build and test in Browser:
+     custom: # Pipelines that are triggered manually
+        End2End-Tests: # The name that is displayed in the list in the Bitbucket Cloud GUI
             - step:
                 caches:
                     - node
                 script:
+                    - rm -rf ./addons/readme.txt
+                    # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
+                    - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
+                    - git clone https://geowerkstatt@bitbucket.org/geowerkstatt-hamburg/addons.git
+                    - cd addons/cosi
                     - npm install
-                    - apt-get install unzip
+                    - cd ../sdpdownload
+                    - npm install
+                    - cd ..; cd ..;
+                    - npm install
+                    - npm run buildPortal
+                    - apt-get update && apt-get install unzip
+                    # make script executable
+                    - chmod +x ./devtools/scripts/transfer_to_test_geoportal.sh
+                    # commit changed file for "git-ftp"
+                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable" 
+                    - ./devtools/scripts/transfer_to_test_geoportal.sh
+                    # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestWithServer
+                    - npm run browsertestOnGeoportalTest

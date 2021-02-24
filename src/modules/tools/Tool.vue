@@ -135,8 +135,8 @@ export default {
     <div
         v-if="active"
         :id="renderToWindow ? '' : 'tool-sidebar-vue'"
-        class="tool-window-vue"
         :class="{
+            'tool-window-vue': renderToWindow,
             'table-tool-win-all-vue': uiStyle === 'TABLE',
             'is-minified': isMinified
         }"
@@ -147,7 +147,7 @@ export default {
             id="basic-resize-handle-sidebar"
             hPos="l"
             :minW="200"
-            targetSel=".tool-window-vue"
+            targetSel="#tool-sidebar-vue"
             @endResizing="updateMap"
         >
             <div>&#8942;</div>
@@ -285,6 +285,10 @@ export default {
         max-height:72vh;
         overflow: auto;
         min-width: 280px;
+
+        @media (max-width: 400px) {
+            right: 20px;
+        }
 
         .basic-resize-handle {
             position:absolute;

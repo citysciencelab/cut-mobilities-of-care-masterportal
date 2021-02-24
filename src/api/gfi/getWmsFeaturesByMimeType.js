@@ -128,6 +128,7 @@ export function getHtmlFeature (layer, url) {
     if (typeof url !== "string") {
         return [];
     }
+
     return requestGfi("text/html", url).then(document => {
         return handleHTMLResponse(document, layer, url);
     });
@@ -141,8 +142,8 @@ export function getHtmlFeature (layer, url) {
  * @returns {Object[]}  a list of object{getTheme, getTitle, getAttributesToShow, getProperties, getGfiUrl} or an emtpy array
  */
 export function handleHTMLResponse (document, layer, url) {
-    if (typeof document !== "undefined" && document.getElementsByTagName("tbody")[0]?.children.length >= 1) {
-        return [createGfiFeature(layer, url)];
+    if (document !== null) {
+        return [createGfiFeature(layer, url, null, null, document)];
     }
     return [];
 }
@@ -158,10 +159,11 @@ export function handleHTMLResponse (document, layer, url) {
  * @param {String|Object} [feature] the feature to get the id and the properties from
  * @param {?Object} [feature.properties] an object with the data of the feature as simple key/value pairs
  * @param {String} [feature.id=""] id the id of the feature
- * @param {Object[]} features a list of features
+ * @param {Object[]} [features=null] a list of features
+ * @param {String} [document=""] A html document as string with gfi content.
  * @returns {Object} an object{getTitle, getTheme, getAttributesToShow, getProperties, getId, getGfiUrl, getLayerId}
  */
-export function createGfiFeature (layer, url = "", feature, features = null) {
+export function createGfiFeature (layer, url = "", feature, features = null, document = "") {
     if (!layer) {
         return {};
     }
@@ -175,7 +177,8 @@ export function createGfiFeature (layer, url = "", feature, features = null) {
         getId: () => feature ? feature.getId() : "",
         getGfiUrl: () => url,
         getMimeType: () => layer.get("infoFormat"),
-        getLayerId: () => layer.get("id") ? layer.get("id") : ""
+        getLayerId: () => layer.get("id") ? layer.get("id") : "",
+        getDocument: () => document
     };
 }
 
