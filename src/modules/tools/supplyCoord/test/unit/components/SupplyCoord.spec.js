@@ -25,7 +25,6 @@ describe("src/modules/tools/supplyCoord/components/SupplyCoord.vue", () => {
         },
         mockMapMarkerActions = {
             removePointMarker: sinon.stub()
-            // ...mapActions("MapMarker", ["removePointMarker"]),
         },
         mockMapActions = {
             addPointerMoveHandler: sinon.stub(),
