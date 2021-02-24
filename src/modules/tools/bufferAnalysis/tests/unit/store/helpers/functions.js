@@ -1,5 +1,6 @@
 import Layer from "../../../../../../../../modules/core/modelList/layer/model";
 import sinon from "sinon";
+import {Vector as VectorLayer} from "ol/layer";
 
 /**
  * Creates an array with a given number of Layer Objects
@@ -17,6 +18,7 @@ function createLayersArray (count) {
         layer.setIsSelectedSpy = sinon.spy();
         layer.set("name", "Layer" + i);
         layer.set("id", i);
+        layer.set("layer", new VectorLayer());
         sinon.stub(layer, "setIsSelected").callsFake(layer.setIsSelectedSpy);
         layers.push(layer);
     }
