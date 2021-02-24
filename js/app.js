@@ -30,7 +30,6 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
@@ -231,10 +230,6 @@ async function loadApp () {
             }
             case "parcelSearch": {
                 new ParcelSearchView({model: tool});
-                break;
-            }
-            case "searchByCoord": {
-                new SearchByCoordView({model: tool});
                 break;
             }
             /**

@@ -12,6 +12,7 @@ import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
 import Measure from "./measure/store/indexMeasure";
 import SaveSelection from "./saveSelection/store/indexSaveSelection";
+import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
@@ -28,6 +29,7 @@ export default {
         Gfi,
         Measure,
         SaveSelection,
+        SearchByCoord,
         ScaleSwitcher,
         StyleVT,
         SupplyCoord

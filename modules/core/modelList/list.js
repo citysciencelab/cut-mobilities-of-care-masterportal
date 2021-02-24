@@ -26,7 +26,6 @@ import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 import Contact from "../../tools/contact/model";
-import SearchByCoord from "../../tools/searchByCoord/model";
 import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
@@ -266,9 +265,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
-            }
-            else if (attrs.id === "searchByCoord") {
-                return new SearchByCoord(attrs, options);
             }
             else if (attrs.id === "lines") {
                 return new Lines(attrs, options);
