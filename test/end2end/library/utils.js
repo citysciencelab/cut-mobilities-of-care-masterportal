@@ -146,13 +146,16 @@ async function logBrowserstackUrlToTest (sessionId) {
             password: process.env.bs_key
         }
     }).then(res => {
+        let logged = false;
+
         res.data.forEach(entry => {
             const build = entry.automation_build;
 
             /* eslint-disable-next-line no-process-env */
-            if (build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
+            if (!logged && build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
                 const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
 
+                logged = true;
                 console.warn(`      ${url}${sessionId}`);
             }
         });

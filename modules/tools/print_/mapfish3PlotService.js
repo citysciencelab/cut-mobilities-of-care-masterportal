@@ -613,7 +613,7 @@ const PrintModel = Tool.extend(/** @lends PrintModel.prototype */{
         visibleLayer.forEach(layer => {
             const layerModel = Radio.request("ModelList", "getModelByAttributes", {"id": layer.get("id")});
 
-            if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale <= layer.getMinResolution()) {
+            if (resoByMaxScale > layer.getMaxResolution() || resoByMinScale < layer.getMinResolution()) {
                 invisibleLayer.push(layer);
                 invisibleLayerNames += "- " + layer.get("name") + "<br>";
                 if (layerModel !== undefined) {

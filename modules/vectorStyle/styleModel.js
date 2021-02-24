@@ -576,7 +576,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     },
 
     /**
-     * Returns a unique id created from geometryType and conditions using base64 decoding.
+     * Returns an id created from geometryType and conditions using encodeURIComponent.
      * @param   {string} geometryType features geometry type
      * @param   {object} rule         a rule description
      * @returns {string} id
@@ -584,7 +584,7 @@ const VectorStyleModel = Backbone.Model.extend(/** @lends VectorStyleModel.proto
     createLegendId: function (geometryType, rule) {
         const properties = rule.hasOwnProperty("conditions") ? rule.conditions : null;
 
-        return btoa(geometryType + JSON.stringify(properties));
+        return encodeURIComponent(geometryType + JSON.stringify(properties));
     },
 
     /**

@@ -194,7 +194,7 @@ const LocationFinderModel = Backbone.Model.extend(/** @lends LocationFinderModel
                             max = this.transformToMapProjection(Radio.request("Map", "getMap"), crs, [parseFloat(locationFinderResult.xmax), parseFloat(locationFinderResult.ymax)]);
 
                         hit.coordinate = [
-                            min[0], min[1], max[0], max[1]
+                            min[0], min[1], max[0], min[1], max[0], max[1], min[0], max[1], min[0], min[1]
                         ];
                     }
                     else {

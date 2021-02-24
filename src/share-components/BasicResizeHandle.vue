@@ -62,7 +62,6 @@ export default {
             isResizing: false, // Flag to determine, if element is resizing right now
             startC: {x: 0, y: 0}, // Initial cursor position before resize start
             diffCRot: {x: 0, y: 0}, // Cursor position difference during resizing (modified by rotation)
-            limitD: {maxW: 0, minW: 0, maxH: 0, minH: 0}, // Calculated dimension limitations
             startR: 0, // Initial element rotation
             startP: {top: 0, left: 0}, // Initial starting position of resizable element
             startD: {width: 0, height: 0}, // Initial starting dimanesions of resizable element
@@ -189,24 +188,31 @@ export default {
 
             if (this.hPos !== "t" && this.hPos !== "b") {
                 newWidth = this.startD.width + this.hSigns[this.hPos][0] * this.diffCRot.x;
-                if (newWidth < this.limitD.minW) {
-                    newWidth = this.limitD.minW;
+                if (newWidth < this.minW) {
+                    newWidth = this.minW;
                 }
-                if (newWidth > this.limitD.maxW) {
-                    newWidth = this.limitD.maxW;
+                if (newWidth > this.maxW) {
+                    newWidth = this.maxW;
                 }
                 this.targetElement.style.width = Math.round(newWidth) + "px";
             }
 
             if (this.hPos !== "l" && this.hPos !== "r") {
                 newHeight = this.startD.height + this.hSigns[this.hPos][1] * this.diffCRot.y;
-                if (newHeight < this.limitD.minH) {
-                    newHeight = this.limitD.minH;
+                if (newHeight < this.minH) {
+                    newHeight = this.minH;
                 }
-                if (newHeight > this.limitD.maxH) {
-                    newHeight = this.limitD.maxH;
+                if (newHeight > this.maxH) {
+                    newHeight = this.maxH;
                 }
                 this.targetElement.style.height = Math.round(newHeight) + "px";
+            }
+
+            if (this.targetElement.style.maxWidth !== "none") {
+                this.targetElement.style.maxWidth = "none";
+            }
+            if (this.targetElement.style.maxHeight !== "none") {
+                this.targetElement.style.maxHeight = "none";
             }
         },
         /**
@@ -239,41 +245,6 @@ export default {
 
             this.targetElement.style.left = Math.round(newLeft) + "px";
             this.targetElement.style.top = Math.round(newTop) + "px";
-        },
-        /**
-         * Stores element dimension limitations.
-         * @returns {void}
-         */
-        storeDimensionLimitations: function () {
-            const targetElStyle = window.getComputedStyle(this.targetElement, null);
-
-            if (this.minW === -Infinity && parseFloat(targetElStyle.minWidth, 10) >= 0) {
-                this.limitD.minW = parseFloat(targetElStyle.minWidth, 10);
-            }
-            else {
-                this.limitD.minW = this.minW;
-            }
-
-            if (this.minH === -Infinity && parseFloat(targetElStyle.minHeight, 10) >= 0) {
-                this.limitD.minH = parseFloat(targetElStyle.minHeight, 10);
-            }
-            else {
-                this.limitD.minH = this.minH;
-            }
-
-            if (this.maxW === Infinity && parseFloat(targetElStyle.maxWidth, 10) >= 0) {
-                this.limitD.maxW = parseFloat(targetElStyle.maxWidth, 10);
-            }
-            else {
-                this.limitD.maxW = this.maxW;
-            }
-
-            if (this.maxH === Infinity && parseFloat(targetElStyle.maxHeight, 10) >= 0) {
-                this.limitD.maxH = parseFloat(targetElStyle.maxHeight, 10);
-            }
-            else {
-                this.limitD.maxH = this.maxH;
-            }
         },
         /**
          * Stores initial element rotation. This is needed to calculate the new resize position while
@@ -318,8 +289,6 @@ export default {
             this.startD.height = this.targetElement.offsetHeight;
             this.targetElement.style.width = this.startD.width;
             this.targetElement.style.height = this.startD.height;
-            this.targetElement.style.maxWidth = "none";
-            this.targetElement.style.maxHeight = "none";
         },
         /**
          * Stores initial cursor position. This is needed to calculate the cursor move distance while
@@ -345,7 +314,6 @@ export default {
             this.storeStartingCursorCoords(event);
             this.storeStartingPosition();
             this.storeStartingRotation();
-            this.storeDimensionLimitations();
             this.storeStartingDimensions();
 
             this.isResizing = true;

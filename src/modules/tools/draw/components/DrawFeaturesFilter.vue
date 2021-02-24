@@ -85,6 +85,7 @@ export default {
                 </label>
             </div>
         </template>
+        <hr>
     </form>
 </template>
 

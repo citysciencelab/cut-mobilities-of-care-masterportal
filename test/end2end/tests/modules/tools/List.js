@@ -45,7 +45,7 @@ async function ListTests ({builder, url, resolution, capability}) {
                 await driver.findElement(By.css("div#window li#featurelistFeaturelist"));
                 await driver.findElement(By.css("div#window li#featurelistFeaturedetails"));
 
-                hospitalLayerEntry = await driver.findElement(By.css("ul#featurelist-themes-ul li:last-child"));
+                hospitalLayerEntry = await driver.findElement(By.css("#featurelist-layer-1711"));
             });
 
             it("tool lists visible features", async function () {

@@ -134,8 +134,9 @@ export default {
 <template>
     <div
         v-if="active"
-        :id="renderToWindow ? 'tool-window-vue' : 'tool-sidebar-vue'"
+        :id="renderToWindow ? '' : 'tool-sidebar-vue'"
         :class="{
+            'tool-window-vue': renderToWindow,
             'table-tool-win-all-vue': uiStyle === 'TABLE',
             'is-minified': isMinified
         }"
@@ -146,7 +147,7 @@ export default {
             id="basic-resize-handle-sidebar"
             hPos="l"
             :minW="200"
-            targetEl="#tool-sidebar-vue"
+            targetSel="#tool-sidebar-vue"
             @endResizing="updateMap"
         >
             <div>&#8942;</div>
@@ -171,7 +172,7 @@ export default {
 
             <BasicDragHandle
                 v-if="renderToWindow"
-                targetEl="#tool-window-vue"
+                targetSel=".tool-window-vue"
                 :marginBottom="resizableWindow ? 25 : 0"
                 class="heading-element flex-grow"
             >
@@ -217,7 +218,7 @@ export default {
                 :id="'basic-resize-handle-' + hPos"
                 :key="hPos"
                 :hPos="hPos"
-                targetEl="#tool-window-vue"
+                targetSel=".tool-window-vue"
                 :minW="200"
                 :minH="100"
             />
@@ -272,7 +273,7 @@ export default {
         }
     }
 
-    #tool-window-vue {
+    .tool-window-vue {
         background-color: @background_color_1;
         display: block;
         position: absolute;
@@ -284,6 +285,10 @@ export default {
         max-height:72vh;
         overflow: auto;
         min-width: 280px;
+
+        @media (max-width: 400px) {
+            right: 20px;
+        }
 
         .basic-resize-handle {
             position:absolute;

@@ -59,6 +59,11 @@ export default {
         this.replacesConfiguredImageLinks();
         this.setImportedComponents();
     },
+    mounted () {
+        this.$nextTick(() => {
+            this.addTextHtmlContentToIframe();
+        });
+    },
     methods: {
         beautifyKey,
         isWebLink,
@@ -90,6 +95,18 @@ export default {
             }
             else if (typeof imageLinksAttribute === "string") {
                 this.imageLinks = [imageLinksAttribute];
+            }
+        },
+
+        /**
+         * Adds the text/html content to the iframe
+         * @returns {void}
+         */
+        addTextHtmlContentToIframe: function () {
+            const iframe = document.getElementsByClassName("gfi-iFrame")[0];
+
+            if (this.mimeType === "text/html" && iframe) {
+                iframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(this.feature.getDocument());
             }
         }
     }
@@ -166,7 +183,6 @@ export default {
         </table>
         <iframe
             v-if="mimeType === 'text/html'"
-            :src="feature.getGfiUrl()"
             class="gfi-iFrame"
         >
         </iframe>

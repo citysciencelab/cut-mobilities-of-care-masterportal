@@ -76,38 +76,6 @@ function getKmlHotSpotOfIconStyle (anchor) {
 }
 
 /**
- * Adds the scale to the LabelStyle-Part of a Point-KML.
- *
- * @see https://developers.google.com/kml/documentation/kmlreference#iconstyle
- * @param {number} scale Scale calculated from the fontSize of the feature.
- * @returns {string} The LabelStyle-Part of a KML-File.
- */
-function getKmlScaleOfLabelStyle (scale) {
-    return `<colorMode>normal</colorMode><scale>${scale}</scale>`;
-}
-
-/**
- * Determines the scale value of the KML name tag corresponding to the size of the font of the feature.
- *
- * @param {string} fontSize The size of the font retrieved from the feature style text.
- * @returns {number} Scale value for the KML name tag.
- */
-function getScaleFromFontSize (fontSize) {
-    const size = parseInt(fontSize.substr(0, 2), 10);
-
-    if (size <= 12) {
-        return 0;
-    }
-    else if (size <= 20) {
-        return 1;
-    }
-    else if (size <= 32) {
-        return 2;
-    }
-    return 1;
-}
-
-/**
  * Converts the features to KML while also saving its style information.
  *
  * @param {Object} context actions context object.
@@ -171,17 +139,7 @@ export default async function convertFeaturesToKml ({state, dispatch}) {
         if (placemark.getElementsByTagName("Point").length > 0 && skip[i] === false) {
             const style = placemark.getElementsByTagName("Style")[0];
 
-            if (placemark.getElementsByTagName("name")[0]) {
-                const labelStyle = placemark.getElementsByTagName("LabelStyle")[0],
-                    // Please be aware of devtools/tasks/replace.js and devtools/tasks/customBuildPortalconfigsReplace.js if you change the path of the SVG
-                    iconUrl = `${window.location.origin}/img/tools/draw/circle_blue.svg`;
-
-                if (textFonts[i]) {
-                    labelStyle.innerHTML += getKmlScaleOfLabelStyle(getScaleFromFontSize(textFonts[i]));
-                }
-                style.innerHTML += createKmlIconStyle(iconUrl, 0);
-            }
-            else if (hasIconUrl[i] === false && pointColors[i]) {
+            if (hasIconUrl[i] === false && pointColors[i]) {
                 // Please be aware of devtools/tasks/replace.js and devtools/tasks/customBuildPortalconfigsReplace.js if you change the path of the SVG
                 const iconUrl = `${window.location.origin}/img/tools/draw/circle_${getIconColor(pointColors[i])}.svg`,
                     iconStyle = createKmlIconStyle(iconUrl, 1);

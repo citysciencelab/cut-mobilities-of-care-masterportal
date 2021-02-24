@@ -1,6 +1,7 @@
 import {Circle} from "ol/geom.js";
 import {fromCircle} from "ol/geom/Polygon.js";
 import {GeoJSON, GPX} from "ol/format.js";
+import convertFeaturesToKml from "../../../../../../src/utils/convertFeaturesToKml.js";
 
 import {transform, transformPoint} from "../../utils/download/transformGeometry";
 
@@ -33,10 +34,8 @@ async function convertFeatures ({state, dispatch}, format) {
  *
  * @returns {void}
  */
-function fileDownloaded ({commit}) {
-    commit("setDownloadEnabled");
-    commit("setDownloadFileName", "");
-    commit("setDownloadSelectedFormat", "");
+function fileDownloaded ({state, commit}) {
+    commit("setDownloadSelectedFormat", state.download.selectedFormat);
 }
 
 /**
@@ -55,7 +54,7 @@ async function prepareData ({state, commit, dispatch}) {
             features = await dispatch("convertFeatures", new GPX());
             break;
         case "KML":
-            features = await dispatch("convertFeaturesToKml");
+            features = await convertFeaturesToKml(state.download.features);
             break;
         case "none":
             commit("setDownloadSelectedFormat", "");
@@ -110,9 +109,15 @@ function setDownloadFeatures ({state, commit, dispatch}) {
         const feature = drawnFeature.clone(),
             geometry = feature.getGeometry();
 
+        // If the feature is invisible from filter, the style will be reset by printing.
+        if (!feature.get("isVisible") && feature.get("invisibleStyle")) {
+            feature.setStyle(feature.get("invisibleStyle"));
+        }
+
         if (geometry instanceof Circle) {
             feature.setGeometry(fromCircle(geometry));
         }
+
         downloadFeatures.push(feature);
     });
 
@@ -146,11 +151,10 @@ function setDownloadFileName ({state, commit, dispatch}, {currentTarget}) {
  * If the user entered a name for a file and has chosen a format for the features, the download button is enabled.
  *
  * @param {Event} event Event fired by selecting a different element.
- * @param {HTMLSelectElement} event.currentTarget The HTML select element for the file format.
+ * @param {String} value The selected option value from dropdown or pre selected value.
  * @returns {void}
  */
-async function setDownloadSelectedFormat ({state, commit, dispatch}, {currentTarget}) {
-    const {value} = currentTarget;
+async function setDownloadSelectedFormat ({state, commit, dispatch}, value) {
 
     commit("setDownloadSelectedFormat", value);
     if (state.layer.getSource().getFeatures().length > 0) {

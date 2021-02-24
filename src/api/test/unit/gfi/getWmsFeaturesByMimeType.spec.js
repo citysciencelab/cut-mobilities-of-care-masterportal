@@ -34,7 +34,7 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
 
     describe("createGfiFeature", () => {
         it("should return an object with specific functions to get the given params", () => {
-            const feature = createGfiFeature(layer, url, aFeature);
+            const feature = createGfiFeature(layer, url, aFeature, null, "documentMock");
 
             expect(feature).to.be.an("object");
 
@@ -51,6 +51,7 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
             expect(feature.getAttributesToShow()).to.equal("attributesToShow");
             expect(feature.getProperties()).to.equal("featureProperties");
             expect(feature.getId()).to.equal("id");
+            expect(feature.getDocument()).to.equal("documentMock");
         });
     });
 
@@ -166,9 +167,7 @@ describe("src/api/gfi/getWmsFeaturesByMimeType.js", () => {
     });
     describe("handleHTMLResponse", () => {
         it("handles response with mimeType text/html, empty body and the given url", async () => {
-            const documentMock = {
-                    getElementsByTagName: () => []
-                },
+            const documentMock = null,
                 result = handleHTMLResponse(documentMock, layer, url);
 
             expect(result.length).to.equal(0);

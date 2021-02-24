@@ -21,12 +21,12 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function CoordTests ({builder, url, resolution, config, capability}) {
-    describe.only("SupplyCoord", function () {
+    describe("SupplyCoord", function () {
         const selectors = {
             tools: By.xpath("//ul[@id='tools']/.."),
             toolCoord: By.css("ul#tools span.glyphicon-screenshot"),
-            modal: By.css("#tool-window-vue"),
-            header: By.css("#tool-window-vue p.title span"),
+            modal: By.css(".tool-window-vue"),
+            header: By.css(".tool-window-vue p.title span"),
             coordSystemLabel: By.xpath("//label[@for='coordSystemField']"),
             coordSystemSelect: By.css("select#coordSystemField"),
             eastingLabel: By.css("label#coordinatesEastingLabel"),
