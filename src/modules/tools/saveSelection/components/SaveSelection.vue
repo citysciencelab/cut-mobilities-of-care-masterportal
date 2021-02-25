@@ -101,8 +101,10 @@ export default {
 <style lang="less" scoped>
 @import "~variables";
 
-form {
-    width: 450px;
+@media (min-width: 768px) {
+    form {
+        width: 450px;
+    }
 }
 span {
     font-size: 11px;
