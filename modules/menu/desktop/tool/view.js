@@ -170,7 +170,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             }
         }
 
-        // Navigation wird geschlossen
+        // Navigation is closed
         $("div.collapse.navbar-collapse").removeClass("in");
     }
 });
