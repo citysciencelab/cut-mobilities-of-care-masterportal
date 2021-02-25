@@ -68,11 +68,11 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch"
+            en: "englisch",
+            it: "italienisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
     }
 };
 

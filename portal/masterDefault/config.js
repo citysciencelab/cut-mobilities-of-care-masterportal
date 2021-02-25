@@ -119,8 +119,7 @@ const Config = {
             it: "italienisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
-        loadPath: "/locales/{{lng}}/{{ns}}.json"
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
     },
     /**
      * @deprecated to be deleted with version 3.0
