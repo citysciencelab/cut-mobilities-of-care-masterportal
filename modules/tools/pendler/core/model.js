@@ -308,19 +308,22 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
         this.setPostBody(postBody);
     },
+    getDownloadAlertProperties: function(){
+        return {
+            category: "common:modules.alerting.categories.warning",
+            confirmText: "common:button.download",
+            content: i18next.t("common:modules.tools.pendler.general.attributionText"),
+            displayClass: "warning",
+            legacy_onConfirm: this.download.bind(this),
+            mustBeConfirmed: true
+        };
+    },
     /**
      * Creates a confirmable alert with the csvDownloadConfirm text
      * @returns {void}
      */
     createAlertBeforeDownload: function () {
-        Radio.trigger("Alert", "alert", {
-            category: "common:modules.alerting.categories.warning",
-            confirmText: "common:button.download",
-            content: this.get("attributionText"),
-            displayClass: "warning",
-            legacy_onConfirm: this.download.bind(this),
-            mustBeConfirmed: true
-        });
+        Radio.trigger("Alert", "alert", this.getDownloadAlertProperties());
     },
     /**
      * downloads all line-features as csv file
