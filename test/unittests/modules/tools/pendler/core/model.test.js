@@ -36,20 +36,21 @@ describe("modules/tools/pendler/core/model.js", () => {
             expect(result).to.deep.equal(expected);
         });
         it("test createAlertBeforeDownload properties", () => {
-            const expected ={
-                category: "common:modules.alerting.categories.warning",
-                confirmText: "common:button.download",
-                content: "modules.tools.pendler.general.attributionText",
-                displayClass: "warning",
-                mustBeConfirmed: true
-            }, result = model.getDownloadAlertProperties();
+            const expected = {
+                    category: "common:modules.alerting.categories.warning",
+                    confirmText: "common:button.download",
+                    content: "modules.tools.pendler.general.attributionText",
+                    displayClass: "warning",
+                    mustBeConfirmed: true
+                },
+                result = model.getDownloadAlertProperties();
 
             expect(result.category).to.deep.equal(expected.category);
             expect(result.confirmText).to.deep.equal(expected.confirmText);
             expect(result.content).to.deep.equal(expected.content);
             expect(result.displayClass).to.deep.equal(expected.displayClass);
             expect(result.mustBeConfirmed).to.deep.equal(expected.mustBeConfirmed);
-            expect(typeof(result.legacy_onConfirm)).to.be.equals("function");
+            expect(typeof result.legacy_onConfirm).to.be.equals("function");
         });
     });
 });

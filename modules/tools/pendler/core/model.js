@@ -308,7 +308,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
         this.setPostBody(postBody);
     },
-    getDownloadAlertProperties: function(){
+    getDownloadAlertProperties: function () {
         return {
             category: "common:modules.alerting.categories.warning",
             confirmText: "common:button.download",
