@@ -25,7 +25,7 @@ git add addons/
 git commit addons/ -m "is sometimes modified after install"
 echo "git status 3:"
 git status
-git commit package-lock.json -m "is sometimes modified after install"
+# git commit package-lock.json -m "is sometimes modified after install"
 echo "git status 4:"
 git status
 # ATTENTION: (next line) do init once per ftp target-folder to create and transport the .git-ftp.log file containing the SHA1 of the latest commit, after that comment out next line again
