@@ -686,8 +686,8 @@
         "searchbar": {
             "placeholder": {
                 "addressHospitalBplan": "Suche nach Adresse/Krankenhaus/B-Plan",
-                "addressTopicParcel": "Suche Adresse, Stadtteil, Themen",
-                "addressTopic": "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "addressTopicParcel": "Suche Adresse, Stadtteil, Themen, Flurstück",
+                "addressTopic": "Suche Adresse, Stadtteil, Themen",
                 "address": "Suche nach Adresse"
             },
             "locationFinder": {
