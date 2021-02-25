@@ -80,7 +80,6 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
 
         this.listenTo(this, {
             "change:kreis": function (model, value) {
-                this.setFeatureType(this.get("wfsappKreise"));
                 this.unset("direction", {silent: true});
                 this.unset("gemeinde");
                 this.clear();
