@@ -115,7 +115,17 @@ const SidebarView = Backbone.View.extend(/** @lends SidebarView.prototype */{
     toggle: function (visible) {
         this.model.setIsVisible(Boolean(visible));
         if (visible === true) {
-            document.querySelector("#sidebar .tool-manager").style.display = "none";
+            if (document.querySelector("#sidebar .tool-manager")) {
+                document.querySelector("#sidebar .tool-manager").style.display = "none";
+            }
+            // Timeout added since the elements are loaded before the vue app. The problem takes care of itself with the move to Vue.
+            // It is only necessary for the initial opening.
+            else {
+                setTimeout(() => {
+                    document.querySelector("#sidebar .tool-manager").style.display = "none";
+                    Radio.trigger("Map", "updateSize");
+                }, 300);
+            }
         }
         else {
             document.querySelector("#sidebar .tool-manager").style.display = "block";
