@@ -5,6 +5,7 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import {Feature} from "ol";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import store from "../../../src/app-store/index";
 
 const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -612,11 +613,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         if (attributeFields.length <= 1) {
             console.error("The WFS-Layer is invalid. The layer has no attributes.");
             message = this.getAlertMessage("faultyDFTResponse");
-            Radio.trigger("Alert", "alert", {
-                id: "faultyDFTResponse",
-                kategorie: "alert-warn",
-                text: message,
-                confirmable: false
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Warnung",
+                displayClass: "warning",
+                content: message,
+                mustBeConfirmed: false
             });
         }
         else {
@@ -730,13 +731,13 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         }
         else if (gfiAttributes === "ignore") {
             message = this.getAlertMessage("gfiAttrIgnore");
-            Radio.trigger("Alert", "alert", {
-                id: "gfiAttrIgnore",
-                kategorie: "alert-warn",
-                text: message,
-                confirmable: false
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Warnung",
+                displayClass: "warning",
+                content: message,
+                mustBeConfirmed: false
             });
-            console.error("The gfiAttributes are configured with 'ignore' in the configuration of the currently selected layer. Therefore, no attributes of the layer are read and processed.");
+            console.warn("The gfiAttributes are configured with 'ignore' in the configuration of the currently selected layer. Therefore, no attributes of the layer are read and processed.");
         }
         else if (typeof gfiAttributes === "object" && gfiAttributes !== null) {
             Object.entries(gfiAttributes).forEach(([key, value]) => {
@@ -1130,11 +1131,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                     if (typeof feature.get(field.field) !== "string" || feature.get(field.field === "")) {
                         isConditionProofed = false;
                         message = this.getAlertMessage("mandatoryFieldMissing");
-                        Radio.trigger("Alert", "alert", {
-                            id: "mandatoryFieldMissing",
-                            kategorie: "alert-warning",
-                            text: message,
-                            confirmable: false
+                        store.dispatch("Alerting/addSingleAlert", {
+                            category: "Warnung",
+                            displayClass: "warning",
+                            content: message,
+                            mustBeConfirmed: false
                         });
                     }
                 }
@@ -1148,11 +1149,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0 && !feature.getKeys().includes(geometryName)) {
             isConditionProofed = false;
             message = this.getAlertMessage("noGeometry");
-            Radio.trigger("Alert", "alert", {
-                id: "noGeometry",
-                kategorie: "alert-warning",
-                text: message,
-                confirmable: false
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Warnung",
+                displayClass: "warning",
+                content: message,
+                mustBeConfirmed: false
             });
         }
 
@@ -1463,11 +1464,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                     alertCase = "SuccessfullDelete";
                 }
                 message = this.getAlertMessage(alertCase);
-                Radio.trigger("Alert", "alert", {
-                    id: "Save",
-                    kategorie: "alert-success",
-                    text: message,
-                    confirmable: false
+                store.dispatch("Alerting/addSingleAlert", {
+                    category: "Info",
+                    displayClass: "info",
+                    content: message,
+                    mustBeConfirmed: false
                 });
             }
         }
@@ -1516,11 +1517,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             }
             message = this.getAlertMessage(alertCase);
         }
-        Radio.trigger("Alert", "alert", {
-            id: "Save",
-            kategorie: "alert-danger",
-            text: message,
-            confirmable: false
+        store.dispatch("Alerting/addSingleAlert", {
+            category: "Fehler",
+            displayClass: "error",
+            content: message,
+            mustBeConfirmed: false
         });
     },
 

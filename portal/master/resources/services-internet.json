@@ -19,7 +19,7 @@
 		"gfiTheme": "default",
 		"gfiComplex": "false",
 		"layerAttribution": "nicht vorhanden",
-		"legendURL": "ignore",
+		"legend": "ignore",
 		"cache": false,
 		"featureCount": 1,
 		"datasets": [
@@ -60,7 +60,7 @@
 		"gfiTheme": "default",
 		"gfiComplex": "false",
 		"layerAttribution": "nicht vorhanden",
-		"legendURL": "ignore",
+		"legend": "ignore",
 		"cache": false,
 		"featureCount": 1,
 		"datasets": [
@@ -101,7 +101,7 @@
 		"gfiTheme": "default",
 		"gfiComplex": "false",
 		"layerAttribution": "Geodaten der Länder </br> © GeoBasis-DE/ZSGT",
-		"legendURL": "",
+		"legend": "",
 		"cache": false,
 		"featureCount": 1,
 		"datasets": []
@@ -119,7 +119,7 @@
 		"outputFormat": "XML",
 		"gfiAttributes": "showAll",
 		"layerAttribution": "nicht vorhanden",
-		"legendURL": "",
+		"legend": "",
         "isSecured": true,
         "authenticationUrl": "http://dienste2.schulung.deegree-enterprise.de/security-proxy/auth/services/wfstpoint?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType",
 		"datasets": []
@@ -144,7 +144,7 @@
 			"isUpdate": "update"
         },
         "layerAttribution" : "nicht vorhanden",
-        "legendURL" : "",
+        "legend" : "",
         "datasets" : []
 	},
 	{
@@ -167,7 +167,7 @@
 			"isUpdate": "update"
         },
         "layerAttribution" : "nicht vorhanden",
-        "legendURL" : "",
+        "legend" : "",
         "datasets" : []
 	},
 	{
@@ -188,7 +188,7 @@
 		"gfiAttributes" : "showAll",
 		"gfiTheme" : "default",
 		"layerAttribution" : "nicht vorhanden",
-		"legendURL" : "",
+		"legend" : "",
 		"isSecured": true,
 		"authenticationUrl": "http://dienste2.schulung.deegree-enterprise.de/security-proxy/auth/services/wms_1.3.0?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetCapabilities",
 		"cache" : false,

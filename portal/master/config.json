@@ -205,7 +205,7 @@
             "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
           },
-          "extendedFilter": {
+          "filter": {
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
             "deactivateGFI": false
@@ -291,7 +291,7 @@
           "wfst":{
             "name": "translate#common:menu.tools.wfsTransaction",
             "glyphicon": "glyphicon-globe",
-            "layerIds": ["6206", "6207", "6208"],
+            "layerIds": ["6206"],
             "toggleLayer": false,
             "layerSelect": "WFS-T Feature Types",
             "pointButton": [
@@ -405,26 +405,11 @@
           ]
         },
         {
-          "Titel": "WFS-T Dienste",
+          "Titel": "Abgesicherte WMS Dienste",
           "Layer": [
             {
-              "id": "6207",
+              "id": "6111",
               "visibility": false
-            },
-            {
-              "id": "6208",
-              "visibility": false
-            }
-          ]
-        },
-        {
-          "id": "myId2",
-          "children": [
-            {
-              "id": "682"
-            },
-            {
-              "id": "1731"
             }
           ]
         }
