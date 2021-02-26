@@ -18,13 +18,6 @@
     "typ" : "URL"
   },
   {
-    "id" : "7",
-    "name" : "Routing Service VIOM",
-    "url" : "/viomRouting",
-    "providerID" : "HHBWVI",
-    "typ" : "ID"
-  },
-  {
     "id" : "4",
     "name" : "BKG Geokodierungsdienst Suggest",
     "url" : "/bkg_suggest",

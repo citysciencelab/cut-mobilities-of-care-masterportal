@@ -894,7 +894,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:compareFeatures]: # (Portalconfig.menu.tool.compareFeatures)
 [type:parcelSearch]: # (Portalconfig.menu.tool.parcelSearch)
 [type:print]: # (Portalconfig.menu.tool.print)
-[type:routing]: # (Portalconfig.menu.tool.routing)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
 [type:lines]: # (Portalconfig.menu.tool.lines)
@@ -935,7 +934,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
-|routing|nein|**[routing](#markdown-header-portalconfigmenutoolrouting)**||Routing. Über dieses Werkzeug können Routen berechnet werden.|true|
 |saveSelection|nein|**[saveSelection](#markdown-header-portalconfigmenutoolsaveselection)**||Werkzeug mit dem sich die aktuellen Karteninhalte speichern lassen. Der Zustand der Karte wird als URL zum Abspeichern erzeugt. Dabei werden die Layer in deren Reihenfolge, Transparenz und Sichtbarkeit dargestellt. Zusätzlich wird die Zentrumskoordinate mit abgespeichert.|false|
 |searchByCoord|nein|**[searchByCoord](#markdown-header-portalconfigmenutoolsearchbycoord)**||Koordinatensuche. Über eine Eingabemaske können das Koordinatensystem und die Koordinaten eingegeben werden. Das Werkzeug zoomt dann auf die entsprechende Koordinate und setzt einen Marker darauf.|false|
 |selectFeatures|nein|**[tool](#markdown-header-portalconfigmenutool)**||Ermöglicht Auswahl von Features durch Ziehen einer Box und Einsehen derer GFI-Attribute.|false|
@@ -1421,38 +1419,6 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
     "filename": "Ausdruck",
     "title": "Mein Titel",
     "version" : "mapfish_print_3"
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.routing
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Routing Modul.
-
-**ACHTUNG: Backend notwendig!**
-
-**Das Routing findet auf externen Daten statt und ist nur in wenigen Portalen vorenthalten, u.a. das [Verkehrsportal](https://geoportal-hamburg.de/verkehrsportal).**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|viomRoutingID|ja|String||Id des Routingdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|bkgSuggestID|ja|String||Id des Vorschlagsdienstes des BKG. Er wird verwendet um Adressvorschläge zu liefern. Wird in der rest-services.json abgelegt.|false|
-|bkgGeosearchID|ja|String||Id des Geokodierungsdienstes des BKG. Er wird verwendet um gewählte Adressen in Koordinaten umzuwandeln. Wird in der rest-services.json abgelegt.|false|
-|isInitOpen|nein|Boolean|false|Flag, ob das Tool initial geöffnet sein soll.|false|
-
-**Beispiel**
-```
-#!json
-"routing": {
-    "name": "Routenplaner",
-    "glyphicon": "glyphicon-road",
-    "viomRoutingID": "1",
-    "bkgSuggestID": "2",
-    "bkgGeosearchID": "3",
-    "isInitOpen": false
 }
 ```
 
@@ -2963,8 +2929,6 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
 |extendedFilter|nein|Boolean||Gibt an, ob dieser Layer vom Werkzeug "extendedFilter" in **[tools](#markdown-header-portalconfigmenutools)** verwendet werden kann.|false|
 |filterOptions|nein|**[filterOption](#markdown-header-themenconfiglayervectorfilteroption)**[]||Filteroptionen die vom Werkzeug "wfsFeatureFilter" in **[tools](#markdown-header-portalconfigmenutools)** benötigt werden.|false|
 |mouseHoverField|nein|String/String[]||Attributname oder Array von Attributnamen, die angezeigt werden sollen, sobald der User mit der Maus über ein Feature hovert.|false|
-|routable|nein|Boolean||Gibt an, ob die Position der GFI-Abfrage als Routing Ziel verwendet werden kann. Hierzu muss das Werkzeug **[routing](#markdown-header-portalconfigmenutoolrouting)** konfiguriert sein.|false|
-|searchField|nein|String||Attributname nach dem die Searchbar diesen Layer durchsucht.|false|
 |additionalInfoField|nein|String|"name"|Attributname des Features für die Hitlist in der Searchbar. Ist das Attribut nicht vorhanden, wird der Layername angegeben.|false|
 |styleId|nein|String||Id die den Style definiert. Id wird in der **[style.json](style.json.de.md)** aufgelöst.|false|
 |styleGeometryType|nein|String/String[]||Geometrietypen für einen WFS-Style, falls nur bestimmte Geometrien eines Layers angezeigt werden sollen **[siehe dazu](style.json.md#markdown-header-abbildungsvorschriften)**.|false|

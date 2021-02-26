@@ -4,13 +4,11 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
-import RoutingIcon from "../../../favoriteIcons/components/RoutingIcon.vue";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon,
-        RoutingIcon
+        CompareFeatureIcon
     },
     props: {
         feature: {

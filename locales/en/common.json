@@ -35,7 +35,6 @@
             "supplyCoord": "Query coordinates",
             "searchByCoord": "Coordinate search",
             "fileImport": "Import file",
-            "routing": "Route planner",
             "draw": "Drawing / writing",
             "shadow": "Shadows",
             "styleWMS": "Style WMS",
@@ -448,9 +447,6 @@
                     "compareFeatureIcon": {
                       "toCompareList": "Add to compare list",
                       "fromCompareList": "Remove from compare list"
-                    },
-                    "routingicon": {
-                        "routingDestination": "Assign as destination"
                     }
                 },
                 "themes": {
@@ -503,22 +499,6 @@
                 "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 "shortMonths": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
               }
-            },
-            "viomRouting": {
-                "startAddressLabel": "Start address",
-                "destinationAddressLabel": "Destination address",
-                "fromPlaceholder": "From",
-                "toPlaceholder": "To",
-                "setStartTimeText": "Set start time",
-                "routingError": "Error",
-                "enterStartDestHoverText": "Enter start and destination",
-                "enterOptionsText": "Enter options",
-                "calculateRoute": "Calculate route",
-                "currentPosition": "Current position",
-                "routingCalcError": "Sorry, the request could not be processed. Please contact the administrator",
-                "routingCalcAborted": "Sorry, the request failed. Please contact the administrator. The following error has occurred",
-                "addressRequestFailed": "Address request failed",
-                "selectedDestination": "Selected destination"
             },
             "searchByCoord": {
                 "coordinateSystem": "Coordinate system",

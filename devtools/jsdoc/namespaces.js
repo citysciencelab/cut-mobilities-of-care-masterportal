@@ -522,12 +522,6 @@
  */
 
 /**
- * @namespace ViomRouting
- * @memberof Tools
- * @description Tool to route on viom data.
- */
-
-/**
  * @namespace VirtualCity
  * @memberof Tools
  * @description Tool to show virtual city data

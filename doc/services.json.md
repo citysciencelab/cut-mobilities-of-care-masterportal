@@ -492,7 +492,7 @@ Definition of parameters for GFI template `"default"`.
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |imageLinks|no|String/String[]|`["imgLink", "link_image"]`|Defines in which attribute an image reference is given. Attributes will be searched in given order, and the first hit will be used.|
-|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS) and `routing`.
+|showFavoriteIcons|no|Boolean|`true`|Specifies whether an icon bar allowing tool access is to be displayed. The icons are only displayed if the corresponding tools are configured. Usable tools: `compareFeatures` (not yet implemented for WMS).
 
 
 **gfiTheme example for template "Default":**

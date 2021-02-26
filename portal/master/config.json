@@ -325,14 +325,6 @@
             "glyphicon": "glyphicon-filter",
             "deactivateGFI": false
           },
-          "routing": {
-            "name": "translate#common:menu.tools.routing",
-            "glyphicon": "glyphicon-road",
-            "viomRoutingID": "7",
-            "bkgSuggestID": "4",
-            "bkgGeosearchID": "5",
-            "isInitOpen": false
-          },
           "draw": {
             "name": "translate#common:menu.tools.draw",
             "glyphicon": "glyphicon-pencil",

@@ -48,6 +48,9 @@
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.
 
+### Removed
+- The routing-tool was removed.
+
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
 - Various bugfixes.

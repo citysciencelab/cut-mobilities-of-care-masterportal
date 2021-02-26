@@ -25,7 +25,6 @@ import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
  * @deprecated in 3.0.0
@@ -270,9 +269,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "animation") {
                 return new Animation(attrs, options);
-            }
-            else if (attrs.id === "routing") {
-                return new Routing(attrs, options);
             }
             else if (attrs.id === "addWMS") {
                 return new AddWms(attrs, options);

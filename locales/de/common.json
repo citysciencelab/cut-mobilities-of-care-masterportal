@@ -35,7 +35,6 @@
             "supplyCoord": "Koordinaten abfragen",
             "searchByCoord": "Koordinatensuche",
             "fileImport": "Datei-Import",
-            "routing": "Routenplaner",
             "draw": "Zeichnen / Schreiben",
             "shadow": "Schatten",
             "styleWMS": "Style WMS",
@@ -448,9 +447,6 @@
                   "compareFeatureIcon": {
                     "toCompareList": "Auf die Vergleichsliste",
                     "fromCompareList": "Von der Vergleichsliste entfernen"
-                  },
-                  "routingicon": {
-                    "routingDestination": "Als Ziel übernehmen"
                   }
                 },
                 "themes": {
@@ -503,22 +499,6 @@
                 "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
                 "shortMonths": ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
               }
-            },
-            "viomRouting": {
-                "startAddressLabel": "Startadresse",
-                "destinationAddressLabel": "Zieladresse",
-                "fromPlaceholder": "Von",
-                "toPlaceholder": "Bis",
-                "setStartTimeText": "Startzeitpunkt vorgeben",
-                "routingError": "Fehlermeldung bei Routenberechnung",
-                "enterStartDestHoverText": "Start- und Ziel eingeben",
-                "enterOptionsText": "Optionen eingeben",
-                "calculateRoute": "Route berechnen",
-                "currentPosition": "Aktueller Standpunkt",
-                "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator",
-                "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten",
-                "addressRequestFailed": "Adressabfrage fehlgeschlagen",
-                "selectedDestination": "Gewähltes Ziel"
             },
             "searchByCoord": {
                 "coordinateSystem": "Koordinatensystem",

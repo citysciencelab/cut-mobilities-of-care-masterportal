@@ -269,13 +269,6 @@
                  "glyphicon":"glyphicon-filter",
                  "deactivateGFI":false
               },
-              "routing":{
-                 "name":"Routenplaner",
-                 "glyphicon":"glyphicon-road",
-                 "viomRoutingID":"7",
-                 "bkgSuggestID":"4",
-                 "bkgGeosearchID":"5"
-              },
               "draw":{
                  "name":"Zeichnen / Schreiben",
                  "glyphicon":"glyphicon-pencil"
