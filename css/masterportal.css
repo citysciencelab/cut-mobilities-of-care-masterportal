@@ -252,4 +252,18 @@ label {
     margin-top: 5%;
 }
 
+/* only for firefox */
+@-moz-document url-prefix() { 
+    .form-group-sm .form-control{
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      input[type=number]{
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+}
+
 
