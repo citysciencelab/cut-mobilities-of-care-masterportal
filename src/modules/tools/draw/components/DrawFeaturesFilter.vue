@@ -23,7 +23,23 @@ export default {
             this.filterList.forEach(filter => {
                 groupedFeatures[filter.name] = this.filterFeaturesByType(this.features, filter.drawTypes.toString());
             });
+
             return groupedFeatures;
+        },
+
+        /**
+         * The check if there is feature belong to the filter.
+         * If there are features from another tool with another filter, the length of features here will be zero
+         * @returns {Boolean} -
+         */
+        hasFeaturesOfFilter () {
+            let featureLength = 0;
+
+            this.filterList.forEach(filter => {
+                featureLength += this.filterFeaturesByType(this.features, filter.drawTypes.toString()).length;
+            });
+
+            return featureLength > 0;
         }
     },
     methods: {
@@ -85,7 +101,7 @@ export default {
                 </label>
             </div>
         </template>
-        <hr>
+        <hr v-if="hasFeaturesOfFilter">
     </form>
 </template>
 
