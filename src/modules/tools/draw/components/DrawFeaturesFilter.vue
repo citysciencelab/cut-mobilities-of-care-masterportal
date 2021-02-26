@@ -62,9 +62,7 @@ export default {
          * @returns {Boolean} True if there are visible features otherwise false.
          */
         hasVisibleFeatures (features) {
-            const visibleFeatures = features.filter(feature => {
-                return feature.get("isVisible");
-            });
+            const visibleFeatures = features.filter(feature => feature.get("fromDrawTool") && feature.get("isVisible"));
 
             return visibleFeatures.length > 0;
         },
@@ -77,7 +75,9 @@ export default {
          */
         setFeaturesVisibility (features, value) {
             features.forEach(feature => {
-                feature.set("isVisible", value);
+                if (feature.get("fromDrawTool")) {
+                    feature.set("isVisible", value);
+                }
             });
         }
     }

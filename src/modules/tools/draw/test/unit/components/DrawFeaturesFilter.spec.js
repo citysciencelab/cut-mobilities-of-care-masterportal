@@ -22,6 +22,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
         testFeatures = [
             new Feature({
                 isVisible: false,
+                fromDrawTool: false,
                 drawState: {
                     drawType: {
                         id: "drawSymbol"
@@ -30,6 +31,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             }),
             new Feature({
                 isVisible: false,
+                fromDrawTool: false,
                 drawState: {
                     drawType: {
                         id: "drawArea"
@@ -38,6 +40,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             }),
             new Feature({
                 isVisible: false,
+                fromDrawTool: false,
                 drawState: {
                     drawType: {
                         id: "drawCircle"
@@ -106,9 +109,23 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             });
         });
 
+        it("should have no checked checkboxes is the features are visible, but they are not from draw tool", () => {
+            testFeatures.forEach(feature => {
+                feature.set("isVisible", true);
+                feature.set("fromDrawTool", false);
+            });
+            const props = {filterList: filterListConfig, features: testFeatures},
+                wrapper = factory.getShallowMount(props);
+
+            wrapper.findAll("input").wrappers.forEach(input => {
+                expect(input.element.checked).to.be.false;
+            });
+        });
+
         it("should have only checked checkboxes", () => {
             testFeatures.forEach(feature => {
                 feature.set("isVisible", true);
+                feature.set("fromDrawTool", true);
             });
             const props = {filterList: filterListConfig, features: testFeatures},
                 wrapper = factory.getShallowMount(props);
@@ -120,6 +137,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
 
         it("should have one checked and one unchecked checkbox", () => {
             testFeatures[0].set("isVisible", true);
+            testFeatures[0].set("fromDrawTool", true);
             const props = {filterList: filterListConfig, features: testFeatures},
                 wrapper = factory.getShallowMount(props),
                 inputElements = wrapper.findAll("input").wrappers;
