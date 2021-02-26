@@ -285,8 +285,6 @@ export default {
         left: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
-        max-height:72vh;
-        overflow: auto;
         min-width: 280px;
 
         @media (max-width: 400px) {
@@ -323,6 +321,8 @@ export default {
         width: 100%;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
+        overflow: auto;
+        max-height:72vh;
         overflow: auto;
     }
 
