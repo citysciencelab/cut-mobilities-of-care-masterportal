@@ -1,5 +1,6 @@
 import Vuex from "vuex";
 import {expect} from "chai";
+import sinon from "sinon";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import SearchByCoordComponent from "../../../components/SearchByCoord.vue";
 import SearchByCoord from "../../../store/indexSearchByCoord";
@@ -41,12 +42,21 @@ describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
                 },
                 Map: {
                     namespaced: true
+                },
+                MapMarker: {
+                    namespaced: true,
+                    actions: {
+                        removePointMarker: sinon.stub()
+                    }
                 }
             },
             state: {
                 configJson: mockConfigJson
             }
         });
+        store.commit("Tools/SearchByCoord/setCoordinatesEasting", {id: "easting", value: "560416.25"});
+        store.commit("Tools/SearchByCoord/setCoordinatesNorthing", {id: "easting", value: "5929401.90"});
+        store.commit("Tools/SearchByCoord/setActive", true);
     });
 
     it("renders SearchByCoord", () => {
@@ -65,12 +75,19 @@ describe("src/modules/tools/searchByCoord/components/SearchByCoord.vue", () => {
     describe("SearchByCoord.vue methods", () => {
         it("close sets active to false", async () => {
             wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
-
             wrapper.vm.close();
             await wrapper.vm.$nextTick();
 
             expect(store.state.Tools.SearchByCoord.active).to.be.false;
             expect(wrapper.find("#supply-coord").exists()).to.be.false;
+        });
+        it("close resets input fields", async () => {
+            wrapper = shallowMount(SearchByCoordComponent, {store, localVue});
+            wrapper.vm.close();
+            await wrapper.vm.$nextTick();
+
+            expect(store.state.Tools.SearchByCoord.coordinatesEasting.value).to.be.a("string").to.have.a.lengthOf(0);
+            expect(store.state.Tools.SearchByCoord.coordinatesNorthing.value).to.be.a("string").to.have.a.lengthOf(0);
         });
     });
 });
