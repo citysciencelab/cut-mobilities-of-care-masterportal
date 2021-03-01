@@ -182,6 +182,7 @@ export default async function convertFeaturesToKml (features) {
         pointColors = Array(featureCount).fill(undefined),
         skip = Array(featureCount).fill(false),
         textFonts = Array(featureCount).fill(undefined),
+        textFontSize = Array(featureCount).fill(undefined),
         convertedFeatures = new DOMParser().parseFromString(convertFeatures(features, format), "text/xml");
 
     features.forEach((feature, i) => {
@@ -190,9 +191,10 @@ export default async function convertFeaturesToKml (features) {
             style,
             styles;
 
-        if (type === "Point" && feature.values_.name !== undefined) {
+        if (type === "Point" && feature.values_.drawState.text !== undefined) {
             // Imported KML with text, can be used as it is
             skip[i] = true;
+            textFontSize[i] = feature.values_.drawState.fontSize;
         }
         else {
             try {
@@ -245,6 +247,17 @@ export default async function convertFeaturesToKml (features) {
             }
         }
 
+        // Setting format for text
+        if (placemark.getElementsByTagName("Point").length > 0 && skip[i] === true && !isNaN(textFontSize[i])) {
+            const scale = textFontSize[i] / 16,
+                style = placemark.getElementsByTagName("Style")[0],
+                iconUrl = `${window.location.origin}/img/tools/draw/circle_blue.svg`,
+                maskIcon = new DOMParser().parseFromString("<IconStyle><scale>0</scale><Icon><href>" + iconUrl + "</href></Icon></IconStyle>", "text/xml"),
+                maskScale = new DOMParser().parseFromString("<scale>" + scale + "</scale>", "text/xml");
+
+            style.getElementsByTagName("LabelStyle")[0].appendChild(maskScale.getElementsByTagName("scale")[0]);
+            style.appendChild(maskIcon.getElementsByTagName("IconStyle")[0]);
+        }
     });
     return new XMLSerializer().serializeToString(convertedFeatures);
 }
