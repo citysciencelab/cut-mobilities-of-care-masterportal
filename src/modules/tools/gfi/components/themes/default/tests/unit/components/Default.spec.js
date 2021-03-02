@@ -224,5 +224,16 @@ describe("src/modules/tools/gfi/components/themes/default/components/Default.vue
         expect(wrapperHtml.find("iframe").classes()).includes("gfi-iFrame");
     });
 
+    it("should show an iframe after click trough the features", async () => {
+        await wrapper.setProps({
+            feature: {
+                getTheme: () => sinon.stub(),
+                getDocument: () => "abc",
+                getMimeType: () => "text/html"
+            }
+        });
 
+        expect(wrapper.find("iframe").exists()).to.be.true;
+        expect(wrapper.find("iframe").classes()).includes("gfi-iFrame");
+    });
 });

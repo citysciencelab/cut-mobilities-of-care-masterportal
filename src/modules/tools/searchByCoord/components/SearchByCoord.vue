@@ -38,6 +38,20 @@ export default {
             return this.$t("common:modules.tools.searchByCoord.errorMsg.hdmsNoMatch", {valueKey: this.$t(this.getLabel("eastingLabel"))});
         }
     },
+    watch: {
+        /**
+         * Sets the active property of the state to the given value.
+         * @param {Boolean} value Value deciding whether the tool gets activated or deactivated.
+         * @returns {void}
+         */
+        active (value) {
+            if (!value) {
+                this.removeMarker();
+                this.resetErrorMessages();
+                this.resetValues();
+            }
+        }
+    },
     created () {
         this.$on("close", this.close);
         this.setExample();
@@ -51,8 +65,6 @@ export default {
          */
         close () {
             this.setActive(false);
-            this.removeMarker();
-
             // set the backbone model to active false in modellist for changing css class in menu (menu/desktop/tool/view.toggleIsActiveClass)
             const model = Radio.request("ModelList", "getModelByAttributes", {id: this.$store.state.Tools.SearchByCoord.id});
 
@@ -166,6 +178,7 @@ export default {
                             <button
                                 class="btn btn-block"
                                 :disabled="getEastingError || getNorthingError || !coordinatesEasting.value || !coordinatesNorthing.value"
+                                type="button"
                                 @click="searchCoordinate(coordinatesEasting, coordinatesNorthing)"
                             >
                                 {{ $t("common:modules.tools.searchByCoord.search") }}
@@ -180,6 +193,11 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
+#search-by-coord {
+    @media (min-width: 768px) {
+        width: 350px;
+    }
+}
 .error-text {
     font-size: 85%;
     color: #a94442;

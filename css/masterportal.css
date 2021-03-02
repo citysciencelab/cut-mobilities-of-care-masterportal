@@ -214,9 +214,14 @@ label {
     font-family: "MasterPortalFont Bold", "Arial Narrow", Arial, sans-serif;
     font-size:36px;
     margin-bottom:24px;
-    padding:15px 0 30px;
+    padding:15px 40px 30px 40px;
     border-radius:14px;
     text-align:center;
+}
+@media (max-width: 767px) {
+    #portal-logo-box {
+        padding:15px 10px 30px 10px;
+    }
 }
 #portal-logo-box.initial-fadeout-animation {
     opacity:0;
@@ -245,6 +250,20 @@ label {
     font-size:5vmin;
     line-height: 130%;
     margin-top: 5%;
+}
+
+/* only for firefox */
+@-moz-document url-prefix() { 
+    .form-group-sm .form-control{
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      input[type=number]{
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
 }
 
 

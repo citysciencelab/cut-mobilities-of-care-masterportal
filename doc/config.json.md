@@ -2594,6 +2594,7 @@ Folder definition. Folders may also be nested.
 |Layer|yes|**[Layer](#markdown-header-themenconfiglayer)**/**[GroupLayer](#markdown-header-themenconfiggrouplayer)**[]||Layer definition.|false|
 |Ordner|no|**[Ordner](#markdown-header-themenconfigordner)**[]||Folder definition.|false|
 |isFolderSelectable|no|Boolean|true|Defines whether all layers of a folder can be de-/activated at once by using a checkbox.|false|
+|invertLayerOrder|nein|Boolean|false|Defines wheather the order of layers added to the map should be invert when clicking the folder.|false|
 
 **Example folder with one layer**
 
@@ -2667,6 +2668,32 @@ Folder definition. Folders may also be nested.
     }
 }
 ```
+
+**Example folder with an inverted order of layers**
+
+In this example layer 123 will be added to the map first. This leads to 456 being above 123.
+
+```json
+{
+    "Fachdaten": {
+        "Ordner": [
+            {
+                "Titel": "My folder",
+                "invertLayerOrder": true,
+                "Layer": [
+                    {
+                        "id": "123"
+                    },
+                    {
+                        "id": "456"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
 
 ***
 

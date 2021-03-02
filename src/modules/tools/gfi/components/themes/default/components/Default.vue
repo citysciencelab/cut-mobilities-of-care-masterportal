@@ -52,6 +52,13 @@ export default {
             return this.feature.getMimeType();
         }
     },
+    watch: {
+        feature () {
+            this.$nextTick(() => {
+                this.addTextHtmlContentToIframe();
+            });
+        }
+    },
     created () {
         this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
             this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;

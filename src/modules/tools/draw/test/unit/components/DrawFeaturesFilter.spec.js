@@ -6,8 +6,7 @@ import sinon from "sinon";
 
 describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
     let testFeatures,
-        filterListConfig,
-        spySetFeaturesVisibility;
+        filterListConfig;
     const requiredProps = {filterList: [], features: []},
         factory = {
             getShallowMount: (props = requiredProps) => {
@@ -18,10 +17,6 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
                 });
             }
         };
-
-    before(() => {
-        spySetFeaturesVisibility = sinon.spy(DrawFeaturesFilter.methods, "setFeaturesVisibility");
-    });
 
     beforeEach(function () {
         testFeatures = [
@@ -138,10 +133,12 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
         it("should call setFeaturesVisibility if checkbox change event is triggered", async () => {
             const props = {filterList: filterListConfig, features: testFeatures},
                 wrapper = factory.getShallowMount(props),
-                inputElement = wrapper.find("input");
+                inputElement = wrapper.find("input"),
+                spySetFeaturesVisibility = sinon.spy(wrapper.vm, "setFeaturesVisibility");
 
             await inputElement.setChecked();
             expect(spySetFeaturesVisibility.calledOnce).to.be.true;
+            spySetFeaturesVisibility.restore();
         });
     });
 
