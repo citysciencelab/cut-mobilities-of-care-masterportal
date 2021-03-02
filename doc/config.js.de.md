@@ -127,7 +127,7 @@ footer: {
     urls: [
         {
             "bezeichnung": "Kartographie und Gestaltung: ",
-            "url": "http://www.geoinfo.hamburg.de/",
+            "url": "https://geoinfo.hamburg.de/",
             "alias": "Landesbetrieb Geoniformation und Vermessung",
             "alias_mobil": "LGV"
         },

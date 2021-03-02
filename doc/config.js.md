@@ -128,7 +128,7 @@ In the following, all configuration options are described. For all configuration
         "urls": [
             {
                 "bezeichnung": "Cartography and design: ",
-                "url": "http://www.geoinfo.hamburg.de/",
+                "url": "https://geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoniformation und Vermessung",
                 "alias_mobil": "LGV"
             },
