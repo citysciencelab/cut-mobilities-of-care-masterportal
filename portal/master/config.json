@@ -664,7 +664,6 @@
           "id": "10882",
           "styleId": "10882",
           "clusterDistance": 40,
-          "routable": true,
           "searchField": "bezeichnung",
           "styleGeometryType": "Point"
         },

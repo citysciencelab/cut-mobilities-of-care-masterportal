@@ -198,7 +198,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             name: this.get("name"),
             typ: this.get("typ"),
             legendURL: this.get("legendURL"),
-            routable: this.get("routable"),
             infoFormat: this.get("infoFormat")
         }));
     },

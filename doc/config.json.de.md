@@ -2968,7 +2968,6 @@ Hier werden Vector typische Attribute aufgelistet. Vector Layer sind WFS, GeoJSO
         }
     ],
     "mouseHoverField": "name",
-    "routable": false,
     "searchField": "name",
     "styleId": "123456",
     "hitTolerance": 50

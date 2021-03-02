@@ -190,7 +190,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
             gfiTheme: this.get("gfiTheme"),
-            routable: this.get("routable"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode")
         }));

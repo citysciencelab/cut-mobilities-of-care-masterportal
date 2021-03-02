@@ -3050,52 +3050,49 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 **Example**
 
 ```json
-[
-    {
-        "id": "123456",
-        "name": "MyVectorLayerName",
-        "transparency": 0,
-        "visibility": true,
-        "supported": ["2D"],
-        "extent": [454591, 5809000, 700000, 6075769],
-        "layerAttribution": "MyBoldAttribution for layer 123456",
-        "legend": "https://myServer/myService/legend.pdf",
-        "maxScale": "100000",
-        "minScale": "1000",
-        "autoRefresh": "10000",
-        "isNeverVisibleInTree": false,
-        "clusterDistance": 60,
-        "extendedFilter": true,
-        "filterOptions": [
-            {
-                "fieldName": "myFirstAttributeToFilter",
-                "filterName": "Filter_1",
-                "filterString": ["*", "value1", "value2"],
-                "filterType": "combo"
-            },
-            {
-                "fieldName": "mySecondAttributeToFilter",
-                "filterName": "Filter_2",
-                "filterString": ["*", "value3", "value4"],
-                "filterType": "combo"
-            }
-        ],
-        "mouseHoverField": "name",
-        "routable": false,
-        "searchField": "name",
-        "styleId": "123456",
-        "hitTolerance": 50
-    },
-    {
-        "id" : "11111",
-        "name" : "local GeoJSON",
-        "url" : "portal/master/test.json",
-        "typ" : "GeoJSON",
-        "gfiAttributes" : "showAll",
-        "layerAttribution" : "nicht vorhanden",
-        "legend" : true
-    }
-]
+{
+    "id": "123456",
+    "name": "MyVectorLayerName",
+    "transparency": 0,
+    "visibility": true,
+    "supported": ["2D"],
+    "extent": [454591, 5809000, 700000, 6075769],
+    "layerAttribution": "MyBoldAttribution for layer 123456",
+    "legend": "https://myServer/myService/legend.pdf",
+    "maxScale": "100000",
+    "minScale": "1000",
+    "autoRefresh": "10000",
+    "isNeverVisibleInTree": false,
+    "clusterDistance": 60,
+    "extendedFilter": true,
+    "filterOptions": [
+        {
+            "fieldName": "myFirstAttributeToFilter",
+            "filterName": "Filter_1",
+            "filterString": ["*", "value1", "value2"],
+            "filterType": "combo"
+        },
+        {
+            "fieldName": "mySecondAttributeToFilter",
+            "filterName": "Filter_2",
+            "filterString": ["*", "value3", "value4"],
+            "filterType": "combo"
+        }
+    ],
+    "mouseHoverField": "name",
+    "searchField": "name",
+    "styleId": "123456",
+    "hitTolerance": 50
+},
+{
+    "id" : "11111",
+    "name" : "local GeoJSON",
+    "url" : "portal/master/test.json",
+    "typ" : "GeoJSON",
+    "gfiAttributes" : "showAll",
+    "layerAttribution" : "nicht vorhanden",
+    "legend" : true
+}
 ```
 
 ***
