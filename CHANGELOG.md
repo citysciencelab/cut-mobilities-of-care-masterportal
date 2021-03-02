@@ -3,8 +3,8 @@
 
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
-### Known Issues
-- 3D: Klickt man auf ein 3D-Objekt verschwindet der Positions-Anzeiger im Objekt
+## Known Issues
+- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
 
