@@ -43,7 +43,7 @@ const Config = {
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
     useVectorStyleBeta: true,
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         styleId: "location_eventlotse",
