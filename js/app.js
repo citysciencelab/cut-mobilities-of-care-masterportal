@@ -420,7 +420,7 @@ function loadAddOnsAfterLanguageLoaded (legacyAddons) {
             import(
                 /* webpackChunkName: "[request]" */
                 /* webpackInclude: /addons[\\\/].*[\\\/]*.js$/ */
-                /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                /* webpackExclude: /(node_modules)|(.+unittests.)|(.+test.)+/ */
                 "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
                 let addon;
