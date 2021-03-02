@@ -291,6 +291,10 @@ export default {
             right: 20px;
         }
 
+        .win-body-vue {
+            max-height:72vh;
+        }
+
         .basic-resize-handle {
             position:absolute;
             width:6px;
@@ -317,13 +321,10 @@ export default {
     .win-body-vue {
         position: relative;
         padding: @padding;
-        height: calc(100% - 58px);
-        width: 100%;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
         overflow: auto;
-        max-height:72vh;
-        overflow: auto;
+        width: 100%;
     }
 
     .table-tool-win-all-vue {
@@ -355,6 +356,10 @@ export default {
         background-color: @background_color_1;
         padding:0 0 0 12px;
         height:100%;
+        
+        .win-body-vue {
+            height: calc(100% - 35px);
+        }
     }
 
     #basic-resize-handle-sidebar{
