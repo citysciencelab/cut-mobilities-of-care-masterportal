@@ -37,7 +37,7 @@ const Config = {
     },
     proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
+        imgPath: "https://geoportal-hamburg.de.de/lgv-config/img/"
     },
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
@@ -68,11 +68,11 @@ const Config = {
         debug: false,
         languages: {
             de: "deutsch",
-            en: "englisch",
-            it: "italienisch"
+            en: "englisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"],
+        loadPath: "/locales/{{lng}}/{{ns}}.json"
     }
 };
 

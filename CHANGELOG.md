@@ -3,8 +3,8 @@
 
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
-### Known Issues
-- 3D: Klickt man auf ein 3D-Objekt verschwindet der Positions-Anzeiger im Objekt
+## Known Issues
+- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
 
@@ -24,7 +24,8 @@
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 - Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
-- WPS migrated to vue.
+- Migrated the StyleVT Tool from Backbone.js to Vue.js.
+- WPS migrated to Vue.js.
 
 ### Deprecated
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.

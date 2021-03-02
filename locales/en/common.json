@@ -48,7 +48,8 @@
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
             "selectFeatures": "Select features",
-            "legend":"Legend"
+            "legend":"Legend",
+            "styleVt": "Style VT"
         },
         "contact": "Mail",
         "info": "Information"
