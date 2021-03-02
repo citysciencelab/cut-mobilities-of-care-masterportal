@@ -10,12 +10,11 @@
 * A commit represents an idea or a change
 * Use verbs for your commits: **add**/**remove**/**update**/**refactor**/**fix**/**config**/**hotfix**
 * Do not commit `console.log` statements
-* Commits marked as `hotfix` will be merged to both the `dev` and the `stable` branch; that is, 1 Feature Branch will result in 2 Pull Requests
 
 ## Branches and workflow
 
 * The development of new features and bug fixing usually takes place on features branches based on the `dev` branch. We use the **[Gitflow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#gitflow-workflow)**.
-* The development branch is named `dev`, the stable branch is named `stable`.
+* The development branch is named `dev`.
 * Use verbs for merge commits: **add**/**remove**/**update**/**refactor**/**fix**/**config**/**hotfix**. Merge commit messages should be in English and speaking.
 * Branches are deleted after merging.
 
@@ -45,13 +44,13 @@
 * **External developers** are not team members and do not receive write permission to the repository. Please **[fork](https://bitbucket.org/geowerkstatt-hamburg/masterportal/fork)** the `dev` branch for your development.
 * Commit and push to your fork. From the fork, a pull request targeting the `dev` branch may be opened.
 * Please also fix bugs targeting the `dev` branch:
-    - A pull request should indicate whether a **hotfix** should be applied to the `stable` branch. Please note our **[hints regarding versioning](versioning.md)**.
+    - Please indicate in the pull request if the bug should be published as a hotfix.. Please note our **[hints regarding versioning](versioning.md)**.
     - Team members take care of transferring the required code.
-    - We use **[cherry-picking](https://git-scm.com/docs/git-cherry-pick)** to apply **hotfix** commits to the `stable` branch. This is simpler when **hotfix** commits contain the hotfix and nothing else. Please note our **[coding conventions](codingConventions.md)** regarding this.
+    - We use **[cherry-picking](https://git-scm.com/docs/git-cherry-pick)** to apply **hotfix** commits. This is simpler when **hotfix** commits contain the hotfix and nothing else. Please note our **[coding conventions](codingConventions.md)** regarding this.
 
 ## Pull Requests
 
-* Commits pushed to branches may only reach the `dev` or `stable` branch via pull requests.
+* Commits pushed to branches may only reach the `dev` branch via pull requests.
 * **External developers** set their PR's reviewer to **[geowerkstatt](https://bitbucket.org/geowerkstatt)**. This is a technical user that will note the team members.
 * The review is done by at least one team member. The reviewer checks the pull request based on the Definition of Done. Errors or comments may be added directly to the code or as comments within the pull request.
 * A pull request passing all checks is approved. The approving team member merges the commit for **external developers**.

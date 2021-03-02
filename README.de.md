@@ -6,7 +6,7 @@ Das Masterportal ist ein Baukasten für Geo-Anwendungen im Web auf Basis von [Op
 
 Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](https://www.hamburg.de/geowerkstatt/).
 
-## für Anwender (Stable-Version)
+## für Anwender
 
 * [Download](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/)
 * [Quickstart für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/setup.de.md)
