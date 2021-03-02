@@ -1,7 +1,7 @@
 import TemplateSettings from "text-loader!./templateSettings.html";
 import Template from "text-loader!./templateLight.html";
 import checkChildrenDatasets from "../../checkChildrenDatasets.js";
-import store from "../../../../src/app-store/index";
+import store from "../../../../src/app-store";
 import axios from "axios";
 
 const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
@@ -265,14 +265,12 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
     },
 
     /**
-     * Triggers the parser to remove the item/layer
-     * Executes removeLayer in the model
-     * Removes the element
-     * Select a style for vector tile leyer.
+     * Activates the StyleVT Tool and commits the current layer model to the state.
+     *
      * @returns {void}
      */
     openStyleVT: function () {
-        Radio.trigger("StyleVT", "open", this.model);
+        store.dispatch("Tools/StyleVT/setActive", {active: true, layerModel: this.model}, {root: true});
     },
 
     /**

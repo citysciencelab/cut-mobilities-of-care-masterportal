@@ -2266,9 +2266,9 @@ WFS-T module to visualize (*GetFeature*), create (*insert*), update (*update*), 
 |layerIds|yes|String[]||Array of layer ids.|false|
 |toggleLayer|no|Boolean|false|Whether layer feature stay visible when adding a new feature.|
 |layerSelect|no|String|"aktueller Layer:"|Option to change the layer selection label.|
-|pointButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating points and what label the button should have.|
-|lineButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating lines and what label the button should have.|
-|areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)|false|Configuration of which layers allow creating areas and what label the button should have.|
+|pointButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating points and what label the button should have.|
+|lineButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating lines and what label the button should have.|
+|areaButton|no|[Button](#markdown-header-portalconfigmenutoolwfstButton)[]|false|Configuration of which layers allow creating areas and what label the button should have.|
 |edit|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the edit button should be shown, and if, with which label.|
 |delete|no|[EditDelete](#markdown-header-portalconfigmenutoolwfsteditdelete)|false|Whether the delete button should be shown, and if, with which label.|
 |useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
@@ -2317,7 +2317,7 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 |----|--------|----|-------|-----------|------|
 |layerId|yes|String||Layer to be configured.|false|
 |show|yes|Boolean|true|Whether the button is available.|false|
-|caption|no|String|"Erfassen"|Button text. If no value is given, the Masterportal will use, depending on circumstances, "Punkt erfassen", "Linie erfassen", or "Fläche erfassen".|false|
+|caption|no|String|"Erfassen"|Button text. If no value is given, the Masterportal will use, depending on the type of button, "Punkt erfassen", "Linie erfassen", or "Fläche erfassen".|false|
 
 **Examples**
 
@@ -2329,23 +2329,27 @@ The attributes `pointButton`/`lineButton`/`areaButton` may be of type boolean or
 
 ```json
 {
-    "pointButton": {
-        {
-            "layerId":"1234",
-            "show": true,
-            "caption": "Point test",
-        },
-        {
-            "layerId": "5678",
-            "show": true
-        },
-        {
-            "layerId": "5489",
-            "show": false
-        }
-    }
+    "layerId": "1234",
+    "show": true,
+    "caption": "Point test"
 }
 ```
+
+```json
+{
+    "layerId": "5678",
+    "show": true
+}
+```
+
+```json
+{
+    "layerId": "5489",
+    "show": false
+}
+```
+
+***
 
 #### Portalconfig.menu.tool.wfst.EditDelete
 
@@ -3077,50 +3081,52 @@ List of attributes typically used in vector layers. Vector layers are WFS, GeoJS
 **Example**
 
 ```json
-{
-    "id": "123456",
-    "name": "MyVectorLayerName",
-    "transparency": 0,
-    "visibility": true,
-    "supported": ["2D"],
-    "extent": [454591, 5809000, 700000, 6075769],
-    "layerAttribution": "MyBoldAttribution for layer 123456",
-    "legend": "https://myServer/myService/legend.pdf",
-    "maxScale": "100000",
-    "minScale": "1000",
-    "autoRefresh": "10000",
-    "isNeverVisibleInTree": false,
-    "clusterDistance": 60,
-    "extendedFilter": true,
-    "filterOptions": [
-        {
-            "fieldName": "myFirstAttributeToFilter",
-            "filterName": "Filter_1",
-            "filterString": ["*", "value1", "value2"],
-            "filterType": "combo"
-        },
-        {
-            "fieldName": "mySecondAttributeToFilter",
-            "filterName": "Filter_2",
-            "filterString": ["*", "value3", "value4"],
-            "filterType": "combo"
-        }
-    ],
-    "mouseHoverField": "name",
-    "routable": false,
-    "searchField": "name",
-    "styleId": "123456",
-    "hitTolerance": 50
-},
-{
-    "id" : "11111",
-    "name" : "local GeoJSON",
-    "url" : "portal/master/test.json",
-    "typ" : "GeoJSON",
-    "gfiAttributes" : "showAll",
-    "layerAttribution" : "nicht vorhanden",
-    "legend" : true
-}
+[
+    {
+        "id": "123456",
+        "name": "MyVectorLayerName",
+        "transparency": 0,
+        "visibility": true,
+        "supported": ["2D"],
+        "extent": [454591, 5809000, 700000, 6075769],
+        "layerAttribution": "MyBoldAttribution for layer 123456",
+        "legend": "https://myServer/myService/legend.pdf",
+        "maxScale": "100000",
+        "minScale": "1000",
+        "autoRefresh": "10000",
+        "isNeverVisibleInTree": false,
+        "clusterDistance": 60,
+        "extendedFilter": true,
+        "filterOptions": [
+            {
+                "fieldName": "myFirstAttributeToFilter",
+                "filterName": "Filter_1",
+                "filterString": ["*", "value1", "value2"],
+                "filterType": "combo"
+            },
+            {
+                "fieldName": "mySecondAttributeToFilter",
+                "filterName": "Filter_2",
+                "filterString": ["*", "value3", "value4"],
+                "filterType": "combo"
+            }
+        ],
+        "mouseHoverField": "name",
+        "routable": false,
+        "searchField": "name",
+        "styleId": "123456",
+        "hitTolerance": 50
+    },
+    {
+        "id" : "11111",
+        "name" : "local GeoJSON",
+        "url" : "portal/master/test.json",
+        "typ" : "GeoJSON",
+        "gfiAttributes" : "showAll",
+        "layerAttribution" : "nicht vorhanden",
+        "legend" : true
+    }
+]
 ```
 
 ***
