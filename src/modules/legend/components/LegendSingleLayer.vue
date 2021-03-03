@@ -132,7 +132,6 @@ export default {
         padding-top: 5px;
         padding-bottom: 5px;
         img {
-            max-width: 100%;
             &.left {
                 max-width: 50px;
                 padding: 5px 0;
