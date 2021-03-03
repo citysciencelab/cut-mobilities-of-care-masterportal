@@ -5,6 +5,7 @@ import CompareFeatureIcon from "../../../components/CompareFeatureIcon.vue";
 import Feature from "ol/Feature";
 import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
+import sinon from "sinon";
 
 const localVue = createLocalVue();
 
@@ -31,9 +32,6 @@ describe("src/modules/tools/gfi/components/favoriteIcons/components/CompareFeatu
                     getLayerId: () => "1234",
                     getTitle: () => "TestTitle"
                 }
-            },
-            methods: {
-                componentExists: () => true
             },
             localVue,
             mocks: {
@@ -77,6 +75,9 @@ describe("src/modules/tools/gfi/components/favoriteIcons/components/CompareFeatu
                     }
                 }
             })
+        });
+        sinon.stub(CompareFeatureIcon.methods, "componentExists").callsFake(function () {
+            return true;
         });
         expect(wrapper.find("span").exists()).to.be.false;
     });
