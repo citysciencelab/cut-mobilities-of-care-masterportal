@@ -6,8 +6,7 @@ import sinon from "sinon";
 
 describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
     let testFeatures,
-        filterListConfig,
-        spySetFeaturesVisibility;
+        filterListConfig;
     const requiredProps = {filterList: [], features: []},
         factory = {
             getShallowMount: (props = requiredProps) => {
@@ -19,14 +18,11 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             }
         };
 
-    before(() => {
-        spySetFeaturesVisibility = sinon.spy(DrawFeaturesFilter.methods, "setFeaturesVisibility");
-    });
-
     beforeEach(function () {
         testFeatures = [
             new Feature({
                 isVisible: false,
+                fromDrawTool: false,
                 drawState: {
                     drawType: {
                         id: "drawSymbol"
@@ -35,6 +31,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             }),
             new Feature({
                 isVisible: false,
+                fromDrawTool: false,
                 drawState: {
                     drawType: {
                         id: "drawArea"
@@ -43,6 +40,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             }),
             new Feature({
                 isVisible: false,
+                fromDrawTool: false,
                 drawState: {
                     drawType: {
                         id: "drawCircle"
@@ -111,9 +109,23 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
             });
         });
 
+        it("should have no checked checkboxes is the features are visible, but they are not from draw tool", () => {
+            testFeatures.forEach(feature => {
+                feature.set("isVisible", true);
+                feature.set("fromDrawTool", false);
+            });
+            const props = {filterList: filterListConfig, features: testFeatures},
+                wrapper = factory.getShallowMount(props);
+
+            wrapper.findAll("input").wrappers.forEach(input => {
+                expect(input.element.checked).to.be.false;
+            });
+        });
+
         it("should have only checked checkboxes", () => {
             testFeatures.forEach(feature => {
                 feature.set("isVisible", true);
+                feature.set("fromDrawTool", true);
             });
             const props = {filterList: filterListConfig, features: testFeatures},
                 wrapper = factory.getShallowMount(props);
@@ -125,6 +137,7 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
 
         it("should have one checked and one unchecked checkbox", () => {
             testFeatures[0].set("isVisible", true);
+            testFeatures[0].set("fromDrawTool", true);
             const props = {filterList: filterListConfig, features: testFeatures},
                 wrapper = factory.getShallowMount(props),
                 inputElements = wrapper.findAll("input").wrappers;
@@ -138,10 +151,12 @@ describe("src/tools/draw/components/DrawFeaturesFilter.vue", () => {
         it("should call setFeaturesVisibility if checkbox change event is triggered", async () => {
             const props = {filterList: filterListConfig, features: testFeatures},
                 wrapper = factory.getShallowMount(props),
-                inputElement = wrapper.find("input");
+                inputElement = wrapper.find("input"),
+                spySetFeaturesVisibility = sinon.spy(wrapper.vm, "setFeaturesVisibility");
 
             await inputElement.setChecked();
             expect(spySetFeaturesVisibility.calledOnce).to.be.true;
+            spySetFeaturesVisibility.restore();
         });
     });
 

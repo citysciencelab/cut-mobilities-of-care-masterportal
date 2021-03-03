@@ -314,10 +314,11 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
      * @param {Number} level - level of the folder
      * @param {Boolean} isExpanded - if true, folder will be expanded
      * @param {String} i18nKey - key for the name to translate
+     * @param {Boolean} [invertLayerOrder=false] inverts the order the layers when added to the map on folder click
      * @fires QuickHelp#RadioRequestQuickHelpIsSet
      * @returns {void}
      */
-    addFolder: function (name, id, parentId, level, isExpanded, i18nKey) {
+    addFolder: function (name, id, parentId, level, isExpanded, i18nKey, invertLayerOrder = false) {
         const folder = {
             type: "folder",
             name: i18nKey ? i18next.t(i18nKey) : name,
@@ -331,7 +332,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             parentId: parentId,
             isExpanded: isExpanded ? isExpanded : false,
             level: level,
-            quickHelp: Radio.request("QuickHelp", "isSet")
+            quickHelp: Radio.request("QuickHelp", "isSet"),
+            invertLayerOrder
         };
 
         this.addItem(folder);

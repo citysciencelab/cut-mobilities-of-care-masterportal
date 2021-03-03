@@ -384,7 +384,7 @@ const PrintModel = Tool.extend({
 
         // for local IDE take path to
         if (imgPath.indexOf("localhost") !== -1) {
-            imgPath = "https://geoportal-hamburg.de/lgv-config/img/";
+            imgPath = "https://geodienste.hamburg.de/lgv-config/img/";
         }
         return imgPath;
     },

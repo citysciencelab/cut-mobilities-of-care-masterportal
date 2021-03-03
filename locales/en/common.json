@@ -47,7 +47,9 @@
             "getInfos": "Retrieve information",
             "addWms": "Add WMS",
             "scaleSwitcher": "Scale switcher",
-            "selectFeatures": "Select features"
+            "selectFeatures": "Select features",
+            "legend":"Legend",
+            "styleVt": "Style VT"
         },
         "contact": "Mail",
         "info": "Information"
@@ -219,7 +221,7 @@
                 "errorMessage": "The specified service could not be loaded. Please make sure that the URL was entered correctly.<br><br> If the problem persists, please contact the operator of the service with the following note:<br><strong>It should be ensured that a CORS header is set for the service. This is recommended by the <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> in chapter 4.7.1.</strong>",
                 "errorHttpsMessage": "The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL).",
                 "placeholder": "Please enter the WMS-URL here.",
-                "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
+                "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Load layer",
                 "ifInExtent": "The geodata provided via the WMS are outside the displayable range. Adding WMS is not possible.",
                 "checkVersion": "Adding WMS is possible only if the version of external wms layer equals or is greater than 1.3.0."
@@ -519,13 +521,23 @@
                 "selectedDestination": "Selected destination"
             },
             "searchByCoord": {
-                "exampleAcronym": "e.g.",
+                "coordinateSystem": "Coordinate system",
+                "hdms": {
+                    "eastingLabel": "Latitude",
+                    "northingLabel": "Longitude"
+                },
+                "cartesian": {
+                    "eastingLabel": "Easting",
+                    "northingLabel": "Northing"
+                },
+                "search": "Search",
+                "exampleAcronym": "e.g. ",
                 "errorMsg": {
                     "noCoord": "Please enter your {{valueKey}}.",
-                    "noMatch": "Your chosen {{valueKey}} is not correct! (Example: {{valueExample}})"
-                },
-                "hdmsEastingText": "value for the $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "value for the $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
+                    "noMatch": "Your chosen {{valueKey}} is not correct! Example: ",
+                    "hdmsNoCoord": "Please enter your value for the {{valueKey}}.",
+                    "hdmsNoMatch": "Your chosen value for the {{valueKey}} is not correct! Example: "
+                }
             },
             "draw": {
                 "clickToPlaceText": "Click on the map to place the text",
@@ -688,6 +700,7 @@
             "placeholder": {
                 "addressHospitalBplan": "Search for Address/Hospital/B-Plan",
                 "addressTopicParcel": "Search address, district, topics, parcel",
+                "addressTopic": "Search address, district, topics",
                 "address": "Search for Address"
             },
             "showAllResults": "Show all results",

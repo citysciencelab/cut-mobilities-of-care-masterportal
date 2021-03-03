@@ -33,7 +33,9 @@ export default {
          * @returns {void}
          */
         selectedGeometry () {
-            this.createDrawInteraction();
+            if (this.active) {
+                this.createDrawInteraction();
+            }
         }
     },
     created () {

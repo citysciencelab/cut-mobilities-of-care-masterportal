@@ -4,7 +4,7 @@ const Config = {
         fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
-    wfsImgPath: "https://geoportal-hamburg.de/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",
         wfsId: "4560",
@@ -41,7 +41,7 @@ const Config = {
     footer: {
         urls: [{
             "bezeichnung": "common:modules.footer.designation",
-            "url": "https://www.geoinfo.hamburg.de/",
+            "url": "https://geoinfo.hamburg.de/",
             "alias": "Landesbetrieb Geoinformation und Vermessung",
             "alias_mobil": "LGV"
         }],

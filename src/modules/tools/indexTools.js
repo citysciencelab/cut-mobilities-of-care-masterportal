@@ -10,10 +10,12 @@ import Contact from "./contact/store/indexContact";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
 import Gfi from "./gfi/store/indexGfi";
-import SaveSelection from "./saveSelection/store/indexSaveSelection";
-import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
-import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 import Measure from "./measure/store/indexMeasure";
+import SaveSelection from "./saveSelection/store/indexSaveSelection";
+import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
+import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
+import StyleVT from "./styleVT/store/indexStyleVT";
+import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 
 /**
  * This is here to test app-store/utils/composeModules.
@@ -26,10 +28,12 @@ export default {
         Draw,
         FileImport,
         Gfi,
+        Measure,
         SaveSelection,
+        SearchByCoord,
         ScaleSwitcher,
-        SupplyCoord,
-        Measure
+        StyleVT,
+        SupplyCoord
     },
     state,
     getters,

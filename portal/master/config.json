@@ -311,7 +311,8 @@
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },
-          "searchByCoord": {
+          "searchByCoord":
+          {
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
@@ -463,7 +464,7 @@
             {
               "name": "translate#common:modules.tools.info.disclaimer",
               "glyphicon": "glyphicon-globe",
-              "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+              "url": "https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
             },
             {
               "name": "translate#common:modules.tools.info.home.name",

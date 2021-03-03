@@ -219,7 +219,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 store: store,
                 localVue
             }),
-            modal = wrapper.find("#vue-tool-content-body");
+            modal = wrapper.find(".vue-tool-content-body");
 
         await modal.trigger("click");
         expect(wrapper.emitted()).to.not.have.property("close");

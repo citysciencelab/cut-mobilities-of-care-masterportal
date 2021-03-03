@@ -146,22 +146,6 @@ const SliderView = Backbone.View.extend(/** @lends SliderView.prototype */{
         if (event.keyCode === 13 || event.type === "focusout") {
             this.setInputMinAndMaxValue(this.model.changeValuesByText(min, max));
         }
-
-        this.changeSizeOfInputFiled(event.target.className, event.target.value);
-    },
-
-    /**
-     * change size from input field
-     * @param {String} className - class from input field
-     * @param {String} value - value from input field
-     * @returns {void}
-     */
-    changeSizeOfInputFiled: function (className) {
-        const targetClass = this.chooseInputFiled(className),
-            buffer = 7,
-            inputField = this.$(targetClass);
-
-        inputField.css("width", (inputField.val().length + buffer) + "ch");
     },
 
     /**

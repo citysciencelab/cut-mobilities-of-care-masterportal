@@ -7,7 +7,7 @@ const Config = {
         urls: [
             {
                 "bezeichnung": "Kartographie und Gestaltung: ",
-                "url": "https://www.geoinfo.hamburg.de/",
+                "url": "https://geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }

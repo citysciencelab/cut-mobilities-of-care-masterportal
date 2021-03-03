@@ -3,8 +3,25 @@
 
 [Semantic versioning](https://semver.org/spec/v2.0.0.html) is used.
 
+## Known Issues
+- 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
+
+---
 
 ## Unreleased - in development
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+---
+
+## v2.7.0 - 2021-03-03
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
 - On draw tool Double Circle configuration available in config.json
@@ -16,12 +33,14 @@
 
 ### Changed
 - The language of the changelog has been changed to English.
+- Migrated the SearchByCoord Tool from Backbone.js to Vue.js.
 - The measure tool has been migrated to Vue.
 - Migrated the Download Tool from Backbone.js to Vue.js and integrated it into the Draw Tool.
 - Migrated the SaveSelection Tool from Backbone.js to Vue.js. It also no longer has a Radio channel.
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 - Migrated the Contact Tool from Backbone.js to Vue.js. In doing so, the functionality of the config parameter 'deleteAfterSend' was split into two parameters; 'closeAfterSend' and 'deleteAfterSend'.
-- WPS migrated to vue.
+- Migrated the StyleVT Tool from Backbone.js to Vue.js.
+- WPS migrated to Vue.js.
 
 ### Deprecated
 - Deprecated the parameter 'serviceID' for the contact tool; 'serviceId' should be used instead.
@@ -29,10 +48,50 @@
 - copyToClipboard is now a reusable action and can no longer be triggered through the Radio.
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.
 
-### Removed
-
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+- Various bugfixes.
+
+---
+
+## v2.6.3 - 2021-02-12
+### Fixed
+- Mehrere Darstellungsfehler bei den Layern "Dauerzählstellen (Rad) Hamburg" und "Verkehrsdaten Rad (Infrarotdetektoren) Hamburg" wurden behoben.
+- Ein Fehler wurde behoben, durch den bei Maßstabbeschränkten Layern beim Drucken Warnungen ausgegeben wurden,
+- obwohl alles in Ordnung war.
+
+---
+
+## v2.6.2 - 2021-02-10
+### Changed
+- Der Download im Druckmodul wird nun ohne ein Popup durchgeführt. Somit kann der Ausdruck auch mit einem aktiven Popup Blocker heruntergeladen werden.
+- Die Italienische Sprachdatei wurde erweitert und angepasst.
+- Die Angabe der restrictedAlerts im Alerting Modul ist nun nicht mehr Case-Sensitive
+- Die Anzeige der Schrägluftbilder wird im Internet Explorer 11 nicht mehr unterstützt, es erscheint eine Meldung mit dem Vorschlag für diese Funktionalität einen aktuellen Browser zu nutzen.
+- Die Beschreibung des Attributes "infoFormat" wurde aus der config.json.md in die services.json.md verschoben.
+- Die Angabe von gfiAttributes ist jetzt case-insensitive.
+- Im SensorLayer lässt sich das Laden der Observations über retained message nun in der config.json aus- bzw. einschalten.
+- Daten aus der SensorThings-API lassen sich nun auch mittles Datastreams als Wurzelelment laden.
+- Beim verschieben der Karte werden Features aus der SensorThings-API nun ohne Anzeige des Loaders direkt nachgeladen.
+
+### Fixed
+- Ein Fehler wurde behoben, der beim Öffnen des Themenbaumes zu langen Ladezeiten führte.
+- Ein Download-Link wurde hinzugefügt, da manche Browser den automatischen Download blockieren.
+- Das Alerting Modul ignoriert Groß- und Kleinschreibung beim Filtern der URLs.
+- Im Werkzeug WFST wurden einige Bugs behoben. Unter anderem wurden bei Meldungen keine Buttons mehr angezeigt.
+- Ein Fehler wurde behoben, der bei geclusterten Features vom Layertyp Sensor dazu führte, dass die Clusterung in einigen Fällen beim Hereinzoomen nicht aufgelöst wurde.
+- In bestimmten Fällen wurde beim Drucken eine falsche Url erstellt.
+- Bei D3 Grafiken wurden bei der linken Achsen Beschriftung die Tausender Trennzeichen in Anführungszeichen dargestellt.
+- Ein Fehler wurde behoben, der auftrat wenn ein Layer angeschaltet wurde, der verschiedene Sonderzeichen im Namen enthielt.
+- Wenn der MapMarker in Kombination mit einer Projektion als URL Parameter angegeben wird, wird der MapMarker nun korrekt projiziert.
+- Ein Fehler wurde behoben der dazu führte, dass die Legende im Menü angezeigt wurde, auch wenn diese nicht konfiguriert war.
+- 3D: Das GFI von Gebäuden zeigt wieder alle verfügbaren Attribute an und das GFI für Brückenflächen wird wieder angezeigt.
+- Ein Fehler wurde behoben der verhindert hat, dass eine Get Feature Info für WMS vom Mapserver mit dem "infoFormat": "application/vnd.ogc.gml" angezeigt wurde.
+- Wenn Layer über die Url als Parameter selektiert wurden und die Transparenz nicht übergeben wurde, war deren Transparenz im Themenbaum nicht einstellbar, das ist behoben.
+- Das Drucken eines Ausschnitts in dem der MapMarker sichtbar ist funktioniert jetzt. Der MapMarker wird im Druck nicht dargestellt.
+- Bei der WFS-Suche wurde der Such-Begriff bei der Anfrage fälschlicherweise kodiert, das wurde beseitigt.
+- Eine Meldung wurde im IE11 hinzugefügt, dass die Schrägluftbilder nicht unterstützt werden.
+- Bei der Legende waren einige Bilder verschwommen dargestelt.
 
 ---
 

@@ -11,12 +11,22 @@ import axios from "axios";
 export function requestGfi (mimeType, url) {
     return axios.get(url)
         .then(response => handleResponseAxios(response))
-        .then(docString => parseDocumentString(docString, mimeType))
+        .then(docString => {
+            const parsedDocument = parseDocumentString(docString, mimeType);
+
+            if (mimeType === "text/html") {
+                if (parsedDocument.getElementsByTagName("tbody")[0]?.children.length >= 1) {
+                    return docString;
+                }
+                return null;
+            }
+
+            return parsedDocument;
+        })
         .then(doc => {
             if (mimeType === "text/xml") {
                 return parseFeatures(doc);
             }
-            // mimeType === "text/html" -> other formats are currently not supported
             return doc;
         })
         .catch(error => {

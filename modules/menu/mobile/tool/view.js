@@ -46,9 +46,20 @@ const ItemView = Backbone.View.extend({
             this.model = Radio.request("ModelList", "getModelByAttributes", {id: this.model.id});
         }
 
-        this.model.setIsActive(true);
-        store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
-        // Navigation wird geschlossen
+        if (!this.model.get("isActive")) {
+            // active the tool if it is not active
+            // deactivate all other modules as long as the tool is not set to "keepOpen"
+            this.model.collection.setActiveToolsToFalse(this.model);
+            this.model.setIsActive(true);
+            store.dispatch("Tools/setToolActive", {id: this.model.id, active: true});
+        }
+        else {
+            // deactivate tool if it is already active
+            this.model.setIsActive(false);
+            store.dispatch("Tools/setToolActive", {id: this.model.id, active: false});
+        }
+
+        // Navigation is closed
         $("div.collapse.navbar-collapse").removeClass("in");
     },
     removeIfNotVisible: function () {

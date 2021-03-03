@@ -22,6 +22,7 @@ export function drawInteractionOnDrawEvent ({state, commit, dispatch, rootState}
         layerSource = state.layer.getSource();
 
     commit("setAddFeatureListener", layerSource.once("addfeature", event => {
+        event.feature.set("fromDrawTool", true);
         if (circleMethod === "defined" && drawType.geometry === "Circle") {
             const innerRadius = !isNaN(styleSettings.circleRadius) ? parseFloat(styleSettings.circleRadius) : null,
                 outerRadius = !isNaN(styleSettings.circleOuterRadius) ? parseFloat(styleSettings.circleOuterRadius) : null,

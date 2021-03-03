@@ -2,16 +2,16 @@
 
 # Masterportal
 
-Das Masterportal ist ein Baukasten für Geo-Anwendungen im Web auf Basis von [OpenLayers](https://openlayers.org) und [Backbone.js](https://backbonejs.org). Das Masterportal ist OpenSource Software. Es ist unter der [MIT-Lizenz](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/License.txt) veröffentlicht.
+Das Masterportal ist ein Baukasten für Geo-Anwendungen im Web auf Basis von [OpenLayers](https://openlayers.org) und [Backbone.js](https://backbonejs.org). Das Masterportal ist OpenSource Software. Es ist unter der [MIT-Lizenz](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/License.txt) veröffentlicht.
 
 Das Masterportal ist ein Projekt der [Geowerkstatt Hamburg](https://www.hamburg.de/geowerkstatt/).
 
-## für Anwender (Stable-Version)
+## für Anwender
 
 * [Download](https://bitbucket.org/geowerkstatt-hamburg/masterportal/downloads/)
-* [Quickstart für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/doc/setup.de.md)
-* [Remote Interface](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/doc/remoteInterface.de.md)
-* [Dokumentation für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/stable/doc/doc.de.md)
+* [Quickstart für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/setup.de.md)
+* [Remote Interface](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/remoteInterface.de.md)
+* [Dokumentation für Anwender](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/doc/doc.de.md)
 * [Community Board (Anwender-Forum, Issue Tracker)](https://trello.com/c/qajdXkMa/110-willkommen)
 
 ## für Entwickler

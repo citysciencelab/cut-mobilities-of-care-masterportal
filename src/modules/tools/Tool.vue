@@ -228,7 +228,6 @@ export default {
 
 <style lang="less" scoped>
     @import "~variables";
-    @color_1: rgb(85, 85, 85);
     @color_2: rgb(255, 255, 255);
     @font_family_1: "MasterPortalFont Bold","Arial Narrow",Arial,sans-serif;
     @font_family_2: "MasterPortalFont", sans-serif;
@@ -240,18 +239,17 @@ export default {
     #vue-tool-content-body { display:block; }
 
     .win-heading{
-        padding: 12px 10px 12px 10px;
         border-bottom: 1px solid rgb(229, 229, 229);
         font-family: @font_family_1;
         display:flex;
         flex-direction:row;
         width:100%;
+        padding-left: 10px;
 
         .heading-element {
             white-space: nowrap;
-            color: @color_1;
+            color: @secondary_contrast;
             font-size: 14px;
-            padding: 6px;
 
             &.flex-grow {
                 flex-grow:99;
@@ -259,9 +257,14 @@ export default {
             }
 
             > .title {
-                margin:0;
-                overflow:hidden;
+                color: @secondary_contrast;
                 white-space: nowrap;
+                font-size: 14px;
+                padding-top: 10px;
+            }
+
+            > .glyphicon {
+                padding: 10px 8px 10px 0px;
             }
 
             > span {
@@ -282,9 +285,15 @@ export default {
         left: 20px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
         z-index: 999;
-        max-height:72vh;
-        overflow: auto;
         min-width: 280px;
+
+        @media (max-width: 400px) {
+            right: 20px;
+        }
+
+        .win-body-vue {
+            max-height:72vh;
+        }
 
         .basic-resize-handle {
             position:absolute;
@@ -304,10 +313,7 @@ export default {
             .win-heading{
                 background-color:@background_color_2;
                 border-bottom:none;
-
-                .heading-element {
-                    .title { color: @color_2; }
-                }
+                overflow: hidden;
             }
         }
     }
@@ -315,22 +321,28 @@ export default {
     .win-body-vue {
         position: relative;
         padding: @padding;
-        height: calc(100% - 58px);
-        width: 100%;
         -webkit-overflow-scrolling: touch;
         background-color: @background_color_1;
         overflow: auto;
+        width: 100%;
     }
 
     .table-tool-win-all-vue {
         font-family: @font_family_2;
         border-radius: 12px;
-        background-color: @background_color_4;
         margin-bottom: 30px;
-        .header {
+        .win-heading {
             font-family: @font_family_2;
-            > .title { color: @color_2; }
-            > .buttons { color: @color_2; }
+            font-size: 14px;
+            background-color: @background_color_4;
+            .heading-element {
+                > .title {
+                    color: @color_2;
+                    font-size: 14px;
+                }
+                > .buttons { color: @color_2; }
+                > .glyphicon { color: @color_2; }
+            }
         }
         .win-body-vue {
             border-bottom-left-radius: 12px;
@@ -344,6 +356,10 @@ export default {
         background-color: @background_color_1;
         padding:0 0 0 12px;
         height:100%;
+
+        .win-body-vue {
+            height: calc(100% - 35px);
+        }
     }
 
     #basic-resize-handle-sidebar{

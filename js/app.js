@@ -30,12 +30,10 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
@@ -233,10 +231,6 @@ async function loadApp () {
                 new ParcelSearchView({model: tool});
                 break;
             }
-            case "searchByCoord": {
-                new SearchByCoordView({model: tool});
-                break;
-            }
             /**
              * wfsFeatureFilter
              * @deprecated in 3.0.0
@@ -275,10 +269,6 @@ async function loadApp () {
             }
             case "wfst": {
                 new WfstView({model: tool});
-                break;
-            }
-            case "styleVT": {
-                new StyleVTView({model: tool});
                 break;
             }
             /**
@@ -425,7 +415,7 @@ function loadAddOnsAfterLanguageLoaded (legacyAddons) {
             import(
                 /* webpackChunkName: "[request]" */
                 /* webpackInclude: /addons[\\\/].*[\\\/]*.js$/ */
-                /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                /* webpackExclude: /(node_modules)|(.+unittests.)|(.+test.)+/ */
                 "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
                 let addon;
