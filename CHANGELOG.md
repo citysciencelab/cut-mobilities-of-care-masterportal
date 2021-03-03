@@ -8,7 +8,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.7.0 - 2021-03-03
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
 - On draw tool Double Circle configuration available in config.json
@@ -30,10 +30,9 @@
 ### Deprecated
 - Deprecated the parameter `simpleMap` in the config.js and moved its configuration to the `saveSelection` tool in the config.json.
 
-### Removed
-
 ### Fixed
 - If the Save selection tool is not configured, the button for it is no longer displayed in the topic tree.
+- Various bugfixes.
 
 ---
 
