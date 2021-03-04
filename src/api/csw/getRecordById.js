@@ -61,7 +61,14 @@ function parseTitle (json) {
  * @returns {String} abstract
  */
 function parseAbstract (json) {
-    return json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.abstract?.CharacterString?.getValue();
+    let abstractData = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.abstract?.CharacterString?.getValue();
+    const match = (/\r|\n/).exec(abstractData);
+
+    if (match) {
+        abstractData = abstractData.replace(/(?:\r\n|\r|\n)/g, "<br>").replace(/(<br ?\/?>)+/gi, "<br>").replace(/(<br ?\/?>)+/gi, "</p><p>");
+    }
+
+    return "<p>" + abstractData + "</p>";
 }
 
 /**
