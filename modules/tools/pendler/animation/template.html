@@ -51,20 +51,27 @@
     </div>
 
     <div class="radio">
-        <label class=" radio-inline">
+        <label class=" radio-inline"
+            <%= featureType === wfsappGemeinde && typeof gemeinde === "undefined" ? "id='mouseOverTarget'" : "" %>
+        >
             <input type="radio" name="direction" value="wohnort"
                 <%= typeof direction !== "undefined" && direction === "wohnort" ? "checked" : "" %>
                 <%= featureType === wfsappGemeinde && typeof gemeinde === "undefined" ? "disabled" : "" %>
             >
             <%=domicile%>
         </label>
-        <label class=" radio-inline">
+        <label class=" radio-inline"
+            <%= featureType === wfsappGemeinde && typeof gemeinde === "undefined" ? "id='mouseOverTarget'" : "" %>
+        >
             <input type="radio" name="direction" value="arbeitsort"
                 <%= typeof direction !== "undefined" && direction === "arbeitsort" ? "checked" : "" %>
                 <%= featureType === wfsappGemeinde && typeof gemeinde === "undefined" ? "disabled" : "" %>
             >
             <%=workplace%>
         </label>
+        <div class="tooltip">
+            <span class="tooltiptext"><%=chooseBorough%></span>
+        </div>
     </div>
 
     <% if (typeof direction !== "undefined") { %>

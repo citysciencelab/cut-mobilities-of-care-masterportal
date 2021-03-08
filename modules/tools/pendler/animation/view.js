@@ -10,7 +10,10 @@ const AnimationView = Backbone.View.extend({
         "change #pendler-check-gemeinde": "checkGemeinde",
         "change #select-gemeinde": "setGemeinde",
         "change #select-trefferAnzahl": "setTrefferAnzahl",
-        "change input[type=radio]": "setDirection"
+        "change input[type=radio]": "setDirection",
+        "mouseover #mouseOverTarget": "onRadioLabelMouseover",
+        "mouseout #mouseOverTarget": "onRadioLabelMouseout",
+        "click #mouseOverTarget": "onRadioLabelClick"
     },
 
     initialize: function () {
@@ -96,6 +99,18 @@ const AnimationView = Backbone.View.extend({
 
     setDirection: function (evt) {
         this.model.setDirection(evt.target.value);
+    },
+
+    onRadioLabelClick: function () {
+        document.querySelector("#select-gemeinde").style.border = "1px solid red";
+    },
+
+    onRadioLabelMouseover: function () {
+        document.querySelector(".tooltip .tooltiptext").style.visibility = "visible";
+    },
+
+    onRadioLabelMouseout: function () {
+        document.querySelector(".tooltip .tooltiptext").style.visibility = "hidden";
     }
 });
 

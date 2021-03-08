@@ -8,7 +8,10 @@ const LinesView = Backbone.View.extend({
         "change #select-trefferAnzahl": "setTrefferAnzahl",
         "change input[type=radio]": "setDirection",
         "click .csv-download": "createAlertBeforeDownload",
-        "click .btn-remove-features": "removeFeatures"
+        "click .btn-remove-features": "removeFeatures",
+        "mouseover #mouseOverTarget": "onRadioLabelMouseover",
+        "mouseout #mouseOverTarget": "onRadioLabelMouseout",
+        "click #mouseOverTarget": "onRadioLabelClick"
     },
 
     initialize: function () {
@@ -87,6 +90,18 @@ const LinesView = Backbone.View.extend({
 
     setDirection: function (evt) {
         this.model.setDirection(evt.target.value);
+    },
+
+    onRadioLabelClick: function () {
+        document.querySelector("#select-gemeinde").style.border = "1px solid red";
+    },
+
+    onRadioLabelMouseover: function () {
+        document.querySelector(".tooltip .tooltiptext").style.visibility = "visible";
+    },
+
+    onRadioLabelMouseout: function () {
+        document.querySelector(".tooltip .tooltiptext").style.visibility = "hidden";
     }
 });
 
