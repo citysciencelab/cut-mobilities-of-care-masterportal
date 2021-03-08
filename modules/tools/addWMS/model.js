@@ -2,6 +2,7 @@ import Tool from "../../core/modelList/tool/model";
 import {WMSCapabilities} from "ol/format.js";
 import {intersects} from "ol/extent";
 import {transform as transformCoord, getProjection} from "masterportalAPI/src/crs";
+import store from "../../../src/app-store/index";
 
 const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
     /**
@@ -79,7 +80,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
             return;
         }
         else if (url.includes("http:")) {
-            Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.errorHttpsMessage"));
+            store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.errorHttpsMessage"));
             return;
         }
         Radio.trigger("Util", "showLoader");
@@ -95,16 +96,20 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                         capability = parser.read(data),
                         version = capability?.version,
                         checkVersion = this.isVersionEnabled(version),
-                        currentExtent = Radio.request("Parser", "getPortalConfig")?.mapView?.extent,
-                        checkExtent = this.getIfInExtent(capability, currentExtent);
+                        currentExtent = Radio.request("Parser", "getPortalConfig")?.mapView?.extent;
 
-                    if (!checkExtent) {
-                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.ifInExtent"));
-                        return;
-                    }
+                    let checkExtent = this.getIfInExtent(capability, currentExtent),
+                        finalCapability = capability;
 
                     if (!checkVersion) {
-                        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.checkVersion"));
+                        const reversedData = this.getReversedData(data);
+
+                        finalCapability = parser.read(reversedData);
+                        checkExtent = this.getIfInExtent(finalCapability, currentExtent);
+                    }
+
+                    if (!checkExtent) {
+                        store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.ifInExtent"));
                         return;
                     }
 
@@ -116,13 +121,13 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
                         Radio.trigger("ModelList", "renderTree");
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
-                    Radio.trigger("Parser", "addFolder", capability.Service.Title, uniqId, "ExternalLayer", 0);
-                    capability.Capability.Layer.Layer.forEach(layer => {
+                    Radio.trigger("Parser", "addFolder", finalCapability.Service.Title, uniqId, "ExternalLayer", 0);
+                    finalCapability.Capability.Layer.Layer.forEach(layer => {
                         this.parseLayer(layer, uniqId, 1);
                     });
                     Radio.trigger("ModelList", "closeAllExpandedFolder");
 
-                    Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.completeMessage"));
+                    store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.completeMessage"));
 
                 }
                 catch (e) {
@@ -142,7 +147,7 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
      * @returns {void}
      */
     displayErrorMessage: function () {
-        Radio.trigger("Alert", "alert", i18next.t("common:modules.tools.addWMS.errorMessage"));
+        store.dispatch("Alerting/addSingleAlert", i18next.t("common:modules.tools.addWMS.errorMessage"));
     },
 
     /**
@@ -207,8 +212,20 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
         }
 
         if (Array.isArray(layer) && layer.length) {
-            const firstLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[0], layer[0].extent[1]]),
+            let firstLayerExtent = [],
+                secondLayerExtent = [];
+
+            layer.forEach(singleLayer => {
+                if (singleLayer.crs === "EPSG:25832") {
+                    firstLayerExtent = [singleLayer.extent[0], singleLayer.extent[1]];
+                    secondLayerExtent = [singleLayer.extent[2], singleLayer.extent[3]];
+                }
+            });
+
+            if (!firstLayerExtent.length && !secondLayerExtent.length) {
+                firstLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[0], layer[0].extent[1]]);
                 secondLayerExtent = transformCoord(layer[0].crs, "EPSG:25832", [layer[0].extent[2], layer[0].extent[3]]);
+            }
 
             layerExtent = [firstLayerExtent[0], firstLayerExtent[1], secondLayerExtent[0], secondLayerExtent[1]];
 
@@ -216,6 +233,20 @@ const AddWMSModel = Tool.extend(/** @lends AddWMSModel.prototype */{
         }
 
         return true;
+    },
+
+    /**
+     * Getter for reversed data of old wms version
+     * @param {Object} data the response of the imported wms layer
+     * @returns {xml} reversedData - The reversed data of the response of the imported wms layer
+     */
+    getReversedData: function (data) {
+        let reversedData = new XMLSerializer().serializeToString(data);
+
+        reversedData = reversedData.replace(/<SRS>/g, "<CRS>").replace(/<\/SRS>/g, "</CRS>").replace(/SRS=/g, "CRS=");
+        reversedData = new DOMParser().parseFromString(reversedData, "text/xml");
+
+        return reversedData;
     },
 
     /**

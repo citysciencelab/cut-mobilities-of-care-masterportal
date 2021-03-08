@@ -143,4 +143,14 @@ describe("addWMS/model", function () {
             expect(model.getIfInExtent(capability, currentExtent)).to.be.true;
         });
     });
+
+    describe("getReversedData", function () {
+        const data = "<Layer><SRS>EPSG:4326</SRS><Layer queryable=\"1\"><SRS>EPSG:102100</SRS><BoundingBox SRS=\"EPSG:4326\" minx=\"6.355978\" miny=\"49.11015\" maxx=\"7.413363\" maxy=\"49.644331\"/></Layer></Layer>",
+            dataXml = new DOMParser().parseFromString(data, "text/xml");
+
+        it("should replace all SRS with CRS in the xml node and attribute", function () {
+            expect(model.getReversedData(dataXml).getElementsByTagName("SRS").length).to.equal(0);
+            expect(model.getReversedData(dataXml).getElementsByTagName("CRS").length).not.to.equal(0);
+        });
+    });
 });
