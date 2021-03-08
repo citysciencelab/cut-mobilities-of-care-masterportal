@@ -203,6 +203,8 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 |gfiTheme|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht *default* gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
+|isSecured|nein|Boolean|false|Anzeige ob der Layer zu einem abgesicherten Dienst gehört. (**[siehe unten](#markdown-header-wfs-layerissecured)**)|false|
+|authenticationUrl|nein|String||Zusätzliche Url, die aufgerufen wird um die basic Authentifizierung im Browser auszulösen.|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 **Beispiel WFS:**
 
 ```
@@ -220,6 +222,8 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legend" : true,
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType",
       "datasets" : [
          {
             "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
@@ -259,6 +263,26 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
     "datasets" : []
   }
 ```
+***
+## WFS-Layer.isSecured ##
+WFS Layer der zu einem abgesicherte WFS Dienst gehört.
+
+**ACHTUNG: Wenn der Layer zu einem abgesicherten Dienst gehört, müssen folgende Änderungen am Service vorgenommen werden!**
+
+* Es müssen anhand des Referer zwei Header gesetzt werden.
+* Die Konfiguration hierfür muss z.B. im Apache Webserver erfolgen.
+* `Access-Control-Allow-Credentials: true`
+* Dynamische Umschreibung des nachfolgenden HTTP Headers von: `Access-Control-Allow-Origin: *` nach `Access-Control-Allow-Origin: URL des zugreifenden Portals`
+
+**ACHTUNG: Wenn es sich bei dem Layer auch um einen WFS-T Layer eines abgesicherten Dienstes handelt, dann muss zusätzlich folgende Änderung am Service vorgenommen werden!**
+
+* Es muss anhand des Referer ein Header gesetzt werden.
+* Die Konfiguration hierfür muss z.B. im Apache Webserver erfolgen.
+* Wenn für diesen Header noch keine Einstellung vorgenommen wurde, dann muss der Header wie folgt gesetzt werden, damit es keine Auswirkungen auf andere Anfragen gibt: `Access-Control-Allow-Headers: Content-Type, *`
+* Wenn für diesen Header schon Einstellungen vorgenommen wurden, dann muss der Header `Access-Control-Allow-Headers` mit folgendem Eintrag ergänzt werden: `Content-Type`
+
+***
+
 
 ***
 ## Vector Tile Layer ##

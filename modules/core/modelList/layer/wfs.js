@@ -9,6 +9,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
         supported: ["2D", "3D"],
         showSettings: true,
+        isSecured: false,
         isClustered: false,
         allowedVersions: ["1.1.0"],
         altitudeMode: "clampToGround",
@@ -165,6 +166,9 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             async: true,
             type: "GET",
             context: this,
+            xhrFields: {
+                withCredentials: true
+            },
             success: this.handleResponse,
             complete: function () {
                 if (showLoader) {
@@ -261,7 +265,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {void}
      */
     createLegend: function () {
-        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId"));
+        const styleModel = Radio.request("StyleList", "returnModelById", this.get("styleId")),
+            isSecured = this.attributes.isSecured;
         let legend = this.get("legend");
 
         /**
@@ -283,8 +288,11 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             this.setLegend(legend);
         }
         else if (styleModel && legend === true) {
-            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+            if (!isSecured && Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
                 styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
+            }
+            else if (isSecured && Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+                styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }
             this.setLegend(styleModel.getLegendInfos());
         }

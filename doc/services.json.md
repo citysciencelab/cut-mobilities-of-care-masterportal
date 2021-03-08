@@ -207,6 +207,8 @@ WMTS layers can be added by
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+|isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
+|authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 
 **WFS example:**
 
@@ -224,6 +226,8 @@ WMTS layers can be added by
       "gfiAttributes" : "showAll",
       "layerAttribution" : "nicht vorhanden",
       "legend" : true,
+      "isSecured": true,
+      "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType",
       "datasets" : [
          {
             "md_id" : "2FC4BBED-350C-4380-B138-4222C28F56C6",
@@ -262,6 +266,26 @@ WMTS layers can be added by
     "datasets" : []
   }
 ```
+***
+## WFS-Layer.isSecured ##
+WFS layer belonging to a secured WFS service.
+
+**CAUTION: If the layer belongs to a secured service, the following changes must be made to the service!**
+
+* Two headers must be set based on the referer.
+* The configuration for this must be done e.g. in the Apache web server.
+* `Access-Control-Allow-Credentials: true`.
+* Dynamic rewrite of the following HTTP header from: <br>
+`Access-Control-Allow-Origin: *` <br>
+to <br>
+`Access-Control-Allow-Origin: URL of the accessing portal`.
+
+**CAUTION: If the layer is also a WFS-T layer of a secured service, the following additional change must be made to the service!**
+
+* A headers must be set based on the referer.
+* The configuration for this must be done e.g. in the Apache web server.
+* If no setting has yet been made for this header, the header must be set as follows to avoid any effects on other requests: `Access-Control-Allow-Headers: Content-Type, * `
+* If settings have already been made for this header, the following entry must be added to the `Access-Control-Allow-Headers` header: `Content-Type`
 
 ***
 ## Vector Tile Layer
