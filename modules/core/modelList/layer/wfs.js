@@ -144,16 +144,26 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
          * getProxyUrl()
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
+            prefix = this.get("featurePrefix"),
+            namespace = this.get("featureNS"),
+            typename = this.get("featureType"),
             params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
                 SRSNAME: Radio.request("MapView", "getProjection").getCode(),
-                TYPENAME: this.get("featureType"),
+                TYPENAME: typename,
                 VERSION: this.get("version"),
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
             mapInitialLoading = Radio.request("Map", "getInitialLoading");
+
+        if (prefix !== undefined && typeof prefix === "string" && namespace !== undefined && typeof namespace === "string") {
+            params.NAMESPACE = `xmlns(${prefix}=${namespace})`;
+            if (typename.indexOf(`${prefix}:`) !== 0) {
+                params.TYPENAME = `${prefix}:${typename}`;
+            }
+        }
 
         $.ajax({
             beforeSend: function () {
