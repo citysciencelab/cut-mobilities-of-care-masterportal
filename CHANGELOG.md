@@ -21,6 +21,12 @@
 
 ---
 
+## v2.7.1 - 2021-03-05
+### Fixed
+- The representation in the legend has been corrected.
+
+---
+
 ## v2.7.0 - 2021-03-03
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
