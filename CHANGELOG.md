@@ -18,6 +18,9 @@
 ### Removed
 
 ### Fixed
+
+---
+
 ## v2.7.2 - 2021-03-09
 ### Fixed
 - SensorThings: Fix the bug where initially data has not been fetched, resulting display of "no data" on mousehover.
