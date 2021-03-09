@@ -14,7 +14,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
         pendlerLegend: [],
         renderToWindow: true,
         zoomLevel: 1,
-        url: "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
+        url: "https://geodienste.hamburg.de/MRH_WFS_Pendlerstroeme_im_Tool",
         params: {
             REQUEST: "GetFeature",
             SERVICE: "WFS",
@@ -41,7 +41,7 @@ const PendlerCoreModel = Tool.extend(/** @lends PendlerCoreModel.prototype */{
      * @property {Array} pendlerLegend=[] the legend
      * @property {Boolean} renderToWindow=true Flag if tool should be rendered in window
      * @property {Number} zoomLevel=1 level map is zoomed
-     * @property {String} url= "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung" url to get the 'pendlerverflechtung' from
+     * @property {String} url= "https://geodienste.hamburg.de/MRH_WFS_Pendlerstroeme_im_Tool" url to get the 'Pendlerstroeme'
      * @property {Object} params= {
             REQUEST: "GetFeature",
             SERVICE: "WFS",
