@@ -27,20 +27,6 @@
 
 ---
 
-## v2.7.1 - 2021-03-05
-### Fixed
-- Die Darstellung in der Legende wurde korrrigiert.
-
----
-
-## v2.6.3 - 2021-02-12
-### Fixed
-- Mehrere Darstellungsfehler bei den Layern "Dauerzählstellen (Rad) Hamburg" und "Verkehrsdaten Rad (Infrarotdetektoren) Hamburg" wurden behoben.
-- Ein Fehler wurde behoben, durch den bei Maßstabbeschränkten Layern beim Drucken Warnungen ausgegeben wurden,
-- obwohl alles in Ordnung war.
-
----
-
 ## v2.7.0 - 2021-03-03
 ### Added
 - Integration and use of WMS-services secured via User / Password (HTTP-Basic). Thy are marked in the topic tree by lock symbol.
