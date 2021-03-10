@@ -7,7 +7,7 @@ Wir wollen ein Tool schreiben, über welches man den Kartenmaßstab steuern kann
 Darüber hinaus soll unser Tool auf Änderungen des Kartenmaßstabes reagieren und den entsprechend aktuellen Maßstab im Drop-Down-Menu anzeigen.
 
 ### Neues Tool anlegen
-In das Verzeichnis "src/modules/tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen soll ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scaleSwitcher". Darunter  die Ordner "components" und "store" anlegen und darin die für dieses Tool benötigten Dateien anlegen. Ebenso die Dateien für die Tests anlegen. Das [Tutorial für vue-Tests](unittestingVue.de.md) beschreibt, wie der ScaleSwitcher getestet werden kann.
+In das Verzeichnis "src/modules/tools" wechseln und einen neuen Ordner erstellen. Aus dem Ordnernamen soll ersichtlich sein, um was für ein Tool es sich dabei handelt - z.B. "scaleSwitcher". Darunter  die Ordner "components" und "store" anlegen und darin die für dieses Tool benötigten Dateien anlegen. Ebenso die Dateien für die Tests anlegen. Das [Tutorial für vue-Tests](unitTestVue.de.md) beschreibt, wie der ScaleSwitcher getestet werden kann.
 ```
 src
 |-- modules
