@@ -3,7 +3,7 @@ const path = require("path"),
     stableVersionNumber = require(path.resolve(rootPath, "devtools/tasks/getStableVersionNumber"))(),
     gitRevSync = require("git-rev-sync"),
     moment = require("moment"),
-    date = moment().format("YYYY-MM-DD_HH-mm-ss");
+    date = moment().format("YYYY-MM-DD_HH-mm");
 
 module.exports = function getMastercodeVersionFolderName () {
     let folderName = stableVersionNumber;
