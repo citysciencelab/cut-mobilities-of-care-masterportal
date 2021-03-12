@@ -37,7 +37,6 @@ import TreeFilter from "../../treeFilter/model";
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import FeatureLister from "../../tools/featureLister/model";
-import AddWms from "../../tools/addWMS/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
@@ -269,9 +268,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "animation") {
                 return new Animation(attrs, options);
-            }
-            else if (attrs.id === "addWMS") {
-                return new AddWms(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);

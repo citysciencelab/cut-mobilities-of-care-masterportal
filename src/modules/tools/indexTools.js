@@ -6,6 +6,7 @@ import actions from "./actionsTools";
 /**
  * The imported tools.
  */
+import AddWMS from "./addWMS/store/indexAddWMS";
 import Contact from "./contact/store/indexContact";
 import Draw from "./draw/store/indexDraw";
 import FileImport from "./fileImport/store/indexFileImport";
@@ -24,6 +25,7 @@ import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
 export default {
     namespaced: true,
     modules: {
+        AddWMS,
         Contact,
         Draw,
         FileImport,

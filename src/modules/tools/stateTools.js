@@ -1,3 +1,4 @@
+import AddWMS from "./addWMS/components/AddWMS.vue";
 import Contact from "./contact/components/Contact.vue";
 import Draw from "./draw/components/Draw.vue";
 import FileImport from "./fileImport/components/FileImport.vue";
@@ -16,6 +17,7 @@ import SupplyCoord from "./supplyCoord/components/SupplyCoord.vue";
  */
 const state = {
     componentMap: {
+        addWMS: AddWMS,
         contact: Contact,
         draw: Draw,
         fileImport: FileImport,
