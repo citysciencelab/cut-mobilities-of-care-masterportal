@@ -177,7 +177,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      * @param  {event} [eventType="click"] - The type of event that triggered this function.
      * @return {void}
      */
-    bkgSearch: function (hit, showOrHideMarker, eventType = "click") {
+    bkgSearch: function (hit, showOrHideMarker, eventType) {
         const name = hit.name,
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
