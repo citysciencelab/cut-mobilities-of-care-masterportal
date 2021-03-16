@@ -13,6 +13,8 @@
 - External WMS Layers with version lower than 1.3.0 can also be imported.
 - Added possibility to prepend prefix to GFI attribute.
 - WMTS Layers can now be printed with MapFish.
+- The user can search visible wfs features by clicking a position on the map by clicking the "Nearby button" on the controls
+- The user can search visible wfs features after searching an address from search field by clicking the "Nearby button" on the controls
 
 ### Changed
 - The tool AddWMS switched from backbone to vue module.

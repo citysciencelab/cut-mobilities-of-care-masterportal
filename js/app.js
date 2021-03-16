@@ -55,7 +55,6 @@ import PrintView from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import OrientationView from "../modules/controls/orientation/view";
 import SearchbarView from "../modules/searchbar/view";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -272,16 +271,9 @@ async function loadApp () {
         controlsView = new ControlsView();
 
         controls.forEach(control => {
-            const orientationConfigAttr = typeof control.attr === "string" ? {zoomMode: control.attr} : control;
             let element;
 
             switch (control.id) {
-                case "orientation": {
-                    element = controlsView.addRowTR(control.id, true);
-                    orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
-                    new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
                 case "button3d": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);

@@ -227,6 +227,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
         if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
             Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.get("zoomLevel"));
             store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);
+            store.commit("controls/orientation/setPosition", data.features[0].geometry.coordinates);
         }
 
         else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&

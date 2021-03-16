@@ -2,9 +2,11 @@ import getters from "./gettersControls";
 import mutations from "./mutationsControls";
 import attributions from "./attributions/store/indexAttributions";
 import backForward from "./backForward/store/indexBackForward";
+import orientation from "./orientation/store/indexOrientation";
 import Attributions from "./attributions/components/Attributions.vue";
 import BackForward from "./backForward/components/BackForward.vue";
 import FullScreen from "./fullScreen/components/FullScreen.vue";
+import Orientation from "./orientation/components/Orientation.vue";
 import OverviewMap from "./overviewMap/components/OverviewMap.vue";
 import TotalView from "./totalView/components/TotalView.vue";
 import Zoom from "./zoom/components/Zoom.vue";
@@ -20,7 +22,8 @@ export default {
     namespaced: true,
     modules: {
         attributions,
-        backForward
+        backForward,
+        orientation
     },
     // initial state - information on all controls that are not addons.
     state: {
@@ -29,6 +32,7 @@ export default {
             attributions: Attributions,
             backForward: BackForward,
             fullScreen: FullScreen,
+            orientation: Orientation,
             overviewMap: OverviewMap,
             totalView: TotalView,
             zoom: Zoom,

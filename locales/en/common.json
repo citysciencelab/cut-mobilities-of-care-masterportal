@@ -614,9 +614,10 @@
             },
             "orientation": {
                 "titleGeolocate": "Common position",
-                "titleGeolocatePOI": "Close to me",
+                "titleGeolocatePOI": "Close to here",
                 "geolocationDeniedText": "Localisation is not available",
-                "trackingDeniedText": "'$t(common:modules.controls.orientation.titleGeolocatePOI)' is not available"
+                "trackingDeniedText": "'Close to here' is not available",
+                "distanceUnit": "Meters"
             },
             "orientation3d": {
                 "compass": {

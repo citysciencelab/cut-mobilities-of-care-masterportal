@@ -614,9 +614,10 @@
             },
             "orientation": {
                 "titleGeolocate": "Standpunkt",
-                "titleGeolocatePOI": "In meiner Nähe",
+                "titleGeolocatePOI": "In der Nähe",
                 "geolocationDeniedText": "Lokalisierung nicht verfügbar",
-                "trackingDeniedText": "'In meiner Nähe' nicht verfügbar"
+                "trackingDeniedText": "'In der Nähe' nicht verfügbar",
+                "distanceUnit": "Meter"
             },
             "orientation3d": {
                 "compass": {
