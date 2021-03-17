@@ -16,7 +16,6 @@
 - The tool AddWMS switched from backbone to vue module.
 - Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
-- The tootltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
 
 ### Deprecated
 
@@ -26,6 +25,7 @@
 - GFI of type text/html now also loads css files of the body.
 - Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
 - Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened
+- Printing of tooltip of measure-tool works: The tooltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
 
 ---
 
