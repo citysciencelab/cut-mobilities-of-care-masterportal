@@ -111,7 +111,7 @@ export default {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
-                iframe.src = "data:text/html;charset=utf-8," + encodeURIComponent(this.feature.getDocument());
+                iframe.contentWindow.document.write(this.feature.getDocument());
             }
         }
     }

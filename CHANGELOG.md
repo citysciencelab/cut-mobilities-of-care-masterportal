@@ -18,6 +18,7 @@
 ### Removed
 
 ### Fixed
+- GFI of type text/html now also loads css files of the body.
 
 ---
 
