@@ -67,7 +67,9 @@ const state = {
         style,
         name: "measure_layer",
         alwaysOnTop: true
-    })
+    }),
+    featureId: -1,
+    tooltipCoord: []
 };
 
 export default state;

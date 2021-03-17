@@ -56,12 +56,11 @@ export default {
                 {selectedGeometry} = state;
 
             interaction = makeDraw2d(
-                map,
                 selectedGeometry,
                 feature => commit("addFeature", feature),
-                overlay => commit("addOverlay", overlay),
                 flag => commit("setIsDrawing", flag),
-                rootState._store
+                featureId => commit("setFeatureId", featureId),
+                tooltipCoord => commit("setTooltipCoord", tooltipCoord)
             );
             map.addInteraction(interaction);
         }

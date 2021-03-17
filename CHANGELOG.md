@@ -16,6 +16,7 @@
 - The tool AddWMS switched from backbone to vue module.
 - Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
+- The tootltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
 
 ### Deprecated
 

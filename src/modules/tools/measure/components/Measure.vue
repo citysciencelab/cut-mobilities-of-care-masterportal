@@ -5,6 +5,7 @@ import Tool from "../../Tool.vue";
 import getters from "../store/gettersMeasure";
 import mutations from "../store/mutationsMeasure";
 import actions from "../store/actionsMeasure";
+import MeasureTooltip from "./MeasureTooltip.vue";
 
 /**
  * Measurement tool to measure lines and areas in the map.
@@ -12,7 +13,8 @@ import actions from "../store/actionsMeasure";
 export default {
     name: "Measure",
     components: {
-        Tool
+        Tool,
+        MeasureTooltip
     },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
@@ -81,6 +83,7 @@ export default {
                 v-if="active"
                 id="measure"
             >
+                <MeasureTooltip />
                 <form
                     class="form-horizontal"
                     role="form"
