@@ -18,7 +18,7 @@ describe("tools/measure/store/mutationsMeasure", function () {
             expect(state.lines).not.to.equal(lines);
             expect(state.lines).to.deep.equal({0: {}, 1: {}, 2: {}, id: {ol_uid: "id"}});
         });
-        
+
 
         it("adds Polygon measurements to polygon object by key", function () {
             const polygons = {0: {}, 1: {}, 2: {}},
