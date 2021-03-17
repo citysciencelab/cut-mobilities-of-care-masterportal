@@ -196,6 +196,7 @@ export default {
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
+                        step="10"
                         class="font-arial form-control input-sm pull-left"
                         type="number"
                     >
