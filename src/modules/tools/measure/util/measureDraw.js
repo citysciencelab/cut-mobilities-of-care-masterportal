@@ -22,7 +22,6 @@ function makeDraw (type, addFeature, setIsDrawing, setFeatureId, setTooltipCoord
 
     draw.on("drawstart", function (evt) {
         sketch = evt.feature;
-        sketch.set("styleId", sketch.ol_uid);
         sketch.set("isBeingDrawn", true);
         addFeature(sketch);
         setFeatureId(sketch.ol_uid);

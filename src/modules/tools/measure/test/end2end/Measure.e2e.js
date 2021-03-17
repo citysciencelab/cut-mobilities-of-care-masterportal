@@ -4,6 +4,7 @@ const webdriver = require("selenium-webdriver"),
     {hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
     {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {isMobile, is3D, isBasic} = require("../../../../../../test/end2end/settings"),
+    {getMeasureLayersTexts, areRegExpsInMeasureLayer} = require("../../../../../../test/end2end/library/scripts"),
     {By} = webdriver;
 
 /**
@@ -15,10 +16,10 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
     const testIsApplicable = !isMobile(resolution) && isBasic(url);
 
     if (testIsApplicable) {
-        describe("Measure Tool", function () {
+        describe.only("Measure Tool", function () {
             if (!is3D(mode)) {
                 describe("2D measurement", function () {
-                    let driver, selectGeometry, selectUnit, deleteButton, viewport, overlays;
+                    let driver, selectGeometry, selectUnit, deleteButton, viewport;
 
                     before(async function () {
                         if (capability) {
@@ -58,6 +59,8 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     });
 
                     it("draws a line showing length in meters and a tooltip", async function () {
+                        let number = null;
+
                         viewport = await driver.findElement(By.css(".ol-viewport"));
 
                         await driver.actions({bridge: true})
@@ -67,18 +70,32 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .click()
                             .perform();
 
-                        overlays = await driver.findElements(By.css(".ol-tooltip-measure.measure-tooltip"));
-                        expect((/\d+ m\n.+/).test(await overlays[0].getText())).to.be.true;
+                        const texts = await driver.executeScript(getMeasureLayersTexts);
+
+                        expect(texts.length).to.equals(2);
+                        expect(texts[0].indexOf(" m") > -1);
+                        number = texts[0].substring(0, texts[0].indexOf(" m"));
+
+                        expect(parseInt(number, 10)).not.to.be.NaN;
+                        expect(texts[1]).to.be.equals("Abschließen mit Doppelklick");
                     });
 
                     it("ends drawing a line on double-click showing length in meters without tooltip", async function () {
+                        let number = null;
+
                         await driver.actions({bridge: true})
                             .move({origin: viewport, x: -50, y: 50})
                             .doubleClick()
                             .perform();
 
-                        overlays = await driver.findElements(By.css(".ol-tooltip-measure.measure-tooltip"));
-                        expect((/\d+ m/).test(await overlays[overlays.length - 1].getText())).to.be.true;
+                        const texts = await driver.executeScript(getMeasureLayersTexts);
+
+                        expect(texts.length).to.equals(2);
+                        expect(texts[0].indexOf(" m") > -1);
+                        number = texts[0].substring(0, texts[0].indexOf(" m"));
+
+                        expect(parseInt(number, 10)).not.to.be.NaN;
+                        expect(texts[1]).to.be.equals("");
                     });
 
                     it("allows deleting made measurements by clicking the deletion button", async function () {
@@ -88,6 +105,8 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     });
 
                     it("draws a polygon, ending in double-click, displaying area in meters² and deviation", async function () {
+                        let number = null;
+
                         await (
                             await driver.findElement(
                                 By.css("#measure-tool-geometry-select option:last-child")
@@ -105,8 +124,14 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .move({origin: viewport, x: 40, y: 0}).doubleClick()
                             .perform();
 
-                        overlays = await driver.findElements(By.css(".ol-tooltip-measure.measure-tooltip"));
-                        expect((/\d+(\.\d+)? m²/).test(await overlays[overlays.length - 1].getText())).to.be.true;
+                        const texts = await driver.executeScript(getMeasureLayersTexts);
+
+                        expect(texts.length).to.equals(2);
+                        expect(texts[0].indexOf(" m") > -1);
+                        number = texts[0].substring(0, texts[0].indexOf(" m²"));
+
+                        expect(parseInt(number, 10)).not.to.be.NaN;
+                        expect(texts[1]).to.be.equals("");
                     });
                 });
             }
@@ -143,7 +168,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .move({origin: viewport, x: 0, y: 10}).click()
                             .perform();
 
-                        await driver.wait(async () => driver.executeScript(() => {
+                        await driver.wait(async () => driver.executeScript(() => {areRegExpsInMeasureLayer
                             /* was areRegExpsInMeasureLayer, should now check for olcs overlay*/
                         }, [
                             "Länge: \\d+(\\.\\d+)?m",

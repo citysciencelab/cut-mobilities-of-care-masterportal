@@ -121,7 +121,9 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
         expect(tp).not.to.be.null;
         expect(style.length).to.be.equals(2);
         expect(style[0].text_.text_).to.be.equals("0");
-        expect(style[1].text_.text_).to.be.equals(null);
+        // testing text not null, else it cannot be printed
+        expect(style[1].text_.text_).not.to.be.null;
+        expect(style[1].text_.text_).to.be.equals("");
     });
     it("Polygon: generateTextPoint creates a tooltip-feature with 2 styles", () => {
         createStore(false, true, "polygonId");

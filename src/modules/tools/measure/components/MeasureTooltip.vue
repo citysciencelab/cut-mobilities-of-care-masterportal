@@ -87,6 +87,7 @@ export default {
             else {
                 pointFeature.setStyle(this.generateTextStyles(feature));
             }
+            // this styleId is important for printing
             pointFeature.set("styleId", uniqueId("measureStyle"));
             return pointFeature;
         },
@@ -124,7 +125,7 @@ export default {
                 }),
                 new Style({
                     text: new Text({
-                        text: feature.get("isBeingDrawn") ? this.$t("modules.tools.measure.finishWithDoubleClick") : null,
+                        text: feature.get("isBeingDrawn") ? this.$t("modules.tools.measure.finishWithDoubleClick") : "",
                         textAlign: "left",
                         font: "12px sans-serif",
                         fill: fill,
