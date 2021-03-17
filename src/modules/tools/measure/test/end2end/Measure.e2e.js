@@ -16,7 +16,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
     const testIsApplicable = !isMobile(resolution) && isBasic(url);
 
     if (testIsApplicable) {
-        describe("Measure Tool", function () {
+        describe.only("Measure Tool", function () {
             if (!is3D(mode)) {
                 describe("2D measurement", function () {
                     let driver, selectGeometry, selectUnit, deleteButton, viewport;
@@ -45,6 +45,8 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                         selectGeometry = await driver.findElement(By.id("measure-tool-geometry-select"), 5000);
                         selectUnit = await driver.findElement(By.id("measure-tool-unit-select"), 5000);
                         deleteButton = await driver.findElement(By.id("measure-delete"), 5000);
+                        const s = await selectGeometry.getText();
+                        console.warn(s);
 
                         await driver.wait(
                             async () => ["Strecke\nFläche", "Distance\nArea"].includes(await selectGeometry.getText()),
