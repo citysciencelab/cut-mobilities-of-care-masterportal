@@ -45,14 +45,10 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                         selectGeometry = await driver.findElement(By.id("measure-tool-geometry-select"), 5000);
                         selectUnit = await driver.findElement(By.id("measure-tool-unit-select"), 5000);
                         deleteButton = await driver.findElement(By.id("measure-delete"), 5000);
-                        const s = await selectGeometry.getText();
-                        console.warn(s);
+                        const selectGeometryText = await selectGeometry.getText();
 
-                        await driver.wait(
-                            async () => ["Strecke\nFläche", "Distance\nArea"].includes(await selectGeometry.getText()),
-                            5000,
-                            "Geometry select had unexpected content."
-                        );
+                        expect(selectGeometryText.indexOf("Strecke")).to.be.greaterThan(-1);
+                        expect(selectGeometryText.indexOf("Fläche")).to.be.greaterThan(-1);
                         await driver.wait(
                             async () => await selectUnit.getText() === "m\nkm",
                             5000,
