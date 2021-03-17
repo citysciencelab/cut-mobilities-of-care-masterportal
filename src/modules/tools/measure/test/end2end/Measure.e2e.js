@@ -168,12 +168,10 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                             .move({origin: viewport, x: 0, y: 10}).click()
                             .perform();
 
-                        await driver.wait(async () => driver.executeScript(() => {areRegExpsInMeasureLayer
-                            /* was areRegExpsInMeasureLayer, should now check for olcs overlay*/
-                        }, [
+                        expect(await driver.executeScript(areRegExpsInMeasureLayer, [
                             "Länge: \\d+(\\.\\d+)?m",
                             "Höhe: \\d+(\\.\\d+)?m"
-                        ]));
+                        ])).to.be.true;
                     });
                 });
             }
