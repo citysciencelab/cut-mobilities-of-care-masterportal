@@ -49,7 +49,12 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         this.model.setIncorrectConfigLayers(incorrectIds);
 
         this.listenTo(this.model, {
-            "change:isActive": this.render,
+            "change:isActive": function () {
+                if (this.model.get("isActive") === true) {
+                    this.model.updateAvailableLayers();
+                }
+                this.render();
+            },
             "change:activeButton": this.render,
             "change:currentLayerId": this.render,
             "change:showAttrTable": this.render,

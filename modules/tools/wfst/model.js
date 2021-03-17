@@ -310,7 +310,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             incorrectConfigLayers = this.get("incorrectConfigLayers"),
             initialAlertCases = this.get("initialAlertCases");
 
-        if (typeof this.get("currentLayerId") === "string" && event.find(layer => layer.id === this.get("currentLayerId")) === undefined) {
+        if (typeof this.get("currentLayerId") === "string" && event !== undefined && event.find(layer => layer.id === this.get("currentLayerId")) === undefined) {
             this.setIsDeselectedLayer(true);
         }
         if (Object.entries(activeLayers).length > 0) {
