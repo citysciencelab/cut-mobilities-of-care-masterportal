@@ -331,8 +331,8 @@
                 "animation": {
                     "domicile": "Wohnort",
                     "workplace": "Arbeitsort",
-                    "chooseDistrict": "Landkreis / kreisfreie Stadt auswählen",
-                    "chooseBorough": "Stadt / Gemeindeverband auswählen",
+                    "chooseDistrict": "Landkreis/kreisfreie Stadt auswählen",
+                    "chooseBorough": "Stadt/Gemeinde auswählen",
                     "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
                     "deleteGeometries": "Geometrien löschen",
                     "noCommutersKnown": "Keine pendelnden Personen bekannt!",
@@ -347,8 +347,8 @@
                 "lines": {
                     "domicile": "Wohnort",
                     "workplace": "Arbeitsort",
-                    "chooseDistrict": "Landkreis / kreisfreie Stadt auswählen",
-                    "chooseBorough": "Stadt / Gemeindeverband auswählen",
+                    "chooseDistrict": "Landkreis/kreisfreie Stadt auswählen",
+                    "chooseBorough": "Stadt/Gemeinde auswählen",
                     "relationshipsToDisplay": "Anzahl anzuzeigender Beziehungen",
                     "deleteGeometries": "Geometrien löschen",
                     "noCommutersKnown": "Keine pendelnden Personen bekannt!",

@@ -331,8 +331,8 @@
                 "animation": {
                     "domicile": "Domicile",
                     "workplace": "Workplace",
-                    "chooseDistrict": "Choose district",
-                    "chooseBorough": "Choose borough / city",
+                    "chooseDistrict": "Choose county/district",
+                    "chooseBorough": "Choose town/municipality",
                     "relationshipsToDisplay": "Number of relationships to display",
                     "deleteGeometries": "Delete geometries",
                     "noCommutersKnown": "No commuting people known!",
@@ -347,8 +347,8 @@
                 "lines": {
                     "domicile": "Domicile",
                     "workplace": "Workplace",
-                    "chooseDistrict": "Choose district",
-                    "chooseBorough": "Choose borough / city",
+                    "chooseDistrict": "Choose county/district",
+                    "chooseBorough": "Choose town/municipality",
                     "relationshipsToDisplay": "Number of relationships to display",
                     "deleteGeometries": "Delete geometries",
                     "noCommutersKnown": "No commuting people known!",
