@@ -2,6 +2,9 @@ import Vuex from "vuex";
 import {Polygon, LineString} from "ol/geom.js";
 import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
+import VectorLayer from "ol/layer/Vector.js";
+import VectorSource from "ol/source/Vector.js";
+import {Style} from "ol/style.js";
 
 import MeasureTooltipComponent from "../../../components/MeasureTooltip.vue";
 
@@ -49,7 +52,13 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
                                 }}),
                                 lineLengths: () => ({lineId: "500 m"}),
                                 polygonAreas: () => ({polygonId: "500 m²"}),
-                                featureId: () => featureId
+                                featureId: () => featureId,
+                                layer: () => new VectorLayer({
+                                    name: "measure_layer",
+                                    source: new VectorSource(),
+                                    alwaysOnTop: true,
+                                    style: new Style()
+                                })
                             }
                         }
                     }
@@ -64,7 +73,7 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
                 store,
                 localVue
             }),
-            tp = wrapper.vm.generateTextPoint(),
+            tp = wrapper.vm.generateTextPoint("lineId"),
             style = tp.style_;
 
         expect(tp).not.to.be.null;
@@ -81,11 +90,12 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
         });
         let style = null;
 
-        wrapper.vm.textPoint = wrapper.vm.generateTextPoint();
-        wrapper.vm.setValueAtTooltipLayer({lineId: "500 m"}, "LineString");
-        style = wrapper.vm.textPoint.style_;
+        wrapper.vm.currentTextPoint = wrapper.vm.generateTextPoint("lineId");
+        wrapper.vm.layer.getSource().addFeature(wrapper.vm.currentTextPoint);
+        wrapper.vm.setValueAtTooltipLayer({lineId: "500 m"});
+        style = wrapper.vm.currentTextPoint.style_;
 
-        expect(wrapper.vm.textPoint).not.to.be.null;
+        expect(wrapper.vm.currentTextPoint).not.to.be.null;
         expect(style.length).to.be.equals(2);
         expect(style[0].text_.text_).to.be.equals("500 m");
         expect(style[1].text_.text_).to.be.equals("modules.tools.measure.finishWithDoubleClick");
@@ -115,7 +125,7 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
                 localVue
             }),
 
-            tp = wrapper.vm.generateTextPoint(),
+            tp = wrapper.vm.generateTextPoint("lineId"),
             style = tp.style_;
 
         expect(tp).not.to.be.null;
@@ -131,7 +141,7 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
                 store,
                 localVue
             }),
-            tp = wrapper.vm.generateTextPoint(),
+            tp = wrapper.vm.generateTextPoint("polygonId"),
             style = tp.style_;
 
         expect(tp).not.to.be.null;
@@ -166,11 +176,12 @@ describe("src/modules/tools/measure/components/MeasureTooltip.vue", () => {
         });
         let style = null;
 
-        wrapper.vm.textPoint = wrapper.vm.generateTextPoint();
-        wrapper.vm.setValueAtTooltipLayer({polygonId: "500 m"}, "Polygon");
-        style = wrapper.vm.textPoint.style_;
+        wrapper.vm.currentTextPoint = wrapper.vm.generateTextPoint("polygonId");
+        wrapper.vm.layer.getSource().addFeature(wrapper.vm.currentTextPoint);
+        wrapper.vm.setValueAtTooltipLayer({polygonId: "500 m"});
+        style = wrapper.vm.currentTextPoint.style_;
 
-        expect(wrapper.vm.textPoint).not.to.be.null;
+        expect(wrapper.vm.currentTextPoint).not.to.be.null;
         expect(style.length).to.be.equals(2);
         expect(style[0].text_.text_).to.be.equals("500 m");
         expect(style[1].text_.text_).to.be.equals("modules.tools.measure.finishWithDoubleClick");

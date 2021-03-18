@@ -13,54 +13,54 @@ export default {
     name: "MeasureTooltip",
     data: () => {
         return {
-            textPoint: null
+            currentTextPoint: null
         };
     },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters))
     },
     watch: {
-        featureId () {
-            this.textPoint = this.generateTextPoint();
-            this.layer.getSource().addFeature(this.textPoint);
+        featureId (value) {
+            this.currentTextPoint = this.generateTextPoint(value);
+            this.layer.getSource().addFeature(this.currentTextPoint);
         },
         polygonAreas (value) {
-            this.setValueAtTooltipLayer(value, "Polygon");
+            this.setValueAtTooltipLayer(value);
         },
         lineLengths (value) {
-            this.setValueAtTooltipLayer(value, "LineString");
+            this.setValueAtTooltipLayer(value);
         }
     },
     methods: {
         /**
-         * Sets the measured value at the tooltip-layer.
-         * @param {object} measureValues containes the measure values by featureId
-         * @param {string} selectedGeometryName "Polygon" or "LineString"
+         * Sets the measured values at all tooltip-layer.
+         * @param {object} measureValues containes the measured values by featureId
          * @returns {void}
          */
-        setValueAtTooltipLayer (measureValues, selectedGeometryName) {
-            if (this.selectedGeometry === selectedGeometryName &&
-                this.textPoint &&
-                Object.values(measureValues).length > 0 &&
+        setValueAtTooltipLayer (measureValues) {
+            if (Object.values(measureValues).length > 0 &&
                 Object.values(measureValues).findIndex((value) => value === "0") === -1) {
-                const geom = this.textPoint.getGeometry(),
-                    feature = this.lines[this.featureId] || this.polygons[this.featureId],
-                    styles = this.generateTextStyles(feature, measureValues[feature.ol_uid]);
+                this.currentTextPoint.getGeometry().setCoordinates(this.tooltipCoord);
 
+                Object.keys(measureValues).forEach(featureId => {
+                    const feature = this.lines[featureId] || this.polygons[featureId],
+                        styles = this.generateTextStyles(feature, measureValues[featureId]);
 
-                geom.setCoordinates(this.tooltipCoord);
-                this.textPoint.setStyle(styles);
+                    this.layer.getSource().forEachFeature(aFeature => {
+                        if (aFeature.get("featureId") === feature.ol_uid) {
+                            aFeature.setStyle(styles);
+                        }
+                    });
+                });
             }
         },
         /**
          * generates text for points
-         * @param {number} distance - distance for 3D
-         * @param {number} heightDiff - height for 3D
-         * @param {number} coords - coordinates for 3D
+         * @param {string} featureId - id of the current feature
          * @returns {this} pointFeature
          */
-        generateTextPoint (distance, heightDiff, coords) {
-            const feature = this.lines[this.featureId] || this.polygons[this.featureId];
+        generateTextPoint (featureId) {
+            const feature = this.lines[featureId] || this.polygons[featureId];
             let geom = null,
                 coord = null,
                 pointFeature = null;
@@ -68,11 +68,7 @@ export default {
             if (feature !== undefined) {
                 geom = feature.getGeometry();
             }
-
-            if (distance !== undefined) {
-                coord = coords;
-            }
-            else if (geom instanceof Polygon) {
+            if (geom instanceof Polygon) {
                 coord = geom.getCoordinates()[0][geom.getCoordinates()[0].length - 2];
             }
             else if (geom instanceof LineString) {
@@ -81,14 +77,10 @@ export default {
             pointFeature = new Feature({
                 geometry: new Point(coord)
             });
-            if (distance !== undefined) {
-                pointFeature.setStyle(this.generate3dTextStyles(distance, heightDiff));
-            }
-            else {
-                pointFeature.setStyle(this.generateTextStyles(feature));
-            }
-            // this styleId is important for printing
+            pointFeature.setStyle(this.generateTextStyles(feature));
+            // this styleId is important for printing, else lines and polygons are not printed
             pointFeature.set("styleId", uniqueId("measureStyle"));
+            pointFeature.set("featureId", feature.ol_uid);
             return pointFeature;
         },
         /**
