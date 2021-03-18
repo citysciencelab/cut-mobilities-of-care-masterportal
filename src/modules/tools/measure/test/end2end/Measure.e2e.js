@@ -45,15 +45,13 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                         selectGeometry = await driver.findElement(By.id("measure-tool-geometry-select"), 5000);
                         selectUnit = await driver.findElement(By.id("measure-tool-unit-select"), 5000);
                         deleteButton = await driver.findElement(By.id("measure-delete"), 5000);
-                        const selectGeometryText = await selectGeometry.getText();
+                        const selectGeometryText = await selectGeometry.getText(),
+                            selectUnitText = await selectUnit.getText();
 
                         expect(selectGeometryText.indexOf("Strecke")).to.be.greaterThan(-1);
                         expect(selectGeometryText.indexOf("Fläche")).to.be.greaterThan(-1);
-                        await driver.wait(
-                            async () => await selectUnit.getText() === "m\nkm",
-                            5000,
-                            "Unit select had unexpected content."
-                        );
+                        expect(selectUnitText.indexOf("m")).to.be.greaterThan(-1);
+                        expect(selectUnitText.indexOf("km")).to.be.greaterThan(-1);
                     });
 
                     it("draws a line showing length in meters and a tooltip", async function () {
