@@ -360,28 +360,28 @@ For more details, consider reading the [extensive SensorThings-API documentation
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
+|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
+|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
+|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |epsg|no|String|`"EPSG:4326"`|SensorThings-API coordinate reference system|`"EPSG:4326"`|
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
 |gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |id|yes|String||Arbitrary id|`"999999"`|
-|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
 |legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
+|mqttOptions|no|**[mqttOptions](#markdown-header-mqtt_options)**||mqtt web socket connection configuration||
+|mqttQos|no|Number|2|Quality of service subscription level. For more information see **[sensorThings](sensorThings.md)**|0|
+|mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription. For more information see **[sensorThings](sensorThings.md)**|0|
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
+|noDataValue|no|String|`"no data"`|Placeholder for unavailable Observations to Datastreams.|`"no data"`|
+|showNoDataValue|no|Boolean|`true`|Whether Datastreams should be given without Observations.|`true`|
+|timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|yes|String||Service type; in this case, `"SensorThings"`. (**[WMS, see above](#markdown-header-wms-layer)**, **[WMTS, see above](#markdown-header-wmts-layer)**, and **[WFS, see above](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|yes|String||Service URL; may be extended by `urlParameter`|`"https://51.5.242.162/itsLGVhackathon"`|
 |urlParameter|no|**[urlParameter](#markdown-header-url_parameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|no|String|"1.1"|Service version used to request data.|`"1.0"`|
-|loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
-|showNoDataValue|no|Boolean|`true`|Whether Datastreams should be given without Observations.|`true`|
-|noDataValue|no|String|`"no data"`|Placeholder for unavailable Observations to Datastreams.|`"no data"`|
-|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
-|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
-|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
-|timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
-|mqttOptions|no|**[mqttOptions](#markdown-header-mqtt_options)**||mqtt web socket connection configuration||
-|mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription. For more information see **[sensorThings](sensorThings.md)**|0|
-|mqttQos|no|Number|2|Quality of service subscription level. For more information see **[sensorThings](sensorThings.md)**|0|
 
 **Sensor example:**
 
@@ -417,8 +417,8 @@ Used to configure the target of a mqtt web socket connection. If nothing is set,
 |----|--------|----|-------|-----------|-------|
 |host|no|String||Host address|`"example.com"`|
 |port|no|String||Host port|`"9876"`|
-|path|no|String||Path|`"/mqtt"`|
-|protocol|no|String||Used protocol|`"ws"`, `"wss"`|
+|path|no|String|"/mqtt"|Path|`"/mqtt"`|
+|protocol|no|String|"wss"|Used protocol|`"ws"`, `"wss"`|
 
 ## url_Parameter
 

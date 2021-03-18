@@ -13,8 +13,10 @@
 - External WMS Layers with version lower than 1.3.0 can also be imported
 - Added possibility to prepend prefix to GFI attribute
 ### Changed
-- WMS hinzurügen module switched from backbone to vue module
+- The tool AddWMS switched from backbone to vue module.
+- Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
+
 ### Deprecated
 
 ### Removed

@@ -23,7 +23,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         timezone: "Europe/Berlin",
         version: "1.1",
-        mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
         showNoDataValue: true,
@@ -31,6 +30,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         altitudeMode: "clampToGround",
         isSubscribed: false,
         moveendListener: null,
+        mqttOptions: {},
         loadThingsOnlyInCurrentExtent: false,
         useProxy: false,
         mqttRh: 2,
@@ -839,10 +839,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             mqttOptions = Object.assign({
-                mqttUrl: "wss://" + url.split("/")[2] + this.get("mqttPath"),
-                mqttVersion: "3.1.1",
+                host: url.split("/")[2],
                 rhPath: url,
-                context: this
+                context: this,
+                path: "/mqtt",
+                protocol: "wss",
+                mqttVersion: "3.1.1"
             }, this.get("mqttOptions")),
             mqtt = new SensorThingsMqtt(mqttOptions);
 

@@ -33,12 +33,11 @@ export class SensorThingsMqtt {
      * @param {Object} [optionsOpt.context=this] the scope to call everything in
      * @param {mqtt} [mqttClientOpt] the mqtt object to be used instead of the default (default is MQTT.js, https://www.npmjs.com/package/mqtt)
      * @constructor
-     * @returns {Void}  -
+     * @returns {void}
      */
     constructor (optionsOpt, mqttClientOpt) {
         /** private */
         this.options = Object.assign({
-            mqttUrl: "",
             mqttVersion: "3.1.1",
             rhPath: "",
             context: this
@@ -53,7 +52,7 @@ export class SensorThingsMqtt {
         }
 
         /** private */
-        this.mqttClient = (typeof mqttClientOpt === "object" && typeof mqttClientOpt.connect === "function" ? mqttClientOpt : mqttClientDefault).connect(this.options.mqttUrl, this.options);
+        this.mqttClient = (typeof mqttClientOpt === "object" && typeof mqttClientOpt.connect === "function" ? mqttClientOpt : mqttClientDefault).connect(this.options);
         /** private */
         this.messageHandler = null;
         /** private */
