@@ -554,7 +554,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             let phenomenonTime = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.phenomenonTime : "";
 
             this.addDatastreamProperties(thing.properties, dataStream.properties);
-            phenomenonTime = changeTimeZone(phenomenonTime, this.get("utc"));
+            phenomenonTime = changeTimeZone(phenomenonTime?.split("/")[0], this.get("utc"));
 
             thing.properties.dataStreamId.push(dataStreamId);
             thing.properties.dataStreamName.push(dataStreamName);
