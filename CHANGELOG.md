@@ -19,6 +19,7 @@
 
 ### Fixed
 - GFI of type text/html now also loads css files of the body.
+- Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
 
 ---
 

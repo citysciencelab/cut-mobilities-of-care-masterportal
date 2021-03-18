@@ -47,12 +47,26 @@ export function getMetadata (json) {
 }
 
 /**
+ * Gets the MD_Identification node.
+ * MD_Identification may be implemented as MD_DataIdentification or SV_ServiceIdentification.
+ * @param {Object} json The csw result json .
+ * @see {@link https://portal.ogc.org/files/?artifact_id=56905}
+ * @see {@link http://portal.opengeospatial.org/files/?artifact_id=6495}
+ * @returns {Object|Object[]} todo
+ */
+export function getMdIdentification (json) {
+    return json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification
+        ||
+        json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.SV_ServiceIdentification;
+}
+
+/**
  * Gets the title of the metadata.
  * @param {Object} json - the response
  * @returns {String} title
  */
-function parseTitle (json) {
-    return json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.citation?.CI_Citation?.title?.CharacterString?.getValue();
+export function parseTitle (json) {
+    return getMdIdentification(json)?.citation?.CI_Citation?.title?.CharacterString?.getValue();
 }
 
 /**
@@ -61,7 +75,7 @@ function parseTitle (json) {
  * @returns {String} abstract
  */
 function parseAbstract (json) {
-    let abstractData = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.abstract?.CharacterString?.getValue();
+    let abstractData = getMdIdentification(json)?.abstract?.CharacterString?.getValue();
     const match = (/\r|\n/).exec(abstractData);
 
     if (match) {
@@ -77,7 +91,7 @@ function parseAbstract (json) {
  * @returns {String|undefined} update frequency
  */
 function parseFrequenzy (json) {
-    const attributes = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.resourceMaintenance?.MD_MaintenanceInformation?.maintenanceAndUpdateFrequency?.MD_MaintenanceFrequencyCode?.getAttributes(),
+    const attributes = getMdIdentification(json)?.resourceMaintenance?.MD_MaintenanceInformation?.maintenanceAndUpdateFrequency?.MD_MaintenanceFrequencyCode?.getAttributes(),
         frequencyTypes = {
             continual: "common:modules.cswParser.continual",
             daily: "common:modules.cswParser.daily",
@@ -106,17 +120,17 @@ function parseFrequenzy (json) {
  * @returns {String|undefined} formatted date
  */
 function parseDate (json, dateType) {
-    const dates = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.citation?.CI_Citation?.date;
+    const dates = getMdIdentification(json)?.citation?.CI_Citation?.date;
     let dateValue;
 
     if (Array.isArray(dates)) {
         dates.forEach(date => {
-            if (date.CI_Date?.dateType?.CI_DateTypeCode?.getAttributes()?.codeListValue === dateType) {
-                dateValue = date.CI_Date?.date?.DateTime?.getValue() || dates.CI_Date?.date?.Date?.getValue();
+            if (date?.CI_Date?.dateType?.CI_DateTypeCode?.getAttributes()?.codeListValue === dateType) {
+                dateValue = date.CI_Date?.date?.DateTime?.getValue() || date.CI_Date?.date?.Date?.getValue();
             }
         });
     }
-    else if (dates.CI_Date?.dateType?.CI_DateTypeCode?.getAttributes()?.codeListValue === dateType) {
+    else if (dates?.CI_Date?.dateType?.CI_DateTypeCode?.getAttributes()?.codeListValue === dateType) {
         dateValue = dates.CI_Date?.date?.DateTime?.getValue() || dates.CI_Date?.date?.Date?.getValue();
     }
 
@@ -159,7 +173,7 @@ function parseDownloadLinks (json) {
  * @returns {String} name of the contact
  */
 function parseContactByRole (json, role) {
-    const pointOfContacts = json.GetRecordByIdResponse?.MD_Metadata?.identificationInfo?.MD_DataIdentification?.pointOfContact;
+    const pointOfContacts = getMdIdentification(json)?.pointOfContact;
     let dateValue = {};
 
     if (Array.isArray(pointOfContacts)) {
