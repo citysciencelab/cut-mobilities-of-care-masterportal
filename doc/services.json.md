@@ -116,6 +116,7 @@ WMTS layers can be added by
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
 |legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|matrixSizes|no|Number[][]|Number of tile rows and columns of the grid for each zoom level. The values here are the `TileMatrixWidth` and `TileMatrixHeight` advertised in the GetCapabilities response of the WMTS.|[[1, 1], [2, 2], [4, 4], [8, 8], [16, 16], [32, 32], [64, 64], [128, 128], [256, 256], [512, 512], [1024, 1024], [2048, 2048], [4096, 4096], [8192, 8192], [16384, 16384], [32768, 32768], [65536, 65536], [131072, 131072], [262144, 262144], [524288, 524288]]|
 |maxScale|yes|String||The layer is shown only up to this scale.|`"1000000"`|
 |minScale|yes|String||The layer is shown only down to this scale.|`"0"`|
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Geoland Basemap"`|
@@ -123,6 +124,7 @@ WMTS layers can be added by
 |origin|yes|Number[]||Tile raster origin. Can be fetched from the WMTS capabilities; usually the extent's top left corner.|`[-20037508.3428, 20037508.3428]`|
 |requestEncoding|yes|enum["KVP", "REST"]||WMTS service request encoding.|`"REST"`|
 |resLength|yes|String||Length of resolution and matrixIds arrays. Required to configure the layer's maximum zoom level.|`"20"`|
+|scales|no|Number[]|The scale defined for each zoom level. The values are the `ScaleDenominator` of each `TileMatrix` of the `TileMatrixSet` as advertised in the GetCapabilities response of the WMTS.|[559082264.029, 279541132.015, 139770566.007, 69885283.0036, 34942641.5018, 17471320.7509, 8735660.37545, 4367830.18773, 2183915.09386, 1091957.54693, 45978.773466, 272989.386733, 136494.693366, 68247.3466832, 34123.6733416, 17061.8366708, 8530.91833540, 4265.45916770, 2132.72958385, 1066.36479193]|
 |style|no|String|"normal"|Name of the style. Must match the noted in the WMTS capabilities.|`"normal"`|
 |tileMatrixSet|yes|String||Matrix set required to call the WMTS service. Not required when using `optionsFromCapabilities`, a fitting TileMatrixSet is injected then.|`"google3857"`|
 |tilesize|yes|String||Tile height and width in pixels.|`"512"`|
@@ -155,6 +157,18 @@ WMTS layers can be added by
    "minScale": "0",
    "maxScale": "2500000",
    "tileMatrixSet": "google3857",
+   "matrixSizes": [
+       [1, 1], [2, 2],
+       [4, 4], [8, 8],
+       [16, 16], [32, 32],
+       [64, 64], [128, 128],
+       [256, 256], [512, 512],
+       [1024, 1024], [2048, 2048],
+       [4096, 4096], [8192, 8192],
+       [16384, 16384], [32768, 32768],
+       [65536, 65536], [131072, 131072],
+       [262144, 262144], [524288, 524288]
+   ],
    "coordinateSystem": "EPSG:3857",
    "layerAttribution": "nicht vorhanden",
    "legend": false,
@@ -163,6 +177,13 @@ WMTS layers can be added by
    "origin": [
       -20037508.3428,
       20037508.3428
+   ],
+   "scales": [
+       559082264.029, 279541132.015, 139770566.007, 69885283.0036,
+       34942641.5018, 17471320.7509, 8735660.37545, 4367830.18773,
+       2183915.09386, 1091957.54693, 45978.773466, 272989.386733,
+       136494.693366, 68247.3466832, 34123.6733416, 17061.8366708,
+       8530.91833540, 4265.45916770, 2132.72958385, 1066.36479193
    ],
    "resLength": "20",
    "requestEncoding": "REST"

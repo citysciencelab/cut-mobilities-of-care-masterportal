@@ -112,6 +112,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |layerAttribution|nein|String|"nicht vorhanden"|Zusätzliche Information zu diesem Layer, die im Portal angezeigt wird, sofern etwas anderes als *"nicht vorhanden"* angegeben und in dem jeweiligen Portal das *Control LayerAttribution* aktiviert ist.|`"nicht vorhanden"`|
 |legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
 |legend|nein|Boolean/String/String[]||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
+|matrixSizes|nein|Number[][]|Anzahl an Kachel-Reihen und -Spalten des Rasters für jede Zoomstufe. Die verwendeten Werte sind `TileMatrixWidth` und `TileMatrixHeight`, wie sie aus der Antwort der GetCapabilities-Anfrage des WMTS ausgelesen werden können.|[[1, 1], [2, 2], [4, 4], [8, 8], [16, 16], [32, 32], [64, 64], [128, 128], [256, 256], [512, 512], [1024, 1024], [2048, 2048], [4096, 4096], [8192, 8192], [16384, 16384], [32768, 32768], [65536, 65536], [131072, 131072], [262144, 262144], [524288, 524288]]|
 |maxScale|ja|String||Bis zu diesem Maßstab wird der Layer im Portal angezeigt|`"2500000"`|
 |minScale|nein|String||Ab diesem Maßstab wird der Layer im Portal angezeigt|`"0"`|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Geoland Basemap"`|
@@ -119,6 +120,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 |origin|ja|Number[]||Der Ursprung des Kachelrasters. Dieser kann entweder den WMTS Capabilities entnommen werden oder entspricht meist der oberen linken Ecke des extents.|`[-20037508.3428, 20037508.3428]`|
 |requestEncoding|ja|enum["KVP", "REST"]||Codierung der Anfrage an den WMTS Dienst.|`"REST"`|
 |resLength|ja|String||Länge des resolutions und des matrixIds Arrays. Wird benötigt, um die maximale Zoom-Stufe des Layers einstellen zu können.|`"20"`|
+|scales|nein|Number[]|Die Skalierung, wie sie für jede Zoomstufe definiert ist. Die Werten stellen den Parameter `ScaleDenominator` von jeder `TileMatrix` des `TileMatrixSet` dar, wie sie aus der Antwort der GetCapabilities-Anfrage des WMTS ausgelesen werden können.|[559082264.029, 279541132.015, 139770566.007, 69885283.0036, 34942641.5018, 17471320.7509, 8735660.37545, 4367830.18773, 2183915.09386, 1091957.54693, 45978.773466, 272989.386733, 136494.693366, 68247.3466832, 34123.6733416, 17061.8366708, 8530.91833540, 4265.45916770, 2132.72958385, 1066.36479193]|
 |style|nein|String|"normal"|Name des Styles, welcher dem aus den WMTS Capabilities entsprechen muss.|`"normal"`|
 |tileMatrixSet|ja|String||Set der Matrix, das für die Anfrage an den WMTS Dienst benötigt wird. Bei der optionsFromCapabilities-Variante, ist dieser Parameter nicht zwingend notwendig (es wird ein passendes TileMatrixSet gesucht).|`"google3857"`|
 |tileSize|ja|String||Kachelgröße in Pixel.|`"256"`|
@@ -130,9 +132,7 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
 
 **Beispiel 1 WMTS:**
 
-```
-#!json
-
+```json
 {
    "id": "320",
    "name": "Geoland Basemap",
@@ -153,14 +153,33 @@ B) Nutzung der OpenLayers-optionsFromCapabilities-Methode (siehe Beispiel 2)
    "minScale": "0",
    "maxScale": "2500000",
    "tileMatrixSet": "google3857",
+   "matrixSizes": [
+       [1, 1], [2, 2],
+       [4, 4], [8, 8],
+       [16, 16], [32, 32],
+       [64, 64], [128, 128],
+       [256, 256], [512, 512],
+       [1024, 1024], [2048, 2048],
+       [4096, 4096], [8192, 8192],
+       [16384, 16384], [32768, 32768],
+       [65536, 65536], [131072, 131072],
+       [262144, 262144], [524288, 524288]
+   ],
    "coordinateSystem": "EPSG:3857",
    "layerAttribution": "nicht vorhanden",
    "legend": false,
    "cache": true,
    "wrapX": true,
    "origin": [
-      -20037508.3428,
-      20037508.3428
+       -20037508.3428,
+       20037508.3428
+   ],
+   "scales": [
+       559082264.029, 279541132.015, 139770566.007, 69885283.0036,
+       34942641.5018, 17471320.7509, 8735660.37545, 4367830.18773,
+       2183915.09386, 1091957.54693, 45978.773466, 272989.386733,
+       136494.693366, 68247.3466832, 34123.6733416, 17061.8366708,
+       8530.91833540, 4265.45916770, 2132.72958385, 1066.36479193
    ],
    "resLength": "20",
    "requestEncoding": "REST"

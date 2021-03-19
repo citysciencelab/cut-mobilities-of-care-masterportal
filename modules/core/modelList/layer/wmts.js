@@ -74,13 +74,15 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 tilePixelRatio: DEVICE_PIXEL_RATIO,
                 urls: urls,
                 matrixSet: this.get("tileMatrixSet"),
+                matrixSizes: this.get("matrixSizes"),
                 layer: this.get("layers"),
                 format: format,
                 style: style,
                 version: this.get("version"),
                 transparent: this.get("transparent").toString(),
                 wrapX: wrapX,
-                requestEncoding: this.get("requestEncoding")
+                requestEncoding: this.get("requestEncoding"),
+                scales: this.get("scales")
             }));
         }
         else {
@@ -102,11 +104,22 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
 
             this.fetchWMTSCapabilities(url)
                 .then((result) => {
-                    const options = optionsFromCapabilities(result, capabilitiesOptions);
+                    const options = optionsFromCapabilities(result, capabilitiesOptions),
+                        tileMatrixSet = result.Contents.TileMatrixSet.filter(set => set.Identifier === options.matrixSet)[0],
+                        matrixSizes = [],
+                        scales = [];
+
+                    // Add the parameters "ScaleDenominator" and "MatrixHeight" / "MatrixWidth" to the source to be able to print WMTS layers
+                    tileMatrixSet.TileMatrix.forEach(({MatrixHeight, MatrixWidth, ScaleDenominator}) => {
+                        matrixSizes.push([MatrixWidth, MatrixHeight]);
+                        scales.push(ScaleDenominator);
+                    });
 
                     if (options !== null) {
                         const source = new WMTS(options);
 
+                        source.matrixSizes = matrixSizes;
+                        source.scales = scales;
                         this.set("options", options);
                         this.setLayerSource(source);
                         Promise.resolve();

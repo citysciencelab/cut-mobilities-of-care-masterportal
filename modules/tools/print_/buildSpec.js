@@ -204,10 +204,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     },
 
     /**
-     * returns layerinfoy by layer type
-     * @param  {ol.layer} layer ol.Layer with deatures
+     * Returns information about the layer depending on the layer type.
+     *
+     * @param  {ol.layer} layer ol.Layer with features
      * @param {Number} currentResolution Current map resolution
-     * @returns {Object} - LayerObject for mapfish print.
+     * @returns {Object} - LayerObject for MapFish print.
      */
     buildLayerType: function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
@@ -218,17 +219,25 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             returnLayer;
 
         if (isInScaleRange) {
+            const source = layer.getSource();
+
             if (layer instanceof Image) {
                 returnLayer = this.buildImageWms(layer);
             }
             else if (layer instanceof Tile) {
-                returnLayer = this.buildTileWms(layer);
+                // The source of a TileWMS has a params object while the source of a WMTS has a layer object
+                if (source?.getParams) {
+                    returnLayer = this.buildTileWms(layer);
+                }
+                else if (source?.getLayer) {
+                    returnLayer = this.buildWmts(layer, source);
+                }
             }
             else if (layer.get("name") === "import_draw_layer") {
                 returnLayer = this.getDrawLayerInfo(layer, extent);
             }
             else if (layer instanceof Vector) {
-                features = layer.getSource().getFeaturesInExtent(extent);
+                features = source.getFeaturesInExtent(extent);
 
                 if (features.length > 0) {
                     returnLayer = this.buildVector(layer, features);
@@ -253,6 +262,50 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         }
 
         return isInScale;
+    },
+
+    /**
+     * Builds the information needed for MapFish to print the given WMTS Layer.
+     *
+     * @param {ol.layer.Tile} layer The WMTS Layer.
+     * @param {?ol.source.WMTS} source The source of the WMTS Layer.
+     * @returns {Object} Information about the WMTS Layer.
+     */
+    buildWmts: (layer, source) => {
+        const matrices = [],
+            tileGrid = source.getTileGrid(),
+            matrixIds = tileGrid.getMatrixIds(),
+            {origins_, tileSizes_} = tileGrid;
+        let baseURL = source.getUrls()[0];
+
+        for (let i = 0; i < matrixIds.length; i++) {
+            // The parameters "matrixSizes" and "scales" are not standard for a WMTS source and are added in the process of parsing the information of the layer
+            matrices.push({
+                identifier: matrixIds[i],
+                matrixSize: source.matrixSizes[i],
+                topLeftCorner: origins_[i],
+                scaleDenominator: source.scales[i],
+                tileSize: [tileSizes_[i], tileSizes_[i]]
+            });
+        }
+
+        // TODO(roehlipa): Do situations like e.g. "sTyLe" need to be checked as well?
+        if (baseURL.includes("{Style}")) {
+            // As described in the MapFish Documentation (https://mapfish.github.io/mapfish-print-doc/javadoc/org/mapfish/print/map/tiled/wmts/WMTSLayerParam.html#baseURL) the parameter "style" seemingly needs to be written small.
+            baseURL = baseURL.replace(/{Style}/g, "{style}");
+        }
+
+        return {
+            baseURL,
+            opacity: layer.getOpacity(),
+            type: "WMTS",
+            layer: source.getLayer(),
+            style: source.getStyle(),
+            imageFormat: source.getFormat(),
+            matrixSet: source.getMatrixSet(),
+            matrices,
+            requestEncoding: source.getRequestEncoding()
+        };
     },
 
     /**
