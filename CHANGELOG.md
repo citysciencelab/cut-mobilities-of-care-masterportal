@@ -10,9 +10,10 @@
 
 ## Unreleased - in development
 ### Added
-External WMS Layers with version lower than 1.3.0 can also be imported 
+External WMS Layers with version lower than 1.3.0 can also be imported
 ### Changed
 WMS hinzurügen module switched from backbone to vue module
+- In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
 ### Deprecated
 
 ### Removed
