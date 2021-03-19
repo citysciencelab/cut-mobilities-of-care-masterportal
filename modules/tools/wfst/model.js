@@ -579,6 +579,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @returns {void}
      */
     sendDescribeFeatureType: function (url, version, typename, isSecured) {
+        const timeout = isSecured ? 0 : 5000;
+
         $.ajax(url + "?SERVICE=WFS&REQUEST=DescribeFeatureType&VERSION=" + version + "&TYPENAME=" + typename, {
             method: "GET",
             context: this,
@@ -586,7 +588,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                 withCredentials: isSecured
             },
             success: this.handleResponse,
-            timeout: 5000,
+            timeout: timeout,
             error: function () {
                 this.handleError();
             }
