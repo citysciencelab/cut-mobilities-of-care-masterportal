@@ -983,7 +983,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 |name|ja|String||Name des Werkzeuges im Menu.|false|
 |centerMapToClickPoint|nein|Boolean|false|Wenn der Parameter auf true gesetzt wird, verschiebt sich die Karte beim Klick auf ein Feature so, dass das Feature im Mittelpunkt der sichtbaren Karte liegt. Dies ist nur bei der Verwendung des desktopTypes "Detached" relevant.|false|
 |glyphicon|nein|String|"glyphicon-info-sign"|CSS Klasse des Glyphicons, das vor dem GFI im Menu angezeigt wird.|false|
-|isActive|nein|Boolean|true|Gibt an, ob das GFI per default aktiviert ist.|false|
+|active|nein|Boolean|true|Gibt an, ob das GFI per default aktiviert ist.|false|
 |desktopType|nein|String|"detached"|Gibt an welches Template für die GetFeatureInfo im Desktopmodus verwendet wird. Bei Attached wird das GFI direkt auf dem Punkt positioniert. Bei Detached wird ein Marker auf den geklickten Punkt gesetzt und das GFI wird rechts auf der Karte platziert.|false|
 |centerMapMarkerPolygon|nein|Boolean|false|Angabe, ob für ein angeklicktes Feature die Koordinaten des Zentrums ermittelt werden sollen oder ob die Koordinaten der tatsächlich angeklickten Koordinate bestimmt werden.|false|
 |highlightVectorRules|nein|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Regeldefinitionen zum Überschreiben des Stylings von abgefragten Vektordaten.[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)|false|
@@ -994,7 +994,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 "gfi":{
     "name":"Informationen abfragen",
     "glyphicon":"glyphicon-info-sign",
-    "isActive":true,
+    "active":true,
     "centerMapMarkerPolygon":true,
     "highlightVectorRules": {
         "fill": {
@@ -1019,7 +1019,7 @@ Zeigt Informationen zu einem abgefragten Feature ab, indem GetFeatureInfo-Reques
 "gfi":{
     "name":"Informationen abfragen",
     "glyphicon":"glyphicon-info-sign",
-    "isActive":true,
+    "active":true,
     "centerMapMarkerPolygon":true
 }
 ```

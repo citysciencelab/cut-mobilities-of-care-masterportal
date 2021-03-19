@@ -1044,7 +1044,7 @@ Displays information to a clicked feature by firing a *GetFeatureInfo* or *GetFe
 |name|yes|String||Name displayed in the menu.|false|
 |centerMapToClickPoint|no|Boolean|false|If true, centers any clicked feature on the map. Only relevant if the `desktopType` attribute is "detached".|false|
 |glyphicon|no|String|"glyphicon-info-sign"|CSS glyphicon class. Glyphicon is shown before the tool name.|false|
-|isActive|no|Boolean|true|Whether GFI is active initially.|false|
+|active|no|Boolean|true|Whether GFI is active initially.|false|
 |desktopType|no|String|"detached"|Used to choose a GFI template in desktop mode. If using "attached", the GFI will be positioned next to the feature. Using "detached" will place a marker on the feature and create the GFI window to the right of the map.|false|
 |centerMapMarkerPolygon|no|Boolean|false|Specification of whether the clicked feature is used to get the center coordinate or the actually clicked coordinate is used.|false|
 |highlightVectorRules|no|**[highlightVectorRules](#markdown-header-portalconfigmenutoolgfihighlightvectorrules)**||Rule definition to override the styling of clicked vector data.|false|
@@ -1056,7 +1056,7 @@ Displays information to a clicked feature by firing a *GetFeatureInfo* or *GetFe
     "gfi":{
         "name": "Request information",
         "glyphicon": "glyphicon-info-sign",
-        "isActive": true,
+        "active": true,
         "centerMapMarkerPolygon": true,
         "highlightVectorRules": {
             "fill": {
@@ -1081,7 +1081,7 @@ Displays information to a clicked feature by firing a *GetFeatureInfo* or *GetFe
     "gfi": {
         "name": "Request information",
         "glyphicon": "glyphicon-info-sign",
-        "isActive": true,
+        "active": true,
         "centerMapMarkerPolygon": true
     }
 }
