@@ -156,6 +156,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
+            xhrParameters = this.attributes.isSecured ? {withCredentials: true} : null,
             mapInitialLoading = Radio.request("Map", "getInitialLoading");
 
         if (prefix !== undefined && typeof prefix === "string" && namespace !== undefined && typeof namespace === "string") {
@@ -176,9 +177,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             async: true,
             type: "GET",
             context: this,
-            xhrFields: {
-                withCredentials: true
-            },
+            xhrFields: xhrParameters,
             success: this.handleResponse,
             complete: function () {
                 if (showLoader) {
