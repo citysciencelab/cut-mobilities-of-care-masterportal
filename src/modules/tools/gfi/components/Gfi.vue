@@ -274,7 +274,7 @@ export default {
         /**
          * Appends a suffix if available.
          * @param {*} value Value to append suffix.
-         * @param {*} suffix Suffix
+         * @param {String} suffix Suffix
          * @returns {String} - Value with suffix.
          */
         appendSuffix: function (value, suffix) {
@@ -289,7 +289,7 @@ export default {
         /**
          * Prepend a prefix if available.
          * @param {*} value Value to prepend prefix.
-         * @param {*} prefix Prefix
+         * @param {String} prefix Prefix
          * @returns {String} - Value with prefix.
          */
         prependPrefix: function (value, prefix) {

@@ -755,9 +755,10 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 |condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
 |type|false|enum["string","date"]|"string"|Wenn type = "date", dann wird versucht ein Datum aus dem Attributwert zu erzeugen.| '"date"'|
 |format|false|String|"DD.MM.YYYY HH:mm:ss"|Datumsformat.| '"DD.MM.YYY"'|
+|prefix|false|String||Prefix, das an den Attributwert vorangestellt wird.| Wert wird ohne Leerzeichen dem Attributwert vorangestellt '"https://"'|
 |suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
 
-**Beispiel gfiAttributes als Objekt mit suffix:**
+**Beispiel gfiAttributes als Objekt mit suffix und prefix:**
 
 ```
 #!json
@@ -768,7 +769,8 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
       "key3": {
          "name": "Key der im Portal gezeigt wird 3",
          "condition": "contains",
-         "suffix": "°C"
+         "suffix": "°C",
+         "prefix": "https://"
       }
    }
 }

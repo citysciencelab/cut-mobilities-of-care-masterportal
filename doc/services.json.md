@@ -781,7 +781,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
 
-**gfiAttributes example object using `suffix`:**
+**gfiAttributes example object using `suffix` and `prefix` :**
 
 ```json
 {
@@ -791,7 +791,8 @@ If the gfiAttributes are given as an object, a key's value may also be an object
       "key3": {
          "name": "key shown in the portal 3",
          "condition": "contains",
-         "suffix": "°C"
+         "suffix": "°C",
+         "prefix": "https://"
       }
    }
 }
