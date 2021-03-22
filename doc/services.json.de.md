@@ -378,7 +378,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|urlParameter|nein|**[urlParameter](#markdown-header-sensorlayerurlParameter)**||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
+|urlParameter|nein|**[urlParameter](#markdown-header-sensorlayerurlparameter)**||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
