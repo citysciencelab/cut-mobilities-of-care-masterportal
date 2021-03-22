@@ -13,7 +13,7 @@
 - External WMS Layers with version lower than 1.3.0 can also be imported
 - Added possibility to prepend prefix to GFI attribute
 ### Changed
-WMS hinzurügen module switched from backbone to vue module
+- WMS hinzurügen module switched from backbone to vue module
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
 ### Deprecated
 
@@ -22,6 +22,7 @@ WMS hinzurügen module switched from backbone to vue module
 ### Fixed
 - GFI of type text/html now also loads css files of the body.
 - Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
+- Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened
 
 ---
 

@@ -15,6 +15,63 @@ describe("core/modelList/layer/wfs", function () {
         wfsLayer = new WFSModel();
     });
 
+    describe("getRequestParamsAndOptions", function () {
+        it("should return an object", function () {
+            expect(wfsLayer.getRequestParamsAndOptions()).to.be.a("object");
+        });
+        it("should return nulled xhrParameters, if layer is not secured", function () {
+            wfsLayer.attributes.isSecured = false;
+
+            const po = wfsLayer.getRequestParamsAndOptions();
+
+            expect(po.xhrParameters).to.be.null;
+        });
+        it("should return xhrParameters with content, if layer is secured", function () {
+            wfsLayer.attributes.isSecured = true;
+
+            const po = wfsLayer.getRequestParamsAndOptions();
+
+            expect(po.xhrParameters).not.to.be.null;
+            expect(po.xhrParameters).not.be.equals({withCredentials: true});
+        });
+        it("should return params namespace undefined, if featurePrefix is null", function () {
+            wfsLayer.attributes.featurePrefix = null;
+            wfsLayer.attributes.featureNS = "featureNS";
+            const po = wfsLayer.getRequestParamsAndOptions();
+
+            expect(po.params.NAMESPACE).to.be.undefined;
+        });
+        it("should return params namespace undefined, if featureNS is null", function () {
+            wfsLayer.attributes.featurePrefix = "featurePrefix";
+            wfsLayer.attributes.featureNS = null;
+            const po = wfsLayer.getRequestParamsAndOptions();
+
+            expect(po.params.NAMESPACE).to.be.undefined;
+        });
+        it("should return params namespace filled, if featureNS and featurePrefix is set", function () {
+            wfsLayer.attributes.featurePrefix = "featurePrefix";
+            wfsLayer.attributes.featureNS = "featureNS";
+            const po = wfsLayer.getRequestParamsAndOptions();
+
+            expect(po.params.NAMESPACE).to.be.equals("xmlns(featurePrefix=featureNS)");
+        });
+        it("should return params namespace filled, if featureNS, featurePrefix and featureType is set", function () {
+            let po = null;
+
+            wfsLayer.attributes.featurePrefix = "featurePrefix";
+            wfsLayer.attributes.featureNS = "featureNS";
+            wfsLayer.attributes.featureType = "featureType";
+
+            po = wfsLayer.getRequestParamsAndOptions();
+            expect(po.params.NAMESPACE).to.be.equals("xmlns(featurePrefix=featureNS)");
+            expect(po.params.TYPENAME).to.be.equals("featurePrefix:featureType");
+            wfsLayer.attributes.featureType = "featurePrefix:";
+            po = wfsLayer.getRequestParamsAndOptions();
+            expect(po.params.TYPENAME).to.be.equals("featurePrefix:");
+        });
+
+    });
+
     describe("checkVersion", function () {
         it("should return false for invalid version", function () {
             expect(wfsLayer.checkVersion("layerName", "layerId", "2.0.0", ["1.1.0"])).to.be.false;

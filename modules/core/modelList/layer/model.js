@@ -180,7 +180,7 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @returns {void}
      **/
     checkForScale: function (options) {
-        if (parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
+        if (options && parseFloat(options.scale, 10) <= parseInt(this.get("maxScale"), 10) && parseFloat(options.scale, 10) >= parseInt(this.get("minScale"), 10)) {
             this.setIsOutOfRange(false);
         }
         else {
