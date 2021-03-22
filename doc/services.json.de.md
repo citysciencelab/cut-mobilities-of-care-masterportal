@@ -349,7 +349,7 @@ WFS Layer der zu einem abgesicherte WFS Dienst gehört.
 
 ***
 
-## Sensor-Layer ##
+## SensorLayer ##
 
 Ein Feature kann mehrere Datastreams vorhalten. Im Portal wird für jeden Datastream die neueste Beobachtung als Attribut am Feature wie folgt eingetragen: "dataStream_[id]_[name]". id ist die @iot.id des Datastreams.
 Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter nicht verfügbar wird der Wert aus datastream.unitOfMeasurement.name verwendet.
@@ -368,7 +368,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |legend|nein|Boolean/String/String[]||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
 |legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
 |loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
-|mqttOptions|nein|**[mqttOptions](#markdown-header-Sensor-Layer.mqttOptions)**||Konfiguration der Websocket-Verbindung für mqtt||
+|mqttOptions|nein|**[mqttOptions](#markdown-header-sensorlayermqttoptions)**||Konfiguration der Websocket-Verbindung für mqtt||
 **Beispiel Sensor:**
 |mqttQos|nein|Number|2|Quality of service subscription level. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
 |mqttRh|nein|Number|2|Diese Option gibt an, ob beim Einrichten des Abonnements retained messages gesendet werden. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
@@ -378,7 +378,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|urlParameter|nein|**[urlParameter](#markdown-header-Sensor-Layer.urlParameter)**||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
+|urlParameter|nein|**[urlParameter](#markdown-header-sensorlayerurlParameter)**||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
@@ -412,7 +412,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
    }
 ```
 
-## Sensor-Layer.mqttOptions ##
+## SensorLayer.mqttOptions ##
 
 Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt definiert werden. Wird hier nichts angegeben so wird veruscht die Parameter aus der Server-URL zu extrahieren.
 
@@ -436,7 +436,7 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
    }
 ```
 
-## Sensor-Layer.urlParameter ##
+## SensorLayer.urlParameter ##
 
 Über die UrlParameter können die daten aus der SensorThingsAPI gefiltert werden.
 
