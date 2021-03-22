@@ -23,7 +23,7 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     parseTree: function (layerList, Layer3dList) {
         let newLayerList = this.filterValidLayer(layerList, this.get("validLayerTypes"));
 
-        newLayerList = this.removeWMSBySensorThings(newLayerList);
+        newLayerList = this.removeWmsBySensorThings(newLayerList);
         // Removes all layers that are already displayed in the cache
         newLayerList = this.deleteLayersIncludeCache(newLayerList);
 
@@ -50,16 +50,42 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
     },
 
     /**
-     * Removes WMS-Layer containing the same dataset as SensorThings layer, using the attribute relatedWMSId.
-     * @param  {Object[]} [layerList=[]] - The layers from services.json
+     * Removes WMS-Layer containing the same dataset as SensorThings layer, using the attribute related_wms_layers.
+     * @param  {Object[]} [layerList=[]] The layers from services.json
      * @returns {Object[]} LayerList without wms duplicates
      */
-    removeWMSBySensorThings: function (layerList = []) {
+    removeWmsBySensorThings: function (layerList = []) {
         const sensorThingsLayer = layerList.filter(layer => layer?.typ.toUpperCase() === "SENSORTHINGS"),
-            layerIdsToRemove = sensorThingsLayer.map(layer => layer?.relatedWMSId).filter(layerId => layerId),
-            layerListWithoutWMSDuplicates = layerList.filter(layer => !layerIdsToRemove.includes(layer.id));
+            layerListWithoutWmsSDuplicates = [...layerList],
+            layerIdsToRemove = this.getWmsLayerIdsToRemove(sensorThingsLayer);
 
-        return layerListWithoutWMSDuplicates;
+        layerIdsToRemove.forEach(layerIdToRemove => {
+            const layerToRemove = layerListWithoutWmsSDuplicates.find(layer => layer.id === layerIdToRemove),
+                index = layerListWithoutWmsSDuplicates.indexOf(layerToRemove);
+
+            if (index > -1) {
+                layerListWithoutWmsSDuplicates.splice(index, 1);
+            }
+        });
+
+        return layerListWithoutWmsSDuplicates;
+    },
+
+    /**
+     * Gets the wms layer ids to remove, using the attribute related_wms_layers.
+     * @param {Object[]} [sensorThingsLayer=[]] The sensorThings layers.
+     * @returns {Object[]} The wms layer ids to remove.
+     */
+    getWmsLayerIdsToRemove: function (sensorThingsLayer = []) {
+        let layerIdsToRemove = [];
+
+        sensorThingsLayer.forEach(layer => {
+            if (layer?.related_wms_layers !== undefined) {
+                layerIdsToRemove = layerIdsToRemove.concat(layer.related_wms_layers);
+            }
+        });
+
+        return layerIdsToRemove;
     },
 
     /**

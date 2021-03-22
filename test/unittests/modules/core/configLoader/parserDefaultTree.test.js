@@ -41,34 +41,35 @@ describe("core/configLoader/parserDefaultTree", function () {
         });
     });
 
-    describe("removeWMSBySensorThings", function () {
+    describe("removeWmsBySensorThings", function () {
         it("should be an empty array by empty array input", function () {
-            expect(getDefaultModel().removeWMSBySensorThings([])).to.be.an("array").that.is.empty;
+            expect(getDefaultModel().removeWmsBySensorThings([])).to.be.an("array").that.is.empty;
         });
 
-        const layerList = [
-            {
-                "id": "100",
-                "typ": "SensorThings",
-                "relatedWMSId": "300"
-            },
-            {
-                "id": "200",
-                "typ": "WMS"
-            },
-            {
-                "id": "300",
-                "typ": "WMS"
-            }
-        ];
-
         it("should be empty array without duplicate wms", function () {
-            expect(getDefaultModel().removeWMSBySensorThings(layerList).length).to.equal(2);
-            expect(getDefaultModel().removeWMSBySensorThings(layerList)).to.deep.include(
+            const layerList = [
                 {
                     "id": "100",
                     "typ": "SensorThings",
-                    "relatedWMSId": "300"
+                    "related_wms_layers": ["300"]
+                },
+                {
+                    "id": "200",
+                    "typ": "WMS"
+                },
+                {
+                    "id": "300",
+                    "typ": "WMS"
+                }
+            ];
+
+            expect(getDefaultModel().removeWmsBySensorThings(layerList)).to.be.an("array");
+            expect(getDefaultModel().removeWmsBySensorThings(layerList).length).to.equal(2);
+            expect(getDefaultModel().removeWmsBySensorThings(layerList)).to.deep.include(
+                {
+                    "id": "100",
+                    "typ": "SensorThings",
+                    "related_wms_layers": ["300"]
                 },
                 {
                     "id": "200",
@@ -76,5 +77,35 @@ describe("core/configLoader/parserDefaultTree", function () {
                 }
             );
         });
+    });
+
+    describe("getWmsLayerIdsToRemove", function () {
+        it("should be an empty array by empty array input", function () {
+            expect(getDefaultModel().getWmsLayerIdsToRemove([])).to.be.an("array").that.is.empty;
+        });
+
+        it("should be an array with the related_wms_layers", function () {
+            const layerList = [
+                {
+                    "id": "100",
+                    "typ": "SensorThings",
+                    "related_wms_layers": ["300", "500"]
+                },
+                {
+                    "id": "200",
+                    "typ": "SensorThings",
+                    "related_wms_layers": ["800"]
+                },
+                {
+                    "id": "200",
+                    "typ": "WMS"
+                }
+            ];
+
+            expect(getDefaultModel().getWmsLayerIdsToRemove(layerList)).to.be.an("array");
+            expect(getDefaultModel().getWmsLayerIdsToRemove(layerList)).length(3);
+            expect(getDefaultModel().getWmsLayerIdsToRemove(layerList)).includes("300", "500", "800");
+        });
+
     });
 });
