@@ -368,7 +368,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |legend|nein|Boolean/String/String[]||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
 |legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
 |loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
-|***[mqttOptions](#markdown-header-mqtt_options)**|nein|Object||Konfiuration der Websocket-Verbindung für mqtt||
+|***[mqttOptions](#markdown-header-Sensor Layer.mqttOptions)**|nein|Object||Konfiuration der Websocket-Verbindung für mqtt||
 **Beispiel Sensor:**
 |mqttQos|nein|Number|2|Quality of service subscription level. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
 |mqttRh|nein|Number|2|Diese Option gibt an, ob beim Einrichten des Abonnements retained messages gesendet werden. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
@@ -378,7 +378,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
+|**[urlParameter](#markdown-header-Sensor Layer.urlParameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
