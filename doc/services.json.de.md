@@ -349,7 +349,7 @@ WFS Layer der zu einem abgesicherte WFS Dienst gehört.
 
 ***
 
-## Sensor-Layer ##
+## Sensor Layer ##
 
 Ein Feature kann mehrere Datastreams vorhalten. Im Portal wird für jeden Datastream die neueste Beobachtung als Attribut am Feature wie folgt eingetragen: "dataStream_[id]_[name]". id ist die @iot.id des Datastreams.
 Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter nicht verfügbar wird der Wert aus datastream.unitOfMeasurement.name verwendet.
@@ -383,8 +383,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
 
 
-```
-#!json
+```json
 
    {
       "id" : "999999",
@@ -393,6 +392,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
+         "root" : "Things"
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
       },
@@ -404,10 +404,15 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
          "plug" : "Stecker",
          "type" : "Typ",
          "dataStreamId" : "DataStreamID"
+      },
+      "mqttOptions" : {
+          "host" : "https://localhost",
+          "port": "1883"
       }
    }
 ```
-## mqtt_options ##
+
+## Sensor Layer.mqttOptions ##
 
 Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt definiert werden. Wird hier nichts angegeben so wird veruscht die Parameter aus der Server-URL zu extrahieren.
 
@@ -418,33 +423,44 @@ Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt def
 |path|nein|String|"/mqtt"|Pfad|`"/mqtt"`|
 |protocol|nein|String|"wss"|Verwendetes Protokol|`"ws"`, `"wss"`|
 
-## url_Parameter ##
+**Beispiel mqttOptions:**
+```json
+
+   {
+      "mqttOptions" : {
+         "host" : "https://localhost",
+         "port" : "8883",
+         "path": "/mqtt",
+         "protocol": "wss"
+      }
+   }
+```
+
+## Sensor Layer.urlParameter ##
 
 Über die UrlParameter können die daten aus der SensorThingsAPI gefiltert werden.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |root|nein|String|"Things"|Das Wurzelelement in der URL, auf dem die Query angewendet wird. Möglich sind `"Things"` oder `"Datastreams"`|"Datastreams"|
 
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
 
-```
-#!json
+```json
 
    {
       "urlParameter" : {
-         "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-         "root": "Datastreams"
+         "filter" : "startswith(Things/name,'Charging')",
+         "root": "Things"
       }
    }
 ```
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation und das Phänomen (ObservedProperty), das beobachtet wird. Wenn vorhanden wird die ObservedProperty für die dynamische Attributerstellung verwendet.**
 
-```
-#!json
+```json
 
    {
       "urlParameter": {

@@ -385,7 +385,6 @@ For more details, consider reading the [extensive SensorThings-API documentation
 
 **Sensor example:**
 
-
 ```json
 
    {
@@ -395,6 +394,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
+         "root" : "Things",
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
       },
@@ -406,10 +406,15 @@ For more details, consider reading the [extensive SensorThings-API documentation
          "plug" : "Stecker",
          "type" : "Typ",
          "dataStreamId" : "DataStreamID"
+      },
+      "mqttOptions" : {
+          "host" : "https://localhost",
+          "port": "1883"
       }
    }
 ```
-## mqtt_options
+
+## Sensor Layer.mqttOptions
 
 Used to configure the target of a mqtt web socket connection. If nothing is set, the portal tries to infer the parameters from the service URL.
 
@@ -420,14 +425,27 @@ Used to configure the target of a mqtt web socket connection. If nothing is set,
 |path|no|String|"/mqtt"|Path|`"/mqtt"`|
 |protocol|no|String|"wss"|Used protocol|`"ws"`, `"wss"`|
 
-## url_Parameter
+**Example mqttOptions:**
+```json
+
+    {
+      "mqttOptions" : {
+         "host" : "https://localhost",
+         "port" : "8883",
+         "path": "/mqtt",
+         "protocol": "wss"
+      }
+   }
+```
+
+## Sensor Layer.urlParameter ##
 
 Enables filtering SensorThingsAPI requests.
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
 |expand|no|String/Array||See [full documentation](sensorThings.md)|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
 |root|no|String|"Things"|The root element in the URL to which the query is applied. possible are `"Things"` or `"Datastreams"`|"Datastreams"|
 
 **urlParameter example:** Show all Things where the name starts with `"Charging"`, and all Datastreams belonging to those Things. Show each Datastream's latest Observation.
@@ -437,7 +455,7 @@ Enables filtering SensorThingsAPI requests.
     "urlParameter" : {
         "filter" : "startswith(Things/name,'Charging')",
         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-        "root": "Datastreams"
+        "root": "Things"
     }
 }
 ```
