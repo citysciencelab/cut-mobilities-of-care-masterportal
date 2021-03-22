@@ -778,6 +778,7 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
 |type|no|enum["string","date"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date.|`"date"`|
 |format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
+|prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
 
 **gfiAttributes example object using `suffix`:**
