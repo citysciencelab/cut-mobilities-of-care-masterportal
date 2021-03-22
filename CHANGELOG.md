@@ -44,8 +44,8 @@
 - The tool AddWMS switched from backbone to vue module.
 - Consolidate the mqttOptions in the layer sensor with the documentation (services.json.md).
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
-- External WMS Layers with version lower than 1.3.0 can also be imported.
 - Legends are only printed from layers that are switched visible.
+- Layers of type `SensorThings` are now automatically displayed in the default topic tree. The attribute `related_wms_layers` can be used to hide related layers of type `WMS`.
 
 ### Removed
 - SensorThings address tab in layerInformation removed.
