@@ -350,7 +350,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 
 ***
 
-## Sensor layer
+## Sensor-layer
 
 A feature kann hold multiple Datastreams. For each Datastream, the latest obervation is added as a feature attribute as `"dataStream_[id]_[name]"`, where `id` is the Datastream's `@iot.id`.
 
@@ -370,7 +370,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
 |legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
 |loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
-|mqttOptions|no|**[mqttOptions](#markdown-header-Sensor Layer.mqttOptions)**||mqtt web socket connection configuration||
+|mqttOptions|no|**[mqttOptions](#markdown-header-Sensor-layer.mqttOptions)**||mqtt web socket connection configuration||
 |mqttQos|no|Number|2|Quality of service subscription level. For more information see **[sensorThings](sensorThings.md)**|0|
 |mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription. For more information see **[sensorThings](sensorThings.md)**|0|
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
@@ -379,7 +379,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
 |timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|yes|String||Service type; in this case, `"SensorThings"`. (**[WMS, see above](#markdown-header-wms-layer)**, **[WMTS, see above](#markdown-header-wmts-layer)**, and **[WFS, see above](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|yes|String||Service URL; may be extended by `urlParameter`|`"https://51.5.242.162/itsLGVhackathon"`|
-|urlParameter|no|**[urlParameter](#markdown-header-Sensor Layer.urlParameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
+|urlParameter|no|**[urlParameter](#markdown-header-Sensor-layer.urlParameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|no|String|"1.1"|Service version used to request data.|`"1.0"`|
 
@@ -414,7 +414,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
    }
 ```
 
-## Sensor Layer.mqttOptions ##
+## Sensor-layer.mqttOptions ##
 
 Used to configure the target of a mqtt web socket connection. If nothing is set, the portal tries to infer the parameters from the service URL.
 
@@ -438,7 +438,7 @@ Used to configure the target of a mqtt web socket connection. If nothing is set,
    }
 ```
 
-## Sensor Layer.urlParameter ##
+## Sensor-layer.urlParameter ##
 
 Enables filtering SensorThingsAPI requests.
 
