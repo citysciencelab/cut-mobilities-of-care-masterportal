@@ -268,14 +268,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * Builds the information needed for MapFish to print the given WMTS Layer.
      *
      * @param {ol.layer.Tile} layer The WMTS Layer.
-     * @param {?ol.source.WMTS} source The source of the WMTS Layer.
+     * @param {ol.source.WMTS} source The source of the WMTS Layer.
      * @returns {Object} Information about the WMTS Layer.
      */
     buildWmts: (layer, source) => {
         const matrices = [],
             tileGrid = source.getTileGrid(),
             matrixIds = tileGrid.getMatrixIds(),
-            {origins_, tileSizes_} = tileGrid;
+            {origin_, origins_, tileSize_, tileSizes_} = tileGrid;
         let baseURL = source.getUrls()[0];
 
         for (let i = 0; i < matrixIds.length; i++) {
@@ -283,9 +283,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             matrices.push({
                 identifier: matrixIds[i],
                 matrixSize: source.matrixSizes[i],
-                topLeftCorner: origins_[i],
+                topLeftCorner: origin_ ? origin_ : origins_[i],
                 scaleDenominator: source.scales[i],
-                tileSize: [tileSizes_[i], tileSizes_[i]]
+                tileSize: tileSize_ ? [tileSize_, tileSize_] : [tileSizes_[i], tileSizes_[i]]
             });
         }
 

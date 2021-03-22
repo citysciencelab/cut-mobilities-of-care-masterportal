@@ -58,32 +58,34 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
                 resLength = parseInt(this.get("resLength"), 10),
                 resolutions = new Array(resLength),
-                matrixIds = new Array(resLength);
+                matrixIds = new Array(resLength),
+                source = new WMTS({
+                    projection: projection,
+                    attributions: this.get("olAttribution"),
+                    tileGrid: new WMTSTileGrid({
+                        origin: this.get("origin"),
+                        resolutions: resolutions,
+                        matrixIds: matrixIds,
+                        tileSize: this.get("tileSize")
+                    }),
+                    tilePixelRatio: DEVICE_PIXEL_RATIO,
+                    urls: urls,
+                    matrixSet: this.get("tileMatrixSet"),
+                    matrixSizes: this.get("matrixSizes"),
+                    layer: this.get("layers"),
+                    format: format,
+                    style: style,
+                    version: this.get("version"),
+                    transparent: this.get("transparent").toString(),
+                    wrapX: wrapX,
+                    requestEncoding: this.get("requestEncoding"),
+                    scales: this.get("scales")
+                });
 
             this.generateArrays(resolutions, matrixIds, resLength, size);
-
-            this.setLayerSource(new WMTS({
-                projection: projection,
-                attributions: this.get("olAttribution"),
-                tileGrid: new WMTSTileGrid({
-                    origin: this.get("origin"),
-                    resolutions: resolutions,
-                    matrixIds: matrixIds,
-                    tileSize: this.get("tileSize")
-                }),
-                tilePixelRatio: DEVICE_PIXEL_RATIO,
-                urls: urls,
-                matrixSet: this.get("tileMatrixSet"),
-                matrixSizes: this.get("matrixSizes"),
-                layer: this.get("layers"),
-                format: format,
-                style: style,
-                version: this.get("version"),
-                transparent: this.get("transparent").toString(),
-                wrapX: wrapX,
-                requestEncoding: this.get("requestEncoding"),
-                scales: this.get("scales")
-            }));
+            source.matrixSizes = this.get("matrixSizes");
+            source.scales = this.get("scales");
+            this.setLayerSource(source);
         }
         else {
             const layerIdentifier = this.get("layers"),

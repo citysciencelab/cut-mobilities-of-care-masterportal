@@ -2,7 +2,8 @@ import BuildSpecModel from "@modules/tools/print_/buildSpec.js";
 import Util from "@testUtil";
 import Style from "@modules/vectorStyle/model";
 import {Style as OlStyle} from "ol/style.js";
-import {TileWMS, ImageWMS} from "ol/source.js";
+import WMTSTileGrid from "ol/tilegrid/WMTS";
+import {TileWMS, ImageWMS, WMTS} from "ol/source.js";
 import {Tile, Vector} from "ol/layer.js";
 import {expect} from "chai";
 import {EOL} from "os";
@@ -378,6 +379,58 @@ describe("tools/print_/buildSpec", function () {
         });
         it("should create hex string from rgbArray with transparency", function () {
             expect(buildSpecModel.rgbArrayToHex([255, 0, 0, 1])).to.deep.include("#ff0000");
+        });
+    });
+    describe("buildWmts", () => {
+        const matrixIds = [0, 1, 2],
+            matrixSizes = [[1, 1], [2, 2], [4, 4]],
+            origin = [0, 0],
+            scales = [2, 1, 0],
+            tileSize = 512,
+            wmtsLayer = new Tile({
+                source: new WMTS({
+                    tileGrid: new WMTSTileGrid({
+                        origin,
+                        resolutions: [2, 1, 0],
+                        matrixIds,
+                        tileSize
+                    }),
+                    urls: ["url"],
+                    matrixSet: "tileMatrixSet",
+                    layer: "my_layer",
+                    style: "lit",
+                    requestEncoding: "REST"
+                }),
+                opacity: 1
+            });
+
+        wmtsLayer.getSource().matrixSizes = matrixSizes;
+        wmtsLayer.getSource().scales = scales;
+
+        it("should buildWmts", function () {
+            const matrices = [];
+
+            for (let i = 0; i < matrixIds.length; i++) {
+                matrices.push({
+                    identifier: matrixIds[i],
+                    matrixSize: matrixSizes[i],
+                    topLeftCorner: origin,
+                    scaleDenominator: scales[i],
+                    tileSize: [tileSize, tileSize]
+                });
+            }
+
+            expect(buildSpecModel.buildWmts(wmtsLayer, wmtsLayer.getSource())).to.deep.own.include({
+                baseURL: "url",
+                opacity: 1,
+                type: "WMTS",
+                layer: "my_layer",
+                style: "lit",
+                imageFormat: "image/jpeg",
+                matrixSet: "tileMatrixSet",
+                matrices,
+                requestEncoding: "REST"
+            });
         });
     });
     describe("buildTileWms", function () {
