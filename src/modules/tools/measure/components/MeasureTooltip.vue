@@ -40,7 +40,9 @@ export default {
         setValueAtTooltipLayer (measureValues) {
             if (Object.values(measureValues).length > 0 &&
                 Object.values(measureValues).findIndex((value) => value === "0") === -1) {
-                this.currentTextPoint.getGeometry().setCoordinates(this.tooltipCoord);
+                if (this.currentTextPoint) {
+                    this.currentTextPoint.getGeometry().setCoordinates(this.tooltipCoord);
+                }
 
                 Object.keys(measureValues).forEach(featureId => {
                     const feature = this.lines[featureId] || this.polygons[featureId],
