@@ -75,11 +75,11 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // require("./tests/modules/tools/Einwohnerabfrage_HH.js"),
                     // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                     require("./tests/modules/tools/ExtendedFilter.js"),
-                    // require("../../src/modules/tools/gfi/test/end2end/Gfi.e2e.js"),
+                    require("../../src/modules/tools/gfi/test/end2end/Gfi.e2e.js"),
                     // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
                     require("./tests/modules/Legend.js"),
                     require("./tests/modules/tools/List.js"),
-                    // require("../../src/modules/tools/measure/test/end2end/Measure.e2e.js"),
+                    require("../../src/modules/tools/measure/test/end2end/Measure.e2e.js"),
                     // require("./tests/modules/tools/ParcelSearch.js"),
                     // require("./tests/modules/tools/SearchByCoord.js"),
 
