@@ -596,13 +596,22 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
     /**
      * Sets Layer indeces initially. Background layers are treatet seperatly from normal layers to ensure
-     * they will be put into background.
+     * they will be put into background, if they haven't been defined in the URL Parameters array.
+     * @param  {array} paramLayers The Layer Array according the URL Parameters
      * @return {void}
      */
-    initLayerIndeces: function () {
+    initLayerIndeces: function (paramLayers) {
         const allLayerModels = this.getTreeLayers(),
-            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
-            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true);
+            baseLayerModels = allLayerModels.filter(function (layerModel) {
+                return layerModel.get("isBaseLayer") === true && paramLayers.find(model => {
+                    return model.id === layerModel.id;
+                }) === undefined;
+            }),
+            layerModels = allLayerModels.filter(function (layerModel) {
+                return layerModel.get("isBaseLayer") !== true || paramLayers.find(model => {
+                    return model.id === layerModel.id;
+                }) !== undefined;
+            });
 
         let initialLayers = [];
 
@@ -787,7 +796,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             this.addModelsByAttributes({typ: "Oblique"});
         }
 
-        this.initLayerIndeces();
+        this.initLayerIndeces(paramLayers);
         this.updateLayerView();
     },
 
