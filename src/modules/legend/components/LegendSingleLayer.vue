@@ -20,9 +20,16 @@ export default {
     watch: {
         legendObj () {
             this.$nextTick(() => {
-                if (this.renderToId !== "" && document.getElementById(this.renderToId) !== null) {
+                const renderToElement = document.getElementById(this.renderToId);
+
+                if (this.renderToId !== "" && renderToElement !== null) {
                     this.$el.style.display = "block";
-                    document.getElementById(this.renderToId).appendChild(new DOMParser().parseFromString(this.$el.outerHTML, "text/html").firstChild);
+
+                    while (renderToElement.lastElementChild) {
+                        renderToElement.removeChild(renderToElement.lastElementChild);
+                    }
+
+                    renderToElement.appendChild(new DOMParser().parseFromString(this.$el.outerHTML, "text/html").firstChild);
                     this.$el.style.display = "none";
                 }
             });

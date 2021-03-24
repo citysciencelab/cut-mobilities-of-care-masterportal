@@ -5,6 +5,7 @@ import Tool from "../../Tool.vue";
 import getters from "../store/gettersMeasure";
 import mutations from "../store/mutationsMeasure";
 import actions from "../store/actionsMeasure";
+import MeasureTooltip from "./MeasureTooltip.vue";
 
 /**
  * Measurement tool to measure lines and areas in the map.
@@ -12,7 +13,8 @@ import actions from "../store/actionsMeasure";
 export default {
     name: "Measure",
     components: {
-        Tool
+        Tool,
+        MeasureTooltip
     },
     computed: {
         ...mapGetters("Tools/Measure", Object.keys(getters)),
@@ -26,7 +28,13 @@ export default {
          * @returns {void}
          */
         active (value) {
-            (value ? this.createDrawInteraction : this.removeDrawInteraction)();
+            if (!value) {
+                this.removeIncompleteDrawing();
+                this.removeDrawInteraction();
+            }
+            else {
+                this.createDrawInteraction();
+            }
         },
         /**
          * Recreates draw interaction on geometry type update.
@@ -62,6 +70,23 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+        /**
+         * removes the last drawing if it has not been completed
+         * @return {void}
+         */
+        removeIncompleteDrawing () {
+            const feature = this.lines[this.featureId] || this.polygons[this.featureId];
+
+            if (feature && feature.get("isBeingDrawn")) {
+                const layerSource = this.layer.getSource();
+
+                if (layerSource.getFeatures().length > 0) {
+                    const actualFeature = layerSource.getFeatures().slice(-1)[0];
+
+                    layerSource.removeFeature(actualFeature);
+                }
+            }
         }
     }
 };
@@ -81,6 +106,7 @@ export default {
                 v-if="active"
                 id="measure"
             >
+                <MeasureTooltip />
                 <form
                     class="form-horizontal"
                     role="form"

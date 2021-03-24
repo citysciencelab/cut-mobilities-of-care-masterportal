@@ -11,12 +11,6 @@ describe("tools/measure/store/actionsMeasure", function () {
 
     beforeEach(() => {
         state = {
-            overlays: [{
-                vueInstance: {
-                    $destroy: sinon.spy()
-                },
-                overlay: Symbol.for("overlay")
-            }],
             unlisteners: [sinon.spy()],
             interaction: {
                 abortDrawing: sinon.spy()
@@ -41,13 +35,6 @@ describe("tools/measure/store/actionsMeasure", function () {
             expect(state.interaction.abortDrawing.calledOnce).to.be.true;
         });
 
-        it("destroys both vue instance and ol overlay of each MeasureOverlay", function () {
-            deleteFeatures({state, commit, rootGetters});
-
-            expect(state.overlays[0].vueInstance.$destroy.calledOnce).to.be.true;
-            expect(rootGetters["Map/map"].removeOverlay.withArgs(Symbol.for("overlay")).calledOnce).to.be.true;
-        });
-
         it("calls all unlisteners", function () {
             deleteFeatures({state, commit, rootGetters});
 
@@ -65,7 +52,6 @@ describe("tools/measure/store/actionsMeasure", function () {
 
             expect(commit.calledWith("setLines", {})).to.be.true;
             expect(commit.calledWith("setPolygons", {})).to.be.true;
-            expect(commit.calledWith("setOverlays", [])).to.be.true;
             expect(commit.calledWith("setUnlisteners", [])).to.be.true;
         });
     });

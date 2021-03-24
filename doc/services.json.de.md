@@ -368,7 +368,7 @@ WFS Layer der zu einem abgesicherte WFS Dienst gehört.
 
 ***
 
-## Sensor-Layer ##
+## SensorLayer ##
 
 Ein Feature kann mehrere Datastreams vorhalten. Im Portal wird für jeden Datastream die neueste Beobachtung als Attribut am Feature wie folgt eingetragen: "dataStream_[id]_[name]". id ist die @iot.id des Datastreams.
 Der Name wird aus datastream.properties.type ausgelesen. Ist dieser parameter nicht verfügbar wird der Wert aus datastream.unitOfMeasurement.name verwendet.
@@ -378,32 +378,31 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
 |epsg|nein|String|"EPSG:4326"|Koordinatensystem der SensorThings-API|`"EPSG:4326"`|
+|altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
+|altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
+|altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
 |**[gfiAttributes](#markdown-header-gfi_attributes)**|ja|String/Object||GFI-Attribute die angezeigt werden sollen.|`"ignore"`|
 |**[gfiTheme](#markdown-header-gfi_theme)**|ja|String/Object||Darstellungsart der GFI-Informationen für diesen Layer. Wird hier nicht default gewählt, können eigens für diesen Layer erstellte Templates ausgewählt werden, die es erlauben die GFI-Informationen in anderer Struktur als die Standard-Tabellendarstellung anzuzeigen.|`"default"`|
 |id|ja|String||Frei wählbare Layer-ID|`"999999"`|
-|legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
 |legend|nein|Boolean/String/String[]||Wert aus **[services.json](services.json.de.md)**. URL die verwendet wird, um die Legende anzufragen. Boolean-Wert um dynamisch die Legende aus dem WMS request oder dem styling zu generieren. String-Wert als Pfad auf Bild oder PDF-Datei.|false|
+|legendURL|ja|String/String[]||Link zur Legende, um statische Legenden des Layers zu verknüpfen. **ignore**: Es wird keine Legende abgefragt, ““ (Leerstring): GetLegendGraphic des Dienstes wird aufgerufen.Deprecated, bitte "legend" verwenden.|`"ignore"`|
+|loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
+|mqttOptions|nein|**[mqttOptions](#markdown-header-sensorlayermqttoptions)**||Konfiguration der Websocket-Verbindung für mqtt||
+**Beispiel Sensor:**
+|mqttQos|nein|Number|2|Quality of service subscription level. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
+|mqttRh|nein|Number|2|Diese Option gibt an, ob beim Einrichten des Abonnements retained messages gesendet werden. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
 |name|ja|String||Anzeigename des Layers im Portal. Dieser wird im Portal im Layerbaum auftauchen und ist unabhängig vom Dienst frei wählbar.|`"Elektro Ladestandorte"`|
+|noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
+|showNoDataValue|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
+|timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|ja|String||Diensttyp, in diesem Fall SensorThings-API (**[WMS siehe oben](#markdown-header-wms-layer)**, **[WMTS siehe oben](#markdown-header-wmts-layer)** und **[WFS siehe oben](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|ja|String||Dienste URL die um "urlParameter" ergänzt werden kann |`"https://51.5.242.162/itsLGVhackathon"`|
-|**[urlParameter](#markdown-header-url_parameter)**|nein|Object||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
+|urlParameter|nein|**[urlParameter](#markdown-header-sensorlayerurlparameter)**||Angabe von Query Options. Diese schränken die Abfrage der Sensordaten ein (z.B. durch "filter" oder "expand"). ||
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
 |version|nein|String|"1.1"|Dienste Version, die beim Anfordern der Daten angesprochen wird.|`"1.0"`|
-|loadThingsOnlyInCurrentExtent|nein|Boolean|false|Gibt an ob Things ausschließlich im aktuellen Browser-Extent geladen werden sollen. Ändert sich der Extent, werden weitere Things nachgeladen.|`true`|
-|showNoDataValue|nein|Boolean|true|Gibt an ob Datastreams ohne Observations angegeben werden sollen.|`true`|
-|noDataValue|nein|String|"no data"|Platzhalter für nciht vorhandenen Observations der Datastreams.|`"Keine Daten"`|
-|altitudeMode|nein|enum["clampToGround","absolute","relativeToGround"]|"clampToGround"|Höhenmodus für die Darstellung in 3D.|`"absolute"`|
-|altitude|nein|Number||Höhe für die Darstellung in 3D in Metern. Wird eine altitude angegeben, so wird die vorhandene Z-Koordinate überschrieben. Falls keine Z-Koordinate vorhanden ist, wird die altitude als Z-Koordinate gesetzt.|`527`|
-|altitudeOffset|nein|Number||Höhenoffset für die Darstellung in 3D in Metern. Wird ein altitudeOffset angegeben, so wird die vorhandene Z-Koordinate um den angegebenen Wert erweitert. Falls keine Z-Koordinate vorhanden ist, wird der altitudeOffset als Z-Koordinate gesetzt.|`10`|
-|timezone|nein|String|Europe/Berlin|Name einer Moment-Timezone zur Umrechnung der PhaenomenonTime des Sensors (von UTC) in die Zeitzone des Client.|[Gültige Timezones laut Docs](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
-|***[mqttOptions](#markdown-header-mqtt_options)**|nein|Object||Konfiuration der Websocket-Verbindung für mqtt||
-**Beispiel Sensor:**
-|mqttRh|nein|Number|2|Diese Option gibt an, ob beim Einrichten des Abonnements retained messages gesendet werden. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
-|mqttQos|nein|Number|2|Quality of service subscription level. Für weitere Informationen siehe **[SensorThings](sensorThings.de.md)**|0|
 
 
-```
-#!json
+```json
 
    {
       "id" : "999999",
@@ -412,6 +411,7 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
+         "root" : "Things"
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
       },
@@ -423,47 +423,63 @@ Eine ausführliche Dokumentation der SensorThings-API befindet sich hier: [Dokum
          "plug" : "Stecker",
          "type" : "Typ",
          "dataStreamId" : "DataStreamID"
+      },
+      "mqttOptions" : {
+          "host" : "https://localhost",
+          "port": "1883"
       }
    }
 ```
-## mqtt_options ##
+
+## SensorLayer.mqttOptions ##
 
 Anhand der mqttOptions kann das Ziel für die Websocket-Verbindung für mqtt definiert werden. Wird hier nichts angegeben so wird veruscht die Parameter aus der Server-URL zu extrahieren.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
 |host|nein|String||Adresse des Hosts|`"example.com"`|
-|port|nein|String||Port am Host|`"9876"`|
-|path|nein|String||Pfad|`"/mqtt"`|
-|protocol|nein|String||Verwendetes Protokol|`"ws"`, `"wss"`|
+|port|nein|String|443|Port am Host|`"9876"`|
+|path|nein|String|"/mqtt"|Pfad|`"/mqtt"`|
+|protocol|nein|String|"wss"|Verwendetes Protokol|`"ws"`, `"wss"`|
 
-## url_Parameter ##
+**Beispiel mqttOptions:**
+```json
+
+   {
+      "mqttOptions" : {
+         "host" : "https://localhost",
+         "port" : "8883",
+         "path": "/mqtt",
+         "protocol": "wss"
+      }
+   }
+```
+
+## SensorLayer.urlParameter ##
 
 Über die UrlParameter können die daten aus der SensorThingsAPI gefiltert werden.
 
 |Name|Verpflichtend|Typ|default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |expand|nein|String/Array||Koordinatensystem der SensorThings-API|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|filter|nein|String||Koordinatensystem der SensorThings-API|`"startswith(Things/name,'Charging')"`|
 |root|nein|String|"Things"|Das Wurzelelement in der URL, auf dem die Query angewendet wird. Möglich sind `"Things"` oder `"Datastreams"`|"Datastreams"|
 
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams. Zeige auch von jedem Datastream die neueste Observation**
 
-```
-#!json
+```json
 
    {
       "urlParameter" : {
-         "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-         "root": "Datastreams"
+         "filter" : "startswith(Things/name,'Charging')",
+         "root": "Things"
       }
    }
 ```
 **Beispiel urlParameter: Zeige alle Things deren Name mit 'Charging' beginnt und alle zugehörigen Datastreams die im Namen 'Lastenrad' enthalten. Zeige auch von jedem Datastream die neueste Observation und das Phänomen (ObservedProperty), das beobachtet wird. Wenn vorhanden wird die ObservedProperty für die dynamische Attributerstellung verwendet.**
 
-```
-#!json
+```json
 
    {
       "urlParameter": {
@@ -774,9 +790,10 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
 |condition|true|enum["contains", "startsWith", "endsWith"]|| Bedingung nach welcher der key gegen alle Attribute des Features geprüft wird.| '"startsWith"'|
 |type|false|enum["string","date"]|"string"|Wenn type = "date", dann wird versucht ein Datum aus dem Attributwert zu erzeugen.| '"date"'|
 |format|false|String|"DD.MM.YYYY HH:mm:ss"|Datumsformat.| '"DD.MM.YYY"'|
+|prefix|false|String||Prefix, das an den Attributwert vorangestellt wird.| Wert wird ohne Leerzeichen dem Attributwert vorangestellt '"https://"'|
 |suffix|false|String||Suffix, das an den Attributwert angehängt wird.| '"°C"'|
 
-**Beispiel gfiAttributes als Objekt mit suffix:**
+**Beispiel gfiAttributes als Objekt mit suffix und prefix:**
 
 ```
 #!json
@@ -787,7 +804,8 @@ Wird gfiAttributes als Objekt übergeben, kann der Value auch ein Objekt sein. D
       "key3": {
          "name": "Key der im Portal gezeigt wird 3",
          "condition": "contains",
-         "suffix": "°C"
+         "suffix": "°C",
+         "prefix": "https://"
       }
    }
 }

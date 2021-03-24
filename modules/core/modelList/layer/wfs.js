@@ -133,11 +133,10 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     },
 
     /**
-     * Updates layer source
-     * @param  {Boolean} [showLoader] Flag if Loader should be shown.
-     * @returns {void}
+     * Returns the params and options to request an update of the layer source.
+     * @returns {object} contains params, url and xhrFields for the request
      */
-    updateSource: function (showLoader) {
+    getRequestParamsAndOptions: function () {
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -150,35 +149,49 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             params = {
                 REQUEST: "GetFeature",
                 SERVICE: "WFS",
-                SRSNAME: Radio.request("MapView", "getProjection").getCode(),
+                SRSNAME: Radio.request("MapView", "getProjection")?.getCode(),
                 TYPENAME: typename,
                 VERSION: this.get("version"),
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
-            mapInitialLoading = Radio.request("Map", "getInitialLoading");
+            xhrParameters = this.attributes.isSecured ? {withCredentials: true} : null;
+
 
         if (prefix !== undefined && typeof prefix === "string" && namespace !== undefined && typeof namespace === "string") {
             params.NAMESPACE = `xmlns(${prefix}=${namespace})`;
-            if (typename.indexOf(`${prefix}:`) !== 0) {
+            if (typename && typename.indexOf(`${prefix}:`) !== 0) {
                 params.TYPENAME = `${prefix}:${typename}`;
             }
         }
+        return {
+            url: url,
+            params: params,
+            xhrParameters: xhrParameters
+        };
+    },
+
+    /**
+     * Updates layer source.
+     * @param {boolean} showLoader Flag if Loader should be shown.
+     * @param {object} requestParams contains params, url and xhrFields for the request
+     * @returns {void}
+     */
+    updateSource: function (showLoader) {
+        const requestParams = this.getRequestParamsAndOptions();
 
         $.ajax({
             beforeSend: function () {
-                if (mapInitialLoading === 0 && showLoader) {
+                if (Radio.request("Map", "getInitialLoading") === 0 && showLoader) {
                     Radio.trigger("Util", "showLoader");
                 }
             },
-            url: url,
-            data: params,
+            url: requestParams.url,
+            data: requestParams.params,
             async: true,
             type: "GET",
             context: this,
-            xhrFields: {
-                withCredentials: true
-            },
+            xhrFields: requestParams.xhrParameters,
             success: this.handleResponse,
             complete: function () {
                 if (showLoader) {

@@ -350,6 +350,24 @@ function areRegExpsInMeasureLayer () {
 }
 
 /**
+ * Returns the etxts contained in styles of measure_layer.
+ * @returns {string} the texts
+ */
+function getMeasureLayersTexts () {
+    const texts = Backbone.Radio.request("Map", "getMap")
+        .getLayers()
+        .getArray()
+        .filter(l => l.get("name") === "measure_layer")[0]
+        .getSource()
+        .getFeatures()
+        .map(f => f.getStyle())
+        .filter(s => s)
+        .reduce((acc, curr) => [...acc, ...curr], [])
+        .map(s => s.getText().getText());
+
+    return texts;
+}
+/**
  * @param {number} x number of feature to return coordinates of
  * @param {string} name name of layer to retrieve feature of
  * @returns {(Array.<number[]> | null)} coordinates or null if layer or feature not found
@@ -531,6 +549,7 @@ module.exports = {
     areAllFeaturesOfLayerVisible,
     basicAuth,
     getMarkerPointCoord,
+    getMeasureLayersTexts,
     isFullscreen,
     isLayerVisible,
     isMarkerPointVisible,

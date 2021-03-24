@@ -371,7 +371,7 @@ Please note the [VTL specification](https://docs.mapbox.com/vector-tiles/specifi
 
 ***
 
-## Sensor layer
+## SensorLayer
 
 A feature kann hold multiple Datastreams. For each Datastream, the latest obervation is added as a feature attribute as `"dataStream_[id]_[name]"`, where `id` is the Datastream's `@iot.id`.
 
@@ -381,31 +381,30 @@ For more details, consider reading the [extensive SensorThings-API documentation
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
+|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
+|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
+|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |epsg|no|String|`"EPSG:4326"`|SensorThings-API coordinate reference system|`"EPSG:4326"`|
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
 |gfiTheme|yes|**[gfiTheme](#markdown-header-gfi_theme)**||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |id|yes|String||Arbitrary id|`"999999"`|
-|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
 |legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
+|loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
+|mqttOptions|no|**[mqttOptions](#markdown-header-sensorlayermqttoptions)**||mqtt web socket connection configuration||
+|mqttQos|no|Number|2|Quality of service subscription level. For more information see **[sensorThings](sensorThings.md)**|0|
+|mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription. For more information see **[sensorThings](sensorThings.md)**|0|
 |name|yes|String||Arbitrary display name used in the layer tree.|`"Charging locations"`|
+|noDataValue|no|String|`"no data"`|Placeholder for unavailable Observations to Datastreams.|`"no data"`|
+|showNoDataValue|no|Boolean|`true`|Whether Datastreams should be given without Observations.|`true`|
+|timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
 |typ|yes|String||Service type; in this case, `"SensorThings"`. (**[WMS, see above](#markdown-header-wms-layer)**, **[WMTS, see above](#markdown-header-wmts-layer)**, and **[WFS, see above](#markdown-header-wfs-layer)**)|`"SensorThings"`|
 |url|yes|String||Service URL; may be extended by `urlParameter`|`"https://51.5.242.162/itsLGVhackathon"`|
-|urlParameter|no|**[urlParameter](#markdown-header-url_parameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
+|urlParameter|no|**[urlParameter](#markdown-header-sensorlayerurlparameter)**||Query options specification. These modify the request to sensor data, e.g. with `"filter"` or `"expand"`.||
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |version|no|String|"1.1"|Service version used to request data.|`"1.0"`|
-|loadThingsOnlyInCurrentExtent|no|Boolean|`false`|Whether Things are only to be fetched for the current extent. On changing the extent, another request is fired.|`true`|
-|showNoDataValue|no|Boolean|`true`|Whether Datastreams should be given without Observations.|`true`|
-|noDataValue|no|String|`"no data"`|Placeholder for unavailable Observations to Datastreams.|`"no data"`|
-|altitudeMode|no|enum["clampToGround","absolute","relativeToGround"]|`"clampToGround"`|Height mode in 3D mode.|`"absolute"`|
-|altitude|no|Number||Display height in 3D mode in meters. If an altitude is given, any existing z coordinate is overwritten. If no z coordinate exists, altitude is used as its value.|`527`|
-|altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
-|timezone|no|String|`"Europe/Berlin"`|`moment` time zone name used to convert a Sensor's PhaenomenonTime (UTC) to the client's time zone.|[Valid timezome documentation](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)|
-|mqttOptions|no|**[mqttOptions](#markdown-header-mqtt_options)**||mqtt web socket connection configuration||
-|mqttRh|no|Number|2|This option specifies whether retained messages are sent on subscription. For more information see **[sensorThings](sensorThings.md)**|0|
-|mqttQos|no|Number|2|Quality of service subscription level. For more information see **[sensorThings](sensorThings.md)**|0|
 
 **Sensor example:**
-
 
 ```json
 
@@ -416,6 +415,7 @@ For more details, consider reading the [extensive SensorThings-API documentation
       "version" : "1.0",
       "url" : "https://51.5.242.162/itsLGVhackathon",
       "urlParameter" : {
+         "root" : "Things",
          "filter" : "startswith(Things/name,'Charging')",
          "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"
       },
@@ -427,10 +427,15 @@ For more details, consider reading the [extensive SensorThings-API documentation
          "plug" : "Stecker",
          "type" : "Typ",
          "dataStreamId" : "DataStreamID"
+      },
+      "mqttOptions" : {
+          "host" : "https://localhost",
+          "port": "1883"
       }
    }
 ```
-## mqtt_options
+
+## SensorLayer.mqttOptions ##
 
 Used to configure the target of a mqtt web socket connection. If nothing is set, the portal tries to infer the parameters from the service URL.
 
@@ -438,17 +443,30 @@ Used to configure the target of a mqtt web socket connection. If nothing is set,
 |----|--------|----|-------|-----------|-------|
 |host|no|String||Host address|`"example.com"`|
 |port|no|String||Host port|`"9876"`|
-|path|no|String||Path|`"/mqtt"`|
-|protocol|no|String||Used protocol|`"ws"`, `"wss"`|
+|path|no|String|"/mqtt"|Path|`"/mqtt"`|
+|protocol|no|String|"wss"|Used protocol|`"ws"`, `"wss"`|
 
-## url_Parameter
+**Example mqttOptions:**
+```json
+
+    {
+      "mqttOptions" : {
+         "host" : "https://localhost",
+         "port" : "8883",
+         "path": "/mqtt",
+         "protocol": "wss"
+      }
+   }
+```
+
+## SensorLayer.urlParameter ##
 
 Enables filtering SensorThingsAPI requests.
 
 |Name|Required|Type|Default|Description|Example|
 |----|--------|----|-------|-----------|-------|
-|filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
 |expand|no|String/Array||See [full documentation](sensorThings.md)|`"Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)"`|
+|filter|no|String||See [full documentation](sensorThings.md)|`"startswith(Things/name,'Charging')"`|
 |root|no|String|"Things"|The root element in the URL to which the query is applied. possible are `"Things"` or `"Datastreams"`|"Datastreams"|
 
 **urlParameter example:** Show all Things where the name starts with `"Charging"`, and all Datastreams belonging to those Things. Show each Datastream's latest Observation.
@@ -458,7 +476,7 @@ Enables filtering SensorThingsAPI requests.
     "urlParameter" : {
         "filter" : "startswith(Things/name,'Charging')",
         "expand" : "Locations,Datastreams/Observations($orderby=phenomenonTime%20desc;$top=1)",
-        "root": "Datastreams"
+        "root": "Things"
     }
 }
 ```
@@ -799,9 +817,10 @@ If the gfiAttributes are given as an object, a key's value may also be an object
 |condition|yes|enum["contains", "startsWith", "endsWith"]||Condition checked on each feature attribute.|`"startsWith"`|
 |type|no|enum["string","date"]|`"string"`|If `"date"`, the portal will attempt to parse the attribute value to a date.|`"date"`|
 |format|no|String|`"DD.MM.YYYY HH:mm:ss"`|Data format.|`"DD.MM.YYY"`|
+|prefix|no|String||Attribute value prefix.|Add string to value without whitespace `"https://"`|
 |suffix|no|String||Attribute value suffix.|`"°C"`|
 
-**gfiAttributes example object using `suffix`:**
+**gfiAttributes example object using `suffix` and `prefix` :**
 
 ```json
 {
@@ -811,7 +830,8 @@ If the gfiAttributes are given as an object, a key's value may also be an object
       "key3": {
          "name": "key shown in the portal 3",
          "condition": "contains",
-         "suffix": "°C"
+         "suffix": "°C",
+         "prefix": "https://"
       }
    }
 }
