@@ -394,6 +394,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
             let clonedFeature,
                 stylingRule,
+                stylingRuleSplit,
                 styleObject,
                 geometryType,
                 styleGeometryFunction;
@@ -411,8 +412,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
+                    stylingRuleSplit = stylingRule.split("=");
 
-                    this.unsetStringPropertiesOfFeature(clonedFeature, stylingRule.split("=")[0].substring(1));
+                    if (stylingRuleSplit.length > 0) {
+                        this.unsetStringPropertiesOfFeature(clonedFeature, stylingRuleSplit[0].substring(1));
+                    }
                     this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
 
                     // do nothing if we already have a style object for this CQL rule
