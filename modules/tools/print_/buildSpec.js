@@ -410,8 +410,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
                     stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
+
+                    this.unsetStringPropertiesOfFeature(clonedFeature, stylingRule.split("=")[0].substring(1));
+                    this.addFeatureToGeoJsonList(clonedFeature, geojsonList);
+
                     // do nothing if we already have a style object for this CQL rule
                     if (mapfishStyleObject.hasOwnProperty(stylingRule)) {
                         return;
@@ -443,6 +446,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }.bind(this));
         }.bind(this));
         return mapfishStyleObject;
+    },
+
+    /**
+     * Unsets all properties of type string of the given feature.
+     * @param {ol.Feature} feature to unset properties of type string at
+     * @param {string} notToUnset key not to unset
+     * @returns {void}
+     */
+    unsetStringPropertiesOfFeature: function(feature, notToUnset){
+            Object.keys(feature.getProperties()).forEach(key => {
+                        const prop = feature.getProperties()[key];
+                        
+                        if(key !== notToUnset && typeof prop === "string"){
+                            feature.unset(key, {silent: true});
+                        }
+                    });
     },
 
     /**
