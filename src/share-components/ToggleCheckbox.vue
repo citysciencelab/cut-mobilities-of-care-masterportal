@@ -50,6 +50,9 @@ export default {
             this.currentState = !this.currentState;
 
             this.$emit("change", this.currentState);
+        },
+        setActive: function (newValue) {
+            this.currentState = newValue;
         }
     }
 };
