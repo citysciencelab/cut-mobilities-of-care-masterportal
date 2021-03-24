@@ -289,7 +289,6 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             });
         }
 
-        // TODO(roehlipa): Do situations like e.g. "sTyLe" need to be checked as well?
         if (baseURL.includes("{Style}")) {
             // As described in the MapFish Documentation (https://mapfish.github.io/mapfish-print-doc/javadoc/org/mapfish/print/map/tiled/wmts/WMTSLayerParam.html#baseURL) the parameter "style" seemingly needs to be written small.
             baseURL = baseURL.replace(/{Style}/g, "{style}");
