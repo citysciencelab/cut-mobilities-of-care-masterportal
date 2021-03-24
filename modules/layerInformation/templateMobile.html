@@ -30,7 +30,7 @@
                     <% if (downloadLinks !== null) { %>
                     <li><a data-toggle="tab" href="#LayerInfoDataDownload"><%= downloadDataset %></a></li>
                     <% } %>
-                    <% if (url !== null) { %>
+                    <% if (url !== null && typ !== "SensorThings") { %>
                     <li><a data-toggle="tab" href="#url"><%= typ %>-<%= addressSuffix %></a></li>
                     <% } %>
                 </ul>
