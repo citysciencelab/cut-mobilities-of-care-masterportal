@@ -31,6 +31,7 @@
 - Show metadata if the MD_Identification node is implemented as MD_DataIdentification or SV_ServiceIdentification.
 - Fixed a bug that made single layer info legend appear multiple times when activating additional layers while opened.
 - Printing of tooltip of measure-tool works: The tooltip of the measure tool is no longer implemented as an overlay, it is created now as vectorlayer.
+- Printing of big amount of features now works.
 
 ---
 
