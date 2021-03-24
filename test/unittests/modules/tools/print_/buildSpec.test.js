@@ -45,30 +45,32 @@ describe("tools/print_/buildSpec", function () {
     });
     describe("unsetStringPropertiesOfFeature", function () {
         it("unsetStringPropertiesOfFeature - remove one prop other one should stay", function () {
-            let props = {"a":"a", "b": "b"};
-            const feature = new Feature({
-                name: "feature123"
-            });
+            const props = {"a": "a", "b": "b"},
+                feature = new Feature({
+                    name: "feature123"
+                });
+
             feature.setProperties(props);
 
             buildSpecModel.unsetStringPropertiesOfFeature(feature, "a");
-            expect(feature.getProperties()).to.have.property('a');
-            expect(feature.getProperties()).not.to.have.property('b');
+            expect(feature.getProperties()).to.have.property("a");
+            expect(feature.getProperties()).not.to.have.property("b");
         });
 
         it("unsetStringPropertiesOfFeature - remove not existing prop should remove all", function () {
-            let props = {"a":"a", "b": "b"};
-            const feature = new Feature({
-                name: "feature123"
-            });
+            const props = {"a": "a", "b": "b"},
+                feature = new Feature({
+                    name: "feature123"
+                });
+
             feature.setProperties(props);
 
             buildSpecModel.unsetStringPropertiesOfFeature(feature, "c");
-            expect(feature.getProperties()).not.to.have.property('a');
-            expect(feature.getProperties()).not.to.have.property('b');
-            expect(feature.getProperties()).not.to.have.property('c');
+            expect(feature.getProperties()).not.to.have.property("a");
+            expect(feature.getProperties()).not.to.have.property("b");
+            expect(feature.getProperties()).not.to.have.property("c");
         });
-       
+
 
     });
 
@@ -1118,29 +1120,6 @@ describe("tools/print_/buildSpec", function () {
 
     });
     describe("getFontFamily", function () {
-        it("should return the font family", function () {
-            expect(buildSpecModel.getFontFamily("bold 16px Helvetica", "16")).to.equals("Helvetica");
-            expect(buildSpecModel.getFontFamily("bold 20px Sans Serif", "20")).to.equals("Sans Serif");
-            expect(buildSpecModel.getFontFamily("20px Sans Serif", "20")).to.equals("Sans Serif");
-        });
-        it("should return \"\" if called with undefined", function () {
-            expect(buildSpecModel.getFontFamily(undefined, undefined)).to.equals("");
-            expect(buildSpecModel.getFontFamily("", undefined)).to.equals("");
-            expect(buildSpecModel.getFontFamily(undefined, "")).to.equals("");
-        });
-        it("should return \"\" if called with null", function () {
-            expect(buildSpecModel.getFontFamily(null, null)).to.equals("");
-            expect(buildSpecModel.getFontFamily("", null)).to.equals("");
-            expect(buildSpecModel.getFontFamily(null, "")).to.equals("");
-        });
-        it("should return \"\" if called with nonsense", function () {
-            expect(buildSpecModel.getFontFamily("asdfghjklhghggh", "16")).to.equals("");
-            expect(buildSpecModel.getFontFamily("", "pzuouk")).to.equals("");
-            expect(buildSpecModel.getFontFamily("16", "")).to.equals("");
-        });
-
-
-    });describe("getFontFamily", function () {
         it("should return the font family", function () {
             expect(buildSpecModel.getFontFamily("bold 16px Helvetica", "16")).to.equals("Helvetica");
             expect(buildSpecModel.getFontFamily("bold 20px Sans Serif", "20")).to.equals("Sans Serif");

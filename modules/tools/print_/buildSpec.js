@@ -454,14 +454,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {string} notToUnset key not to unset
      * @returns {void}
      */
-    unsetStringPropertiesOfFeature: function(feature, notToUnset){
-            Object.keys(feature.getProperties()).forEach(key => {
-                        const prop = feature.getProperties()[key];
-                        
-                        if(key !== notToUnset && typeof prop === "string"){
-                            feature.unset(key, {silent: true});
-                        }
-                    });
+    unsetStringPropertiesOfFeature: function (feature, notToUnset) {
+        Object.keys(feature.getProperties()).forEach(key => {
+            const prop = feature.getProperties()[key];
+
+            if (key !== notToUnset && typeof prop === "string") {
+                feature.unset(key, {silent: true});
+            }
+        });
     },
 
     /**
