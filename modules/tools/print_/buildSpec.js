@@ -157,26 +157,29 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     buildLayers: function (layerList) {
         const layers = [],
             attributes = this.get("attributes"),
-            currentResolution = Radio.request("MapView", "getOptions").resolution;
+            currentResolution = Radio.request("MapView", "getOptions").resolution,
+            visibleLayerIds = [];
 
-        layerList.forEach(function (layer) {
+        layerList.forEach(layer => {
             const printLayers = [];
 
             if (layer instanceof Group) {
-                layer.getLayers().getArray().forEach(function (childLayer) {
+                layer.getLayers().getArray().forEach(childLayer => {
                     printLayers.push(this.buildLayerType(childLayer, currentResolution));
-                }.bind(this));
+                });
             }
             else {
                 printLayers.push(this.buildLayerType(layer, currentResolution));
             }
-            printLayers.forEach(function (printLayer) {
+            printLayers.forEach(printLayer => {
                 if (printLayer !== undefined) {
+                    visibleLayerIds.push(layer.get("id"));
                     layers.push(printLayer);
                 }
             });
-        }.bind(this));
+        });
 
+        this.setVisibleLayerIds(visibleLayerIds);
         attributes.map.layers = layers.reverse();
     },
 
@@ -244,6 +247,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 }
             }
         }
+
         return returnLayer;
     },
 
@@ -931,7 +935,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return hex.length === 1 ? "0" + hex : hex;
     },
     /**
-     * gets legend from legend vue store and builds legend object for mapfish print
+     * Gets legend from legend vue store and builds legend object for mapfish print
+     * The legend is only print if the related layer is visible.
      * @param  {Boolean} isLegendSelected flag if legend has to be printed
      * @param {Boolean} isMetaDataAvailable flag to print metadata
      * @return {void}
@@ -943,28 +948,31 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
 
         if (isLegendSelected && legends.length > 0) {
             legendObject.layers = [];
-            legends.forEach(function (legendObj) {
-                const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
+            legends.forEach(legendObj => {
+                if (this.get("visibleLayerIds").includes(legendObj.id)) {
+                    const legendContainsPdf = this.legendContainsPdf(legendObj.legend);
 
-                if (isMetaDataAvailable) {
-                    metaDataLayerList.push(legendObj.name);
+                    if (isMetaDataAvailable) {
+                        metaDataLayerList.push(legendObj.name);
+                    }
+
+                    if (legendContainsPdf) {
+                        Radio.trigger("Alert", "alert", {
+                            kategorie: "alert-info",
+                            text: "<b>Der Layer \"" + legendObj.name + "\" enthält eine als PDF vordefinierte Legende. " +
+                                "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
+                                "Sie können sich die vordefinierte Legende aus der Legende im Menü separat herunterladen."
+                        });
+                    }
+                    else {
+                        legendObject.layers.push({
+                            layerName: legendObj.name,
+                            values: this.prepareLegendAttributes(legendObj.legend)
+                        });
+                    }
                 }
 
-                if (legendContainsPdf) {
-                    Radio.trigger("Alert", "alert", {
-                        kategorie: "alert-info",
-                        text: "<b>Der Layer \"" + legendObj.name + "\" enthält eine als PDF vordefinierte Legende. " +
-                            "Diese kann nicht in den Ausdruck mit aufgenommen werden.</b><br>" +
-                            "Sie können sich die vordefinierte Legende aus der Legende im Menü separat herunterladen."
-                    });
-                }
-                else {
-                    legendObject.layers.push({
-                        layerName: legendObj.name,
-                        values: this.prepareLegendAttributes(legendObj.legend)
-                    });
-                }
-            }.bind(this));
+            });
         }
 
         this.setShowLegend(isLegendSelected);
@@ -1224,6 +1232,15 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     setUniqueIdList: function (value) {
         this.set("uniqueIdList", value);
+    },
+
+    /**
+     * Setter for visibleLayerIds
+     * @param {String} value visibleLayerIds
+     * @returns {void}
+     */
+    setVisibleLayerIds: function (value) {
+        this.set("visibleLayerIds", value);
     }
 });
 

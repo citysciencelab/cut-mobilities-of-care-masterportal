@@ -61,30 +61,30 @@ function parseNodeAttributes (nodeAttributes) {
     return attributes;
 }
 
-/**
- * Make sure we have Node.children and Element.children available.
- * Internet Explorer 11 Polyfill.
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children}
- */
-(function (constructor) {
-    if (constructor &&
-        constructor.prototype &&
-        constructor.prototype.children === undefined) {
-        Object.defineProperty(constructor.prototype, "children", {
-            get: function () {
-                const nodes = this.childNodes,
-                    children = [];
+// /**
+//  * Make sure we have Node.children and Element.children available.
+//  * Internet Explorer 11 Polyfill.
+//  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children}
+//  */
+// (function (constructor) {
+//     if (constructor &&
+//         constructor.prototype &&
+//         constructor.prototype.children === undefined) {
+//         Object.defineProperty(constructor.prototype, "children", {
+//             get: function () {
+//                 const nodes = this.childNodes,
+//                     children = [];
 
-                // iterate all childNodes
-                nodes.forEach(function (node) {
-                    // remenber those, that are Node.ELEMENT_NODE (1)
-                    if (node.nodeType === 1) {
-                        children.push(node);
-                    }
-                });
-                return children;
-            }
-        });
-    }
-    // apply the fix to all HTMLElements (window.Element) and to SVG/XML (window.Node)
-})(window.Node || window.Element);
+//                 // iterate all childNodes
+//                 nodes.forEach(function (node) {
+//                     // remenber those, that are Node.ELEMENT_NODE (1)
+//                     if (node.nodeType === 1) {
+//                         children.push(node);
+//                     }
+//                 });
+//                 return children;
+//             }
+//         });
+//     }
+//     // apply the fix to all HTMLElements (window.Element) and to SVG/XML (window.Node)
+// })(window.Node || window.Element);
