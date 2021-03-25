@@ -46,11 +46,20 @@ export default {
     },
 
     methods: {
+        /**
+         * Toggles the state
+         * @returns {void} emits change with currentState as payload
+         */
         toggle: function () {
             this.currentState = !this.currentState;
 
             this.$emit("change", this.currentState);
         },
+        /**
+         * Sets the current State. Required to Undo a change if e.g. a Layer couldn't be loaded.
+         * @param {boolean} newValue the new Value
+         * @returns {void}
+         */
         setActive: function (newValue) {
             this.currentState = newValue;
         }
@@ -60,7 +69,7 @@ export default {
 
 <template>
     <div
-        class="togglecheckboxcomponent toggle btn btn-default btn-sm"
+        class="toggleCheckboxComponent toggle btn btn-default btn-sm"
         :class="{'off': !isActive}"
     >
         <input
@@ -92,7 +101,7 @@ export default {
 </template>
 
 <style lang="less" scoped>
-    div.togglecheckboxcomponent {
+    div.toggleCheckboxComponent {
         width:63px;
     }
 </style>
