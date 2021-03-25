@@ -88,9 +88,10 @@
     "modules": {
         "language": {
             "languageTitle": "Please choose a language",
-            "de": "German",
+            "de": "Deutsch",
             "en": "English",
-            "it": "Italian"
+            "it": "Italiano",
+            "pt": "Português"
         },
         "core": {
           "modelList": {
