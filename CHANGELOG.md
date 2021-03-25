@@ -24,6 +24,7 @@
 ### Deprecated
 
 ### Removed
+- SensorThings address tab in layerInformation removed.
 
 ### Fixed
 - GFI of type text/html now also loads css files of the body.
