@@ -136,6 +136,7 @@ export default {
     }
     .vue-tool-content-body {
         max-height: 175px;
+        overflow-x: hidden;
         overflow: auto;
     }
     .vue-tool-content-body::-webkit-scrollbar {
