@@ -1358,11 +1358,11 @@ Koordinatensuche.
 
 [inherits]: # (Portalconfig.menu.tool)
 
-Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService, MapfishPrint 2 (Deprecated in 3.0.0) oder MapfishPrint 3. Das Drucken von Vector Tile Layern wird nicht unterstützt, da die Druckdienste es nicht unterstützen; falls der User versucht die Anzeige zu so einem Layer zu drucken, wird ihm eine Hinweismeldung dazu angezeigt.
+Druckmodul. Konfigurierbar für 2 Druckdienste: den High Resolution PlotService oder MapfishPrint 3. Das Drucken von Vector Tile Layern wird nicht unterstützt, da die Druckdienste es nicht unterstützen; falls der User versucht die Anzeige zu so einem Layer zu drucken, wird ihm eine Hinweismeldung dazu angezeigt.
 
 **ACHTUNG: Backend notwendig!**
 
-**Es wird mit einem [Mapfish-Print2](http://www.mapfish.org/doc/print/index.html), [Mapfish-Print3](http://mapfish.github.io/mapfish-print-doc) oder einem HighResolutionPlotService im Backend kommuniziert.**
+**Es wird mit einem [Mapfish-Print3](https://mapfish.github.io/mapfish-print-doc) oder einem HighResolutionPlotService im Backend kommuniziert.**
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
@@ -1371,29 +1371,11 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
 |printAppId|nein|String|"master"|Id der print app des Druckdienstes. Dies gibt dem Druckdienst vor welche/s Template/s er zu verwenden hat.|false|
 |filename|nein|String|"report"|Dateiname des Druckergebnisses.|false|
 |title|nein|String|"PrintResult"|Titel des Dokuments. Erscheint als Kopfzeile.|false|
-|version|nein|String|| Flag welcher Druckdienst verwendet werden soll. Bei "HighResolutionPlotService" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 2 verwendet, sonst wird MapfishPrint 3 verwendet.|false|
-|printID|nein|String||Deprecated in 3.0.0. Id des Druckdienstes der verwendet werden soll. Wird in der rest-services.json abgelegt.|false|
-|outputFilename|nein|String|"report"|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|false|
-|gfi|nein|Boolean|false|Deprecated in 3.0.0. Dateiname des Druckergebnisses.|false|
-|configYAML|nein|String|"/master"|Deprecated in 3.0.0. Konfiguration des Templates das verwendet werden soll.|false|
+|version|nein|String||Flag welcher Druckdienst verwendet werden soll. Bei "HighResolutionPlotService" wird der High Resolution PlotService verwendet, wenn der Parameter nicht gesetzt wird, wird Mapfish 3 verwendet.|false|
 |isLegendSelected|nein|Boolean|false|Gibt an, ob die Checkbox, zum Legende mitdrucken, aktiviert sein soll. Wird nur angezeigt wenn der Druckdienst (Mapfish Print 3) das Drucken der Legende unterstützt.|false|
 |legendText|nein|String|"Mit Legende"|Beschreibender Text für die printLegend-Checkbox.|false|
 |dpiForPdf|nein|Number|200|Auflösung der Karte im PDF.|false|
 |useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-
-**Beispiel Konfiguration mit MapfishPrint2**
-```
-#!json
-"print": {
-    "name": "Karte drucken",
-    "glyphicon": "glyphicon-print",
-    "printID": "123456",
-    "configYAML": "/master",
-    "outputFilename": "report",
-    "title": "Mein Titel",
-    "gfi": true
-}
-```
 
 **Beispiel Konfiguration mit High Resolution PlotService**
 ```
@@ -1417,8 +1399,7 @@ Druckmodul. Konfigurierbar für 3 Druckdienste: den High Resolution PlotService,
     "mapfishServiceId": "mapfish_printservice_id",
     "printAppId": "mrh",
     "filename": "Ausdruck",
-    "title": "Mein Titel",
-    "version" : "mapfish_print_3"
+    "title": "Mein Titel"
 }
 ```
 

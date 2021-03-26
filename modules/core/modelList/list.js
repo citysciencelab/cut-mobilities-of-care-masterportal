@@ -16,11 +16,6 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
-/**
- * PrintV2
- * @deprecated in 3.0.0
- */
-import PrintV2 from "../../tools/print/model";
 import Print from "../../tools/print_/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
@@ -235,15 +230,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                /**
-                 * PrintV2
-                 * do not use the attribute "version"
-                 * @deprecated in 3.0.0
-                 */
-                if (attrs.version === undefined) {
-                    return new PrintV2(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
-                }
-                else if (attrs.version === "HighResolutionPlotService") {
+                if (attrs.version === "HighResolutionPlotService") {
                     return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new Print(attrs, options);

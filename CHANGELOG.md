@@ -25,6 +25,7 @@
 
 ### Removed
 - SensorThings address tab in layerInformation removed.
+- The Print modul for using mapfishprint v2 has been removed.
 
 ### Fixed
 - GFI of type text/html now also loads css files of the body.

@@ -56,7 +56,6 @@ const Config = {
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
     restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
     styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
-    proxyURL: "/cgi-bin/proxy.cgi",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,

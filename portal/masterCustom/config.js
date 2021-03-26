@@ -35,7 +35,6 @@ const Config = {
     remoteInterface: {
         postMessageUrl: "https://localhost:9001"
     },
-    proxyURL: "/cgi-bin/proxy.cgi",
     quickHelp: {
         imgPath: "https://geoportal-hamburg.de.de/lgv-config/img/"
     },

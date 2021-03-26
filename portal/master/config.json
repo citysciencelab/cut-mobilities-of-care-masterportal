@@ -307,7 +307,6 @@
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "legendText": "Mit Legende",
-            "version" : "mapfish_print_3",
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },

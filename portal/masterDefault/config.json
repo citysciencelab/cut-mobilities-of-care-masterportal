@@ -64,8 +64,7 @@
                         "mapfishServiceId": "mapfish",
                         "printAppId": "master",
                         "filename": "Ausdruck",
-                        "title": "Mein Titel",
-                        "version": "mapfish_print_3"
+                        "title": "Mein Titel"
                     },
                     "supplyCoord": {
                         "name": "translate#common:menu.tools.coord",
