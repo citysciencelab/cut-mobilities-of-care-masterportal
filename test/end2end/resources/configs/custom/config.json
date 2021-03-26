@@ -248,8 +248,7 @@
                  "mapfishServiceId":"mapfish_qs",
                  "printAppId":"master",
                  "filename":"Ausdruck",
-                 "title":"Mein Titel",
-                 "version":"mapfish_print_3"
+                 "title":"Mein Titel"
               },
               "searchByCoord":{
                  "name":"Koordinatensuche",

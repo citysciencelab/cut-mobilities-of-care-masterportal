@@ -30,15 +30,9 @@
     "typ" : "EmailService"
   },
   {
-    "id" : "99999",
-    "name" : "Print Service",
-    "url" : "https://geoportal.metropolregion.hamburg.de/mapfish_print_2.0",
-    "typ" : "PrintService"
-  },
-  {
     "id": "mapfish",
     "name": "Print Service Prod",
-    "url": "https://geoportal.metropolregion.hamburg.de/mapfish_print/print/",
+    "url": "https://geodienste.hamburg.de/mapfish_print/print/",
     "typ": "Print"
   }
 ]

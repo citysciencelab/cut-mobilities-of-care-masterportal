@@ -3,7 +3,7 @@ import PrintTemplate from "text-loader!./template.html";
 /**
  * @member PrintTemplate
  * @description Template used to create the Print modul
- * @memberof print_
+ * @memberof print
  */
 
 const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
@@ -22,7 +22,7 @@ const PrintView = Backbone.View.extend(/** @lends PrintView.prototype */{
     /**
     * @class PrintView
     * @extends Backbone.View
-    * @memberof print_
+    * @memberof print
     * @constructs
     * @listens Print#ChangeIsActive
     * @listens Print#ChangeIsGfiActive

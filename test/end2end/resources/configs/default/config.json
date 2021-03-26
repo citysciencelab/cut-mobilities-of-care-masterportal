@@ -167,8 +167,7 @@
                         "mapfishServiceId": "mapfish",
                         "printAppId": "master",
                         "filename": "Ausdruck",
-                        "title": "Mein Titel",
-                        "version": "mapfish_print_3"
+                        "title": "Mein Titel"
                     },
                     "coord": {
                         "name": "Koordinaten abfragen",

@@ -1,9 +1,9 @@
-import PrintModel from "@modules/tools/print_/mapfish3PlotService.js";
+import PrintModel from "@modules/tools/print/mapfish3PlotService.js";
 import VectorSource from "ol/source/Vector.js";
 import VectorLayer from "ol/layer/Vector.js";
 const chai = require("chai");
 
-describe("tools/print_/model", function () {
+describe("tools/print/model", function () {
     const expect = chai.expect;
     let printModel;
 

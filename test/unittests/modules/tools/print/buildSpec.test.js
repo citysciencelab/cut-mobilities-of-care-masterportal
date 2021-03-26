@@ -1,4 +1,4 @@
-import BuildSpecModel from "@modules/tools/print_/buildSpec.js";
+import BuildSpecModel from "@modules/tools/print/buildSpec.js";
 import Util from "@testUtil";
 import Style from "@modules/vectorStyle/model";
 import {Style as OlStyle} from "ol/style.js";
@@ -9,7 +9,7 @@ import {expect} from "chai";
 import {EOL} from "os";
 import Feature from "ol/Feature.js";
 
-describe("tools/print_/buildSpec", function () {
+describe("tools/print/buildSpec", function () {
     let buildSpecModel,
         utilModel,
         pointFeatures,

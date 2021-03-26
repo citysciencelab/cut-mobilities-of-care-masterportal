@@ -16,8 +16,8 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
-import Print from "../../tools/print_/mapfish3PlotService";
-import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
+import Print from "../../tools/print/mapfish3PlotService";
+import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
 /**

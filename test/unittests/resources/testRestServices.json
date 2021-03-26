@@ -79,18 +79,6 @@
     "typ" : "EmailService"
   },
   {
-    "id" : "99999",
-    "name" : "Print Service",
-    "url" : "https://geodienste.hamburg.de/mapfish_print_2_internet",
-    "typ" : "PrintService"
-  },
-  {
-    "id" : "99998",
-    "name" : "Print Service Test",
-    "url" : "https://geoportaltest.metropolregion.hamburg.de/mapfish_print_2.0",
-    "typ" : "PrintService"
-  },
-  {
     "id": "mapfish_qs",
     "name": "Print Service QS",
     "url": "https://geoportaltest.metropolregion.hamburg.de/mapfish_print/print/",
