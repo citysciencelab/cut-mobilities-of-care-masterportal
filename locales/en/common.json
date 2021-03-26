@@ -219,7 +219,7 @@
                 "error": "&#10060; Unfortunately no (valid) WMS could be found under the given URL!",
                 "errorMessage": "&#10060; The specified service could not be loaded. Please make sure that the URL was entered correctly.<br><br> If the problem persists, please contact the operator of the service with the following note:<br><strong>It should be ensured that a CORS header is set for the service. This is recommended by the <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a> in chapter 4.7.1.</strong>",
                 "errorHttpsMessage": "&#10060; The WMS you requested is located under a http-url. The master portal can only integrate WMS via https (SSL).",
-                "errorEmptyUrl": "&#10060; Please input an wms Url in the input field!",
+                "errorEmptyUrl": "Please input an wms Url in the input field!",
                 "placeholder": "Please enter the WMS-URL here.",
                 "textExample": "Example: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Load layer",

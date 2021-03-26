@@ -101,7 +101,7 @@ export default {
          * @returns {void}
          */
         importLayers: function () {
-            const url = this.$el.querySelector("#wmsUrl").value;
+            const url = this.$el.querySelector("#wmsUrl").value.trim();
 
             this.invalidUrl = false;
             if (url === "") {
