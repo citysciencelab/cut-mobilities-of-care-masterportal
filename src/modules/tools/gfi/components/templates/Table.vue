@@ -54,14 +54,28 @@ export default {
         close () {
             this.$emit("close");
         },
+
+        /**
+         * Rotates the gfi window in the table mode.
+         * The position is set so that the turntable always stays at the same position.
+         * @returns {void}
+         */
         rotate () {
-            const className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim();
+            const headerwidth = this.$el.getElementsByClassName("tool-window-heading")[0].offsetWidth,
+                headerHeight = this.$el.getElementsByClassName("tool-window-heading")[0].offsetHeight,
+                className = this.$el.className.substring(0, this.$el.className.indexOf("rotate")).trim(),
+                transformOrigin = `${headerwidth - 40}px ${headerHeight - 20}px`;
 
             this.rotateAngle = this.rotateAngle - 90;
             if (this.rotateAngle === -360) {
                 this.rotateAngle = 0;
             }
+
             this.$el.className = className + " rotate" + this.rotateAngle;
+            this.$el.style.transformOrigin = transformOrigin;
+            this.$el.style.webkitTransformOrigin = transformOrigin;
+            this.$el.style.msTransformOrigin = transformOrigin;
+            this.$el.style.mozTransformOrigin = transformOrigin;
         }
     }
 };
