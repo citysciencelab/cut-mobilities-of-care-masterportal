@@ -30,13 +30,7 @@ const POIModel = Backbone.Model.extend({
      * @returns {void}
      */
     getFeatures: function () {
-        /**
-         * Selector for old or new way to set vector legend
-         * @deprecated with new vectorStyle module
-         * @type {Boolean}
-         */
-        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false,
-            poiDistances = Radio.request("geolocation", "getPoiDistances"),
+        const poiDistances = Radio.request("geolocation", "getPoiDistances"),
             poiFeatures = [];
         let featInCircle = [];
 
@@ -53,7 +47,7 @@ const POIModel = Backbone.Model.extend({
 
         poiFeatures.forEach(category => {
             category.features.forEach(feat => {
-                feat.imgPath = isNewVectorStyle ? this.getImgPath(feat) : this.getImgPathOld(feat);
+                feat.imgPath = this.getImgPath(feat);
                 feat.name = this.getFeatureTitle(feat);
             });
         });
@@ -94,43 +88,6 @@ const POIModel = Backbone.Model.extend({
 
         return feature.getId();
 
-    },
-
-    /**
-     * Ermittelt zum Feature den img-Path und gibt ihn zurück.
-     * @deprecated with new vectorStyle module
-     * @param  {ol.feature} feat Feature
-     * @return {string}      imgPath
-     */
-    getImgPathOld: function (feat) {
-        let imagePath = "",
-            styleClass,
-            styleSubClass;
-        const style = Radio.request("StyleList", "returnModelById", feat.styleId);
-
-        if (style) {
-            styleClass = style.get("class");
-            styleSubClass = style.get("subClass");
-            if (styleClass === "POINT") {
-                if (styleSubClass === "CUSTOM") {
-                    imagePath = style.get("imagePath") + this.createStyleFieldImageName(feat, style);
-                }
-                if (styleSubClass === "CIRCLE") {
-                    imagePath = this.createCircleSVG(style);
-                }
-                else if (style.get("imageName") !== "blank.png") {
-                    imagePath = style.get("imagePath") + style.get("imageName");
-                }
-            }
-            if (styleClass === "LINE") {
-                imagePath = this.createLineSVG(style);
-            }
-            if (styleClass === "POLYGON") {
-                imagePath = this.createPolygonSVG(style);
-            }
-        }
-
-        return imagePath;
     },
 
     /**

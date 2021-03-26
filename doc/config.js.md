@@ -45,7 +45,6 @@ In the following, all configuration options are described. For all configuration
 |startingMap3D|bi|Boolean|`false`|Controls whether the map should start in 3D mode.||
 |tree|no|**[tree](#tree)**||||
 |uiStyle|no|String|`"default"`|Sets the control element layout. |`table`|
-|useVectorStyleBeta|no|Boolean|`false`|If set to `true`, the new styling module currently in development is used to create vector styles; else, the system currently in production is used. Please mind that the `style.json` file requires a different syntax than before if setting this flag to `true`. _Deprecated in major release 3.0._|useVectorStyleBeta: true|
 |wfsImgPath|no|String||Path to the folder holding images for the WFS styles. The path is relative to *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|no|String|`""`|Reference to a WPS interface used in various modules. The ID is resolved to a service defined in the **[rest-services.json](rest-services.json.md)** file.|`""`|
 |zoomToFeature|no|**[zoomToFeature](#markdown-header-zoomtofeature)**||Optional configuration of the URL query parameter `featureid`. For details, see **[urlParameter](urlParameter.md)**.||

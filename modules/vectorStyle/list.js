@@ -1,4 +1,3 @@
-import WFSStyle from "./model";
 import StyleModel from "./styleModel";
 import store from "../../src/app-store";
 
@@ -11,11 +10,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @returns {object} style model
      */
     model: function (attrs, options) {
-        if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta) {
-            return new StyleModel(attrs, options);
-        }
-
-        return new WFSStyle(attrs, options);
+        return new StyleModel(attrs, options);
     },
     url: function () {
         if (!Config.hasOwnProperty("styleConf") || Config.styleConf === "") {
@@ -98,13 +93,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
      * @returns {object} style model
     */
     returnModelById: function (layerId) {
-        return this.find(function (slmodel) {
-            if (Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta) {
-                return slmodel.attributes.styleId === layerId;
-            }
-
-            return slmodel.attributes.layerId === layerId;
-        });
+        return this.find(slmodel => slmodel.attributes.styleId === layerId);
     },
     /**
      * overwrite parse function so that only the style-models are saved
@@ -133,17 +122,7 @@ const StyleList = Backbone.Collection.extend(/** @lends StyleList.prototype */{
         styleIds.push(this.getFeatureViaURLStyles());
 
         styleIds = Array.isArray(styleIds) ? styleIds.reduce((acc, val) => acc.concat(val), []) : styleIds;
-        filteredData = dataWithDefaultValue.filter(function (styleModel) {
-            /**
-             * filter for .layerId and styleId as well
-             * @deprecated since v 3.0
-             */
-            if (!Config.hasOwnProperty("useVectorStyleBeta") || Config.useVectorStyleBeta !== true) {
-                return styleIds.includes(styleModel.layerId);
-            }
-
-            return styleIds.includes(styleModel.styleId);
-        });
+        filteredData = dataWithDefaultValue.filter(styleModel => styleIds.includes(styleModel.styleId));
 
         this.add(filteredData);
 

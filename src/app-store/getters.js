@@ -105,17 +105,6 @@ export default {
         }
         return false;
     },
-    /**
-     * checks if the param useVectorStyleBeta is available in config.js and returns the value
-     * @param {object} state - the store state
-     * @returns {boolean} true useVectorStyleBeta is set to true
-     */
-    useVectorStyleBeta: (state) => {
-        if (typeof state?.configJs?.useVectorStyleBeta === "boolean") {
-            return state.configJs.useVectorStyleBeta;
-        }
-        return false;
-    },
 
     /**
      * checks if the default style is set

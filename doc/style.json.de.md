@@ -1,8 +1,5 @@
 >Zurück zur **[Dokumentation Masterportal](doc.de.md)**.
 
-# Dokumentation der deprecated Version
-Hier geht es zur **[Dokumentation der alten Version](style.json-deprecated.md)**.
-
 [TOC]
 
 # style.json #
@@ -23,7 +20,6 @@ Erst zu dem Zeitpunkt, wenn ein Layer visualisiert werden soll, werden aus der i
 ## Konfiguration des Styling-Moduls
 Der Pfad zur verwendenden *style.json* wird in der **[config.js](config.js.de.md)** definiert und ist dort dokumentiert. Bitte beachten Sie folgende Parameter:
 
-- *useVectorStyleBeta*: Zum steuern der Version.
 - *styleConf*: Zum definieren des Pfades zur Datei.
 > Hinweis: Fehlerhafte Pfadangaben werden über eine entsprechende Fehlermeldung mitgeteilt.
 

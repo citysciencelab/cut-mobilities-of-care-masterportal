@@ -29,8 +29,7 @@ const Config = {
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
-    },
-    useVectorStyleBeta: true
+    }
 };
 
 // conditional export to make config readable by e2e tests

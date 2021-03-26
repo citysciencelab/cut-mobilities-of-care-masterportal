@@ -43,7 +43,6 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
 |**[tree](#tree)**|nein|Object||||
 |uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
-|**useVectorStyleBeta**|nein|Boolean|false|Konfigurationswert ob anstelle des produktiven vectorStyle-Moduls ein sich in der Entwicklung befindliches neues Modul zum Styling von Vektordaten verwendet werden soll. Die Verwendung bedingt eine neue Syntax der style.json. Deprecated mit Version 3.0.|useVectorStyleBeta: true|
 |wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über **[rest-services.json](rest-services.json.de.md)** aufgelöst.|`""`|
 |**[zoomToFeature](#markdown-header-zoomtofeature)**|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe **[URL-Parameter](urlParameter.de.md)**.||

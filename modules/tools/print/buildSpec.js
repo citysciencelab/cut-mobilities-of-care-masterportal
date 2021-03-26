@@ -384,13 +384,12 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     buildStyle: function (layer, features, geojsonList) {
         const mapfishStyleObject = {
-                "version": "2"
-            },
-            isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
+            "version": "2"
+        };
 
         features.forEach(function (feature) {
             const styles = this.getFeatureStyle(feature, layer),
-                styleAttribute = this.getStyleAttribute(layer, feature, isNewVectorStyle);
+                styleAttribute = this.getStyleAttribute(layer, feature);
 
             let clonedFeature,
                 stylingRule,
@@ -877,10 +876,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     /**
      * @param {ol.Layer} layer -
      * @param {ol.feature} feature - the feature of current layer
-     * @param {Boolean} isNewVectorStyle - check if it is the new vector style
      * @returns {String} the attribute by whose value the feature is styled
      */
-    getStyleAttribute: function (layer, feature, isNewVectorStyle) {
+    getStyleAttribute: function (layer, feature) {
         const layerId = layer.get("id");
 
         let layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layerId}),
@@ -893,7 +891,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             layerModel = this.getChildModelIfGroupLayer(layerModel, layerId);
             styleList = Radio.request("StyleList", "returnModelById", layerModel.get("styleId"));
             if (layerModel.get("styleId")) {
-                if (isNewVectorStyle && styleList !== undefined) {
+                if (styleList !== undefined) {
                     ruleFeature = styleList.getRulesForFeature(feature);
                     styleField = ruleFeature.length && ruleFeature[0] && ruleFeature[0].hasOwnProperty("conditions") ? Object.keys(ruleFeature[0].conditions.properties)[0] : "";
                 }

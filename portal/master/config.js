@@ -86,13 +86,7 @@ const Config = {
         },
         fallbackLanguage: "de",
         changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
-    },
-    /**
-     * @deprecated to be deleted with version 3.0
-     * @property {boolean} Config.useVectorStyleBeta Flag to use the new vectorStyling module for backward compatibility
-     * @default false
-     */
-    useVectorStyleBeta: true
+    }
 };
 
 // conditional export to make config readable by e2e tests

@@ -311,10 +311,10 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
             this.setLegend(legend);
         }
         else if (styleModel && legend === true) {
-            if (!isSecured && Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+            if (!isSecured) {
                 styleModel.getGeometryTypeFromWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }
-            else if (isSecured && Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false) {
+            else if (isSecured) {
                 styleModel.getGeometryTypeFromSecuredWFS(this.get("url"), this.get("version"), this.get("featureType"), this.get("styleGeometryType"));
             }
             this.setLegend(styleModel.getLegendInfos());

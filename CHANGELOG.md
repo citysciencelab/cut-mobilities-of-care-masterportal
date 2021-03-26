@@ -25,7 +25,8 @@
 
 ### Removed
 - SensorThings address tab in layerInformation removed.
-- The Print modul for using mapfishprint v2 has been removed.
+- The print module for using mapfishprint v2 has been removed. In this case the attribute `proxyurl` has been removed too
+- The vector style module for using the style_v2.json has been removed. In this case the atteibute `useVectorStyleBeta` has been removed too.
 
 ### Fixed
 - GFI of type text/html now also loads css files of the body.
