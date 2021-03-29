@@ -1,4 +1,4 @@
-import {generateSimpleMutations} from "../../../src/app-store/utils/generators";
+import {generateSimpleMutations} from "../../../../src/app-store/utils/generators";
 import stateGraphicalSelect from "./stateGraphicalSelect";
 
 const mutations = {
@@ -9,7 +9,6 @@ const mutations = {
      * will be returned.
      */
     ...generateSimpleMutations(stateGraphicalSelect)
-
 };
 
 export default mutations;
