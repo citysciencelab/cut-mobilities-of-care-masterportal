@@ -84,11 +84,15 @@ export default {
             <span>{{ $t(title) }}</span>
         </template>
         <template v-slot:body>
-            <component
-                :is="theme"
-                :feature="feature"
-            />
-            <slot name="footer" />
+            <div class="body">
+                <component
+                    :is="theme"
+                    :feature="feature"
+                />
+            </div>
+            <div class="footer">
+                <slot name="footer" />
+            </div>
         </template>
     </ToolWindow>
 </template>
@@ -120,21 +124,21 @@ export default {
             text-overflow: ellipsis;
         }
     }
-    .vue-tool-content-body {
+    .vue-tool-content-body .body {
         max-height: 175px;
         overflow-x: hidden;
     }
-    .vue-tool-content-body::-webkit-scrollbar {
+    .vue-tool-content-body .body::-webkit-scrollbar {
         width: 20px;
     }
-    .vue-tool-content-body::-webkit-scrollbar-track {
+    .vue-tool-content-body .body::-webkit-scrollbar-track {
         border: 5px solid transparent;
         border-radius: 12px;
         background-clip: content-box;
         background-color: #d3d3d3;
     }
 
-    .vue-tool-content-body::-webkit-scrollbar-thumb {
+    .vue-tool-content-body .body::-webkit-scrollbar-thumb {
         background-color: #003063;
         border: 6px solid transparent;
         border-radius: 12px;
