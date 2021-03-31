@@ -1,4 +1,4 @@
-import colorArrayToRgb from "../../../src/utils/colorArrayToRgb";
+import {convertColor} from "../../../src/utils/convertColor";
 import SnippetModel from "../model";
 import ValueModel from "../value/model";
 
@@ -105,8 +105,8 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     createPolygonSVG: function (style) {
         let svg = "";
-        const fillColor = style.get("polygonFillColor") ? colorArrayToRgb(style.get("polygonFillColor")) : "black",
-            strokeColor = style.get("polygonStrokeColor") ? colorArrayToRgb(style.get("polygonStrokeColor")) : "black",
+        const fillColor = style.get("polygonFillColor") ? convertColor(style.get("polygonFillColor"), "rgbString") : "black",
+            strokeColor = style.get("polygonStrokeColor") ? convertColor(style.get("polygonStrokeColor"), "rgbString") : "black",
             strokeWidth = style.get("polygonStrokeWidth"),
             fillOpacity = style.get("polygonFillColor")[3] || 0,
             strokeOpacity = style.get("polygonStrokeColor")[3] || 0;
@@ -135,10 +135,10 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     createCircleSVG: function (style) {
         let svg = "";
-        const circleStrokeColor = style.get("circleStrokeColor") ? colorArrayToRgb(style.get("circleStrokeColor")) : "black",
+        const circleStrokeColor = style.get("circleStrokeColor") ? convertColor(style.get("circleStrokeColor"), "rgbString") : "black",
             circleStrokeOpacity = style.get("circleStrokeColor")[3] || 0,
             circleStrokeWidth = style.get("circleStrokeWidth"),
-            circleFillColor = style.get("circleFillColor") ? colorArrayToRgb(style.get("circleFillColor")) : "black",
+            circleFillColor = style.get("circleFillColor") ? convertColor(style.get("circleFillColor"), "rgbString") : "black",
             circleFillOpacity = style.get("circleFillColor")[3] || 0;
 
         svg += "<svg height='25' width='25'>";
@@ -165,7 +165,7 @@ const MultiCheckboxModel = SnippetModel.extend({
      */
     createLineSVG: function (style) {
         let svg = "";
-        const strokeColor = style.get("lineStrokeColor") ? colorArrayToRgb(style.get("lineStrokeColor")) : "black",
+        const strokeColor = style.get("lineStrokeColor") ? convertColor(style.get("lineStrokeColor"), "rgbString") : "black",
             strokeWidth = style.get("lineStrokeWidth"),
             strokeOpacity = style.get("lineStrokeColor")[3] || 0,
             strokeDash = style.get("lineStrokeDash") ? style.get("lineStrokeDash").join(" ") : undefined;

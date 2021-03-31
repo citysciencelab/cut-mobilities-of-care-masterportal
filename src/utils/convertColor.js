@@ -8,6 +8,16 @@
  * "rgbaArrayString" -> "[255, 255, 255, 1]"
  * "rgbString" -> "rgb(255, 255, 255)"
  * "rgbaString" -> "rgba(255, 255, 255, 1)"
+ *
+ * how to import
+ * ------------
+ * import {convertColor} from "src/utils/convertColor";
+ *
+ * examples
+ * ------------
+ *          [255, 255, 255] := convertColor("rgb(255, 255, 255)", "rgb") .
+ * "rgba(255, 255, 255, 1)" := convertColor([255, 255, 255, 1], "rgbaString") .
+ *                "#ffffff" := convertColor("white", "hex") .
  */
 
 /**

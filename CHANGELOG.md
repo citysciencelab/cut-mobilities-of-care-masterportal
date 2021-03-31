@@ -10,12 +10,15 @@
 
 ## Unreleased - in development
 ### Added
-- New attribute 'nearbyTitle' implemented in config.json for the tite in the list of nearby serach results
+- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby serach results
+
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
+- colorTools are renamed into convertColor (src/utils/convertColor)
 
 ### Deprecated
+- colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
 
 ### Removed
 
