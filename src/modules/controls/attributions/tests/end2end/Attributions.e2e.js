@@ -41,6 +41,8 @@ function AttributionsTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementLocated(By.css(".attributions-button")), 50000);
                 attributionsButton = await driver.findElement(By.css(".attributions-button"));
 
+                // eslint-disable-next-line
+                //todo not wegnehmen!
                 expect(attributionsButton).not.to.exist;
             });
 
