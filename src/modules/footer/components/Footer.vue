@@ -38,7 +38,7 @@ export default {
 
         /**
          * Toggles the given Tool
-         * @param {string} toolModelId The Model ID of the tool to activate/deactivate.
+         * @param {string} toolModelId The Model ID of the tool to activate/deactivate. ID may be empty.
          * @param {object} event The Click event
          * @returns {void}
          */
