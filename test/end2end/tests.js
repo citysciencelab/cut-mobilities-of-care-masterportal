@@ -90,12 +90,13 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                 e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
             for (const suite of suites) {
+                this.retries(4);
                 suite(e2eTestParams);
             }
         });
     }
     catch (err) {
-        console.error(err);
+        console.error("error in tests.js:", err);
     }
 }
 

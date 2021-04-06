@@ -17,7 +17,7 @@ function AttributionsTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master
 
     if (testIsApplicable) {
-        describe("Modules Controls Attributions", function () {
+        describe.only("Modules Controls Attributions", function () {
             let driver, attributionsButton, attributionsDiv;
 
             before(async function () {
@@ -41,7 +41,7 @@ function AttributionsTests ({builder, url, resolution, capability}) {
                 await driver.wait(until.elementLocated(By.css(".attributions-button")), 50000);
                 attributionsButton = await driver.findElement(By.css(".attributions-button"));
 
-                expect(attributionsButton).to.exist;
+                expect(attributionsButton).not.to.exist;
             });
 
             it("should open/close closed/opened attributions on clicking attribution button", async function () {
