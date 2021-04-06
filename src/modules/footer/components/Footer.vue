@@ -34,7 +34,27 @@ export default {
         ...mapActions("Footer", [
             "initialize"
         ]),
-        ...mapMutations("Footer", Object.keys(mutations))
+        ...mapMutations("Footer", Object.keys(mutations)),
+
+        /**
+         * Toggles the given Tool
+         * @param {string} toolModelId The Model ID of the tool to activate/deactivate. ID may be empty.
+         * @param {object} event The Click event
+         * @returns {void}
+         */
+        toggleTool (toolModelId, event) {
+            if (toolModelId) {
+                const model = Radio.request("ModelList", "getModelByAttributes", {id: toolModelId});
+
+                if (model) {
+                    if (event) {
+                        event.preventDefault();
+                    }
+
+                    model.setIsActive(!model.isActive);
+                }
+            }
+        }
     }
 };
 </script>
@@ -55,6 +75,7 @@ export default {
                     <a
                         :href="url.url"
                         target="_blank"
+                        @click="toggleTool(url.toolModelId, $event)"
                     >
                         {{ $t(mobile ? $t(url.alias_mobil) : $t(url.alias)) }}
                     </a>
