@@ -44,7 +44,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
                 stroke: false
             }
         },
-        proxyURL: "",
         glyphicon: "glyphicon-print",
         precomposeListener: {},
         postcomposeListener: {},
@@ -92,7 +91,6 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      * @property {Boolean} gfi=false - Flag if gfi is supported
      * @property {String} printurl="" - Url to plot service
      * @property {Object} gfiMarker - Style settings for an gfi marker
-     * @property {String} proxyURL="" - Url to the proxy
      * @property {String} glyphicon="glyphicon-print" - Icon for the print button
      * @property {Object} precomposeListener={} - Holder for an PrecomposeListener
      * @property {Object} postcomposeListener={} - Holder for an PostcomposeListener
@@ -212,9 +210,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
             this.set("printurl", printurl);
             if (this.get("currentLayer") === undefined) {
                 $.ajax({
-                    url: this.get("proxyURL") + "?url=" + printurl + "/info.json",
-                    // in lokaler Umgebung
-                    // url: printurl + "/info.json",
+                    url: printurl + "/info.json",
                     type: "GET",
                     data: "",
                     context: this,
@@ -881,7 +877,7 @@ const HighResolutionPrintModel = Tool.extend(/** @lends HighResolutionPrintModel
      */
     getPDFURL: function () {
         $.ajax({
-            url: this.get("proxyURL") + "?url=" + this.get("createURL"),
+            url: this.get("createURL"),
             // in lokaler Umgebung
             // url: this.get("createURL"),
             type: "POST",
