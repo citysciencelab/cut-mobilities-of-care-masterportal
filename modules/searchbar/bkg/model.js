@@ -174,7 +174,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      * Starts the precise search of a selected BKG proposal.
      * @param  {object} hit - Object of the BKG proposal.
      * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
-     * @param  {event} [eventType="click"] - The type of event that triggered this function.
+     * @param  {event} eventType - The type of event that triggered this function.
      * @return {void}
      */
     bkgSearch: function (hit, showOrHideMarker, eventType) {
