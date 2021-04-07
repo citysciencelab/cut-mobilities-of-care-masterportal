@@ -3,9 +3,9 @@ import Feature from "ol/Feature.js";
 
 import {expect} from "chai";
 
-import {calculateLineLengths, calculatePolygonAreas} from "../../../util/measureCalculation";
+import {calculateLineLengths, calculatePolygonAreas} from "../../../utils/measureCalculation";
 
-describe("tools/measure/util/measureCalculation", function () {
+describe("tools/measure/utils/measureCalculation", function () {
     describe("calculateLineLengths", function () {
         it("should format measured linestring(s) in m/km correctly", function () {
             const feature = new Feature({

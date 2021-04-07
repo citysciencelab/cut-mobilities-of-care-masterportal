@@ -12,13 +12,13 @@ describe("src/utils/getProxyUrl", function () {
 
         expect(getProxyUrl(url, proxyHost)).to.be.equal("https://test-proxy.example.com/dies_ist_ein_test/PFAD_ZU_TEST-QUELLE");
     });
-    it("shouldn't transform url for local ressources I", function () {
+    it("shouldn't transform url for local resources I", function () {
         const url = "http://localhost/test.json",
             proxyHost = "https://test-proxy.example.com";
 
         expect(getProxyUrl(url, proxyHost)).to.be.equal("http://localhost/test.json");
     });
-    it("shouldn't transform url for local ressources II", function () {
+    it("shouldn't transform url for local resources II", function () {
         const url = "./test.json",
             proxyHost = "https://test-proxy.example.com";
 

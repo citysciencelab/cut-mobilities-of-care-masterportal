@@ -34,6 +34,7 @@
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
 - External WMS Layers with version lower than 1.3.0 can also be imported.
 - Legends are only printed from layers that are switched visible.
+- Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 
 ### Deprecated
 
@@ -467,7 +468,7 @@
 ### Added
   - Dependencies: Die Äbhängigkeit "lgv-config" wird nicht mehr benötigt, extern geladene Dateien (z.B. "services.json") werden über einen direkten Pfad oder eine URL bezogen
   - Dependencies: Aktualisierung der Versionen diverser Abhängigkeiten
-  - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "ressources" Ordner mit Beispiel Daten
+  - Basic-Portal: Das Basic-Portal wurde überarbeitet und enthält nun einen "resources" Ordner mit Beispiel Daten
   - Pre-push-Hook: Code wird beim Pushen vor dem Push mit ES-Lint überprüft
   - GroupLayer: Es ist nun möglich, bei Gruppenlayern die Attribute "layerAttribution", "mouseHoverField", "maxScale" und "minScale" zu konfigurieren
   - Shadow-Tool: Im 3D-Modus gibt es jetzt ein Werkzeug zur Darstellung des Schattenwurfes, mit einstellbarem Datum und Uhrzeit-

@@ -503,7 +503,7 @@ Hier werden die Metadatensätze der dargestellten Datensätze referenziert. Dies
 |Name|Verpflichtend|Typ|default|Beschreibung|
 |----|-------------|---|-------|------------|
 |md_id|nein|String||Metadatensatz-Identifier des Metadatensatzes|
-|rs_id|nein|String||Ressource-Identifier des Metadatensatzes|
+|rs_id|nein|String||Resource-Identifier des Metadatensatzes|
 |md_name|nein|String||Name des Datensatzes|
 |bbox|nein|String||Ausdehnung des Datensatzes|
 |kategorie_opendata|nein|String||Opendata-Kategorie aus der Codeliste von govdata.de|

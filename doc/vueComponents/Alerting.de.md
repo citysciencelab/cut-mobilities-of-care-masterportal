@@ -52,7 +52,7 @@ store.dispatch("Alerting/addSingleAlert", {
 |once|nein|Boolean/Object|false|Wenn false, kann dieses Alert immer wieder angezeigt werden. Wenn true, wird es nur einmal angezeigt. Es kann auch ein Objekt mit einer Zeitspanne angelegt werden, in der das Alerting nicht erneut angezeigt werden kann: {years: 1, months: 3, days: 5, hours: 15, minutes: 10, seconds: 3, milliseconds: 123} (https://momentjs.com/docs/#/parsing/object/). Die einzelnen Keys sind optional.|
 
 ## Initiales Laden einer Alerting Konfiguration ##
-Das Alerting Modul bietet die Möglichkeit, in der Datei config.js eine URL unter dem Parameter alerting.fetchBroadcastUrl zu definieren, zum Beispiel "https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json". Falls geschehen, lädt das Portal beim Starten die dort hinterlegte Konfigurationsdatei und erstellt Alerts. Das ist hilfreich, wenn man beispielsweise die Nutzer eines Portals auf eine neue Version hinweisen möchte oder eine Serverwartung geplant ist. Somit können bei beliebig vielen Portalen zentral Userhinweise konfiguriert werden.
+Das Alerting Modul bietet die Möglichkeit, in der Datei config.js eine URL unter dem Parameter alerting.fetchBroadcastUrl zu definieren, zum Beispiel "https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json". Falls geschehen, lädt das Portal beim Starten die dort hinterlegte Konfigurationsdatei und erstellt Alerts. Das ist hilfreich, wenn man beispielsweise die Nutzer eines Portals auf eine neue Version hinweisen möchte oder eine Serverwartung geplant ist. Somit können bei beliebig vielen Portalen zentral Userhinweise konfiguriert werden.
 
 Beispiel einer Konfigurationsdatei:
 

@@ -2232,7 +2232,7 @@ Das Attribut edit / delete kann vom Typ Boolean oder String sein. Wenn es vom Ty
 ***
 
 ### Portalconfig.menu.staticlinks
-Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen Webressource dienen oder als Trigger eines zu definierenden Events.
+Das Array staticlink beinhaltet Objekte die entweder als Link zu einer anderen Webresource dienen oder als Trigger eines zu definierenden Events.
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|

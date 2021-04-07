@@ -2,7 +2,7 @@ import Vuex from "vuex";
 import {config, createLocalVue, shallowMount} from "@vue/test-utils";
 import {expect} from "chai";
 import AddWMSComponent from "../../../components/AddWMS.vue";
-import AddWMS from "../../../../addWMS/store/indexAddWMS";
+import AddWMS from "../../../store/indexAddWMS";
 
 const localVue = createLocalVue();
 

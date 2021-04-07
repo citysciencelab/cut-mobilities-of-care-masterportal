@@ -1,7 +1,7 @@
 import VectorLayer from "ol/layer/Vector.js";
 
-import style from "../util/measureStyle";
-import source from "../util/measureSource";
+import style from "../utils/measureStyle";
+import source from "../utils/measureSource";
 
 /**
  * Measure tool state definition.

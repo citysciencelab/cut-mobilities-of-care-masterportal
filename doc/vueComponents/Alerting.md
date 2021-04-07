@@ -52,7 +52,7 @@ store.dispatch("Alerting/addSingleAlert", {
 
 ## Initially loading an *Alerting* configuration
 
-The *Alerting* module allows specifying an URL in the `config.js` parameter `alerting.fetchBroadcastUrl`, e.g. `"https://localhost:9001/portal/master/ressources/broadcastedPortalAlerts.json"`. If such a parameter is set, the module will load the linked configuration file and create the alerts. This may e.g. be used to inform users of new versions or planned down-times. An arbitrary amount of portals may be supplied with such a central user information file.
+The *Alerting* module allows specifying an URL in the `config.js` parameter `alerting.fetchBroadcastUrl`, e.g. `"https://localhost:9001/portal/master/resources/broadcastedPortalAlerts.json"`. If such a parameter is set, the module will load the linked configuration file and create the alerts. This may e.g. be used to inform users of new versions or planned down-times. An arbitrary amount of portals may be supplied with such a central user information file.
 
 Configuration file example:
 

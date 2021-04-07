@@ -1,7 +1,7 @@
 import {expect} from "chai";
-import {calculateOneHour, filterDataByActualTimeStep, calculateWorkloadforOneDay, createInitialDayPerHour, calculateWorkloadForOneWeekday} from "../../../library/calculateWorkloadForOneWeekday.js";
+import {calculateOneHour, filterDataByActualTimeStep, calculateWorkloadforOneDay, createInitialDayPerHour, calculateWorkloadForOneWeekday} from "../../../utils/calculateWorkloadForOneWeekday.js";
 
-describe("src/modules/tools/gfi/components/themes/sensor/library/calculateWorkloadForOneWeekday.js", () => {
+describe("src/modules/tools/gfi/components/themes/sensor/utils/calculateWorkloadForOneWeekday.js", () => {
 
     describe("calculateOneHour", function () {
         it("should return number 0 for undefined input", function () {
