@@ -8,7 +8,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.8.0 - 2021-04-07
 ### Added
 - External WMS Layers with version lower than 1.3.0 can also be imported.
 - Added possibility to prepend prefix to GFI attribute.
