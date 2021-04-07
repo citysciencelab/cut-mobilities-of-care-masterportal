@@ -643,7 +643,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 strokeOpacity: layer.getOpacity()
             };
 
-        this.buildFillStyle(fillStyle, obj);
+        if (fillStyle !== null) {
+            this.buildFillStyle(fillStyle, obj);
+            this.buildStrokeStyle(fillStyle, obj);
+        }
         if (strokeStyle !== null) {
             this.buildStrokeStyle(strokeStyle, obj);
         }
@@ -664,7 +667,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 strokeOpacity: layer.getOpacity()
             };
 
-        this.buildStrokeStyle(strokeStyle, obj);
+        if (strokeStyle !== null) {
+            this.buildStrokeStyle(strokeStyle, obj);
+        }
         return obj;
     },
 
