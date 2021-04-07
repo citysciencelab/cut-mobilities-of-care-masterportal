@@ -6,7 +6,7 @@
     "url": "https://www.masterportal.org"
   },
   "bugs": "https://bitbucket.org/geowerkstatt-hamburg/masterportal/issues",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "license": "MIT",
   "description": "The MasterPortal as OpenSource Geoportal",
   "repository": {
