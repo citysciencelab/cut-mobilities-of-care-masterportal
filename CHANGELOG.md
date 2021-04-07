@@ -7,10 +7,13 @@
 - 3D: The position indicator inside of a 3D object vanishes when clicking on the object.
 
 ---
+
 ## Unreleased - in development
 ### Added
 - New attribute 'nearbyTitle' implemented in config.json for the tite in the list of nearby serach results
 ### Changed
+- Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
+- Tool addons are now also written in config.json in camelCase.
 
 ### Deprecated
 
@@ -20,6 +23,7 @@
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
 
 ---
+
 ## v2.8.0 - 2021-04-07
 ### Added
 - External WMS Layers with version lower than 1.3.0 can also be imported.
@@ -34,10 +38,6 @@
 - In config.json.md, the attribute `isActive` was changed to `active` in Portalconfig.menu.tool.gfi.
 - External WMS Layers with version lower than 1.3.0 can also be imported.
 - Legends are only printed from layers that are switched visible.
-- Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
-- Tool addons are now also written in config.json in camelCase.
-
-### Deprecated
 
 ### Removed
 - SensorThings address tab in layerInformation removed.
