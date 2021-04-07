@@ -111,7 +111,7 @@ src
 |   |   |   |-- mutationsExampleModule.js
 |   |   |   |-- stateExampleModule.js
 |   |   |
-|   |   |-- test
+|   |   |-- tests
 |   |   |   |-- unit
 |   |   |   |   |-- components
 |   |   |   |   |   |-- exampleModule.spec.js
