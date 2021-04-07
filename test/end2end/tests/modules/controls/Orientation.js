@@ -32,6 +32,15 @@ function Orientation ({builder, url, resolution, capability}) {
             await driver.quit();
         });
 
+        afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                await driver.quit();
+                driver = await initDriver(builder, url, resolution);
+                await driver.executeScript(mockGeoLocationAPI);
+            }
+        });
+
         it("has a button for geolocating", async function () {
             geolocateButton = await driver.wait(until.elementLocated(By.id("geolocate")), 9000);
             expect(geolocateButton).to.exist;
@@ -57,6 +66,10 @@ function Orientation ({builder, url, resolution, capability}) {
             let driver, poiButton;
 
             before(async function () {
+                if (capability) {
+                    capability.name = this.currentTest.fullTitle();
+                    builder.withCapabilities(capability);
+                }
                 driver = await initDriver(builder, url, resolution);
                 await driver.executeScript(mockGeoLocationAPI);
 
@@ -70,7 +83,20 @@ function Orientation ({builder, url, resolution, capability}) {
             });
 
             after(async function () {
+                if (capability) {
+                    driver.session_.then(function (sessionData) {
+                        logBrowserstackUrlToTest(sessionData.id_);
+                    });
+                }
                 await driver.quit();
+            });
+
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                }
             });
 
             it("should have a poi button", async function () {

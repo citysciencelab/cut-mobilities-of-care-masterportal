@@ -41,6 +41,15 @@ function BackForwardTests ({builder, url, resolution, browsername, capability}) 
                 await driver.quit();
             });
 
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                }
+            });
+
+
             it("should provide the forward and backward button", async function () {
                 await driver.wait(until.elementLocated(By.css(".back-forward-buttons .forward")), 50000);
                 forwardButton = driver.findElement(By.css(".back-forward-buttons .forward"));
