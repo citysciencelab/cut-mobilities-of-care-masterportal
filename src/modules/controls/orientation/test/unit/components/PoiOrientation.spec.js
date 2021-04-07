@@ -121,19 +121,21 @@ describe("src/modules/controls/orientation/components/PoiOrientationComponent.vu
     describe("getFeatureTitle", function () {
         let feature = new Feature();
 
-        it("should return featureId when other info is unset", function () {
-            feature.setId("123");
-            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("string").to.equal("123");
-        });
         it("should return layerName when name is unset", function () {
             feature = Object.assign(feature, {
                 layerName: "LayerName"
             });
-            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("string").to.equal("LayerName");
+            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("array").to.deep.equal(["LayerName"]);
         });
         it("should return name when set", function () {
             feature.set("name", "Name");
-            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("string").to.equal("Name");
+            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("array").to.deep.equal(["Name"]);
+        });
+        it("should return nearby title text when set", function () {
+            feature = Object.assign(feature, {
+                nearbyTitleText: ["nearbyTitleText"]
+            });
+            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("array").to.deep.equal(["nearbyTitleText"]);
         });
     });
 

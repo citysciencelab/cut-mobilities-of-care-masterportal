@@ -357,6 +357,7 @@ export default {
                         Object.assign(feat, {
                             styleId: layer.get("styleId"),
                             layerName: layer.get("name"),
+                            nearbyTitleText: this.getNearbyTitleText(feat, layer.get("nearbyTitle")),
                             dist2Pos: this.getDistance(feat, centerPosition)
                         });
                     }, this);
@@ -403,6 +404,30 @@ export default {
                 dist = Math.round(line.getLength());
 
             return dist;
+        },
+
+        /**
+         * Getting the attributes for the list of nearby features
+         * @param {ol/Feature} feat Feature
+         * @param {(String|String[])} nearbyTitle the attribute(s) of features to show in the nearby list
+         * @return {String[]} the text of nearbyTitle
+         */
+        getNearbyTitleText (feat, nearbyTitle) {
+            if (typeof nearbyTitle === "string" && feat.get(nearbyTitle) !== undefined) {
+                return [feat.get(nearbyTitle)];
+            }
+            else if (Array.isArray(nearbyTitle)) {
+                const nearbyTitleText = [];
+
+                nearbyTitle.forEach(attr => {
+                    if (feat.get(attr) !== undefined) {
+                        nearbyTitleText.push(feat.get(attr));
+                    }
+                });
+
+                return nearbyTitleText;
+            }
+            return [];
         }
     }
 

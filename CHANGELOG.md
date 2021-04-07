@@ -9,7 +9,7 @@
 ---
 ## Unreleased - in development
 ### Added
-
+- New attribute 'nearbyTitle' implemented in config.json for the tite in the list of nearby serach results
 ### Changed
 
 ### Deprecated
