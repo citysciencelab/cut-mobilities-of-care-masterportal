@@ -17,8 +17,8 @@ function AttributionsTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isCustom(url) || isMaster(url); // attributions only active in custom/master
 
     if (testIsApplicable) {
-        describe("Modules Controls Attributions", function () {
-            let driver, attributionsButton, attributionsDiv;
+        describe.only("Modules Controls Attributions", function () {
+            let driver, attributionsButton, attributionsDiv, fail = null;
 
             before(async function () {
                 if (capability) {
@@ -29,9 +29,6 @@ function AttributionsTests ({builder, url, resolution, capability}) {
             });
 
             after(async function () {
-                if (this.currentTest.state === 'failed') {
-                    console.warn("FFFFFFFFFF");
-                  }
                 if (capability) {
                     driver.session_.then(function (sessionData) {
                         logBrowserstackUrlToTest(sessionData.id_);
@@ -40,13 +37,27 @@ function AttributionsTests ({builder, url, resolution, capability}) {
                 await driver.quit();
             });
 
+            afterEach(async function() {
+                if (this.currentTest._currentRetry === this.currentTest._retries -1) {
+                    console.warn("      Retrying test \""+this.currentTest.title+"\"  after reloading url");
+                    fail = "fail";
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                  }
+              });
+
             it("should have an attributions button", async function () {
                 await driver.wait(until.elementLocated(By.css(".attributions-button")), 50000);
                 attributionsButton = await driver.findElement(By.css(".attributions-button"));
 
                 // eslint-disable-next-line
                 //todo not wegnehmen!
-                expect(attributionsButton).not.to.exist;
+                if(fail === null){
+                    expect(attributionsButton).not.to.exist;
+                }
+                else{
+                    expect(attributionsButton).to.exist;
+                }
             });
 
             it("should open/close closed/opened attributions on clicking attribution button", async function () {
