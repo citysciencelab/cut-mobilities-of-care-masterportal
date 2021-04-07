@@ -7,6 +7,7 @@ git config git-ftp.user $LGV_TEST_FTP_USERNAME
 git config git-ftp.password $LGV_TEST_FTP_PASSWORD
 git config git-ftp.syncroot dist
 git config git-ftp.url ftp://test.geoportal-hamburg.de/
+git ftp catchup -vv
 #replace slashes in branchname with underscores and
 tmp=$BITBUCKET_BRANCH
 branchname=${tmp//[\/]/_}
