@@ -29,6 +29,9 @@ function AttributionsTests ({builder, url, resolution, capability}) {
             });
 
             after(async function () {
+                if (this.currentTest.state === 'failed') {
+                    console.warn("FFFFFFFFFF");
+                  }
                 if (capability) {
                     driver.session_.then(function (sessionData) {
                         logBrowserstackUrlToTest(sessionData.id_);
