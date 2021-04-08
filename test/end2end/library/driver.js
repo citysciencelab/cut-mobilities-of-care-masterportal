@@ -39,13 +39,13 @@ async function prepareOB (driver) {
  * @returns {void}
  */
 async function loadUrl (driver, url, mode) {
-    await driver.get(url);
+    doLoadUrl(driver, url);
 
-    if (url.indexOf("localhost") === -1) {
-        driver.executeScript(basicAuth("lgv", "test"));
-    }
-
-    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000).catch(err => console.warn("isInitalLoadingFinished err:", err));
+    await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000).catch(err => {
+        console.warn("isInitalLoadingFinished err:", err);
+        console.warn("Try again to load url ", url);
+        doLoadUrl(driver, url);
+    });
 
     // wait until resolution is ready, else Firefox will often find uninitialized Backbone initially
     await driver.wait(async () => await driver.executeScript(getResolution) !== null, 90000);
@@ -56,6 +56,20 @@ async function loadUrl (driver, url, mode) {
     }
     else if (mode === "OB") {
         await prepareOB(driver);
+    }
+}
+
+/**
+ * Loads the given url and if not localhost executes basic auth.
+ * @param {selenium-webdriver.driver} driver driver object
+ * @param {String} url url to load
+ * @returns {void}
+ */
+async function doLoadUrl (driver, url) {
+    await driver.get(url);
+
+    if (url.indexOf("localhost") === -1) {
+        driver.executeScript(basicAuth("lgv", "test"));
     }
 }
 
