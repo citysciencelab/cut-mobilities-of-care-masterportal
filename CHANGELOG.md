@@ -17,6 +17,7 @@
 ### Removed
 
 ### Fixed
+- Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
 
 ---
 ## v2.8.0 - 2021-04-07
