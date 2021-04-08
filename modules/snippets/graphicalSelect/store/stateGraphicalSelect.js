@@ -19,22 +19,12 @@ import Overlay from "ol/Overlay.js";
      * @property {String} tooltipMessagePolygon="Klicken um Stützpunkt hinzuzufügen" Message for tooltip
      * @property {ol.geojson} selectedAreaGeoJson={} the selected area as GeoJSON
      * @property {String} defaultSelection="" initiliazed value of the dropdown selection
-     * @fires Core#RadioRequestMapCreateLayerIfNotExists
-     * @fires Core#RadioTriggerMapAddOverlay
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @fires Core#RadioTriggerMapRegisterListener
-     * @fires Snippets.GraphicalSelect#setStatus
-     * @fires Snippets.GraphicalSelect#resetView
-     * @fires Snippets.GraphicalSelect#resetGeographicSelection
-     * @fires Snippets.GraphicalSelect#featureToGeoJson
-     * @listens Snippets.Dropdown#ValuesChanged
-     * @listens Snippets.Checkbox#ValuesChanged
      */
 const state = {
     active: false,
     name: "Geometrie",
     type: "string",
-    displayName: "Geometrie auswählen",
+    displayName: "common:snippets.graphicalSelect.displayName",
     snippetType: "graphicalSelect",
     isMultiple: false,
     drawInteraction: undefined,
@@ -49,8 +39,8 @@ const state = {
     selectionElements: ["Dropdown"],
     geographicValues: ["Box", "Circle", "Polygon"],
     currentValue: "",
-    tooltipMessage: "",
-    tooltipMessagePolygon: "",
+    tooltipMessage: "common:snippets.graphicalSelect.tooltipMessage",
+    tooltipMessagePolygon: "common:snippets.graphicalSelect.tooltipMessagePolygon",
     selectedAreaGeoJson: undefined,
     defaultSelection: ""
 };

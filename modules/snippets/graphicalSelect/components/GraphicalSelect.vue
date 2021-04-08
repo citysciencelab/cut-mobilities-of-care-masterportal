@@ -74,7 +74,6 @@ export default {
      */
     mounted () {
         this.selectedOptionData = this.selectedOption;
-        this.changeLang();
         this.createDomOverlay({id: "circle-overlay", overlay: this.circleOverlay});
         this.createDomOverlay({id: "tooltip-overlay", overlay: this.tooltipOverlay});
         this.createDrawInteraction();
@@ -91,12 +90,13 @@ export default {
         ...mapActions("Alerting", ["addSingleAlert"]),
 
         /**
-     * Handles (de-)activation of this Tool
-     * @param {boolean} value flag if tool is active
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @todo Replace if removeOverlay is available in vue
-     * @returns {void}
-     */
+         * Handles (de-)activation of this Tool
+         * @param {Boolean} value flag if tool is active
+         * @fires Core#RadioTriggerMapRemoveOverlay
+         * @todo Replace if removeOverlay is available in vue
+         * @returns {void}
+         */
+
         setStatus: function (value) {
             if (value) {
                 this.createDrawInteraction();
@@ -111,17 +111,17 @@ export default {
         },
 
         /**
-     * Sets the selection of the dropdown to the default value
-     * @returns {void}
-     */
+         * Sets the selection of the dropdown to the default value
+         * @returns {void}
+         */
         resetGeographicSelection: function () {
             this.selectedOptionData = Object.keys(this.options)[0];
         },
 
         /**
-     * Check the provided configuration of the graphicalSelect element
-     * @returns {void}
-     */
+         * Check the provided configuration of the graphicalSelect element
+         * @returns {void}
+         */
         checkOptions: function () {
             if (!this.geographicValues.every(key => Object.keys(this.options).includes(key))) {
                 this.addSingleAlert({
@@ -143,11 +143,11 @@ export default {
         },
 
         /**
-     * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
-     * @fires Core#RadioTriggerMapRemoveOverlay
-     * @todo Replace if removeOverlay is available in vue
-     * @returns {void}
-     */
+         * Used to hide Geometry and Textoverlays if request was unsuccessful for any reason
+         * @fires Core#RadioTriggerMapRemoveOverlay
+         * @todo Replace if removeOverlay is available in vue
+         * @returns {void}
+         */
         resetView: function () {
             this.layer.getSource().clear();
             this.removeInteraction(this.draw);
@@ -158,7 +158,7 @@ export default {
 
         /**
          * Rounds the circle radius.
-         * @param {number} radius - circle radius
+         * @param {Number} radius circle radius
          * @return {String} the rounded radius
          */
         roundRadius: function (radius) {
@@ -240,7 +240,6 @@ export default {
                     if (drawtype === "Box") {
                         return geometryFunction(coordinates, opt_geom);
                     }
-                    // drawtype === "Circle"
                     return this.snapRadiusToInterval(coordinates, opt_geom);
                 }
             });
@@ -251,7 +250,6 @@ export default {
             this.setDrawInteractionListener({interaction: this.draw, layer: this.layer, vm: this});
             this.setDrawInteraction(this.draw);
             Radio.trigger("Map", "registerListener", "pointermove", this.showTooltipOverlay.bind(this), this);
-            Radio.trigger("Map", "addOverlay", this.tooltipOverlay);
         }
     }
 };

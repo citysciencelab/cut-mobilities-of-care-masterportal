@@ -3,26 +3,20 @@ import {fromCircle} from "ol/geom/Polygon.js";
 
 const actions = {
     /**
-     * change language - sets default values for the language
-     * @param {Object} state - vuex state
-     * @returns {Void}  -
-     */
-    changeLang: function ({state}) {
-        state.displayName = i18next.t("common:snippets.graphicalSelect.displayName");
-        state.tooltipMessage = i18next.t("common:snippets.graphicalSelect.tooltipMessage");
-        state.tooltipMessagePolygon = i18next.t("common:snippets.graphicalSelect.tooltipMessagePolygon");
-    },
-
-    /**
      * Sets listeners for draw interaction events. On "drawend" the selected area is stored as geoJSON in the model-property "selectedAreaGeoJson".
      * @param {Object} dispatch commit vuex element
-     * @param {Object} payload payload.interaction - Interaction for drawing feature geometries, payload.layer - Vector data that is rendered client-side
+     * @param {Object} payload vuex element
+     * @param {Object} payload.interaction Interaction for drawing feature geometries
+     * @param {Object} payload.layer Vector data that is rendered client-side
+     * @param {Object} payload.vm vue instance
+     * @todo Replace Radio.trigger after refactoring
      * @returns {void}
      */
     setDrawInteractionListener: async function ({dispatch, commit}, payload) {
         payload.interaction.on("drawstart", function () {
-            // remove alert of "more than X tiles"
+            // remove possible alerts
             Radio.trigger("Alert", "alert:remove");
+            dispatch("Alerting/cleanup", "", {root: true});
             payload.layer.getSource().clear();
         });
 
@@ -30,7 +24,6 @@ const actions = {
             const geoJson = await dispatch("featureToGeoJson", evt.feature);
 
             commit("setSelectedAreaGeoJson", geoJson);
-            // emit event onDrawEnd with geoJson value
             payload.vm.$parent.$parent.$emit("onDrawEnd", geoJson);
         });
 
@@ -40,8 +33,8 @@ const actions = {
     * Converts a feature to a geojson.
     * If the feature geometry is a circle, it is converted to a polygon.
     * @param {Object} context commit vuex element
-    * @param {ol.Feature} feature - drawn feature
-    * @returns {object} GeoJSON
+    * @param {ol.Feature} feature drawn feature
+    * @returns {Object} GeoJSON
     */
     featureToGeoJson: async function (context, feature) {
         const reader = new GeoJSON(),
@@ -66,10 +59,10 @@ const actions = {
             currentValue = state.currentValue;
 
         if (currentValue === "Polygon") {
-            tooltipOverlay.element.innerHTML = state.tooltipMessagePolygon;
+            tooltipOverlay.element.innerHTML = i18next.t(state.tooltipMessagePolygon);
         }
         else {
-            tooltipOverlay.element.innerHTML = state.tooltipMessage;
+            tooltipOverlay.element.innerHTML = i18next.t(state.tooltipMessage);
         }
         tooltipOverlay.setPosition(coords);
     },
@@ -77,7 +70,10 @@ const actions = {
     /**
      * Adds or removes the circle overlay from the map.
      * @param {Object} context vuex element
-     * @param {Object} payload payload.type - geometry type, payload.overlay - circleOverlay
+     * @param {Object} payload vuex element
+     * @param {String} payload.type geometry type
+     * @param {Object} payload.overlayCircle circleOverlay
+     * @param {Object} payload.overlayTool toolOverlay
      * @todo Replace if removeOverlay, addOverlay is available in vue
      * @fires Core#RadioTriggerMapAddOverlay
      * @fires Core#RadioTriggerMapRemoveOverlay
@@ -86,6 +82,7 @@ const actions = {
     toggleOverlay: function (context, payload) {
         if (payload.type === "Circle") {
             Radio.trigger("Map", "addOverlay", payload.overlayCircle);
+            Radio.trigger("Map", "addOverlay", payload.overlayTool);
         }
         else {
             Radio.trigger("Map", "removeOverlay", payload.overlayCircle);
@@ -97,7 +94,9 @@ const actions = {
      * Creates a div element for the circle overlay
      * and adds it to the overlay.
      * @param {Object} context vuex element
-     * @param {Object} payload payload.id - id of the div to create, payload.overlay - circleOverlay
+     * @param {Object} payload vuex element
+     * @param {String} payload.id id of the div to create
+     * @param {Object} payload.overlay circleOverlay
      * @returns {void}
      */
     createDomOverlay: function (context, payload) {
