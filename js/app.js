@@ -59,7 +59,7 @@ import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
 import Orientation3DView from "../modules/controls/orientation3d/view";
 import VirtualcityModel from "../modules/tools/virtualCity/model";
-import SelectFeaturesView from "../modules/tools/selectFeatures/view";
+import SelectFeaturesDeprecatedView from "../modules/tools/selectFeaturesDeprecated/view";
 import LoaderOverlay from "../src/utils/loaderOverlay";
 
 let sbconfig,
@@ -254,8 +254,8 @@ async function loadApp () {
                 new VirtualcityModel(tool.attributes);
                 break;
             }
-            case "selectFeatures": {
-                new SelectFeaturesView({model: tool});
+            case "selectFeaturesDeprecated": {
+                new SelectFeaturesDeprecatedView({model: tool});
                 break;
             }
             default: {

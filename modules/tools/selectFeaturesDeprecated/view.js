@@ -1,12 +1,12 @@
-import SelectFeaturesTemplate from "text-loader!./template.html";
+import SelectFeaturesDeprecatedTemplate from "text-loader!./template.html";
 
-const SelectFeaturesView = Backbone.View.extend(/** @lends SelectFeaturesView.prototype */ {
+const SelectFeaturesDeprecatedView = Backbone.View.extend(/** @lends SelectFeaturesDeprecatedView.prototype */ {
     events: {
         "click .select-features-zoom-link": "featureZoom"
     },
 
     /**
-     * @class SelectFeaturesView
+     * @class SelectFeaturesDeprecatedView
      * @extends Backbone.View
      * @memberof Tools.SelectFeatures
      * @listens Tools.SelectFeatures#changeIsActive
@@ -34,7 +34,7 @@ const SelectFeaturesView = Backbone.View.extend(/** @lends SelectFeaturesView.pr
         }
     },
 
-    template: _.template(SelectFeaturesTemplate),
+    template: _.template(SelectFeaturesDeprecatedTemplate),
 
     /**
      * Renders the SelectFeatures tool contents.
@@ -67,4 +67,4 @@ const SelectFeaturesView = Backbone.View.extend(/** @lends SelectFeaturesView.pr
     }
 });
 
-export default SelectFeaturesView;
+export default SelectFeaturesDeprecatedView;

@@ -14,7 +14,7 @@ import {isUrl} from "../../../src/utils/urlHelper";
  * @memberof Tools.SelectFeatures
  */
 
-const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype */ {
+const SelectFeaturesDeprecatedTool = Tool.extend(/** @lends SelectFeaturesDeprecatedTool.prototype */ {
     defaults: {
         ...Tool.prototype.defaults,
         selectedFeatures: undefined,
@@ -321,4 +321,4 @@ const SelectFeaturesTool = Tool.extend(/** @lends SelectFeaturesTool.prototype *
     }
 });
 
-export default SelectFeaturesTool;
+export default SelectFeaturesDeprecatedTool;

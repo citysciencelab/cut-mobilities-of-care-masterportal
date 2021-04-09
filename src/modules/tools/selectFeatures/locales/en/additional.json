@@ -1,0 +1,10 @@
+{
+    "modules": {
+        "tools": {
+            "selectFeatures": {
+                "title": "My Test",
+                "content": "I am a test"
+            }
+        }
+    }
+}

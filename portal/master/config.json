@@ -314,6 +314,14 @@
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
+          "selectFeaturesDeprecated":
+          {
+            "name": "translate#common:menu.tools.selectFeatures"
+          },
+          "selectFeatures":
+          {
+            "name": "translate#common:menu.tools.selectFeatures"
+          },
           "fileImport": {
             "name": "translate#common:menu.tools.fileImport",
             "glyphicon": "glyphicon-import"
