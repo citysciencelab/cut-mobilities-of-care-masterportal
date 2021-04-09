@@ -489,13 +489,14 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
      */
     setMarkerZoom: function (hit) {
         const resolutions = Radio.request("MapView", "getResolutions"),
-            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105);
+            index = resolutions.indexOf(0.2645831904584105) === -1 ? resolutions.length : resolutions.indexOf(0.2645831904584105),
+            startZoomLevel = this.model.get("startZoomLevel") !== undefined ? this.model.get("startZoomLevel") : index;
         let extent = [];
 
         if (hit.coordinate.length === 2) {
             store.dispatch("MapMarker/removePolygonMarker");
             store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
-            Radio.trigger("MapView", "setCenter", hit.coordinate, index);
+            Radio.trigger("MapView", "setCenter", hit.coordinate, startZoomLevel);
         }
         else {
             store.dispatch("MapMarker/removePolygonMarker");
