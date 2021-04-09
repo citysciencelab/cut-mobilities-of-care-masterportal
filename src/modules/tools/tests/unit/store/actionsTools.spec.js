@@ -101,7 +101,7 @@ describe("src/modules/tools/actionsTools.js", () => {
                 };
 
             testAction(addTool, tool, state, {}, [
-                {type: "setComponentMap", payload: Object.assign(state.componentMap, {[tool.default.name]: tool.default})}
+                {type: "setComponentMap", payload: Object.assign(state.componentMap, {"vueAddon": tool.default})}
             ], {}, done);
         });
     });

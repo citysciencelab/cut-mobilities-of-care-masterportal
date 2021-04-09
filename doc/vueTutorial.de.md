@@ -24,7 +24,7 @@ src
 |   |   |   |   |-- mutationsScaleSwitcher.js
 |   |   |   |   |-- stateScaleSwitcher.js
 |   |   |   |
-|   |   |	|-- test
+|   |   |	|-- tests
 |   |   |	|   |-- end2end
 |   |   |   |	|   |-- ScaleSwitcher.e2e.js
 |   |   |	|   |-- unit

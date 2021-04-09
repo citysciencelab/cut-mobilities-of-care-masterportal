@@ -1,7 +1,7 @@
 import {expect} from "chai";
-import {arrayPerHour, calculateArithmeticMean} from "../../../library/mathematicalOperations.js";
+import {arrayPerHour, calculateArithmeticMean} from "../../../utils/mathematicalOperations.js";
 
-describe("src/modules/tools/gfi/components/themes/sensor/library/mathematicalOperations.spec.js", () => {
+describe("src/modules/tools/gfi/components/themes/sensor/utils/mathematicalOperations.spec.js", () => {
 
     describe("arrayPerHour", function () {
         it("should return an empty array for undefined input", function () {

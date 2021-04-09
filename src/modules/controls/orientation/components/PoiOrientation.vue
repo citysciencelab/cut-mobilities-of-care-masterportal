@@ -85,7 +85,7 @@ export default {
             poiFeatures.forEach(category => {
                 category.features.forEach(feat => {
                     feat.imgPath = this.getImgPath(feat);
-                    feat.name = this.getFeatureTitle(feat);
+                    feat.nearbyTitleText = this.getFeatureTitle(feat);
                 });
             });
 
@@ -113,18 +113,20 @@ export default {
 
         /**
          * Getting the feature title
-         * @param  {ol/feature} feature the vector feature
-         * @return {string} Name
+         * @param  {ol/Feature} feature the vector feature
+         * @return {string[]} the nearbyTitle Text
          */
         getFeatureTitle (feature) {
-            if (feature.get("name")) {
-                return feature.get("name");
-            }
-            else if (feature.layerName) {
-                return feature.layerName;
+            if (!Array.isArray(feature.nearbyTitleText) || !feature.nearbyTitleText.length) {
+                if (feature.get("name")) {
+                    return [feature.get("name")];
+                }
+                else if (feature.layerName) {
+                    return [feature.layerName];
+                }
             }
 
-            return feature.getId();
+            return feature.nearbyTitleText;
 
         },
 
@@ -351,7 +353,12 @@ export default {
                                                 <img :src="feat.imgPath">
                                             </td>
                                             <td>
-                                                <strong>{{ feat.name }}</strong>
+                                                <p
+                                                    v-for="(featNearbyTitleText, iNearby) in feat.nearbyTitleText"
+                                                    :key="'featNearbyTitleText' + iNearby"
+                                                >
+                                                    <strong>{{ featNearbyTitleText }}</strong>
+                                                </p>
                                                 <p>{{ feat.dist2Pos + " " + $t('common:modules.controls.orientation.distanceUnit') }}</p>
                                             </td>
                                         </tr>

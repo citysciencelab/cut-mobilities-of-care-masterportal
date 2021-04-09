@@ -60,7 +60,9 @@ const actions = {
      * @returns {void}
      */
     addTool: ({state, commit}, tool) => {
-        commit("setComponentMap", Object.assign(state.componentMap, {[tool.name]: tool}));
+        const toolName = tool.name !== undefined ? tool.name.charAt(0).toLowerCase() + tool.name.slice(1) : tool.name;
+
+        commit("setComponentMap", Object.assign(state.componentMap, {[toolName]: tool}));
     },
 
     /**

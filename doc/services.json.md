@@ -506,7 +506,7 @@ Metadata specification. All metadata of the layer data is referenced here. By cl
 |Name|Required|Type|Default|Description|
 |----|--------|----|-------|-----------|
 |md_id|no|String||Metadata record identifier|
-|rs_id|no|String||Ressource identifier of the metadata record|
+|rs_id|no|String||Resource identifier of the metadata record|
 |md_name|no|String||Record name|
 |bbox|no|String||Record extension|
 |kategorie_opendata|no|String||Opendata category from the govdata.de code list|

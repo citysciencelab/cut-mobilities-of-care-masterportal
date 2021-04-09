@@ -6,7 +6,7 @@ For an example test suite, see *masterportal/src/modules/tools/scaleSwitcher/tes
 
 ### Test file location
 
-Test files are to be saved with the file extension `.spec.js`. All test files are to be placed next to the component and store being tested in a separate `test/unit` folder. For illustration, the following example was constructed using the `ScaleSwitcher` component.
+Test files are to be saved with the file extension `.spec.js`. All test files are to be placed next to the component and store being tested in a separate `tests/unit` folder. For illustration, the following example was constructed using the `ScaleSwitcher` component.
 
 ```
 src
@@ -23,7 +23,7 @@ src
 |   |   |   |   |-- mutationsScaleSwitcher.js
 |   |   |   |   |-- stateScaleSwitcher.js
 |   |   |   |
-|   |   |	|-- test
+|   |   |	|-- tests
 |   |   |	|   |-- end2end
 |   |   |   |	|   |-- ScaleSwitcher.e2e.js
 |   |   |	|   |-- unit

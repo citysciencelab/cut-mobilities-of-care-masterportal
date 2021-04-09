@@ -2,9 +2,9 @@ import Vuex from "vuex";
 import {config, createLocalVue, shallowMount} from "@vue/test-utils";
 import {expect} from "chai";
 import PoiOrientationComponent from "../../../components/PoiOrientation.vue";
-import LinestringStyle from "./../../../../../../../modules/vectorStyle/linestringStyle.js";
-import PointStyle from "./../../../../../../../modules/vectorStyle/pointStyle.js";
-import PolygonStyle from "./../../../../../../../modules/vectorStyle/polygonStyle.js";
+import LinestringStyle from "../../../../../../../modules/vectorStyle/linestringStyle.js";
+import PointStyle from "../../../../../../../modules/vectorStyle/pointStyle.js";
+import PolygonStyle from "../../../../../../../modules/vectorStyle/polygonStyle.js";
 import Feature from "ol/Feature.js";
 import {Circle} from "ol/geom.js";
 import sinon from "sinon";
@@ -121,19 +121,21 @@ describe("src/modules/controls/orientation/components/PoiOrientationComponent.vu
     describe("getFeatureTitle", function () {
         let feature = new Feature();
 
-        it("should return featureId when other info is unset", function () {
-            feature.setId("123");
-            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("string").to.equal("123");
-        });
         it("should return layerName when name is unset", function () {
             feature = Object.assign(feature, {
                 layerName: "LayerName"
             });
-            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("string").to.equal("LayerName");
+            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("array").to.deep.equal(["LayerName"]);
         });
         it("should return name when set", function () {
             feature.set("name", "Name");
-            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("string").to.equal("Name");
+            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("array").to.deep.equal(["Name"]);
+        });
+        it("should return nearby title text when set", function () {
+            feature = Object.assign(feature, {
+                nearbyTitleText: ["nearbyTitleText"]
+            });
+            expect(wrapper.vm.getFeatureTitle(feature)).to.be.an("array").to.deep.equal(["nearbyTitleText"]);
         });
     });
 

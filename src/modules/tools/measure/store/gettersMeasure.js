@@ -1,5 +1,5 @@
 import stateMeasure from "./stateMeasure";
-import {calculateLineLengths, calculatePolygonAreas} from "../util/measureCalculation";
+import {calculateLineLengths, calculatePolygonAreas} from "../utils/measureCalculation";
 
 import {generateSimpleGetters} from "../../../../app-store/utils/generators";
 
