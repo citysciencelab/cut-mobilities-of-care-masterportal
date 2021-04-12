@@ -14,7 +14,7 @@ describe("src/share-components/graphicalSelect/store/gettersGraphicalSelect", fu
         expect(stateGraphicalSelect.type).to.be.equal("string");
     });
     it("returns the displayName default value from state", function () {
-        expect(stateGraphicalSelect.displayName).to.be.equal("Geometrie auswählen");
+        expect(stateGraphicalSelect.displayName).to.be.equal("common:snippets.graphicalSelect.displayName");
     });
     it("returns the snippetType default value from state", function () {
         expect(stateGraphicalSelect.snippetType).to.be.equal("graphicalSelect");
@@ -32,10 +32,10 @@ describe("src/share-components/graphicalSelect/store/gettersGraphicalSelect", fu
         expect(stateGraphicalSelect.currentValue).to.be.equal("");
     });
     it("returns the tooltipMessage default value from state", function () {
-        expect(stateGraphicalSelect.tooltipMessage).to.be.equal("");
+        expect(stateGraphicalSelect.tooltipMessage).to.be.equal("common:snippets.graphicalSelect.tooltipMessage");
     });
     it("returns the tooltipMessagePolygon default value from state", function () {
-        expect(stateGraphicalSelect.tooltipMessagePolygon).to.be.equal("");
+        expect(stateGraphicalSelect.tooltipMessagePolygon).to.be.equal("common:snippets.graphicalSelect.tooltipMessagePolygon");
     });
     it("returns the selectedAreaGeoJson default value from state", function () {
         expect(stateGraphicalSelect.selectedAreaGeoJson).to.be.equal(undefined);

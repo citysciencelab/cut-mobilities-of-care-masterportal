@@ -110,7 +110,8 @@ describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", ()
 
         actions.toggleOverlay(context, payload);
 
-        expect(radioTrigger.calledOnceWithExactly("Map", "addOverlay", payload.overlayCircle)).to.be.true;
+        expect(radioTrigger.calledWithExactly("Map", "addOverlay", payload.overlayCircle)).to.be.true;
+        expect(radioTrigger.calledWithExactly("Map", "addOverlay", payload.overlayTool)).to.be.true;
 
     });
     it("createDomOverlay creates div with id", () => {
