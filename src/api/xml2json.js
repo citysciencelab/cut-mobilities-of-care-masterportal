@@ -67,9 +67,11 @@ function parseNodeAttributes (nodeAttributes) {
  * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/children}
  */
 (function (constructor) {
-    if (constructor &&
-        constructor.prototype &&
-        constructor.prototype.children === undefined) {
+    if (
+        constructor
+        && constructor.prototype
+        && !constructor.prototype.hasOwnProperty("children")
+    ) {
         Object.defineProperty(constructor.prototype, "children", {
             get: function () {
                 const nodes = this.childNodes,
