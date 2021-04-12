@@ -15,7 +15,6 @@ const actions = {
     setDrawInteractionListener: async function ({dispatch, commit}, payload) {
         payload.interaction.on("drawstart", function () {
             // remove possible alerts
-            Radio.trigger("Alert", "alert:remove");
             dispatch("Alerting/cleanup", "", {root: true});
             payload.layer.getSource().clear();
         });
