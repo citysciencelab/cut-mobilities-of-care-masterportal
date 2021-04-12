@@ -4,7 +4,7 @@ import Vuex from "vuex";
 import Alerting from "../modules/alerting/store/indexAlerting";
 import ConfirmAction from "../modules/confirmAction/store/indexConfirmAction";
 import Footer from "../modules/footer/store/indexFooter";
-import GraphicalSelect from "../../modules/snippets/graphicalSelect/store/indexGraphicalSelect";
+import GraphicalSelect from "../share-components/graphicalSelect/store/indexGraphicalSelect";
 import Language from "../modules/language/store/indexLanguage";
 import Title from "../modules/title/store/indexTitle";
 import Map from "../modules/map/store/indexMap";

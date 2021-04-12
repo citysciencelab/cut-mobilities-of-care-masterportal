@@ -2,7 +2,7 @@ import {expect} from "chai";
 import stateGraphicalSelect from "../../../store/stateGraphicalSelect";
 
 
-describe("modules/snippets/graphicalSelect/store/gettersGraphicalSelect", function () {
+describe("src/share-components/graphicalSelect/store/gettersGraphicalSelect", function () {
     it("returns the active from state", function () {
         expect(stateGraphicalSelect.active).to.be.false;
     });

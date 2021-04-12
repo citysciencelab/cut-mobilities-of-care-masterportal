@@ -1,5 +1,5 @@
 <script>
-import Dropdown from "../../../../src/share-components/dropdowns/DropdownSimple.vue";
+import Dropdown from "../../dropdowns/DropdownSimple.vue";
 import {mapGetters, mapActions, mapMutations} from "vuex";
 import getters from "../store/gettersGraphicalSelect";
 import mutations from "../store/mutationsGraphicalSelect";

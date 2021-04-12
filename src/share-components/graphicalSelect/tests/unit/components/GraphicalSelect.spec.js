@@ -3,7 +3,7 @@ import {shallowMount, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import GraphicalSelectComponent from "../../../components/GraphicalSelect.vue";
 import GraphicalSelectModule from "../../../store/indexGraphicalSelect.js";
-import Dropdown from "../../../../../../src/share-components/dropdowns/DropdownSimple.vue";
+import Dropdown from "../../../../dropdowns/DropdownSimple.vue";
 
 const localVue = createLocalVue();
 
@@ -11,7 +11,7 @@ localVue.use(Vuex);
 
 let store;
 
-describe("modules/snippets/graphicalSelect/components/GraphicalSelect.vue", () => {
+describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", () => {
 
     const GrandParentVm = mount({
             template: "<div/>"

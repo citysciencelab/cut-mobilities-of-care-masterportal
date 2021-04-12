@@ -9,7 +9,7 @@ import Draw from "ol/interaction/Draw.js";
 import Overlay from "ol/Overlay.js";
 
 
-describe("modules/snippets/graphicalSelect/store/actionsGraphicalSelect", () => {
+describe("src/share-components/graphicalSelect/store/actionsGraphicalSelect", () => {
     let commit, dispatch, context;
 
     before(() => {
