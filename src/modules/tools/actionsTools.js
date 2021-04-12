@@ -132,10 +132,11 @@ const actions = {
     /**
     * Sets the active property of the state form tool which has the parameter isActive: true
     * Also starts processes if the tool is activated (active === true).
+    * The gfi is excluded, because it is allowed to be active in parallel with another tool.
     * @returns {void}
     */
     setToolActiveByConfig ({getters, dispatch}) {
-        const activeTools = getters.getActiveToolNames;
+        const activeTools = getters.getActiveToolNames.filter(toolName => toolName !== "Gfi");
 
         dispatch("controlActivationOfTools", activeTools[0]);
 
