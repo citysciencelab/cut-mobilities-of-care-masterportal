@@ -1,7 +1,5 @@
 >**[Return to the Masterportal documentation](doc.md)**.
 
->For the deprecated style.json version, see the **[old documentation](style.json-deprecated.md)**.
-
 [TOC]
 
 # style.json
@@ -24,7 +22,6 @@ At the time of layer visualization, the readied [OpenLayers Styles](https://open
 
 The *style.json*'s path is defined in the **[config.js](config.js.md)** file. Follow the link for details. Please mind the following parameters::
 
-- *useVectorStyleBeta*: Version control
 - *styleConf*: Defining the file path
 
 >💡 Hint: Incorrect path information is reported with an error message.

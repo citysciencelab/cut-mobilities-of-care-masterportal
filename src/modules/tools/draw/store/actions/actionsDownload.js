@@ -35,9 +35,7 @@ async function convertFeatures ({state, dispatch}, format) {
  * @returns {void}
  */
 function fileDownloaded ({state, commit}) {
-    commit("setDownloadEnabled");
-    commit("setDownloadFileName", "");
-    commit("setDownloadSelectedFormat", state.download.preSelectedFormat);
+    commit("setDownloadSelectedFormat", state.download.selectedFormat);
 }
 
 /**

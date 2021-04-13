@@ -23,7 +23,7 @@ export default {
         /**
          * Reads current URL and returns it without hash and without get params, always ending with slash.
          * This is needed to have a normalized URL tocompare with configured BroadcastConfig URLs;
-         * see example file /portal/master/ressources/broadcastedPortalAlerts.json
+         * see example file /portal/master/resources/broadcastedPortalAlerts.json
          * @returns {String} The normalized current browser URL
          */
         currentUrl: () => document.URL.replace(/#.*$/, "").replace(/\/*\?.*$/, "/"),

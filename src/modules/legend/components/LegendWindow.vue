@@ -782,7 +782,8 @@ export default {
     #legend {
         .legend-window {
             position: absolute;
-            width: 300px;
+            min-width:200px;
+            max-width:600px;
             right: 0px;
             margin: 10px 10px 30px 10px;
             background-color: #ffffff;

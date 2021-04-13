@@ -1065,4 +1065,48 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
             expect(wrapper.vm.appendSuffix(true, "suffix")).to.equal("true suffix");
         });
     });
+
+    describe("prependPrefix", function () {
+        const wrapper = shallowMount(GfiComponent, {
+            computed: {
+                isMobile: () => true,
+                active: () => true,
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null,
+                    getFeatures: () => sinon.stub()
+                }],
+                mapSize: () => []
+            },
+            store: getGfiStore,
+            localVue
+        });
+
+        it("Should leave string value as is, when prefix is undefined", function () {
+            expect(wrapper.vm.prependPrefix("test1", undefined)).to.equal("test1");
+        });
+        it("Should leave number value as is, when prefix is undefined", function () {
+            expect(wrapper.vm.prependPrefix(123, undefined)).to.equal(123);
+        });
+        it("Should leave float value as is, when prefix is undefined", function () {
+            expect(wrapper.vm.prependPrefix(12.3, undefined)).to.equal(12.3);
+        });
+        it("Should leave boolean value as is, when prefix is undefined", function () {
+            expect(wrapper.vm.prependPrefix(true, undefined)).to.be.true;
+        });
+        it("Should prepend prefix w/o whitespace", function () {
+            expect(wrapper.vm.prependPrefix("test1", "prefix")).to.equal("prefixtest1");
+        });
+        it("Should turn number value into string and prepend prefix w/o whitespace", function () {
+            expect(wrapper.vm.prependPrefix(0, "prefix")).to.equal("prefix0");
+        });
+        it("Should turn float value into string and prepend prefix w/o whitespace", function () {
+            expect(wrapper.vm.prependPrefix(12.3, "prefix")).to.equal("prefix12.3");
+        });
+        it("Should turn boolean value into string and prepend prefix w/o whitespace", function () {
+            expect(wrapper.vm.prependPrefix(true, "prefix")).to.equal("prefixtrue");
+        });
+        it("Should prepend prefix with whitespace", function () {
+            expect(wrapper.vm.prependPrefix("test", "prefix ")).to.equal("prefix test");
+        });
+    });
 });

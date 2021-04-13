@@ -13,7 +13,7 @@ Folgende Struktur ist dabei zu beachten, hier am Beispiel eines Werkzeuges (MyAd
 1.1.
 ```
 addons
-|-- MyAddon1
+|-- myAddon1
 |    index.js
 |   |-- components
 |	|   |-- MyAddon1.vue
@@ -47,7 +47,7 @@ addons
 |   |
 |   |-- package.json
 
-|-- MyGfiTheme
+|-- myGfiTheme
 |   index.js
 |   |-- components
 |	|   |-- MyGfiTheme.vue
@@ -61,7 +61,7 @@ addons
 |	|-- doc
 |	|   |-- config.json.md
 |   |
-|	|-- test
+|	|-- tests
 |	|   |-- end2end
 |   |	|   |-- MyGfiTheme.e2e.js
 |	|   |-- unit
@@ -71,7 +71,7 @@ addons
 |   |-- package.json
 
 |-- MyGFIThemesFolder
-|   |-- MyGFISubFolder
+|   |-- myGFISubFolder
 |   |   index.js
 |   |   |-- components
 |   |   |   |-- MyGfiTheme.vue
@@ -85,7 +85,7 @@ addons
 |   |   |-- doc
 |   |   |   |-- config.json.md
 |   |   |
-|   |   |-- test
+|   |   |-- tests
 |   |   |   |-- end2end
 |   |   |   |   |-- MyGfiTheme.e2e.js
 |   |   |   |-- unit
@@ -117,15 +117,15 @@ Standardmäßig entspricht der Key eines Addons dem Namen seines Ordners im Addo
 ```json
 {
   [...]
-  "MyAddon1": {
+  "myAddon1": {
     "type": "tool"
   },
-  "MyGfiTheme": {
+  "myGfiTheme": {
     "type": "gfiTheme"
   },
-  "AnotherGFITheme": {
+  "anotherGFITheme": {
     "type": "gfiTheme",
-    "path": "MyGFIThemesFolder/MyGFISubFolder"
+    "path": "myGFIThemesFolder/myGFISubFolder"
   }
 }
 ```
@@ -158,7 +158,7 @@ Hier legen wir ein kurzes Beispiel-Addon für ein Werkzeug an!
 ```
 myMasterPortalFolder/
     addons/
-        VueAddon/
+        vueAddon/
             index.js
             components/
                 VueAddon.vue
@@ -172,7 +172,7 @@ myMasterPortalFolder/
 2.2. Addon-Code schreiben:
 
 ```js
-// myMasterPortalFolder/addons/VueAddon/store/index.js
+// myMasterPortalFolder/addons/vueAddon/store/index.js
 
 import GenericTool from "../../../src/modules/tools/indexTools";
 import composeModules from "../../../src/app-store/utils/composeModules";
@@ -193,7 +193,7 @@ export default composeModules([GenericTool, {
 Der `state`, die `mutations`, `actions` und `getters` können in separaten Dateien liegen oder werden hier direkt angegeben. Die Angabe von ```namespaced:true``` ist verpflichtend.
 
 ```vue
-// myMasterPortalFolder/addons/VueAddon/components/VueAddon.vue
+// myMasterPortalFolder/addons/vueAddon/components/VueAddon.vue
 
 <script>
 import Tool from "../../../src/modules/tools/Tool.vue";
@@ -304,7 +304,7 @@ export default {
 // myMasterPortalFolder/addons/addonsConf.json
 
 {
-  "VueAddon": {
+  "vueAddon": {
     "type": "tool"
   }
 }

@@ -18,12 +18,11 @@ The file defines all web services that do not belong to OGC services like WMS an
 
 1. Print services
 2. Metadata sources (CSW HMDK)
-3. Routing service
-4. BKG geocoding service
-5. Gazetteer URL
-6. WPS
-7. Email Services
-8. virtualcityPLANNER Service
+3. BKG geocoding service
+4. Gazetteer URL
+5. WPS
+6. Email Services
+7. virtualcityPLANNER Service
 
 In some scenarios different URLs are required, depending on whether requests are sent from an Intranet or the Internet. This can be solved by providing two files only differing in their service URLs. While filenames can be chosen freely, we suggest using these names:
 
@@ -45,13 +44,6 @@ In some scenarios different URLs are required, depending on whether requests are
     "name" : "Metadata URL",
     "url" : "http://metaver.de/trefferanzeige?docuuid=",
     "typ" : "URL"
-  },
-  {
-    "id" : "7",
-    "name" : "Routing",
-    "url" : "/viomRouting",
-    "providerID" : "HHBWVI",
-    "typ" : "ID"
   }
 ]
 ```

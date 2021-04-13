@@ -5,6 +5,7 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import {Feature} from "ol";
 import getProxyUrl from "../../../src/utils/getProxyUrl";
+import store from "../../../src/app-store/index";
 
 const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     defaults: Object.assign({}, Tool.prototype.defaults, {
@@ -32,12 +33,14 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         version: "",
         featureNS: "",
         feautrePrefix: "",
+        isSecured: false,
         wfstFields: [],
         attributesField: {},
         featureProperties: {},
         showInfoText: false,
         geometryName: null,
         incorrectConfigLayers: [],
+        missingLayers: [],
         editInteraction: new Select(),
         currentFeature: null,
         successfullTransaction: "",
@@ -77,12 +80,14 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @property {String} version="" - version of the current active wfs Layer
      * @property {String} featureNS="" - featureNS of the current active wfs Layer
      * @property {String} featurePrefix="" - featurePrefix of the current active wfs Layer
+     * @property {Boolean} isSecured=false - flag if the current active wfs Layer is secured
      * @property {Object[]} wfstFields=[] - Array with all informations for the input fields
      * @property {Object} attributesField={} - Attributes of the current feature type
      * @property {Object} featureProperties={} - Values of the attribute table
      * @property {Boolean} showInfoText=false - Flag if the info tag should be shown
      * @property {String} geometryName=null - name of the geometry property of the current feature
      * @property {Object[]} incorrectConfigLayers=[] - Array with ids of incorrect configured layers
+     * @property {String[]} missingLayers=[] - Array with ids of layers that are missing in the modelList yet
      * @property {ol.Select} editInteraction=new Select() - Select
      * @property {null} currentFeature=null - the current feature
      * @property {String} successfullTransaction="" - identifies whether a transaction was successfull
@@ -190,23 +195,56 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         const alertCases = this.get("alertCases"),
             incorrectIds = [];
         let wfsLayer,
+            missingLayers,
             error;
 
         if (Array.isArray(ids)) {
+            missingLayers = this.checkForMissingLayers(ids);
             ids.forEach(function (id) {
-                wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
-                error = this.checkLayerConfig(wfsLayer);
-                if (error === true) {
-                    if (!this.get("incorrectConfigLayers").includes(id)) {
-                        incorrectIds.push(id);
-                    }
-                    if (!alertCases.includes("missingLayerParam")) {
-                        this.setAlertCases("missingLayerParam");
+                if (missingLayers.indexOf(id) < 0) {
+                    wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
+                    error = this.checkLayerConfig(wfsLayer);
+                    if (error === true) {
+                        if (!this.get("incorrectConfigLayers").includes(id)) {
+                            incorrectIds.push(id);
+                        }
+                        if (!alertCases.includes("missingLayerParam")) {
+                            this.setAlertCases("missingLayerParam");
+                        }
                     }
                 }
             }, this);
         }
         return incorrectIds;
+    },
+
+    /**
+     * Checks if the layers configured for the wfst module are included in the modelList
+     * They can first not be included because of e.g. secured services
+     * @param {String[]} ids - ids of the configured layers
+     * @return {String[]} ids of the missing layers
+     */
+    checkForMissingLayers: function (ids) {
+        const missingLayers = [];
+        let wfsLayer,
+            index;
+
+        ids.forEach(function (id) {
+            wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
+            // if the layer is not included in the modelList
+            if (wfsLayer === undefined || wfsLayer === null) {
+                if (!missingLayers.includes(id)) {
+                    missingLayers.push(id);
+                }
+            }
+            // if layer is included in the modelList remove id from missingLayers Array
+            else if (missingLayers.includes(id)) {
+                index = missingLayers.indexOf(id);
+                missingLayers.splice(index, 1);
+            }
+        });
+        this.setMissingLayers(missingLayers);
+        return missingLayers;
     },
 
     /**
@@ -272,7 +310,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             incorrectConfigLayers = this.get("incorrectConfigLayers"),
             initialAlertCases = this.get("initialAlertCases");
 
-        if (typeof this.get("currentLayerId") === "string" && event.find(layer => layer.id === this.get("currentLayerId")) === undefined) {
+        if (typeof this.get("currentLayerId") === "string" && event !== undefined && event.find(layer => layer.id === this.get("currentLayerId")) === undefined) {
             this.setIsDeselectedLayer(true);
         }
         if (Object.entries(activeLayers).length > 0) {
@@ -493,12 +531,14 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      */
     updateActiveLayer: function (id) {
         let wfsLayer = {},
-            parameter = {};
+            parameter = {},
+            isSecured = false;
 
         this.setCurrentLayerId(id);
 
         wfsLayer = Radio.request("ModelList", "getModelByAttributes", {id: id});
         parameter = this.getLayerParams(wfsLayer);
+        isSecured = wfsLayer.attributes.isSecured !== undefined ? wfsLayer.attributes.isSecured : false;
 
         this.setUrl(parameter.url);
         this.setFeatureType(parameter.featureType);
@@ -506,8 +546,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         this.setFeatureNS(parameter.featureNS);
         this.setFeaturePrefix(parameter.featurePrefix);
         this.setGfiAttributes(parameter.gfiAttributes);
+        this.setIsSecured(isSecured);
 
-        this.sendDescribeFeatureType(parameter.url, parameter.version, parameter.featureType);
+        this.sendDescribeFeatureType(parameter.url, parameter.version, parameter.featureType, isSecured);
     },
 
     /**
@@ -534,13 +575,20 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      * @param {String} url - url of the current active layer
      * @param {String} version - version of the current active layer
      * @param {String} typename - featureType name of the current active layer
+     * @param {Boolean} isSecured - flag if wfs layer is secured
      * @returns {void}
      */
-    sendDescribeFeatureType: function (url, version, typename) {
+    sendDescribeFeatureType: function (url, version, typename, isSecured) {
+        const timeout = isSecured ? 0 : 5000;
+
         $.ajax(url + "?SERVICE=WFS&REQUEST=DescribeFeatureType&VERSION=" + version + "&TYPENAME=" + typename, {
             method: "GET",
             context: this,
+            xhrFields: {
+                withCredentials: isSecured
+            },
             success: this.handleResponse,
+            timeout: timeout,
             error: function () {
                 this.handleError();
             }
@@ -567,11 +615,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         if (attributeFields.length <= 1) {
             console.error("The WFS-Layer is invalid. The layer has no attributes.");
             message = this.getAlertMessage("faultyDFTResponse");
-            Radio.trigger("Alert", "alert", {
-                id: "faultyDFTResponse",
-                kategorie: "alert-warn",
-                text: message,
-                confirmable: false
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Warnung",
+                displayClass: "warning",
+                content: message,
+                mustBeConfirmed: false
             });
         }
         else {
@@ -685,13 +733,13 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         }
         else if (gfiAttributes === "ignore") {
             message = this.getAlertMessage("gfiAttrIgnore");
-            Radio.trigger("Alert", "alert", {
-                id: "gfiAttrIgnore",
-                kategorie: "alert-warn",
-                text: message,
-                confirmable: false
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Warnung",
+                displayClass: "warning",
+                content: message,
+                mustBeConfirmed: false
             });
-            console.error("The gfiAttributes are configured with 'ignore' in the configuration of the currently selected layer. Therefore, no attributes of the layer are read and processed.");
+            console.warn("The gfiAttributes are configured with 'ignore' in the configuration of the currently selected layer. Therefore, no attributes of the layer are read and processed.");
         }
         else if (typeof gfiAttributes === "object" && gfiAttributes !== null) {
             Object.entries(gfiAttributes).forEach(([key, value]) => {
@@ -1085,11 +1133,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                     if (typeof feature.get(field.field) !== "string" || feature.get(field.field === "")) {
                         isConditionProofed = false;
                         message = this.getAlertMessage("mandatoryFieldMissing");
-                        Radio.trigger("Alert", "alert", {
-                            id: "mandatoryFieldMissing",
-                            kategorie: "alert-warning",
-                            text: message,
-                            confirmable: false
+                        store.dispatch("Alerting/addSingleAlert", {
+                            category: "Warnung",
+                            displayClass: "warning",
+                            content: message,
+                            mustBeConfirmed: false
                         });
                     }
                 }
@@ -1103,11 +1151,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         if (typeof feature === "object" && feature !== null && Object.entries(feature).length > 0 && !feature.getKeys().includes(geometryName)) {
             isConditionProofed = false;
             message = this.getAlertMessage("noGeometry");
-            Radio.trigger("Alert", "alert", {
-                id: "noGeometry",
-                kategorie: "alert-warning",
-                text: message,
-                confirmable: false
+            store.dispatch("Alerting/addSingleAlert", {
+                category: "Warnung",
+                displayClass: "warning",
+                content: message,
+                mustBeConfirmed: false
             });
         }
 
@@ -1363,7 +1411,8 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
          * getProxyUrl()
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
-            that = this;
+            that = this,
+            isSecured = this.get("isSecured");
 
         Radio.trigger("Util", "showLoader");
         if (xmlString.length > 0) {
@@ -1372,6 +1421,9 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                 method: "POST",
                 processData: false,
                 contentType: "text/xml",
+                xhrFields: {
+                    withCredentials: isSecured
+                },
                 data: xmlString,
                 success: function (data, textStatus, jqXHR) {
                     Radio.trigger("Util", "hideLoader");
@@ -1414,11 +1466,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
                     alertCase = "SuccessfullDelete";
                 }
                 message = this.getAlertMessage(alertCase);
-                Radio.trigger("Alert", "alert", {
-                    id: "Save",
-                    kategorie: "alert-success",
-                    text: message,
-                    confirmable: false
+                store.dispatch("Alerting/addSingleAlert", {
+                    category: "Info",
+                    displayClass: "info",
+                    content: message,
+                    mustBeConfirmed: false
                 });
             }
         }
@@ -1443,7 +1495,7 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
         this.setSuccessfullTransaction("noSuccess");
 
         // if response contains an exception, give an appropriate feedback to the exception code
-        if (jqXHR.responseText.includes("Exception")) {
+        if (jqXHR.responseText !== undefined && jqXHR.responseText.includes("Exception")) {
             exceptionCode = this.getSubstring(jqXHR.responseText, ["exceptionCode", "\"", "\""]);
             if (exceptionCodes.includes(exceptionCode)) {
                 message = this.getAlertMessage(exceptionCode);
@@ -1467,11 +1519,11 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
             }
             message = this.getAlertMessage(alertCase);
         }
-        Radio.trigger("Alert", "alert", {
-            id: "Save",
-            kategorie: "alert-danger",
-            text: message,
-            confirmable: false
+        store.dispatch("Alerting/addSingleAlert", {
+            category: "Fehler",
+            displayClass: "error",
+            content: message,
+            mustBeConfirmed: false
         });
     },
 
@@ -1665,6 +1717,15 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
     },
 
     /**
+     * Setter for isSecured
+     * @param {Boolean} value - isSecured
+     * @returns {void}
+     */
+    setIsSecured: function (value) {
+        this.set("isSecured", value);
+    },
+
+    /**
      * Setter for editButton
      * @param {Boolean} value - editButton
      * @returns {void}
@@ -1770,6 +1831,15 @@ const WfstModel = Tool.extend(/** @lends WfstModel.prototype */{
      */
     setLayerIds: function (value) {
         this.set("layerIds", value);
+    },
+
+    /**
+     * Setter for missingLayers
+     * @param {String[]} value - missingLayers
+     * @returns {void}
+     */
+    setMissingLayers: function (value) {
+        this.set("missingLayers", value);
     },
 
     /**

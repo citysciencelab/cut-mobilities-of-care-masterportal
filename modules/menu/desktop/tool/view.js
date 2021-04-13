@@ -24,7 +24,8 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
         });
         // Listener for addOns so that multilanguage geht initially adjusted.
         this.listenTo(this.model, {
-            "change:name": this.rerender
+            "change:name": this.rerender,
+            "change:glyphicon": this.rerender
         });
         this.listenTo(Radio.channel("Map"), {
             "change": function (mode) {
@@ -169,7 +170,7 @@ const ToolView = Backbone.View.extend(/** @lends ToolView.prototype */{
             }
         }
 
-        // Navigation wird geschlossen
+        // Navigation is closed
         $("div.collapse.navbar-collapse").removeClass("in");
     }
 });

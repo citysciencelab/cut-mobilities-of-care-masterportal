@@ -21,3 +21,40 @@
 .tool-pendler-animation .input-group {
 	max-width: 320px;
 }
+
+.animation_buttons_clear {
+	clear: both;
+}
+
+.tool-pendler-animation .tooltip {
+	position: relative;
+	display: inline-block;
+	opacity: 0.8;
+	float: left;
+	left: 230px;
+	top: -57px;
+	.tooltiptext {
+		visibility: hidden;
+		width: 230px;
+		background-color: #CACACA;
+		color: #ff0000;
+		text-align: center;
+		border-radius: 6px;
+		padding: 5px 0;
+		position: absolute;
+		z-index: 1;
+		top: -5px;
+		right: 110%;
+		&::after {
+			content: "";
+			color: #000;
+			position: absolute;
+			top: 50%;
+			left: 100%;
+			margin-top: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: transparent transparent transparent #CACACA;
+		}
+	}
+}

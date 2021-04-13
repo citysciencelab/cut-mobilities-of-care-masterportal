@@ -3,6 +3,7 @@ import {config, shallowMount, createLocalVue} from "@vue/test-utils";
 import LegendMenuComponent from "../../../components/LegendMenu.vue";
 import Legend from "../../../store/indexLegend";
 import {expect} from "chai";
+import sinon from "sinon";
 
 const localVue = createLocalVue();
 
@@ -22,7 +23,8 @@ describe("LegendMenu.vue", () => {
             }
         },
         getters = {
-            mobile: state => state.mobile
+            mobile: state => state.mobile,
+            uiStyle: sinon.stub()
         },
         mutations = {
             setMobile (state, mobile) {

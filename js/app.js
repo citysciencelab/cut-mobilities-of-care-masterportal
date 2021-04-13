@@ -30,12 +30,10 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import SearchByCoordView from "../modules/tools/searchByCoord/view";
 import LineView from "../modules/tools/pendler/lines/view";
 import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
-import StyleVTView from "../modules/tools/styleVT/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
 import CompareFeaturesView from "../modules/tools/compareFeatures/view";
 import RemoteInterfaceVue from "../src/plugins/remoteInterface/RemoteInterface";
@@ -51,24 +49,12 @@ import WFSFeatureFilterView from "../modules/wfsFeatureFilter/view";
  * @deprecated in 3.0.0
  */
 import ExtendedFilterView from "../modules/tools/extendedFilter/view";
-import AddWMSView from "../modules/tools/addWMS/view";
-import RoutingView from "../modules/tools/viomRouting/view";
-import Contact from "../modules/tools/contact/view";
 import TreeFilterView from "../modules/treeFilter/view";
 import FeatureLister from "../modules/tools/featureLister/view";
-import PrintView from "../modules/tools/print_/view";
-/**
- * PrintView2
- * @deprecated in 3.0.0
- * remove "version" in doc and config.
- * rename "print_" to "print"
- * only load PrintView
- */
-import PrintView2 from "../modules/tools/print/view";
+import PrintView from "../modules/tools/print/view";
 import WfstView from "../modules/tools/wfst/view";
 // controls
 import ControlsView from "../modules/controls/view";
-import OrientationView from "../modules/controls/orientation/view";
 import SearchbarView from "../modules/searchbar/view";
 import Button3DView from "../modules/controls/button3d/view";
 import ButtonObliqueView from "../modules/controls/buttonOblique/view";
@@ -215,27 +201,11 @@ async function loadApp () {
                 break;
             }
             case "print": {
-                /**
-                 * PrintView2
-                 * @deprecated in 3.0.0
-                 * remove "version" in doc and config.
-                 * rename "print_" to "print"
-                 * only load correct view
-                 */
-                if (tool.has("version") && (tool.get("version") === "mapfish_print_3" || tool.get("version") === "HighResolutionPlotService")) {
-                    new PrintView({model: tool});
-                }
-                else {
-                    new PrintView2({model: tool});
-                }
+                new PrintView({model: tool});
                 break;
             }
             case "parcelSearch": {
                 new ParcelSearchView({model: tool});
-                break;
-            }
-            case "searchByCoord": {
-                new SearchByCoordView({model: tool});
                 break;
             }
             /**
@@ -258,18 +228,6 @@ async function loadApp () {
                 new TreeFilterView({model: tool});
                 break;
             }
-            case "routing": {
-                new RoutingView({model: tool});
-                break;
-            }
-            case "contact": {
-                new Contact({model: tool});
-                break;
-            }
-            case "addWMS": {
-                new AddWMSView({model: tool});
-                break;
-            }
             case "featureLister": {
                 new FeatureLister({model: tool});
                 break;
@@ -280,10 +238,6 @@ async function loadApp () {
             }
             case "wfst": {
                 new WfstView({model: tool});
-                break;
-            }
-            case "styleVT": {
-                new StyleVTView({model: tool});
                 break;
             }
             /**
@@ -317,16 +271,9 @@ async function loadApp () {
         controlsView = new ControlsView();
 
         controls.forEach(control => {
-            const orientationConfigAttr = typeof control.attr === "string" ? {zoomMode: control.attr} : control;
             let element;
 
             switch (control.id) {
-                case "orientation": {
-                    element = controlsView.addRowTR(control.id, true);
-                    orientationConfigAttr.epsg = Radio.request("MapView", "getProjection").getCode();
-                    new OrientationView({el: element, config: orientationConfigAttr});
-                    break;
-                }
                 case "button3d": {
                     if (control.attr === true) {
                         element = controlsView.addRowTR(control.id);
@@ -430,7 +377,7 @@ function loadAddOnsAfterLanguageLoaded (legacyAddons) {
             import(
                 /* webpackChunkName: "[request]" */
                 /* webpackInclude: /addons[\\\/].*[\\\/]*.js$/ */
-                /* webpackExclude: /(node_modules)|(.+unittests.)+/ */
+                /* webpackExclude: /(node_modules)|(.+unittests.)|(.+test.)+/ */
                 "../addons/" + entryPoint + ".js").then(module => {
                 /* eslint-disable new-cap */
                 let addon;

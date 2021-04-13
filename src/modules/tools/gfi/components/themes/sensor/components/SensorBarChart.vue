@@ -2,8 +2,8 @@
 import Chart from "chart.js";
 import * as moment from "moment";
 
-import {calculateWorkloadForOneWeekday} from "../library/calculateWorkloadForOneWeekday";
-import {calculateArithmeticMean} from "../library/mathematicalOperations";
+import {calculateWorkloadForOneWeekday} from "../utils/calculateWorkloadForOneWeekday";
+import {calculateArithmeticMean} from "../utils/mathematicalOperations";
 
 export default {
     name: "SensorBarChart",

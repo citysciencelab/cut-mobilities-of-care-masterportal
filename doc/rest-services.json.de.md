@@ -18,12 +18,11 @@ In dieser Datei werden alle Service-URLs definiert und gebündelt, die nicht vom
 
 1.	Druckservices
 2.	Metadatenquellen (CSW HMDK)
-3.	Routing Berechnungsdienst
-4.	BKG Geokodierungsdienste
-5.	Gazetteer URL
-6.	WPS
-7.	Email Services
-8.  virtualcityPLANNER Service
+3.	BKG Geokodierungsdienste
+4.	Gazetteer URL
+5.	WPS
+6.	Email Services
+7.  virtualcityPLANNER Service
 
 Häufig unterscheiden sich die zu verwendenden URLs zwischen Intranet und Internet-Nutzung. Aus diesem Grund erscheint meist das Vorhalten zweier identischer Dateien sinnvoll, die sich nur hinsichtlich der Webservice-URLs unterscheiden.
 Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
@@ -48,13 +47,6 @@ Hier kommen meist folgende Dateien zum Einsatz (Dateinamen frei wählbar):
     "name" : "Metadaten-URL",
     "url" : "http://metaver.de/trefferanzeige?docuuid=",
     "typ" : "URL"
-  },
-  {
-    "id" : "7",
-    "name" : "Routing",
-    "url" : "/viomRouting",
-    "providerID" : "HHBWVI",
-    "typ" : "ID"
   }
 ]
 ```

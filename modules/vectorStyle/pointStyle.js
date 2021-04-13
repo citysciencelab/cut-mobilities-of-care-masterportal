@@ -71,7 +71,7 @@ const PointStyleModel = StyleModel.extend(/** @lends PointStyleModel.prototype *
     },
 
     initialize: function (feature, styles, isClustered) {
-        if (Config.wfsImgPath !== undefined) {
+        if (typeof Config === "object" && Config.wfsImgPath !== undefined) {
             this.setImagePath(Config.wfsImgPath);
         }
         else {

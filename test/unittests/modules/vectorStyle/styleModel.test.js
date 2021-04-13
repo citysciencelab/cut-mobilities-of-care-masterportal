@@ -218,13 +218,13 @@ describe("vectorStyleModel", function () {
 
     describe("createLegendId", function () {
         it("returns correct id for Point and null", function () {
-            expect(styleModel.createLegendId("Point", {})).to.equal("UG9pbnRudWxs");
+            expect(styleModel.createLegendId("Point", {})).to.equal("Pointnull");
         });
-        it("returns correct id for Linestring with some conditions", function () {
-            expect(styleModel.createLegendId("Point", {conditions: {properties: {name: "name"}}})).to.equal("UG9pbnR7InByb3BlcnRpZXMiOnsibmFtZSI6Im5hbWUifX0=");
+        it("returns correct id for Point with some conditions", function () {
+            expect(styleModel.createLegendId("Point", {conditions: {properties: {name: "name"}}})).to.equal("Point%7B%22properties%22%3A%7B%22name%22%3A%22name%22%7D%7D");
         });
-        it("returns correct id for Linestring with other conditions", function () {
-            expect(styleModel.createLegendId("Point", {conditions: {properties: {name: "name2"}}})).to.equal("UG9pbnR7InByb3BlcnRpZXMiOnsibmFtZSI6Im5hbWUyIn19");
+        it("returns correct id for Point with other conditions", function () {
+            expect(styleModel.createLegendId("Point", {conditions: {properties: {name: "name2"}}})).to.equal("Point%7B%22properties%22%3A%7B%22name%22%3A%22name2%22%7D%7D");
         });
     });
 

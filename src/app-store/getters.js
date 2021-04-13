@@ -18,6 +18,7 @@ export default {
     // proxyHost is deprecated in the next major-release
     proxyHost: state => state?.configJs?.proxyHost || "",
     // configJSON desctructuring
+    portalTitle: state => state?.configJson?.Portalconfig?.portalTitle?.title || null,
     controlsConfig: state => state?.configJson?.Portalconfig?.controls || null,
     legendConfig: state => state?.configJson?.Portalconfig?.menu.legend || null,
     menuConfig: state => state?.configJson?.Portalconfig?.menu || null,
@@ -101,17 +102,6 @@ export default {
         }
         else if (state?.configJs?.uiStyle === "table") {
             return true;
-        }
-        return false;
-    },
-    /**
-     * checks if the param useVectorStyleBeta is available in config.js and returns the value
-     * @param {object} state - the store state
-     * @returns {boolean} true useVectorStyleBeta is set to true
-     */
-    useVectorStyleBeta: (state) => {
-        if (typeof state?.configJs?.useVectorStyleBeta === "boolean") {
-            return state.configJs.useVectorStyleBeta;
         }
         return false;
     },

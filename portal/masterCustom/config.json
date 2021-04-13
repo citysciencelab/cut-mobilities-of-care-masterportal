@@ -224,8 +224,7 @@
                  "mapfishServiceId":"mapfish_qs",
                  "printAppId":"master",
                  "filename":"Ausdruck",
-                 "title":"Mein Titel",
-                 "version":"mapfish_print_3"
+                 "title":"Mein Titel"
               },
               "searchByCoord":{
                "name": "translate#common:menu.tools.searchByCoord",
@@ -239,13 +238,6 @@
                  "name":"Erweiterter Filter",
                  "glyphicon":"glyphicon-filter",
                  "deactivateGFI":false
-              },
-              "routing":{
-                 "name": "translate#common:menu.tools.routing",
-                 "glyphicon":"glyphicon-road",
-                 "viomRoutingID":"7",
-                 "bkgSuggestID":"4",
-                 "bkgGeosearchID":"5"
               },
               "draw":{
                 "name":"translate#common:menu.tools.draw",
@@ -326,10 +318,22 @@
           "showCollapseAllButton": true
         },
         "contact":{
-         "name": "translate#common:menu.contact",
-           "glyphicon":"glyphicon-envelope",
-           "serviceID":"80001",
-           "includeSystemInfo":true
+          "name": "translate#common:menu.contact",
+          "glyphicon":"glyphicon-envelope",
+          "serviceId":"80001",
+          "includeSystemInfo":true,
+          "from": [
+              {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+              }
+          ],
+          "to": [
+              {
+                  "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+                  "name": "LGVGeoportalHilfe"
+              }
+          ]
         },
         "info":{
          "name": "translate#common:menu.info",

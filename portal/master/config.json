@@ -307,11 +307,11 @@
             "filename": "Ausdruck",
             "title": "Mein Titel",
             "legendText": "Mit Legende",
-            "version" : "mapfish_print_3",
             "currentLayoutName": "A3 Hochformat",
             "dpiForPdf": 120
           },
-          "searchByCoord": {
+          "searchByCoord":
+          {
             "name": "translate#common:menu.tools.searchByCoord",
             "glyphicon": "glyphicon-record"
           },
@@ -323,14 +323,6 @@
             "name": "Erweiterter Filter",
             "glyphicon": "glyphicon-filter",
             "deactivateGFI": false
-          },
-          "routing": {
-            "name": "translate#common:menu.tools.routing",
-            "glyphicon": "glyphicon-road",
-            "viomRoutingID": "7",
-            "bkgSuggestID": "4",
-            "bkgGeosearchID": "5",
-            "isInitOpen": false
           },
           "draw": {
             "name": "translate#common:menu.tools.draw",
@@ -422,11 +414,11 @@
             "name": "translate#common:menu.tools.scaleSwitcher",
             "glyphicon": "glyphicon-resize-full"
           },
-          "VueAddon": {
+          "vueAddon": {
             "name": "AddonTool",
             "glyphicon": "glyphicon-screenshot"
           },
-          "TacticalMark": {
+          "tacticalMark": {
             "name": "Taktische Zeichen",
             "glyphicon": "glyphicon-map-marker"
           }
@@ -440,8 +432,20 @@
       "contact": {
         "name": "translate#common:menu.contact",
         "glyphicon": "glyphicon-envelope",
-        "serviceID": "80001",
-        "includeSystemInfo": true
+        "serviceId": "80001",
+        "includeSystemInfo": true,
+        "from": [
+          {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+          }
+        ],
+        "to": [
+          {
+            "email": "lgvgeoportal-hilfe@gv.hamburg.de",
+            "name": "LGVGeoportalHilfe"
+          }
+        ]
       },
       "info": {
         "name": "translate#common:menu.info",
@@ -451,7 +455,7 @@
             {
               "name": "translate#common:modules.tools.info.disclaimer",
               "glyphicon": "glyphicon-globe",
-              "url": "http://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
+              "url": "https://preview.poc.hamburg.de/hhcae-cm7/servlet/segment/de/energiewende/waermekataster/8348242/waermekataster-haftungsausschuss"
             },
             {
               "name": "translate#common:modules.tools.info.home.name",
@@ -656,10 +660,9 @@
           "featureCount": 20
         },
         {
-          "id": "2404",
-          "styleId": "45",
+          "id": "10882",
+          "styleId": "10882",
           "clusterDistance": 40,
-          "routable": true,
           "searchField": "bezeichnung",
           "styleGeometryType": "Point"
         },

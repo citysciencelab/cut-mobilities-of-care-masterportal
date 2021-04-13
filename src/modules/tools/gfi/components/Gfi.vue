@@ -227,10 +227,12 @@ export default {
                     preparedValue = String(preparedValue);
                 }
             }
-            if (preparedValue && preparedValue !== "undefined") {
+            if (preparedValue && obj.suffix && preparedValue !== "undefined") {
                 preparedValue = this.appendSuffix(preparedValue, obj.suffix);
             }
-
+            if (preparedValue && obj.prefix && preparedValue !== "undefined") {
+                preparedValue = this.prependPrefix(preparedValue, obj.prefix);
+            }
             return preparedValue;
         },
         /**
@@ -272,7 +274,7 @@ export default {
         /**
          * Appends a suffix if available.
          * @param {*} value Value to append suffix.
-         * @param {*} suffix Suffix
+         * @param {String} suffix Suffix
          * @returns {String} - Value with suffix.
          */
         appendSuffix: function (value, suffix) {
@@ -283,6 +285,22 @@ export default {
             }
             return valueWithSuffix;
         },
+
+        /**
+         * Prepend a prefix if available.
+         * @param {*} value Value to prepend prefix.
+         * @param {String} prefix Prefix
+         * @returns {String} - Value with prefix.
+         */
+        prependPrefix: function (value, prefix) {
+            let valueWithPrefix = value;
+
+            if (prefix) {
+                valueWithPrefix = prefix + String(valueWithPrefix);
+            }
+            return valueWithPrefix;
+        },
+
         /**
          * Returns the value of the given key. Also considers, that the key may be an object path.
          * @param {Object} gfi Gfi object.

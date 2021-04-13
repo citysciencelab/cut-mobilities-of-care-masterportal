@@ -42,12 +42,10 @@ const MultiCheckboxModel = SnippetModel.extend({
      * @returns {void}
      */
     addValueModel: function (value) {
-        const isNewVectorStyle = Config.hasOwnProperty("useVectorStyleBeta") && Config.useVectorStyleBeta ? Config.useVectorStyleBeta : false;
-
         this.get("valuesCollection").add(new ValueModel({
             attr: this.get("name"),
             value: value,
-            iconPath: isNewVectorStyle ? this.getIconPath(value) : this.getIconPathOld(value),
+            iconPath: this.getIconPath(value),
             displayName: value,
             isSelected: this.get("isInitialLoad") ? true : this.get("preselectedValues").indexOf(value) !== -1,
             isSelectable: true,
@@ -187,41 +185,6 @@ const MultiCheckboxModel = SnippetModel.extend({
         svg += "</svg>";
 
         return svg;
-    },
-
-
-    /**
-     * creates a model value and adds it to the value collection
-     * @deprecated with new vectorStyle module
-     * @param  {string} value - value
-     * @returns {string} - path to Icon
-     */
-    getIconPathOld: function (value) {
-        const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: this.get("layerId")});
-        let styleId,
-            styleModel,
-            valueStyle,
-            iconPath;
-
-        if (layerModel) {
-            styleId = layerModel.get("styleId");
-
-            if (styleId) {
-                styleModel = Radio.request("StyleList", "returnModelById", styleId);
-            }
-        }
-
-        if (styleModel) {
-            valueStyle = styleModel.get("styleFieldValues").filter(function (styleFieldValue) {
-                return styleFieldValue.styleFieldValue === value;
-            });
-        }
-
-        if (valueStyle) {
-            iconPath = styleModel.get("imagePath") + valueStyle[0].imageName;
-        }
-
-        return iconPath;
     },
 
     /**

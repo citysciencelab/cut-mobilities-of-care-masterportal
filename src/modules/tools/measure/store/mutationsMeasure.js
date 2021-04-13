@@ -20,15 +20,6 @@ const mutations = {
         };
     },
     /**
-     * Adds an overlay to the overlays array.
-     * @param {object} state vuex state
-     * @param {MeasureOverlay} payload added overlay
-     * @returns {void}
-     */
-    addOverlay (state, payload) {
-        state.overlays = [...state.overlays, payload];
-    },
-    /**
      * Adds an unlisten function to the unlisteners array.
      * @param {object} state vuex state
      * @param {function} payload added unlisten function

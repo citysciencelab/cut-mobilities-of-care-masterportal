@@ -35,7 +35,6 @@
             "supplyCoord": "Richiedi coordinate",
             "searchByCoord": "Ricerca di coordinate",
             "fileImport": "Importa file",
-            "routing": "Traccia tragitto",
             "draw": "Disegna / Scrivi",
             "shadow": "Ombre",
             "styleWMS": "Adatta WMS",
@@ -48,7 +47,8 @@
             "addWms": "Aggiungi WMS",
             "wfsTransaction": "Strumento WFS-T",
             "scaleSwitcher": "Cambia scala",
-            "selectFeatures": "Seleziona"
+            "selectFeatures": "Seleziona",
+            "styleVt": "Style VT"
         },
         "contact": "Contatti",
         "info": "Informazioni"
@@ -219,23 +219,27 @@
                 "errorMessage": "Il servizio specificato non ha potuto essere caricato. Si prega di assicurarsi che l'URL sia stato specificato correttamente.<br><br>Se il problema si verifica ancora, si prega di contattare il gestore del servizio con la seguente nota:<br><strong>CORS-Header deve essere obbligatoriamente impostata per il servizio. Questo è raccomandato nel capitolo 4.7.1. da <a target='_blank' href='https://www.gdi-de.org/SharedDocs/Downloads/DE/GDI-DE/Dokumente/Architektur_GDI-DE_Bereitstellung_Darstellungsdienste.pdf?__blob=publicationFile'>GDI-DE</a></strong>",
                 "errorHttpsMessage": "Il WMS che avete richiesto utilizza HTTP. Il Masterportal può integrare WMS solo utilizzando HTTPS (SSL).",
                 "placeholder": "Inserire qui l'URL del WMS.",
-                "textExample": "Esempio: https://geodienste.hamburg.de/HH_WMS_Gruenes_Netz",
+                "textExample": "Esempio: https://geodienste.hamburg.de/HH_WMS_Fahrradrouten",
                 "textLoadLayer": "Carica",
                 "ifInExtent": "I geodati forniti tramite il WMS sono al di fuori dell'area visualizzabile. WMS non aggiunto.",
                 "checkVersion": "Aggiungere WMS è possibile solo se la versione del WMS esterno è uguale o superiore a 1.3.0."
             },
             "contact": {
-                "textPlaceholder": "Si prega di formulare qui la vostra richiesta e premere &quot;$t(common:modules.tools.contact.textSendButton)&quot;",
-                "userNamePlaceholder": "Nome",
-                "textSendButton": "Invia",
-                "emailAddressPlaceholder": "Indirizzo e-mail",
-                "telephonePlaceholder": "Numero di telefono",
-                "errorName": "Si prega di indicare il vostro nome.",
-                "errorEmail": "Si prega di inserire un indirizzo e-mail valido.",
-                "errorNumber": "A quale numero di telefono possiamo contattarvi?",
-                "errorMessage": "Trasmissione e-mail non riuscita!",
-                "successMessage": "La vostra richiesta è stata inviata con successo",
-                "successTicket": "Il vostro numero di ticket è: "
+              "error": {
+                  "mail": "Si prega di inserire un indirizzo e-mail valido.",
+                  "message": "Trasmissione e-mail non riuscita!",
+                  "phone": "A quale numero di telefono possiamo contattarvi?",
+                  "username": "Si prega di indicare il vostro nome."
+              },
+              "placeholder": {
+                  "mail": "Indirizzo e-mail",
+                  "message": "Si prega di formulare qui la vostra richiesta e premere \"$t(common:modules.tools.contact.sendButton)\".",
+                  "phone": "Numero di telefono",
+                  "username": "Nome"
+              },
+              "sendButton": "Invia",
+              "successMessage": "La vostra richiesta è stata inviata con successo",
+              "successTicket": "Il vostro numero di ticket è: "
             },
             "print": {
                 "titleLabel": "Titolo",
@@ -433,9 +437,6 @@
                   "compareFeatureIcon": {
                     "toCompareList": "Aggiungi alla lista del confronto",
                     "fromCompareList": "Rimouvi dalla lista del confronto"
-                  },
-                  "routingicon": {
-                    "routingDestination": "Adotta come destinazione"
                   }
                 },
                 "themes": {
@@ -488,30 +489,12 @@
                 "shortMonths": ["gen", "feb", "mar", "apr", "mag", "gui", "lug", "ago", "set", "ott", "nov", "dic"]
               }
             },
-            "viomRouting": {
-                "startAddressLabel": "Startadresse",
-                "destinationAddressLabel": "Zieladresse",
-                "fromPlaceholder": "Von",
-                "toPlaceholder": "Bis",
-                "setStartTimeText": "Startzeitpunkt vorgeben",
-                "routingError": "Fehlermeldung bei Routenberechnung",
-                "enterStartDestHoverText": "Start- und Ziel eingeben",
-                "enterOptionsText": "Optionen eingeben",
-                "calculateRoute": "Route berechnen",
-                "currentPosition": "Aktueller Standpunkt",
-                "routingCalcError": "Entschuldigung, die Adressabfrage konnte leider nicht verarbeitet werden. Bitte wenden sie sich an den Administrator",
-                "routingCalcAborted": "Entschuldigung, die Adressabfrage ist leider fehlgeschlagen. Bitte wenden sie sich an den Administrator. Folgender Fehler ist aufgetreten",
-                "addressRequestFailed": "Adressabfrage fehlgeschlagen",
-                "selectedDestination": "Gew�hltes Ziel"
-            },
             "searchByCoord": {
                 "exampleAcronym": "Es.",
                 "errorMsg": {
                     "noCoord": "Si prega di inserire {{valueKey}} completo.",
-                    "noMatch": "L'input per {{valueKey}} non è corretto! (Esempio: {{valueExample}})"
-                },
-                "hdmsEastingText": "Valore $t(common:modules.tools.supplyCoord.hdms.eastingLabel)",
-                "hdmsNorthingText": "Valore $t(common:modules.tools.supplyCoord.hdms.northingLabel)"
+                    "noMatch": "L'input per {{valueKey}} non è corretto! Esempio: "
+                }
             },
             "draw": {
                 "clickToPlaceText": "Clicca sulla mappa per inserire il testo",

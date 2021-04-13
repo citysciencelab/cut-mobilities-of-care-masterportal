@@ -606,7 +606,7 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 const {styleSettings} = getters;
 
                 state.selectedFeature.setStyle(function (feature) {
-                    if (feature.get("isVisible")) {
+                    if (feature.get("isVisible") === undefined || feature.get("isVisible")) {
                         return createStyle(feature.get("drawState"), styleSettings);
                     }
                     return undefined;

@@ -45,7 +45,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 Tools: {
                     namespaced: true,
                     modules: {
-                        GFI: {
+                        Gfi: {
                             namespaced: true,
                             mutations: mockMutations,
                             getters: mockGetters
@@ -219,7 +219,7 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                 store: store,
                 localVue
             }),
-            modal = wrapper.find("#vue-tool-content-body");
+            modal = wrapper.find(".vue-tool-content-body");
 
         await modal.trigger("click");
         expect(wrapper.emitted()).to.not.have.property("close");
@@ -262,7 +262,9 @@ describe("src/modules/tools/gfi/components/templates/Detached.vue", () => {
                     getTheme: () => "default",
                     getTitle: () => "Hallo",
                     getMimeType: () => "text/html",
-                    getGfiUrl: () => "http"
+                    getGfiUrl: () => "http",
+                    getLayerId: () => sinon.stub(),
+                    getOlFeature: () => olFeature
                 }
             },
             components: {

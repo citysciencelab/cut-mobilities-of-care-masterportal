@@ -58,30 +58,34 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
                 size = getWidth(extent) / parseInt(this.get("tileSize"), 10),
                 resLength = parseInt(this.get("resLength"), 10),
                 resolutions = new Array(resLength),
-                matrixIds = new Array(resLength);
+                matrixIds = new Array(resLength),
+                source = new WMTS({
+                    projection: projection,
+                    attributions: this.get("olAttribution"),
+                    tileGrid: new WMTSTileGrid({
+                        origin: this.get("origin"),
+                        resolutions: resolutions,
+                        matrixIds: matrixIds,
+                        tileSize: this.get("tileSize")
+                    }),
+                    tilePixelRatio: DEVICE_PIXEL_RATIO,
+                    urls: urls,
+                    matrixSet: this.get("tileMatrixSet"),
+                    matrixSizes: this.get("matrixSizes"),
+                    layer: this.get("layers"),
+                    format: format,
+                    style: style,
+                    version: this.get("version"),
+                    transparent: this.get("transparent").toString(),
+                    wrapX: wrapX,
+                    requestEncoding: this.get("requestEncoding"),
+                    scales: this.get("scales")
+                });
 
             this.generateArrays(resolutions, matrixIds, resLength, size);
-
-            this.setLayerSource(new WMTS({
-                projection: projection,
-                attributions: this.get("olAttribution"),
-                tileGrid: new WMTSTileGrid({
-                    origin: this.get("origin"),
-                    resolutions: resolutions,
-                    matrixIds: matrixIds,
-                    tileSize: this.get("tileSize")
-                }),
-                tilePixelRatio: DEVICE_PIXEL_RATIO,
-                urls: urls,
-                matrixSet: this.get("tileMatrixSet"),
-                layer: this.get("layers"),
-                format: format,
-                style: style,
-                version: this.get("version"),
-                transparent: this.get("transparent").toString(),
-                wrapX: wrapX,
-                requestEncoding: this.get("requestEncoding")
-            }));
+            source.matrixSizes = this.get("matrixSizes");
+            source.scales = this.get("scales");
+            this.setLayerSource(source);
         }
         else {
             const layerIdentifier = this.get("layers"),
@@ -102,11 +106,22 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
 
             this.fetchWMTSCapabilities(url)
                 .then((result) => {
-                    const options = optionsFromCapabilities(result, capabilitiesOptions);
+                    const options = optionsFromCapabilities(result, capabilitiesOptions),
+                        tileMatrixSet = result.Contents.TileMatrixSet.filter(set => set.Identifier === options.matrixSet)[0],
+                        matrixSizes = [],
+                        scales = [];
+
+                    // Add the parameters "ScaleDenominator" and "MatrixHeight" / "MatrixWidth" to the source to be able to print WMTS layers
+                    tileMatrixSet.TileMatrix.forEach(({MatrixHeight, MatrixWidth, ScaleDenominator}) => {
+                        matrixSizes.push([MatrixWidth, MatrixHeight]);
+                        scales.push(ScaleDenominator);
+                    });
 
                     if (options !== null) {
                         const source = new WMTS(options);
 
+                        source.matrixSizes = matrixSizes;
+                        source.scales = scales;
                         this.set("options", options);
                         this.setLayerSource(source);
                         Promise.resolve();
@@ -198,7 +213,6 @@ const WMTSLayer = Layer.extend(/** @lends WMTSLayer.prototype */{
             name: this.get("name"),
             typ: this.get("typ"),
             legendURL: this.get("legendURL"),
-            routable: this.get("routable"),
             infoFormat: this.get("infoFormat")
         }));
     },

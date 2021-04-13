@@ -49,7 +49,12 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
         this.model.setIncorrectConfigLayers(incorrectIds);
 
         this.listenTo(this.model, {
-            "change:isActive": this.render,
+            "change:isActive": function () {
+                if (this.model.get("isActive") === true) {
+                    this.model.updateAvailableLayers();
+                }
+                this.render();
+            },
             "change:activeButton": this.render,
             "change:currentLayerId": this.render,
             "change:showAttrTable": this.render,
@@ -73,11 +78,19 @@ const WfstView = Backbone.View.extend(/** @lends WfstView.prototype */{
     render: function () {
         const isActive = this.model.get("isActive"),
             initialAlertCases = this.model.get("initialAlertCases"),
-            incorrectConfigLayers = this.model.get("incorrectConfigLayers"),
+            ids = this.model.get("layerIds"),
+            missingLayers = this.model.checkForMissingLayers(ids),
             activeLayers = this.model.get("activeLayers"),
             activeButton = this.model.get("activeButton");
         let alertCases,
-            message;
+            message,
+            incorrectConfigLayers = this.model.get("incorrectConfigLayers");
+
+        // checks if configured layers for the wfst module are not in the modelList yet (e.g. saved services)
+        if (missingLayers.length > 0) {
+            incorrectConfigLayers = this.model.getIncorrectConfiguredLayerIds(ids);
+            this.model.setIncorrectConfigLayers(incorrectConfigLayers);
+        }
 
         this.model.checkActiveLayers(activeLayers, incorrectConfigLayers);
         if (isActive) {

@@ -17,7 +17,9 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
 
     beforeEach(() => {
         mqtt = new SensorThingsMqtt({
-            mqttUrl: "url"
+            host: "url",
+            path: "/mqtt",
+            protocol: "wss"
         }, {
             connect: () => {
                 return false;
@@ -28,30 +30,38 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
 
     describe("constructor", () => {
         it("should connect to mqtt with the given url", () => {
-            let lastUrl = false;
+            let lastHost = false,
+                lastPath = false,
+                lastProtocol = false;
 
             new SensorThingsMqtt({
-                mqttUrl: "url"
+                host: "url",
+                path: "/mqtt",
+                protocol: "wss"
             }, {
-                connect: (url) => {
-                    lastUrl = url;
+                connect: ({host, path, protocol}) => {
+                    lastHost = host;
+                    lastPath = path;
+                    lastProtocol = protocol;
                 }
             });
 
-            expect(lastUrl).to.equal("url");
+            expect(lastHost).to.equal("url");
+            expect(lastPath).to.equal("/mqtt");
+            expect(lastProtocol).to.equal("wss");
         });
 
         it("should connect to mqtt with the given options", () => {
             let lastOptions = false;
             const expectedOptions = {
-                mqttUrl: "url",
+                host: "url",
                 mqttVersion: "3.1.1",
                 rhPath: "rhPath",
                 context: "this"
             };
 
             new SensorThingsMqtt(expectedOptions, {
-                connect: (url, options) => {
+                connect: (options) => {
                     lastOptions = options;
                 }
             });
@@ -62,13 +72,13 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
         it("should expand the options for mqtt v3.1 by a different protocolId and protocolVersion", () => {
             let lastOptions = false;
             const givenOptions = {
-                    mqttUrl: "url",
+                    host: "url",
                     mqttVersion: "3.1",
                     rhPath: "rhPath",
                     context: "this"
                 },
                 expectedOptions = {
-                    mqttUrl: "url",
+                    host: "url",
                     mqttVersion: "3.1",
                     rhPath: "rhPath",
                     context: "this",
@@ -77,7 +87,7 @@ describe("core/modelList/layer/sensorThingsMqtt", function () {
                 };
 
             new SensorThingsMqtt(givenOptions, {
-                connect: (url, options) => {
+                connect: (options) => {
                     lastOptions = options;
                 }
             });

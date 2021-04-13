@@ -150,7 +150,7 @@ Creates a build from the example folder.
 $ npm run buildExamples
 ```
 
-The produced `examples.zip` and `examples-x.x.x.zip` (versioned) both contain runnable Masterportal instances (*Basic*) including a *ressources* folder.
+The produced `examples.zip` and `examples-x.x.x.zip` (versioned) both contain runnable Masterportal instances (*Basic*) including a *resources* folder.
 
 ## Updating dependencies
 

@@ -4,13 +4,11 @@ import {isWebLink} from "../../../../../../../utils/urlHelper.js";
 import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../../../../utils/isPhoneNumber.js";
 import {isEmailAddress} from "../../../../../../../utils/isEmailAddress.js";
 import CompareFeatureIcon from "../../../favoriteIcons/components/CompareFeatureIcon.vue";
-import RoutingIcon from "../../../favoriteIcons/components/RoutingIcon.vue";
 
 export default {
     name: "Default",
     components: {
-        CompareFeatureIcon,
-        RoutingIcon
+        CompareFeatureIcon
     },
     props: {
         feature: {
@@ -52,12 +50,24 @@ export default {
             return this.feature.getMimeType();
         }
     },
+    watch: {
+        feature () {
+            this.$nextTick(() => {
+                this.addTextHtmlContentToIframe();
+            });
+        }
+    },
     created () {
         this.showFavoriteIcons = this.feature.getTheme()?.params?.hasOwnProperty("showFavoriteIcons") ?
             this.feature.getTheme().params.showFavoriteIcons : this.showFavoriteIcons;
 
         this.replacesConfiguredImageLinks();
         this.setImportedComponents();
+    },
+    mounted () {
+        this.$nextTick(() => {
+            this.addTextHtmlContentToIframe();
+        });
     },
     methods: {
         beautifyKey,
@@ -90,6 +100,18 @@ export default {
             }
             else if (typeof imageLinksAttribute === "string") {
                 this.imageLinks = [imageLinksAttribute];
+            }
+        },
+
+        /**
+         * Adds the text/html content to the iframe
+         * @returns {void}
+         */
+        addTextHtmlContentToIframe: function () {
+            const iframe = document.getElementsByClassName("gfi-iFrame")[0];
+
+            if (this.mimeType === "text/html" && iframe) {
+                iframe.contentWindow.document.write(this.feature.getDocument());
             }
         }
     }
@@ -166,7 +188,6 @@ export default {
         </table>
         <iframe
             v-if="mimeType === 'text/html'"
-            :src="feature.getGfiUrl()"
             class="gfi-iFrame"
         >
         </iframe>

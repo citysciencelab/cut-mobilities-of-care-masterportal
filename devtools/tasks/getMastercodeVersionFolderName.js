@@ -6,9 +6,14 @@ const path = require("path"),
 
 module.exports = function getMastercodeVersionFolderName () {
     let folderName = stableVersionNumber;
+    const tag = gitRevSync.tag().replace(/\./g, "_").slice(1),
+        tagFirstParent = gitRevSync.tagFirstParent().replace(/\./g, "_").slice(1);
 
-    if (gitRevSync.branch().toUpperCase() !== "STABLE") {
-        folderName += "_DEV_" + moment(gitRevSync.date()).format("YYYY-MM-DD__HH-mm-ss");
+    if (stableVersionNumber !== tag || stableVersionNumber !== tagFirstParent) {
+        // gitRevSync.date() = the date of the current commit
+        const date = moment(gitRevSync.date()).format("YYYY-MM-DD__HH-mm-ss");
+
+        folderName += `_${gitRevSync.branch()}_last_change_at_${date}`;
     }
 
     return folderName;

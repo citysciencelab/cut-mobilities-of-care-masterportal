@@ -34,7 +34,7 @@
             <% if (downloadLinks) { %>
             <li value="LayerInfoDataDownload" class="tab-toggle"><a data-toggle="tab" href="#LayerInfoDataDownload"><%= downloadDataset %></a></li>
             <% } %>
-            <% if (url !== null && urlIsVisible !== false) { %>
+            <% if (url !== null && urlIsVisible !== false && typ !== "SensorThings") { %>
             <li value="url" class="tab-toggle"><a data-toggle="tab" href="#url"><%= typ %>-<%= addressSuffix %></a></li>
             <% } %>
         </ul>
@@ -57,10 +57,10 @@
                 <% } %>
             </div>
         </div>
-        <div id="url" class="tab-pane fade">
-            <ul class="list-unstyled">
-                <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
-            </ul>
-        </div>
+            <div id="url" class="tab-pane fade">
+                <ul class="list-unstyled">
+                    <li><a href="<%= url %>?SERVICE=<%= typ %>&REQUEST=GetCapabilities" target="_blank"><%= url %> </a><li>
+                </ul>
+            </div>
     </div>
 </div>

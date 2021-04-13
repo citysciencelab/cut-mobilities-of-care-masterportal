@@ -221,6 +221,25 @@ export default {
                 return false;
             }
             return true;
+        },
+
+        /**
+         * Checks if there are visible features from draw tool.
+         * @param {module:ol/Feature[]} features - The features to be checked.
+         * @returns {Boolean} True if there are visible features otherwise false.
+         */
+        isFromDrawTool () {
+            const visibleFeatures = this.layer.getSource().getFeatures().filter(feature => feature.get("fromDrawTool") && feature.get("isVisible"));
+
+            return visibleFeatures.length > 0;
+        },
+
+        /**
+         * Returns the features are setted from drawTool
+         * @returns {module:ol/Feature[]} The features from drawTool
+         */
+        featuresFromDrawTool () {
+            return this.layer.getSource().getFeatures().filter(feature => feature.get("fromDrawTool"));
         }
 
         // NOTE: A nice feature would be that, similar to the interactions with the map, the Undo and Redo Buttons are disabled if not useable.
@@ -369,12 +388,13 @@ export default {
                 </option>
             </select>
             <hr>
-            <template v-if="layer.getSource().getFeatures().length > 0 && isFilterListValid">
+            <template
+                v-if="isFromDrawTool && isFilterListValid"
+            >
                 <DrawFeaturesFilter
                     :filterList="filterList"
-                    :features="layer.getSource().getFeatures()"
+                    :features="featuresFromDrawTool"
                 />
-                <hr>
             </template>
             <form
                 class="form-horizontal"

@@ -129,9 +129,9 @@
 					"mouseHoverField": "gebietsname"
 				},
 				{
-					"id": "2404",
+					"id": "10882",
 					"name": "WFS Bike and Ride Parkplätze",
-					"styleId": "45",
+					"styleId": "10882",
           "clusterDistance": 40,
           "styleGeometryType": ["Point"]
 				},

@@ -161,7 +161,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     glyphicon: "glyphicon-plus-sign",
                     isVisibleInTree: this.getIsVisibleInTree(level, "folder", true, treeType),
                     isInThemen: true,
-                    quickHelp: Radio.request("QuickHelp", "isSet")
+                    quickHelp: Radio.request("QuickHelp", "isSet"),
+                    invertLayerOrder: folder.invertLayerOrder
                 });
                 // rekursiver Aufruf
                 this.parseTree(folder, folder.id, level + 1);

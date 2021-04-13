@@ -23,7 +23,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         timezone: "Europe/Berlin",
         version: "1.1",
-        mqttPath: "/mqtt",
         subscriptionTopics: {},
         httpSubFolder: "",
         showNoDataValue: true,
@@ -31,6 +30,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         altitudeMode: "clampToGround",
         isSubscribed: false,
         moveendListener: null,
+        mqttOptions: {},
         loadThingsOnlyInCurrentExtent: false,
         useProxy: false,
         mqttRh: 2,
@@ -190,7 +190,6 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             typ: this.get("typ"),
             gfiAttributes: this.get("gfiAttributes"),
             gfiTheme: this.get("gfiTheme"),
-            routable: this.get("routable"),
             id: this.get("id"),
             altitudeMode: this.get("altitudeMode")
         }));
@@ -247,6 +246,8 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
                 this.styling(isClustered);
                 this.get("layer").setStyle(this.get("style"));
             }
+
+            features.forEach(feature => Radio.trigger("GFI", "changeFeature", feature));
 
             if (typeof onsuccess === "function") {
                 onsuccess();
@@ -553,7 +554,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             let phenomenonTime = dataStream.hasOwnProperty("Observations") ? dataStream.Observations[0]?.phenomenonTime : "";
 
             this.addDatastreamProperties(thing.properties, dataStream.properties);
-            phenomenonTime = changeTimeZone(phenomenonTime, this.get("utc"));
+            phenomenonTime = changeTimeZone(phenomenonTime?.split("/")[0], this.get("utc"));
 
             thing.properties.dataStreamId.push(dataStreamId);
             thing.properties.dataStreamName.push(dataStreamName);
@@ -838,10 +839,12 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
          */
         const url = this.get("useProxy") ? getProxyUrl(this.get("url")) : this.get("url"),
             mqttOptions = Object.assign({
-                mqttUrl: "wss://" + url.split("/")[2] + this.get("mqttPath"),
-                mqttVersion: "3.1.1",
+                host: url.split("/")[2],
                 rhPath: url,
-                context: this
+                context: this,
+                path: "/mqtt",
+                protocol: "wss",
+                mqttVersion: "3.1.1"
             }, this.get("mqttOptions")),
             mqtt = new SensorThingsMqtt(mqttOptions);
 

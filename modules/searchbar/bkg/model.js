@@ -174,10 +174,10 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
      * Starts the precise search of a selected BKG proposal.
      * @param  {object} hit - Object of the BKG proposal.
      * @param  {boolean} showOrHideMarker - Indicates whether the marker should be shown or hidden.
-     * @param  {event} [eventType="click"] - The type of event that triggered this function.
+     * @param  {event} eventType - The type of event that triggered this function.
      * @return {void}
      */
-    bkgSearch: function (hit, showOrHideMarker, eventType = "click") {
+    bkgSearch: function (hit, showOrHideMarker, eventType) {
         const name = hit.name,
             request = "bbox=" + this.get("extent") + "&outputformat=json&srsName=" + this.get("epsg") + "&count=1&query=" + encodeURIComponent(name);
 
@@ -227,6 +227,7 @@ const BKGSearchModel = Backbone.Model.extend(/** @lends BKGSearchModel.prototype
         if (data.features.length !== 0 && data.features[0].geometry !== null && data.features[0].geometry.type === "Point") {
             Radio.trigger("MapView", "setCenter", data.features[0].geometry.coordinates, zoomLevel !== undefined ? zoomLevel : this.get("zoomLevel"));
             store.dispatch("MapMarker/placingPointMarker", data.features[0].geometry.coordinates);
+            store.commit("controls/orientation/setPosition", data.features[0].geometry.coordinates);
         }
 
         else if (data.features.length !== 0 && data.features[0].properties !== null && data.features[0].properties.bbox !== null &&

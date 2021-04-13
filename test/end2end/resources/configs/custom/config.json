@@ -248,8 +248,7 @@
                  "mapfishServiceId":"mapfish_qs",
                  "printAppId":"master",
                  "filename":"Ausdruck",
-                 "title":"Mein Titel",
-                 "version":"mapfish_print_3"
+                 "title":"Mein Titel"
               },
               "searchByCoord":{
                  "name":"Koordinatensuche",
@@ -268,13 +267,6 @@
                  "name":"Erweiterter Filter",
                  "glyphicon":"glyphicon-filter",
                  "deactivateGFI":false
-              },
-              "routing":{
-                 "name":"Routenplaner",
-                 "glyphicon":"glyphicon-road",
-                 "viomRoutingID":"7",
-                 "bkgSuggestID":"4",
-                 "bkgGeosearchID":"5"
               },
               "draw":{
                  "name":"Zeichnen / Schreiben",

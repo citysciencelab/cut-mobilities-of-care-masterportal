@@ -16,18 +16,10 @@ import Folder from "./folder/model";
 import Tool from "./tool/model";
 import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
-/**
- * PrintV2
- * @deprecated in 3.0.0
- */
-import PrintV2 from "../../tools/print/model";
-import Print from "../../tools/print_/mapfish3PlotService";
-import HighResolutionPrint from "../../tools/print_/highResolutionPlotService";
+import Print from "../../tools/print/mapfish3PlotService";
+import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
 import Animation from "../../tools/pendler/animation/model";
 import Lines from "../../tools/pendler/lines/model";
-import Contact from "../../tools/contact/model";
-import SearchByCoord from "../../tools/searchByCoord/model";
-import Routing from "../../tools/viomRouting/model";
 /**
  * WfsFeatureFilter
  * @deprecated in 3.0.0
@@ -40,12 +32,10 @@ import TreeFilter from "../../treeFilter/model";
  */
 import ExtendedFilter from "../../tools/extendedFilter/model";
 import FeatureLister from "../../tools/featureLister/model";
-import AddWms from "../../tools/addWMS/model";
 import Shadow from "../../tools/shadow/model";
 import CompareFeatures from "../../tools/compareFeatures/model";
 import ParcelSearch from "../../tools/parcelSearch/model";
 import StyleWMS from "../../tools/styleWMS/model";
-import StyleVT from "../../tools/styleVT/model";
 import LayerSliderModel from "../../tools/layerSlider/model";
 import Viewpoint from "./viewPoint/model";
 import ColorScale from "../../tools/colorScale/model";
@@ -240,15 +230,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
         }
         else if (attrs.type === "tool") {
             if (attrs.id === "print") {
-                /**
-                 * PrintV2
-                 * do not use the attribute "version"
-                 * @deprecated in 3.0.0
-                 */
-                if (attrs.version === undefined) {
-                    return new PrintV2(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
-                }
-                else if (attrs.version === "HighResolutionPlotService") {
+                if (attrs.version === "HighResolutionPlotService") {
                     return new HighResolutionPrint(Object.assign(attrs, {center: Radio.request("MapView", "getCenter"), proxyURL: Config.proxyURL}), options);
                 }
                 return new Print(attrs, options);
@@ -259,9 +241,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "styleWMS") {
                 return new StyleWMS(attrs, options);
             }
-            else if (attrs.id === "styleVT") {
-                return new StyleVT(attrs, options);
-            }
             else if (attrs.id === "compareFeatures") {
                 return new CompareFeatures(attrs, options);
             }
@@ -271,26 +250,14 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
             }
-            else if (attrs.id === "searchByCoord") {
-                return new SearchByCoord(attrs, options);
-            }
             else if (attrs.id === "lines") {
                 return new Lines(attrs, options);
             }
             else if (attrs.id === "animation") {
                 return new Animation(attrs, options);
             }
-            else if (attrs.id === "routing") {
-                return new Routing(attrs, options);
-            }
-            else if (attrs.id === "addWMS") {
-                return new AddWms(attrs, options);
-            }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
-            }
-            else if (attrs.id === "contact") {
-                return new Contact(attrs, options);
             }
             /**
              * wfsFeatureFilter
@@ -467,6 +434,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
      * @return {void}
      */
     setIsSelectedOnChildLayers: function (model) {
+        const folder = Radio.request("Parser", "getItemsByAttributes", {id: model.get("id")});
         let descendantModels = this.add(Radio.request("Parser", "getItemsByAttributes", {parentId: model.get("id")}));
 
         // Layers in default tree are always sorted alphabetically while in other tree types, layers are
@@ -477,7 +445,10 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
         // Since each layer will be put into selected layers list seperately, their order changes because we
         // shift the layers from one stack to another. So just revert the stack order first.
-        descendantModels = descendantModels.reverse();
+        // This behavior can be avoided setting the invertLayerOrder flag to true.
+        if (!Array.isArray(folder) || !folder.length || !folder[0].invertLayerOrder) {
+            descendantModels = descendantModels.reverse();
+        }
 
         // Setting each layer as selected will trigger rerender of OL canvas and displayed selected layers.
         descendantModels.forEach(childModel => {
@@ -612,13 +583,22 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
 
     /**
      * Sets Layer indeces initially. Background layers are treatet seperatly from normal layers to ensure
-     * they will be put into background.
+     * they will be put into background, if they haven't been defined in the URL Parameters array.
+     * @param  {array} paramLayers The Layer Array according the URL Parameters
      * @return {void}
      */
-    initLayerIndeces: function () {
+    initLayerIndeces: function (paramLayers) {
         const allLayerModels = this.getTreeLayers(),
-            baseLayerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") === true),
-            layerModels = allLayerModels.filter(layerModel => layerModel.get("isBaseLayer") !== true);
+            baseLayerModels = allLayerModels.filter(function (layerModel) {
+                return layerModel.get("isBaseLayer") === true && paramLayers.find(model => {
+                    return model.id === layerModel.id;
+                }) === undefined;
+            }),
+            layerModels = allLayerModels.filter(function (layerModel) {
+                return layerModel.get("isBaseLayer") !== true || paramLayers.find(model => {
+                    return model.id === layerModel.id;
+                }) !== undefined;
+            });
 
         let initialLayers = [];
 
@@ -803,7 +783,7 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             this.addModelsByAttributes({typ: "Oblique"});
         }
 
-        this.initLayerIndeces();
+        this.initLayerIndeces(paramLayers);
         this.updateLayerView();
     },
 

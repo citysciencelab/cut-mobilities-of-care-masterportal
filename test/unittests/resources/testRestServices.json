@@ -18,13 +18,6 @@
     "typ" : "URL"
   },
   {
-    "id" : "7",
-    "name" : "Routing Service VIOM",
-    "url" : "/viomRouting",
-    "providerID" : "HHBWVI",
-    "typ" : "ID"
-  },
-  {
     "id" : "4",
     "name" : "BKG Geokodierungsdienst Suggest",
     "url" : "/bkg_suggest",
@@ -84,18 +77,6 @@
     "name" : "Email Service by PHP",
     "url" : "https://geoportal-hamburg.de/smtp/sendmail.php",
     "typ" : "EmailService"
-  },
-  {
-    "id" : "99999",
-    "name" : "Print Service",
-    "url" : "https://geodienste.hamburg.de/mapfish_print_2_internet",
-    "typ" : "PrintService"
-  },
-  {
-    "id" : "99998",
-    "name" : "Print Service Test",
-    "url" : "https://geoportaltest.metropolregion.hamburg.de/mapfish_print_2.0",
-    "typ" : "PrintService"
   },
   {
     "id": "mapfish_qs",

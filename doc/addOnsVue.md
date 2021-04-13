@@ -16,7 +16,7 @@ Only files related to add-ons must be placed in the `addons` folder.
 
 ```
 addons
-|-- MyAddon1
+|-- myAddon1
 |    index.js
 |   |-- components
 |	|   |-- MyAddOn1.vue
@@ -37,7 +37,7 @@ addons
 |	|-- doc
 |	|   |-- config.json.md
 |   |
-|	|-- test
+|	|-- tests
 |	|   |-- end2end
 |   |	|   |-- MyAddOn1.e2e.js
 |	|   |-- unit
@@ -50,7 +50,7 @@ addons
 |   |
 |   |-- package.json
 
-|-- MyGfiTheme
+|-- myGfiTheme
 |   index.js
 |   |-- components
 |	|   |-- MyGfiTheme.vue
@@ -64,7 +64,7 @@ addons
 |	|-- doc
 |	|   |-- config.json.md
 |   |
-|	|-- test
+|	|-- tests
 |	|   |-- end2end
 |   |	|   |-- MyGfiTheme.e2e.js
 |	|   |-- unit
@@ -73,8 +73,8 @@ addons
 |   |
 |   |-- package.json
 
-|-- MyGFIThemesFolder
-|   |-- MyGFISubFolder
+|-- myGFIThemesFolder
+|   |-- myGFISubFolder
 |   |   index.js
 |   |   |-- components
 |   |   |   |-- MyGfiTheme.vue
@@ -88,7 +88,7 @@ addons
 |   |   |-- doc
 |   |   |   |-- config.json.md
 |   |   |
-|   |   |-- test
+|   |   |-- tests
 |   |   |   |-- end2end
 |   |   |   |   |-- MyGfiTheme.e2e.js
 |   |   |   |-- unit
@@ -103,7 +103,7 @@ The entry point of each add-on must be a file named `index.js` on add-on folder 
 
 ### Configuration file
 
-Within the add-ons folder, a configuration file `addonsConf.json` must exist. This file is to contain JSON that has the add-on's name as key; i.e., an add-on in `addons/MyAddOn1` would have `MyAddOn1` as key.
+Within the add-ons folder, a configuration file `addonsConf.json` must exist. This file is to contain JSON that has the add-on's name as key; i.e., an add-on in `addons/myAddOn1` would have `myAddOn1` as key.
 
 #### `addonsConf.json` example
 
@@ -119,15 +119,15 @@ By default, an add-on's key is the name of its folder. By using the parameter `p
 
 ```json
 {
-  "MyAddOn1": {
+  "myAddOn1": {
     "vue": true
   },
-  "MyGfiTheme": {
+  "myGfiTheme": {
     "type": "gfiTheme"
   },
-  "AnotherGFITheme": {
+  "anotherGFITheme": {
     "type": "gfiTheme",
-    "path": "MyGFIThemesFolder/MyGFISubFolder"
+    "path": "myGFIThemesFolder/myGFISubFolder"
   }
 }
 ```
@@ -156,7 +156,7 @@ The add-on example shall have the name *VueAddOn* with entry point file `index.j
 ```
 myMasterPortalFolder/
     addons/
-        VueAddOn/
+        vueAddOn/
             index.js
             components/
                 VueAddOn.vue
@@ -191,7 +191,7 @@ export default composeModules([GenericTool, {
 The contents `state`, `mutations`, `actions`, and `getters` may be placed in separate files or can alternatively be written directly to the store file. Please mind that setting `namespaced: true` is mandatory.
 
 ```vue
-// myMasterPortalFolder/addons/VueAddon/components/VueAddon.vue
+// myMasterPortalFolder/addons/vueAddon/components/VueAddon.vue
 
 <script>
 import Tool from "../../../src/modules/tools/Tool.vue";
@@ -302,7 +302,7 @@ export default {
 // myMasterPortalFolder/addons/addonsConf.json
 
 {
-  "VueAddon": {
+  "vueAddon": {
     "type": "tool"
   }
 }
@@ -328,7 +328,7 @@ const Config = {
         "name": "Tools",
         "glyphicon": "glyphicon-wrench",
         "children": {
-           "VueAddon": {
+           "vueAddon": {
                 "name": "translate#additional:modules.tools.vueAddon.title",
                 "glyphicon": "glyphicon-th-list"
           },

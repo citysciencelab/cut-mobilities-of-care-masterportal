@@ -1,6 +1,6 @@
 /**
  * @file
- * <h1>Welcome to the Open Source Project "Masterportal" of the [Landesbetrieb Geoinformation und Vermessung]{@link http://www.geoinfo.hamburg.de}</h1>
+ * <h1>Welcome to the Open Source Project "Masterportal" of the [Implementierungspartnerschaft Masterportal]{@link https://www.masterportal.org/}</h1>
  */
 import "core-js/stable";
 import "regenerator-runtime/runtime";

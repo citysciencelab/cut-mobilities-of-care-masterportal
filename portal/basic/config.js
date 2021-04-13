@@ -12,7 +12,7 @@ const Config = {
         urls: [
             {
                 "bezeichnung": "common:modules.footer.designation",
-                "url": "https://www.geoinfo.hamburg.de/",
+                "url": "https://geoinfo.hamburg.de/",
                 "alias": "Landesbetrieb Geoinformation und Vermessung",
                 "alias_mobil": "LGV"
             }
@@ -29,8 +29,7 @@ const Config = {
     mouseHover: {
         numFeaturesToShow: 2,
         infoText: "(weitere Objekte. Bitte zoomen.)"
-    },
-    useVectorStyleBeta: true
+    }
 };
 
 // conditional export to make config readable by e2e tests

@@ -23,7 +23,23 @@ export default {
             this.filterList.forEach(filter => {
                 groupedFeatures[filter.name] = this.filterFeaturesByType(this.features, filter.drawTypes.toString());
             });
+
             return groupedFeatures;
+        },
+
+        /**
+         * The check if there is feature belong to the filter.
+         * If there are features from another tool with another filter, the length of features here will be zero
+         * @returns {Boolean} -
+         */
+        hasFeaturesOfFilter () {
+            let featureLength = 0;
+
+            this.filterList.forEach(filter => {
+                featureLength += this.filterFeaturesByType(this.features, filter.drawTypes.toString()).length;
+            });
+
+            return featureLength > 0;
         }
     },
     methods: {
@@ -46,9 +62,7 @@ export default {
          * @returns {Boolean} True if there are visible features otherwise false.
          */
         hasVisibleFeatures (features) {
-            const visibleFeatures = features.filter(feature => {
-                return feature.get("isVisible");
-            });
+            const visibleFeatures = features.filter(feature => feature.get("fromDrawTool") && feature.get("isVisible"));
 
             return visibleFeatures.length > 0;
         },
@@ -61,7 +75,9 @@ export default {
          */
         setFeaturesVisibility (features, value) {
             features.forEach(feature => {
-                feature.set("isVisible", value);
+                if (feature.get("fromDrawTool")) {
+                    feature.set("isVisible", value);
+                }
             });
         }
     }
@@ -85,6 +101,7 @@ export default {
                 </label>
             </div>
         </template>
+        <hr v-if="hasFeaturesOfFilter">
     </form>
 </template>
 
