@@ -10,17 +10,21 @@
 
 ## Unreleased - in development
 ### Added
-- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby serach results
+- New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
+- Add @babel/eslint-parser to the package.json
 
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.
 - Tool addons are now also written in config.json in camelCase.
 - colorTools are renamed into convertColor (src/utils/convertColor)
+- Updates the core-js and babel dependencies in the package.json
+- Update the dependency caniuse-lite.
 
 ### Deprecated
 - colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
 
 ### Removed
+- remove babel-eslint from the package.json
 
 ### Fixed
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
