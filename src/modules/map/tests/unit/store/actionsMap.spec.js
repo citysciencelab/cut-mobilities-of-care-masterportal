@@ -10,7 +10,8 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
                     mapMode: MapMode.MODE_2D
                 },
                 rootGetters = {
-                    "Tools/Gfi/active": false
+                    "Tools/Gfi/active": false,
+                    "controls/orientation/poiModeCurrentPositionEnabled": true
                 },
                 commit = sinon.spy(),
                 obj = {
@@ -31,7 +32,8 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
                     mapMode: MapMode.MODE_3D
                 },
                 rootGetters = {
-                    "Tools/Gfi/active": false
+                    "Tools/Gfi/active": false,
+                    "controls/orientation/poiModeCurrentPositionEnabled": true
                 },
                 commit = sinon.spy(),
                 obj = {
@@ -57,7 +59,8 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
                     mapMode: MapMode.MODE_2D
                 },
                 rootGetters = {
-                    "Tools/Gfi/active": true
+                    "Tools/Gfi/active": true,
+                    "controls/orientation/poiModeCurrentPositionEnabled": true
                 },
                 dispatch = sinon.spy(),
                 commit = sinon.spy(),
@@ -98,7 +101,8 @@ describe("src/modules/map/store/actions/actionsMap.js", () => {
                     }
                 },
                 rootGetters = {
-                    "Tools/Gfi/active": true
+                    "Tools/Gfi/active": true,
+                    "controls/orientation/poiModeCurrentPositionEnabled": true
                 },
                 commit = sinon.spy(),
                 dispatch = sinon.spy(),

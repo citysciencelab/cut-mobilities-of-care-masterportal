@@ -11,13 +11,53 @@ const mutations = {
     ...generateSimpleMutations(OrientationState),
 
     /**
-     * Set the Geolocation
+     * Set the ShowPoi Window
+     * @param {Object} state - the orientation state
+     * @param {Boolean} active - the status of poi window
+     * @returns {void}
+     */
+    setShowPoi (state, active) {
+        state.showPoi = active;
+    },
+
+    /**
+     * Set the ShowPoiIcon
      * @param {Object} state - the orientation state
      * @param {Boolean} active - the status of poi icon
      * @returns {void}
      */
     setShowPoiIcon (state, active) {
         state.showPoiIcon = active;
+    },
+
+    /**
+     * Set the ShowPoiChoice
+     * @param {Object} state - the orientation state
+     * @param {Boolean} active - the status of poi icon Choice
+     * @returns {void}
+     */
+    setShowPoiChoice (state, active) {
+        state.showPoiChoice = active;
+    },
+
+    /**
+     * Set the current poi mode
+     * @param {Object} state - the orientation state
+     * @param {String} option - the mode of poi
+     * @returns {void}
+     */
+    setPoiMode (state, option) {
+        state.poiMode = option;
+    },
+
+    /**
+     * Set the status if poi mode is current position
+     * @param {Object} state - the orientation state
+     * @param {String} enabled - the status if current position enabled
+     * @returns {void}
+     */
+    setCurrentPositionEnabled (state, enabled) {
+        state.poiModeCurrentPositionEnabled = enabled;
     },
 
     /**

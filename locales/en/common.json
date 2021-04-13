@@ -616,8 +616,13 @@
                 "titleGeolocate": "Common position",
                 "titleGeolocatePOI": "Close to here",
                 "geolocationDeniedText": "Localisation is not available",
-                "trackingDeniedText": "'Close to here' is not available",
-                "distanceUnit": "Meters"
+                "poiChoiceTitle": "Select starting point for radius search:",
+                "poiChoiceCurrentPostion": "Current location",
+                "poiChoiceCustomPostion": "Search address or set point in map",
+                "poiChoiceConfirmation": "OK",
+                "poiChoiceStop": "Quit",
+                "trackingDeniedText": "'Close to here' is not available.",
+                "distanceUnit": "meters"
             },
             "orientation3d": {
                 "compass": {
