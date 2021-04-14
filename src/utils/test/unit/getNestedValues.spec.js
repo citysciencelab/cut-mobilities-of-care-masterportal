@@ -48,7 +48,7 @@ describe("src/utils/getNestedValues.js", () => {
         expect(getNestedValues(42, "age")).to.be.empty;
     });
 
-    it("should return an empty array if the second param is not a string", () => {
+    it("should return an empty array if the given key is not existing", () => {
         expect(getNestedValues(starks, undefined)).to.be.empty;
         expect(getNestedValues(starks, null)).to.be.empty;
         expect(getNestedValues(starks, [])).to.be.empty;
@@ -56,9 +56,6 @@ describe("src/utils/getNestedValues.js", () => {
         expect(getNestedValues(starks, false)).to.be.empty;
         expect(getNestedValues(starks, true)).to.be.empty;
         expect(getNestedValues(starks, 5)).to.be.empty;
-    });
-
-    it("should return an empty array if the given key is not existing", () => {
         expect(getNestedValues(starks, "status")).to.be.empty;
         expect(getNestedValues(starks, "")).to.be.empty;
     });
