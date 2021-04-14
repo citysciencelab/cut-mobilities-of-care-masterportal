@@ -23,8 +23,8 @@ pipelines:
                     # find all zip folders in dist folder, loop through the results and post the zips to the BB download folder
                     - for zipFilePath in $(find dist -name \*.zip); do
                         echo "zip"
-                        #curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
                       done
+                        #curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
     custom: # Pipelines that are triggered manually
         End2End-Tests: # The name that is displayed in the list in the Bitbucket Cloud GUI
             - step:
