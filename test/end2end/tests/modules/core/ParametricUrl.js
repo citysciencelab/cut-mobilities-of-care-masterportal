@@ -32,6 +32,14 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             await driver.quit();
         });
 
+        afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                await driver.quit();
+                driver = await getUnnavigatedDriver(builder, resolution);
+            }
+        });
+
         it("?style=simple hides control elements", async function () {
             await loadUrl(driver, `${url}?style=simple`, mode);
 

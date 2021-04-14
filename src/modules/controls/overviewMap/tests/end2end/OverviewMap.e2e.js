@@ -39,6 +39,14 @@ function OverviewMap ({builder, url, resolution, browsername, capability}) {
                 await driver.quit();
             });
 
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                }
+            });
+
             it("has an overview map button", async function () {
                 await driver.wait(until.elementLocated(By.css(".overviewmap-button")), 9000);
                 overviewMapButton = await driver.findElement(By.css(".overviewmap-button"));

@@ -38,6 +38,14 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                         await driver.quit();
                     });
 
+                    afterEach(async function () {
+                        if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                            console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                            await driver.quit();
+                            driver = await initDriver(builder, url, resolution);
+                        }
+                    });
+
                     it("opens a widget with distance/meters preconfigured for geometry/unit", async function () {
                         await reclickUntilNotStale(driver, By.xpath("//ul[@id='tools']//.."));
                         await (await driver.findElement(By.css("#tools .glyphicon-resize-full"))).click();

@@ -37,6 +37,14 @@ async function PanTests ({builder, url, resolution, browsername, capability}) {
             await driver.quit();
         });
 
+        afterEach(async function () {
+            if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                await driver.quit();
+                driver = await initDriver(builder, url, resolution);
+            }
+        });
+
         it("should move when panned", async function () {
             this.timeout(10000);
             const center = await driver.executeScript(getCenter),

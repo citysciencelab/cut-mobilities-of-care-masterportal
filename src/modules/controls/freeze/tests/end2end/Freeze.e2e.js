@@ -29,10 +29,18 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
+                await init();
+            });
+
+            /**
+             * clicks on topic-button
+             * @returns {void}
+             */
+            async function init () {
                 topicButton = await driver.findElement(By.css("#root .dropdown:first-child"));
                 tree = await driver.findElement(By.id("tree"));
                 topicButton.click(); // close tree for upcoming tests
-            });
+            }
 
             after(async function () {
                 if (capability) {
@@ -42,6 +50,16 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
                 }
                 await driver.quit();
             });
+
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                    await init();
+                }
+            });
+
 
             it("should have freeze button", async function () {
                 freezeButton = await driver.findElement(By.css(".freeze-view-start"));

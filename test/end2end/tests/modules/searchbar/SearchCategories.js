@@ -88,13 +88,21 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             }
 
             before(async function () {
-                const searchInputSelector = By.css("#searchInput");
-
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
+                await init();
+            });
+
+            /**
+             * provides some elements
+             * @returns {void}
+             */
+            async function init () {
+                const searchInputSelector = By.css("#searchInput");
+
                 await driver.wait(until.elementLocated(searchInputSelector));
                 searchInput = await driver.findElement(searchInputSelector);
                 searchMarker = await driver.findElement(By.css("#searchMarker"));
@@ -102,7 +110,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 clear = await driver.findElement(By.css("#searchbar span.form-control-feedback"));
                 initialCenter = await driver.executeScript(getCenter);
                 initialResolution = await driver.executeScript(getCenter);
-            });
+            }
 
             after(async function () {
                 if (capability) {
@@ -111,6 +119,15 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     });
                 }
                 await driver.quit();
+            });
+
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                    await init();
+                }
             });
 
             it("searches show some results in a dropdown", async function () {

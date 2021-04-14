@@ -755,7 +755,12 @@
             "selectByCircle": "Draw circle",
             "selectByPolygon": "Draw surface",
             "tooltipMessage": "Click to start and exit",
-            "tooltipMessagePolygon": "Click to add a point"
+            "tooltipMessagePolygon": "Click to add a point",
+            "alert": {
+              "notSupportedOption": "Graphical selection contains not supported elements! Available elements:",
+              "notSupportedSelection": "SelectedOption of the graphical selection is not supported! Available elements:",
+              "notSupportedElement": "Template element of the graphical selection is not supported! Available elements:"
+            }
         },
         "value": {
             "deleteSelection": "Delete selection"

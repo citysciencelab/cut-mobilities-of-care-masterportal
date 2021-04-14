@@ -41,6 +41,14 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
                 await driver.quit();
             });
 
+            afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                }
+            });
+
             it("should have a total view button", async function () {
                 await driver.wait(until.elementLocated(By.css(".total-view-button")), 9000);
                 totalViewButton = await driver.findElement(By.css(".total-view-button"));

@@ -48,16 +48,16 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
             */
             const suites = [
                     // modules/controls
-                    require("../../src/modules/controls/attributions/test/end2end/Attributions.e2e.js"),
-                    require("../../src/modules/controls/backForward/test/end2end/BackForward.e2e.js"),
+                    require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
+                    require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
                     // require("./tests/modules/controls/Button3D.js"),
                     // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                     require("./tests/modules/controls/ButtonOblique.js"),
-                    require("../../src/modules/controls/freeze/test/end2end/Freeze.e2e.js"),
-                    require("../../src/modules/controls/fullScreen/test/end2end/FullScreen.e2e.js"),
+                    require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
+                    require("../../src/modules/controls/fullScreen/tests/end2end/FullScreen.e2e.js"),
                     require("./tests/modules/controls/Orientation.js"),
-                    require("../../src/modules/controls/overviewMap/test/end2end/OverviewMap.e2e.js"),
-                    require("../../src/modules/controls/totalView/test/end2end/TotalView.e2e.js"),
+                    require("../../src/modules/controls/overviewMap/tests/end2end/OverviewMap.e2e.js"),
+                    require("../../src/modules/controls/totalView/tests/end2end/TotalView.e2e.js"),
                     require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                     // modules/core
@@ -71,31 +71,32 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     // require("./tests/modules/searchbar/GdiSearch.js"),
 
                     // modules/tools
-                    require("../../src/modules/tools/contact/test/end2end/Contact.e2e.js"),
+                    require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
                     // require("./tests/modules/tools/Einwohnerabfrage_HH.js"),
                     // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
                     require("./tests/modules/tools/ExtendedFilter.js"),
-                    require("../../src/modules/tools/gfi/test/end2end/Gfi.e2e.js"),
+                    require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
                     // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
                     require("./tests/modules/Legend.js"),
                     require("./tests/modules/tools/List.js"),
-                    require("../../src/modules/tools/measure/test/end2end/Measure.e2e.js"),
+                    require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
                     // require("./tests/modules/tools/ParcelSearch.js"),
                     // require("./tests/modules/tools/SearchByCoord.js"),
 
                     // non-module tests
-                    require("../../src/test/end2end/Pan.e2e.js"),
-                    require("../../src/test/end2end/Zoom.e2e.js")
+                    require("../../src/tests/end2end/Pan.e2e.js"),
+                    require("../../src/tests/end2end/Zoom.e2e.js")
                 ],
                 e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
             for (const suite of suites) {
+                this.retries(2);
                 suite(e2eTestParams);
             }
         });
     }
     catch (err) {
-        console.error(err);
+        console.error("error in tests.js:", err);
     }
 }
 

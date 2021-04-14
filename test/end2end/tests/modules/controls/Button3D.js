@@ -35,10 +35,17 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);
+                await init();
+            });
+
+            /**
+             * only for default url: activate a layer for later testing whether it remains active - other portals have layers active initially
+             * @returns {void}
+             */
+            async function init () {
                 await driver.wait(until.elementLocated(By.css("#button3D")), 5000);
                 button3D = await driver.findElement(By.css("#button3D"));
 
-                // activate a layer for later testing whether it remains active - other portals have layers active initially
                 if (isDefault(url)) {
                     await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                     await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
@@ -47,7 +54,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
                     await (await driver.findElement(By.css(".Overlayer > .glyphicon"))).click();
                     await (await driver.findElement(By.xpath("//span[contains(.,'Themen')]"))).click();
                 }
-            });
+            }
 
             after(async function () {
                 if (capability) {
@@ -59,6 +66,12 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
             });
 
             afterEach(async function () {
+                if (this.currentTest._currentRetry === this.currentTest._retries - 1) {
+                    console.warn("      FAILED! Retrying test \"" + this.currentTest.title + "\"  after reloading url");
+                    await driver.quit();
+                    driver = await initDriver(builder, url, resolution);
+                    await init();
+                }
                 /* add some cooldown time per test to avoid overlaps;
                 * would be nicer with awaits, but what could we wait for? */
                 await driver.wait(new Promise(r => setTimeout(r, 2000)));

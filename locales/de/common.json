@@ -755,7 +755,12 @@
             "selectByCircle": "Kreis aufziehen",
             "selectByPolygon": "Fläche zeichnen",
             "tooltipMessage": "Klicken zum Starten und Beenden",
-            "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen"
+            "tooltipMessagePolygon": "Klicken um Stützpunkt hinzuzufügen",
+            "alert": {
+              "notSupportedOption": "Graphische Auswahl enthält nicht unterstützte Elemente! Verfügbar sind:",
+              "notSupportedSelection": "SelectedOption der graphischen Auswahl wird nicht unterstützt! Verfügbar sind:",
+              "notSupportedElement": "Template-Element der graphischen Auswahl wird nicht unterstützt! Verfügbar sind:"
+            }
         },
         "value": {
             "deleteSelection": "Auswahl löschen"

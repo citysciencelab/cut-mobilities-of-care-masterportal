@@ -21,7 +21,7 @@ export default {
         zoomMode: {
             type: String,
             required: false,
-            default: null
+            default: "once"
         },
         /** the distances in config.json */
         poiDistances: {
