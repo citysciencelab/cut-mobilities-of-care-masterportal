@@ -5,7 +5,7 @@ import VectorSource from "ol/source/Vector.js";
 import {never} from "ol/events/condition";
 
 import Tool from "../../../../modules/tools/Tool.vue";
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapActions} from "vuex";
 import getters from "../store/gettersSelectFeatures";
 import mutations from "../store/mutationsSelectFeatures";
 
@@ -21,9 +21,96 @@ export default {
     },
     created () {
         this.$on("close", this.close);
+        this.createInteractions();
+    },
+    watch: {
+        active (newValue) {
+            if (newValue) {
+                this.addInteractions();
+            }
+            else {
+                this.removeInteractions();
+            }
+
+        }
     },
     methods: {
         ...mapMutations("Tools/SelectFeatures", Object.keys(mutations)),
+        ...mapActions("Map", {
+            addInteractionToMap: "addInteraction",
+            removeInteractionFromMap: "removeInteraction"
+        }),
+
+        /**
+         * Creates the interactions for selecting features.
+         * @returns {void}
+         */
+        createInteractions: function () {
+            const select = new Select({
+                    // select works indirectly via DragBox results - never updates itself
+                    addCondition: never,
+                    removeCondition: never,
+                    toggleCondition: never,
+                    condition: never
+                }),
+                dragBox = new DragBox({condition: platformModifierKeyOnly});
+
+            this.setSelectedFeatures(select.getFeatures());
+
+            dragBox.on("boxstart", this.clearFeatures.bind(this));
+            dragBox.on("boxend", this.setFeaturesFromDrag.bind(this));
+
+            this.setSelectInteraction(select);
+            this.setDragBoxInteraction(dragBox);
+        },
+
+        /**
+         * Clears the selected features of all current instances.
+         * @returns {void}
+         */
+        clearFeatures: function () {
+            this.setSelectedFeatures(null);
+            this.setSelectedFeaturesWithRenderInformation([]);
+        },
+
+        /**
+         * Adds the interactions to the Map.
+         * @returns {void}
+         */
+        addInteractions: function () {
+            this.addInteractionToMap(this.selectInteraction);
+            this.addInteractionToMap(this.dragBoxInteraction);
+        },
+
+        /**
+         * Removes the Interactions from the Map.
+         * @returns {void}
+         */
+        removeInteractions: function () {
+            this.removeInteractionFromMap(this.selectInteraction);
+            this.removeInteractionFromMap(this.dragBoxInteraction);
+        },
+
+        /**
+         * Infers features from interaction state and sets them to the selectedFeatures.
+         * @returns {void}
+         */
+        setFeaturesFromDrag: function () {
+            const extent = this.dragBoxInteraction.getGeometry().getExtent();
+
+            Radio
+                .request("Map", "getLayers")
+                .getArray()
+                .filter(l => l.get("visible") && l.get("source") instanceof VectorSource)
+                .forEach(
+                    l => l.get("source").forEachFeatureIntersectingExtent(
+                        extent,
+                        feature => this.prepareFeature(l, feature)
+                    )
+                );
+
+            Radio.trigger(this, "updatedSelection");
+        },
 
         /**
          * Prepares the properties of a feature for tabular display.
@@ -137,7 +224,7 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t(name)"
+        :title="$t('common:menu.tools.selectFeatures')"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
@@ -147,9 +234,9 @@ export default {
         <template v-slot:toolBody>
             <div
                 v-if="active"
-                id="vue-addon"
+                id="selectFeatures"
             >
-                {{ $t("additional:modules.tools.vueAddon.content") }}
+                {{ $t("common:modules.tools.selectFeatures.noFeatureChosen") }}
             </div>
         </template>
     </Tool>

@@ -12,7 +12,7 @@
  */
 const state = {
     active: false,
-    id: "SelectFeatures",
+    id: "selectFeatures",
     // defaults for config.json parameters
     name: "Test Vue Addon",
     glyphicon: "glyphicon-screenshot",
@@ -22,8 +22,8 @@ const state = {
     deactivateGFI: true,
     selectedFeatures: undefined,
     selectedFeaturesWithRenderInformation: [],
-    select: undefined,
-    dragBox: undefined
+    selectInteraction: undefined,
+    dragBoxInteraction: undefined
 };
 
 export default state;
