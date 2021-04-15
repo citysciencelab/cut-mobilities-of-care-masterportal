@@ -9,7 +9,7 @@ import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersSelectFeatures";
 import mutations from "../store/mutationsSelectFeatures";
 
-import {isUrl} from "../../../src/utils/urlHelper";
+import {isUrl} from "../../../../utils/urlHelper";
 
 export default {
     name: "SelectFeatures",
