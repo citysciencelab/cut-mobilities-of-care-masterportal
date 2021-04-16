@@ -95,7 +95,7 @@ export default {
             >
                 {{ textOff }}
             </label>
-            <span class="toggle-handle btn btn-default btn-sm"></span>
+            <span class="toggle-handle btn btn-default btn-sm" @click="toggle"></span>
         </div>
     </div>
 </template>
