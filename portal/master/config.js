@@ -1,5 +1,9 @@
 const Config = {
+<<<<<<< HEAD
     addons: ["einwohnerabfrage", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+=======
+    addons: ["EinwohnerAbfrage", "VueAddon", "TacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+>>>>>>> 7d7d82496 (added new Einwohnerabfrage-Vue-addon to master-config)
     alerting: {
         fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
