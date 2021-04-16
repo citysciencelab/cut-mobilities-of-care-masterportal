@@ -315,5 +315,6 @@ export default {
     .gfi-theme-sensor {
         width: 65vh;
         height: 45vh;
+        overflow: auto;
     }
 </style>
