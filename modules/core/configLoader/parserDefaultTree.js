@@ -1,4 +1,5 @@
 import Parser from "./parser";
+import addTranslationToRawConfig from "../../../src/utils/addTranslationToRawConfig";
 
 const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype */{
     /**
@@ -29,6 +30,8 @@ const DefaultTreeParser = Parser.extend(/** @lends DefaultTreeParser.prototype *
 
         // For layers with more than 1 dataset, 1 additional layer is created per dataset
         newLayerList = this.createLayerPerDataset(newLayerList);
+
+        addTranslationToRawConfig(newLayerList, "translate#");
 
         this.parseLayerList(newLayerList, Layer3dList);
     },
