@@ -75,7 +75,7 @@ function createFolders () {
     fs.mkdir(destinationFolder).then(() => {
         fs.mkdir(destinationPortalFolder).then(() => {
             fs.copy(portal.source, destinationPortalFolder).then(() => {
-                fs.copy(portal.mastercode, destinationFolder + "/mastercode").then(() => {
+                fs.copy(portal.mastercode + "/" + mastercodeVersionFolderName, destinationFolder + "/mastercode/" + mastercodeVersionFolderName).then(() => {
                     removeAddonCssFiles();
                 }).catch(err => console.error(err));
             }).catch(err => console.error(err));
