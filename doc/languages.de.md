@@ -213,7 +213,7 @@ Eine Übersetzung wird dann wie folgt implementiert:
 i18next.t("additional:modules.tools.example.title"),
 
 ```
-[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/addons/src/master/einwohnerabfrage/)
+[Beispiel](https://bitbucket.org/geowerkstatt-hamburg/addons/src/master/populationRequest/)
 
 ## Interessante Übersetzungsfunktionen von i18nxt
 

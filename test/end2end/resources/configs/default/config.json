@@ -148,7 +148,7 @@
                         "configJSON": "/test/end2end/resources/configs/default/gemarkungen.json",
                         "parcelDenominator": false
                     },
-                    "einwohnerabfrage": {
+                    "PopulationRequest": {
                         "name": "Einwohneranzahl abfragen",
                         "glyphicon": "glyphicon-wrench"
                     },

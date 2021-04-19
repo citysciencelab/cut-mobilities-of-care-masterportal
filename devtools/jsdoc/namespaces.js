@@ -406,7 +406,7 @@
  */
 
 /**
- * @namespace Einwohnerabfrage
+ * @namespace PopulationRequest
  * @memberof Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */
