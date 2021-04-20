@@ -1,10 +1,10 @@
 import Vuex from "vuex";
 import {config, createLocalVue, shallowMount} from "@vue/test-utils";
 import {expect} from "chai";
-import PoiOrientationComponent from "../../../components/PoiOrientation.vue";
-import LinestringStyle from "../../../../../../../modules/vectorStyle/linestringStyle.js";
-import PointStyle from "../../../../../../../modules/vectorStyle/pointStyle.js";
-import PolygonStyle from "../../../../../../../modules/vectorStyle/polygonStyle.js";
+import PoiOrientationComponent from "../../../../components/poi/PoiOrientation.vue";
+import LinestringStyle from "../../../../../../../../modules/vectorStyle/linestringStyle.js";
+import PointStyle from "../../../../../../../../modules/vectorStyle/pointStyle.js";
+import PolygonStyle from "../../../../../../../../modules/vectorStyle/polygonStyle.js";
 import Feature from "ol/Feature.js";
 import {Circle} from "ol/geom.js";
 import sinon from "sinon";
@@ -14,7 +14,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe("src/modules/controls/orientation/components/PoiOrientationComponent.vue", () => {
+describe("src/modules/controls/orientation/components/PoiOrientation.vue", () => {
     const mockConfigJson = {
             Portalconfig: {
                 menu: {
@@ -112,7 +112,7 @@ describe("src/modules/controls/orientation/components/PoiOrientationComponent.vu
     });
 
     describe("Render Component", function () {
-        it("renders the Poi Orientation module", () => {
+        it("renders the Poi Orientation component", () => {
             expect(wrapper.find("#surrounding_vectorfeatures").exists()).to.be.true;
             expect(wrapper.find(".modal-backdrop").exists()).to.be.true;
         });

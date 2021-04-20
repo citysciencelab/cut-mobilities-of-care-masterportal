@@ -1,32 +1,43 @@
 /**
- * Gets nested values recursively from an object by the given key if it exists, up to a depth of 500.
- * @param {Object} obj - The object to search.
- * @param {String} searchKey - The key for the searched values.
- * @param {Object|String[]} [nestedValues=[]] - Given nested values.
- * @param {Number} [depth=0] - number of self calls
- * @param {Number} [maxDepth=500]  - maximum number of self calls
- * @returns {Object|String[]} results - The found nested values.
+ * gets all entries for a key of an object, following its knots into a given depth
+ * - returns a simple array as a list of the found values of the keys
+ * - does not add values of an object that is already recognized and added by the given key
+ * - does not recognize recursions within objects (e.g. a = [a]), lower maxDepth to prevent infinit loops earlier
+ * @param {Object} obj the object to search
+ * @param {*} searchKey the key to search for
+ * @param {Number} [maxDepth=200] maximum number of self calls, default: 200
+ * @returns {*[]} the found nested values as simple array of values
  */
-export default function getNestedValues (obj, searchKey, nestedValues = [], depth = 0, maxDepth = 500) {
-    const results = nestedValues;
+export default function getNestedValues (obj, searchKey, maxDepth = 200) {
+    if (typeof obj !== "object" || obj === null) {
+        return [];
+    }
+    const result = [];
 
-    if (typeof obj !== "object" || obj === null || typeof searchKey !== "string") {
-        console.error(`getNestedValues: ${obj} has to be defined and an object (not null). ${searchKey} has to be defined and a string`);
-        return results;
+    getNestedValuesHelper(obj, searchKey, maxDepth, result, 0);
+    return result;
+}
+
+/**
+ * helper function for the recursion
+ * @param {Object} obj the object to search
+ * @param {*} searchKey the key to search for
+ * @param {Number} maxDepth depth barrier
+ * @param {Object|*[]} result collection of already found values
+ * @param {Number} depth current depth
+ * @returns {void}
+ */
+function getNestedValuesHelper (obj, searchKey, maxDepth, result, depth) {
+    if (typeof obj !== "object" || obj === null || depth >= maxDepth) {
+        return;
     }
 
     Object.keys(obj).forEach(key => {
-        const value = obj[key];
-
         if (key === searchKey) {
-            results.push(value);
+            result.push(obj[key]);
         }
-        else if (typeof value === "object") {
-            if (depth < maxDepth) {
-                getNestedValues(value, searchKey, results, depth + 1);
-            }
+        else {
+            getNestedValuesHelper(obj[key], searchKey, maxDepth, result, depth + 1);
         }
     });
-
-    return results;
 }

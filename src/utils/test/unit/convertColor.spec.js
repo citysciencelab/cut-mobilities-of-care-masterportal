@@ -18,9 +18,9 @@ import {
     convertToRgbaArrayString,
     convertToRgbString,
     convertToRgbaString
-} from "../../colorTools.js";
+} from "../../convertColor.js";
 
-describe("src/utils/colorTools.js", () => {
+describe("src/utils/convertColor.js", () => {
     describe("isRgbArray", () => {
         it("should return false if the given array is anything but an array of 3 numbers", () => {
             expect(isRgbArray(undefined)).to.be.false;

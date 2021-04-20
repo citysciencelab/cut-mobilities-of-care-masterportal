@@ -1,7 +1,30 @@
 image: node:12.13.1
 
 pipelines:
-     custom: # Pipelines that are triggered manually
+    # Start pipeline with tag to build examples zips and copy them to the Bitbucket download folder
+    tags:
+        'v*.*.*':
+            - step:
+                name: build examples zip
+                caches:
+                    - node
+                artifacts:
+                    - dist/**
+                script:
+                    - npm install
+                    - npm run buildExamples
+                    - apt-get update
+            - step:
+                name: deploy examples zip
+                caches:
+                    - node
+                script:
+                    - apt-get install -y curl
+                    # find all zip folders in dist folder, loop through the results and post the zips to the BB download folder
+                    - for zipFilePath in $(find dist -name \*.zip); do
+                        curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
+                      done
+    custom: # Pipelines that are triggered manually
         End2End-Tests: # The name that is displayed in the list in the Bitbucket Cloud GUI
             - step:
                 caches:
@@ -22,7 +45,7 @@ pipelines:
                     # make script executable
                     - chmod +x ./devtools/scripts/transfer_to_test_geoportal.sh
                     # commit changed file for "git-ftp"
-                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable" 
+                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable"
                     - ./devtools/scripts/transfer_to_test_geoportal.sh
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash

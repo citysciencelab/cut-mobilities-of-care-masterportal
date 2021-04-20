@@ -21,7 +21,7 @@
         "chai-friendly"
     ],
     "parserOptions": {
-        "parser": "babel-eslint",
+        "parser": "@babel/eslint-parser",
         "ecmaVersion": 2017,
         "sourceType": "module",
         "allowImportExportEverywhere": true

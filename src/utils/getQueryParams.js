@@ -25,9 +25,6 @@ function getQueryParams (query = locationSearch) {
                 if (checkisURLQueryValid(value)) {
                     queryParams[key] = decodeURIComponent(value);
                 }
-                else {
-                    console.warn("The URL-parameters contain illegal information!");
-                }
             });
         }
     }
