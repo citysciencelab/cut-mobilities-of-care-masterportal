@@ -410,7 +410,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
+                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute, style);
                     stylingRuleSplit = stylingRule.split("=");
 
                     if (stylingRuleSplit.length > 0) {
@@ -559,15 +559,17 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             textScale = style.getScale() ? style.getScale() : 1,
             fontSize = isFontSizeInFont ? size : 10 * textScale,
             fontFamily = isFontSizeInFont ? this.getFontFamily(font, fontSize) : font,
-            fontColor = style.getFill().getColor();
+            fontColor = style.getFill().getColor(),
+            stroke = style.getStroke() ? style.getStroke() : undefined;
 
         return {
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
             fontColor: this.rgbArrayToHex(fontColor),
             fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
-            labelOutlineColor: style.getStroke() !== null ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
-            labelXOffset: -style.getOffsetX(),
+            labelOutlineColor: stroke ? this.rgbArrayToHex(stroke.getColor()) : undefined,
+            labelOutlineWidth: stroke ? stroke.getWidth() : undefined,
+            labelXOffset: style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
             fontSize: fontSize,
             fontFamily: fontFamily,
@@ -763,7 +765,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     addFeatureToGeoJsonList: function (feature, geojsonList) {
         let convertedFeature;
 
-        if (feature.get("features") !== undefined) {
+        if (feature.get("features") && feature.get("features").length === 1) {
             feature.get("features").forEach(function (clusteredFeature) {
                 convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
 
@@ -798,7 +800,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }
         });
         // take over id from feature because the feature id is not set in the clone.
-        clonedFeature.setId(feature.getId());
+        clonedFeature.setId(feature.getId() || feature.ol_uid);
         // circle is not suppported by geojson
         if (clonedFeature.getGeometry().getType() === "Circle") {
             clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
@@ -810,6 +812,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         convertedFeature = geojsonFormat.writeFeatureObject(clonedFeature);
         if (clonedFeature.getGeometry().getCoordinates().length === 0) {
             convertedFeature = undefined;
+        }
+        // if its a cluster remove property features
+        if (convertedFeature.properties.hasOwnProperty("features")) {
+            delete convertedFeature.properties.features;
         }
         return convertedFeature;
     },
@@ -842,9 +848,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {ol.Feature} layer -
      * @param {ol.Feature} feature -
      * @param {string} styleAttribute - the attribute by whose value the feature is styled
+     * @param {ol.style} style style
      * @returns {string} an ECQL Expression
      */
-    getStylingRule: function (layer, feature, styleAttribute) {
+    getStylingRule: function (layer, feature, styleAttribute, style) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
             styleAttr = feature.get("styleId") ? "styleId" : styleAttribute;
         let styleModel,
@@ -856,6 +863,14 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         }
         // cluster feature with geometry style
         else if (feature.get("features") !== undefined) {
+            if (style !== undefined && style.getText().getText() !== undefined) {
+                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()));
+                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()) + "']";
+            }
+            else if (feature.get("features").length > 1) {
+                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_cluster");
+                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_cluster']";
+            }
             return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "']";
         }
         // feature with geometry style and label style
