@@ -113,6 +113,43 @@ export default {
         },
 
         /**
+         * Gets a feature or multiple features and forwards it/them to the pushFeatures Function.
+         * Also pushes the features to the selected features.
+         * @param {module:ol/Layer} layer layer the feature belongs to (for gfi attributes)
+         * @param {module:ol/Feature} feature feature to be pushed
+         * @returns {void}
+         */
+        prepareFeature: function (layer, feature) {
+            this.$store.state.selectedFeatures.push(feature);
+            if (feature.get("features") === undefined) {
+                const item = feature;
+
+                this.pushFeatures(layer, item);
+            }
+            else {
+                feature.get("features").forEach(item => {
+                    this.pushFeatures(layer, item);
+                });
+            }
+        },
+
+        /**
+         * Pushes the given feature and its properties to the selectedFeaturesWithRenderInformation array.
+         * @param {module:ol/Layer} layer layer the feature belongs to (for gfi attributes)
+         * @param {module:ol/Feature} item feature to be pushed
+         * @returns {void}
+         */
+        pushFeatures: function (layer, item) {
+            this.$store.state.selectedFeaturesWithRenderInformation.push({
+                item,
+                properties: this.translateGFI(
+                    item.getProperties(),
+                    layer.get("gfiAttributes")
+                )
+            });
+        },
+
+        /**
          * Prepares the properties of a feature for tabular display.
          * @param {object} properties Technical key to display value
          * @param {object} gfiAttributes Technical key to display key
