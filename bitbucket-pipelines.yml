@@ -6,6 +6,8 @@ definitions:
         name: install masterportal on test.geoportal
         caches:
             - node
+        artifacts:
+            - dist/**
         script:
             - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
             - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
