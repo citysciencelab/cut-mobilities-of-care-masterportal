@@ -55,4 +55,4 @@ pipelines:
                 script:
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest
+                    - npm run browsertestOnGeoportalTestSaucelabs
