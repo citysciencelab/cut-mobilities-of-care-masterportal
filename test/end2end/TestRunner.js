@@ -141,7 +141,6 @@ function createBuilder (testExecutorName, capability, buildName) {
     if (testExecutorName === "browserstack") {
         builder.usingHttpAgent(new http.Agent({keepAlive: true}));
         builder.usingServer("http://hub-cloud.browserstack.com/wd/hub").
-        // todo: das auch für saucelabs?
             usingWebDriverProxy(proxy);
         capability.build = buildName;
     }
