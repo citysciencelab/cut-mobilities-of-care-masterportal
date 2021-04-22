@@ -118,10 +118,10 @@ function isFirefox (browsername) {
 
 /**
  * Produces browserstack or saucelabs configurations.
- * @param {String} testExecutor "browserstack" or "saucelabs"
+ * @param {String} testService "browserstack" or "saucelabs"
  * @returns {Array} array of bs configuration objects
  */
-function getCapabilities (testExecutor) {
+function getCapabilities (testService) {
     const baseBrowserstack = {
         // do not set selenium version here, then selenium uses the detected_language, see "Input Capabilities" of each test in browserstack
             "acceptSslCerts": true,
@@ -153,7 +153,7 @@ function getCapabilities (testExecutor) {
             }
         };
 
-    if (testExecutor === "browserstack") {
+    if (testService === "browserstack") {
         return [
             {
                 ...baseBrowserstack,

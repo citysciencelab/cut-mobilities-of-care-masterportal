@@ -15,7 +15,7 @@ const webdriver = require("selenium-webdriver"),
         modes
     } = require("./settings"),
     /* eslint-disable no-process-env */
-    testExecutor = process.env.testExecutor,
+    testService = process.env.npm_config_testservice,
     browser = process.env.browser || "firefox,chrome",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart || "portal/",
@@ -53,7 +53,7 @@ function setLocalProxy (currentBrowser, builder) {
         options = options.addArguments(`--proxy-bypass-list=${localBypassList.join(",")}`);
         options = options.addArguments("--ignore-certificate-errors");
         options = options.addArguments("--ignore-ssl-errors");
-        if (testExecutor === undefined) {
+        if (testService === undefined) {
             options = options.addArguments("--no-sandbox");
         }
         builder.setChromeOptions(options);
@@ -85,7 +85,7 @@ function runTests (browsers) {
     if (process.env.BITBUCKET_BRANCH) {
         /* eslint-disable-next-line no-process-env */
         build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
-        console.warn("Running tests on " + testExecutor + " with name:\"" + build + "\" on Urls:");
+        console.warn("Running tests on " + testService + " with name:\"" + build + "\" on Urls:");
     }
 
     browsers.forEach(currentBrowser => {
@@ -105,7 +105,7 @@ function runTests (browsers) {
                     });
                 }
                 else {
-                    const caps = getCapabilities(testExecutor);
+                    const caps = getCapabilities(testService);
 
                     /* eslint-disable-next-line no-process-env */
                     if (process.env.BITBUCKET_BRANCH) {
@@ -115,10 +115,10 @@ function runTests (browsers) {
                     }
 
                     caps.forEach(capability => {
-                        const builder = createBuilder(testExecutor, capability, build);
+                        const builder = createBuilder(testService, capability, build);
 
                         resolutions.forEach(resolution => {
-                            tests(builder, completeUrl, testExecutor + "/ " + capability.browserName, resolution, config, mode, capability);
+                            tests(builder, completeUrl, testService + "/ " + capability.browserName, resolution, config, mode, capability);
                         });
                     });
                 }
@@ -128,17 +128,17 @@ function runTests (browsers) {
 }
 
 /**
- * Creates a webdriver.Builder for the given testExecutor.
- * @param {String} testExecutorName "browserstack" or "saucelabs"
+ * Creates a webdriver.Builder for the given testService.
+ * @param {String} testServiceName "browserstack" or "saucelabs"
  * @param {Object} capability browserstack or saucelabs configurations.
  * @param {String} buildName name of the build
  * @returns {Object} the webdriver.Builder
  */
-function createBuilder (testExecutorName, capability, buildName) {
+function createBuilder (testServiceName, capability, buildName) {
 
     const builder = new webdriver.Builder();
 
-    if (testExecutorName === "browserstack") {
+    if (testServiceName === "browserstack") {
         builder.usingHttpAgent(new http.Agent({keepAlive: true}));
         builder.usingServer("http://hub-cloud.browserstack.com/wd/hub").
             usingWebDriverProxy(proxy);

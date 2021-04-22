@@ -1,5 +1,20 @@
 image: node:12.13.1
 
+definitions: 
+  steps:
+    - step: &install-masterportal-on-test-geoportal
+        name: install masterportal on test.geoportal
+        caches:
+            - node
+        script:
+            - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
+            - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
+            - export FTP_SOURCE_PATH="dist"
+            - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
+            - export FTP_UNTRACKED_PATH="$'!dist/mastercode_$BITBUCKET_BRANCH'"
+            - export FTP_GITLOGFILE="testGitLog"
+            - /bin/bash devtools/scripts/transfer_ftp.sh
+
 pipelines:
     # Start pipeline with tag to build examples zips and copy them to the Bitbucket download folder
     tags:
@@ -26,18 +41,7 @@ pipelines:
                       done
     custom: # Pipelines that are triggered manually
         End2End-Tests on browserstack:
-            - step:
-                name: install masterportal on test.geoportal
-                caches:
-                    - node
-                script:
-                    - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
-                    - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
-                    - export FTP_SOURCE_PATH="dist"
-                    - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
-                    - export FTP_UNTRACKED_PATH="$'!dist/mastercode_$BITBUCKET_BRANCH'"
-                    - export FTP_GITLOGFILE="testGitLog"
-                    - /bin/bash devtools/scripts/transfer_ftp.sh
+            - step: *install-masterportal-on-test-geoportal
             - step:
                 name: run e2e tests on browserstack url=test.geoportal
                 caches:
@@ -45,27 +49,16 @@ pipelines:
                 script:
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTestBrowserstack
+                    - npm run browsertestOnGeoportalTest --testservice=browserstack
         End2End-Tests on saucelabs:
-            - step:
-                name: install masterportal on test.geoportal
-                caches:
-                    - node
-                script:
-                    - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
-                    - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
-                    - export FTP_SOURCE_PATH="dist"
-                    - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
-                    - export FTP_UNTRACKED_PATH="$'!dist/mastercode_$BITBUCKET_BRANCH'"
-                    - export FTP_GITLOGFILE="testGitLog"
-                    - /bin/bash devtools/scripts/transfer_ftp.sh
+            - step: *install-masterportal-on-test-geoportal
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal
                 caches:
                     - node
                 script:
                     # run e2e tests
-                    - npm run browsertestOnGeoportalTestSaucelabs
+                    - npm run browsertestOnGeoportalTest --testservice=saucelabs
         End2End-Tests on browserstack/ use existing server:
             - step:
                 name: run e2e tests on browserstack url=test.geoportal_buildname
@@ -73,12 +66,12 @@ pipelines:
                     - node
                 script:
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTestBrowserstack
+                    - npm run browsertestOnGeoportalTest --testservice=browserstack
         End2End-Tests on saucelabs/ use existing server:
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal_buildname
                 caches:
                     - node
                 script:
-                    - npm run browsertestOnGeoportalTestSaucelabs                    
+                    - npm run browsertestOnGeoportalTest --testservice=saucelabs                    
 

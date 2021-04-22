@@ -135,9 +135,9 @@ async function reclickUntilNotStale (driver, selector) {
 async function logBrowserstackUrlToTest (sessionId) {
     const bsUrl = "https://api.browserstack.com/automate/builds.json",
         /* eslint-disable no-process-env */
-        testExecutor = process.env.testExecutor;
+        testService = process.env.npm_config_testservice;
 
-    if (testExecutor === "browserstack") {
+    if (testService === "browserstack") {
         axios({
             method: "get",
             url: bsUrl,
