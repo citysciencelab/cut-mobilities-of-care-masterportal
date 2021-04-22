@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 # generic script for transfering data by git ftp according to the provided variables from the YAML file.
 
 # Variables FTP_USERNAME, FTP_PASSWORD, FTP_SOURCE_PATH, FTP_TARGET_URL, FTP_UNTRACKED_PATH have to be provided in the pipeline YAML.
@@ -24,8 +23,10 @@ git status
 #replace slashes in branchname with underscores and
 tmp=$BITBUCKET_BRANCH
 branchname=${tmp//[\/]/_}
-#create temporariliy a file called ".git-ftp-include" containing the subfolders in folder ./dist, see https://github.com/git-ftp/git-ftp/blob/master/man/git-ftp.1.md
-STR=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
+# create temporariliy a file called ".git-ftp-include" containing the subfolders in folder ./dist, see https://github.com/git-ftp/git-ftp/blob/master/man/git-ftp.1.md
+# Example for several folders:
+STR=$FTP_UNTRACKED_PATH
+# STR=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
 echo "$STR"  >> .git-ftp-include
 echo "git status 1:"
 git status
