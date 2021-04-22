@@ -16,7 +16,7 @@ const webdriver = require("selenium-webdriver"),
     } = require("./settings"),
     /* eslint-disable no-process-env */
     testExecutor = process.env.testExecutor,
-    browser = "fromCapabilities", // process.env.browser || "firefox,chrome",
+    browser = process.env.browser || "firefox,chrome",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart || "portal/",
     // proxy for browserstack
@@ -91,8 +91,6 @@ function runTests (browsers) {
     browsers.forEach(currentBrowser => {
         configs.forEach((pathEnd, config) => {
             let completeUrl = url + urlPart + pathEnd;
-
-            console.warn("currentBrowser:", currentBrowser);
 
             modes.forEach(mode => {
                 if (currentBrowser !== "fromCapabilities") {
