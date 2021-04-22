@@ -31,23 +31,13 @@ pipelines:
                 caches:
                     - node
                 script:
-                    - rm -rf ./addons/readme.txt
-                    # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
-                    - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
-                    - git clone https://geowerkstatt@bitbucket.org/geowerkstatt-hamburg/addons.git
-                    - cd addons/cosi
-                    - npm install
-                    - cd ../sdpdownload
-                    - npm install
-                    - cd ..; cd ..;
-                    - npm install
-                    - npm run buildPortal
-                    - apt-get update && apt-get install unzip
-                    # make script executable
-                    - chmod +x ./devtools/scripts/transfer_to_test_geoportal.sh
-                    # commit changed file for "git-ftp"
-                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable"
-                    - ./devtools/scripts/transfer_to_test_geoportal.sh
+                    - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
+                    - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
+                    - export FTP_SOURCE_PATH="dist"
+                    - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
+                    - export FTP_UNTRACKED_PATH="$'!dist/mastercode_$BITBUCKET_BRANCH'"
+                    - export FTP_GITLOGFILE="testGitLog"
+                    - /bin/bash devtools/scripts/transfer_ftp.sh
             - step:
                 name: run e2e tests on browserstack url=test.geoportal
                 caches:
@@ -62,25 +52,15 @@ pipelines:
                 caches:
                     - node
                 script:
-                    - rm -rf ./addons/readme.txt
-                    # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
-                    - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
-                    - git clone https://geowerkstatt@bitbucket.org/geowerkstatt-hamburg/addons.git
-                    - cd addons/cosi
-                    - npm install
-                    - cd ../sdpdownload
-                    - npm install
-                    - cd ..; cd ..;
-                    - npm install
-                    - npm run buildPortal
-                    - apt-get update && apt-get install unzip
-                    # make script executable
-                    - chmod +x ./devtools/scripts/transfer_to_test_geoportal.sh
-                    # commit changed file for "git-ftp"
-                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable"
-                    - ./devtools/scripts/transfer_to_test_geoportal.sh
+                    - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
+                    - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
+                    - export FTP_SOURCE_PATH="dist"
+                    - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
+                    - export FTP_UNTRACKED_PATH="$'!dist/mastercode_$BITBUCKET_BRANCH'"
+                    - export FTP_GITLOGFILE="testGitLog"
+                    - /bin/bash devtools/scripts/transfer_ftp.sh
             - step:
-                name: run e2e tests on browserstack url=test.geoportal
+                name: run e2e tests on saucelabs url=test.geoportal
                 caches:
                     - node
                 script:
