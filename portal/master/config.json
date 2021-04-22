@@ -773,15 +773,15 @@
                 "barPercentage": 1.1,
                 "values": {
                   "available": {
-                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.available",
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.available",
                     "color": "rgba(0, 220, 0, 1)"
                   },
                   "charging": {
-                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
                     "color": "rgba(220, 0, 0, 1)"
                   },
                   "outoforder": {
-                      "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                      "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
                       "color": "rgba(175, 175, 175, 1)"
                   }
                 }
