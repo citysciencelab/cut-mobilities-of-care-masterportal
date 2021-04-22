@@ -28,6 +28,7 @@ branchname=${tmp//[\/]/_}
 STR=$FTP_UNTRACKED_PATH
 # STR=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
 echo "$STR"  >> .git-ftp-include
+tail .git-ftp-include
 echo "git status 1:"
 git status
 git add .git-ftp-include
