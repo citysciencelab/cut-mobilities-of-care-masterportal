@@ -542,6 +542,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             // backwards-compatibility:
             url = origin + "/lgv-config/img" + this.getImageName(src);
         }
+        else if (src.indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+            url = src;
+        }
         return url;
     },
 
@@ -863,7 +866,30 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             labelField,
             labelValue;
 
-        if (styleAttr === "") {
+        if (styleAttr === "" && feature.get("features") && feature.get("features").length === 1) {
+            const singleFeature = new Feature({
+                properties: feature.get("features")[0].getProperties(),
+                geometry: feature.get("features")[0].getGeometry()
+            });
+
+            feature.get("features")[0] = singleFeature;
+            if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+                singleFeature.setId("first_svg_" + singleFeature.ol_uid);
+            }
+            else {
+                singleFeature.setId("second_png_" + singleFeature.ol_uid);
+            }
+            singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
+            return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
+
+        }
+        else if (styleAttr === "" && feature.get("features") !== undefined) {
+            if (style !== undefined && style.getText().getText() !== undefined) {
+                feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
+                return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
+            }
+        }
+        else if (styleAttr === "") {
             return "*";
         }
         // cluster feature with geometry style
