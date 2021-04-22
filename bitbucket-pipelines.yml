@@ -27,6 +27,7 @@ pipelines:
     custom: # Pipelines that are triggered manually
         End2End-Tests: # The name that is displayed in the list in the Bitbucket Cloud GUI
             - step:
+                name: install masterportal on test.geoportal
                 caches:
                     - node
                 script:
@@ -47,6 +48,11 @@ pipelines:
                     # commit changed file for "git-ftp"
                     - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable"
                     - ./devtools/scripts/transfer_to_test_geoportal.sh
+            - step:
+                name: run e2e tests on browserstack url=test.geoportal
+                caches:
+                    - node
+                script:
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
                     - npm run browsertestOnGeoportalTest
