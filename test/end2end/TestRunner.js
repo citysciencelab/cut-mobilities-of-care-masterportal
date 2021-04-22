@@ -146,8 +146,8 @@ function createBuilder (testExecutorName, capability, buildName) {
         capability.build = buildName;
     }
     else {
-        builder.usingServer("https://ondemand.eu-central-1.saucelabs.com/wd/hub").
-            capability["sauce:options"].build = buildName;
+        builder.usingServer("https://ondemand.eu-central-1.saucelabs.com/wd/hub");
+        capability["sauce:options"].build = buildName;
     }
     builder.withCapabilities(capability);
     return builder;
