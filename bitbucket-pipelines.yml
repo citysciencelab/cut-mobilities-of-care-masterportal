@@ -2,8 +2,8 @@ image: node:12.13.1
 
 definitions: 
   steps:
-    - step: &install-masterportal-on-test-geoportal
-        name: install masterportal on test.geoportal
+    - step: &install-e2e-tests-server-on-test-geoportal
+        name: install masterportals master, basic etc. on test.geoportal
         caches:
             - node
         artifacts:
@@ -14,14 +14,10 @@ definitions:
             - export FTP_SOURCE_PATH="dist"
             - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
             - export FTP_GITLOGFILE="testGitLog"
+            #replace slashes in branchname with underscores
             - tmp=$BITBUCKET_BRANCH
-            #replace slashes in branchname with underscores and
             - branchname=${tmp//[\/]/_}
-            #create temporariliy a file called ".git-ftp-include" containing the subfolders in folder ./dist, see https://github.com/git-ftp/git-ftp/blob/master/man/git-ftp.1.md
-            # - STR=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
-            # - export FTP_UNTRACKED_PATH=$STR
             - export FTP_UNTRACKED_PATH=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
-            - echo $FTP_UNTRACKED_PATH
             - rm -rf ./addons/readme.txt
             # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
             - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
@@ -66,7 +62,7 @@ pipelines:
                       done
     custom: # Pipelines that are triggered manually
         End2End-Tests on browserstack:
-            - step: *install-masterportal-on-test-geoportal
+            - step: *install-e2e-tests-server-on-test-geoportal
             - step:
                 name: run e2e tests on browserstack url=test.geoportal
                 caches:
@@ -76,7 +72,7 @@ pipelines:
                     - ./devtools/scripts/run_browserstack_local.bash
                     - npm run browsertestOnGeoportalTest --testservice=browserstack
         End2End-Tests on saucelabs:
-            - step: *install-masterportal-on-test-geoportal
+            - step: *install-e2e-tests-server-on-test-geoportal
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal
                 caches:
