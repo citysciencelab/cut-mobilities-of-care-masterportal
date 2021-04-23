@@ -9,11 +9,11 @@ const webdriver = require("selenium-webdriver"),
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function EinwohnerAbfrageTests ({builder, url, resolution, capability}) {
+async function PopulationRequestTests ({builder, url, resolution, capability}) {
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe("Einwohnerabfrage_HH", function () {
+        describe("PopulationRequest_HH", function () {
             const selectors = {
                 tools: By.css("ul#root li.dropdown:nth-child(4)"),
                 // todo sprachunabhaengig machen
@@ -267,4 +267,4 @@ async function EinwohnerAbfrageTests ({builder, url, resolution, capability}) {
     }
 }
 
-module.exports = EinwohnerAbfrageTests;
+module.exports = PopulationRequestTests;

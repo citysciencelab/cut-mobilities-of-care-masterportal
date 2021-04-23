@@ -9,7 +9,6 @@ import StyleList from "../modules/vectorStyle/list";
 import Preparser from "../modules/core/configLoader/preparser";
 import ParametricURL from "../modules/core/parametricURL";
 import Map from "../modules/core/map";
-import AddGeoJSON from "../modules/tools/addGeoJSON/model";
 import RemoteInterface from "../modules/remoteInterface/model";
 import RadioMasterportalAPI from "../modules/remoteInterface/radioMasterportalAPI";
 import WFSTransactionModel from "../modules/wfsTransaction/model";
@@ -137,7 +136,6 @@ async function loadApp () {
         new ParametricURL();
     }
     new Map(Radio.request("Parser", "getPortalConfig").mapView);
-    new AddGeoJSON();
     new WindowView();
 
     app.$mount();

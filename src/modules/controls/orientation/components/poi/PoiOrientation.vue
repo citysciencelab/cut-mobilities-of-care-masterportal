@@ -1,8 +1,8 @@
 <script>
 import {mapGetters, mapMutations} from "vuex";
-import getters from "../store/gettersOrientation";
-import mutations from "../store/mutationsOrientation";
-import {extractEventCoordinates} from "../../../../../src/utils/extractEventCoordinates";
+import getters from "../../store/gettersOrientation";
+import mutations from "../../store/mutationsOrientation";
+import {extractEventCoordinates} from "../../../../../../src/utils/extractEventCoordinates";
 
 export default {
     name: "PoiOrientation",
@@ -299,6 +299,7 @@ export default {
                         class="glyphicon glyphicon-remove"
                         aria-hidden="true"
                         data-dismiss="modal"
+                        :title="$t('button.close')"
                         @click="hidePoi"
                     ></span>
                     <h4 class="modal-title">

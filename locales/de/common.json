@@ -616,7 +616,12 @@
                 "titleGeolocate": "Standpunkt",
                 "titleGeolocatePOI": "In der Nähe",
                 "geolocationDeniedText": "Lokalisierung nicht verfügbar",
-                "trackingDeniedText": "'In der Nähe' nicht verfügbar",
+                "poiChoiceTitle": "Ausgangspunkt für Umkeissuche wählen:",
+                "poiChoiceCurrentPostion": "Standort",
+                "poiChoiceCustomPostion": "Adresssuche oder Punkt in Karte setzen",
+                "poiChoiceConfirmation": "OK",
+                "poiChoiceStop": "Beenden",
+                "trackingDeniedText": "'In der Nähe' nicht verfügbar.",
                 "distanceUnit": "Meter"
             },
             "orientation3d": {

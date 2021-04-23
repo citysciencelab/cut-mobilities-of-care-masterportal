@@ -262,11 +262,10 @@
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
-          "einwohnerabfrage": {
+          "populationRequest": {
             "name": "translate#additional:modules.tools.populationRequest.title",
             "glyphicon": "glyphicon-wrench",
-            "onlyDesktop": false,
-            "useProxy": true
+            "onlyDesktop": false
           },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",

@@ -3,7 +3,8 @@ import {mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersOrientation";
 import mutations from "../store/mutationsOrientation";
 import ControlIcon from "../../ControlIcon.vue";
-import PoiOrientation from "./PoiOrientation.vue";
+import PoiChoice from "./poi/PoiChoice.vue";
+import PoiOrientation from "./poi/PoiOrientation.vue";
 import Geolocation from "ol/Geolocation.js";
 import Overlay from "ol/Overlay.js";
 import proj4 from "proj4";
@@ -14,6 +15,7 @@ export default {
     name: "Orientation",
     components: {
         ControlIcon,
+        PoiChoice,
         PoiOrientation
     },
     props: {
@@ -37,7 +39,6 @@ export default {
                 positioning: "center-center",
                 stopEvent: false
             }),
-            showPoi: false,
             tracking: false,
             isGeolocationDenied: false,
             isGeoLocationPossible: false,
@@ -57,6 +58,11 @@ export default {
         isGeolocationDenied () {
             this.toggleBackground();
             this.checkWFS();
+        },
+        position () {
+            if (!this.poiModeCurrentPositionEnabled && this.showPoiIcon) {
+                this.showPoiWindow();
+            }
         }
     },
     created () {
@@ -100,8 +106,8 @@ export default {
                     this.positioning();
                 }
 
-                geolocation.on("change", this.positioning, this);
-                geolocation.on("error", this.onError, this);
+                geolocation.on("change", this.positioning);
+                geolocation.on("error", this.onError);
                 this.tracking = true;
             }
             else {
@@ -181,9 +187,9 @@ export default {
         },
 
         /**
-        * Getting the current postion or untrack the position
-        * @returns {void}
-        */
+         * Getting the current postion or untrack the position
+         * @returns {void}
+         */
         getOrientation () {
             if (!this.tracking) {
                 this.track();
@@ -270,8 +276,7 @@ export default {
          * @returns {void}
          */
         getPOI () {
-            Radio.trigger("Util", "showLoader");
-            this.trackPOI();
+            this.setShowPoiChoice(true);
         },
 
         /**
@@ -281,18 +286,22 @@ export default {
         trackPOI () {
             let geolocation = null;
 
-            this.map.addOverlay(this.marker);
-            if (this.geolocation === null) {
-                geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
-                this.setGeolocation(geolocation);
-            }
-            else {
-                geolocation = this.geolocation;
-                this.showPoiWindow();
-            }
+            this.removeOverlay();
 
-            geolocation.once("change", this.showPoiWindow);
-            geolocation.once("error", this.onPOIError);
+            if (this.poiModeCurrentPositionEnabled) {
+                this.$store.dispatch("MapMarker/removePointMarker");
+                this.map.addOverlay(this.marker);
+                if (this.geolocation === null) {
+                    geolocation = new Geolocation({tracking: true, projection: Proj.get("EPSG:4326")});
+                    this.setGeolocation(geolocation);
+                }
+                else {
+                    geolocation = this.geolocation;
+                    this.showPoiWindow();
+                }
+                geolocation.on("change", this.showPoiWindow);
+                geolocation.on("error", this.onPOIError);
+            }
         },
 
         /**
@@ -302,9 +311,14 @@ export default {
         untrackPOI () {
             const geolocation = this.geolocation;
 
-            geolocation.un("change", this.showPoiWindow);
-            geolocation.un("error", this.onPOIError);
-            this.showPoi = false;
+            if (this.poiModeCurrentPositionEnabled) {
+                geolocation.un("change", this.showPoiWindow);
+                geolocation.un("error", this.onPOIError);
+            }
+            else {
+                this.removeOverlay();
+            }
+            this.setShowPoi(false);
         },
 
         /**
@@ -313,14 +327,16 @@ export default {
          */
         showPoiWindow () {
             if (!this.position) {
+                Radio.trigger("Util", "showLoader");
                 const geolocation = this.geolocation,
                     position = geolocation.getPosition(),
                     centerPosition = proj4(proj4("EPSG:4326"), proj4(this.epsg), position);
 
                 // setting the center position
                 this.setPosition(centerPosition);
+                this.positioning();
             }
-            this.showPoi = true;
+            this.setShowPoi(true);
         },
 
         /**
@@ -369,6 +385,7 @@ export default {
 
             return featuresAll;
         },
+
         /**
          * Computes the union of the passed-in arrays: the list of unique items, in order, that are present in one or more of the arrays.
          * @param  {Array} arr1 the first array
@@ -454,6 +471,12 @@ export default {
             :on-click="getPOI"
         >
         </ControlIcon>
+        <PoiChoice
+            v-if="showPoiChoice"
+            id="geolocatePoiChoice"
+            @track="trackPOI"
+        >
+        </PoiChoice>
         <PoiOrientation
             v-if="showPoi"
             :poiDistances="poiDistances"

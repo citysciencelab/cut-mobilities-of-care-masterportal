@@ -148,7 +148,7 @@ function parseDownloadLinks (json) {
     const transferOptions = json.GetRecordByIdResponse?.MD_Metadata?.distributionInfo?.MD_Distribution?.transferOptions,
         downloadResources = [];
 
-    if (transferOptions) {
+    if (typeof transferOptions === "object" && transferOptions !== null) {
         const onlineResources = getNestedValues(transferOptions, "CI_OnlineResource");
 
         onlineResources.forEach(resource => {
@@ -161,6 +161,9 @@ function parseDownloadLinks (json) {
                 });
             }
         });
+    }
+    else {
+        console.error(`parseDownloadLinks: ${transferOptions} has to be an object (not null).`);
     }
 
     return downloadResources.length > 0 ? downloadResources : null;

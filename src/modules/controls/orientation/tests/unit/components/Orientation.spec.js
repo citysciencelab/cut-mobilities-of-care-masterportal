@@ -61,7 +61,7 @@ describe("src/modules/controls/orientation/components/Orientation.vue", () => {
         });
     });
 
-    it("renders the Orientation Module", () => {
+    it("renders the Orientation component", () => {
         expect(wrapper.find(".orientationButtons").exists()).to.be.true;
         expect(wrapper.find("#geolocation_marker").exists()).to.be.true;
     });

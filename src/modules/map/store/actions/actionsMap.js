@@ -139,9 +139,10 @@ const actions = {
             dispatch("collectGfiFeatures");
         }
 
-        if (rootGetters["controls/orientation/showPoiIcon"]) {
+        if (!rootGetters["controls/orientation/poiModeCurrentPositionEnabled"]) {
             dispatch("MapMarker/placingPointMarker", evt.coordinate, {root: true});
             commit("controls/orientation/setPosition", evt.coordinate, {root: true});
+            commit("controls/orientation/setShowPoi", true, {root: true});
         }
     },
 

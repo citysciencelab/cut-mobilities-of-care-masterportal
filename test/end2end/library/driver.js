@@ -66,10 +66,24 @@ async function loadUrl (driver, url, mode) {
  * @returns {void}
  */
 async function doLoadUrl (driver, url) {
+    /* eslint-disable no-process-env */
+    const testService = process.env.npm_config_testservice;
+
     await driver.get(url);
 
     if (url.indexOf("localhost") === -1) {
-        driver.executeScript(basicAuth("lgv", "test"));
+
+        if (testService === "browserstack") {
+            driver.executeScript(basicAuth("lgv", "test"));
+        }
+        else {
+            const firstPart = url.substring(0, 8),
+                secondPart = url.substring(8),
+                urlWithBasicAuth = firstPart + "lgv:test@" + secondPart;
+
+            await driver.get(urlWithBasicAuth);
+        }
+
     }
 }
 

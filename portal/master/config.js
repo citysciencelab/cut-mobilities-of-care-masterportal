@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["einwohnerabfrage", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
+    addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
         fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
