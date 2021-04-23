@@ -37,7 +37,7 @@ definitions:
             # make script executable
             - chmod +x ./devtools/scripts/transfer_ftp.sh
             # commit changed file for "git-ftp"
-            - git commit devtools/scripts/transfer_ftp.sh -m "made transfer_ftp.sh executable"
+            # - git commit devtools/scripts/transfer_ftp.sh -m "made transfer_ftp.sh executable"
             - /bin/bash devtools/scripts/transfer_ftp.sh
 
 pipelines:
