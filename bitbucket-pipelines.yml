@@ -104,6 +104,8 @@ pipelines:
                 name: tests a deployed portal
                 caches:
                     - node
+                artifacts:
+                    - dist/**
                 script:
                     - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
                     - mv ./ci_scripts/* ./devtools
