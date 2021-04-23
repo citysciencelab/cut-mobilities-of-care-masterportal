@@ -149,7 +149,8 @@ function getCapabilities (testService) {
                 /* eslint-disable-next-line no-process-env */
                 "username": process.env.SAUCE_USERNAME,
                 /* eslint-disable-next-line no-process-env */
-                "accessKey": process.env.SAUCE_ACCESS_KEY
+                "accessKey": process.env.SAUCE_ACCESS_KEY,
+                "extendedDebugging": true
             }
         };
 
