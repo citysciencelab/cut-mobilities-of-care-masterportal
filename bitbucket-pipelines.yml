@@ -98,5 +98,15 @@ pipelines:
                 caches:
                     - node
                 script:
-                    - npm run browsertestOnGeoportalTest --testservice=saucelabs                    
+                    - npm run browsertestOnGeoportalTest --testservice=saucelabs
+        Tests deployed portal:
+            - step:
+                name: tests a deployed portal
+                caches:
+                    - node
+                script:
+                    - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
+                    - mv ./ci_scripts/* ./devtools
+                    - rm -rf ./ci_scripts
+                    - npm run browsertestOnGeoportalTest --testservice=saucelabs --portalname=cosi  --deploymenttest=true
 

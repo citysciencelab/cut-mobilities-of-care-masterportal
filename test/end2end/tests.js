@@ -27,7 +27,7 @@ const {isBasic, is2D} = require("./settings");
  * @param {Object} capability containes browserstack capability
  * @returns {void}
  */
-function tests (builder, url, browsername, resolution, config, mode, capability) {
+function tests (builder, url, browsername, resolution, config, mode, capability, deploymentTest) {
     try {
         describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
             this.timeout(3600000);
@@ -87,7 +87,16 @@ function tests (builder, url, browsername, resolution, config, mode, capability)
                     require("../../src/tests/end2end/Pan.e2e.js"),
                     require("../../src/tests/end2end/Zoom.e2e.js")
                 ],
+                deplomentTestSuites = [
+                    require("../../src/tests/end2end/Zoom.e2e.js")
+                ],
                 e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
+                let suitesToRun = suites;
+
+                if(deploymentTest !== false){
+                    console.log(deploymentTest);
+                    suitesToRun = deplomentTestSuites;
+                }
 
             for (const suite of suites) {
                 this.retries(2);
