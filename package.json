@@ -25,7 +25,6 @@
     "browsertestWithDevServer": "env NODE_ENV=e2eTest env browser=fromCapabilities webpack-dev-server --reporter ./test/end2end/library/reporter.js --config devtools/webpack.browsertest.js",
     "browsertestOnGeoportalTest": "env browser=fromCapabilities env urlPart=\\/ env url=https://test.geoportal-hamburg.de ./node_modules/.bin/mocha --reporter ./test/end2end/library/reporter.js ./test/end2end/TestRunner.js",
     "browsertest": "env urlPart=portal/ ./node_modules/.bin/mocha --reporter ./test/end2end/library/reporter.js ./test/end2end/TestRunner.js",
-    "deploymenttest": "npm run browsertestOnGeoportalTest --testservice=saucelabs --portalname=cosi  --deploymenttest=true",
     "build": "node devtools/tasks/build.js",
     "buildPortal": "node devtools/tasks/buildPortal.js",
     "buildExamples": "node devtools/tasks/exampleBuild.js && node devtools/tasks/exampleCopy.js",

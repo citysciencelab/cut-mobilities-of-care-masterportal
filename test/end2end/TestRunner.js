@@ -111,7 +111,7 @@ function runTests (browsers) {
                     }
 
                     resolutions.forEach(resolution => {
-                        tests(builder, completeUrl, currentBrowser, resolution, config, mode);
+                        tests(builder, completeUrl, currentBrowser, resolution, config, mode, null, deploymentTest);
                     });
                 }
                 else {

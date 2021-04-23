@@ -94,11 +94,11 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 let suitesToRun = suites;
 
                 if(deploymentTest !== false){
-                    console.log(deploymentTest);
                     suitesToRun = deplomentTestSuites;
                 }
+                console.log("running tests: ",suitesToRun);
 
-            for (const suite of suites) {
+            for (const suite of suitesToRun) {
                 this.retries(2);
                 suite(e2eTestParams);
             }
