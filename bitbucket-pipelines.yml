@@ -108,5 +108,5 @@ pipelines:
                     - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
                     - mv ./ci_scripts/* ./devtools
                     - rm -rf ./ci_scripts
-                    - npm run browsertestOnGeoportalTest --testservice=saucelabs --portalname=cosi  --deploymenttest=true
+                    - npm run browsertestOnGeoportalTest --testservice=saucelabs --portalname=geo-online  --deploymenttest=true
 
