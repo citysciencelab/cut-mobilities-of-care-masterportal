@@ -29,6 +29,7 @@
 
 ### Fixed
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
+- Printing wfs cluster features and features with multiple styles
 
 ---
 
