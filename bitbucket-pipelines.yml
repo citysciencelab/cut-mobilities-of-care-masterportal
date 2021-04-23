@@ -21,7 +21,7 @@ definitions:
             # todo branch raus!
             - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
             - mv ./ci_scripts/* ./devtools
-            - ls -al
+            - rm -rf ./ci_scripts
             - rm -rf ./addons/readme.txt
             # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
             - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
