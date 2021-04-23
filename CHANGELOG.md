@@ -19,6 +19,7 @@
 - colorTools are renamed into convertColor (src/utils/convertColor)
 - Updates the core-js and babel dependencies in the package.json
 - Update the dependency caniuse-lite.
+- The module addGeoJSON switched from backbone to vue and is provided as a util now.
 
 ### Deprecated
 - colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
