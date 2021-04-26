@@ -34,9 +34,14 @@ async function ZoomTests ({builder, url, resolution, capability, result}) {
 
             after(async function () {
                 if (capability) {
-                    driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
-                    });
+                    if(driver){
+                        driver.session_.then(function (sessionData) {
+                            logBrowserstackUrlToTest(sessionData.id_);
+                        });
+                    }
+                    else{
+                        result.fail = true; 
+                    }
                 }
                 await driver.quit();
             });
