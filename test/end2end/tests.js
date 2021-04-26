@@ -1,4 +1,5 @@
-const {isBasic, is2D} = require("./settings");
+const {isBasic, is2D} = require("./settings"),
+    result = {};
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -30,7 +31,7 @@ const {isBasic, is2D} = require("./settings");
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode, capability, deploymentTest) {
-        describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
+    describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
         this.timeout(3600000);
 
         if (isBasic(url) && !is2D(mode)) {
@@ -91,7 +92,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
             deplomentTestSuites = [
                 require("../../src/tests/end2end/Zoom.e2e.js")
             ],
-            e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
+            e2eTestParams = {builder, url, resolution, config, mode, browsername, capability, result};
         let suitesToRun = suites;
 
         if (deploymentTest !== false) {
@@ -103,15 +104,15 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
             suite(e2eTestParams);
         }
 
-        after(async function(){
-           /* eslint-disable-next-line no-process-env */
-            console.log("after process.env.e2eTestFailures:",process.env.e2eTestFailures);
-            console.log("after this:",this);
-            if(process.env.e2eTestFailures){
-                process.env.e2eTestFailures = undefined;
+        after(async function () {
+            /* eslint-disable-next-line no-process-env */
+            if (deploymentTest && result.fail) {
+                /* eslint-disable-next-line no-process-exit */
                 return process.exit(1);
             }
-          })  
+            /* eslint-disable-next-line no-process-exit */
+            return process.exit(0);
+        });
     });
 }
 

@@ -92,9 +92,6 @@ function SpecWithRetries (runner, options) {
 
         // failures
         if (stats.failures) {
-             /* eslint-disable-next-line no-process-env */
-             process.env.e2eTestFailures = true;
-             
             fmt = color("fail", "  %d failing");
 
             Base.consoleLog(fmt, stats.failures);
