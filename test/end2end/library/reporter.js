@@ -97,6 +97,8 @@ function SpecWithRetries (runner, options) {
             Base.consoleLog(fmt, stats.failures);
 
             Base.list(this.failures);
+            /* eslint-disable-next-line no-process-env */
+            process.env.e2eTestFailures = this.failures;
         }
 
         // unstable tests
