@@ -109,6 +109,7 @@ pipelines:
                 script:
                     - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
                     - mv ./ci_scripts/* ./devtools
+                    - ls -al ./devtools
                     - rm -rf ./ci_scripts
                     - chmod +x ./devtools/scripts/testDeployedPortals.sh
                     - ./devtools/scripts/testDeployedPortals.sh
