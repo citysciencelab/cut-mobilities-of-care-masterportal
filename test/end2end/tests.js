@@ -105,6 +105,8 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
         }
 
         after(async function () {
+            console.log("tests.js deploymentTest:",deploymentTest);
+            console.log("tests.js result:",result);
             /* eslint-disable-next-line no-process-env */
             if (deploymentTest && result.fail) {
                 /* eslint-disable-next-line no-process-exit */
