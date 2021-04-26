@@ -113,7 +113,6 @@ pipelines:
                     - rm -rf ./ci_scripts
                     - chmod +x ./devtools/scripts/testDeployedPortals.sh
                     - ./devtools/scripts/testDeployedPortals.sh
-                    - echo $?
                 after-script:
                     - if [[ BITBUCKET_EXIT_CODE -eq 0 ]]; then exit 0; else echo "Step failed"; fi;
                     - pipe: atlassian/email-notify:0.3.8 
