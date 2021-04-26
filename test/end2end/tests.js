@@ -99,9 +99,18 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
         }
 
         for (const suite of suitesToRun) {
-            this.retries(2);
+            // this.retries(2);
             suite(e2eTestParams);
         }
+
+        after(async function(){
+           /* eslint-disable-next-line no-process-env */
+            console.log("process.env.e2eTestFailures:",process.env.e2eTestFailures);
+            if(process.env.e2eTestFailures){
+                process.env.e2eTestFailures = undefined;
+                return process.exit(1);
+            }
+          })  
     });
 }
 
