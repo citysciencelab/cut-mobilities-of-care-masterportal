@@ -100,7 +100,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
         }
 
         for (const suite of suitesToRun) {
-            // this.retries(2);
+            this.retries(2);
             suite(e2eTestParams);
         }
 
