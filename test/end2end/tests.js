@@ -96,7 +96,6 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 if(deploymentTest !== false){
                     suitesToRun = deplomentTestSuites;
                 }
-                console.log("running tests: ",suitesToRun);
 
             for (const suite of suitesToRun) {
                 this.retries(2);
