@@ -104,7 +104,7 @@ pipelines:
                 caches:
                     - node
                 script:
-                    - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
+                    - git clone --single-branch --branch $BITBUCKET_BRANCH git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
                     - mv ./ci_scripts/* ./devtools
                     - rm -rf ./ci_scripts
                     - chmod +x ./devtools/scripts/testDeployedPortals.sh
