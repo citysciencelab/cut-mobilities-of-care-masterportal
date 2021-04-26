@@ -141,6 +141,10 @@ function runTests (browsers) {
             });
         });
     });
+     /* eslint-disable-next-line no-process-env */
+    if(process.env.e2eTestFailures){
+        throw 1;
+    }
 }
 
 /**
