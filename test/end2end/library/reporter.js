@@ -98,8 +98,7 @@ function SpecWithRetries (runner, options) {
 
             Base.list(this.failures);
             /* eslint-disable-next-line no-process-env */
-            process.env.e2eTestFailures += stats.failures;
-            console.warn("process.env.e2eTestFailures:",process.env.e2eTestFailures);
+            process.env.e2eTestFailures = true;
         }
 
         // unstable tests
