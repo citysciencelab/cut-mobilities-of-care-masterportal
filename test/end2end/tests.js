@@ -10,6 +10,7 @@ const {isBasic, is2D} = require("./settings");
  * @property {String} config key that defines which config the Masterportal should run on
  * @property {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @property {String} browsername string indicating which browser is in use
+ * @property {Object} capability containes browserstack capability
  */
 
 /**
@@ -25,6 +26,7 @@ const {isBasic, is2D} = require("./settings");
  * @param {String} config key that defines which config the Masterportal should run on
  * @param {String} mode key that defines which steps should be taken before testing (e.g. activating 3D)
  * @param {Object} capability containes browserstack capability
+ * @param {Boolean} deploymentTest if true, only one test for a deployed portal is running
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode, capability, deploymentTest) {
@@ -91,11 +93,11 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                     require("../../src/tests/end2end/Zoom.e2e.js")
                 ],
                 e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
-                let suitesToRun = suites;
+            let suitesToRun = suites;
 
-                if(deploymentTest !== false){
-                    suitesToRun = deplomentTestSuites;
-                }
+            if (deploymentTest !== false) {
+                suitesToRun = deplomentTestSuites;
+            }
 
             for (const suite of suitesToRun) {
                 this.retries(2);

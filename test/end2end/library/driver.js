@@ -120,7 +120,7 @@ async function getUnnavigatedDriver (builder, resolution) {
  */
 async function initDriver (builder, url, resolution, mode) {
     const driver = await getUnnavigatedDriver(builder, resolution);
-    
+
     await loadUrl(driver, url, mode);
     return driver;
 }

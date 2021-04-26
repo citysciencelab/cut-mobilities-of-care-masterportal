@@ -15,8 +15,11 @@ const webdriver = require("selenium-webdriver"),
         modes
     } = require("./settings"),
     /* eslint-disable no-process-env */
+    // contains "browserstack" or "saucelabs"
     testService = process.env.npm_config_testservice,
+    // if running a deploymentTest, name of the portal to test is contained
     portalName = process.env.npm_config_portalname,
+    // if true, only one test on a deplyed portal is running, see portalName
     deploymentTest = process.env.npm_config_deploymenttest || false,
     browser = process.env.browser || "firefox,chrome",
     url = process.env.url || "https://localhost:9001/",
@@ -30,7 +33,7 @@ const webdriver = require("selenium-webdriver"),
     /* eslint-enable no-process-env */
 let portalConfigs = configs;
 
-if(deploymentTest && portalName){
+if (deploymentTest && portalName) {
     portalConfigs = new Map([
         [portalName, portalName]
     ]);
@@ -100,8 +103,9 @@ function runTests (browsers) {
     browsers.forEach(currentBrowser => {
         portalConfigs.forEach((pathEnd, config) => {
             let completeUrl = url + urlPart + pathEnd;
-            if(deploymentTest){
-                console.warn("Running test on deployed portal using url:",completeUrl);
+
+            if (deploymentTest) {
+                console.warn("Running test on deployed portal using url:", completeUrl);
             }
 
             modes.forEach(mode => {
@@ -119,6 +123,7 @@ function runTests (browsers) {
                 else {
                     const caps = getCapabilities(testService);
 
+                    /* eslint-disable-next-line no-process-env */
                     if (!deploymentTest && process.env.BITBUCKET_BRANCH) {
                         /* eslint-disable-next-line no-process-env */
                         completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");

@@ -73,7 +73,8 @@ pipelines:
                 script:
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest --testservice=browserstack
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs:
             - step: *install-e2e-tests-server-on-test-geoportal
             - step:
@@ -82,7 +83,8 @@ pipelines:
                     - node
                 script:
                     # run e2e tests
-                    - npm run browsertestOnGeoportalTest --testservice=saucelabs
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=saucelabs
         End2End-Tests on browserstack/ use existing server:
             - step:
                 name: run e2e tests on browserstack url=test.geoportal_buildname
@@ -90,14 +92,16 @@ pipelines:
                     - node
                 script:
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest --testservice=browserstack
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=browserstack
         End2End-Tests on saucelabs/ use existing server:
             - step:
                 name: run e2e tests on saucelabs url=test.geoportal_buildname
                 caches:
                     - node
                 script:
-                    - npm run browsertestOnGeoportalTest --testservice=saucelabs
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=saucelabs
         Testing deployed portal:
             - step:
                 name: tests a deployed portal
