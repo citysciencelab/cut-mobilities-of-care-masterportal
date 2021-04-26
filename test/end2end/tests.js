@@ -105,7 +105,8 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
 
         after(async function(){
            /* eslint-disable-next-line no-process-env */
-            console.log("process.env.e2eTestFailures:",process.env.e2eTestFailures);
+            console.log("after process.env.e2eTestFailures:",process.env.e2eTestFailures);
+            console.log("after this:",this);
             if(process.env.e2eTestFailures){
                 process.env.e2eTestFailures = undefined;
                 return process.exit(1);
