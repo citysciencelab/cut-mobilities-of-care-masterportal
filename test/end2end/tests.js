@@ -109,11 +109,9 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
             console.log("tests.js result:",result);
             /* eslint-disable-next-line no-process-env */
             if (deploymentTest && result.fail) {
-                /* eslint-disable-next-line no-process-exit */
-                return process.exit(1);
+                console.log("set process exit code to 1");
+                process.exitCode = 1;
             }
-            /* eslint-disable-next-line no-process-exit */
-            return process.exit(0);
         });
     });
 }

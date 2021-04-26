@@ -40,7 +40,6 @@ async function ZoomTests ({builder, url, resolution, capability, result}) {
                         });
                     }
                     else{
-                        console.log("set result fail in after in test");
                         result.fail = true; 
                     }
                 }
