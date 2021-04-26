@@ -39,7 +39,6 @@ async function prepareOB (driver) {
  * @returns {void}
  */
 async function loadUrl (driver, url, mode) {
-    console.log("loadUrl url=", url);
     doLoadUrl(driver, url);
 
     await driver.wait(async () => await driver.executeScript(isInitalLoadingFinished) === true, 90000).catch(err => {
@@ -82,7 +81,6 @@ async function doLoadUrl (driver, url) {
                 secondPart = url.substring(8),
                 urlWithBasicAuth = firstPart + "lgv:test@" + secondPart;
 
-                console.warn("urlWithBasicAuth:",urlWithBasicAuth);
             await driver.get(urlWithBasicAuth);
         }
 
@@ -121,7 +119,6 @@ async function getUnnavigatedDriver (builder, resolution) {
  * @returns {selenium.webdriver.Driver} driver instance
  */
 async function initDriver (builder, url, resolution, mode) {
-    console.log("initDriver url=", url);
     const driver = await getUnnavigatedDriver(builder, resolution);
     
     await loadUrl(driver, url, mode);

@@ -91,7 +91,7 @@ function runTests (browsers) {
 
 
     /* eslint-disable-next-line no-process-env */
-    if (process.env.BITBUCKET_BRANCH) {
+    if (!deploymentTest && process.env.BITBUCKET_BRANCH) {
         /* eslint-disable-next-line no-process-env */
         build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
         console.warn("Running tests on " + testService + " with name:\"" + build + "\" on Urls:");
@@ -100,7 +100,9 @@ function runTests (browsers) {
     browsers.forEach(currentBrowser => {
         portalConfigs.forEach((pathEnd, config) => {
             let completeUrl = url + urlPart + pathEnd;
-            console.log("completeUrl=",completeUrl);
+            if(deploymentTest){
+                console.warn("Running test on deployed portal using url:",completeUrl);
+            }
 
             modes.forEach(mode => {
                 if (currentBrowser !== "fromCapabilities") {
