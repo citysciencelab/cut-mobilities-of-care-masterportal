@@ -118,18 +118,10 @@ pipelines:
                     # - if [[ $BITBUCKET_EXIT_CODE -eq 0 ]]; then exit 0; else echo "Step failed"; fi;
                     # do something here that might throw
                     - RETURN_CODE=$?  ## capture the exit code
-                    - if [ $RETURN_CODE -eq 1 ]; then
-                    - echo "return code is 1"
+                    - if [ $RETURN_CODE -gt 0 ]; then
+                    - echo "return code is gt 0"
                     - exit 1
                     - else
                     - echo "return code is 0"
                     - fi
                     - set -e # turn on error-trapping
-                    - pipe: atlassian/email-notify:0.3.8 
-                      variables: 
-                        USERNAME: 'myemail@example.com' 
-                        PASSWORD: $PASSWORD 
-                        FROM: 'myemail@example.com' 
-                        TO: 'example@example.com' 
-                        HOST: 'smtp.gmail.com'
-                        BODY_PLAIN: "Build failed!"
