@@ -104,15 +104,15 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
             suite(e2eTestParams);
         }
 
-        after(async function () {
-            console.log("tests.js deploymentTest:",deploymentTest);
-            console.log("tests.js result:",result);
-            /* eslint-disable-next-line no-process-env */
-            if (deploymentTest && result.fail) {
-                console.log("set process exit code to 1");
-                process.exitCode = 1;
-            }
-        });
+    //     after(async function () {
+    //         console.log("tests.js deploymentTest:",deploymentTest);
+    //         console.log("tests.js result:",result);
+    //         /* eslint-disable-next-line no-process-env */
+    //         if (deploymentTest && result.fail) {
+    //             console.log("set process exit code to 1");
+    //             process.exitCode = 1;
+    //         }
+    //     });
     });
 }
 
