@@ -40,8 +40,9 @@ async function DeployedPortalsTest ({builder, url, resolution, capability}) {
             }
         });
 
-        it("only here for testing init driver and load url", async function () {
-            expect("portal").to.be.equals("portal");
+        it("running", async function () {
+            // only here for testing init driver and load url
+            expect("masterportal").to.be.equals("masterportal");
         });
     });
 }
