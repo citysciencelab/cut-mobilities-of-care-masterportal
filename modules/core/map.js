@@ -684,6 +684,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (!found) {
             source = new VectorSource();
             layer = new VectorLayer({
+                id: name,
                 name: name,
                 source: source,
                 alwaysOnTop: true
