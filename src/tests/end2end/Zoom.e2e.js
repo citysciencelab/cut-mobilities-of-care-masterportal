@@ -13,10 +13,9 @@ const webdriver = require("selenium-webdriver"),
  * @param {String} params.url the url to test
  * @param {String} params.resolution formatted as "AxB" with A, B integers
  * @param {module:selenium-webdriver.Capabilities} param.capability sets the capability when requesting a new session - overwrites all previously set capabilities
- * @param {Object} params.result to fill with return values to caller, e.g. info about failing
  * @returns {void}
  */
-async function ZoomTests ({builder, url, resolution, capability, result}) {
+async function ZoomTests ({builder, url, resolution, capability}) {
     const testIsApplicable = !isMobile(resolution); // no mouse wheel on mobile devices
 
     if (testIsApplicable) {
@@ -39,9 +38,6 @@ async function ZoomTests ({builder, url, resolution, capability, result}) {
                             logBrowserstackUrlToTest(sessionData.id_);
                         });
                     }
-                    else{
-                        result.fail = true; 
-                    }
                 }
                 await driver.quit();
             });
@@ -52,9 +48,6 @@ async function ZoomTests ({builder, url, resolution, capability, result}) {
                     await driver.quit();
                     driver = await initDriver(builder, url, resolution);
                     canvas = await driver.findElement(By.css(".ol-viewport"));
-                }
-                if (this.currentTest.state === "failed") {
-                    result.fail = true;
                 }
             });
 

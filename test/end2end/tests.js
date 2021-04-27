@@ -1,5 +1,4 @@
-const {isBasic, is2D} = require("./settings"),
-    result = {};
+const {isBasic, is2D} = require("./settings");
 
 /**
  * Description of the parameter set forwarded to each test suite. Each test suite may decide in itself
@@ -92,7 +91,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
             deplomentTestSuites = [
                 require("../../src/tests/end2end/Zoom.e2e.js")
             ],
-            e2eTestParams = {builder, url, resolution, config, mode, browsername, capability, result};
+            e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
         let suitesToRun = suites;
 
         if (deploymentTest !== false) {
@@ -103,16 +102,6 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
             this.retries(2);
             suite(e2eTestParams);
         }
-
-    //     after(async function () {
-    //         console.log("tests.js deploymentTest:",deploymentTest);
-    //         console.log("tests.js result:",result);
-    //         /* eslint-disable-next-line no-process-env */
-    //         if (deploymentTest && result.fail) {
-    //             console.log("set process exit code to 1");
-    //             process.exitCode = 1;
-    //         }
-    //     });
     });
 }
 
