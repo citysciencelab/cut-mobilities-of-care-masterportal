@@ -44,7 +44,7 @@ export default {
     },
     computed: {
         ...mapGetters("GraphicalSelect", Object.keys(getters)),
-        options_value: function () {
+        optionsValue: function () {
             return this.options ? this.options : {
                 "Box": this.$t("common:snippets.graphicalSelect.selectBySquare"),
                 "Circle": this.$t("common:snippets.graphicalSelect.selectByCircle"),
@@ -116,7 +116,7 @@ export default {
          * @returns {void}
          */
         resetGeographicSelection: function () {
-            this.selectedOptionData = Object.keys(this.options_value)[0];
+            this.selectedOptionData = Object.keys(this.optionsValue)[0];
         },
 
         /**
@@ -124,7 +124,7 @@ export default {
          * @returns {void}
          */
         checkOptions: function () {
-            if (!this.geographicValues.every(key => Object.keys(this.options_value).includes(key))) {
+            if (!this.geographicValues.every(key => Object.keys(this.optionsValue).includes(key))) {
                 this.addSingleAlert({
                     "content": i18next.t("common:snippets.graphicalSelect.alert.notSupportedOption") + this.geographicValues
                 });
@@ -261,7 +261,7 @@ export default {
         <Dropdown
             v-if="selectElement === 'Dropdown'"
             v-model="selectedOptionData"
-            :options="options_value"
+            :options="optionsValue"
         />
     </form>
 </template>
