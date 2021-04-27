@@ -112,3 +112,4 @@ pipelines:
                     - mv ./ci_scripts/* ./devtools
                     - rm -rf ./ci_scripts
                     - chmod +x ./devtools/scripts/testDeployedPortals.sh
+                    - ./devtools/scripts/testDeployedPortals.sh
