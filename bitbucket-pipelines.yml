@@ -102,9 +102,9 @@ pipelines:
                 script:
                     - export url=https://test.geoportal-hamburg.de
                     - npm run browsertestOnExternalServer --testservice=saucelabs
-        Testing deployed portal:
+        Testing deployed portals:
             - step:
-                name: tests a deployed portal
+                name: test deployed portals
                 caches:
                     - node
                 script:
