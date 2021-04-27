@@ -113,11 +113,11 @@ pipelines:
                     - rm -rf ./ci_scripts
                     - chmod +x ./devtools/scripts/testDeployedPortals.sh
                     - set +e # turn off error-trapping
-                    - ./devtools/scripts/testDeployedPortals.sh
-                after-script:
-                    # - if [[ $BITBUCKET_EXIT_CODE -eq 0 ]]; then exit 0; else echo "Step failed"; fi;
                     # do something here that might throw
+                    - ./devtools/scripts/testDeployedPortals.sh
                     - RETURN_CODE=$?  ## capture the exit code
+                    - echo "return code:"
+                    - echo $RETURN_CODE
                     - if [ $RETURN_CODE -gt 0 ]; then
                     - echo "return code is gt 0"
                     - exit 1
