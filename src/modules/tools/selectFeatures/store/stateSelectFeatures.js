@@ -1,14 +1,18 @@
 /**
  * User type definition
- * @typedef {object} SelectFeaturesState
- * @property {boolean} active if true, VueAddon will rendered
- * @property {string} id id of the SelectFeatures component
- * @property {string} name displayed as title (config-param)
- * @property {string} glyphicon icon next to title (config-param)
- * @property {boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
- * @property {boolean} resizableWindow if true, window is resizable (config-param)
- * @property {boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
- * @property {boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @typedef {Object} SelectFeaturesState
+ * @property {Boolean} active if true, VueAddon will rendered
+ * @property {String} id id of the SelectFeatures component
+ * @property {String} name displayed as title (config-param)
+ * @property {String} glyphicon icon next to title (config-param)
+ * @property {Boolean} renderToWindow if true, tool is rendered in a window, else in sidebar (config-param)
+ * @property {Boolean} resizableWindow if true, window is resizable (config-param)
+ * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
+ * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @property {module:ol/Collection} selectedFeatures the selected Features Collection
+ * @property {Array} selectedFeaturesWithRenderInformation the selected Features with RenderInformation Array
+ * @property {module:ol/interaction/Select} selectInteraction the ol Select interaction
+ * @property {module:ol/interaction/DragBox} dragBoxInteraction the ol DragBox interaction
  */
 const state = {
     active: false,

@@ -10,6 +10,7 @@ import getters from "../store/gettersSelectFeatures";
 import mutations from "../store/mutationsSelectFeatures";
 
 import {isUrl} from "../../../../utils/urlHelper";
+import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
 
 export default {
     name: "SelectFeatures",
@@ -19,13 +20,10 @@ export default {
     computed: {
         ...mapGetters("Tools/SelectFeatures", Object.keys(getters))
     },
-    created () {
-        this.$on("close", this.close);
-        this.createInteractions();
-    },
     watch: {
         active (newValue) {
             if (newValue) {
+                this.createInteractions();
                 this.addInteractions();
             }
             else {
@@ -34,12 +32,16 @@ export default {
 
         }
     },
+    created () {
+        this.$on("close", this.close);
+    },
     methods: {
         ...mapMutations("Tools/SelectFeatures", Object.keys(mutations)),
         ...mapActions("Map", {
             addInteractionToMap: "addInteraction",
             removeInteractionFromMap: "removeInteraction"
         }),
+        isEmailAddress,
 
         /**
          * Creates the interactions for selecting features.
@@ -55,8 +57,6 @@ export default {
                 }),
                 dragBox = new DragBox({condition: platformModifierKeyOnly});
 
-            this.setSelectedFeatures(select.getFeatures());
-
             dragBox.on("boxstart", this.clearFeatures.bind(this));
             dragBox.on("boxend", this.setFeaturesFromDrag.bind(this));
 
@@ -69,7 +69,10 @@ export default {
          * @returns {void}
          */
         clearFeatures: function () {
-            this.setSelectedFeatures(null);
+            if (this.selectedFeatures) {
+                this.selectedFeatures.clear();
+            }
+            this.setSelectedFeatures(this.selectInteraction.getFeatures());
             this.setSelectedFeaturesWithRenderInformation([]);
         },
 
@@ -101,15 +104,13 @@ export default {
             Radio
                 .request("Map", "getLayers")
                 .getArray()
-                .filter(l => l.get("visible") && l.get("source") instanceof VectorSource)
+                .filter(layer => layer.get("visible") && layer.get("source") instanceof VectorSource)
                 .forEach(
-                    l => l.get("source").forEachFeatureIntersectingExtent(
+                    layer => layer.get("source").forEachFeatureIntersectingExtent(
                         extent,
-                        feature => this.prepareFeature(l, feature)
+                        feature => this.prepareFeature(layer, feature)
                     )
                 );
-
-            Radio.trigger(this, "updatedSelection");
         },
 
         /**
@@ -120,7 +121,7 @@ export default {
          * @returns {void}
          */
         prepareFeature: function (layer, feature) {
-            this.$store.state.selectedFeatures.push(feature);
+            this.addSelectedFeature(feature);
             if (feature.get("features") === undefined) {
                 const item = feature;
 
@@ -140,7 +141,7 @@ export default {
          * @returns {void}
          */
         pushFeatures: function (layer, item) {
-            this.$store.state.selectedFeaturesWithRenderInformation.push({
+            this.addSelectedFeatureWithRenderInformation({
                 item,
                 properties: this.translateGFI(
                     item.getProperties(),
@@ -151,15 +152,26 @@ export default {
 
         /**
          * Prepares the properties of a feature for tabular display.
-         * @param {object} properties Technical key to display value
-         * @param {object} gfiAttributes Technical key to display key
-         * @returns {Array.<string[]>} Array of [key,value]-pairs - may be empty
+         * @param {Object} properties Technical key to display value
+         * @param {Object} gfiAttributes Technical key to display key
+         * @returns {Array.<String[]>} Array of [key,value]-pairs - may be empty
          */
         translateGFI: function (properties, gfiAttributes) {
             // makes links in result list clickable
-            Object.entries(properties).forEach(([key, value]) => {
-                if (typeof value === "string" && isUrl(value)) {
-                    properties[key] = "<a href=" + value + " target=\"_blank\">" + value + "</a>";
+            Object.entries(properties).forEach(([key, propValue]) => {
+                if (this.isValidKey(key) && this.isValidValue(propValue) && propValue.indexOf("|") > -1) {
+                    properties[key] = "";
+                    propValue.split("|").forEach(function (arrayItemValue) {
+                        if (isUrl(arrayItemValue)) {
+                            properties[key] += "<a href=" + arrayItemValue + " target=\"_blank\">" + arrayItemValue + "</a><br/>";
+                        }
+                        else {
+                            properties[key] += arrayItemValue + "<br/>";
+                        }
+                    });
+                }
+                else if (this.isValidKey(key) && this.isValidValue(propValue) && isUrl(propValue)) {
+                    properties[key] = "<a href=" + propValue + " target=\"_blank\">" + propValue + "</a>";
                 }
             });
             // showAll => just use properties and make key look nice
@@ -197,32 +209,32 @@ export default {
         /**
          * Prepares a key for display.
          * e.g. "very_important_field" becomes "Very Important Field"
-         * @param {string} str key to beautify
-         * @returns {string} beautified key
+         * @param {String} str key to beautify
+         * @returns {String} beautified key
          */
         beautifyKey: function (str) {
             return str
                 .split("_")
-                .map(s => s.substring(0, 1).toUpperCase() + s.substring(1))
+                .map(item => item.substring(0, 1).toUpperCase() + item.substring(1))
                 .join(" ");
         },
 
         /**
          * Translates | separators to newlines.
-         * @param {string} str string, potentially with separators '|'
-         * @returns {string} beautified string
+         * @param {String} str string, potentially with separators '|'
+         * @returns {String} beautified string
          */
         beautifyValue: function (str) {
             return str
                 .split("|")
-                .map(s => s.trim())
+                .map(item => item.trim())
                 .join("<br/>");
         },
 
         /**
          * helper function: check, if key has a valid value
-         * @param {string} key parameter
-         * @returns {boolean} desc
+         * @param {String} key parameter
+         * @returns {Boolean} key is valid (i.e. not a member of ignoredKeys)
          */
         isValidKey: function (key) {
             const ignoredKeys = Config.ignoredKeys ? Config.ignoredKeys : Radio.request("Util", "getIgnoredKeys");
@@ -232,8 +244,8 @@ export default {
 
         /**
          * helper function: check, if str has a valid value
-         * @param {string} str parameter
-         * @returns {boolean} desc
+         * @param {String} str parameter
+         * @returns {Boolean} value is valid
          */
         isValidValue: function (str) {
             return Boolean(str && typeof str === "string" && str.toUpperCase() !== "NULL");
@@ -254,6 +266,32 @@ export default {
             if (model) {
                 model.set("isActive", false);
             }
+        },
+
+        /**
+         * Feature listing offer clickable elements to zoom to a feature.
+         * @param {Object} event click event
+         * @returns {void}
+         */
+        featureZoom: function (event) {
+            const featureIndex = event.currentTarget.id.split("-")[0],
+                {item} = this.selectedFeaturesWithRenderInformation[featureIndex];
+
+            Radio.request("Map", "getMap").getView().fit(item.getGeometry());
+        },
+
+        /**
+         * translates the given key, checkes if the key exists and throws a console warning if not
+         * @param {String} key the key to translate
+         * @param {Object} [options=null] for interpolation, formating and plurals
+         * @returns {String} the translation or the key itself on error
+         */
+        translate (key, options = null) {
+            if (key === "common:" + this.$t(key)) {
+                console.warn("the key " + JSON.stringify(key) + " is unknown to the common translation");
+            }
+
+            return this.$t(key, options);
         }
     }
 };
@@ -261,20 +299,88 @@ export default {
 
 <template lang="html">
     <Tool
-        :title="$t('common:menu.tools.selectFeatures')"
+        :title="translate('common:menu.tools.selectFeatures')"
         :icon="glyphicon"
         :active="active"
         :render-to-window="renderToWindow"
         :resizable-window="resizableWindow"
         :deactivateGFI="deactivateGFI"
+        class="selectFeatures"
     >
         <template v-slot:toolBody>
             <div
                 v-if="active"
                 id="selectFeatures"
             >
-                {{ $t("common:modules.tools.selectFeatures.noFeatureChosen") }}
+                <div
+                    v-if="selectedFeaturesWithRenderInformation.length === 0"
+                >
+                    {{ translate("common:modules.tools.selectFeatures.noFeatureChosen") }}
+                </div>
+                <div
+                    v-else
+                    class="select-features-tables"
+                >
+                    <template
+                        v-for="(selectedFeature, index) in selectedFeaturesWithRenderInformation"
+                    >
+                        <table
+                            v-if="selectedFeature.properties.length > 0"
+                            :key="index"
+                            class="table table-striped table-bordered"
+                        >
+                            <tbody>
+                                <tr
+                                    v-for="(property, propIndex) in selectedFeature.properties"
+                                    :key="propIndex"
+                                >
+                                    <td>{{ property[0] }}</td>
+                                    <td v-if="isEmailAddress(property[1])">
+                                        <a :href="`mailto:${property[1]}`">{{ property[1] }}</a>
+                                    </td>
+                                    <td
+                                        v-else-if="property[1].includes('<br') || property[1].includes('<a')"
+                                        v-html="property[1]"
+                                    >
+                                    </td>
+                                    <td v-else>
+                                        {{ property[1] }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p
+                            v-else
+                            :key="index"
+                        >
+                            {{ translate("common:modules.tools.selectFeatures.propertylessFeature") }}
+                        </p>
+                        <a
+                            :id="index + '-selectFeatures-feature'"
+                            :key="'a' + index"
+                            href="#"
+                            class="select-features-zoom-link"
+                            @click="featureZoom"
+                        >
+                            {{ translate("common:modules.tools.selectFeatures.zoomToFeature") }}
+                        </a>
+                        <hr
+                            v-if="index !== selectedFeaturesWithRenderInformation.length - 1"
+                            :key="'h' + index"
+                        />
+                    </template>
+                </div>
             </div>
         </template>
     </Tool>
 </template>
+
+<style type="less" scoped>
+.selectFeatures {
+    max-width:500px;
+    max-height:745px;
+}
+.select-features-tables p {
+    margin: 8px 0px;
+}
+</style>
