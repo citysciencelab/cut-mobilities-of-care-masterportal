@@ -1058,8 +1058,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return legend.some(legendPart => {
             let isPdf = false;
 
-            if (typeof legendPart === "object") {
+            if (typeof legendPart === "object" && !Array.isArray(legendPart.graphic)) {
                 isPdf = legendPart.graphic.endsWith(".pdf");
+            }
+            else if (typeof legendPart === "object" && Array.isArray(legendPart.graphic)) {
+                return isPdf;
             }
             else {
                 isPdf = legendPart.endsWith(".pdf");
@@ -1109,7 +1112,18 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 },
                 graphic = typeof legendPart === "object" ? legendPart.graphic : legendPart;
 
-            if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+            if (Array.isArray(graphic)) {
+                graphic.forEach(graphicPart => {
+                    if (graphicPart.indexOf("svg") !== -1) {
+                        legendObj.svg = decodeURIComponent(graphicPart).split("data:image/svg+xml;charset=utf-8,")[1];
+                    }
+                    else {
+                        legendObj.imageUrl = graphicPart;
+                    }
+                });
+                legendObj.legendType = "svgAndPng";
+            }
+            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
                 legendObj.legendType = "wmsGetLegendGraphic";
                 legendObj.imageUrl = graphic;
             }
