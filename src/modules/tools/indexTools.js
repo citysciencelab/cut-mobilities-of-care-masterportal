@@ -17,7 +17,7 @@ import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
-import SelectFeatures from "./selectFeatures/store/indexSelectFeatures"
+import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
 
 /**
  * This is here to test app-store/utils/composeModules.
