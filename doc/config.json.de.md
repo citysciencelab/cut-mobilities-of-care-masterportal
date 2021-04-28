@@ -674,7 +674,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 #!json
 "portalTitle": {
     "title": "Master",
-    "logo": "../../lgv-config/img/hh-logo.png",
+    "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
     "link": "https://geoinfo.hamburg.de",
     "toolTip": "Landesbetrieb Geoinformation und Vermessung"
 }
@@ -701,7 +701,7 @@ In der Menüleiste kann der Portalname und ein Bild angezeigt werden, sofern die
 ```
 #!json
 "mapView": {
-    "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+    "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
     "startCenter": [561210, 5932600],
     "options": [
         {
@@ -1301,7 +1301,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
 |----|-------------|---|-------|------------|------|
 |serviceId|ja|String||Id des Dienstes der abgefragt werden soll. Wird in der rest-services.json abgelegt.|false|
 |storedQueryId|ja|String||Id der stored query die verwendet werden soll.|true|
-|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
+|configJSON|ja|String||Pfad zur Konfigurationsdatei, die die Gemarkungen enthält. **[Beispiel](https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|nein|Boolean|false|Flag, ob Flurnummern auch zur Suche verwendet werden sollen. Besonderheit Hamburg: Hamburg besitzt als Stadtstaat keine Fluren.|false|
 |styleId|nein|String||Hier kann eine StyleId aus der style.json angegeben werden um den Standard-Style vom MapMarker zu überschreiben.|false|
 |zoomLevel|nein|Number|7|Gibt an, auf welches ZoomLevel gezoomt werden soll.|false|
@@ -1314,7 +1314,7 @@ Beispiel: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=GetFeat
     "glyphicon": "glyphicon-search",
     "serviceId": "6",
     "storedQueryID": "Flurstueck",
-    "configJSON": "/lgv-config/gemarkungen_hh.json",
+    "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
     "parcelDenominator": false,
     "styleId": "flaecheninfo"
 }

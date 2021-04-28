@@ -236,8 +236,8 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await loadUrl(driver, `${url}?featureid=18,26`, mode);
                 await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
                 await driver.wait(async () => driver.executeScript(doesLayerWithFeaturesExist, [
-                    {coordinate: [568814.3835, 5931819.377], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"},
-                    {coordinate: [567043.565, 5934455.808], image: "https://geoportal-hamburg.de/lgv-config/img/location_eventlotse.svg"}
+                    {coordinate: [568814.3835, 5931819.377], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"},
+                    {coordinate: [567043.565, 5934455.808], image: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg"}
                 ]), 20000);
             });
         }

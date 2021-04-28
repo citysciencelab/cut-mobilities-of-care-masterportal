@@ -2,7 +2,7 @@ module.exports = {
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     gfiWindow: "attached",
     simpleMap: false,
-    wfsImgPath: "/lgv-config/img/",
+    wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     allowParametricURL: true,
     zoomToFeature: {
         attribute: "flaechenid",
@@ -82,8 +82,8 @@ module.exports = {
 
     quickHelp: true,
     portalConf: "../../portal/master/",
-    layerConf: "/lgv-config/services-fhhnet-ALL.json",
-    restConf: "/lgv-config/rest-services-fhhnet.json",
+    layerConf: "https://geodienste.hamburg.de/lgv-config/services-fhhnet-ALL.json",
+    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-fhhnet.json",
     styleConf: "",
     proxyURL: "/cgi-bin/proxy.cgi",
     attributions: true,

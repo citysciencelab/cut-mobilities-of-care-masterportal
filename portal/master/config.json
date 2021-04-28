@@ -2,7 +2,7 @@
   "Portalconfig": {
     "portalTitle": {
       "title": "Master",
-      "logo": "https://geoportal-hamburg.de/lgv-config/img/hh-logo.png",
+      "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
       "link": "https://geoinfo.hamburg.de",
       "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -110,7 +110,7 @@
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView": {
-      "backgroundImage": "https://geoportal-hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [
         561210,
         5932600
@@ -276,7 +276,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure": {

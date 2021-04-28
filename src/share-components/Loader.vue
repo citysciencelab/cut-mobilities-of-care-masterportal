@@ -70,7 +70,7 @@ export default {
         >
             <img
                 id="loader-portal-logo"
-                src="https://geoportal-hamburg.de/lgv-config/img/Logo_Masterportal.svg"
+                src="https://geodienste.hamburg.de/lgv-config/img/Logo_Masterportal.svg"
                 alt="Masterportal"
             >
             <div

@@ -1,7 +1,7 @@
 const Config = {
     addons: ["populationRequest", "vueAddon", "tacticalMark", "trinkwasser", "schulinfo", "continuousCountingBike", "verkehrsstaerken", "solaratlas", "dataTable", "reisezeiten"],
     alerting: {
-        fetchBroadcastUrl: "https://geoportal-hamburg.de/lgv-config/newsFeedPortalAlerts.json"
+        fetchBroadcastUrl: "https://geodienste.hamburg.de/lgv-config/newsFeedPortalAlerts.json"
     },
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
@@ -48,14 +48,14 @@ const Config = {
         showVersion: true
     },
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de/lgv-config/img/"
+        imgPath: "https://geodienste.hamburg.de/lgv-config/img/"
     },
     cswId: "3",
     metaDataCatalogueId: "2",
     portalConf: "./",
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
-    restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
+    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
+    styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
     scaleLine: true,
     mouseHover: {
         numFeaturesToShow: 2,

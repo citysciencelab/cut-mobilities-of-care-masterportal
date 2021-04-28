@@ -9,5 +9,5 @@ Werkzeuge.
         parcelSearch: true,
         ...
     },
-    gemarkungen: "../components/lgv-config/gemarkung.json",
+    gemarkungen: https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     ...

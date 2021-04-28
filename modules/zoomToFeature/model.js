@@ -11,7 +11,7 @@ const ZoomToFeature = Backbone.Model.extend({
     defaults: {
         ids: [],
         attribute: "flaechenid",
-        imgLink: "/lgv-config/img/location_eventlotse.svg",
+        imgLink: "https://geodienste.hamburg.de/lgv-config/img/location_eventlotse.svg",
         wfsId: "4560",
         featureCenterList: [],
         format: new WFS(),

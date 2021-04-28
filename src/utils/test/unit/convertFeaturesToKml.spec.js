@@ -38,7 +38,7 @@ describe("src/utils/convertFeaturesToKml.js", () => {
                         font: "12px sans-serif"
                     }),
                     image: new Icon({
-                        src: "https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/Vorlage_bombe.jpg",
+                        src: "https://geodienste.hamburg.de/lgv-config/img/Vorlage_bombe.jpg",
                         scale: 1,
                         opacity: 1
                     }),
@@ -52,7 +52,7 @@ describe("src/utils/convertFeaturesToKml.js", () => {
 
         it("should convert features to a KML String", async () => {
             const resultStr = await actions.convertFeatures(features, new KML({extractStyles: true})),
-                expectedStr = "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd\"><Document><Placemark><name>Text</name><Style><IconStyle><Icon><href>https://geofos.fhhnet.stadt.hamburg.de/lgv-config/img/Vorlage_bombe.jpg</href></Icon></IconStyle><LabelStyle><color>ff333333</color></LabelStyle></Style><Point><coordinates>4.51135965729457,0.00043464479558792565</coordinates></Point></Placemark><Placemark><LineString><coordinates>4.511359622386033,0.00043455797019284264 4.511359815945773,0.0004345639275288218 4.511359871968666,0.00043461290717897535</coordinates></LineString></Placemark><Placemark><Polygon><outerBoundaryIs><LinearRing><coordinates>4.5113595883788875,0.00043448916018316755 4.511360046636338,0.0004345471007437477 4.511359826056848,0.00043426737985943244 4.5113595883788875,0.00043448916018316755</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>";
+                expectedStr = "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/kml/2.2 https://developers.google.com/kml/schema/kml22gx.xsd\"><Document><Placemark><name>Text</name><Style><IconStyle><Icon><href>https://geodienste.hamburg.de/lgv-config/img/Vorlage_bombe.jpg</href></Icon></IconStyle><LabelStyle><color>ff333333</color></LabelStyle></Style><Point><coordinates>4.51135965729457,0.00043464479558792565</coordinates></Point></Placemark><Placemark><LineString><coordinates>4.511359622386033,0.00043455797019284264 4.511359815945773,0.0004345639275288218 4.511359871968666,0.00043461290717897535</coordinates></LineString></Placemark><Placemark><Polygon><outerBoundaryIs><LinearRing><coordinates>4.5113595883788875,0.00043448916018316755 4.511360046636338,0.0004345471007437477 4.511359826056848,0.00043426737985943244 4.5113595883788875,0.00043448916018316755</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>";
 
             expect(resultStr).to.equal(expectedStr);
         });

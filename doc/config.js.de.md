@@ -8,10 +8,10 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 
 |Name|Verpflichtend|Typ|Default|Beschreibung|Beispiel|
 |----|-------------|---|-------|------------|--------|
-|layerConf|ja|String||Pfad zur **[services.json](services.json.de.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/services-internet.json"`|
+|layerConf|ja|String||Pfad zur **[services.json](services.json.de.md)**, die alle verfügbaren WMS-Layer bzw. WFS-FeatureTypes enthält. Der Pfad ist relativ zu *js/main.js*.|`https://geodienste.hamburg.de/lgv-config/services-internet.json"`|
 |namedProjections|ja|Array[String]||Festlegung der nutzbaren Koordinatensysteme (**[siehe Syntax](http://proj4js.org/#named-projections)**).|`[["EPSG:25832", "+title=ETRS89/UTM 32N +proj=utm +zone=32 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"]]`|
-|restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.de.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`"../components/lgv-config/rest-services-internet.json"`|
-|styleConf|ja|String||Pfad zur **[style.json](style.json.de.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/style.json"`|
+|restConf|ja|String||Pfad zur **[rest-services.json](rest-services.json.de.md)**, die weitere, verfügbare Dienste enthält (z.B. Druckdienst, WPS, CSW). Der Pfad ist relativ zu js/main.js.|`https://geodienste.hamburg.de/lgv-config/rest-services-internet.json"`|
+|styleConf|ja|String||Pfad zur **[style.json](style.json.de.md)**, die Styles für Vektorlayer (WFS) enthält. Der Pfad ist relativ zu *js/main.js*.|`https://geodienste.hamburg.de/lgv-config/style.json"`|
 |addons|nein|Array|[]|Angabe der Namen der gewünschten Custom-Module. Diese befinden sich im Ordner /addons/ und deren Entrypoints werden mithilfe der Datei addonsConf.json definiert.|`["myAddon1", "myAddon2"]`|
 |**[alerting](#markdown-header-alerting)**|nein|Object|{"category": "alert-info", "isDismissable": true, "isConfirmable": false, "position": "top-center", "fadeOut": null}|Konfigurationsobjekt zum Überschreiben der default Werte des Alerting Moduls.|{fadeOut: 6000}|
 |**[cameraParameter](#markdown-header-cameraparameter)**|nein|Object||Start Camera Parameter||
@@ -43,7 +43,7 @@ Im Folgenden werden die einzelnen Konfigurationsoptionen beschrieben. Darüber h
 |startingMap3D|nein|Boolean|false|Legt fest ob der 3D Modus beim Start der Anwendung geladen werden soll.||
 |**[tree](#tree)**|nein|Object||||
 |uiStyle|nein|String|default|Steuert das Layout der Bedienelemente. |`table`|
-|wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`"../components/lgv-config/img/"`|
+|wfsImgPath|nein|String||Pfad zum Ordner mit Bildern, die für WFS-Styles benutzt werden. Der Pfad ist relativ zu *js/main.js*.|`https://geodienste.hamburg.de/lgv-config/img/"`|
 |wpsID|nein|String|""|Referenz auf eine WPS-Schnittstelle, die in verschiedenen Modulen genutzt wird. ID wird über **[rest-services.json](rest-services.json.de.md)** aufgelöst.|`""`|
 |**[zoomToFeature](#markdown-header-zoomtofeature)**|nein|Object||Optionale Konfigurations-Einstellungen für den URL-Parameter *featureid*. Siehe **[URL-Parameter](urlParameter.de.md)**.||
 
