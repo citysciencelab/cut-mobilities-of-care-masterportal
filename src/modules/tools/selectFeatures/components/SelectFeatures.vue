@@ -314,6 +314,7 @@ export default {
             >
                 <div
                     v-if="selectedFeaturesWithRenderInformation.length === 0"
+                    class="selectFeaturesDefaultMessage"
                 >
                     {{ translate("common:modules.tools.selectFeatures.noFeatureChosen") }}
                 </div>

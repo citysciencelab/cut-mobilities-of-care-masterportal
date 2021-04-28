@@ -18,8 +18,8 @@ const state = {
     active: false,
     id: "selectFeatures",
     // defaults for config.json parameters
-    name: "Test Vue Addon",
-    glyphicon: "glyphicon-screenshot",
+    name: "translate#common:menu.tools.selectFeatures",
+    glyphicon: "glyphicon-list-alt",
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
