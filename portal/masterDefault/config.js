@@ -1,5 +1,5 @@
 const Config = {
-    addons: ["continuousCountingBike", "dataTable", "solaratlas", "trinkwasser", "verkehrsstaerken"],
+    addons: ["populationRequest", "trinkwasser", "verkehrsstaerken", "continuousCountingBike", "dataTable", "trafficCount", "solaratlas"],
     ignoredKeys: ["BOUNDEDBY", "SHAPE", "SHAPE_LENGTH", "SHAPE_AREA", "OBJECTID", "GLOBALID", "GEOMETRY", "SHP", "SHP_AREA", "SHP_LENGTH", "GEOM"],
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     metadata: {
