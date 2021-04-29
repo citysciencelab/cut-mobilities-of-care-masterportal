@@ -27,6 +27,7 @@
 
 ### Removed
 - remove babel-eslint from the package.json
+- Documentation files in German language have been removed. From now on the documentation will only be maintained in English. The only exception is config.json.de.md, because a German language file is necessary for the mp-admin.
 
 ### Fixed
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
