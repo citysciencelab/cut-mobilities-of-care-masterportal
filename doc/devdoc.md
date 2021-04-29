@@ -14,11 +14,11 @@ To contribute to the project, please follow this workflow and the "Definition of
 
 About writing unit and end-to-end tests:
 
-* **[Test documentation](test.md)**
+* **[Test documentation](testing.md)**
 
 To write code that's not supposed to be added to the Masterportal repository, features may be added to a Masterportal instance as add-ons:
 
-* **[Add-ons](addonsVue.md)**
+* **[Add-ons](addOnsVue.md)**
 
 Further links:
 
