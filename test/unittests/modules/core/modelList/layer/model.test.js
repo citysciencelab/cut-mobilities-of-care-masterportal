@@ -50,5 +50,21 @@ describe("core/modelList/layer/model", function () {
             expect(model.attributes.isSelected).to.be.true;
             expect(secondModel.attributes.isSelected).to.be.true;
         });
+
+        it("should increase the transparency by 10 percent", function () {
+            model.setTransparency("30");
+            model.incTransparency();
+
+            expect(model.get("transparency")).to.be.a("number");
+            expect(model.get("transparency")).equals(40);
+        });
+
+        it("should decreases the transparency by 10 percent", function () {
+            model.setTransparency("30");
+            model.decTransparency();
+
+            expect(model.get("transparency")).to.be.a("number");
+            expect(model.get("transparency")).equals(20);
+        });
     });
 });

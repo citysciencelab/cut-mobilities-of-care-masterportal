@@ -31,7 +31,8 @@
 
 ### Fixed
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
-- Printing wfs cluster features and features with multiple styles
+- Printing wfs cluster features and features with multiple styles.
+- If the transparency of a layer is defined as string, it will be parsed to an integer now.
 
 ---
 
