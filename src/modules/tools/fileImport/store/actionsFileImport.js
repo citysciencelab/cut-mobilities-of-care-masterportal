@@ -169,6 +169,13 @@ export default {
                 geometries.forEach(geometry => {
                     geometry.transform("EPSG:4326", "EPSG:25832");
                 });
+
+                // in case File doesn't have the isVisible setting
+                if (feature.hasOwnProperty("values_")) {
+                    if (!feature.values_.hasOwnProperty("isVisible")) {
+                        feature.values_.isVisible = true;
+                    }
+                }
             }
         });
 
