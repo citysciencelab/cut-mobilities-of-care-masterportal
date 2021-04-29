@@ -1123,6 +1123,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 });
                 legendObj.legendType = "svgAndPng";
             }
+            else if (graphic.indexOf("data:image/svg+xml;charset=utf-8,<svg") !== -1) {
+                legendObj.svg = decodeURIComponent(graphic).split("data:image/svg+xml;charset=utf-8,")[1];
+                legendObj.legendType = "svg";
+            }
             else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
                 legendObj.legendType = "wmsGetLegendGraphic";
                 legendObj.imageUrl = graphic;
