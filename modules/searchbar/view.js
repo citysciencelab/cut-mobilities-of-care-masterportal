@@ -496,6 +496,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
         if (hit.coordinate.length === 2) {
             store.dispatch("MapMarker/removePolygonMarker");
             store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
+            if (typeof hit.coordinate[0] === "string" && typeof hit.coordinate[1] === "string") {
+                hit.coordinate[0] = parseFloat(hit.coordinate[0]);
+                hit.coordinate[1] = parseFloat(hit.coordinate[1]);
+            }
             Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
         }
         else {
@@ -922,6 +926,10 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             store.dispatch("MapMarker/removePointMarker");
 
             if (hit.coordinate.length === 2) {
+                if (typeof hit.coordinate[0] === "string" && typeof hit.coordinate[1] === "string") {
+                    hit.coordinate[0] = parseFloat(hit.coordinate[0]);
+                    hit.coordinate[1] = parseFloat(hit.coordinate[1]);
+                }
                 store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
             }
             else {
