@@ -43,38 +43,36 @@ export default {
             return getTheme(this.feature.getTheme(), this.$options.components, this.$gfiThemeAddons);
         }
     },
-    mounted: function () {
-        this.$nextTick(function () {
+    mounted () {
+        this.$nextTick(() => {
             this.createOverlay();
             this.createPopover();
         });
     },
-    beforeDestroy: function () {
-        this.removePopover();
+    beforeDestroy () {
+        Radio.trigger("Map", "removeOverlay", this.overlay);
     },
     methods: {
         close () {
-            this.removePopover();
             this.$emit("close");
         },
 
         /**
-         * it will create an overlay for the attached theme
+         * It will create an overlay for the attached theme.
          * @returns {void}
          */
         createOverlay () {
             const gfipopup = document.createElement("DIV");
 
-            // creating the overlay
             gfipopup.id = "gfipopup";
             document.body.appendChild(gfipopup);
-            Radio.trigger("Map", "addOverlay", this.overlay);
             this.overlay.setElement(document.getElementById("gfipopup"));
+            Radio.trigger("Map", "addOverlay", this.overlay);
             this.overlay.setPosition(this.clickCoord);
         },
 
         /**
-         * it will create the popup window as attached theme
+         * It will create the popup window as attached theme.
          * @returns {void}
          */
         createPopover () {
@@ -93,21 +91,6 @@ export default {
             });
 
             $(this.overlay.getElement()).popover("show");
-        },
-
-        /**
-         * it will remove the popup window as attached theme and make the standard gfi theme visible again
-         * @returns {void}
-         */
-        removePopover () {
-            const overlayElement = this.overlay.getElement();
-
-            if (overlayElement !== null && typeof overlayElement !== "undefined" && overlayElement.parentNode !== null) {
-                $(this.overlay.getElement()).popover("destroy");
-
-                overlayElement.parentNode.removeChild(overlayElement);
-                Radio.trigger("Map", "removeOverlay", this.overlay);
-            }
         }
     }
 };
