@@ -54,9 +54,9 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         const attr = this.model.toJSON();
 
         if (!this.model.get("features")) {
-            LoaderOverlay.show(2000);
             return this;
         }
+        LoaderOverlay.show(2000);
 
         this.$el.html(this.template(attr));
         this.renderSnippets();

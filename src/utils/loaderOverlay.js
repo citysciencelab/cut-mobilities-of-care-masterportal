@@ -14,9 +14,10 @@ export default {
     show: function (maxWait = 25000) {
         const loader = document.getElementById("loader"),
             masterportalContainer = document.getElementById("masterportal-container");
+        let currentLoaderTimeout = this.loaderTimeoutReference;
 
-        clearTimeout(this.loaderTimeoutReference);
-        this.loaderTimeoutReference = setTimeout(() => {
+        clearTimeout(currentLoaderTimeout);
+        currentLoaderTimeout = setTimeout(() => {
             this.hide();
         }, maxWait);
 
