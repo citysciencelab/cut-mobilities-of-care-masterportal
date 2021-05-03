@@ -483,6 +483,21 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
     },
 
     /**
+     * checks for the coordinates being strings anjd converts them to float in this case
+     * @param {Array} point coordinates Array
+     * @returns {Array} converted coordinates
+     */
+    sanitizePoint: function (point) {
+        const sanitizedPoint = point;
+
+        if (typeof point[0] === "string" && typeof point[1] === "string") {
+            sanitizedPoint[0] = parseFloat(point[0]);
+            sanitizedPoint[1] = parseFloat(point[1]);
+        }
+        return sanitizedPoint;
+    },
+
+    /**
      * sets a Marker and triggers the zooming
      * @param {Object} hit search result
      * @returns {void}
@@ -495,11 +510,8 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
 
         if (hit.coordinate.length === 2) {
             store.dispatch("MapMarker/removePolygonMarker");
+            hit.coordinate = this.sanitizePoint(hit.coordinate);
             store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
-            if (typeof hit.coordinate[0] === "string" && typeof hit.coordinate[1] === "string") {
-                hit.coordinate[0] = parseFloat(hit.coordinate[0]);
-                hit.coordinate[1] = parseFloat(hit.coordinate[1]);
-            }
             Radio.trigger("MapView", "setCenter", hit.coordinate, zoomLevel);
         }
         else {
@@ -926,10 +938,7 @@ const SearchbarView = Backbone.View.extend(/** @lends SearchbarView.prototype */
             store.dispatch("MapMarker/removePointMarker");
 
             if (hit.coordinate.length === 2) {
-                if (typeof hit.coordinate[0] === "string" && typeof hit.coordinate[1] === "string") {
-                    hit.coordinate[0] = parseFloat(hit.coordinate[0]);
-                    hit.coordinate[1] = parseFloat(hit.coordinate[1]);
-                }
+                hit.coordinate = this.sanitizePoint(hit.coordinate);
                 store.dispatch("MapMarker/placingPointMarker", hit.coordinate);
             }
             else {

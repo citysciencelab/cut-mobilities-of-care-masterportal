@@ -20,6 +20,7 @@
 - Updates the core-js and babel dependencies in the package.json
 - Update the dependency caniuse-lite.
 - The module addGeoJSON switched from backbone to vue and is provided as a util now.
+- Fixed an issue in searchbar, that after finding a result and zooming to it the 3D mode couldn't be activated anymore
 
 ### Deprecated
 - colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
