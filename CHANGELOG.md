@@ -21,6 +21,7 @@
 - Update the dependency caniuse-lite.
 - The module addGeoJSON switched from backbone to vue and is provided as a util now.
 - Fixed an issue in searchbar, that after finding a result and zooming to it the 3D mode couldn't be activated anymore
+- The loading image is now displayed longer when switching to map mode: Oblique (max. 80000ms).
 
 ### Deprecated
 - colorArrayToRgb (src/utils/colorArrayToRgb) is deprecated. Use convertColor (src/utils/convertColor) instead.
@@ -33,6 +34,7 @@
 - Fixed a bug that prevented the gfi of a wms from being requested via a reverseproxy.
 - Printing wfs cluster features and features with multiple styles.
 - If the transparency of a layer is defined as string, it will be parsed to an integer now.
+- When clicking on layers of type TERRAIN3D, TILESET3D or OBLIQUE in the search, a query is now displayed that can be used to switch to the respective map mode.
 
 ---
 

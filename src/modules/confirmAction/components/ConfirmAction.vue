@@ -54,8 +54,8 @@ export default {
                 </h3>
                 <p
                     id="confirmation-textContent"
+                    v-html="currentConfirmAction.textContent"
                 >
-                    {{ $t(currentConfirmAction.textContent) }}
                 </p>
                 <div id="confirmation-button-container">
                     <button

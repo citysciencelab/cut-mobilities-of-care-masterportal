@@ -5,7 +5,8 @@
         "download": "Scarica",
         "search": "Cerca",
         "close": "Chiudi",
-        "minimize": "Riduci"
+        "minimize": "Riduci",
+        "confirm": "Verifica"
     },
     "colors": {
         "blue": "Blu",

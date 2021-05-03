@@ -5,7 +5,8 @@
         "download": "Download",
         "search": "Search",
         "close": "Close",
-        "minimize": "Minimize"
+        "minimize": "Minimize",
+        "confirm": "Confirm"
     },
     "colors": {
         "blue": "Blue",
@@ -722,6 +723,10 @@
             },
             "osm": {
                 "errorMsg": "Searching with OpenStreetMap is currently not available."
+            },
+            "tree": {
+                "chooseObliqueLayer": "Selecting the layer \"{{hitName}}\" causes a switch to the <b>map mode: oblique!</b><br>The switch may take some time.<br><br>Do you want to switch to the <b>map mode: oblique?</b><br>",
+                "choose3dLayer": "Selecting the layer \"{{hitName}}\" causes a switch to the <b>map mode: 3D!</b><br>The switch may take some time.<br><br>Do you want to switch to the <b>map mode: 3D?</b><br>"
             },
             "noInitialResults": "Initial search found no hits."
         },

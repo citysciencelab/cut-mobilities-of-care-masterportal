@@ -5,7 +5,8 @@
         "download": "Herunterladen",
         "search": "Suchen",
         "close": "Schließen",
-        "minimize": "Minimieren"
+        "minimize": "Minimieren",
+        "confirm": "Bestätigen"
     },
     "colors": {
         "blue": "Blau",
@@ -722,6 +723,10 @@
             },
             "osm": {
                 "errorMsg": "OpenStreetMap-Suche nicht erreichbar."
+            },
+            "tree": {
+              "chooseObliqueLayer": "Die Auswahl des Layers \"{{hitName}}\" bewirkt einen Wechsel in den <b>Kartenmodus: Schrägluftbilder!</b><br>Der Wechsel kann einige Zeit in Anspruch nehmen.<br><br>Möchten Sie in den <b>Kartenmodus: Schrägluftbilder</b> wechseln?<br>",
+              "choose3dLayer": "Die Auswahl des Layers \"{{hitName}}\" bewirkt einen Wechsel in den <b>Kartenmodus: 3D!</b><br>Der Wechsel kann einige Zeit in Anspruch nehmen.<br><br>Möchten Sie in den <b>Kartenmodus: 3D</b> wechseln?<br>"
             },
             "noInitialResults": "Die initiale Suche ergab keine Treffer."
         },

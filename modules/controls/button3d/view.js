@@ -44,7 +44,8 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
 
         this.model = new Button3dModel();
         channel.on({
-            "change": this.change
+            "change": this.change,
+            "mapChangeTo3d": this.mapChange
         }, this);
 
         this.listenTo(this.model, {
@@ -161,7 +162,9 @@ const Button3dView = Backbone.View.extend(/** @lends Button3dView.prototype */{
      */
     mapChange: function (evt) {
         // stop bubbling up to parent elements
-        evt.stopPropagation();
+        if (evt) {
+            evt.stopPropagation();
+        }
         const supportedOnlyIn3d = Radio.request("Tool", "getSupportedOnlyIn3d"),
             supportedIn3d = Radio.request("Tool", "getSupportedIn3d"),
             supportedOnlyInOblique = Radio.request("Tool", "getSupportedOnlyInOblique"),
