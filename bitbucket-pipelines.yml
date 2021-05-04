@@ -18,8 +18,7 @@ definitions:
             - tmp=$BITBUCKET_BRANCH
             - branchname=${tmp//[\/]/_}
             - export FTP_UNTRACKED_PATH=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
-            # todo branch raus!
-            - git clone --single-branch --branch BG-1507 git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
+            - git clone --single-branch --branch $BITBUCKET_BRANCH git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
             - mv ./ci_scripts/* ./devtools
             - rm -rf ./ci_scripts
             - rm -rf ./addons/readme.txt
@@ -102,14 +101,3 @@ pipelines:
                 script:
                     - export url=https://test.geoportal-hamburg.de
                     - npm run browsertestOnExternalServer --testservice=saucelabs
-        Testing deployed portals:
-            - step:
-                name: test deployed portals
-                caches:
-                    - node
-                script:
-                    - git clone --single-branch --branch $BITBUCKET_BRANCH git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
-                    - mv ./ci_scripts/* ./devtools
-                    - rm -rf ./ci_scripts
-                    - chmod +x ./devtools/scripts/testDeployedPortals.sh
-                    - ./devtools/scripts/testDeployedPortals.sh
