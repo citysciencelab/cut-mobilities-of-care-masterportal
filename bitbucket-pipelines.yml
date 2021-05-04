@@ -18,7 +18,7 @@ definitions:
             - tmp=$BITBUCKET_BRANCH
             - branchname=${tmp//[\/]/_}
             - export FTP_UNTRACKED_PATH=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
-            - git clone --single-branch --branch $BITBUCKET_BRANCH git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
+            - git clone git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
             - mv ./ci_scripts/* ./devtools
             - rm -rf ./ci_scripts
             - rm -rf ./addons/readme.txt
