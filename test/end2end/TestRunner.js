@@ -134,7 +134,7 @@ function runTests (browsers) {
                         const builder = createBuilder(testService, capability, build);
 
                         resolutions.forEach(resolution => {
-                            tests(builder, completeUrl, testService + "/ " + capability.browserName, resolution, config, mode, capability, deploymentTest);
+                            tests(builder, completeUrl, capability.browserName, resolution, config, mode, capability, deploymentTest);
                         });
                     });
                 }

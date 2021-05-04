@@ -30,8 +30,9 @@ const {isBasic, is2D} = require("./settings");
  * @returns {void}
  */
 function tests (builder, url, browsername, resolution, config, mode, capability, deploymentTest) {
-    describe(`${browsername} (mode=${mode},resolution=${resolution},config=${config})`, function () {
-        this.timeout(3600000);
+    try {
+        describe(`${browsername} (${mode}, ${resolution}, ${config})`, function () {
+            this.timeout(3600000);
 
         if (isBasic(url) && !is2D(mode)) {
             // portal/basic does not offer any mode besides 2D; skip all suites for non-2D basic
