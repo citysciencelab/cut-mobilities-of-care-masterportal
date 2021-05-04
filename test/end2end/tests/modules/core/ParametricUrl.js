@@ -18,6 +18,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await getUnnavigatedDriver(builder, resolution);
