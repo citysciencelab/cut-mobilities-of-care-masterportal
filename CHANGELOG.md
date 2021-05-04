@@ -35,6 +35,7 @@
 - Printing wfs cluster features and features with multiple styles.
 - If the transparency of a layer is defined as string, it will be parsed to an integer now.
 - When clicking on layers of type TERRAIN3D, TILESET3D or OBLIQUE in the search, a query is now displayed that can be used to switch to the respective map mode.
+- Fixed a bug that for the gfi in infoFormat "text/html" did not execute the script part when starting the iFrame.
 
 ---
 
