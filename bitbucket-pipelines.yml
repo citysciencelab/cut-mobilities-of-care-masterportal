@@ -1,6 +1,6 @@
 image: node:12.13.1
 
-definitions: 
+definitions:
   steps:
     - step: &install-e2e-tests-server-on-test-geoportal
         name: install masterportals master, basic etc. on test.geoportal
@@ -62,6 +62,23 @@ pipelines:
                     - for zipFilePath in $(find dist -name \*.zip); do
                         curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
                       done
+            #- step:
+                #name: trigger portalconfigs to deploy
+                #caches:
+                    #- node
+                #script:
+                    #- pipe: atlassian/trigger-pipeline:4.2.1
+                      #variables:
+                        #BITBUCKET_USERNAME: ${BITBUCKET_USERNAME}
+                        #BITBUCKET_APP_PASSWORD: ${BITBUCKET_APP_PASSWORD}
+                        #REPOSITORY: 'portalconfigs'
+                        # ACCOUNT: '<string>' # Optional
+                        #BRANCH_NAME: 'dev'
+                        #CUSTOM_PIPELINE_NAME: 'deployReleasePortals'
+                        # PIPELINE_VARIABLES: '<json>' # Optional
+                        # WAIT: '<boolean>' # Optional
+                        # WAIT_MAX_TIMEOUT: '<string>' # Optional
+                        # DEBUG: '<boolean>' # Optional
     custom: # Pipelines that are triggered manually
         End2End-Tests on browserstack:
             - step: *install-e2e-tests-server-on-test-geoportal
