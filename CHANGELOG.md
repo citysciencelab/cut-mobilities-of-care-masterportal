@@ -8,7 +8,7 @@
 
 ---
 
-## Unreleased - in development
+## v2.9.0 - 2021-05-05
 ### Added
 - New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
 - Add @babel/eslint-parser to the package.json
