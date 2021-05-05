@@ -19,7 +19,7 @@ definitions:
             - branchname=${tmp//[\/]/_}
             - export FTP_UNTRACKED_PATH=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
             - git clone git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
-            - mv ./ci_scripts/* ./devtools
+            - mv ./ci_scripts/deployScripts ./deployScripts # mv deployScripts scripts to masterportal root
             - rm -rf ./ci_scripts
             - rm -rf ./addons/readme.txt
             # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
@@ -34,9 +34,9 @@ definitions:
             - npm run buildPortal
             - apt-get update && apt-get install unzip
             # make script executable
-            - chmod +x ./devtools/scripts/transfer_ftp.sh
+            - chmod +x ./deployScripts/transfer_ftp.sh
             # commit changed file for "git-ftp"
-            - /bin/bash devtools/scripts/transfer_ftp.sh
+            - /bin/bash ./deployScripts/transfer_ftp.sh
 
 pipelines:
     # Start pipeline with tag to build examples zips and copy them to the Bitbucket download folder
