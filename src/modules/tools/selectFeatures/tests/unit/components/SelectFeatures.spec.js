@@ -28,7 +28,19 @@ describe("src/modules/tools/selectFeatures/components/SelectFeatures.vue", () =>
         mockMapActions = {
             addInteraction: sinon.stub(),
             removeInteraction: sinon.stub()
-        };
+        },
+        mockSelectedFeaturesWithRenderInformation = [
+            {
+                item: null,
+                properties: [
+                    ["Name", "Max-Brauer-Schule"],
+                    ["Schulform", "Grundschule"],
+                    ["Schulstandort", "Hauptstandort"],
+                    ["Scherpunktschule Inklusion", ""]
+                ]
+            }
+        ];
+
     let store;
 
     beforeEach(() => {
@@ -73,5 +85,25 @@ describe("src/modules/tools/selectFeatures/components/SelectFeatures.vue", () =>
         expect(wrapper.find("#selectFeatures").exists()).to.be.false;
 
         spyRemoveInteractions.restore();
+    });
+
+    it("renders the SelectFeatures-Table if it has data", async () => {
+        await store.commit("Tools/SelectFeatures/setSelectedFeaturesWithRenderInformation", mockSelectedFeaturesWithRenderInformation);
+        const wrapper = shallowMount(SelectFeaturesComponent, {store, localVue});
+
+        expect(wrapper.find(".select-features-tables").exists()).to.be.true;
+        expect(wrapper.find(".featureName").exists()).to.be.true;
+        expect(wrapper.find(".featureValue").exists()).to.be.true;
+        expect(wrapper.find(".select-features-zoom-link").exists()).to.be.true;
+    });
+
+    it("selectFeatures functions return correct results", async () => {
+        const wrapper = shallowMount(SelectFeaturesComponent, {store, localVue});
+
+        expect(wrapper.vm.beautifyKey("very_important_field")).to.equal("Very Important Field");
+        expect(wrapper.vm.beautifyValue("very|important|field")).to.equal("very<br/>important<br/>field");
+        expect(wrapper.vm.isValidValue("NULL")).to.equal(false);
+        expect(wrapper.vm.isValidValue(1)).to.equal(false);
+        expect(wrapper.vm.isValidValue("Wert")).to.equal(true);
     });
 });

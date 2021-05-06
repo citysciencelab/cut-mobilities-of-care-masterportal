@@ -18,7 +18,7 @@ const state = {
     active: false,
     id: "selectFeatures",
     // defaults for config.json parameters
-    name: "translate#common:menu.tools.selectFeatures",
+    name: "common:menu.tools.selectFeatures",
     glyphicon: "glyphicon-list-alt",
     renderToWindow: true,
     resizableWindow: true,

@@ -11,6 +11,7 @@ import mutations from "../store/mutationsSelectFeatures";
 
 import {isUrl} from "../../../../utils/urlHelper";
 import {isEmailAddress} from "../../../../utils/isEmailAddress.js";
+import {isPhoneNumber, getPhoneNumberAsWebLink} from "../../../../utils/isPhoneNumber.js";
 
 export default {
     name: "SelectFeatures",
@@ -42,6 +43,8 @@ export default {
             removeInteractionFromMap: "removeInteraction"
         }),
         isEmailAddress,
+        isPhoneNumber,
+        getPhoneNumberAsWebLink,
 
         /**
          * Creates the interactions for selecting features.
@@ -151,41 +154,53 @@ export default {
         },
 
         /**
-         * Prepares the properties of a feature for tabular display.
-         * @param {Object} properties Technical key to display value
-         * @param {Object} gfiAttributes Technical key to display key
+         * Iterates the Properties and adds Links and Breaks.
+         * @param {Array} properties Technical key to display value
          * @returns {Array.<String[]>} Array of [key,value]-pairs - may be empty
          */
-        translateGFI: function (properties, gfiAttributes) {
-            // makes links in result list clickable
+        processLinksAndBreaks: function (properties) {
+            const resultProperties = properties;
+
+            // makes links in result list clickable and adds <br/>s
             Object.entries(properties).forEach(([key, propValue]) => {
                 if (this.isValidKey(key) && this.isValidValue(propValue) && propValue.indexOf("|") > -1) {
-                    properties[key] = "";
+                    resultProperties[key] = "";
                     propValue.split("|").forEach(function (arrayItemValue) {
                         if (isUrl(arrayItemValue)) {
-                            properties[key] += "<a href=" + arrayItemValue + " target=\"_blank\">" + arrayItemValue + "</a><br/>";
+                            resultProperties[key] += "<a href=" + arrayItemValue + " target=\"_blank\">" + arrayItemValue + "</a><br/>";
                         }
                         else {
-                            properties[key] += arrayItemValue + "<br/>";
+                            resultProperties[key] += arrayItemValue + "<br/>";
                         }
                     });
                 }
                 else if (this.isValidKey(key) && this.isValidValue(propValue) && isUrl(propValue)) {
-                    properties[key] = "<a href=" + propValue + " target=\"_blank\">" + propValue + "</a>";
+                    resultProperties[key] = "<a href=" + propValue + " target=\"_blank\">" + propValue + "</a>";
                 }
             });
+
+            return resultProperties;
+        },
+
+        /**
+         * Prepares the properties of a feature for tabular display.
+         * @param {Array} properties Technical key to display value
+         * @param {Object} gfiAttributes Technical key to display key
+         * @returns {Array.<String[]>} Array of [key,value]-pairs - may be empty
+         */
+        translateGFI: function (properties, gfiAttributes) {
+            const resultProperties = this.processLinksAndBreaks(properties);
+
             // showAll => just use properties and make key look nice
             if (gfiAttributes === "showAll") {
                 return Object
-                    .entries(properties)
+                    .entries(resultProperties)
                     .map(([key, value]) => {
                         if (this.isValidKey(key) && this.isValidValue(value)) {
                             return [this.beautifyKey(key), this.beautifyValue(value)];
                         }
                         return false;
-                    })
-                    // filter "false" entries that did not pass checks
-                    .filter(entry => entry);
+                    });
             }
 
             // type object => contains pretty-print instruction for key as value
@@ -194,7 +209,7 @@ export default {
                     .keys(gfiAttributes)
                     .map(key => [
                         gfiAttributes[key],
-                        this.beautifyValue(properties[key] || "")
+                        this.beautifyValue(resultProperties[key] || "")
                     ]);
             }
 
@@ -335,16 +350,33 @@ export default {
                                     v-for="(property, propIndex) in selectedFeature.properties"
                                     :key="propIndex"
                                 >
-                                    <td>{{ property[0] }}</td>
-                                    <td v-if="isEmailAddress(property[1])">
+                                    <td
+                                        class="featureName"
+                                    >
+                                        {{ property[0] }}
+                                    </td>
+                                    <td
+                                        v-if="isEmailAddress(property[1])"
+                                        class="featureValue"
+                                    >
                                         <a :href="`mailto:${property[1]}`">{{ property[1] }}</a>
                                     </td>
                                     <td
+                                        v-else-if="isPhoneNumber(property[1])"
+                                        class="featureValue"
+                                    >
+                                        <a :href="getPhoneNumberAsWebLink(property[1])">{{ property[1] }}</a>
+                                    </td>
+                                    <td
                                         v-else-if="property[1].includes('<br') || property[1].includes('<a')"
+                                        class="featureValue"
                                         v-html="property[1]"
                                     >
                                     </td>
-                                    <td v-else>
+                                    <td
+                                        v-else
+                                        class="featureValue"
+                                    >
                                         {{ property[1] }}
                                     </td>
                                 </tr>
@@ -378,10 +410,16 @@ export default {
 
 <style type="less" scoped>
 .selectFeatures {
-    max-width:500px;
+    max-width:600px;
     max-height:745px;
 }
 .select-features-tables p {
     margin: 8px 0px;
+}
+td.featureName {
+    width:30%;
+}
+td.featureValue {
+    width:70%;
 }
 </style>
