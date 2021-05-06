@@ -23,7 +23,7 @@ describe("src/modules/tools/selectFeatures/store/gettersSelectFeatures", functio
 
     describe("testing default values", function () {
         it("returns the name default value from state", function () {
-            expect(name(stateSelectFeatures)).to.be.equals("translate#common:menu.tools.selectFeatures");
+            expect(name(stateSelectFeatures)).to.be.equals("common:menu.tools.selectFeatures");
         });
         it("returns the glyphicon default value from state", function () {
             expect(glyphicon(stateSelectFeatures)).to.equals("glyphicon-list-alt");
