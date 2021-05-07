@@ -104,14 +104,17 @@ export default {
         },
 
         /**
-         * Adds the text/html content to the iframe
+         * Adds the text/html content to the iframe.
+         * The onLoad event of the iframe starts with the execution of close().
          * @returns {void}
          */
         addTextHtmlContentToIframe: function () {
             const iframe = document.getElementsByClassName("gfi-iFrame")[0];
 
             if (this.mimeType === "text/html" && iframe) {
+                iframe.contentWindow.document.open();
                 iframe.contentWindow.document.write(this.feature.getDocument());
+                iframe.contentWindow.document.close();
             }
         }
     }

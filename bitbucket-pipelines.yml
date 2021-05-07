@@ -1,5 +1,43 @@
 image: node:12.13.1
 
+definitions:
+  steps:
+    - step: &install-e2e-tests-server-on-test-geoportal
+        name: install masterportals master, basic etc. on test.geoportal
+        caches:
+            - node
+        artifacts:
+            - dist/**
+        script:
+            - export FTP_USERNAME="$LGV_TEST_FTP_USERNAME"
+            - export FTP_PASSWORD="$LGV_TEST_FTP_PASSWORD"
+            - export FTP_SOURCE_PATH="dist"
+            - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
+            - export FTP_GITLOGFILE="testGitLog"
+            #replace slashes in branchname with underscores
+            - tmp=$BITBUCKET_BRANCH
+            - branchname=${tmp//[\/]/_}
+            - export FTP_UNTRACKED_PATH=$'!dist/master_'$branchname$'\n!dist/basic_'$branchname$'\n!dist/masterCustom_'$branchname$'\n!dist/masterDefault_'$branchname$'\n!dist/mastercode'
+            - git clone git@bitbucket.org:geowerkstatt-hamburg/ci_scripts.git
+            - mv ./ci_scripts/deployScripts ./deployScripts # mv deployScripts scripts to masterportal root
+            - rm -rf ./ci_scripts
+            - rm -rf ./addons/readme.txt
+            # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
+            - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
+            - git clone https://geowerkstatt@bitbucket.org/geowerkstatt-hamburg/addons.git
+            - cd addons/cosi
+            - npm install
+            - cd ../sdpdownload
+            - npm install
+            - cd ..; cd ..;
+            - npm install
+            - npm run buildPortal
+            - apt-get update && apt-get install unzip
+            # make script executable
+            - chmod +x ./deployScripts/transfer_ftp.sh
+            # commit changed file for "git-ftp"
+            - /bin/bash ./deployScripts/transfer_ftp.sh
+
 pipelines:
     # Start pipeline with tag to build examples zips and copy them to the Bitbucket download folder
     tags:
@@ -24,29 +62,59 @@ pipelines:
                     - for zipFilePath in $(find dist -name \*.zip); do
                         curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"$zipFilePath" -v;
                       done
+            #- step:
+                #name: trigger portalconfigs to deploy
+                #caches:
+                    #- node
+                #script:
+                    #- pipe: atlassian/trigger-pipeline:4.2.1
+                      #variables:
+                        #BITBUCKET_USERNAME: ${BITBUCKET_USERNAME}
+                        #BITBUCKET_APP_PASSWORD: ${BITBUCKET_APP_PASSWORD}
+                        #REPOSITORY: 'portalconfigs'
+                        # ACCOUNT: '<string>' # Optional
+                        #BRANCH_NAME: 'dev'
+                        #CUSTOM_PIPELINE_NAME: 'deployReleasePortals'
+                        # PIPELINE_VARIABLES: '<json>' # Optional
+                        # WAIT: '<boolean>' # Optional
+                        # WAIT_MAX_TIMEOUT: '<string>' # Optional
+                        # DEBUG: '<boolean>' # Optional
     custom: # Pipelines that are triggered manually
-        End2End-Tests: # The name that is displayed in the list in the Bitbucket Cloud GUI
+        End2End-Tests on browserstack:
+            - step: *install-e2e-tests-server-on-test-geoportal
             - step:
+                name: run e2e tests on browserstack url=test.geoportal
                 caches:
                     - node
                 script:
-                    - rm -rf ./addons/readme.txt
-                    # because of use of "git-ftp" for transfering files every change in repository has to be comittet, see https://git-ftp.github.io/
-                    - git commit ./addons/readme.txt -m "deleted before add addons in e2e test run"
-                    - git clone https://geowerkstatt@bitbucket.org/geowerkstatt-hamburg/addons.git
-                    - cd addons/cosi
-                    - npm install
-                    - cd ../sdpdownload
-                    - npm install
-                    - cd ..; cd ..;
-                    - npm install
-                    - npm run buildPortal
-                    - apt-get update && apt-get install unzip
-                    # make script executable
-                    - chmod +x ./devtools/scripts/transfer_to_test_geoportal.sh
-                    # commit changed file for "git-ftp"
-                    - git commit devtools/scripts/transfer_to_test_geoportal.sh -m "made transfer_to_test_geoportal.sh executable"
-                    - ./devtools/scripts/transfer_to_test_geoportal.sh
                     # run e2e tests
                     - ./devtools/scripts/run_browserstack_local.bash
-                    - npm run browsertestOnGeoportalTest
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=browserstack
+        End2End-Tests on saucelabs:
+            - step: *install-e2e-tests-server-on-test-geoportal
+            - step:
+                name: run e2e tests on saucelabs url=test.geoportal
+                caches:
+                    - node
+                script:
+                    # run e2e tests
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=saucelabs
+        End2End-Tests on browserstack/ use existing server:
+            - step:
+                name: run e2e tests on browserstack url=test.geoportal_buildname
+                caches:
+                    - node
+                script:
+                    - ./devtools/scripts/run_browserstack_local.bash
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=browserstack
+        End2End-Tests on saucelabs/ use existing server:
+            - step:
+                name: run e2e tests on saucelabs url=test.geoportal_buildname
+                caches:
+                    - node
+                script:
+                    - export url=https://test.geoportal-hamburg.de
+                    - npm run browsertestOnExternalServer --testservice=saucelabs

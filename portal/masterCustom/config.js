@@ -36,11 +36,11 @@ const Config = {
         postMessageUrl: "https://localhost:9001"
     },
     quickHelp: {
-        imgPath: "https://geoportal-hamburg.de.de/lgv-config/img/"
+        imgPath: "https://geodienste.hamburg.de/lgv-config/img/"
     },
     layerConf: "https://geodienste.hamburg.de/services-internet.json",
-    restConf: "https://geoportal-hamburg.de/lgv-config/rest-services-internet.json",
-    styleConf: "https://geoportal-hamburg.de/lgv-config/style_v3.json",
+    restConf: "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
+    styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
     wfsImgPath: "https://geodienste.hamburg.de/lgv-config/img/",
     zoomToFeature: {
         attribute: "flaechenid",

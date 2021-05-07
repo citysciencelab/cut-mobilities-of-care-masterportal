@@ -34,13 +34,7 @@ export default {
         options: {
             type: Object,
             required: false,
-            default: function () {
-                return {
-                    "Box": i18next.t("common:snippets.graphicalSelect.selectBySquare"),
-                    "Circle": i18next.t("common:snippets.graphicalSelect.selectByCircle"),
-                    "Polygon": i18next.t("common:snippets.graphicalSelect.selectByPolygon")
-                };
-            }
+            default: undefined
         }
     },
     data () {
@@ -49,7 +43,14 @@ export default {
         };
     },
     computed: {
-        ...mapGetters("GraphicalSelect", Object.keys(getters))
+        ...mapGetters("GraphicalSelect", Object.keys(getters)),
+        optionsValue: function () {
+            return this.options ? this.options : {
+                "Box": this.$t("common:snippets.graphicalSelect.selectBySquare"),
+                "Circle": this.$t("common:snippets.graphicalSelect.selectByCircle"),
+                "Polygon": this.$t("common:snippets.graphicalSelect.selectByPolygon")
+            };
+        }
     },
     watch: {
         selectedOptionData: function () {
@@ -115,7 +116,7 @@ export default {
          * @returns {void}
          */
         resetGeographicSelection: function () {
-            this.selectedOptionData = Object.keys(this.options)[0];
+            this.selectedOptionData = Object.keys(this.optionsValue)[0];
         },
 
         /**
@@ -123,7 +124,7 @@ export default {
          * @returns {void}
          */
         checkOptions: function () {
-            if (!this.geographicValues.every(key => Object.keys(this.options).includes(key))) {
+            if (!this.geographicValues.every(key => Object.keys(this.optionsValue).includes(key))) {
                 this.addSingleAlert({
                     "content": i18next.t("common:snippets.graphicalSelect.alert.notSupportedOption") + this.geographicValues
                 });
@@ -260,7 +261,7 @@ export default {
         <Dropdown
             v-if="selectElement === 'Dropdown'"
             v-model="selectedOptionData"
-            :options="options"
+            :options="optionsValue"
         />
     </form>
 </template>

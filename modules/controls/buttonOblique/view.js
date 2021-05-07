@@ -42,7 +42,8 @@ const ButtonObliqueView = Backbone.View.extend(/** @lends ButtonObliqueView.prot
 
         this.model = new ButtonObliqueModel();
         channel.on({
-            "change": this.change
+            "change": this.change,
+            "mapChangeToOblique": this.mapChange
         }, this);
 
         this.listenTo(this.model, {

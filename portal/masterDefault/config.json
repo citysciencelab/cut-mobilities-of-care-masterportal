@@ -42,7 +42,7 @@
                         "glyphicon": "glyphicon-search",
                         "serviceId": "6",
                         "storedQueryID": "Flurstueck",
-                        "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+                        "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
                         "parcelDenominator": false
                     },
                     "addWMS":{

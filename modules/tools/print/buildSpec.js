@@ -410,7 +410,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                         clonedFeature.setGeometry(styleGeometryFunction(clonedFeature));
                         geometryType = styleGeometryFunction(clonedFeature).getType();
                     }
-                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute);
+                    stylingRule = this.getStylingRule(layer, clonedFeature, styleAttribute, style);
                     stylingRuleSplit = stylingRule.split("=");
 
                     if (stylingRuleSplit.length > 0) {
@@ -515,8 +515,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     buildPointStyleIcon: function (style, layer) {
         return {
             type: "point",
-            graphicWidth: style.getSize()[0] * style.getScale(),
-            graphicHeight: style.getSize()[1] * style.getScale(),
+            graphicWidth: style.getSize()[0] ? style.getSize()[0] * style.getScale() : 60,
+            graphicHeight: style.getSize()[1] ? style.getSize()[1] * style.getScale() : 60,
             externalGraphic: this.buildGraphicPath(style.getSrc()),
             graphicOpacity: layer.getOpacity()
         };
@@ -542,6 +542,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             // backwards-compatibility:
             url = origin + "/lgv-config/img" + this.getImageName(src);
         }
+        else if (src.indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+            url = src;
+        }
         return url;
     },
 
@@ -559,15 +562,17 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             textScale = style.getScale() ? style.getScale() : 1,
             fontSize = isFontSizeInFont ? size : 10 * textScale,
             fontFamily = isFontSizeInFont ? this.getFontFamily(font, fontSize) : font,
-            fontColor = style.getFill().getColor();
+            fontColor = style.getFill().getColor(),
+            stroke = style.getStroke() ? style.getStroke() : undefined;
 
         return {
             type: "text",
             label: style.getText() !== undefined ? style.getText() : "",
             fontColor: this.rgbArrayToHex(fontColor),
             fontOpacity: fontColor[0] !== "#" ? fontColor[3] : 1,
-            labelOutlineColor: style.getStroke() !== null ? this.rgbArrayToHex(style.getStroke().getColor()) : undefined,
-            labelXOffset: -style.getOffsetX(),
+            labelOutlineColor: stroke ? this.rgbArrayToHex(stroke.getColor()) : undefined,
+            labelOutlineWidth: stroke ? stroke.getWidth() : undefined,
+            labelXOffset: style.getOffsetX(),
             labelYOffset: -style.getOffsetY(),
             fontSize: fontSize,
             fontFamily: fontFamily,
@@ -643,7 +648,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 strokeOpacity: layer.getOpacity()
             };
 
-        this.buildFillStyle(fillStyle, obj);
+        if (fillStyle !== null) {
+            this.buildFillStyle(fillStyle, obj);
+            this.buildStrokeStyle(fillStyle, obj);
+        }
         if (strokeStyle !== null) {
             this.buildStrokeStyle(strokeStyle, obj);
         }
@@ -664,7 +672,9 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 strokeOpacity: layer.getOpacity()
             };
 
-        this.buildStrokeStyle(strokeStyle, obj);
+        if (strokeStyle !== null) {
+            this.buildStrokeStyle(strokeStyle, obj);
+        }
         return obj;
     },
 
@@ -763,7 +773,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     addFeatureToGeoJsonList: function (feature, geojsonList) {
         let convertedFeature;
 
-        if (feature.get("features") !== undefined) {
+        if (feature.get("features") && feature.get("features").length === 1) {
             feature.get("features").forEach(function (clusteredFeature) {
                 convertedFeature = this.convertFeatureToGeoJson(clusteredFeature);
 
@@ -798,7 +808,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
             }
         });
         // take over id from feature because the feature id is not set in the clone.
-        clonedFeature.setId(feature.getId());
+        clonedFeature.setId(feature.getId() || feature.ol_uid);
         // circle is not suppported by geojson
         if (clonedFeature.getGeometry().getType() === "Circle") {
             clonedFeature.setGeometry(fromCircle(clonedFeature.getGeometry()));
@@ -810,6 +820,10 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         convertedFeature = geojsonFormat.writeFeatureObject(clonedFeature);
         if (clonedFeature.getGeometry().getCoordinates().length === 0) {
             convertedFeature = undefined;
+        }
+        // if its a cluster remove property features
+        if (convertedFeature.properties.hasOwnProperty("features")) {
+            delete convertedFeature.properties.features;
         }
         return convertedFeature;
     },
@@ -842,20 +856,52 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      * @param {ol.Feature} layer -
      * @param {ol.Feature} feature -
      * @param {string} styleAttribute - the attribute by whose value the feature is styled
+     * @param {ol.style} style style
      * @returns {string} an ECQL Expression
      */
-    getStylingRule: function (layer, feature, styleAttribute) {
+    getStylingRule: function (layer, feature, styleAttribute, style) {
         const layerModel = Radio.request("ModelList", "getModelByAttributes", {id: layer.get("id")}),
             styleAttr = feature.get("styleId") ? "styleId" : styleAttribute;
         let styleModel,
             labelField,
             labelValue;
 
-        if (styleAttr === "") {
+        if (styleAttr === "" && feature.get("features") && feature.get("features").length === 1) {
+            const singleFeature = new Feature({
+                properties: feature.get("features")[0].getProperties(),
+                geometry: feature.get("features")[0].getGeometry()
+            });
+
+            feature.get("features")[0] = singleFeature;
+            if (style.getImage().getSrc().indexOf("data:image/svg+xml;charset=utf-8") === 0) {
+                singleFeature.setId("first_svg_" + singleFeature.ol_uid);
+            }
+            else {
+                singleFeature.setId("second_png_" + singleFeature.ol_uid);
+            }
+            singleFeature.set(singleFeature.getId(), String(feature.get("features").length));
+            return "[" + singleFeature.getId() + "='" + String(feature.get("features").length) + "']";
+
+        }
+        else if (styleAttr === "" && feature.get("features") !== undefined) {
+            if (style !== undefined && style.getText().getText() !== undefined) {
+                feature.set("sensorClusterStyle", feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()));
+                return "[sensorClusterStyle='" + feature.get("features")[0].ol_uid + "_" + String(style.getText().getText()) + "']";
+            }
+        }
+        else if (styleAttr === "") {
             return "*";
         }
         // cluster feature with geometry style
         else if (feature.get("features") !== undefined) {
+            if (style !== undefined && style.getText().getText() !== undefined) {
+                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()));
+                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_" + String(style.getText().getText()) + "']";
+            }
+            else if (feature.get("features").length > 1) {
+                feature.set(styleAttr, feature.get("features")[0].get(styleAttr) + "_cluster");
+                return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "_cluster']";
+            }
             return "[" + styleAttr + "='" + feature.get("features")[0].get(styleAttr) + "']";
         }
         // feature with geometry style and label style
@@ -1012,8 +1058,11 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
         return legend.some(legendPart => {
             let isPdf = false;
 
-            if (typeof legendPart === "object") {
+            if (typeof legendPart === "object" && !Array.isArray(legendPart.graphic)) {
                 isPdf = legendPart.graphic.endsWith(".pdf");
+            }
+            else if (typeof legendPart === "object" && Array.isArray(legendPart.graphic)) {
+                return isPdf;
             }
             else {
                 isPdf = legendPart.endsWith(".pdf");
@@ -1063,7 +1112,22 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
                 },
                 graphic = typeof legendPart === "object" ? legendPart.graphic : legendPart;
 
-            if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
+            if (Array.isArray(graphic)) {
+                graphic.forEach(graphicPart => {
+                    if (graphicPart.indexOf("svg") !== -1) {
+                        legendObj.svg = decodeURIComponent(graphicPart).split("data:image/svg+xml;charset=utf-8,")[1];
+                    }
+                    else {
+                        legendObj.imageUrl = graphicPart;
+                    }
+                });
+                legendObj.legendType = "svgAndPng";
+            }
+            else if (graphic.indexOf("data:image/svg+xml;charset=utf-8,<svg") !== -1) {
+                legendObj.svg = decodeURIComponent(graphic).split("data:image/svg+xml;charset=utf-8,")[1];
+                legendObj.legendType = "svg";
+            }
+            else if (graphic.toUpperCase().includes("GETLEGENDGRAPHIC")) {
                 legendObj.legendType = "wmsGetLegendGraphic";
                 legendObj.imageUrl = graphic;
             }

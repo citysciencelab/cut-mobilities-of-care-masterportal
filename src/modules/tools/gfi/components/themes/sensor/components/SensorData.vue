@@ -18,7 +18,6 @@ export default {
     },
     data: function () {
         return {
-            // firstColumnHeaderName: this.$t("common:modules.tools.gfi.themes.sensor.sensorData.firstColumnHeaderName"),
             columnHeaderAttribute: "dataStreamName"
         };
     },
@@ -40,7 +39,9 @@ export default {
             const properties = this.feature.getMappedProperties();
 
             Object.entries(properties).forEach(([key, value]) => {
-                properties[key] = typeof value === "string" ? value.split(" | ") : value;
+                const splittedValue = typeof value === "string" ? value.split(" | ") : value;
+
+                properties[key] = Array.isArray(splittedValue) ? splittedValue : [splittedValue];
             });
 
             return properties;
@@ -55,7 +56,6 @@ export default {
         }
     },
     created () {
-        // this.firstColumnHeaderName = this.feature.getTheme()?.params?.data?.firstColumnHeaderName || this.firstColumnHeaderName;
         this.columnHeaderAttribute = this.feature.getTheme()?.params?.data?.columnHeaderAttribute || this.columnHeaderAttribute;
     },
     methods: {

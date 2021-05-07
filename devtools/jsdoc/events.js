@@ -303,7 +303,7 @@
  * @example Radio.trigger("Parser", "addGDILayer", values)
  */
 
-/**
+ /**
  * @event Core.ConfigLoader#RadioTriggerParserAddGeoJSONLayer
  * @param {String} layerName - The name of the layer (can be selected alphanumerically)
  * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
@@ -2079,17 +2079,6 @@
  * @event Snippets#ValuesChanged
  * @description Triggered when a snippet changed its values
  * @param {object}
- */
-
-/** -------------------- TOOLS.ADDGEOJSON -------------------- */
-
-/**
- * @event Tools.AddGeoJSON#RadioTriggerAddGeoJSONAddGeoJsonToMap
- * @description todo
- * @param {String} layerName - The name of the layer (can be selected alphanumerically)
- * @param {String} layerId - The Id of the layers (can be selected alphanumerically, but should be unique)
- * @param {String} geojson - A valid GeoJson. If no crs is defined in the Json, EPSG:4326 is assumed..
- * @example Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layerName, layerId, geojson)
  */
 
 /** -------------------- TOOLS.WFST -------------------- */

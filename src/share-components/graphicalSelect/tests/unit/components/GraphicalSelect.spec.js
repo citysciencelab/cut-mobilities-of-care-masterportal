@@ -1,14 +1,26 @@
 import Vuex from "vuex";
-import {shallowMount, mount, createLocalVue} from "@vue/test-utils";
+import {config, shallowMount, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import GraphicalSelectComponent from "../../../components/GraphicalSelect.vue";
 import GraphicalSelectModule from "../../../store/indexGraphicalSelect.js";
 import Dropdown from "../../../../dropdowns/DropdownSimple.vue";
+import sinon from "sinon";
 
-const localVue = createLocalVue();
+
+const localVue = createLocalVue(),
+    mockMapGetters = {
+    },
+    mockMapActions = {
+        removeInteraction: sinon.stub(),
+        addInteraction: sinon.stub()
+    },
+    mockMapMutations = {
+        addLayerToMap: sinon.stub(),
+        removeLayerFromMap: sinon.stub()
+    };
 
 localVue.use(Vuex);
-
+config.mocks.$t = key => key;
 let store;
 
 describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", () => {
@@ -27,8 +39,13 @@ describe("src/share-components/graphicalSelect/components/GraphicalSelect.vue", 
         store = new Vuex.Store({
             namespaces: true,
             modules: {
-                GraphicalSelect: GraphicalSelectModule
-
+                GraphicalSelect: GraphicalSelectModule,
+                Map: {
+                    namespaced: true,
+                    getters: mockMapGetters,
+                    mutations: mockMapMutations,
+                    actions: mockMapActions
+                }
             }
         });
     });

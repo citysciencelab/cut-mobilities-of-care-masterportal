@@ -13,7 +13,7 @@ This search uses the StoredQuery with ID `Flurstueck`. The portal UI is located 
         "parcelSearch": true,
         // ...
     },
-    "gemarkungen": "../components/lgv-config/gemarkung.json",
+    "gemarkungen": https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     // ...
 }
 ```

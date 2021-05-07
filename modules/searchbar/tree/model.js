@@ -1,3 +1,5 @@
+import store from "../../../src/app-store/index";
+
 const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
     defaults: {
         inUse: false,
@@ -72,6 +74,7 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
 
         if (this.get("layers").length === 0) {
             uniqueLayerModels = this.getUniqeLayermodels(Radio.request("Parser", "getItemsByAttributes", {type: "layer"}));
+            uniqueLayerModels = this.removeLayerInCaseOfMissingConfig(uniqueLayerModels, store.getters.controlsConfig);
             layersForSearch = this.getLayerForSearch(uniqueLayerModels);
             this.setLayers(layersForSearch);
         }
@@ -84,6 +87,7 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
             this.set("inUse", false);
         }
     },
+
     /**
      * Executes the search in the node variable.
      * @param {string} searchStringRegExp - Suchstring as RegExp.
@@ -141,6 +145,26 @@ const TreeModel = Backbone.Model.extend(/** @lends TreeModel.prototype */{
 
             return layerModels.indexOf(firstLayermodel) === index;
         });
+    },
+
+    /**
+     * Removes oblique and 3D layers if the corresponding controls are not configured.
+     * @param {Object[]} layerModels The layer models to search.
+     * @param {Object} controlsConfig The config data of the controls.
+     * @returns {Object[]} The filtered layer models, if necessary without 3D and Oblique layer.
+     */
+    removeLayerInCaseOfMissingConfig: function (layerModels, controlsConfig) {
+        let filteredLayerModel = layerModels;
+
+        if (!controlsConfig?.buttonOblique) {
+            filteredLayerModel = filteredLayerModel.filter(layerModel => layerModel?.typ?.toUpperCase() !== "OBLIQUE");
+        }
+        if (!controlsConfig?.button3d) {
+            filteredLayerModel = filteredLayerModel.filter(layerModel => layerModel?.typ?.toUpperCase() !== "TILESET3D");
+            filteredLayerModel = filteredLayerModel.filter(layerModel => layerModel?.typ?.toUpperCase() !== "TERRAIN3D");
+        }
+
+        return filteredLayerModel;
     },
 
     /**

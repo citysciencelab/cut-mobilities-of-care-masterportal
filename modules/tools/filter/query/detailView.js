@@ -4,7 +4,6 @@ import SnippetCheckBoxView from "../../../snippets/checkbox/view";
 import Template from "text-loader!./templateDetailView.html";
 import SnippetSliderView from "../../../snippets/slider/range/view";
 import SnippetMultiCheckboxView from "../../../snippets/multiCheckbox/view";
-import LoaderOverlay from "../../../../src/utils/loaderOverlay";
 
 const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototype */{
     events: {
@@ -54,7 +53,6 @@ const QueryDetailView = Backbone.View.extend(/** @lends QueryDetailView.prototyp
         const attr = this.model.toJSON();
 
         if (!this.model.get("features")) {
-            LoaderOverlay.show(2000);
             return this;
         }
 

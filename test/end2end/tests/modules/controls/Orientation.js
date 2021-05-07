@@ -17,6 +17,7 @@ function Orientation ({builder, url, resolution, capability}) {
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             driver = await initDriver(builder, url, resolution);
@@ -62,12 +63,13 @@ function Orientation ({builder, url, resolution, capability}) {
 
     // only configured in portal/master
     if (isMaster(url)) {
-        describe("Modules Controls ProximitySearch", function () {
+        describe.skip("Modules Controls ProximitySearch", function () {
             let driver, poiButton;
 
             before(async function () {
                 if (capability) {
                     capability.name = this.currentTest.fullTitle();
+                    capability["sauce:options"].name = this.currentTest.fullTitle();
                     builder.withCapabilities(capability);
                 }
                 driver = await initDriver(builder, url, resolution);

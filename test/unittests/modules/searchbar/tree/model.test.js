@@ -53,6 +53,114 @@ describe("modules/searchbar/tree", function () {
         });
     });
 
+    describe("removeLayerInCaseOfMissingConfig", function () {
+        const layerModels = [
+            {
+                name: "Spider-Man",
+                typ: "WMS"
+            },
+            {
+                name: "Thor",
+                typ: "OBLIQUE"
+            },
+            {
+                name: "Hulk",
+                typ: "TILESET3D"
+            },
+            {
+                name: "Iron Man",
+                typ: "TERRAIN3D"
+            },
+            {
+                name: "Captain America",
+                typ: "WFS"
+            }
+        ];
+
+        it("All layers should stay inside, because buttonOblique and button3d are true", function () {
+            const controlsConfig = {
+                buttonOblique: true,
+                button3d: true
+            };
+
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.be.an("array");
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig).length).equals(5);
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).equals(layerModels);
+        });
+
+        it("Layers of type TERRAIN3D and TILESET3D are taken, because buttonOblique is true and button3d false", function () {
+            const controlsConfig = {
+                buttonOblique: true,
+                button3d: false
+            };
+
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.be.an("array");
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig).length).equals(3);
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.deep.nested.include(
+                {
+                    name: "Spider-Man",
+                    typ: "WMS"
+                },
+                {
+                    name: "Thor",
+                    typ: "OBLIQUE"
+                },
+                {
+                    name: "Captain America",
+                    typ: "WFS"
+                }
+            );
+        });
+
+        it("Layers of type OBLIQUE are taken, because buttonOblique is false and button3d true", function () {
+            const controlsConfig = {
+                buttonOblique: false,
+                button3d: true
+            };
+
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.be.an("array");
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig).length).equals(4);
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.deep.nested.include(
+                {
+                    name: "Spider-Man",
+                    typ: "WMS"
+                },
+                {
+                    name: "Hulk",
+                    typ: "TILESET3D"
+                },
+                {
+                    name: "Iron Man",
+                    typ: "TERRAIN3D"
+                },
+                {
+                    name: "Captain America",
+                    typ: "WFS"
+                }
+            );
+        });
+
+        it("Layers of type TERRAIN3D, TILESET3D and OBLIQUE are taken, because buttonOblique and button3d are true", function () {
+            const controlsConfig = {
+                buttonOblique: false,
+                button3d: false
+            };
+
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.be.an("array");
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig).length).equals(2);
+            expect(model.removeLayerInCaseOfMissingConfig(layerModels, controlsConfig)).to.deep.nested.include(
+                {
+                    name: "Spider-Man",
+                    typ: "WMS"
+                },
+                {
+                    name: "Captain America",
+                    typ: "WFS"
+                }
+            );
+        });
+    });
+
     describe("getUniqeNodes", function () {
         const layerModels = [
             {

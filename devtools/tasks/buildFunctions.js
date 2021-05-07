@@ -25,9 +25,10 @@ function buildSinglePortal (allPortalPaths) {
     }
 
     sourcePortalPath = allPortalPaths.pop();
-
+    // MASTERPORTAL_DISTRIBUTION_RUN has to be set true in repository portalconfigs/bitbucket-pipelines.yml, for a distribution run of masterportal
+    // BITBUCKET_BRANCH is appended to portalName, if usual e2e-tests are running
     /* eslint-disable-next-line no-process-env */
-    const appendix = process.env.BITBUCKET_BRANCH ? "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_") : "",
+    const appendix = process.env.BITBUCKET_BRANCH && process.env.MASTERPORTAL_DISTRIBUTION_RUN !== "true" ? "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_") : "",
         portalName = sourcePortalPath.split(path.sep).pop(),
         distPortalPath = path.resolve(distPath, portalName + appendix);
 

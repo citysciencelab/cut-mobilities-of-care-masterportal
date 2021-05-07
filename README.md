@@ -1,5 +1,3 @@
-> Switch to the [German version](/README.de.md).
-
 # Masterportal
 
 The Masterportal is a tool-kit to create geo web applications based on [OpenLayers](https://openlayers.org), [Vue.js](https://vuejs.org/) and [Backbone.js](https://backbonejs.org). The Masterportal is Open Source Software published under the [MIT License](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/dev/License.txt).
@@ -22,4 +20,4 @@ The Masterportal is a project by [Geowerkstatt Hamburg](https://www.hamburg.de/g
 
 [![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=aDNJT1VSRDlMVXNpRzJzYXQ4bHN0RERXbGpETmdQeDBMUlp0cEJkOWNPRT0tLVFJcndaSi9KWFBTM0FVWEZkYnhlS2c9PQ==--0ef330a6aef7023b1f50659a6d57f9369f988f53)](https://automate.browserstack.com/public-build/aDNJT1VSRDlMVXNpRzJzYXQ4bHN0RERXbGpETmdQeDBMUlp0cEJkOWNPRT0tLVFJcndaSi9KWFBTM0FVWEZkYnhlS2c9PQ==--0ef330a6aef7023b1f50659a6d57f9369f988f53)
 
-[![Sauce Test Status](https://saucelabs.com/buildstatus/YOUR_SAUCE_USERNAME)](https://app.saucelabs.com/u/YOUR_SAUCE_USERNAME)
+[![Sauce Test Status](https://app.eu-central-1.saucelabs.com/buildstatus/geodatenanwendungen_gv.hamburg.de)](https://app.eu-central-1.saucelabs.com/builds/dfd7abc54af1493091fbeef1b6b48ca6)

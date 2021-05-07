@@ -450,8 +450,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     incTransparency: function () {
-        if (this.get("transparency") <= 90) {
-            this.setTransparency(this.get("transparency") + 10);
+        const transparency = parseInt(this.get("transparency"), 10);
+
+        if (transparency <= 90) {
+            this.setTransparency(transparency + 10);
         }
     },
 
@@ -460,8 +462,10 @@ const Layer = Item.extend(/** @lends Layer.prototype */{
      * @return {void}
      */
     decTransparency: function () {
-        if (this.get("transparency") >= 10) {
-            this.setTransparency(this.get("transparency") - 10);
+        const transparency = parseInt(this.get("transparency"), 10);
+
+        if (transparency >= 10) {
+            this.setTransparency(transparency - 10);
         }
     },
 

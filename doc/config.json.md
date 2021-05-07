@@ -724,7 +724,7 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 {
     "portalTitle": {
         "title": "Master",
-        "logo": "../../lgv-config/img/hh-logo.png",
+        "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
         "link": "https://geoinfo.hamburg.de",
         "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     }
@@ -754,7 +754,7 @@ The menu bar allows showing a portal name and portal image if sufficient horizon
 ```json
 {
     "mapView": {
-        "backgroundImage": "/lgv-config/img/backgroundCanvas.jpeg",
+        "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
         "startCenter": [561210, 5932600],
         "options": [
             {
@@ -1378,7 +1378,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
 |----|--------|----|-------|-----------|------|
 |serviceId|yes|String||Id of the service to request. Resolved using the **[rest-services.json](rest-services.json.md)** file.|false|
 |storedQueryId|yes|String||Id of the stored query to use.|true|
-|configJSON|yes|String||Path to the configuration file holding districts. **[Example file](https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
+|configJSON|yes|String||Path to the configuration file holding districts. **[Example file](https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json)**.|false|
 |parcelDenominator|no|Boolean|false|Flag defining whether parcel denominators are used as a level. (Hamburg special: As a city state, Hamburg has no parcel denominators.)|false|
 |styleId|no|String||Allows choosing a style id from the `style.json` file to overwrite the map marker default style.|false|
 |zoomLevel|no|Number|7|Defines to which zoom level the tool should zoom.|false|
@@ -1392,7 +1392,7 @@ Example request: **https://geodienste.hamburg.de/HH_WFS_DOG?service=WFS&request=
         "glyphicon": "glyphicon-search",
         "serviceId": "6",
         "storedQueryID": "Flurstueck",
-        "configJSON": "/lgv-config/gemarkungen_hh.json",
+        "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
         "parcelDenominator": false,
         "styleId": "flaecheninfo"
     }

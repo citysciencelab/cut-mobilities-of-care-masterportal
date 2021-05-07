@@ -67,6 +67,26 @@ function removeBadTags (rawSource) {
     return result;
 }
 
+/**
+ * Checks for isVisible setting and in case it's not there adds it.
+ * @param {Array} features The Features to be inspected.
+ * @returns {Array} Returns Features with isVisible set.
+ */
+function checkIsVisibleSetting (features) {
+    const resFeatures = features;
+
+    resFeatures.forEach(feature => {
+        // in case File doesn't have the isVisible setting
+        if (feature.hasOwnProperty("values_")) {
+            if (!feature.values_.hasOwnProperty("isVisible")) {
+                feature.values_.isVisible = true;
+            }
+        }
+    });
+
+    return resFeatures;
+}
+
 export default {
     setSelectedFiletype: ({commit}, newFiletype) => {
         commit("setSelectedFiletype", newFiletype);
@@ -171,6 +191,7 @@ export default {
                 });
             }
         });
+        features = checkIsVisibleSetting(features);
 
         vectorLayer.getSource().addFeatures(features);
 

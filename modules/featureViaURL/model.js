@@ -1,3 +1,4 @@
+import addGeoJSON from "../../src/utils/addGeoJSON.js";
 const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/{
     defaults: {
         layerIds: [],
@@ -24,7 +25,6 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
      * @fires Core#RadioRequestParametricURLGetFeatureViaURL
      * @fires Core.ConfigLoader#RadioRequestParserGetTreeType
      * @fires Core.ConfigLoader#RadioTriggerParserAddFolder
-     * @fires Tools.AddGeoJSON#RadioTriggerAddGeoJSONAddGeoJsonToMap
      * @listens i18next#RadioTriggerLanguageChanged
      */
     initialize: function (config) {
@@ -145,7 +145,7 @@ const FeatureViaURL = Backbone.Model.extend(/** @lends FeatureViaURL.prototype*/
                 Radio.trigger("Alert", "alert", i18next.t("common:modules.featureViaURL.messages.featureParsingNoneAdded"));
             }
             this.get("layerIds").push(layerId);
-            Radio.trigger("AddGeoJSON", "addGeoJsonToMap", layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
+            addGeoJSON(layers[pos].name, layers[pos].id, geoJSON, layers[pos].styleId, parentId, gfiAttributes);
             if (typeof zoomTo !== "undefined" && (zoomTo === layerId || zoomTo.indexOf(layerId) !== -1)) {
                 Radio.trigger("Map", "zoomToFilteredFeatures", this.getFeatureIds(layerId), layerId);
             }

@@ -370,12 +370,6 @@
  */
 
 /**
- * @namespace AddGeoJSON
- * @memberof Tools
- * @description Adds GeoJSON as layer
- */
-
-/**
  * @namespace AddWMS
  * @memberof Tools
  * @description Tool to add external WMS services as layer to the map.
@@ -406,7 +400,7 @@
  */
 
 /**
- * @namespace Einwohnerabfrage
+ * @namespace PopulationRequest
  * @memberof Tools
  * @description Tool to request data about inhabitants of Hamburg.
  */

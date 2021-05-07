@@ -40,7 +40,7 @@ describe("src/modules/tools/draw/utils/style/createIconStyle.js", () => {
         it("value without path shall result in imgPath + value", () => {
             // Image from https://material.io/resources/icons/?icon=cloud&style=baseline
             const color = [0, 0, 0, 1],
-                imgPath = "/lgv-config/img",
+                imgPath = "https://geodienste.hamburg.de/lgv-config/img",
                 pointSize = 16,
                 symbol = {
                     caption: i18next.t("common:modules.tools.draw.iconList.iconCloud"),

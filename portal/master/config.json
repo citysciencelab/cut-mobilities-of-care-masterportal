@@ -2,7 +2,7 @@
   "Portalconfig": {
     "portalTitle": {
       "title": "Master",
-      "logo": "https://geoportal-hamburg.de/lgv-config/img/hh-logo.png",
+      "logo": "https://geodienste.hamburg.de/lgv-config/img/hh-logo.png",
       "link": "https://geoinfo.hamburg.de",
       "toolTip": "Landesbetrieb Geoinformation und Vermessung"
     },
@@ -110,7 +110,7 @@
       "placeholder": "translate#common:modules.searchbar.placeholder.addressHospitalBplan"
     },
     "mapView": {
-      "backgroundImage": "https://geoportal-hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
+      "backgroundImage": "https://geodienste.hamburg.de/lgv-config/img/backgroundCanvas.jpeg",
       "startCenter": [
         561210,
         5932600
@@ -262,6 +262,11 @@
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
         "children": {
+          "populationRequest": {
+            "name": "translate#additional:modules.tools.populationRequest.title",
+            "glyphicon": "glyphicon-wrench",
+            "onlyDesktop": false
+          },
           "compareFeatures": {
             "name": "translate#common:menu.tools.compareFeatures",
             "glyphicon": "glyphicon-th-list"
@@ -271,7 +276,7 @@
             "glyphicon": "glyphicon-search",
             "serviceId": "6",
             "storedQueryID": "Flurstueck",
-            "configJSON": "https://geoportal-hamburg.de/lgv-config/gemarkungen_hh.json",
+            "configJSON": "https://geodienste.hamburg.de/lgv-config/gemarkungen_hh.json",
             "parcelDenominator": false
           },
           "measure": {
@@ -768,15 +773,15 @@
                 "barPercentage": 1.1,
                 "values": {
                   "available": {
-                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.available",
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.available",
                     "color": "rgba(0, 220, 0, 1)"
                   },
                   "charging": {
-                    "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.charging",
+                    "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
                     "color": "rgba(220, 0, 0, 1)"
                   },
                   "outoforder": {
-                      "title": "translate#common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
+                      "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
                       "color": "rgba(175, 175, 175, 1)"
                   }
                 }

@@ -131,7 +131,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
      * recursive function (!) - adds a translation function named i18nextTranslate := function(setter) to each element in subconf found to be translated
      * @param {Object} subconf the raw response of the config.json - this is the raw data from the file before any changes are made; for recursion: this is the subobject of any object in the config.json
      * @param {String} prefix the prefix of values to use to recognize them for translation
-     * @returns {Void}  -
+     * @returns {void}
      * @pre the subconf (raw data) is as it is
      * @post all objects of translatable values of subconf (the raw data) have an extended key i18nextTranlate with a function(setter, key) added
      */
@@ -159,7 +159,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                      * callback function i18nextTranslate
                      * @param {Function} setter a function(translation) to set the value of key
                      * @param {String} key the key (of subconf) which value should be translated
-                     * @returns {Void}  -
+                     * @returns {void}
                      * @pre the value of key is as it is
                      * @post the value of key is run and replaced through i18next.t if key exists for i18next to translate
                      */
@@ -182,7 +182,7 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
                      * callback function i18nextTranslate with cascading former function (cascadeFunction)
                      * @param {Function} setter a function(translation) to set the value of key
                      * @param {String} key the key (of subconf) which value should be translated
-                     * @returns {Void}  -
+                     * @returns {void}
                      * @pre the values of all keys are as they are
                      * @post the translation functions for all keys where run in a cascade
                      */
@@ -212,6 +212,9 @@ const Preparser = Backbone.Model.extend(/** @lends Preparser.prototype */{
             }
         }, this);
     },
+
+
+    /**
 
     /**
      * Update the preparsed treeType from attributes to be downward compatible.

@@ -45,6 +45,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
         before(async function () {
             if (capability) {
                 capability.name = this.currentTest.fullTitle();
+                capability["sauce:options"].name = this.currentTest.fullTitle();
                 builder.withCapabilities(capability);
             }
             services = await new Promise((resolve, reject) => fetch(masterConfigJs.layerConf)
