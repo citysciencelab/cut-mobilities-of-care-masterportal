@@ -12,6 +12,7 @@
 ### Added
 - New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
 - Add @babel/eslint-parser to the package.json
+- Added the new tool "bufferAnalysis"
 
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.

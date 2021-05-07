@@ -75,11 +75,8 @@ const actions = {
      * @returns {void}
      */
     controlActivationOfTools: ({getters, commit, dispatch}, activeToolName) => {
-        getters.getActiveToolNames.forEach(tool => {
-            if (tool !== "Gfi") {
-                commit(tool + "/setActive", false);
-            }
-        });
+        getters.getActiveToolNames.forEach(tool => commit(tool + "/setActive", false));
+
         if (getters.getConfiguredToolNames.includes(activeToolName)) {
             commit(activeToolName + "/setActive", true);
             dispatch("activateToolInModelList", activeToolName);
@@ -107,29 +104,32 @@ const actions = {
     setToolInitValues: ({rootState, commit, dispatch}, toolName) => {
         if (rootState?.queryParams?.initvalues) {
             const toolState = JSON.parse(rootState?.queryParams?.initvalues);
+            let index = 1;
 
             for (const state in toolState) {
-                if (store._actions["Tools/" + toolName + "/" + state]) {
-                    try {
-                        dispatch(toolName + "/" + state, toolState[state]);
-                    }
-                    catch (e) {
-                        const message = e instanceof ValidationError ?
-                            e.message :
-                            i18next.t("common:modules.core.parametricURL.alertWrongInitValues");
+                setTimeout(() => {
+                    if (store._actions["Tools/" + toolName + "/" + state]) {
+                        try {
+                            dispatch(toolName + "/" + state, toolState[state]);
+                        }
+                        catch (e) {
+                            const message = e instanceof ValidationError ?
+                                e.message :
+                                i18next.t("common:modules.core.parametricURL.alertWrongInitValues");
 
-                        Radio.trigger("Alert", "alert", {
-                            text: message,
-                            kategorie: "alert-warning",
-                            position: "top-center",
-                            fadeOut: 5000
-                        });
-                        break;
+                            Radio.trigger("Alert", "alert", {
+                                text: message,
+                                kategorie: "alert-warning",
+                                position: "top-center",
+                                fadeOut: 5000
+                            });
+                        }
                     }
-                }
-                else {
-                    commit(toolName + "/" + state, toolState[state]);
-                }
+                    else {
+                        commit(toolName + "/" + state, toolState[state]);
+                    }
+                }, index * 500);
+                index++;
             }
         }
     },
@@ -144,7 +144,7 @@ const actions = {
 
         dispatch("controlActivationOfTools", activeTools[0]);
 
-        if (activeTools.length >= 2 && !activeTools.some(toolname => toolname === "Gfi")) {
+        if (activeTools.length > 1) {
             console.error("More than one tool has the configuration parameter 'active': true."
                 + " Only one entry is considered. Therefore the tool(s): "
                 + activeTools.slice(1)

@@ -68,19 +68,22 @@ function applySelectedTargetLayer ({commit, getters, dispatch}, selectedTargetLa
     }
 }
 /**
- * Applies the input buffer radius which triggers the show buffer action
+ * Applies the input buffer radius which triggers the show buffer action, removes previous generated layers and shows buffer only when a truthy value for buffer radius is provided
  *
  * @param {Number} selectedBufferRadius - layer object or ID string to select corresponding layer
  *
  * @return {void}
  */
-function applyBufferRadius ({commit, dispatch}, selectedBufferRadius) {
-    // remove previous generated layers and show buffer only when a truthy value is provided
-    commit("setBufferRadius", selectedBufferRadius);
-    if (selectedBufferRadius) {
-        dispatch("removeGeneratedLayers");
-        dispatch("showBuffer");
-    }
+function applyBufferRadius ({commit, dispatch, getters}, selectedBufferRadius) {
+    clearTimeout(getters.timerId);
+    commit("setTimerId", setTimeout(() => {
+        commit("setBufferRadius", selectedBufferRadius);
+
+        if (selectedBufferRadius) {
+            dispatch("removeGeneratedLayers");
+            dispatch("showBuffer");
+        }
+    }, 500));
 }
 
 export {

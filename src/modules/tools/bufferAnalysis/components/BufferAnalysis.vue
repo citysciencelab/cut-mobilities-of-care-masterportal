@@ -93,24 +93,24 @@ export default {
          * Watches the value of selectedTargetLayer
          * deselects the previous selected target layer if it exists and a new selection is made
          * @param {Object} layer the new selected target layer
-         * @param {Object} prev the previous selected target layer
+         * @param {Object} previous  the previous selected target layer
          * @returns {void}
          */
-        selectedTargetLayer (layer, prev) {
-            if (prev && layer) {
-                prev.setIsSelected(false);
+        selectedTargetLayer (layer, previous) {
+            if (previous && layer) {
+                previous.setIsSelected(false);
             }
         },
         /**
          * Watches the value of selectedSourceLayer
          * deselects the previous selected source layer if it exists and the new selected layer is falsy
          * @param {Object} layer the new selected source layer
-         * @param {Object} prev the previous selected source layer
+         * @param {Object} previous  the previous selected source layer
          * @returns {void}
          */
-        selectedSourceLayer (layer, prev) {
-            if (prev && !layer) {
-                prev.setIsSelected(false);
+        selectedSourceLayer (layer, previous) {
+            if (previous && !layer) {
+                previous.setIsSelected(false);
             }
         }
     },
@@ -192,7 +192,7 @@ export default {
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <input
                         id="tool-bufferAnalysis-radiusTextInput"
-                        v-model="bufferRadius"
+                        v-model.lazy="bufferRadius"
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
@@ -202,7 +202,7 @@ export default {
                     >
                     <input
                         id="tool-bufferAnalysis-radiusRangeInput"
-                        v-model="bufferRadius"
+                        v-model.lazy="bufferRadius"
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
@@ -267,7 +267,7 @@ export default {
                         :disabled="!selectedSourceLayer"
                         @click="resetModule"
                     >
-                        {{ $t("modules.tools.bufferAnalysis.clearBtn") }}
+                        {{ $t("modules.tools.bufferAnalysis.clearButton") }}
                     </button>
                 </div>
 
@@ -279,14 +279,14 @@ export default {
                         :disabled="!selectedSourceLayer || !selectedTargetLayer || !bufferRadius"
                         @click="buildUrlFromToolState"
                     >
-                        {{ $t("modules.tools.bufferAnalysis.saveBtn") }}
+                        {{ $t("modules.tools.bufferAnalysis.saveButton") }}
                     </button>
                 </div>
                 <div class="col-md-12 col-sm-12 form-group form-group-sm">
                     <input
                         id="tool-bufferAnalysis-savedUrlText"
                         v-model="savedUrl"
-                        class="col-md-12 col-sm-12 form-group form-group-sm"
+                        class="col-md-12 col-sm-12 form-group form-group-sm input-sm"
                         readonly
                         :hidden="!savedUrl"
                         type="text"
@@ -300,4 +300,27 @@ export default {
 
 <style lang="less" scoped>
     // @import "~variables";
+    #tool-bufferAnalysis-radiusRangeInput {
+        -webkit-appearance: none;
+        appearance: none;
+        border-radius: 4px;
+        border: none;
+        height: 12px;
+        margin-top: 19px;
+        background: #cbcbcb;
+    }
+    #tool-bufferAnalysis-radiusRangeInput {
+        &::-moz-range-thumb, &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #08589e;
+            cursor: pointer;
+            border-width: 1px;
+            border-color: white;
+            width: 22px;
+            height:22px;
+            border-radius: 50%;
+        }
+
+    }
 </style>

@@ -13,6 +13,8 @@ import {ResultType} from "./enums";
  * @property {Boolean} resizableWindow if true, window is resizable (config-param)
  * @property {Boolean} isVisibleInMenu if true, tool is selectable in menu (config-param)
  * @property {Boolean} deactivateGFI flag if tool should deactivate gfi (config-param)
+ * @property {Number} initialWidth initial width of the tool
+ * @property {String} timerId timerId for debounce buffer radius input
  * @property {?Object} selectedSourceLayer data binding for source layer selection
  * @property {?Object} selectedTargetLayer data binding for target layer selection
  * @property {?String} savedUrl data binding for saved url field
@@ -37,6 +39,7 @@ const state = {
     isVisibleInMenu: true,
     deactivateGFI: false,
     initialWidth: 500,
+    timerId: null,
     selectedSourceLayer: null,
     selectedTargetLayer: null,
     savedUrl: null,

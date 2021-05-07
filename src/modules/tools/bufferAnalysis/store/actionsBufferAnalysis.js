@@ -30,10 +30,10 @@ const actions = {
         dispatch("areLayerFeaturesLoaded", selectedTargetLayer.get("id")).then(() => {
             const bufferFeatures = bufferLayer.getSource().getFeatures();
 
-            dispatch("checkIntersectionWithBuffers", bufferFeatures);
-            dispatch("checkIntersectionsWithIntersections", bufferFeatures);
-            dispatch("convertIntersectionsToPolygons");
-            dispatch("addNewFeaturesToMap");
+            dispatch("checkIntersectionWithBuffers", bufferFeatures)
+                .then(dispatch("checkIntersectionsWithIntersections", bufferFeatures))
+                .then(dispatch("convertIntersectionsToPolygons"))
+                .then(dispatch("addNewFeaturesToMap"));
         });
     },
     /**
@@ -42,35 +42,25 @@ const actions = {
      * @return {void}
      */
     showBuffer ({commit, rootGetters, getters: {selectedSourceLayer, jstsParser, bufferRadius, bufferStyle}}) {
-        // get features from selected layer
         const features = selectedSourceLayer.get("layerSource").getFeatures(),
-            // create new source for buffer layer
             vectorSource = new VectorSource(),
             bufferLayer = new VectorLayer({
                 source: vectorSource
             });
 
-        // add new buffer layer to state
         commit("setBufferLayer", bufferLayer);
         features.forEach(feature => {
-            // parse feature geometry with jsts
             const jstsGeom = jstsParser.read(feature.getGeometry()),
-                // calculate buffer with selected buffer radius
                 buffered = jstsGeom.buffer(bufferRadius),
-                // create new feature with reconverted geometry
                 newFeature = new Feature({
                     geometry: jstsParser.write(buffered),
                     name: "Buffers"
                 });
 
-            // set configured style
             newFeature.setStyle(bufferStyle);
-            // remember origin feature
             newFeature.set("originFeature", feature);
-            // add new feature to source
             vectorSource.addFeature(newFeature);
         });
-        // add new layer with buffers to map
         rootGetters["Map/map"].addLayer(bufferLayer);
     },
     /**
@@ -106,6 +96,7 @@ const actions = {
         dispatch("applySelectedSourceLayer", null);
         dispatch("applySelectedTargetLayer", null);
         dispatch("removeGeneratedLayers");
+        commit("setSavedUrl", null);
     },
     /**
      * Checks intersections between buffers and features of the selected target layer
@@ -127,14 +118,12 @@ const actions = {
                         sourcePoly = jstsParser.read(sourceGeometry),
                         targetPoly = jstsParser.read(targetGeometry);
 
-                    // points do not need parsing
                     if (targetGeometry.getType() === "Point" &&
                         sourceGeometry.intersectsCoordinate(targetGeometry.getCoordinates()) &&
                         !sameFeature) {
                         return true;
                     }
 
-                    // check for intersections
                     if (sourcePoly.intersects(targetPoly) && !sameFeature) {
                         dispatch("generateIntersectionPolygon", {
                             properties: targetFeature.getProperties(),
@@ -167,11 +156,9 @@ const actions = {
      * @returns {void}
      */
     generateIntersectionPolygon ({commit, getters: {resultType}}, {sourcePoly, targetPoly, properties = {}}) {
-        // calculate subset polygon due to selected result type
         const subsetPoly = resultType === ResultType.WITHIN ? sourcePoly.intersection(targetPoly) : targetPoly.difference(sourcePoly);
 
         subsetPoly.properties = properties;
-        // add poly to intersections array
         commit("addIntersectionPolygon", subsetPoly);
     },
     /**
@@ -182,18 +169,14 @@ const actions = {
      *
      * @return {void}
      */
-    checkIntersectionsWithIntersections ({dispatch, getters: {intersections, jstsParser, resultType}}, bufferFeatures) {
+    checkIntersectionsWithIntersections ({dispatch, getters: {intersections, jstsParser}}, bufferFeatures) {
         bufferFeatures.forEach(buffer => {
-            intersections.forEach((intersection, key, thisArray) => {
+            intersections.forEach((intersection) => {
                 const sourceGeometry = buffer.getGeometry(),
                     sourcePoly = jstsParser.read(sourceGeometry);
 
                 if (sourcePoly.intersects(intersection)) {
                     dispatch("generateIntersectionPolygon", {properties: intersection.properties, sourcePoly, targetPoly: intersection});
-
-                    if (resultType === ResultType.OUTSIDE) {
-                        thisArray.splice(key, 1);
-                    }
                 }
             });
         });
@@ -231,9 +214,7 @@ const actions = {
             selectedSourceLayer,
             bufferLayer
         }}) {
-        // check if there are result features in array
         if (resultFeatures.length) {
-            // create new vector source and get gfi attributes
             const vectorSource = new VectorSource(),
                 gfiAttributes = selectedTargetLayer.get("gfiAttributes"),
                 resultLayer = new VectorLayer({
@@ -241,17 +222,12 @@ const actions = {
                     style: selectedTargetLayer.get("style")
                 });
 
-            // set new vector layer to state with same style as target layer
             commit("setResultLayer", resultLayer);
 
-            // add result features to new vector source
             vectorSource.addFeatures(resultFeatures);
-            // apply gfi attributes to new vector layer
             resultLayer.set("gfiAttributes", gfiAttributes);
-            // add new layer to map
             rootGetters["Map/map"].addLayer(resultLayer);
         }
-        // reduce opacity for source, target and buffer layers
         const targetOlLayer = selectedTargetLayer.get("layer"),
             sourceOlLayer = selectedSourceLayer.get("layer");
 

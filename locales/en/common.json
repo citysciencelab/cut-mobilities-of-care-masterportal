@@ -610,8 +610,8 @@
             "overlapping": "inside radius",
             "notOverlapping": "outside radius",
             "rangeLabel": "radius (m)",
-            "clearBtn": "Reset",
-            "saveBtn": "Save",
+            "clearButton": "Reset",
+            "saveButton": "Save",
             "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
             "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
           }
