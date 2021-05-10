@@ -136,7 +136,7 @@ export default {
 <template>
     <ToolWindow @close="close">
         <template v-slot:title>
-            <span>{{ $t(title) }}</span>
+            <span>{{ title }}</span>
         </template>
         <template v-slot:body>
             <component

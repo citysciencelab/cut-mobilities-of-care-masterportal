@@ -95,7 +95,7 @@ export default {
             </span>
         </template>
         <template v-slot:title>
-            <span>{{ $t(title) }}</span>
+            <span>{{ title }}</span>
         </template>
         <template v-slot:body>
             <div class="body">
