@@ -4,8 +4,7 @@ import BufferAnalysisComponent from "../../../components/BufferAnalysis.vue";
 import BufferAnalysis from "../../../store/indexBufferAnalysis";
 import {expect} from "chai";
 import sinon from "sinon";
-import {createLayersArray} from "../store/helpers/functions";
-// import Layer from "../../../../../../../modules/core/modelList/layer/model";
+import {createLayersArray} from "../utils/functions";
 
 const localVue = createLocalVue();
 

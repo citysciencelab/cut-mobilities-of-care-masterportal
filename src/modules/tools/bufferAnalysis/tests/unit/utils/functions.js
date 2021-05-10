@@ -1,4 +1,4 @@
-import Layer from "../../../../../../../../modules/core/modelList/layer/model";
+import Layer from "../../../../../../../modules/core/modelList/layer/model";
 import sinon from "sinon";
 import {Vector as VectorLayer} from "ol/layer";
 
@@ -25,18 +25,6 @@ function createLayersArray (count) {
     return layers;
 }
 
-/**
- * Resolves pending promises
- *
- * @return {Promise<unknown>} resolved promise
- */
-function tick () {
-    return new Promise(resolve => {
-        setTimeout(resolve, 0);
-    });
-}
-
 export {
-    createLayersArray,
-    tick
+    createLayersArray
 };

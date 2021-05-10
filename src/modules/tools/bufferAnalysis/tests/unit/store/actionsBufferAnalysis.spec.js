@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import {expect} from "chai";
-import {createLayersArray, tick} from "./helpers/functions";
+import {createLayersArray} from "../utils/functions";
 import actions from "../../../store/actionsBufferAnalysis";
 import stateBufferAnalysis from "../../../store/stateBufferAnalysis";
 import {
@@ -13,10 +13,15 @@ import {
     Polygon
 } from "ol/geom";
 
-describe("src/modules/tools/draw/store/actionsDraw.js", () => {
-    let commit, dispatch, rootGetters, state;
+describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
+    let commit, dispatch, rootGetters, state, tick;
 
     beforeEach(() => {
+        tick = () => {
+            return new Promise(resolve => {
+                setTimeout(resolve, 0);
+            });
+        };
         commit = sinon.spy();
         dispatch = sinon.stub().resolves(true);
         rootGetters = sinon.stub();

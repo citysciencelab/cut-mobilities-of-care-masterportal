@@ -32,7 +32,7 @@ import {ResultType} from "./enums";
 const state = {
     active: false,
     id: "bufferAnalysis",
-    name: "BufferAnalysis",
+    name: "common:menu.tools.bufferAnalysis",
     glyphicon: "glyphicon-resize-full",
     renderToWindow: true,
     resizableWindow: true,

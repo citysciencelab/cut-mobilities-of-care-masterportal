@@ -108,25 +108,20 @@ const actions = {
 
             for (const state in toolState) {
                 setTimeout(() => {
-                    if (store._actions["Tools/" + toolName + "/" + state]) {
-                        try {
+                    try {
+                        if (store._actions["Tools/" + toolName + "/" + state]) {
                             dispatch(toolName + "/" + state, toolState[state]);
                         }
-                        catch (e) {
-                            const message = e instanceof ValidationError ?
-                                e.message :
-                                i18next.t("common:modules.core.parametricURL.alertWrongInitValues");
-
-                            Radio.trigger("Alert", "alert", {
-                                text: message,
-                                kategorie: "alert-warning",
-                                position: "top-center",
-                                fadeOut: 5000
-                            });
+                        else if (store._mutations[toolName + "/" + state]) {
+                            commit(toolName + "/" + state, toolState[state]);
                         }
                     }
-                    else {
-                        commit(toolName + "/" + state, toolState[state]);
+                    catch (e) {
+                        const alertingMessage = {
+                            category: i18next.t("common:modules.alerting.categories.error"),
+                            content: e instanceof ValidationError ? e.message : i18next.t("common:modules.core.parametricURL.alertWrongInitValues")};
+
+                        dispatch("Alerting/addSingleAlert", alertingMessage, {root: true});
                     }
                 }, index * 500);
                 index++;
