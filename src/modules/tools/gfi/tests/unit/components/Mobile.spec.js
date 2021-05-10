@@ -2,6 +2,7 @@ import Vuex from "vuex";
 import {shallowMount, createLocalVue, config} from "@vue/test-utils";
 import {expect} from "chai";
 import Mobile from "../../../components/templates/Mobile.vue";
+import sinon from "sinon";
 
 const localVue = createLocalVue();
 
@@ -17,7 +18,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 feature: {
                     getTheme: () => "default",
                     getMimeType: () => "text/html",
-                    getTitle: () => "Hallo"
+                    getTitle: () => "Hallo",
+                    getProperties: () => sinon.stub(),
+                    getFeatures: () => sinon.stub()
                 }
             },
             localVue
@@ -32,7 +35,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 feature: {
                     getTheme: () => "default",
                     getMimeType: () => "text/html",
-                    getTitle: () => "Hallo"
+                    getTitle: () => "Hallo",
+                    getProperties: () => sinon.stub(),
+                    getFeatures: () => sinon.stub()
                 }
             },
             localVue
@@ -47,7 +52,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                 feature: {
                     getTheme: () => "Default",
                     getMimeType: () => "text/html",
-                    getTitle: () => "Hallo"
+                    getTitle: () => "Hallo",
+                    getProperties: () => sinon.stub(),
+                    getFeatures: () => sinon.stub()
                 }
             },
             localVue
@@ -66,7 +73,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getMimeType: () => "text/html",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getProperties: () => sinon.stub(),
+                        getFeatures: () => sinon.stub()
                     }
                 },
                 localVue
@@ -87,7 +96,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getMimeType: () => "text/html",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getProperties: () => sinon.stub(),
+                        getFeatures: () => sinon.stub()
                     }
                 },
                 localVue
@@ -109,7 +120,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getMimeType: () => "text/html",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getProperties: () => sinon.stub(),
+                        getFeatures: () => sinon.stub()
                     }
                 },
                 localVue
@@ -127,7 +140,9 @@ describe("src/modules/tools/gfi/components/templates/Mobile.vue", () => {
                     feature: {
                         getTheme: () => "Default",
                         getMimeType: () => "text/html",
-                        getTitle: () => "Hallo"
+                        getTitle: () => "Hallo",
+                        getProperties: () => sinon.stub(),
+                        getFeatures: () => sinon.stub()
                     }
                 },
                 slots: {
