@@ -74,16 +74,13 @@ function applySelectedTargetLayer ({commit, getters, dispatch}, selectedTargetLa
  *
  * @return {void}
  */
-function applyBufferRadius ({commit, dispatch, getters}, selectedBufferRadius) {
-    clearTimeout(getters.timerId);
-    commit("setTimerId", setTimeout(() => {
-        commit("setBufferRadius", selectedBufferRadius);
+function applyBufferRadius ({commit, dispatch}, selectedBufferRadius) {
+    commit("setBufferRadius", selectedBufferRadius);
 
-        if (selectedBufferRadius) {
-            dispatch("removeGeneratedLayers");
-            dispatch("showBuffer");
-        }
-    }, 500));
+    if (selectedBufferRadius) {
+        dispatch("removeGeneratedLayers");
+        dispatch("showBuffer");
+    }
 }
 
 export {

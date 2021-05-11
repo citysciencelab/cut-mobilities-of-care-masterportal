@@ -92,14 +92,13 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
         expect(options.length).to.equals(8); // 2 * 3 (selectOptions) + 2 (resultType)
     });
 
-    it("triggers all important actions when all inputs are set", async () => {
+    it("triggers showBuffer action when source layer and buffer radius are set", async () => {
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
             sourceOptions = selectSource.findAll("option"),
-            selectTarget = wrapper.find("#tool-bufferAnalysis-selectTargetInput"),
-            targetOptions = selectTarget.findAll("option"),
             range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
-            layers = createLayersArray(3);
+            layers = createLayersArray(3),
+            clock = sinon.useFakeTimers();
 
         await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
         await wrapper.vm.$nextTick();
@@ -110,11 +109,8 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
 
         range.setValue(1000);
         await wrapper.vm.$nextTick();
+        clock.tick(1000);
         expect(BufferAnalysis.actions.showBuffer.calledOnce).to.equal(true);
-
-        targetOptions.at(2).setSelected();
-        await wrapper.vm.$nextTick();
-        expect(layers[2].setIsSelectedSpy.calledTwice).to.equal(true);
-        expect(BufferAnalysis.actions.checkIntersection.calledOnce).to.equal(true);
+        clock.restore();
     });
 });

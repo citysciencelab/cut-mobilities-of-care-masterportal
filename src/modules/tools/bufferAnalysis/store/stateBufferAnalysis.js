@@ -45,6 +45,7 @@ const state = {
     savedUrl: null,
     resultType: ResultType.OUTSIDE,
     bufferRadius: 0,
+    inputBufferRadius: 0,
     bufferLayer: {},
     resultLayer: {},
     selectOptions: [],

@@ -70,21 +70,12 @@ export default {
                 this.setResultType(newType);
             }
         },
-        bufferRadius: {
-            /**
-             * getter for the computed property bufferRadius
-             * @returns {Number} the current adjusted buffer radius
-             */
+        inputBufferRadius: {
             get () {
-                return this.$store.state.Tools.BufferAnalysis.bufferRadius;
+                return this.$store.state.Tools.BufferAnalysis.inputBufferRadius;
             },
-            /**
-             * setter for the computed property bufferRadius
-             * @param {Number} newRadius the new adjusted buffer radius
-             * @returns {void}
-             */
             set (newRadius) {
-                this.applyBufferRadius(newRadius);
+                this.setInputBufferRadius(newRadius);
             }
         }
     },
@@ -112,6 +103,18 @@ export default {
             if (previous && !layer) {
                 previous.setIsSelected(false);
             }
+        },
+        /**
+         * Watches the value of inputBufferRadius
+         * debounces the input values to prevent unnecessary calculations
+         * @param {Number} newBufferRadius the new selected buffer radius
+         * @returns {void}
+         */
+        inputBufferRadius (newBufferRadius) {
+            clearTimeout(this.timerId);
+            this.setTimerId(setTimeout(() => {
+                this.applyBufferRadius(newBufferRadius);
+            }, 500));
         }
     },
     /**
@@ -192,7 +195,7 @@ export default {
                 <div class="col-md-7 col-sm-7 form-group form-group-sm">
                     <input
                         id="tool-bufferAnalysis-radiusTextInput"
-                        v-model.lazy="bufferRadius"
+                        v-model="inputBufferRadius"
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
@@ -202,7 +205,7 @@ export default {
                     >
                     <input
                         id="tool-bufferAnalysis-radiusRangeInput"
-                        v-model.lazy="bufferRadius"
+                        v-model="inputBufferRadius"
                         :disabled="!selectedSourceLayer || selectedTargetLayer"
                         min="0"
                         max="3000"
