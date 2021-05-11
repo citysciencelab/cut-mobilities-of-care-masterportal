@@ -137,6 +137,12 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
      * @returns {object} contains params, url and xhrFields for the request
      */
     getRequestParamsAndOptions: function () {
+        let propertyname = "";
+
+        if (Array.isArray(this.get("propertyNames"))) {
+            propertyname = this.get("propertyNames").join(",");
+        }
+
         /**
          * @deprecated in the next major-release!
          * useProxy
@@ -152,6 +158,7 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                 SRSNAME: Radio.request("MapView", "getProjection")?.getCode(),
                 TYPENAME: typename,
                 VERSION: this.get("version"),
+                PROPERTYNAME: propertyname ? propertyname : "",
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },

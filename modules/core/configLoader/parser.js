@@ -22,7 +22,8 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "animation",
             "addWMS",
             "shadow"
-        ]
+        ],
+        extendedLayerIdAssoc: {}
     },
 
     /**
@@ -92,7 +93,13 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
             "getSnippetInfos": function () {
                 return this.get("snippetInfos");
             },
-            "getInitVisibBaselayer": this.getInitVisibBaselayer
+            "getInitVisibBaselayer": this.getInitVisibBaselayer,
+            "getOriginId": function (layerId) {
+                if (this.get("extendedLayerIdAssoc").hasOwnProperty(layerId)) {
+                    return this.get("extendedLayerIdAssoc")[layerId];
+                }
+                return layerId;
+            }
         }, this);
 
         channel.on({
