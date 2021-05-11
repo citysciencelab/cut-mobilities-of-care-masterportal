@@ -40,15 +40,43 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     mergedObjsFromRawList,
                     item;
 
-                // Für Single-Layer (ol.layer.Layer)
-                // z.B.: {id: "5181", visible: false}
+                // For layer with the same layer id but with different properties as filter
+                if (!Array.isArray(layerExtended.id) && typeof layerExtended.id === "object") {
+                    if (!layerExtended.id.suffix || typeof layerExtended.id.suffix !== "string") {
+                        console.warn("Please check your Id in config.json file to be sure an valid 'Suffix' to be set");
+                        return;
+                    }
+                    const suffix = layerExtended.id.suffix,
+                        layerId = layerExtended.id.layerId,
+                        extendedLayerIdAssoc = this.get("extendedLayerIdAssoc");
 
-                if (!layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
+                    layerExtended.id = layerId + "-" + suffix;
+                    extendedLayerIdAssoc[layerExtended.id] = layerId;
+
+                    objFromRawList = getLayerWhere({id: layerId});
+
+                    // DIPAS -> There is an object not in the ServicesJSON, but it has a url, the layer is still transferred without a services entry
+                    // DIPAS -> if the layer type "StaticImage" is transferred, the system does not break off but continues to work with the new ImageURL.
+                    // Is required for the use of an individually oiled picture.
+                    if (objFromRawList === null) {
+                        if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
+                            objFromRawList = layerExtended;
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                    layerExtended = Object.assign({}, objFromRawList, layerExtended, {"isChildLayer": false});
+                }
+
+                // For Single-Layer (ol.layer.Layer)
+                // For example: {id: "5181", visible: false}
+                else if (!layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
                     objFromRawList = getLayerWhere({id: layerExtended.id});
-                    // DIPAS -> Steht ein Objekt nicht in der ServicesJSON, hat aber eine url dann wird der Layer ohne Services Eintrag trotzdemübergeben
 
-                    // DIPAS -> wenn der Layertyp "StaticImage" übergeben wird brechen wur nicht ab sondern arbeiten mit der neuen ImageURL weiter.
-                    // Wird für den Einsatz eines individuell eingestelölten Bildes benötigt.
+                    // DIPAS -> There is an object not in the ServicesJSON, but it has a url, the layer is still transferred without a services entry
+                    // DIPAS -> if the layer type "StaticImage" is transferred, the system does not break off but continues to work with the new ImageURL.
+                    // Is required for the use of an individually oiled picture.
                     if (objFromRawList === null) {
                         if (layerExtended.hasOwnProperty("url")) { // Wenn LayerID nicht definiert, dann Abbruch
                             objFromRawList = layerExtended;
@@ -59,8 +87,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     }
                     layerExtended = Object.assign(objFromRawList, layerExtended, {"isChildLayer": false});
                 }
-                // Für Single-Layer (ol.layer.Layer) mit mehreren Layern(FNP, LAPRO, Geobasisdaten (farbig), etc.)
-                // z.B.: {id: ["550,551,552,...,559"], visible: false}
+                // For Single-Layer (ol.layer.Layer) with more layers (FNP, LAPRO, Geobasisdaten (farbig), etc.)
+                // For Example: {id: ["550","551","552",...,"559"], visible: false}
                 else if (Array.isArray(layerExtended.id) && typeof layerExtended.id[0] === "string") {
                     objsFromRawList = getLayerList();
                     mergedObjsFromRawList = this.mergeObjectsByIds(layerExtended.id, objsFromRawList);
@@ -70,8 +98,8 @@ const CustomTreeParser = Parser.extend(/** @lends CustomTreeParser.prototype */{
                     }
                     layerExtended = Object.assign(mergedObjsFromRawList, Radio.request("Util", "omit", layerExtended, ["id"]), {"isChildLayer": false});
                 }
-                // Für Gruppen-Layer (ol.layer.Group)
-                // z.B.: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
+                // For Group-Layer (ol.layer.Group)
+                // For Example: {id: "xxx", children: [{ id: "1364" }, { id: "1365" }], visible: false}
                 else if (layerExtended.hasOwnProperty("children") && typeof layerExtended.id === "string") {
                     layerExtended.children = layerExtended.children.map(childLayer => {
                         objFromRawList = null;

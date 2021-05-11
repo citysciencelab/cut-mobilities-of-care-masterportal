@@ -215,7 +215,7 @@ WMTS layers can be added by
 |featureType|yes|String||Feature type to load. Must match a value of *FeatureTypeList/FeatureType/Name* in the *GetCapabilities* response. Provide without namespace.|`"bab_vkl"`|
 |featurePrefix|no|String||Used to identify a *FeatureType* in the service.|
 |gfiAttributes|yes|String/**[gfiAttributes](#markdown-header-gfi_attributes)**||GFI attributes to be shown.|`"ignore"`|
-|id|yes|String||Arbitrary id|`"44"`|
+|id|yes|String/**[wfs_id](#markdown-header-wfs_id)**||Arbitrary id or an object with id and suffix|`"44"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
 |legend|no|Boolean/String/String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
@@ -230,6 +230,7 @@ WMTS layers can be added by
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
 |isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
 |authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
+|propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
 
 **WFS example:**
 
@@ -248,6 +249,12 @@ WMTS layers can be added by
       "layerAttribution" : "nicht vorhanden",
       "legend" : true,
       "isSecured": true,
+      "propertyNames": [
+          "bezirk_name",
+          "stadtteil_name",
+          "anzahl_sus_primarstufe",
+          "geom"
+      ],
       "authenticationUrl": "https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType",
       "datasets" : [
          {
@@ -284,8 +291,34 @@ WMTS layers can be added by
     "gfiAttributes" : "showAll",
     "layerAttribution" : "nicht vorhanden",
     "legend" : true,
-    "datasets" : []
+    "datasets" : [],
+    "propertyNames": [
+        "bezirk_name",
+        "stadtteil_name",
+        "anzahl_sus_primarstufe",
+        "geom"
+    ]
   }
+```
+***
+## wfs_id
+If the layer id is in an object format, the content in the object should be in the format:
+
+|Name|Required|Type|Default|Description|Example|
+|----|--------|----|-------|-----------|-------|
+|layerId|yes|String||Attribute value layerId.|`"1234567"`|
+|suffix|yes|String||Attribute value suffix.|`"text"`|
+**The layerId and suffix must be unique as a pair**
+
+**wfs layer Id Object example:**
+
+```json
+{
+   "id": {
+        "layerId": "1234567",
+        "suffix": "text"
+   }
+}
 ```
 ***
 ## WFS-Layer.isSecured ##
