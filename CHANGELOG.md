@@ -20,6 +20,7 @@
 
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data"
+- In GFI the layerTitle was shortened in case it contains a colon
 ---
 ## v2.9.1 - 2021-05-25
 ### Fixed
