@@ -231,13 +231,13 @@
               "error": {
                 "mail": "Please input a valid E-mail address",
                 "message": "Sending Email failed!",
+                "messageInput": "Your message has to be at least {{length}} characters long.",
                 "phone": "Please input your phone number",
                 "username": "Please input your name"
               },
               "placeholder": {
                 "mail": "Your E-mail Address",
                 "message": "Please write down your message in here and press \"$t(common:modules.tools.contact.sendButton)\".",
-                "messageInput": "Your message has to be at least {{length}} characters long.",
                 "phone": "Your phone number",
                 "username": "Your name"
               },
