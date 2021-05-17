@@ -189,13 +189,13 @@ function getCapabilities (testService) {
         {
             ...baseSaucelabs,
             "browserName": "safari",
-            "browserVersion": "14.1",
+            "browserVersion": "14",
             "platformName": "macOS 11"
         },
         {
             ...baseSaucelabs,
             "browserName": "edge",
-            "browserVersion": "90",
+            "browserVersion": "89",
             "platformName": "Windows 10"
         }
     ];
