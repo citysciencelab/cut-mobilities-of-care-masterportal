@@ -190,11 +190,11 @@ function getCapabilities (testService) {
             ...baseSaucelabs,
             "browserName": "safari",
             "browserVersion": "14",
-            "platformName": "macOS 11"
+            "platformName": "Big Sur 11.00"
         },
         {
             ...baseSaucelabs,
-            "browserName": "edge",
+            "browserName": "Edge",
             "browserVersion": "89",
             "platformName": "Windows 10"
         }
