@@ -337,7 +337,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 // test by redirecting master to custom
                 await loadUrl(driver, `${url}?config=../masterCustom${urlAffix}/config.json`, mode);
 
-                // expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
+                expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
             });
         }
 
