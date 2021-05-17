@@ -866,6 +866,7 @@ Legend configuration options.
 |name|yes|String||Legend name.|false|
 |glyphicon|no|String|"glyphicon-book"|Legend glyphicon.|false|
 |showCollapseAllButton|no|Boolean|false|Option to en-/disable all legends.|false|
+|showLegend|no|Boolean|false|Option to display the legend when starting the portal|false|
 
 ***
 

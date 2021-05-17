@@ -811,6 +811,7 @@ Konfigurations-Optionen der Legende.
 |name|ja|String||Name der Legende.|false|
 |glyphicon|nein|String|"glyphicon-book"|Glyphicon der Legende.|false|
 |showCollapseAllButton|nein|Boolean|false|Option zum Ein- bzw. Ausblenden aller Legenden|false|
+|showLegend|nein|Boolean|false|Option zum Anzeigen der Legende beim Start des Portals|false|
 
 ***
 
