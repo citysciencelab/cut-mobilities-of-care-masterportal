@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ParameterTests ({builder, url, resolution, mode, capability}) {
-    describe("URL Query Parameters", function () {
+    describe.only("URL Query Parameters", function () {
         let driver; // , gfi, counter;
 
         before(async function () {
@@ -96,16 +96,24 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         });
 
         it("?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
+            let ortho = "";
+
             // 2426 is "Bezirke"
-            // 452 is "Luftbilder DOP 20 (belaubt)"
+            // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
             await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
             await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
-            const treeEntryLuftbilder = await driver.findElement(By.css(
-                    isBasic(url) || isMaster(url)
-                        ? "ul#tree li [title^=\"Luftbilder\"]"
-                        : "#SelectedLayer .layer-item [title^=\"Luftbilder\"]"
-                )),
+            if (isBasic(url) || isMaster(url)) {
+                ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+            }
+            else if (isDefault(url)) {
+                ortho = "#SelectedLayer .layer-item [title^=\"Luftbilder DOP 20 (DOP 40 mit Umland)\"]";
+            }
+            else {
+                ortho = "#SelectedLayer .layer-item [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+            }
+
+            const treeEntryLuftbilder = await driver.findElement(By.css(ortho)),
                 treeEntryBezirke = await driver.findElement(By.css(
                     isBasic(url) || isMaster(url)
                         ? "ul#tree li [title=\"Bezirke\"]"
@@ -249,8 +257,8 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        it("?isinitopen= allows opening tools initially", async function () {
-            const toolName = "draw",
+        it("?isinitopen= allows opening tools initially in window", async function () {
+            const toolName = "fileimport",
                 toolwindow = By.css(".tool-window-vue");
 
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
@@ -258,6 +266,17 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             await driver.wait(until.elementLocated(toolwindow), 5000);
 
             expect(driver.findElement(toolwindow)).to.exist;
+        });
+
+        it("?isinitopen= allows opening tools initially in sidebar", async function () {
+            const toolName = "draw",
+                toolSidebar = By.css("#tool-sidebar-vue");
+
+            await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
+
+            await driver.wait(until.elementLocated(toolSidebar), 5000);
+
+            expect(driver.findElement(toolSidebar)).to.exist;
         });
 
         /*
