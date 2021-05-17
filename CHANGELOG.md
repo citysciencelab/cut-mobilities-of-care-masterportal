@@ -19,6 +19,7 @@
 ### Removed
 
 ### Fixed
+- Now Sensor Layer will show 0 if the dataValue is 0 and not "no data"
 ---
 
 ## v2.9.0 - 2021-05-05

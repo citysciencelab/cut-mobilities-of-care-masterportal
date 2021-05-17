@@ -303,19 +303,21 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
         const modifiedFeature = feature,
             dataStreamValues = [];
 
+
         if (feature && feature.get("dataStreamId")) {
             feature.get("dataStreamId").split(" | ").forEach((id, i) => {
                 const dataStreamName = feature.get("dataStreamName").split(" | ")[i];
 
-                if (this.get("showNoDataValue") && !feature.get("dataStream_" + id + "_" + dataStreamName)) {
+                if (this.get("showNoDataValue") && !feature.get("dataStream_" + id + "_" + dataStreamName) === "") {
                     dataStreamValues.push(this.get("noDataValue"));
                 }
                 else if (feature.get("dataStream_" + id + "_" + dataStreamName)) {
                     dataStreamValues.push(feature.get("dataStream_" + id + "_" + dataStreamName));
                 }
             });
-
-            modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "), true);
+            if (dataStreamValues.length > 0) {
+                modifiedFeature.set("dataStreamValue", dataStreamValues.join(" | "), true);
+            }
         }
         return modifiedFeature;
     },
@@ -559,7 +561,7 @@ const SensorLayer = Layer.extend(/** @lends SensorLayer.prototype */{
             thing.properties.dataStreamId.push(dataStreamId);
             thing.properties.dataStreamName.push(dataStreamName);
 
-            if (dataStreamValue) {
+            if (dataStreamValue !== "") {
                 thing.properties[key] = dataStreamValue;
                 thing.properties[key + "_phenomenonTime"] = this.getLocalTimeFormat(phenomenonTime, this.get("timezone"));
                 thing.properties.dataStreamValue.push(dataStreamValue);

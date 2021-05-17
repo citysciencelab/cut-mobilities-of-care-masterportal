@@ -17,6 +17,7 @@ import SearchByCoord from "./searchByCoord/store/indexSearchByCoord";
 import ScaleSwitcher from "./scaleSwitcher/store/indexScaleSwitcher";
 import StyleVT from "./styleVT/store/indexStyleVT";
 import SupplyCoord from "./supplyCoord/store/indexSupplyCoord";
+import SelectFeatures from "./selectFeatures/store/indexSelectFeatures";
 import BufferAnalysis from "./bufferAnalysis/store/indexBufferAnalysis";
 
 /**
@@ -37,6 +38,7 @@ export default {
         ScaleSwitcher,
         StyleVT,
         SupplyCoord,
+        SelectFeatures,
         BufferAnalysis
     },
     state,
