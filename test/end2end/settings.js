@@ -179,6 +179,12 @@ function getCapabilities (testService) {
             "browserName": "chrome",
             "browserVersion": "89",
             "platformName": "Windows 10"
+        },
+        {
+            ...baseSaucelabs,
+            "browserName": "firefox",
+            "browserVersion": "88",
+            "platformName": "Windows 10"
         }
     ];
 
