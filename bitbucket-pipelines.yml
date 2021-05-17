@@ -14,7 +14,6 @@ definitions:
             - export FTP_SOURCE_PATH="dist"
             - export FTP_TARGET_URL="ftp://test.geoportal-hamburg.de/"
             - export FTP_GITLOGFILE="testGitLog"
-            - ls -al
             #replace slashes in branchname with underscores
             - tmp=$BITBUCKET_BRANCH
             - branchname=${tmp//[\/]/_}
@@ -36,7 +35,6 @@ definitions:
             - chmod +x ./deployScripts/transfer_ftp.sh
             # commit changed file for "git-ftp"
             - /bin/bash ./deployScripts/transfer_ftp.sh
-            - ls -al
 
 pipelines:
     # Start pipeline with tag to build examples zips and copy them to the Bitbucket download folder

@@ -150,8 +150,7 @@ function getCapabilities (testService) {
                 "username": process.env.SAUCE_USERNAME,
                 /* eslint-disable-next-line no-process-env */
                 "accessKey": process.env.SAUCE_ACCESS_KEY,
-                "extendedDebugging": true,
-                "concurrency": 4
+                "extendedDebugging": true
             }
         };
 
