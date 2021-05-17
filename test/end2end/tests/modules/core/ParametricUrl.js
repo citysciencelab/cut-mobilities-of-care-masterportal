@@ -12,7 +12,7 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function ParameterTests ({builder, url, resolution, mode, capability}) {
-    describe.only("URL Query Parameters", function () {
+    describe("URL Query Parameters", function () {
         let driver; // , gfi, counter;
 
         before(async function () {
