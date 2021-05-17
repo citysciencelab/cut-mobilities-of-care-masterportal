@@ -275,9 +275,11 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             expect(driver.findElement(toolSidebar)).to.exist;
         });
 
-        /*
-         * Alert "BKG-Adressdienst nicht erreichbar. Gateway Timeout" bei Aufruf aus dem Internet (^= von Browserstack aus)
-        if (isCustom(url) || isMaster(url) || isDefault(url)) {
+        /**
+         * Tests only in the default tree, because there only the gazetteer is configured.
+         * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
+         */
+        if (isDefault(url)) {
             it("?query= fills and executes query field", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
@@ -291,22 +293,23 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await driver.wait(until.elementLocated(By.css("#searchInputUL li")));
             });
         }
-        */
 
-        /*
-         * Alert "BKG-Adressdienst nicht erreichbar. Gateway Timeout" bei Aufruf aus dem Internet (^= von Browserstack aus)
+        /**
+         * Tests only in the default tree, because there only the gazetteer is configured.
+         * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
+         */
         if (isDefault(url)) {
             it("?query= fills and executes search and zooms to result if unique address", async function () {
-                await loadUrl(driver, `${url}?query=Neuenfelder Straße,19, 21109`, mode);
+                await loadUrl(driver, `${url}?query=Neuenfelder Straße,19`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
                 const input = await driver.findElement(By.css("#searchInput")),
                     expected = [566610.46394, 5928085.6];
                 let center;
 
-                // value is set to search field
+                // // value is set to search field
                 await driver.wait(
-                    async () => await input.getAttribute("value") === "Neuenfelder Straße,19, 21109",
+                    async () => await input.getAttribute("value") === "Neuenfelder Straße 19",
                     10000,
                     "Query was not written so search input."
                 );
@@ -320,7 +323,6 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 }, 10000, `Expected coordinates ${expected}, but received ${center}. Did not receive matching coordinates within 10 seconds.`);
             });
         }
-        */
 
         if (isMaster(url)) {
             it("?config= allows selecting a config", async function () {
