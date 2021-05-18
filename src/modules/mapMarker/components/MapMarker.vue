@@ -12,7 +12,7 @@ export default {
         }, 500);
     },
     methods: {
-        ...mapActions("MapMarker", ["initialize", "activateByUrlParam", "placingPointMarker"])
+        ...mapActions("MapMarker", ["initialize", "activateByUrlParam"])
     }
 };
 

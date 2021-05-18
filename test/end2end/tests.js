@@ -68,7 +68,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 require("./tests/modules/menu/Layers.js"),
 
                 // modules/searchbar
-                // require("./tests/modules/searchbar/SearchCategories.js"),
+                require("./tests/modules/searchbar/SearchCategories.js"),
                 // require("./tests/modules/searchbar/GdiSearch.js"),
 
                 // modules/tools

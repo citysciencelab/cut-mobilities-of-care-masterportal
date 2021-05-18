@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
     {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
-    {isDefault} = require("../../../settings"),
+    {isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
@@ -12,14 +12,14 @@ const webdriver = require("selenium-webdriver"),
  * @returns {void}
  */
 async function SearchCategories ({builder, url, resolution, capability}) {
-    const testIsApplicable = isDefault(url); // only default config has sufficiently configured search bar for test
+    const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
         // TODO with the current configurations, none has the sufficient specialWFS set; configurations need to be expanded first
-        describe.skip("Search Categories", function () {
+        describe("Search Categories", function () {
             const searchString = "Haus",
                 resultsSelector = By.css("#searchInputUL > li.results");
-            let driver, searchInput, searchList, searchMarker, initialCenter, initialResolution, clear;
+            let driver, searchInput, searchList, initialCenter, initialResolution, clear;
 
             /**
              * Clears search bar (if necessary), re-enters search word, opens category view.
@@ -59,32 +59,37 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 const categorySelector = By.xpath(`//li[contains(@class,'type')][contains(.,'${categoryName || idPart}')]`),
                     categoryOpenSelector = By.xpath(`//li[contains(@class,'type')][contains(@class,'open')][contains(.,'${categoryName || idPart}')]`),
                     entrySelector = By.xpath(`//li[contains(@id,'${idPart}')][contains(@class,'hit')]`);
+                let marker = null;
+
+                if (setsMarker) {
+                    marker = "markerPoint";
+                }
+                else if (showsPolygon) {
+                    marker = "markerPolygon";
+                }
 
                 await reopenCategories();
 
-                // confirm mapMarker layer is initially clear to not mix existing elements up with expected elements
-                expect(await driver.executeScript(hasVectorLayerLength, "mapMarker", 0)).to.be.true;
-
-                await driver.wait(until.elementLocated(categorySelector));
+                await driver.wait(until.elementLocated(categorySelector), 12000);
                 await driver.wait(until.elementIsVisible(await driver.findElement(categorySelector)));
+
                 /** sometimes needs another click to really open; retry after 100ms if it didn't work */
                 do {
                     await (await driver.findElement(categorySelector)).click();
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while ((await driver.findElements(categoryOpenSelector)).length === 0);
 
-                await driver.wait(until.elementIsVisible(await driver.findElement(entrySelector)));
+                await driver.wait(until.elementIsVisible(await driver.findElement(entrySelector)), 12000);
                 await reclickUntilNotStale(driver, entrySelector);
 
                 if (movesCenter) {
-                    await driver.wait(async () => initialCenter !== await driver.executeScript(getCenter));
+                    await driver.wait(async () => initialCenter !== await driver.executeScript(getCenter), 12000);
                 }
                 if (changesResolution) {
-                    await driver.wait(async () => initialResolution !== await driver.executeScript(getResolution));
+                    await driver.wait(async () => initialResolution !== await driver.executeScript(getResolution), 12000);
                 }
-                await driver.wait((setsMarker ? until.elementIsVisible : until.elementIsNotVisible)(searchMarker));
 
-                await driver.wait(async () => driver.executeScript(hasVectorLayerLength, "mapMarker", showsPolygon ? 1 : 0));
+                await driver.wait(async () => driver.executeScript(hasVectorLayerLength, marker, marker !== null ? 1 : 0), 9000);
             }
 
             before(async function () {
@@ -106,11 +111,10 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
                 await driver.wait(until.elementLocated(searchInputSelector));
                 searchInput = await driver.findElement(searchInputSelector);
-                searchMarker = await driver.findElement(By.css("#searchMarker"));
                 searchList = await driver.findElement(By.css("#searchInputUL"));
                 clear = await driver.findElement(By.css("#searchbar span.form-control-feedback"));
                 initialCenter = await driver.executeScript(getCenter);
-                initialResolution = await driver.executeScript(getCenter);
+                initialResolution = await driver.executeScript(getResolution);
             }
 
             after(async function () {
@@ -144,13 +148,6 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 await driver.wait(async () => await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge")).length !== 0);
             });
 
-            it("has a map marker layer that uses green polygons", async function () {
-                expect(await driver.executeScript(hasVectorLayerStyle, "mapMarker", {
-                    fill: {color: [8, 119, 95, 0.3]},
-                    stroke: {color: "#08775f"}
-                })).to.be.true;
-            });
-
             it("category 'festgestellt' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
@@ -158,15 +155,25 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                     movesCenter: true,
                     idPart: "festgestellt"
                 });
+
+                expect(await driver.executeScript(hasVectorLayerStyle, "markerPolygon", {
+                    fill: {color: [8, 119, 95, 0.3]},
+                    stroke: {color: [8, 119, 95, 1]}
+                })).to.be.true;
             });
 
-            it("category 'im Verfahren' shows results; on click, zooms to the place and marks it with polygon", async function () {
+            it("category 'B-Plan' shows results; on click, zooms to the place and marks it with polygon", async function () {
                 await selectAndVerifyFirstHit({
                     setsMarker: false,
                     showsPolygon: true,
                     movesCenter: true,
-                    idPart: "im Verfahren"
+                    idPart: "B-Plan"
                 });
+
+                expect(await driver.executeScript(hasVectorLayerStyle, "markerPolygon", {
+                    fill: {color: [8, 119, 95, 0.3]},
+                    stroke: {color: [8, 119, 95, 1]}
+                })).to.be.true;
             });
 
             // NOTE using this instead of 'Krankenhaus' since I can't find the KH search
@@ -179,20 +186,9 @@ async function SearchCategories ({builder, url, resolution, capability}) {
                 });
             });
 
-            it("category 'Ort' shows results; on click, zooms to the place and marks it with a marker, changes resolution", async function () {
-                await selectAndVerifyFirstHit({
-                    setsMarker: true,
-                    showsPolygon: false,
-                    movesCenter: true,
-                    changesResolution: true,
-                    categoryName: "Ort",
-                    idPart: "bkgSuggest"
-                });
-            });
-
             it("category 'Straße' shows results; on click, zooms to the place, changes resolution", async function () {
                 await selectAndVerifyFirstHit({
-                    setsMarker: false,
+                    setsMarker: true,
                     showsPolygon: false,
                     movesCenter: true,
                     changesResolution: true,
