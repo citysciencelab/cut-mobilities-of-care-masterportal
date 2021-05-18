@@ -653,11 +653,6 @@
           "clusterDistance": 50
         },
         {
-          "id": "2714",
-          "gfiTheme": "reisezeiten",
-          "styleId": "2119"
-        },
-        {
           "id": "4905",
           "gfiTheme": "DataTable",
           "featureCount": 20
