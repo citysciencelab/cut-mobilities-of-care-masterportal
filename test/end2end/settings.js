@@ -185,18 +185,6 @@ function getCapabilities (testService) {
             "browserName": "firefox",
             "browserVersion": "88",
             "platformName": "Windows 10"
-        },
-        {
-            ...baseSaucelabs,
-            "browserName": "safari",
-            "browserVersion": "14",
-            "platformName": "Big Sur 11.00"
-        },
-        {
-            ...baseSaucelabs,
-            "browserName": "Edge",
-            "browserVersion": "89",
-            "platformName": "Windows 10"
         }
     ];
 
