@@ -162,13 +162,13 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
                 const initialTilt = await driver.executeScript(getTilt);
 
                 await driver.actions({bridge: true})
-                .move({origin: await driver.findElement(By.css(".ol-viewport"))})
+                    .move({origin: await driver.findElement(By.css(".ol-viewport"))})
                     .press(Button.MIDDLE)
                     .move({x: 10, y: 30})
                     .release(Button.MIDDLE)
                     .perform();
 
-                    await driver.wait(async () => initialTilt < await driver.executeScript(getTilt), 50000, "Tilting up with mouse wheel did not work.");
+                await driver.wait(async () => initialTilt < await driver.executeScript(getTilt), 50000, "Tilting up with mouse wheel did not work.");
 
                 // restore northing & tilt
                 await northPointer.click();
