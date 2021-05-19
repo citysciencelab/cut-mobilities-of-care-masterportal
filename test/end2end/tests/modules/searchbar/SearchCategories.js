@@ -16,7 +16,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
     if (testIsApplicable) {
         // TODO with the current configurations, none has the sufficient specialWFS set; configurations need to be expanded first
-        describe("Search Categories", function () {
+        describe.only("Search Categories", function () {
             const searchString = "Haus",
                 resultsSelector = By.css("#searchInputUL > li.results");
             let driver, searchInput, searchList, initialCenter, initialResolution, clear;
@@ -145,7 +145,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
             it("provides all results aggregated by categories, including sum of hits per category", async function () {
                 await (await driver.findElement(By.css("#searchInputUL > li.results"))).click();
-                await driver.wait(async () => await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge")).length !== 0);
+                expect(await driver.findElements(By.css("#searchInputUL > li.list-group-item.type > span.badge"))).to.not.equals(0);
             });
 
             it("category 'festgestellt' shows results; on click, zooms to the place and marks it with polygon", async function () {
