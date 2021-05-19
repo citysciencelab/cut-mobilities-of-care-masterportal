@@ -473,7 +473,7 @@ function getObModeResolution () {
  * @returns {void}
  */
 function setCenter () {
-    Backbone.Radio.trigger("MapView", "setCenter", arguments[0]);
+    Backbone.Radio.trigger("MapView", "setCenter", arguments[0], arguments[1]);
 }
 
 /**
