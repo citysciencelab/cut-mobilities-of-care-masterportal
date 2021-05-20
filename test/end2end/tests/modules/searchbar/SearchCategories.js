@@ -16,7 +16,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
 
     if (testIsApplicable) {
         // TODO with the current configurations, none has the sufficient specialWFS set; configurations need to be expanded first
-        describe.only("Search Categories", function () {
+        describe("Search Categories", function () {
             const searchString = "Haus",
                 resultsSelector = By.css("#searchInputUL > li.results");
             let driver, searchInput, searchList, initialCenter, initialResolution, clear;
