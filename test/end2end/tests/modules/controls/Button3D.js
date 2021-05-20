@@ -21,6 +21,7 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
      */
     const skipAll = isMobile(resolution) ||
         !is2D(mode) ||
+        // !(isDefault(url) || isCustom(url) || isMaster(url)),
         !isMaster(url),
         testViews = isMaster(url); // views only defined in master
 
@@ -140,22 +141,28 @@ function Button3DTests ({builder, url, resolution, mode, capability}) {
                 expect(await driver.executeScript(getResolution) > initialResolution).to.be.true;
             });
 
-            it("3D mode UI N button rotates on drag and norths on click", async function () {
+            it("3D mode UI N button rotates on drag", async function () {
                 // north initially
                 await northPointer.click();
 
                 // value is very small, but never exactly 0
                 const initialHeading = await driver.executeScript(getHeading);
 
-                // // drag pointer
-                // await driver.actions({bridge: true})
-                //     .dragAndDrop(northPointer, {x: -15, y: 0})
-                //     .perform();
-                // expect(await driver.executeScript(getHeading)).to.not.be.closeTo(initialHeading, 0.00001);
+                // drag pointer
+                await driver.actions({bridge: true})
+                    .dragAndDrop(northPointer, {x: -15, y: 0})
+                    .perform();
+                expect(await driver.executeScript(getHeading)).to.not.be.closeTo(initialHeading, 0.00001);
 
                 // restore northing
+                // await northPointer.click();
+                // expect(initialHeading).to.be.closeTo(await driver.executeScript(getHeading), 0.00001);
+            });
+
+            it("3D mode UI N button norths on click", async function () {
+                // restore northing
                 await northPointer.click();
-                expect(initialHeading).to.be.closeTo(await driver.executeScript(getHeading), 0.00001);
+                expect(0).to.be.closeTo(await driver.executeScript(getHeading), 0.00001);
             });
 
             it("3D mode allows tilting the view with held mouse wheel", async function () {
