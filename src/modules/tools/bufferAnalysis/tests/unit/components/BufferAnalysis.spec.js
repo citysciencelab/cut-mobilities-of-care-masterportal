@@ -11,7 +11,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
+describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
     const mockMapGetters = {
             map: () => ({removeLayer: sinon.spy()})
         },
@@ -30,10 +30,11 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
                 }
             }
         };
-    let store;
+    let store, originalCheckIntersection, originalShowBuffer;
 
     beforeEach(() => {
-
+        originalCheckIntersection = BufferAnalysis.actions.checkIntersection;
+        originalShowBuffer = BufferAnalysis.actions.showBuffer;
         BufferAnalysis.actions.checkIntersection = sinon.spy();
         BufferAnalysis.actions.showBuffer = sinon.spy();
 
@@ -56,6 +57,14 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
             }
         });
         store.commit("Tools/BufferAnalysis/setActive", true);
+    });
+
+    afterEach(() => {
+        BufferAnalysis.actions.checkIntersection = originalCheckIntersection;
+        BufferAnalysis.actions.showBuffer = originalShowBuffer;
+        store.commit("Tools/BufferAnalysis/setActive", false);
+        store.commit("Tools/BufferAnalysis/setSelectOptions", []);
+        store.dispatch("Tools/BufferAnalysis/resetModule");
     });
 
     it("renders the bufferAnalysis", () => {
@@ -95,12 +104,14 @@ describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", 
     it("triggers showBuffer action when source layer and buffer radius are set", async () => {
         const wrapper = shallowMount(BufferAnalysisComponent, {store, localVue}),
             selectSource = wrapper.find("#tool-bufferAnalysis-selectSourceInput"),
-            sourceOptions = selectSource.findAll("option"),
             range = wrapper.find("#tool-bufferAnalysis-radiusTextInput"),
             layers = createLayersArray(3),
             clock = sinon.useFakeTimers();
 
+        let sourceOptions = [];
+
         await store.commit("Tools/BufferAnalysis/setSelectOptions", layers);
+        sourceOptions = selectSource.findAll("option");
         await wrapper.vm.$nextTick();
 
         sourceOptions.at(1).setSelected();

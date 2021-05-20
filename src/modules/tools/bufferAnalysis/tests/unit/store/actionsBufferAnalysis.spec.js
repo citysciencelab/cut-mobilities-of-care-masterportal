@@ -28,7 +28,10 @@ describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
         state = {...stateBufferAnalysis};
     });
 
-    afterEach(sinon.restore);
+    afterEach(() => {
+        actions.resetModule({commit, dispatch, getters: state});
+        sinon.restore();
+    });
 
     describe("initJSTSParser", () => {
         it("initializes the JSTS parser by injecting open layer geometries ", () => {
@@ -65,9 +68,10 @@ describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
     describe("applySelectedSourceLayer", () => {
         it("calls commit and dispatch each one time with correct parameters", () => {
             state.bufferRadius = 1000;
-            const layer = createLayersArray(1)[0];
+            const layer = createLayersArray(1)[0],
+                selectOptions = createLayersArray(3);
 
-            actions.applySelectedSourceLayer({commit, dispatch, getters: state}, layer);
+            actions.applySelectedSourceLayer({commit, dispatch, getters: {...state, selectOptions}}, layer);
 
             expect(commit.calledOnce).to.be.true;
             expect(commit.args[0][0]).to.equal("setSelectedSourceLayer");
@@ -115,7 +119,7 @@ describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
     });
     describe("checkIntersection", () => {
         it("calls dispatch five times with correct parameters and selectedTargetLayer.get() once", async () => {
-            state.selectedTargetLayer = {...createLayersArray(1)[0], get: sinon.spy()};
+            state.selectedTargetLayer = {...createLayersArray(1)[0], get: sinon.stub().returns({setOpacity: () => ({})})};
             state.bufferLayer = {...createLayersArray(1)[0], getSource: ()=> ({getFeatures: ()=>({})})};
             actions.checkIntersection({getters: state, dispatch});
 
@@ -132,7 +136,7 @@ describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
     describe("showBuffer", () => {
         it("calls commit and addLayer once each", async () => {
             rootGetters["Map/map"] = {addLayer: sinon.spy()};
-            state.selectedSourceLayer = {...createLayersArray(1)[0], get: ()=> ({getFeatures: ()=>[]})};
+            state.selectedSourceLayer = {...createLayersArray(1)[0], get: ()=> ({getFeatures: ()=>[], setOpacity: () => ({})})};
             actions.showBuffer({commit, getters: state, dispatch, rootGetters});
 
             expect(commit.calledOnce).to.be.true;
@@ -155,7 +159,7 @@ describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
             actions.resetModule({commit, getters: state, dispatch});
 
             expect(dispatch.callCount).to.equal(3);
-            expect(commit.calledOnce).to.be.true;
+            expect(commit.calledTwice).to.be.true;
         });
     });
 });

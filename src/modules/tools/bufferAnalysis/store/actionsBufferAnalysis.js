@@ -71,9 +71,9 @@ const actions = {
      */
     removeGeneratedLayers ({commit, rootGetters, getters: {resultLayer, bufferLayer}}) {
         rootGetters["Map/map"].removeLayer(resultLayer);
-        commit("setResultLayer", null);
+        commit("setResultLayer", {});
         rootGetters["Map/map"].removeLayer(bufferLayer);
-        commit("setBufferLayer", null);
+        commit("setBufferLayer", {});
         commit("setIntersections", []);
         commit("setResultFeatures", []);
     },
