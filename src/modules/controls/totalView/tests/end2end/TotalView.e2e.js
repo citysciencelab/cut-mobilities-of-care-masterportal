@@ -4,7 +4,7 @@ const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {losesCenter} = require("../../../../../../test/end2end/library/utils"),
     {isMaster, isCustom, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button, until} = webdriver;
 
 /**
@@ -36,7 +36,7 @@ function TotalViewTests ({builder, url, resolution, browsername, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

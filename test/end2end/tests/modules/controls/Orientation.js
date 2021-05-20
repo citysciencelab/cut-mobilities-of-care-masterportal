@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {isMaster} = require("../../../settings"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, mockGeoLocationAPI} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
     {By, until} = webdriver;
@@ -27,7 +27,7 @@ function Orientation ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
@@ -87,7 +87,7 @@ function Orientation ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

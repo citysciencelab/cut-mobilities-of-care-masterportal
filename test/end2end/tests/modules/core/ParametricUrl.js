@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
     {/* imageLoaded, */ getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
-    {centersTo, /* clickFeature,*/ logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {centersTo, /* clickFeature,*/ logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -27,7 +27,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

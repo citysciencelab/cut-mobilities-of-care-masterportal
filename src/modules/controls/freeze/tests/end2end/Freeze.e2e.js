@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {getCenter} = require("../../../../../../test/end2end/library/scripts"),
     {isCustom, isMaster, isMobile, isChrome} = require("../../../../../../test/end2end/settings"),
-    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, Button} = webdriver;
 
 /**
@@ -46,7 +46,7 @@ function FreezeTests ({builder, url, resolution, browsername, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

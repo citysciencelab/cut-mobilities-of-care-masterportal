@@ -125,48 +125,73 @@ async function reclickUntilNotStale (driver, selector) {
         throw error;
     }
 }
+
+/**
+ * Logs the url to the testing cloud,
+ * so far browserstack and saucelabs are possible.
+ * @param {String} sessionId Id of the testing cloud test session.
+ * @returns {void}
+ */
+async function logTestingCloudUrlToTest (sessionId) {
+    /* eslint-disable no-process-env */
+    const testService = process.env.npm_config_testservice;
+
+    if (testService === "browserstack") {
+        logBrowserstackUrlToTest(sessionId);
+    }
+    else if (testService === "saucelabs") {
+        logSauceLabsUrlToTest(sessionId);
+    }
+}
+
 /**
  * Logs the url to the test currently running in browserstack.
  * Gets all current builds from browserstack to achieve the id of this build.
  * Constructs an Url to the test in browserstack with the given session id and the build id.
- * @param {string} sessionId id of the browserstack test session
+ * @param {String} sessionId Id of the browserstack test session.
  * @returns {void}
  */
 async function logBrowserstackUrlToTest (sessionId) {
-    const bsUrl = "https://api.browserstack.com/automate/builds.json",
-        /* eslint-disable no-process-env */
-        testService = process.env.npm_config_testservice;
+    const bsUrl = "https://api.browserstack.com/automate/builds.json";
 
-    if (testService === "browserstack") {
-        axios({
-            method: "get",
-            url: bsUrl,
-            responseType: "json",
-            auth: {
+    axios({
+        method: "get",
+        url: bsUrl,
+        responseType: "json",
+        auth: {
+        /* eslint-disable-next-line no-process-env */
+            username: process.env.bs_user,
             /* eslint-disable-next-line no-process-env */
-                username: process.env.bs_user,
-                /* eslint-disable-next-line no-process-env */
-                password: process.env.bs_key
+            password: process.env.bs_key
+        }
+    }).then(res => {
+        let logged = false;
+
+        res.data.forEach(entry => {
+            const build = entry.automation_build;
+
+            /* eslint-disable-next-line no-process-env */
+            if (!logged && build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
+                const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
+
+                logged = true;
+                console.warn(`      ${url}${sessionId}`);
             }
-        }).then(res => {
-            let logged = false;
+        });
+    })
+        .catch(function (error) {
+            console.warn("Cannot get builds from browserstack: - an error occured calling the url: ", bsUrl, error);
+        });
+}
 
-            res.data.forEach(entry => {
-                const build = entry.automation_build;
-
-                /* eslint-disable-next-line no-process-env */
-                if (!logged && build.name.indexOf(process.env.BITBUCKET_COMMIT) > -1) {
-                    const url = `https://automate.browserstack.com/dashboard/v2/builds/${build.hashed_id}/sessions/`;
-
-                    logged = true;
-                    console.warn(`      ${url}${sessionId}`);
-                }
-            });
-        })
-            .catch(function (error) {
-                console.warn("Cannot get builds from browserstack: - an error occured calling the url: ", bsUrl, error);
-            });
-    }
+/**
+ * Logs the url to the test currently running in sauce labs.
+ * Only the sessionid is needed to generate a URL to the build.
+ * @param {String} sessionId Id of the sauce labs test session.
+ * @returns {void}
+ */
+async function logSauceLabsUrlToTest (sessionId) {
+    console.warn(`https://app.eu-central-1.saucelabs.com/tests/${sessionId}`);
 }
 
 /**
@@ -289,6 +314,6 @@ module.exports = {
     clickFeature,
     hoverFeature,
     reclickUntilNotStale,
-    logBrowserstackUrlToTest,
+    logTestingCloudUrlToTest,
     closeSingleAlert
 };

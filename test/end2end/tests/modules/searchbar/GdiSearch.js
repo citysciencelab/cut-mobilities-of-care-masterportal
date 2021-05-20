@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -33,7 +33,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

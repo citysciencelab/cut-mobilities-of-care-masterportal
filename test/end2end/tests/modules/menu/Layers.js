@@ -7,7 +7,7 @@ const webdriver = require("selenium-webdriver"),
     masterConfigJs = require("../../../../../portal/master/config.js"),
     {getOrderedLayerIds, isLayerVisible} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
-    {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isMaster, isChrome} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -59,7 +59,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

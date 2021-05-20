@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     // {zoomIn} = require("../../../library/scripts"),
-    {clickFeature, /* hoverFeature,*/ logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {clickFeature, /* hoverFeature,*/ logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isDefault /* , isCustom, isMaster, isBasic*/} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -37,7 +37,7 @@ async function GfiTests ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

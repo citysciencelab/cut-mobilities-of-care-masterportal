@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -36,7 +36,7 @@ async function PopulationRequestTests ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

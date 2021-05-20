@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getResolution, mouseWheelUp, mouseWheelDown} = require("../../../test/end2end/library/scripts"),
-    {logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
     {isMobile} = require("../../../test/end2end/settings"),
     {By} = webdriver;
@@ -35,7 +35,7 @@ async function ZoomTests ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

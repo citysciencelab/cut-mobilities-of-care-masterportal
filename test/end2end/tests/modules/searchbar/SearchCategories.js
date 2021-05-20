@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, setCenter, getResolution, setResolution, hasVectorLayerLength, hasVectorLayerStyle} = require("../../../library/scripts"),
     {isDefault} = require("../../../settings"),
     {By, until} = webdriver;
@@ -116,7 +116,7 @@ async function SearchCategories ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

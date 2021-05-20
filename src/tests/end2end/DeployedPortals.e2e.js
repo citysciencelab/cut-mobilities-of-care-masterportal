@@ -1,5 +1,5 @@
 const {expect} = require("chai"),
-    {logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver");
 
 /**
@@ -26,7 +26,7 @@ async function DeployedPortalsTest ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
