@@ -85,7 +85,7 @@ const Config = {
             it: "italienisch"
         },
         fallbackLanguage: "de",
-        changeLanguageOnStartWhen: ["querystring", "localStorage", "navigator", "htmlTag"]
+        changeLanguageOnStartWhen: ["querystring", "localStorage", "htmlTag"]
     }
 };
 
