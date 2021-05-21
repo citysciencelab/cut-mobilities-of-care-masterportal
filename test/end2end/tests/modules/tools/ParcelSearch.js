@@ -63,14 +63,14 @@ async function ParcelSearchTests ({builder, url, resolution, capability}) {
             });
 
             it("opens a modal on activation providing input elements", async () => {
-                const toolsLink = await driver.findElement(selectors.tools, 5000);
-                toolsLink.click();
-                const toolParcelSearch = await driver.findElement(selectors.toolParcelSearch, 1000);
+                const toolsLink = await driver.findElement(selectors.tools, 5000),
+                    toolParcelSearch = await driver.findElement(selectors.toolParcelSearch, 1000),
+                    parcelSearchLink = await toolParcelSearch.findElement(By.xpath("./.."), 1000);
 
-                const parcelSearchLink = await toolParcelSearch.findElement(By.xpath("./.."), 1000);
+                toolsLink.click();
                 await driver.wait(until.elementIsVisible(parcelSearchLink), 1000);
                 parcelSearchLink.click();
-                
+
                 await driver.wait(new Promise(r => setTimeout(r, 500)));
                 await driver.wait(until.elementIsVisible(await driver.findElement(selectors.modal), 1000), 9500);
                 await driver.wait(until.elementLocated(selectors.districtLabel), 5000, "districtLabel did not appear.");
