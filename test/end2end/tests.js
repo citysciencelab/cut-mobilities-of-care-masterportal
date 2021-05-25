@@ -69,7 +69,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
 
                 // modules/searchbar
                 require("./tests/modules/searchbar/SearchCategories.js"),
-                // require("./tests/modules/searchbar/GdiSearch.js"),
+                require("./tests/modules/searchbar/ElasticSearch.js"),
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
