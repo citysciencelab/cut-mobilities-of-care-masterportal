@@ -54,6 +54,9 @@ const LayerView = Backbone.View.extend(/** @lends LayerView.prototype */{
         this.listenTo(Radio.channel("LayerInformation"), {
             "unhighlightLayerInformationIcon": this.unhighlightLayerInformationIcon
         });
+        this.listenTo(Radio.channel("ModelList"), {
+            "updatedSelectedLayerList": this.rerender
+        });
         this.$el.on({
             click: function (e) {
                 e.stopPropagation();

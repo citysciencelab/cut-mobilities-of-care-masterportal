@@ -108,7 +108,6 @@ describe("src/modules/tools/scaleSwitcher/components/ScaleSwitcher.vue", () => {
         expect(wrapper.find("select").element.value).to.equals("10000");
     });
 
-
     it("calls store action setResolutionByIndex when select is changed", async () => {
         const wrapper = shallowMount(ScaleSwitcherComponent, {store, localVue}),
             select = wrapper.find("select"),

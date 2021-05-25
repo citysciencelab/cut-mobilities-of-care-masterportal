@@ -42,8 +42,13 @@ const actions = {
             unsubscribes = [];
         }
 
-        const mapView = map.getView();
+        const mapView = map.getView(),
+            channel = Radio.channel("VectorLayer");
 
+        // listen to featuresLoaded event to be able to determine if all features of a layer are completely loaded
+        channel.on({"featuresLoaded": id => {
+            commit("addLoadedLayerId", id);
+        }});
         // set map to store
         commit("setMap", map);
         commit("setLayerList", map.getLayers().getArray());

@@ -50,7 +50,8 @@
             "scaleSwitcher": "Maßstab umschalten",
             "selectFeatures": "Features auswählen",
             "legend":"Legende",
-            "styleVt": "Style VT"
+            "styleVt": "Style VT",
+            "bufferAnalysis": "Buffer Analyse"
         },
         "contact": "Kontakt",
         "info": "Informationen"
@@ -97,7 +98,8 @@
           },
           "parametricURL": {
             "alertZoomToGeometry": "Der Parametrisierte Aufruf des Portals ist leider schief gelaufen!<br>Bitte stellen Sie sicher das alle Parameter richtig angegeben wurden.",
-            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die LAYERIDS am den Positionen: <b>{{wrongIdsPositionsConcat}}</b> existieren nicht und werden ignoriert!"
+            "alertWrongLayerIds": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die LAYERIDS am den Positionen: <b>{{wrongIdsPositionsConcat}}</b> existieren nicht und werden ignoriert!",
+            "alertWrongInitValues": "<strong>Der parametrisierte Aufruf ist fehlerhaft!</strong> Die gespeicherten Parameter wurden verändert oder sind unvollständig!"
           }
         },
         "alerting": {
@@ -601,6 +603,18 @@
             },
             "scaleSwitcher": {
                 "label": "Maßstab"
+            },
+            "bufferAnalysis": {
+                "sourceSelectLabel": "Quell-Layer",
+                "targetSelectLabel": "Ziel-Layer",
+                "resultTypeLabel": "Ergebnistyp",
+                "overlapping": "innerhalb Radien",
+                "notOverlapping": "außerhalb Radien",
+                "rangeLabel": "Radius (m)",
+                "clearButton": "Zurücksetzen",
+                "saveButton": "Speichern",
+                "sourceLayerNotFound": "Der gespeicherte Quell-Layer mit der ID {{layerId}} wurde nicht gefunden.",
+                "targetLayerNotFound": "Der gespeicherte Ziel-Layer mit der ID {{layerId}} wurde nicht gefunden."
             }
         },
         "controls": {

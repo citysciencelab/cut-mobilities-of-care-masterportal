@@ -250,6 +250,7 @@ export default {
             else if (zoomMode === "always") {
                 this.positionMarker(centerPosition);
                 this.zoomAndCenter(centerPosition);
+                this.firstGeolocation = false;
             }
             else {
                 console.error("The configured zoomMode: " + zoomMode + " does not exist. Please use the params 'once' or 'always'!");
@@ -297,6 +298,7 @@ export default {
                 }
                 else {
                     geolocation = this.geolocation;
+                    this.setPosition(null);
                     this.showPoiWindow();
                 }
                 geolocation.on("change", this.showPoiWindow);

@@ -30,6 +30,7 @@ import {MapMode} from "./enums";
  * @property {?Object.<String, LayerData>} layers register of existing layers
  * @property {?Number[]} overlayIds list of layer ids
  * @property {?Object.<String, LayerData>} overlays list of existing overlays
+ * @property {String[]} loadedLayers list of ready loaded layers IDs
  * @property {?MapMode} mapMode
  */
 const state = {
@@ -63,7 +64,8 @@ const state = {
     mapMode: MapMode.MODE_2D,
     highlightedFeature: null,
     highlightedFeatureStyle: null,
-    vectorFeaturesLoaded: false
+    vectorFeaturesLoaded: false,
+    loadedLayers: []
 };
 
 export default state;

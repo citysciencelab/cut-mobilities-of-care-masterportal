@@ -19,12 +19,14 @@
 ### Removed
 
 ### Fixed
+- Now Sensor Layer will show 0 if the dataValue is 0 and not "no data"
 ---
 
 ## v2.9.0 - 2021-05-05
 ### Added
 - New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
 - Add @babel/eslint-parser to the package.json
+- Added the new tool "bufferAnalysis"
 
 ### Changed
 - Renamed the folders `library` and `util` -> `utils`, `test` -> `tests` and `ressources` -> `resources`.

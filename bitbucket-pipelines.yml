@@ -29,6 +29,8 @@ definitions:
             - npm install
             - cd ../sdpdownload
             - npm install
+            - cd ../qr
+            - npm install
             - cd ..; cd ..;
             - npm install
             - npm run buildPortal

@@ -13,7 +13,7 @@
 styleguide
 
 addons/*
-!addons/readme.txt
+!portal/analysetool/readme.txt
 
 bowerupdate.log
 build
