@@ -21,7 +21,10 @@
 ### Fixed
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data"
 ---
-
+## v2.9.1 - 2021-05-25
+### Fixed
+- Fixed no data in gfi theme of verkehrs layers in geo-online
+---
 ## v2.9.0 - 2021-05-05
 ### Added
 - New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
