@@ -30,7 +30,7 @@ const {
     bufferStyle
 } = getters;
 
-describe("src/modules/tools/bufferAnalysis/store/gettersBufferAnalysis.js", () => {
+describe.skip("src/modules/tools/bufferAnalysis/store/gettersBufferAnalysis.js", () => {
     describe("BufferAnalysis getters", () => {
         it("returns the active from state", () => {
             expect(active(stateBufferAnalysis)).to.be.false;

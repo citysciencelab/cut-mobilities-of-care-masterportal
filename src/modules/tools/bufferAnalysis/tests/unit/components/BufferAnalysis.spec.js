@@ -11,7 +11,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 config.mocks.$t = key => key;
 
-describe.only("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
+describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () => {
     const mockMapGetters = {
             map: () => ({removeLayer: sinon.spy()})
         },

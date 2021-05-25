@@ -51,7 +51,19 @@ function getGfiStore () {
                             return {};
                         },
                         getlayerId: () => null,
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => [{
+                            getTheme: () => "default",
+                            getTitle: () => "Feature 2",
+                            getMimeType: () => "text/html",
+                            getGfiUrl: () => null,
+                            getMappedProperties: () => null,
+                            getAttributesToShow: () => sinon.stub(),
+                            getProperties: () => {
+                                return {};
+                            },
+                            getlayerId: () => null,
+                            getFeatures: () => [sinon.stub()]
+                        }, {}]
                     }, {}],
                     size: sinon.stub(),
                     visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
