@@ -66,7 +66,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
                 // Bezirk 1 is Altona according to portal/master/config.js listing
                 await loadUrl(driver, `${url}?zoomtogeometry=1`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
             });
 
@@ -74,7 +74,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 const expectedCoordinate = [578867.787, 5924175.483999999];
 
                 await loadUrl(driver, `${url}?zoomtogeometry=bergedorf`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
             });
         }
@@ -132,70 +132,68 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         });
 
         if (isMaster(url)) {
-            describe("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info", async function () {
-                before(async function () {
-                    await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
-                });
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - KiTa layer GFI with example 'KiTa Stadt-Land-Fluss' shows gfi", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                // at coords '550115.420 5935760.220'
+                let counter = 0;
 
-                it("KiTa layer GFI with example 'KiTa Stadt-Land-Fluss' shows gfi", async function () {
+                do {
+                    expect(counter++).to.be.below(25);
+                    await clickFeature(driver, [550115.420, 5935760.220]);
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
-                    // at coords '550115.420 5935760.220'
-                    let counter = 0;
-
-                    do {
-                        expect(counter++).to.be.below(25);
-                        await clickFeature(driver, [550115.420, 5935760.220]);
-                        await driver.wait(new Promise(r => setTimeout(r, 100)));
-                    } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
-
-                    await driver.wait(until.elementLocated(By.css("div.gfi")));
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")));
-                    await driver.actions({bridge: true})
-                        .dragAndDrop(
-                            await driver.findElement(By.css(".gfi .tool-window-vue .tool-window-heading .basic-drag-handle")),
-                            await driver.findElement(By.css("html"))
-                        )
-                        .perform();
-                    await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                    expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
-                });
-
-                it("hospital layer GFI with example 'Krankenhaus Tabea' shows gfi", async function () {
-                    // at coords '552406.014 5935396.345'
-                    let counter = 0;
-
-                    do {
-                        expect(counter++).to.be.below(10);
-                        await clickFeature(driver, [552406.014, 5935396.345]);
-                        await driver.wait(new Promise(r => setTimeout(r, 1000)));
-                    } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
-
-                    await driver.wait(until.elementLocated(By.css("div.gfi")));
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")));
-                    await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                    expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
-                });
-
-                it("both layers have their respective legend loaded", async function () {
-                    await (await driver.findElement(By.id("legend-menu"))).click();
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
-                    expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=KitaEinrichtungen')]"))).to.exist;
-                    expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=krankenhaeuser')]"))).to.exist;
-                    await (await driver.findElement(By.id("legend-menu"))).click();
-                    expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
-                });
-
-                it("layers are shown in the topic tree and present layer information", async function () {
-                    await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
-                    await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
-
-                    expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
-                });
+                await driver.wait(until.elementLocated(By.css("div.gfi")));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")));
+                await driver.actions({bridge: true})
+                    .dragAndDrop(
+                        await driver.findElement(By.css(".gfi .tool-window-vue .tool-window-heading .basic-drag-handle")),
+                        await driver.findElement(By.css("html"))
+                    )
+                    .perform();
+                await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
+                expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
             });
+
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Krankenhaus Tabea' shows gfi", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                // at coords '552406.014 5935396.345'
+                let counter = 0;
+
+                do {
+                    expect(counter++).to.be.below(10);
+                    await clickFeature(driver, [552406.014, 5935396.345]);
+                    await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
+
+                await driver.wait(until.elementLocated(By.css("div.gfi")));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")));
+                await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
+                expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
+            });
+
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - both layers have their respective legend loaded", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                await (await driver.findElement(By.id("legend-menu"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
+                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=KitaEinrichtungen')]"))).to.exist;
+                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=krankenhaeuser')]"))).to.exist;
+                await (await driver.findElement(By.id("legend-menu"))).click();
+                expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
+            });
+
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - layers are shown in the topic tree and present layer information", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
+                await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
+
+                expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
+            });
+            // });
 
             it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                 await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
@@ -261,7 +259,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
             await driver.wait(until.elementLocated(toolwindow), 5000);
 
-            expect(driver.findElement(toolwindow)).to.exist;
+            expect(await driver.findElement(toolwindow)).to.exist;
         });
 
         it("?isinitopen= allows opening tools initially in sidebar", async function () {
@@ -272,7 +270,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
             await driver.wait(until.elementLocated(toolSidebar), 5000);
 
-            expect(driver.findElement(toolSidebar)).to.exist;
+            expect(await driver.findElement(toolSidebar)).to.exist;
         });
 
         /**
@@ -326,8 +324,13 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
         if (isMaster(url)) {
             it("?config= allows selecting a config", async function () {
-                const splitUrl = url.split("_").pop(),
-                    urlAffix = splitUrl === url ? "" : `_${splitUrl}`;
+                const splitUrl = url.split("_");
+                let urlAffix = "";
+
+                if (splitUrl.length > 1) {
+                    splitUrl.shift();
+                    urlAffix = `_${splitUrl.join("_")}`;
+                }
 
                 // test by redirecting master to default
                 await loadUrl(driver, `${url}?config=../masterDefault${urlAffix}/config.json`, mode);
