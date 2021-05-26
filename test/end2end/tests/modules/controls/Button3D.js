@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
-    {clickFeature, logTestingCloudUrlToTest} = require("../../../library/utils"),
+    {/* clickFeature,*/ logTestingCloudUrlToTest} = require("../../../library/utils"),
     {getCenter, getTilt, getResolution, getHeading, setTilt, setCenter} = require("../../../library/scripts"),
     {isMaster, isCustom, isDefault, is2D, isMobile} = require("../../../settings"),
     {Button, By, until} = webdriver;
