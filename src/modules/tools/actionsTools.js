@@ -1,6 +1,5 @@
 import {fetchFirstModuleConfig} from "../../utils/fetchFirstModuleConfig";
 import getComponent from "../../utils/getComponent";
-import store from "../../app-store";
 import ValidationError from "../../utils/customErrors/validationError";
 
 
@@ -109,10 +108,10 @@ const actions = {
             for (const state in toolState) {
                 setTimeout(() => {
                     try {
-                        if (store._actions["Tools/" + toolName + "/" + state]) {
+                        if (rootState._store._actions["Tools/" + toolName + "/" + state]) {
                             dispatch(toolName + "/" + state, toolState[state]);
                         }
-                        else if (store._mutations[toolName + "/" + state]) {
+                        else if (rootState._store._mutations[toolName + "/" + state]) {
                             commit(toolName + "/" + state, toolState[state]);
                         }
                     }

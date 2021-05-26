@@ -1,4 +1,3 @@
-import Layer from "../../../../../../../modules/core/modelList/layer/model";
 import sinon from "sinon";
 import {Vector as VectorLayer} from "ol/layer";
 
@@ -12,14 +11,14 @@ import {Vector as VectorLayer} from "ol/layer";
 function createLayersArray (count) {
     const layers = [];
 
-    for (let i = 0; i < count; i++) {
-        const layer = new Layer(); // javascript object
 
-        layer.setIsSelectedSpy = sinon.spy();
+    for (let i = 0; i < count; i++) {
+        const layer = new VectorLayer(); // javascript object
+
+        layer.setIsSelected = sinon.spy();
         layer.set("name", "Layer" + i);
         layer.set("id", i);
         layer.set("layer", new VectorLayer());
-        sinon.stub(layer, "setIsSelected").callsFake(layer.setIsSelectedSpy);
         layers.push(layer);
     }
     return layers;

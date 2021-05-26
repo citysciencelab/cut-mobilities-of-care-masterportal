@@ -116,7 +116,7 @@ describe("src/modules/tools/bufferAnalysis/components/BufferAnalysis.vue", () =>
 
         sourceOptions.at(1).setSelected();
         await wrapper.vm.$nextTick();
-        expect(layers[1].setIsSelectedSpy.calledOnce).to.equal(true);
+        expect(layers[1].setIsSelected.calledOnce).to.equal(true);
 
         range.setValue(1000);
         await wrapper.vm.$nextTick();

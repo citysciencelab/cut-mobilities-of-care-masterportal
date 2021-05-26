@@ -13,7 +13,7 @@ import {
     Polygon
 } from "ol/geom";
 
-describe("src/modules/tools/draw/store/actionsBufferAnalysis.js", () => {
+describe("src/modules/tools/bufferAnalysis/store/actionsBufferAnalysis.js", () => {
     let commit, dispatch, rootGetters, state, tick;
 
     beforeEach(() => {
