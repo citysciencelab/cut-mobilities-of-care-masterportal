@@ -4,6 +4,7 @@ import Cluster from "ol/source/Cluster.js";
 import VectorLayer from "ol/layer/Vector.js";
 import {WFS} from "ol/format.js";
 import getProxyUrl from "../../../../src/utils/getProxyUrl";
+import axios from "axios";
 
 const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
     defaults: Object.assign({}, Layer.prototype.defaults, {
@@ -162,8 +163,8 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                 // loads only the features in the extent of this geometry
                 BBOX: this.get("bboxGeometry") ? this.get("bboxGeometry").getExtent().toString() : undefined
             },
-            xhrParameters = this.attributes.isSecured ? {withCredentials: true} : null;
-
+            xhrParameters = this.attributes.isSecured ? {withCredentials: true} : null,
+            isWfsFilter = this.get("wfsFilter") ? this.get("wfsFilter") : false;
 
         if (prefix !== undefined && typeof prefix === "string" && namespace !== undefined && typeof namespace === "string") {
             params.NAMESPACE = `xmlns(${prefix}=${namespace})`;
@@ -171,41 +172,93 @@ const WFSLayer = Layer.extend(/** @lends WFSLayer.prototype */{
                 params.TYPENAME = `${prefix}:${typename}`;
             }
         }
+
         return {
             url: url,
             params: params,
-            xhrParameters: xhrParameters
+            xhrParameters: xhrParameters,
+            isWfsFilter: isWfsFilter
         };
+    },
+
+    /**
+     * Updates layer source by wfs filter.
+     * @param {object} requestParams contains params, url for the request
+     * @param {XMLDocument} filter the wfs filter in xml format
+     * @param {boolean} showLoader Flag if Loader should be shown.
+     * @param {Function|Axios} instance the axios function
+     * @returns {void}
+     */
+    getDataByWfsFilter: function (requestParams, filter, showLoader, instance) {
+        instance.get(filter)
+            .then(response => {
+                const payload = response?.data;
+
+                instance.post(requestParams.url, payload, {
+                    headers: {
+                        "Content-Type": "text/xml"
+                    }
+                })
+                    .then(responseLayer => {
+                        this.handleResponse(responseLayer.data);
+                    });
+            })
+            .catch(error => {
+                console.error(error);
+            })
+            .then(() => {
+                if (showLoader) {
+                    Radio.trigger("Util", "hideLoader");
+                }
+            });
     },
 
     /**
      * Updates layer source.
      * @param {boolean} showLoader Flag if Loader should be shown.
-     * @param {object} requestParams contains params, url and xhrFields for the request
+     * @param {Object} requestParams contains params, url, xhrFields and isWfsFilter for the request
      * @returns {void}
      */
     updateSource: function (showLoader) {
         const requestParams = this.getRequestParamsAndOptions();
+        let instance = axios,
+            wfsInterceptor = "";
 
-        $.ajax({
-            beforeSend: function () {
-                if (Radio.request("Map", "getInitialLoading") === 0 && showLoader) {
-                    Radio.trigger("Util", "showLoader");
-                }
-            },
-            url: requestParams.url,
-            data: requestParams.params,
-            async: true,
-            type: "GET",
-            context: this,
-            xhrFields: requestParams.xhrParameters,
-            success: this.handleResponse,
-            complete: function () {
-                if (showLoader) {
-                    Radio.trigger("Util", "hideLoader");
-                }
+        if (requestParams?.xhrParameters !== null) {
+            instance = axios.create(requestParams.xhrParameters);
+        }
+
+        wfsInterceptor = instance.interceptors.request.use((config) => {
+            // Showing loader before the request is sent
+            if (Radio.request("Map", "getInitialLoading") === 0 && showLoader) {
+                Radio.trigger("Util", "showLoader");
             }
+
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
         });
+
+        if (!requestParams?.isWfsFilter) {
+            instance.get(requestParams?.url, {params: requestParams?.params})
+                .then(response => {
+                    this.handleResponse(response.data);
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .then(() => {
+                    if (showLoader) {
+                        Radio.trigger("Util", "hideLoader");
+                    }
+                });
+        }
+        else {
+            this.getDataByWfsFilter(requestParams, this.get("wfsFilter"), showLoader, instance);
+        }
+
+        // Eject the loader function
+        instance.interceptors.request.eject(wfsInterceptor);
     },
 
     /**

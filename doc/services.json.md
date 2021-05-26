@@ -228,6 +228,7 @@ WMTS layers can be added by
 |altitudeOffset|no|Number||Height offset for display in 3D mode in meters. If given, any existing z coordinates will be increased by this value. If no z coordinate exists, this value is used as z coordinate.|`10`|
 |gfiTheme|yes|String/Object||Display style of GFI information for this layer. Unless `"default"` is chosen, custom templates may be used to show GFI information in another format than the default table style.|`"default"`|
 |useProxy|no|Boolean|`false`|_Deprecated in the next major release. *[GDI-DE](https://www.gdi-de.org/en)* recommends setting CORS headers on the required services instead._ Only used for GFI requests. The request will contain the requested URL as path, with dots replaced by underscores.|`false`|
+|wfsFilter|no|String||The path of filter file|`"ressources/xmlFilter/filterSchulenStadtteilschulen"`|
 |isSecured|nein|Boolean|false|Displays whether the layer belongs to a secured service. (**[see below](#markdown-header-wms-layerissecured)**)|false|
 |authenticationUrl|nein|String||Additional url called to trigger basic authentication in the browser..|"https://geodienste.hamburg.de/HH_WMS_DOP10?SERVICE=WFS&VERSION=1.1.0&REQUEST=DescribeFeatureType"|
 |propertyNames|no|Array||The attributes as PROPERTYNAME parameter to receive response from wfs layer |`["properties"]`|
@@ -246,6 +247,7 @@ WMTS layers can be added by
       "version" : "1.1.0",
       "featureNS" : "http://www.deegree.org/app",
       "gfiAttributes" : "showAll",
+      "wfsFilter": "ressources/xmlFilter/filterSchulenStadtteilschulen",
       "layerAttribution" : "nicht vorhanden",
       "legend" : true,
       "isSecured": true,

@@ -11,6 +11,7 @@
 ## Unreleased - in development
 ### Added
 - A locale file for Portuguese language was added.
+- New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
