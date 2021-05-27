@@ -128,6 +128,20 @@ export default {
          */
         removeHighlighting: function () {
             this.removeHighlightFeature();
+        },
+
+        /**
+         * In case they key exists, returns its translation. In case the key doesn't exist returns the key.
+         * @param {String} key the key to translate
+         * @param {Object} [options=null] for interpolation, formating and plurals
+         * @returns {String} the translation or the key itself
+         */
+        translate (key, options = null) {
+            if (i18next.exists(key)) {
+                return this.$t(key, options);
+            }
+
+            return key;
         }
     }
 };
@@ -136,7 +150,7 @@ export default {
 <template>
     <ToolWindow @close="close">
         <template v-slot:title>
-            <span>{{ $t(title) }}</span>
+            <span>{{ translate(title) }}</span>
         </template>
         <template v-slot:body>
             <component

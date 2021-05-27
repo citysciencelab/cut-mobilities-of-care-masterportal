@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {hasVectorLayerLength} = require("../../../../../../test/end2end/library/scripts"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {isMobile, is3D, isBasic} = require("../../../../../../test/end2end/settings"),
     {getMeasureLayersTexts, areRegExpsInMeasureLayer} = require("../../../../../../test/end2end/library/scripts"),
     {By} = webdriver;
@@ -33,7 +33,7 @@ async function MeasureTests ({builder, url, resolution, mode, capability}) {
                     after(async function () {
                         if (capability) {
                             driver.session_.then(function (sessionData) {
-                                logBrowserstackUrlToTest(sessionData.id_);
+                                logTestingCloudUrlToTest(sessionData.id_);
                             });
                         }
                         await driver.quit();

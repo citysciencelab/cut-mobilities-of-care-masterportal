@@ -51,7 +51,7 @@ function getGfiStore () {
                             return {};
                         },
                         getlayerId: () => null,
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     }, {}],
                     size: sinon.stub(),
                     visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
@@ -84,7 +84,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 desktopType: () => "attached",
                 active: () => true,
                 gfiFeatures: () => [{
-                    getGfiUrl: () => null
+                    getGfiUrl: () => null,
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },
@@ -104,7 +105,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },
@@ -124,7 +125,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },
@@ -193,7 +194,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                                     return {};
                                 },
                                 getlayerId: () => null,
-                                getFeatures: () => sinon.stub()
+                                getFeatures: () => []
                             }, {}],
                             mapSize: sinon.stub(),
                             visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
@@ -232,7 +233,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getMimeType: () => "text/html",
                         getGfiUrl: () => null,
                         getMappedProperties: () => null,
-                        getProperties: () => sinon.stub()
+                        getProperties: () => sinon.stub(),
+                        getFeatures: () => []
                     },
                     {
                         getTheme: () => "default",
@@ -240,7 +242,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getMimeType: () => "text/html",
                         getGfiUrl: () => null,
                         getMappedProperties: () => null,
-                        getProperties: () => sinon.stub()
+                        getProperties: () => sinon.stub(),
+                        getFeatures: () => []
                     }],
                     mapSize: () => []
                 },
@@ -289,7 +292,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             return {};
                         },
                         getlayerId: () => null,
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     },
                     {}],
                     mapSize: () => []
@@ -320,7 +323,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             return {};
                         },
                         getlayerId: () => null,
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     },
                     {
                         getTheme: () => "default",
@@ -332,7 +335,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                             return {};
                         },
                         getlayerId: () => null,
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     }],
                     mapSize: () => []
                 },
@@ -361,7 +364,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getProperties: () => {
                             return {};
                         },
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     },
                     {
                         getTheme: () => "default",
@@ -373,7 +376,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getProperties: () => {
                             return {};
                         },
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     }],
                     mapSize: () => []
                 },
@@ -401,7 +404,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getProperties: () => {
                         return {};
                     },
-                    getFeatures: () => sinon.stub(),
+                    getFeatures: () => [],
                     "attributesToShow": sinon.stub()
                 },
                 {}],
@@ -430,7 +433,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         getProperties: () => {
                             return {};
                         },
-                        getFeatures: () => sinon.stub()
+                        getFeatures: () => []
                     },
                     {}],
                     mapSize: () => []
@@ -462,7 +465,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getProperties: () => {
                         return {};
                     },
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },
@@ -493,7 +496,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getProperties: () => {
                         return {};
                     },
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },
@@ -525,7 +528,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getProperties: () => {
                         return {};
                     },
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }, {}],
                 mapSize: () => []
             },
@@ -546,7 +549,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => sinon.stub(),
+                    getFeatures: () => [],
                     getProperties: () => {
                         return {};
                     }
@@ -575,7 +578,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -601,7 +604,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -627,7 +630,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -669,7 +672,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -695,7 +698,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -723,7 +726,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -751,7 +754,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -779,7 +782,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -813,7 +816,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -842,7 +845,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -872,7 +875,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -904,7 +907,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -930,7 +933,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -956,7 +959,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => []
                     },
@@ -981,7 +984,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => []
                     },
@@ -1006,7 +1009,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => sinon.stub()
+                            getFeatures: () => []
                         }],
                         mapSize: () => []
                     },
@@ -1032,7 +1035,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },
@@ -1073,7 +1076,7 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => sinon.stub()
+                    getFeatures: () => []
                 }],
                 mapSize: () => []
             },

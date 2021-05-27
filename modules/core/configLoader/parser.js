@@ -526,7 +526,7 @@ const Parser = Backbone.Model.extend(/** @lends Parser.prototype */{
                         $("#Overlayer").parent().after($("#ExternalLayer").parent());
                     }
                     if (!this.getItemByAttributes({id: parentId})) {
-                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, true, "common:tree.subjectData");
+                        this.addFolder("Fachthema", parentId, "ExternalLayer", 1, false, "common:tree.subjectData");
                     }
                 }
                 gdiLayer = Object.assign(gdiLayer, {

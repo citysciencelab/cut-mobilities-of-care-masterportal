@@ -3,7 +3,7 @@ const webdriver = require("selenium-webdriver"),
     {initDriver} = require("../../../library/driver"),
     {isMaster, isMobile} = require("../../../settings"),
     // {getCenter, getResolution} = require("../../../library/scripts"),
-    {logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../library/utils"),
     {By, until} = webdriver;
 
 /**
@@ -28,7 +28,7 @@ async function ListTests ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

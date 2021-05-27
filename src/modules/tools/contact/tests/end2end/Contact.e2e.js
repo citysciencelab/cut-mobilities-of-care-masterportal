@@ -2,7 +2,7 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
     {isMobile, isMaster, isCustom, isDefault} = require("../../../../../../test/end2end/settings"),
-    {logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {By, until} = webdriver;
 
 /**
@@ -38,7 +38,7 @@ async function ContactTests ({builder, url, resolution, capability}) {
             after(async function () {
                 if (capability) {
                     driver.session_.then(function (sessionData) {
-                        logBrowserstackUrlToTest(sessionData.id_);
+                        logTestingCloudUrlToTest(sessionData.id_);
                     });
                 }
                 await driver.quit();

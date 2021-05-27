@@ -25,7 +25,7 @@
       },
       "elasticSearch": {
         "minChars": 3,
-        "serviceId": "elastic_test",
+        "serviceId": "elastic",
         "type": "GET",
         "payload": {
           "id": "query",
@@ -653,11 +653,6 @@
           "clusterDistance": 50
         },
         {
-          "id": "2714",
-          "gfiTheme": "reisezeiten",
-          "styleId": "2119"
-        },
-        {
           "id": "4905",
           "gfiTheme": "DataTable",
           "featureCount": 20
@@ -676,7 +671,7 @@
           ],
           "name": "Eignungsflächen",
           "legendURL": [
-            "https://www.geoportal-hamburg.de/legende/legende_solar.png"
+            "https://geoportal-hamburg.de/legende/legende_solar.png"
           ],
           "gfiTheme": "solaratlas",
           "attributions": "<span>Darstellung der Eignungsflächen ab Maßstab 1: 5000 </span>"

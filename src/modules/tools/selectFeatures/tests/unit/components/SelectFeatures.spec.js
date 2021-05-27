@@ -76,8 +76,8 @@ describe("src/modules/tools/selectFeatures/components/SelectFeatures.vue", () =>
     });
 
     it("do not render the SelectFeatures tool if not active", async () => {
-        const spyRemoveInteractions = sinon.spy(SelectFeaturesComponent.methods, "removeInteractions"),
-            wrapper = shallowMount(SelectFeaturesComponent, {store, localVue});
+        const wrapper = shallowMount(SelectFeaturesComponent, {store, localVue}),
+            spyRemoveInteractions = sinon.spy(wrapper.vm, "removeInteractions");
 
         await store.commit("Tools/SelectFeatures/setActive", false);
         expect(spyRemoveInteractions.calledOnce).to.be.true;

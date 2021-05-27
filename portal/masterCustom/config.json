@@ -40,7 +40,7 @@
         },
         "elasticSearch": {
          "minChars":3,
-         "serviceId":"elastic_test",
+         "serviceId":"elastic",
          "type": "GET",
          "payload": {
             "id":"query",

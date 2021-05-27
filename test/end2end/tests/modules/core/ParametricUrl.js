@@ -1,8 +1,8 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {getUnnavigatedDriver, loadUrl} = require("../../../library/driver"),
-    {/* imageLoaded, */ getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
-    {centersTo, /* clickFeature,*/ logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {getCenter, getResolution, isLayerVisible, areLayersOrdered, doesLayerWithFeaturesExist} = require("../../../library/scripts"),
+    {centersTo, clickFeature, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isBasic, isCustom, isDefault, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -27,7 +27,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
@@ -66,7 +66,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
                 // Bezirk 1 is Altona according to portal/master/config.js listing
                 await loadUrl(driver, `${url}?zoomtogeometry=1`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
             });
 
@@ -74,7 +74,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 const expectedCoordinate = [578867.787, 5924175.483999999];
 
                 await loadUrl(driver, `${url}?zoomtogeometry=bergedorf`, mode);
-                await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
+                await driver.wait(until.elementLocated(By.css(".navbar")), 12000);
                 expect(await centersTo(driver, expectedCoordinate)).to.be.true;
             });
         }
@@ -96,16 +96,24 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
         });
 
         it("?layerIDs=, &visibility=, and &transparency= allow configuring multiple layers and work with &center= and &zoomlevel=", async function () {
+            let ortho = "";
+
             // 2426 is "Bezirke"
-            // 452 is "Luftbilder DOP 20 (belaubt)"
+            // 452 is "Digitale Orthophotos (belaubt) Hamburg || Luftbilder DOP 20 (DOP 40 mit Umland)"
             await loadUrl(driver, `${url}?layerIDs=452,2426&visibility=true,true&transparency=40,20&center=560478.8,5937293.5&zoomlevel=3`, mode);
             await driver.wait(until.elementLocated(By.css(".navbar")), 10000);
 
-            const treeEntryLuftbilder = await driver.findElement(By.css(
-                    isBasic(url) || isMaster(url)
-                        ? "ul#tree li [title^=\"Luftbilder\"]"
-                        : "#SelectedLayer .layer-item [title^=\"Luftbilder\"]"
-                )),
+            if (isBasic(url) || isMaster(url)) {
+                ortho = "ul#tree li [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+            }
+            else if (isDefault(url)) {
+                ortho = "#SelectedLayer .layer-item [title^=\"Luftbilder DOP 20 (DOP 40 mit Umland)\"]";
+            }
+            else {
+                ortho = "#SelectedLayer .layer-item [title^=\"Digitale Orthophotos (belaubt) Hamburg\"]";
+            }
+
+            const treeEntryLuftbilder = await driver.findElement(By.css(ortho)),
                 treeEntryBezirke = await driver.findElement(By.css(
                     isBasic(url) || isMaster(url)
                         ? "ul#tree li [title=\"Bezirke\"]"
@@ -123,73 +131,69 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             expect(10.58332761833642).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:40.000
         });
 
-        /*
-         * These sub-tests tend to fail due to click issues regarding centering & clicking features to open GFI
-         * Commenting out for now so that the other tests may be included
         if (isMaster(url)) {
-            describe("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info", async function () {
-                it("KiTa layer GFI with example 'KiTa Stadt-Land-Fluss' shows gfi", async function () {
-                    await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - KiTa layer GFI with example 'KiTa Stadt-Land-Fluss' shows gfi", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                // at coords '550115.420 5935760.220'
+                let counter = 0;
 
-                    // at coords '550115.420 5935760.220'
-                    counter = 0;
-                    do {
-                        expect(counter++).to.be.below(25);
-                        await clickFeature(driver, [550115.420, 5935760.220]);
-                        await driver.wait(new Promise(r => setTimeout(r, 100)));
-                    } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
+                do {
+                    expect(counter++).to.be.below(25);
+                    await clickFeature(driver, [550115.420, 5935760.220]);
+                    await driver.wait(new Promise(r => setTimeout(r, 100)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
 
-                    await driver.wait(until.elementLocated(By.css("div.gfi")));
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")));
-                    await driver.actions({bridge: true})
-                        .dragAndDrop(
-                            await driver.findElement(By.css(".gfi-header.ui-draggable-handle")),
-                            await driver.findElement(By.css("html"))
-                        )
-                        .perform();
-                    await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                    await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
-                });
-
-                // TODO sometimes doesn't work - bug in Masterportal? Communicated in ticket. Manual tests are inconclusive.
-                it.skip("hospital layer GFI with example 'Krankenhaus Tabea' shows gfi", async function () {
-                    // at coords '552406.014 5935396.345'
-                    gfi = (await driver.findElements(By.css("div.gfi")))[0];
-                    counter = 0;
-                    do {
-                        expect(counter++).to.be.below(10);
-                        await clickFeature(driver, [552406.014, 5935396.345]);
-                        await (await driver.findElement(By.css("canvas"))).click();
-                        await driver.wait(new Promise(r => setTimeout(r, 1000)));
-                    } while (!await gfi.isDisplayed());
-
-                    await driver.wait(until.elementLocated(By.css("div.gfi")));
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
-                    await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")));
-                    await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                    await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
-                });
-
-                it("both layers have their respective legend loaded", async function () {
-                    await (await driver.findElement(By.css("div#navbarRow span.glyphicon-book"))).click();
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-win"))));
-                    expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=KitaEinrichtungen')]"))).to.exist;
-                    expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=krankenhaeuser')]"))).to.exist;
-                    await (await driver.findElement(By.css("div#navbarRow span.glyphicon-book"))).click();
-                    await (await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                    await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.legend-win"))));
-                });
-
-                it("layers are shown in the topic tree and present layer information", async function () {
-                    await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
-                    await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
-                    await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
-
-                    expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
-                });
+                await driver.wait(until.elementLocated(By.css("div.gfi")));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'KiTa Stadt-Land-Fluss')]")));
+                await driver.actions({bridge: true})
+                    .dragAndDrop(
+                        await driver.findElement(By.css(".gfi .tool-window-vue .tool-window-heading .basic-drag-handle")),
+                        await driver.findElement(By.css("html"))
+                    )
+                    .perform();
+                await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
+                expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
             });
+
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - hospital layer GFI with example 'Krankenhaus Tabea' shows gfi", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                // at coords '552406.014 5935396.345'
+                let counter = 0;
+
+                do {
+                    expect(counter++).to.be.below(10);
+                    await clickFeature(driver, [552406.014, 5935396.345]);
+                    await driver.wait(new Promise(r => setTimeout(r, 1000)));
+                } while ((await driver.findElements(By.css("div.gfi"))).length === 0);
+
+                await driver.wait(until.elementLocated(By.css("div.gfi")));
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.gfi"))));
+                await driver.wait(until.elementLocated(By.xpath("//div[contains(@class, 'gfi')]//td[contains(.,'Krankenhaus Tabea')]")));
+                await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
+                expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
+            });
+
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - both layers have their respective legend loaded", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                await (await driver.findElement(By.id("legend-menu"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
+                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_KitaEinrichtung?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=KitaEinrichtungen')]"))).to.exist;
+                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geodienste.hamburg.de/HH_WMS_Krankenhaeuser?VERSION=1.3.0&SERVICE=WMS&REQUEST=GetLegendGraphic&FORMAT=image/png&LAYER=krankenhaeuser')]"))).to.exist;
+                await (await driver.findElement(By.id("legend-menu"))).click();
+                expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
+            });
+
+            it("?layerIDs=, &visibility=, and &transparency= have working gfi/legend/info - layers are shown in the topic tree and present layer information", async function () {
+                await loadUrl(driver, `${url}?layerIDs=4736,myId2&visibility=true,true&transparency=0,0`, mode);
+                await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#tree"))));
+                await (await driver.findElement(By.css(".layer:nth-child(4) .glyphicon-info-sign"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#layerinformation-desktop"))));
+
+                expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
+            });
+            // });
 
             it("?layerIDs=, &visibility=, and &transparency= with set zoom level have working gfi/legend/info", async function () {
                 await loadUrl(driver, `${url}?layerIDs=4736,4537&visibility=true,true&transparency=0,0&zoomLevel=6`, mode);
@@ -206,20 +210,19 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 expect(await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//h6[contains(.,'Steintorwall 20')]"))).to.exist;
                 await driver.actions({bridge: true})
                     .dragAndDrop(
-                        await driver.findElement(By.css(".gfi-header.ui-draggable-handle")),
+                        await driver.findElement(By.css(".gfi .tool-window-vue .tool-window-heading .basic-drag-handle")),
                         await driver.findElement(By.css("html"))
                     )
                     .perform();
                 await (await driver.findElement(By.xpath("//div[contains(@class, 'gfi')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.gfi"))));
+                expect((await driver.findElements(By.css("div.gfi"))).length).to.equal(0);
 
                 // check whether layer has its legend loaded
-                await (await driver.findElement(By.css("div#navbarRow span.glyphicon-book"))).click();
-                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-win"))));
-                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//img[contains(@src,'http://www.geoportal-hamburg.de/legende/legende_solar.png')]"))).to.exist;
-                await (await driver.findElement(By.css("div#navbarRow span.glyphicon-book"))).click();
-                await (await driver.findElement(By.xpath("//div[contains(@class,'legend-win')]//span[contains(@class, 'glyphicon-remove')]"))).click();
-                await driver.wait(until.elementIsNotVisible(await driver.findElement(By.css("div.legend-win"))));
+                await (await driver.findElement(By.id("legend-menu"))).click();
+                await driver.wait(until.elementIsVisible(await driver.findElement(By.css("div.legend-window"))));
+                expect(await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//img[contains(@src,'https://geoportal-hamburg.de/legende/legende_solar.png')]"))).to.exist;
+                await (await driver.findElement(By.xpath("//div[contains(@class,'legend-window')]//span[contains(@class, 'glyphicon-remove')]"))).click();
+                expect((await driver.findElements(By.css("div.legend-window"))).length).to.equal(0);
 
                 // check layer information in topic tree
                 await (await driver.findElement(By.css("div#navbarRow li:first-child"))).click();
@@ -230,7 +233,6 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 expect(await driver.findElements(By.xpath("//*[contains(text(),'Fehler beim Laden der Vorschau der Metadaten.')]"))).to.be.empty;
             });
         }
-        */
 
         if (isMaster(url) || isCustom(url)) {
             it("?featureid= displays markers for features", async function () {
@@ -249,20 +251,33 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             expect(0.2645831904584105).to.be.closeTo(await driver.executeScript(getResolution), 0.000000001); // equals 1:1.000
         });
 
-        it("?isinitopen= allows opening tools initially", async function () {
-            const toolName = "draw",
+        it("?isinitopen= allows opening tools initially in window", async function () {
+            const toolName = "fileimport",
                 toolwindow = By.css(".tool-window-vue");
 
             await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
 
             await driver.wait(until.elementLocated(toolwindow), 5000);
 
-            expect(driver.findElement(toolwindow)).to.exist;
+            expect(await driver.findElement(toolwindow)).to.exist;
         });
 
-        /*
-         * Alert "BKG-Adressdienst nicht erreichbar. Gateway Timeout" bei Aufruf aus dem Internet (^= von Browserstack aus)
-        if (isCustom(url) || isMaster(url) || isDefault(url)) {
+        it("?isinitopen= allows opening tools initially in sidebar", async function () {
+            const toolName = "draw",
+                toolSidebar = By.css("#tool-sidebar-vue");
+
+            await loadUrl(driver, `${url}?isinitopen=${toolName}`, mode);
+
+            await driver.wait(until.elementLocated(toolSidebar), 5000);
+
+            expect(await driver.findElement(toolSidebar)).to.exist;
+        });
+
+        /**
+         * Tests only in the default tree, because there only the gazetteer is configured.
+         * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
+         */
+        if (isDefault(url)) {
             it("?query= fills and executes query field", async function () {
                 await loadUrl(driver, `${url}?query=Neuenfeld`, mode);
 
@@ -276,22 +291,23 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 await driver.wait(until.elementLocated(By.css("#searchInputUL li")));
             });
         }
-        */
 
-        /*
-         * Alert "BKG-Adressdienst nicht erreichbar. Gateway Timeout" bei Aufruf aus dem Internet (^= von Browserstack aus)
+        /**
+         * Tests only in the default tree, because there only the gazetteer is configured.
+         * With the BKG address service can not be tested, because this is only available in the fhhnet and therefore does not work on the Internet.
+         */
         if (isDefault(url)) {
             it("?query= fills and executes search and zooms to result if unique address", async function () {
-                await loadUrl(driver, `${url}?query=Neuenfelder Straße,19, 21109`, mode);
+                await loadUrl(driver, `${url}?query=Neuenfelder Straße,19`, mode);
 
                 await driver.wait(until.elementLocated(By.css("#searchInput")), 10000);
                 const input = await driver.findElement(By.css("#searchInput")),
                     expected = [566610.46394, 5928085.6];
                 let center;
 
-                // value is set to search field
+                // // value is set to search field
                 await driver.wait(
-                    async () => await input.getAttribute("value") === "Neuenfelder Straße,19, 21109",
+                    async () => await input.getAttribute("value") === "Neuenfelder Straße 19",
                     10000,
                     "Query was not written so search input."
                 );
@@ -305,27 +321,28 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 }, 10000, `Expected coordinates ${expected}, but received ${center}. Did not receive matching coordinates within 10 seconds.`);
             });
         }
-        */
 
-        /*
-         * Vorgang lädt dauerhaft
         if (isMaster(url)) {
             it("?config= allows selecting a config", async function () {
+                const splitUrl = url.split("_");
+                let urlAffix = "";
+
+                if (splitUrl.length > 1) {
+                    splitUrl.shift();
+                    urlAffix = `_${splitUrl.join("_")}`;
+                }
+
                 // test by redirecting master to default
-                await loadUrl(driver, `${url}?config=../masterDefault/config.json`, mode);
-                // await driver.findElement(By.xpath("//div[@id='portalTitle']/span[contains(.,'MasterDefault')]")); <- not in current test resolution
-                await driver.wait(async () => driver.executeScript(
-                    imageLoaded,
-                    await driver.wait(until.elementLocated(By.css("#portalTitle img")))
-                ), 5000, "PortalTitle Image did not load.");
+                await loadUrl(driver, `${url}?config=../masterDefault${urlAffix}/config.json`, mode);
+
+                expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .form-inline .catalog-selection .form-control"))).to.exist;
 
                 // test by redirecting master to custom
-                await loadUrl(driver, `${url}?config=../masterCustom/config.json`, mode);
-                // await driver.findElement(By.xpath("//div[@id='portalTitle']/span[contains(.,'MasterCustom')]")); <- not in current test resolution
-                expect(await (await driver.findElement(By.css("#tree .SelectedLayer"))).isDisplayed()).to.be.true;
+                await loadUrl(driver, `${url}?config=../masterCustom${urlAffix}/config.json`, mode);
+
+                expect(await driver.findElement(By.css("ul#tree .layer-catalog .header .control-label"))).to.exist;
             });
         }
-        */
 
         if (isDefault(url)) {
             it("?mdid= opens and displays a layer", async function () {
@@ -344,19 +361,12 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
             });
         }
 
-        // TODO nach Rücksprache in MPLGV-96 erstmal auf ".skip" gestellt, bis eine öffentliche Konfiguration hierfür kommt
-        /*
-         * Layer scheinen nicht in richtiger Reihenfolge aufzutauchen
         if (isDefault(url)) {
             it("opening and configuring lots of layers works", async function () {
-                // TODO
-                // 6.16. (DT, nur FHH-Atlas) Portal mit dem Parameter ?layerIDs=368,8,717,2428,2423,1562_0,2432,1754,1757,1172,1935geofox-bahn,2676,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5 aufrufen (2,5h)
-                //     -> Es werden diverse Layer angezeigt NOTE nur einer wegen überwiegend visibility false
-                //     -> Es wird kein Fehler oder Alert angezeigt NOTE einige Fehler/Alerts - falsche Datenquelle? (DT)
-                //     -> Transparenz und Sichtbarkeit der Layer stimmen mit dem Aufruf überein NOTE ist im Test
-                let layers = "368,8,717,2428,2423,1562_0,2432,1754,1757,1172,1935geofox-bahn,2676,2444,1561_6,2941,2452",
-                    visibility = "true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false",
-                    transparency = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+                //  ?layerIDs=368,717,2423,1562_0,2432,1754,1757,1935geofox-bahn,2444,1561_6,2941,2452&visibility=true,false,false,false,false,false,false,false,false,false,false,false&transparency=0,0,0,0,0,0,0,0,0,0,0,0&center=572765.7219565103,5940389.380731404&zoomlevel=5
+                let layers = "368,717,2423,1562_0,2432,1754,1757,1935geofox-bahn,2444,1561_6,2941,2452",
+                    visibility = "true,false,false,false,false,false,false,false,false,false,false,false",
+                    transparency = "0,0,0,0,0,0,0,0,0,0,0,0",
                     center = "572765.7219565103,5940389.380731404";
 
                 await loadUrl(driver, `${url}?layerIDs=${layers}&visibility=${visibility}&transparency=${transparency}&center=${center}&zoomlevel=5`, mode);
@@ -371,7 +381,7 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
 
                 // layers have correct visibility/opacity
                 for (let i = 0; i < layers.length; i++) {
-                    expect(await driver.executeScript(isLayerVisible, layers[i], 1 - Number(transparency[i]))).to.be(visibility[i] === "true");
+                    expect(await driver.executeScript(isLayerVisible, layers[i], 1 - Number(transparency[i]))).to.equals(visibility[i] === "true");
                 }
 
                 // center parameter worked
@@ -384,7 +394,6 @@ async function ParameterTests ({builder, url, resolution, mode, capability}) {
                 expect(await driver.findElements(By.css("#messages .alert"))).to.be.empty;
             });
         }
-        */
     });
 }
 

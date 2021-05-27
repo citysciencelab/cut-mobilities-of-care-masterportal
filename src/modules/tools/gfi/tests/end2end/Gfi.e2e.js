@@ -1,7 +1,7 @@
 const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../../../../test/end2end/library/driver"),
-    {clickFeature, logBrowserstackUrlToTest} = require("../../../../../../test/end2end/library/utils"),
+    {clickFeature, logTestingCloudUrlToTest} = require("../../../../../../test/end2end/library/utils"),
     {isMaster} = require("../../../../../../test/end2end/settings"),
     {By, until} = webdriver;
 
@@ -35,7 +35,7 @@ async function GfiTests ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

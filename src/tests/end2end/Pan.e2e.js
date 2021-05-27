@@ -1,6 +1,6 @@
 const webdriver = require("selenium-webdriver"),
     {getCenter} = require("../../../test/end2end/library/scripts"),
-    {losesCenter, logBrowserstackUrlToTest} = require("../../../test/end2end/library/utils"),
+    {losesCenter, logTestingCloudUrlToTest} = require("../../../test/end2end/library/utils"),
     {initDriver} = require("../../../test/end2end/library/driver"),
     {isChrome} = require("../../../test/end2end/settings"),
     {By, Button} = webdriver;
@@ -32,7 +32,7 @@ async function PanTests ({builder, url, resolution, browsername, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();

@@ -7,7 +7,7 @@ const webdriver = require("selenium-webdriver"),
     masterConfigJs = require("../../../../../portal/master/config.js"),
     {getOrderedLayerIds, isLayerVisible} = require("../../../library/scripts"),
     {initDriver} = require("../../../library/driver"),
-    {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {getOrderedTitleTexts, getOrderedTitlesFromConfig, getOrderedIdsFromConfig, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isMaster, isChrome} = require("../../../settings"),
     {By, until} = webdriver;
 
@@ -54,12 +54,14 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
                 .catch(reject)
             );
             driver = await initDriver(builder, url, resolution);
+
+            configGivenIdOrder = getOrderedIdsFromConfig(masterConfigJson);
         });
 
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
@@ -105,21 +107,20 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
 
             it("has the same layer order in tree and map in LT", async function () {
                 mapOrderedLayerIds = await driver.executeScript(getOrderedLayerIds);
-                configGivenIdOrder = getOrderedIdsFromConfig(masterConfigJson);
 
                 expect(mapOrderedLayerIds).to.deep.equal(configGivenIdOrder);
             });
 
             it("allows activating and deactivating layers in LT", async function () {
+                // The first layer in tree "100 jahre Stadtgruen POIS" has a transparency of "0.25"
                 const checkLayerId = configGivenIdOrder[0];
 
-                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.false;
                 await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
-                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
                 await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
-                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.false;
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.false;
                 await (await driver.findElement(By.css("ul#root li.layer span.layer-item"))).click();
-                expect(await driver.executeScript(isLayerVisible, checkLayerId)).to.be.true;
+                expect(await driver.executeScript(isLayerVisible, checkLayerId, "0.25")).to.be.true;
             });
 
             it("opens an information window with the info button", async function () {
@@ -155,20 +156,22 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
 
                     const id = mapOrderedLayerIds[0];
 
-                    expect(await driver.executeScript(isLayerVisible, id, "1")).to.be.true;
+                    expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
 
                     // buttons have to be re-fetched each click since they tend to go stale
-                    await (await getButton("plus")).click();
-                    await (await getButton("plus")).click();
-                    await (await getButton("plus")).click();
-
-                    expect(await driver.executeScript(isLayerVisible, id, "0.7")).to.be.true;
-
                     await (await getButton("minus")).click();
                     await (await getButton("minus")).click();
                     await (await getButton("minus")).click();
 
-                    expect(await driver.executeScript(isLayerVisible, id, "1")).to.be.true;
+                    expect(await driver.executeScript(isLayerVisible, id, "0.55")).to.be.true;
+
+                    await (await getButton("plus")).click();
+                    await (await getButton("plus")).click();
+                    await (await getButton("plus")).click();
+
+                    expect(await driver.executeScript(isLayerVisible, id, "0.25")).to.be.true;
+
+
                 });
 
                 it("arrows allow moving layers up in tree and map order", async function () {
@@ -239,7 +242,7 @@ async function MenuLayersTests ({builder, url, resolution, browsername, capabili
 
                 it("arrows moving down do nothing if layer is already last", async function () {
                     await (
-                        await driver.findElement(By.css("ul#root li.layer:nth-child(29) span.glyphicon-cog"))
+                        await driver.findElement(By.css("ul#root li.layer:nth-child(28) span.glyphicon-cog"))
                     ).click();
                     await driver.wait(until.elementLocated(By.css("ul#root li.layer div.layer-settings")));
 

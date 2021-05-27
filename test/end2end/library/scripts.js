@@ -201,7 +201,7 @@ function hasVectorLayerStyle () {
 
     if (stroke) {
         if (stroke.color) {
-            if (JSON.stringify(layer.getStyle().getStroke().getColor()) !== JSON.stringify(stroke.color)) {
+            if (JSON.stringify(layer.getSource().getFeatures()[0].getStyle()[0].getStroke().getColor()) !== JSON.stringify(stroke.color)) {
                 return false;
             }
         }
@@ -209,16 +209,13 @@ function hasVectorLayerStyle () {
 
     if (fill) {
         if (fill.color) {
-            if (JSON.stringify(layer.getStyle().getFill().getColor()) !== JSON.stringify(fill.color)) {
+            if (JSON.stringify(layer.getSource().getFeatures()[0].getStyle()[0].getFill().getColor()) !== JSON.stringify(fill.color)) {
                 return false;
             }
         }
     }
 
     return true;
-
-    // fill color [ 8, 119, 95, 0.3 ]
-    // stroke color "#08775f"
 }
 
 /**
@@ -476,7 +473,7 @@ function getObModeResolution () {
  * @returns {void}
  */
 function setCenter () {
-    Backbone.Radio.trigger("MapView", "setCenter", arguments[0]);
+    Backbone.Radio.trigger("MapView", "setCenter", arguments[0], arguments[1]);
 }
 
 /**

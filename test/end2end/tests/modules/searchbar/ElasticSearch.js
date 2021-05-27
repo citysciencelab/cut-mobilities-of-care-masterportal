@@ -2,21 +2,21 @@ const webdriver = require("selenium-webdriver"),
     {expect} = require("chai"),
     {initDriver} = require("../../../library/driver"),
     {isLayerVisible} = require("../../../library/scripts"),
-    {reclickUntilNotStale, logBrowserstackUrlToTest} = require("../../../library/utils"),
+    {reclickUntilNotStale, logTestingCloudUrlToTest} = require("../../../library/utils"),
     {isCustom, isMaster} = require("../../../settings"),
     {By, until} = webdriver;
 
 /**
- * Tests regarding gdi search.
+ * Tests regarding elastic search.
  * @param {e2eTestParams} params parameter set
  * @returns {void}
  */
-async function GdiSearch ({builder, url, resolution, capability}) {
-    describe.skip("Gdi Search", function () {
+async function ElasticSearch ({builder, url, resolution, capability}) {
+    describe("Elastic Search", function () {
         const searchInputSelector = By.css("#searchInput"),
-            searchString = "Alt",
-            layerName = "Altbestand",
-            layerId = "1571";
+            searchString = "xys",
+            layerName = "high performance area",
+            layerId = "7134";
         let driver, searchInput;
 
         before(async function () {
@@ -33,7 +33,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
         after(async function () {
             if (capability) {
                 driver.session_.then(function (sessionData) {
-                    logBrowserstackUrlToTest(sessionData.id_);
+                    logTestingCloudUrlToTest(sessionData.id_);
                 });
             }
             await driver.quit();
@@ -56,7 +56,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
                 await searchInput.sendKeys(searchString);
 
                 await driver.wait(until.elementIsVisible(await driver.findElement(By.css("#searchInputUL"))));
-                await driver.wait(until.elementLocated(topicSelector), 5000);
+                await driver.wait(until.elementLocated(topicSelector), 800);
             });
         }
 
@@ -66,11 +66,11 @@ async function GdiSearch ({builder, url, resolution, capability}) {
                 checkboxSelector = By.xpath(`//ul[@id='tree']//li//span[text()='${layerName}'][..//span[contains(@class,'glyphicon-check')]]`);
 
             it("renders the chosen layer", async function () {
-                // needs multiple clicks in FF in case the associated function is not ready yet
                 do {
                     await reclickUntilNotStale(driver, listEntrySelector);
                     await driver.wait(new Promise(r => setTimeout(r, 100)));
                 } while (!await (await driver.findElement(treeSelector)).isDisplayed());
+
                 expect(await driver.executeScript(isLayerVisible, layerId)).to.be.true;
             });
 
@@ -91,7 +91,7 @@ async function GdiSearch ({builder, url, resolution, capability}) {
                 const treeButton = await driver.findElement(By.xpath("//span[contains(.,'Themen')]")),
                     tree = await driver.findElement(treeSelector);
 
-                while (isCustom(url) && await tree.isDisplayed()) {
+                if (await tree.isDisplayed()) {
                     // close topic tree initially to see if it opens correctly
                     await treeButton.click();
                 }
@@ -119,4 +119,4 @@ async function GdiSearch ({builder, url, resolution, capability}) {
     });
 }
 
-module.exports = GdiSearch;
+module.exports = ElasticSearch;

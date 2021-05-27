@@ -51,7 +51,7 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 // modules/controls
                 require("../../src/modules/controls/attributions/tests/end2end/Attributions.e2e.js"),
                 require("../../src/modules/controls/backForward/tests/end2end/BackForward.e2e.js"),
-                // require("./tests/modules/controls/Button3D.js"),
+                require("./tests/modules/controls/Button3D.js"),
                 // TODO pull OB to different suites array - maybe depending on environment variable? up for discussion
                 require("./tests/modules/controls/ButtonOblique.js"),
                 require("../../src/modules/controls/freeze/tests/end2end/Freeze.e2e.js"),
@@ -62,26 +62,26 @@ function tests (builder, url, browsername, resolution, config, mode, capability,
                 require("../../src/modules/controls/zoom/test/end2end/Zoom.e2e.js"),
 
                 // modules/core
-                // require("./tests/modules/core/ParametricUrl.js"),
+                require("./tests/modules/core/ParametricUrl.js"),
 
                 // modules/menu
-                // require("./tests/modules/menu/Layers.js"),
+                require("./tests/modules/menu/Layers.js"),
 
                 // modules/searchbar
-                // require("./tests/modules/searchbar/SearchCategories.js"),
-                // require("./tests/modules/searchbar/GdiSearch.js"),
+                require("./tests/modules/searchbar/SearchCategories.js"),
+                require("./tests/modules/searchbar/ElasticSearch.js"),
 
                 // modules/tools
                 require("../../src/modules/tools/contact/tests/end2end/Contact.e2e.js"),
                 // require("./tests/modules/tools/PopulationRequest_HH.js"),
-                // require("../../src/modules/tools/supplyCoord/test/end2end/SupplyCoord.e2e.js"),
+                require("../../src/modules/tools/supplyCoord/tests/end2end/SupplyCoord.e2e.js"),
                 require("./tests/modules/tools/ExtendedFilter.js"),
                 require("../../src/modules/tools/gfi/tests/end2end/Gfi.e2e.js"),
                 // require("./tests/modules/tools/Gfi.js"),old GFI-Test do not delete!
                 require("./tests/modules/Legend.js"),
                 require("./tests/modules/tools/List.js"),
                 require("../../src/modules/tools/measure/tests/end2end/Measure.e2e.js"),
-                // require("./tests/modules/tools/ParcelSearch.js"),
+                require("./tests/modules/tools/ParcelSearch.js"),
                 // require("./tests/modules/tools/SearchByCoord.js"),
 
                 // non-module tests
