@@ -139,14 +139,17 @@ const actions = {
         const activeTools = getters.getActiveToolNames,
             firstActiveTool = activeTools.find(tool => tool !== "Gfi");
 
-        activeTools.forEach(tool => commit(tool + "/setActive", false));
+        if (firstActiveTool !== undefined) {
+            activeTools.forEach(tool => commit(tool + "/setActive", false));
 
-        commit(firstActiveTool + "/setActive", true);
-        if (activeTools.includes("Gfi") && state[firstActiveTool]?.deactivateGFI !== true) {
-            commit("Gfi/setActive", true);
+            commit(firstActiveTool + "/setActive", true);
+            dispatch("activateToolInModelList", firstActiveTool);
+            if (activeTools.includes("Gfi") && state[firstActiveTool]?.deactivateGFI !== true) {
+                commit("Gfi/setActive", true);
+            }
+
+            dispatch("errorMessageToManyToolsActive", {activeTools, firstActiveTool});
         }
-
-        dispatch("errorMessageToManyToolsActive", {activeTools, firstActiveTool});
     },
 
     /**
