@@ -92,7 +92,6 @@ const FilterModel = Tool.extend({
      */
     changeLang: function (lng) {
         this.set({
-            "name": i18next.t("common:menu.filter"),
             "currentLng": lng
         });
     },
