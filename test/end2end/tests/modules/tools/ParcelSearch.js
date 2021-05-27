@@ -21,7 +21,7 @@ async function ParcelSearchTests ({builder, url, resolution, browsername, capabi
     const testIsApplicable = isMaster(url);
 
     if (testIsApplicable) {
-        describe.only("ParcelSearch", function () {
+        describe("ParcelSearch", function () {
             const selectors = {
                 tools: By.css("ul#root li.dropdown:nth-child(4) a"),
                 toolParcelSearch: By.css("ul#tools li.dropdown a span.glyphicon-search"),
