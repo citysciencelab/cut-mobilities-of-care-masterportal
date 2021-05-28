@@ -44,6 +44,7 @@ const ListView = Backbone.View.extend(/** @lends ListView.prototype */{
     render: function () {
         const attr = {backText: i18next.t("common:button.back")};
 
+        this.collection.get("root").set("name", i18next.t("common:menu.name"));
         this.delegateEvents(this.events);
         $(this.targetElement).find("." + this.className).empty();
         $(this.targetElement).prepend(this.$el.html(this.template(attr)));

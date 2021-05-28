@@ -20,7 +20,7 @@ const BreadCrumbList = Backbone.Collection.extend({
     addMainItem: function () {
         this.add({
             id: "root",
-            name: "Menü"
+            name: i18next.t("common:menu.name")
         });
     },
 

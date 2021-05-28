@@ -20,6 +20,7 @@
     },
     "menu": {
         "topics": "Livelli",
+        "name": "Menu",
         "views": {
             "name": "Visualizzazioni",
             "view01": "Visualizzazione 1"
@@ -113,10 +114,12 @@
         },
         "language": {
             "languageTitle": "Si prega di selezionare una lingua",
-            "de": "Deutsch",
-            "en": "English",
+            "de": "Tedesco",
+            "en": "Inglese",
             "it": "Italiano",
-            "pt": "Português"
+            "pt": "Português",
+            "es": "Spagnolo",
+            "tr": "Turco"
         },
         "cswParser": {
             "noMetadataMessage": "Metadati non disponibili.",

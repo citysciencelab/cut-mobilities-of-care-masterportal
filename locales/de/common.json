@@ -20,6 +20,7 @@
     },
     "menu": {
         "topics": "Themen",
+        "name": "Menü",
         "views": {
             "name": "Ansichten",
             "view01": "Ansicht 1"
@@ -120,9 +121,10 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
-            "en": "English",
-            "it": "Italiano",
-            "pt": "Português"
+            "en": "Englisch",
+            "it": "Italienisch",
+            "es": "Spanisch",
+            "pt": "Portugisisch"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",
@@ -585,7 +587,8 @@
                     "iconPoint": "Punkt",
                     "iconLeaf": "Blatt",
                     "iconCloud": "Wolke",
-                    "iconMeadow": "Wiese"
+                    "iconMeadow": "Wiese",
+                    "gelber Pin": "gelber Pin"
                 }
             },
             "measure": {

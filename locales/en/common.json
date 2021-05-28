@@ -20,6 +20,7 @@
     },
     "menu": {
         "topics": "Issues & Topics",
+        "name": "Menu",
         "views": {
             "name": "Views",
             "view01": "View 1"
@@ -90,7 +91,8 @@
             "languageTitle": "Please choose a language",
             "de": "Deutsch",
             "en": "English",
-            "it": "Italiano",
+            "it": "Italian",
+            "es": "Spanish",
             "pt": "Português"
         },
         "core": {
@@ -585,7 +587,8 @@
                     "iconPoint": "Point",
                     "iconLeaf": "Leaf",
                     "iconCloud": "Cloud",
-                    "iconMeadow": "Meadow"
+                    "iconMeadow": "Meadow",
+                    "gelber Pin": "yellow Pin"
                 }
             },
             "measure": {
