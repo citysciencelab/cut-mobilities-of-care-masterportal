@@ -13,6 +13,7 @@
 - A locale file for Portuguese language was added.
 - New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer.
 - Added possibility in gfiTheme sensor to display an explanation text for the data.
+- Spanish is available as a new language selection.
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
