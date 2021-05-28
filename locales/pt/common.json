@@ -116,7 +116,7 @@
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
-			      "pt": "Português"
+            "pt": "Português"
         },
         "cswParser": {
             "noMetadataMessage": "Metadados não estão disponíveis.",
@@ -265,7 +265,7 @@
                 "formatLabel": "Formato",
                 "scaleLabel": "Escala de impressão",
                 "withLegendLabel": "Com Legenda",
-                "printLabel": "Impremir",
+                "printLabel": "Imprimir",
                 "withInfoLabel": "Com Informações",
                 "vtlWarning": "Uma vez que o MapFish 3 não suporta camadas \"Vector Tile Layer\", as seguintes camadas activas não aparecerão na vista de impressão:",
                 "layoutNameList": {
