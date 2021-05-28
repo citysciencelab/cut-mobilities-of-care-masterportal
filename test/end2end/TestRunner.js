@@ -17,10 +17,6 @@ const webdriver = require("selenium-webdriver"),
     /* eslint-disable no-process-env */
     // contains "browserstack" or "saucelabs"
     testService = process.env.npm_config_testservice,
-    // if running a deploymentTest, name of the portal to test is contained
-    portalName = process.env.npm_config_portalname,
-    // if true, only one test on a deplyed portal is running, see portalName
-    deploymentTest = process.env.npm_config_deploymenttest || false,
     browser = process.env.browser || "firefox,chrome",
     url = process.env.url || "https://localhost:9001/",
     urlPart = process.env.urlPart.replace(/\\/g, "") || "portal/",
@@ -29,15 +25,9 @@ const webdriver = require("selenium-webdriver"),
     // proxy for local testing
     localHttpProxy = process.env.http_proxy,
     localHttpsProxy = process.env.https_proxy,
-    localBypassList = ["localhost", "127.0.0.1", "10.*", "geodienste.hamburg.de", "test-geodienste.hamburg.de"];
+    localBypassList = ["localhost", "127.0.0.1", "10.*", "geodienste.hamburg.de", "test-geodienste.hamburg.de"],
     /* eslint-enable no-process-env */
-let portalConfigs = configs;
-
-if (deploymentTest && portalName) {
-    portalConfigs = new Map([
-        [portalName, portalName]
-    ]);
-}
+    portalConfigs = configs;
 
 // pulling execution to separate function for JSDoc; expected input is e.g. "chrome", "bs", "chrome,firefox"
 runTests(browser.split(","));
@@ -94,7 +84,7 @@ function runTests (browsers) {
 
 
     /* eslint-disable-next-line no-process-env */
-    if (!deploymentTest && process.env.BITBUCKET_BRANCH) {
+    if (process.env.BITBUCKET_BRANCH) {
         /* eslint-disable-next-line no-process-env */
         build = "branch: " + process.env.BITBUCKET_BRANCH + " - commit: " + process.env.BITBUCKET_COMMIT + " - date:" + date;
         console.warn("Running tests on " + testService + " with name:\"" + build + "\" on Urls:");
@@ -103,10 +93,6 @@ function runTests (browsers) {
     browsers.forEach(currentBrowser => {
         portalConfigs.forEach((pathEnd, config) => {
             let completeUrl = url + urlPart + pathEnd;
-
-            if (deploymentTest) {
-                console.warn("Running test on deployed portal using url:", completeUrl);
-            }
 
             modes.forEach(mode => {
                 if (currentBrowser !== "fromCapabilities") {
@@ -117,14 +103,14 @@ function runTests (browsers) {
                     }
 
                     resolutions.forEach(resolution => {
-                        tests(builder, completeUrl, currentBrowser, resolution, config, mode, null, deploymentTest);
+                        tests(builder, completeUrl, currentBrowser, resolution, config, mode, null);
                     });
                 }
                 else {
                     const caps = getCapabilities(testService);
 
                     /* eslint-disable-next-line no-process-env */
-                    if (!deploymentTest && process.env.BITBUCKET_BRANCH) {
+                    if (process.env.BITBUCKET_BRANCH) {
                         /* eslint-disable-next-line no-process-env */
                         completeUrl += "_" + process.env.BITBUCKET_BRANCH.replace(/\//g, "_");
                         console.warn(completeUrl);
@@ -134,7 +120,7 @@ function runTests (browsers) {
                         const builder = createBuilder(testService, capability, build);
 
                         resolutions.forEach(resolution => {
-                            tests(builder, completeUrl, capability.browserName, resolution, config, mode, capability, deploymentTest);
+                            tests(builder, completeUrl, capability.browserName, resolution, config, mode, capability);
                         });
                     });
                 }
