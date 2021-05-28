@@ -956,8 +956,6 @@ A folder object defined by a name, glyphicon, and its children.
 [type:print]: # (Portalconfig.menu.tool.print)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
-[type:lines]: # (Portalconfig.menu.tool.lines)
-[type:animation]: # (Portalconfig.menu.tool.animation)
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:contact]: # (Portalconfig.menu.tool.contact)
 [type:filter]: # (Portalconfig.menu.tool.filter)
@@ -976,7 +974,6 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |Name|Required|Type|Default|Description|Expert|
 |----|--------|----|-------|-----------|------|
 |addWMS|no|**[tool](#markdown-header-portalconfigmenutool)**||This tool allows loading specific WMS layers. This is done by providing a URL. All the service's layers are retrieved and offered in the layer tree in section "External technical data". Using this tool is only compatible with the `treeType` "custom" or "default".|true|
-|animation|no|**[animation](#markdown-header-portalconfigmenutoolanimation)**||Commute animation with dot-like elements.|false|
 |compareFeatures|no|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**||Offers a comparison option for vector features. The getFeatureInfo (GFI) window will offer a clickable star symbol to put elements on the comparison list. Works when used together with the GFI theme **Default**.|false|
 |contact|no|**[contact](#markdown-header-portalconfigmenutoolcontact)**||The contact form allows users to send messages to a configured mail address. For example, this may be used to allow users to submit errors and suggestions.|false|
 |coord|no|**[tool](#markdown-header-portalconfigmenutool)**||_Deprecated in 3.0.0. Please use `supplyCoord` instead._ Tool to read coordinates on mouse click. When clicking once, the coordinates in the view are frozen and can be copied on clicking the displaying input elements to the clipboard, i.e. you can use them in another document/chat/mail/... with `Strg+V`.|false|
@@ -990,7 +987,6 @@ List of all configurable tools. Each tool inherits the properties of **[tool](#m
 |layerSlider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||The layerSlider tool allows showing arbitrary services in order. This can e.g. be used to show aerial footage from multiple years in succession.|false|
 |layerslider|no|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||_Deprecated in 3.0.0. Please use `layerSlider` instead._|false|
 |legend|no|**[legend](#markdown-header-portalconfigmenulegend)**||The legend for all visible layers is displayed here.|false|
-|lines|no|**[lines](#markdown-header-portalconfigmenutoollines)**||Commute animation with line-like objects.|false|
 |measure|no|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Allows measuring areas and distances in the units m/km resp. m²/km².|false|
 |parcelSearch|no|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||The parcel search tool allows searching for parcels by district and parcel number. Many German administrative units feature a tripartite order, hence the tool offers searching by "Gemarkung" (district), "Flur" (parcel) (not used in Hamburg), and "Flurstück" (literally "parcel piece").|false|
 |print|no|**[print](#markdown-header-portalconfigmenutoolprint)**||Printing module that can be used to export the map's current view as PDF.|false|
@@ -1828,39 +1824,6 @@ Module displaying vector features. By hovering a feature in the list, its positi
 }
 ```
 
-***
-
-#### Portalconfig.menu.tool.lines
-
-[inherits]: # (Portalconfig.menu.tool)
-
-A line-like depiction of commute movement used in the MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg) commute portal. This tools extends the **[pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)**.
-
-**Example**
-
-```json
-{
-    "animation": {
-        "name": "Commute (Animation)",
-        "glyphicon": "glyphicon-play-circle",
-        "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-        "params": {
-            "REQUEST": "GetFeature",
-            "SERVICE": "WFS",
-            "TYPENAME": "app:mrh_kreise",
-            "VERSION": "1.1.0",
-            "maxFeatures": "10000"
-        },
-        "featureType": "mrh_einpendler_gemeinde",
-        "attrAnzahl": "anzahl_einpendler",
-        "attrGemeinde": "wohnort",
-        "zoomlevel": 1
-    }
-}
-```
-
-***
-
 #### Portalconfig.menu.tool.measure
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1881,87 +1844,6 @@ The measure tool allows measuring distances and areas. This includes the specifi
     }
 }
 ```
-
-***
-
-#### Portalconfig.menu.tool.animation
-
-[inherits]: # (Portalconfig.menu.tool.pendlerCore)
-
-A commute animation used in the MRH (Metropolregion Hamburg, en.: Metropolitan area Hamburg) commute portal. This tools extends the **[pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)**.
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|steps|no|Integer|50|Amount of steps to render in each animation.|false|
-|minPx|no|Integer|5|Minimum size of commuter circles in pixels.|false|
-|maxPx|no|Integer|20|Maximum size of commuter circles in pixels.|false|
-|colors|no|String[]|[]|Amount of colors as RGBA strings, e.g. `"rgba(255,0,0,1)"`, collected in an array.|false|
-|useProxy|no|Boolean|false|_Deprecated in the next major release. [GDI-DE](https://www.gdi-de.org/en) recommends setting CORS headers on the required services instead of using proxies._ Defines whether a service URL should be requested via proxy. For this, dots in the URL are replaced with underscores.|false|
-
-**Example**
-
-```json
-{
-    "animation": {
-        "name": "Commute (Animation)",
-        "glyphicon": "glyphicon-play-circle",
-        "steps": 30,
-        "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-        "params": {
-            "REQUEST": "GetFeature",
-            "SERVICE": "WFS",
-            "TYPENAME": "app:mrh_kreise",
-            "VERSION": "1.1.0",
-            "maxFeatures": "10000"
-        },
-        "featureType": "mrh_einpendler_gemeinde",
-        "attrAnzahl": "anzahl_einpendler",
-        "attrGemeinde": "wohnort",
-        "minPx": 5,
-        "maxPx": 30,
-        "zoomlevel": 1,
-        "colors": [
-            "rgba(255,0,0,0.5)",
-            "rgba(0,255,0,0.5)",
-            "rgba(0,0,255,0.5)",
-            "rgba(0,255,255,0.5)"
-        ]
-    }
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.pendlerCore
-
-[inherits]: # (Portalconfig.menu.tool)
-
-The `pendlerCore` is the core component used in the **[lines](#markdown-header-portalconfigmenutoollines)** and **[animation](#markdown-header-portalconfigmenutoolanimation)** tools. Its properties are overwritten by their specification.
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|zoomLevel|no|Integer|1|Zoom level used on zooming to a local community.|false|
-|url|no|String|"https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|WFS URL to request.|false|
-|params|no|**[param](#markdown-header-portalconfigmenutoolpendlercoreparam)**||Parameters to send with requests.|false|
-|featureType|no|String|"mrh_einpendler_gemeinde"|WFS FeatureType (Layer).|false|
-|attrAnzahl|no|String|"anzahl_einpendler"|Attribute key containing the amount of commuters per local community.|false|
-|attrGemeinde|no|String|"wohnort"|Attribute key containing the local community.|false|
-
-***
-
-#### Portalconfig.menu.tool.pendlerCore.param
-
-Parameters relevant to service requests.
-
-|Name|Required|Type|Default|Description|Expert|
-|----|--------|----|-------|-----------|------|
-|REQUEST|no|String|"GetFeature"|Request type.|false|
-|SERVICE|no|String|"WFS"|Service type.|false|
-|TYPENAME|no|String|"app:mrh_kreise"|Layer type name.|false|
-|VERSION|no|String|"1.1.0"|WFS version.|false|
-|maxFeatures|no|String|"10000"|Maximum amount of features to retrieve.|false|
-
-***
 
 #### Portalconfig.menu.tool.contact
 

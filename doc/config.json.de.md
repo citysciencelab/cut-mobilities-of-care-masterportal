@@ -898,8 +898,6 @@ Ein Ordner-Object wird dadurch definiert, dass es neben "name" und "glyphicon" n
 [type:print]: # (Portalconfig.menu.tool.print)
 [type:draw]: # (Portalconfig.menu.tool.draw)
 [type:featureLister]: # (Portalconfig.menu.tool.featureLister)
-[type:lines]: # (Portalconfig.menu.tool.lines)
-[type:animation]: # (Portalconfig.menu.tool.animation)
 [type:layerSlider]: # (Portalconfig.menu.tool.layerSlider)
 [type:contact]: # (Portalconfig.menu.tool.contact)
 [type:filter]: # (Portalconfig.menu.tool.filter)
@@ -918,7 +916,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
 |----|-------------|---|-------|------------|------|
 |addWMS|nein|**[tool](#markdown-header-portalconfigmenutool)**||Mit diesem Werkzeug lassen sich Layer eines WMS laden. Die Angabe erfolgt über eine URL. Es werden alle Layer des Dienstes geladen und sind im Themenbaum unter "Externe Fachdaten" verfügbar. Bisher ist die Verwendung des Werkzeugs nur in Kombination mit den Tehmenbäumen "custom" und "default" möglich.|true|
-|animation|nein|**[animation](#markdown-header-portalconfigmenutoolanimation)**||Pendleranimation als punkthafte Objekte.|false|
 |compareFeatures|nein|**[compareFeatures](#markdown-header-portalconfigmenutoolcomparefeatures)**|| Bietet eine Vergleichsmöglichkeit von Vektor-Features. In der getFeatureInfo lassen sich Features über das Stern-Symbol auf die Vergleichliste setzen. Funktioniert in Verbindung mit dem GFI-Theme **Default**!|false|
 |contact|nein|**[contact](#markdown-header-portalconfigmenutoolcontact)**||Das Kontaktformular bietet dem User eine Möglichkeit an das konfigurierte Postfach eine Nachricht zu senden. Es können beispielsweise Fehler oder Wünsche und Anregungen gemeldet werden.|false|
 |coord|nein|**[tool](#markdown-header-portalconfigmenutool)**||Deprecated in 3.0.0 Bitte "supplyCoord" verwenden. Werkzeug um Koordinaten per Maus(-Klick) abzufragen. Per Click in die Karte werden die Koordinaten in der Anzeige eingefroren und können per Click auf die Anzeige direkt in die Zwischenablage kopiert werden.|false|
@@ -932,7 +929,6 @@ Liste aller konfigurierbaren Werkzeuge. Jedes Werkzeug erbt von **[tool](#markdo
 |layerSlider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Mit dem Layerslider lassen sich beliebige Dienste in einer Reihenfolge abspielen. Zum Beispiel geeignet für Luftbilder aus verschiedenen Jahrgängen.|false|
 |layerslider|nein|**[layerSlider](#markdown-header-portalconfigmenutoollayerslider)**||Deprecated in 3.0.0 Bitte "layerSlider" verwenden.|false|
 |legend|nein|**[legend](#markdown-header-portalconfigmenulegend)**||In der Legende werden alle sichtbaren Layer dargestellt.|false|
-|lines|nein|**[lines](#markdown-header-portalconfigmenutoollines)**||Pendlerdarstellung als linienhafte Objekte.|false|
 |measure|nein|**[measure](#markdown-header-portalconfigmenutoolmeasure)**||Messwerkzeug um Flächen oder Strecken zu messen. Dabei kann zwischen den Einheiten m/km bzw m²/km² gewechselt werden.|false|
 |parcelSearch|nein|**[parcelSearch](#markdown-header-portalconfigmenutoolparcelsearch)**||Mit dieser Flurstückssuche lassen sich Flurstücke über Gemarkung, Flur (in Hamburg ohne Flur) und Flurstück suchen.|false|
 |print|nein|**[print](#markdown-header-portalconfigmenutoolprint)**||Druckmodul mit dem die Karte als PDF exportiert werden kann.|false|
@@ -1742,37 +1738,6 @@ Modul, das Vektor Features darstellt. Durch Hovern über ein Feature in der List
 }
 ```
 
-***
-
-#### Portalconfig.menu.tool.lines
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Die linienhafte Darstellung der Pendler wird für das Pendlerportal der MRH(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den **[pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)**
-
-**Beispiel**
-```
-#!json
-"animation": {
-    "name": "Pendler (Animation)",
-    "glyphicon": "glyphicon-play-circle",
-    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-    "params": {
-        "REQUEST": "GetFeature",
-        "SERVICE": "WFS",
-        "TYPENAME": "app:mrh_kreise",
-        "VERSION": "1.1.0",
-        "maxFeatures": "10000"
-    },
-    "featureType": "mrh_einpendler_gemeinde",
-    "attrAnzahl": "anzahl_einpendler",
-    "attrGemeinde": "wohnort",
-    "zoomlevel": 1,
-}
-```
-
-***
-
 #### Portalconfig.menu.tool.measure
 
 [inherits]: # (Portalconfig.menu.tool)
@@ -1792,78 +1757,6 @@ Mit dem Messwerkzeug können Strecken und Flächen gemessen werden. Dabei werden
     "earthRadius": 6378137
 },
 ```
-
-***
-#### Portalconfig.menu.tool.animation
-
-[inherits]: # (Portalconfig.menu.tool.pendlerCore)
-
-Die Pendleranimation wird für das Pendlerportal der MRH(Metropolregion Hamburg) verwendet. Dieses Tool erweitert den **[pendlerCore](#markdown-header-portalconfigmenutoolpendlercore)**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|steps|nein|Integer|50|Anzahl der Schritte, die in der Animation durchgeführt werden sollen.|false|
-|minPx|nein|Integer|5|Minimalgröße der Kreisdarstellung der Pendler.|false|
-|maxPx|nein|Integer|20|Maximalgröße der Kreisdarstellung der Pendler.|false|
-|colors|nein|String[]|[]|Anzahl der Farben im RGBA-Muster ("rgba(255,0,0,1)").|false|
-|useProxy|nein|Boolean|false|Deprecated im nächsten Major-Release, da von der GDI-DE empfohlen wird einen CORS-Header einzurichten. Gibt an, ob die URL des Dienstes über einen Proxy angefragt werden soll, dabei werden die Punkte in der URL durch Unterstriche ersetzt.|false|
-
-**Beispiel**
-```
-#!json
-"animation": {
-    "name": "Pendler (Animation)",
-    "glyphicon": "glyphicon-play-circle",
-    "steps": 30,
-    "url": "https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung",
-    "params": {
-        "REQUEST": "GetFeature",
-        "SERVICE": "WFS",
-        "TYPENAME": "app:mrh_kreise",
-        "VERSION": "1.1.0",
-        "maxFeatures": "10000"
-    },
-    "featureType": "mrh_einpendler_gemeinde",
-    "attrAnzahl": "anzahl_einpendler",
-    "attrGemeinde": "wohnort",
-    "minPx": 5,
-    "maxPx": 30,
-    "zoomlevel": 1,
-    "colors": ["rgba(255,0,0,0.5)", "rgba(0,255,0,0.5)", "rgba(0,0,255,0.5)", "rgba(0,255,255,0.5)"]
-}
-```
-
-***
-
-#### Portalconfig.menu.tool.pendlerCore
-
-[inherits]: # (Portalconfig.menu.tool)
-
-Der PendlerCore ist die Kernkomponente der Werkzeuge "Lines" und "Animation". Seine Eigenschaften werden überschrieben durch **[lines](#markdown-header-portalconfigmenutoollines)** und **[animation](#markdown-header-portalconfigmenutoolanimation)**
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|zoomLevel|nein|Integer|1|Zoomstufe auf die gezoomt wird bei Auswahl einer Gemeinde.|false|
-|url|nein|String|"https://geodienste.hamburg.de/MRH_WFS_Pendlerverflechtung"|URL des WFS Dienstes der abgefragt werden soll.|false|
-|params|nein|**[param](#markdown-header-portalconfigmenutoolpendlercoreparam)**||Parameter mit denen der Dienst abgefragt werden soll.|false|
-|featureType|nein|String|"mrh_einpendler_gemeinde"|FeatureType (Layer) des WFS Dienstes.|false|
-|attrAnzahl|nein|String|"anzahl_einpendler"|Attribut das die Anzahl der Pendler pro Gemeinde enthält.|false|
-|attrGemeinde|nein|String|"wohnort"|Attribut das die Gemeinde enthält.|false|
-
-***
-
-#### Portalconfig.menu.tool.pendlerCore.param
-Parameter die für die Anfrage des Dienstes relevant sind.
-
-|Name|Verpflichtend|Typ|Default|Beschreibung|Expert|
-|----|-------------|---|-------|------------|------|
-|REQUEST|nein|String|"GetFeature"|Art des Requests.|false|
-|SERVICE|nein|String|"WFS"|Typ des Dienstes.|false|
-|TYPENAME|nein|String|"app:mrh_kreise"|Typename des Layers.|false|
-|VERSION|nein|String|"1.1.0"|Version des WFS.|false|
-|maxFeatures|nein|String|"10000"|Maximale Anzahl an Features die geholt werden sollen.|false|
-
-***
 
 #### Portalconfig.menu.tool.contact
 

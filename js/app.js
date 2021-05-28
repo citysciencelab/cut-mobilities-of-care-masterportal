@@ -29,8 +29,6 @@ import WindowView from "../modules/window/view";
 import SidebarView from "../modules/sidebar/view";
 import ShadowView from "../modules/tools/shadow/view";
 import ParcelSearchView from "../modules/tools/parcelSearch/view";
-import LineView from "../modules/tools/pendler/lines/view";
-import AnimationView from "../modules/tools/pendler/animation/view";
 import FilterView from "../modules/tools/filter/view";
 import StyleWMSView from "../modules/tools/styleWMS/view";
 import LayerSliderView from "../modules/tools/layerSlider/view";
@@ -179,14 +177,6 @@ async function loadApp () {
         switch (tool.id) {
             case "compareFeatures": {
                 new CompareFeaturesView({model: tool});
-                break;
-            }
-            case "lines": {
-                new LineView({model: tool});
-                break;
-            }
-            case "animation": {
-                new AnimationView({model: tool});
                 break;
             }
             case "filter": {

@@ -18,8 +18,7 @@ import StaticLink from "./staticlink/model";
 import Filter from "../../tools/filter/model";
 import Print from "../../tools/print/mapfish3PlotService";
 import HighResolutionPrint from "../../tools/print/highResolutionPlotService";
-import Animation from "../../tools/pendler/animation/model";
-import Lines from "../../tools/pendler/lines/model";
+
 /**
  * WfsFeatureFilter
  * @deprecated in 3.0.0
@@ -248,12 +247,6 @@ const ModelList = Backbone.Collection.extend(/** @lends ModelList.prototype */{
             }
             else if (attrs.id === "shadow") {
                 return new Shadow(attrs, options);
-            }
-            else if (attrs.id === "lines") {
-                return new Lines(attrs, options);
-            }
-            else if (attrs.id === "animation") {
-                return new Animation(attrs, options);
             }
             else if (attrs.id === "treeFilter") {
                 return new TreeFilter(Object.assign(attrs, Config.hasOwnProperty("treeConf") ? {treeConf: Config.treeConf} : {}), options);
