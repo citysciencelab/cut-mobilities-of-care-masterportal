@@ -215,8 +215,7 @@
             "info": {
                 "disclaimer": "Haftungsausschluss",
                 "home": {
-                    "name": "Hamburg",
-                    "url": "https://www.hamburg.de/"
+                    "name": "Hamburg"
                 }
             },
             "addWMS": {

@@ -348,7 +348,7 @@
                  {
                   "name": "translate#common:modules.tools.info.home.name",
                     "glyphicon": "glyphicon-globe",
-                    "url": "translate#common:modules.tools.info.home.url"
+                    "url": "https://www.hamburg.de/"
                  }
               ]
            }
