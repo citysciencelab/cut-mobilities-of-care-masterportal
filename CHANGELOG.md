@@ -10,6 +10,7 @@
 
 ## Unreleased - in development
 ### Added
+- A locale file for Portuguese language was added.
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
@@ -22,11 +23,15 @@
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
 - In GFI the layerTitle was shortened in case it contains a colon.
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
+
 ---
+
 ## v2.9.1 - 2021-05-25
 ### Fixed
 - Fixed no data in gfi theme of verkehrs layers in geo-online
+
 ---
+
 ## v2.9.0 - 2021-05-05
 ### Added
 - New attribute 'nearbyTitle' implemented in config.json for the title in the list of nearby search results.
@@ -57,6 +62,7 @@
 - Fixed a bug that for the gfi in infoFormat "text/html" did not execute the script part when starting the iFrame.
 - Fixed an issue in searchbar, that after finding a result and zooming to it the 3D mode couldn't be activated anymore
 - Fixed an issue in fileImport that when the imported KML File is missing the isVisible setting the feature wouldn't be displayed when printing
+
 ---
 
 ## v2.8.0 - 2021-04-07
