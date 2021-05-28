@@ -8,7 +8,6 @@ const webdriver = require("selenium-webdriver"),
     } = require("./settings"),
     // name of the portal to test is contained
     portalName = process.env.npm_config_portalname,
-    url = process.env.url,
     urlPart = process.env.urlPart.replace(/\\/g, ""),
     portalConfigs = new Map([
         [portalName, portalName]
@@ -33,7 +32,7 @@ function runTests () {
     }
 
     portalConfigs.forEach((pathEnd, config) => {
-        const completeUrl = url + urlPart + pathEnd,
+        const completeUrl = process.env.url + urlPart + pathEnd,
             caps = getCapabilities("saucelabs");
 
         console.warn("url:", completeUrl);
@@ -64,7 +63,7 @@ function createBuilder (capability, buildName) {
 /**
  * Test Runner. Will call all tests for a given set of parameters.
  * @param {selenium-webdriver.Builder} builder fully prepared builder that can be used for instantiation
- * @param {String} masterPortalUrl to open Masterportal with
+ * @param {String} url to open Masterportal with
  * @param {String} browsername to display in logging
  * @param {String} resolution in format AxB with A, B being integers
  * @param {String} config key that defines which config the Masterportal should run on
@@ -72,14 +71,14 @@ function createBuilder (capability, buildName) {
  * @param {Object} capability containes saucelabs capability
  * @returns {void}
  */
-function tests (builder, masterPortalUrl, browsername, resolution, config, mode, capability) {
+function tests (builder, url, browsername, resolution, config, mode, capability) {
     describe(`${browsername} (${mode}, ${resolution}, ${config})`, function () {
         this.timeout(3600000);
 
         const suites = [
                 require("../../src/tests/end2end/DeployedPortals.e2e.js")
             ],
-            e2eTestParams = {builder, masterPortalUrl, resolution, config, mode, browsername, capability};
+            e2eTestParams = {builder, url, resolution, config, mode, browsername, capability};
 
         for (const suite of suites) {
             this.retries(2);
