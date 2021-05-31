@@ -131,17 +131,41 @@ const actions = {
     /**
     * Sets the active property of the state form tool which has the parameter isActive: true
     * Also starts processes if the tool is activated (active === true).
+    * The gfi is excluded, because it is allowed to be active in parallel with another tool.
     * @returns {void}
     */
-    setToolActiveByConfig ({getters, dispatch}) {
-        const activeTools = getters.getActiveToolNames;
+    setToolActiveByConfig ({state, getters, commit, dispatch}) {
+        const activeTools = getters.getActiveToolNames,
+            firstActiveTool = activeTools.find(tool => tool !== "Gfi");
 
-        dispatch("controlActivationOfTools", activeTools[0]);
+        if (firstActiveTool !== undefined) {
+            activeTools.forEach(tool => commit(tool + "/setActive", false));
 
-        if (activeTools.length > 1) {
+            commit(firstActiveTool + "/setActive", true);
+            dispatch("activateToolInModelList", firstActiveTool);
+            if (activeTools.includes("Gfi") && state[firstActiveTool]?.deactivateGFI !== true) {
+                commit("Gfi/setActive", true);
+            }
+
+            dispatch("errorMessageToManyToolsActive", {activeTools, firstActiveTool});
+        }
+    },
+
+    /**
+     * Print error message if to many tools has the attribute active: true.
+     * @param {Object} context Context of this vue store.
+     * @param {Object} payload The payload
+     * @param {String[]} payload.activeTools Alls active tools.
+     * @param {String} payload.firstActiveTool The activated tool.
+     * @returns {void}
+     */
+    errorMessageToManyToolsActive (context, {activeTools, firstActiveTool}) {
+        const activeToolsWithoutFirstActiveAndGfi = activeTools.filter(tool => tool !== firstActiveTool && tool !== "Gfi");
+
+        if (activeToolsWithoutFirstActiveAndGfi.length > 0) {
             console.error("More than one tool has the configuration parameter 'active': true."
                 + " Only one entry is considered. Therefore the tool(s): "
-                + activeTools.slice(1)
+                + activeToolsWithoutFirstActiveAndGfi
                 + " is/are not activated!");
         }
     },

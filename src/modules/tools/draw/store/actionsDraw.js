@@ -301,7 +301,6 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
                 });
             });
             state.modifyInteraction.on("modifyend", event => {
-                let centerPointCoords;
 
                 changeInProgress = false;
                 if (tooltip) {
@@ -314,9 +313,10 @@ const initialState = JSON.parse(JSON.stringify(stateDraw)),
 
                 // NOTE: This is only used for dipas/diplanung (08-2020): inputMap contains the map
                 if (typeof Config.inputMap !== "undefined" && Config.inputMap !== null) {
-                    centerPointCoords = dispatch("createCenterPoint", {feature: event.features.getArray()[0], targetProjection: Config.inputMap.targetProjection});
-                    dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetProjection}, currentFeature: event.feature})
-                        .then(geoJSON => postDrawEnd({type: "Point", coordinates: centerPointCoords}, geoJSON));
+                    dispatch("createCenterPoint", {feature: event.features.getArray()[0], targetProjection: Config.inputMap.targetProjection}).then(centerPointCoords => {
+                        dispatch("downloadFeaturesWithoutGUI", {prmObject: {"targetProjection": Config.inputMap.targetProjection}, currentFeature: event.feature})
+                            .then(geoJSON => postDrawEnd({type: "Point", coordinates: centerPointCoords}, geoJSON));
+                    });
                 }
             });
         },

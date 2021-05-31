@@ -175,7 +175,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         Radio.trigger("ModelList", "addInitiallyNeededModels");
 
         if (Radio.request("ParametricURL", "getZoomToExtent") !== undefined) {
-            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"), {}, Radio.request("ParametricURL", "getProjectionFromUrl"));
+            this.zoomToExtent(Radio.request("ParametricURL", "getZoomToExtent"), {duration: 0}, Radio.request("ParametricURL", "getProjectionFromUrl"));
         }
 
         Radio.trigger("Map", "isReady", "gfi", false);
@@ -684,6 +684,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
         if (!found) {
             source = new VectorSource();
             layer = new VectorLayer({
+                id: name,
                 name: name,
                 source: source,
                 alwaysOnTop: true

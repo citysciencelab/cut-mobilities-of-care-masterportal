@@ -33,7 +33,7 @@ All the following rules must hold.
 * A.2.2 No methods of *Underscore.js* are in use, except for calls to `_.template()`.
 * A.2.3 No redundant packages are installed.
 * A.2.4 JQuery is only to be used in combination with Backbone.js.
-* A.2.5 The addition of large packages/libraries has to be agreed on by the *LGV* team.
+* A.2.5 The addition of packages/libraries has to be agreed on by the *LGV* team. At least 3 libs need to evaluated before decisions can be made. Use a form from **[library evalutaion](./library evaluation/)** and add to PR. 
 
 ---
 

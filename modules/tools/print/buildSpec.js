@@ -157,7 +157,7 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
     buildLayers: function (layerList) {
         const layers = [],
             attributes = this.get("attributes"),
-            currentResolution = Radio.request("MapView", "getOptions").resolution,
+            currentResolution = Radio.request("MapView", "getOptions")?.resolution,
             visibleLayerIds = [];
 
         layerList.forEach(layer => {
@@ -215,8 +215,8 @@ const BuildSpecModel = Backbone.Model.extend(/** @lends BuildSpecModel.prototype
      */
     buildLayerType: function (layer, currentResolution) {
         const extent = Radio.request("MapView", "getCurrentExtent"),
-            layerMinRes = layer.get("minResolution"),
-            layerMaxRes = layer.get("maxResolution"),
+            layerMinRes = layer?.get("minResolution"),
+            layerMaxRes = layer?.get("maxResolution"),
             isInScaleRange = this.isInScaleRange(layerMinRes, layerMaxRes, currentResolution);
         let features = [],
             returnLayer;

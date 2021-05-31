@@ -3,7 +3,6 @@ import {config, shallowMount, mount, createLocalVue} from "@vue/test-utils";
 import {expect} from "chai";
 import sinon from "sinon";
 import GfiComponent from "../../../components/Gfi.vue";
-import Mobile from "../../../components/templates/Mobile.vue";
 import moment from "moment";
 
 const localVue = createLocalVue(),
@@ -85,7 +84,10 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 active: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => []
+                    getProperties: () => {
+                        return {};
+                    },
+                    getFeatures: () => sinon.stub()
                 }],
                 mapSize: () => []
             },
@@ -105,7 +107,10 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => []
+                    getFeatures: () => sinon.stub(),
+                    getProperties: () => {
+                        return {};
+                    }
                 }],
                 mapSize: () => []
             },
@@ -125,7 +130,10 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => true,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => []
+                    getFeatures: () => sinon.stub(),
+                    getProperties: () => {
+                        return {};
+                    }
                 }],
                 mapSize: () => []
             },
@@ -167,94 +175,6 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         expect(wrapper.findComponent({name: "Detached"}).exists()).to.be.false;
     });
 
-    it("the close-event should call setGfiFeatures commit", async () => {
-        const mockMapMutations = {
-                setGfiFeatures: sinon.stub()
-            },
-            mockGfiMutations = {
-                setCurrentFeature: sinon.stub()
-            },
-            mockGfiGetters = {
-                desktopType: () => sinon.stub()
-            },
-            store = new Vuex.Store({
-                modules: {
-                    Map: {
-                        namespaced: true,
-                        mutations: mockMapMutations,
-                        getters: {
-                            gfiFeatures: () => [{
-                                getTheme: () => "default",
-                                getTitle: () => "Feature 1",
-                                getMimeType: () => "text/html",
-                                getGfiUrl: () => null,
-                                getMappedProperties: () => null,
-                                getAttributesToShow: () => sinon.stub(),
-                                getProperties: () => {
-                                    return {};
-                                },
-                                getlayerId: () => null,
-                                getFeatures: () => []
-                            }, {}],
-                            mapSize: sinon.stub(),
-                            visibleLayerListWithChildrenFromGroupLayers: sinon.stub()
-                        }
-                    },
-                    Tools: {
-                        namespaced: true,
-                        modules: {
-                            Gfi: {
-                                namespaced: true,
-                                mutations: mockGfiMutations,
-                                getters: mockGfiGetters
-                            }
-                        }
-                    }
-                },
-                getters: {
-                    isMobile: () => sinon.stub(),
-                    gfiWindow: () => "",
-                    isTable: () => sinon.stub(),
-                    ignoredKeys: () => sinon.stub()
-                }
-            }),
-            wrapper = mount(GfiComponent, {
-                data () {
-                    return {
-                        pagerIndex: 1
-                    };
-                },
-                computed: {
-                    isMobile: () => true,
-                    active: () => true,
-                    gfiFeatures: () => [{
-                        getTheme: () => "default",
-                        getTitle: () => "Hallo",
-                        getMimeType: () => "text/html",
-                        getGfiUrl: () => null,
-                        getMappedProperties: () => null,
-                        getProperties: () => sinon.stub(),
-                        getFeatures: () => []
-                    },
-                    {
-                        getTheme: () => "default",
-                        getTitle: () => "Hallo2",
-                        getMimeType: () => "text/html",
-                        getGfiUrl: () => null,
-                        getMappedProperties: () => null,
-                        getProperties: () => sinon.stub(),
-                        getFeatures: () => []
-                    }],
-                    mapSize: () => []
-                },
-                localVue,
-                store
-            });
-
-        await wrapper.findComponent(Mobile).vm.$emit("close");
-        expect(mockMapMutations.setGfiFeatures.calledOnce).to.be.true;
-    });
-
     it("should set pagerIndex to zero if gfiFeatures change", () => {
         const wrapper = shallowMount(GfiComponent, {
             data () {
@@ -266,7 +186,13 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isMobile: () => false,
                 active: () => true,
                 mapSize: () => [],
-                gfiFeatures: () => "Test"
+                gfiFeatures: () => [{
+                    getGfiUrl: () => null,
+                    getFeatures: () => sinon.stub(),
+                    getProperties: () => {
+                        return {};
+                    }
+                }]
             },
             store: getGfiStore,
             localVue
@@ -525,10 +451,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                     getGfiUrl: () => null,
                     getMimeType: () => "text/html",
                     getMappedProperties: () => null,
-                    getProperties: () => {
-                        return {};
-                    },
-                    getFeatures: () => []
+                    getProperties: () => sinon.stub(),
+                    getFeatures: () => sinon.stub()
                 }, {}],
                 mapSize: () => []
             },
@@ -549,10 +473,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                 isTable: () => false,
                 gfiFeatures: () => [{
                     getGfiUrl: () => null,
-                    getFeatures: () => [],
-                    getProperties: () => {
-                        return {};
-                    }
+                    getFeatures: () => sinon.stub(),
+                    getProperties: () => sinon.stub()
                 }],
                 mapSize: () => []
             },
@@ -578,7 +500,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -604,7 +527,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -630,7 +554,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -672,7 +597,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -698,7 +624,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -726,7 +653,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -754,7 +682,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -782,7 +711,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -816,7 +746,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -845,7 +776,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -875,7 +807,8 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -900,14 +833,15 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
         });
     });
     describe("getValueFromCondition", function () {
-        it("Sould return first key matching the contains condition", function () {
+        it("Should return first key matching the contains condition", function () {
             const wrapper = shallowMount(GfiComponent, {
                     computed: {
                         isMobile: () => true,
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -926,14 +860,15 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("foo_bar");
         });
-        it("Sould return first key matching the startsWidth condition", function () {
+        it("Should return first key matching the startsWidth condition", function () {
             const wrapper = shallowMount(GfiComponent, {
                     computed: {
                         isMobile: () => true,
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => [],
                         getProperties: () => sinon.stub()
@@ -952,14 +887,15 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("bar");
         });
-        it("Sould return first key matching the startsWidth condition", function () {
+        it("Should return first key matching the startsWidth condition", function () {
             const wrapper = shallowMount(GfiComponent, {
                     computed: {
                         isMobile: () => true,
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => []
                     },
@@ -977,14 +913,15 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("bar_foo");
         });
-        it("Sould return first key matching the endsWith condition", function () {
+        it("Should return first key matching the endsWith condition", function () {
             const wrapper = shallowMount(GfiComponent, {
                     computed: {
                         isMobile: () => true,
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => []
                     },
@@ -1002,14 +939,15 @@ describe("src/modules/tools/gfi/components/Gfi.vue", () => {
 
             expect(wrapper.vm.getValueFromCondition(key, condition, gfi)).to.equal("foo");
         });
-        it("Sould return first key matching the endsWith condition", function () {
+        it("Should return first key matching the endsWith condition", function () {
             const wrapper = shallowMount(GfiComponent, {
                     computed: {
                         isMobile: () => true,
                         active: () => true,
                         gfiFeatures: () => [{
                             getGfiUrl: () => null,
-                            getFeatures: () => []
+                            getFeatures: () => sinon.stub(),
+                            getProperties: () => sinon.stub()
                         }],
                         mapSize: () => []
                     },

@@ -120,8 +120,9 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
-            "en": "Englisch",
-            "it": "Italienisch"
+            "en": "English",
+            "it": "Italiano",
+            "pt": "Português"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",

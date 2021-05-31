@@ -165,10 +165,17 @@ describe("src/modules/tools/actionsTools.js", () => {
             };
 
             testAction(setToolActiveByConfig, {}, state, {}, [
-                {type: "controlActivationOfTools", payload: "ScaleSwitcher", dispatch: true}
+                {type: "ScaleSwitcher/setActive", payload: false},
+                {type: "ScaleSwitcher/setActive", payload: true},
+                {type: "activateToolInModelList", payload: "ScaleSwitcher", dispatch: true},
+                {type: "errorMessageToManyToolsActive", payload: {
+                    activeTools: ["ScaleSwitcher"],
+                    firstActiveTool: "ScaleSwitcher"
+                }, dispatch: true}
             ], {
                 getActiveToolNames: ["ScaleSwitcher"]
             }, done);
+
 
         });
         it("activate only the first tool with active = true", done => {
@@ -185,9 +192,74 @@ describe("src/modules/tools/actionsTools.js", () => {
             };
 
             testAction(setToolActiveByConfig, {}, state, {}, [
-                {type: "controlActivationOfTools", payload: "SupplyCoord", dispatch: true}
+                {type: "SupplyCoord/setActive", payload: false},
+                {type: "ScaleSwitcher/setActive", payload: false},
+                {type: "FileImport/setActive", payload: false},
+                {type: "SupplyCoord/setActive", payload: true},
+                {type: "activateToolInModelList", payload: "SupplyCoord", dispatch: true},
+                {type: "errorMessageToManyToolsActive", payload: {
+                    activeTools: ["SupplyCoord", "ScaleSwitcher", "FileImport"],
+                    firstActiveTool: "SupplyCoord"
+                }, dispatch: true}
             ], {
                 getActiveToolNames: ["SupplyCoord", "ScaleSwitcher", "FileImport"]
+            }, done);
+        });
+        it("activate only the first tool with active = true and deactivate gfi, if this tools has deactivateGFI = true", done => {
+            const state = {
+                SupplyCoord: {
+                    active: true,
+                    deactivateGFI: true
+                },
+                ScaleSwitcher: {
+                    active: true
+                },
+                Gfi: {
+                    active: true
+                }
+            };
+
+            testAction(setToolActiveByConfig, {}, state, {}, [
+                {type: "SupplyCoord/setActive", payload: false},
+                {type: "ScaleSwitcher/setActive", payload: false},
+                {type: "Gfi/setActive", payload: false},
+                {type: "SupplyCoord/setActive", payload: true},
+                {type: "activateToolInModelList", payload: "SupplyCoord", dispatch: true},
+                {type: "errorMessageToManyToolsActive", payload: {
+                    activeTools: ["SupplyCoord", "ScaleSwitcher", "Gfi"],
+                    firstActiveTool: "SupplyCoord"
+                }, dispatch: true}
+            ], {
+                getActiveToolNames: ["SupplyCoord", "ScaleSwitcher", "Gfi"]
+            }, done);
+        });
+        it("activate the first tool with active = true and the gfi, if this tools has deactivateGFI = false", done => {
+            const state = {
+                SupplyCoord: {
+                    active: true,
+                    deactivateGFI: false
+                },
+                ScaleSwitcher: {
+                    active: true
+                },
+                Gfi: {
+                    active: true
+                }
+            };
+
+            testAction(setToolActiveByConfig, {}, state, {}, [
+                {type: "SupplyCoord/setActive", payload: false},
+                {type: "ScaleSwitcher/setActive", payload: false},
+                {type: "Gfi/setActive", payload: false},
+                {type: "SupplyCoord/setActive", payload: true},
+                {type: "activateToolInModelList", payload: "SupplyCoord", dispatch: true},
+                {type: "Gfi/setActive", payload: true},
+                {type: "errorMessageToManyToolsActive", payload: {
+                    activeTools: ["SupplyCoord", "ScaleSwitcher", "Gfi"],
+                    firstActiveTool: "SupplyCoord"
+                }, dispatch: true}
+            ], {
+                getActiveToolNames: ["SupplyCoord", "ScaleSwitcher", "Gfi"]
             }, done);
         });
     });
