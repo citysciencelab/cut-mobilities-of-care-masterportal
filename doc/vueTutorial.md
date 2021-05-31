@@ -89,7 +89,7 @@ export default state;
 
 ## Defining state
 
-[Vuex state](https://vuex.vuejs.org/guide/state.html) is defined in the `modules/tools/scale/store/stateScaleSwitcher.js` file.
+[Vuex state](https://vuex.vuejs.org/guide/state.html) is defined in the `modules/tools/scaleSwitcher/store/stateScaleSwitcher.js` file.
 
 ```js
 const state = {
@@ -245,7 +245,7 @@ import getters from "../store/gettersScaleSwitcher";
 
 ## Use mutations as methods in the ScaleSwitcher.vue
 
-Import the vuex helper function `mapMutations` in the `modules/tools/scale/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
+Import the vuex helper function `mapMutations` in the `modules/tools/scaleSwitcher/components/ScaleSwitcher.vue`, and the *ScaleSwitcher* mutations. All mutation keys of the *ScaleSwitcher* are added.
 
 ```js
 import Tool from "../../Tool.vue";
