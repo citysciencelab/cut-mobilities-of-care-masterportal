@@ -729,12 +729,14 @@ Layout definition for each result's chart.
 |----|--------|----|-------|-----------|
 |title|no|String||Chart image title. May also be set to a path in the translation files in `masterportal/locales`, which you may extend at your own discretion.|
 |color|no|String|`"rgba(0, 0, 0, 1)"`|Bar color.|
+|noticeText|no|String|""|Text that gives a hint about the data.|
 
 ```json
 {
     "available": {
         "title": "Available",
-        "color": "rgba(0, 220, 0, 1)"
+        "color": "rgba(0, 220, 0, 1)",
+        "noticeText": "Explanation of the available data."
     }
 }
 ```
@@ -743,7 +745,8 @@ Layout definition for each result's chart.
 {
     "charging": {
         "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-        "color": "rgba(220, 0, 0, 1)"
+        "color": "rgba(220, 0, 0, 1)",
+        "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
     }
 }
 ```

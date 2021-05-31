@@ -475,7 +475,10 @@
                         "year": "{{count}} Jahr",
                         "year_plural": "{{count}} Jahren",
                         "previousWeekday": "Vorheriger Wochentag",
-                        "nextWeekday": "Nächster Wochentag"
+                        "nextWeekday": "Nächster Wochentag",
+                        "noticeTextAvailable": "(Es werden ausschließlich Daten die mit dem Wert available/Verfügbarkeit berücksichtigt)",
+                        "noticeTextCharging": "(Es werden ausschließlich Daten die mit dem Wert charging/Auslastung berücksichtigt)",
+                        "noticeTextOutoforder": "(Es werden ausschließlich Daten die mit dem Wert outoforder/Außer Betrieb berücksichtigt)"
                       },
                       "sensorData": {
                         "firstColumnHeaderName": "Eigenschaften"

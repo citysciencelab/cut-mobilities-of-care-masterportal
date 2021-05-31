@@ -773,15 +773,18 @@
                 "values": {
                   "available": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.available",
-                    "color": "rgba(0, 220, 0, 1)"
+                    "color": "rgba(0, 220, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextAvailable"
                   },
                   "charging": {
                     "title": "common:modules.tools.gfi.themes.sensor.chargingStations.charging",
-                    "color": "rgba(220, 0, 0, 1)"
+                    "color": "rgba(220, 0, 0, 1)",
+                    "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextCharging"
                   },
                   "outoforder": {
                       "title": "common:modules.tools.gfi.themes.sensor.chargingStations.outoforder",
-                      "color": "rgba(175, 175, 175, 1)"
+                      "color": "rgba(175, 175, 175, 1)",
+                      "noticeText": "common:modules.tools.gfi.themes.sensor.sensorBarChart.noticeTextOutoforder"
                   }
                 }
               }

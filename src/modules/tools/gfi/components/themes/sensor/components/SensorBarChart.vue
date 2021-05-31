@@ -45,7 +45,8 @@ export default {
             hoverBackgroundColor: "rgba(0, 0, 0, 0.8)",
             chartColor: "rgba(0, 0, 0, 1)",
             barPercentage: 1.0,
-            titleText: ""
+            titleText: "",
+            noticeText: ""
         };
     },
     computed: {
@@ -67,6 +68,7 @@ export default {
         this.hoverBackgroundColor = this.chartsParams?.hoverBackgroundColor || this.hoverBackgroundColor;
         this.barPercentage = this.chartsParams?.barPercentage || this.barPercentage;
         this.chartColor = this.chartValue?.color || this.chartColor;
+        this.noticeText = this.chartValue?.noticeText || this.noticeText;
     },
     mounted () {
         this.initialize();
@@ -97,8 +99,9 @@ export default {
 
             this.titleText = [
                 this.$t(this.chartValue?.title || ""),
-                `(${this.$t("common:modules.tools.gfi.themes.sensor.sensorBarChart.chartTitleAverage")} `
-                + this.$t(`common:modules.tools.gfi.themes.sensor.sensorBarChart.${this.periodUnit}`, {count: this.periodLength}) + ")"
+                `${this.$t("common:modules.tools.gfi.themes.sensor.sensorBarChart.chartTitleAverage")} `
+                + this.$t(`common:modules.tools.gfi.themes.sensor.sensorBarChart.${this.periodUnit}`, {count: this.periodLength}),
+                this.$t(this.noticeText)
             ];
 
             return calculateArithmeticMean(processedData);

@@ -11,13 +11,15 @@
 ## Unreleased - in development
 ### Added
 - A locale file for Portuguese language was added.
-- New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer
+- New WFS Layer attribute "wfsFilter" in configuration to filter the data from wfs layer.
+- Added possibility in gfiTheme sensor to display an explanation text for the data.
 
 ### Changed
 - The Id in config.json for every layer could be in an object format, to allow any number of menu entries with the same layer id.
 - New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
+
 ### Deprecated
 
 ### Removed
@@ -27,6 +29,7 @@
 - In GFI the layerTitle was shortened in case it contains a colon.
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
 - Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
+- Fixed an error that caused the historical data in the gfiTheme sensor to not be formatted correctly at times.
 
 ---
 
