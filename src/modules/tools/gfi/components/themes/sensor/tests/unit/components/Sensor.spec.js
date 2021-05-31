@@ -62,8 +62,8 @@ describe("src/modules/tools/gfi/components/themes/senor/components/Sensor.vue", 
     });
 
     it("should return a filter for the dataStreamId", () => {
-        expect(wrapper.vm.createFilterDataStream("1234")).equals("@iot.id eq 1234");
-        expect(wrapper.vm.createFilterDataStream("1111 | 9999")).equals("@iot.id eq 1111 or @iot.id eq 9999");
+        expect(wrapper.vm.createFilterDataStream("1234")).equals("@iot.id%20eq%201234");
+        expect(wrapper.vm.createFilterDataStream("1111 | 9999")).equals("@iot.id%20eq%201111%20or%20@iot.id%20eq%209999");
     });
 
     it("should return periodLength 3 and periodUnit 'month' by default", () => {

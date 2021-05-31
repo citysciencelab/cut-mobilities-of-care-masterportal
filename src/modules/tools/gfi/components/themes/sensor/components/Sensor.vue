@@ -100,7 +100,7 @@ export default {
                     filterDate = this.createFilterDate(this.periodLength, this.periodUnit),
                     filterDataStream = this.createFilterDataStream(this.feature.getProperties()?.dataStreamId),
                     requestQuery = `${url}/v${version}/Datastreams?$select=@iot.id&$expand=Observations`
-                        + `($select=result,phenomenonTime;$orderby=phenomenonTime desc;$filter=phenomenonTime gt ${filterDate})`
+                        + `($select=result,phenomenonTime;$orderby=phenomenonTime%20desc;$filter=phenomenonTime%20gt%20${filterDate})`
                         + `&$filter=${filterDataStream}`;
 
                 this.fetchObservations(requestQuery);
@@ -132,10 +132,10 @@ export default {
 
             dataStreamIds.forEach((id, index) => {
                 if (index === 0) {
-                    dataStreamFilter = `@iot.id eq ${id}`;
+                    dataStreamFilter = `@iot.id%20eq%20${id}`;
                 }
                 else {
-                    dataStreamFilter = `${dataStreamFilter} or @iot.id eq ${id}`;
+                    dataStreamFilter = `${dataStreamFilter}%20or%20@iot.id%20eq%20${id}`;
                 }
             });
 
@@ -149,13 +149,13 @@ export default {
          * @returns {void}
          */
         fetchObservations: function (requestQuery) {
-            const loadedDataStreamIndices = [];
-            let historicalObservations = [];
+            const loadedDataStreamIndices = [],
+                historicalObservations = [];
 
             axios.get(requestQuery)
                 .then(response => {
                     response.data.value.forEach((result, index) => {
-                        historicalObservations = historicalObservations.concat(result);
+                        historicalObservations.push(result);
                         if (result.hasOwnProperty("Observations@iot.nextLink")) {
                             this.fetchNextLinks(result["Observations@iot.nextLink"], index, historicalObservations, loadedDataStreamIndices, response.data.value.length);
                         }
@@ -179,6 +179,7 @@ export default {
                     if (response?.data.hasOwnProperty("value")) {
                         historicalObservations[index].Observations = historicalObservations[index].Observations.concat(response.data.value);
                     }
+
                     if (response?.data.hasOwnProperty("@iot.nextLink")) {
                         this.fetchNextLinks(response.data["@iot.nextLink"], index, historicalObservations, loadedDataStreamIndices, numberOfDataStreams);
                     }
