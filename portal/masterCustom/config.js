@@ -68,6 +68,7 @@ const Config = {
             de: "deutsch",
             en: "englisch",
             it: "italienisch",
+            es: "spanisch",
             pt: "portugiesisch"
         },
         fallbackLanguage: "de",
