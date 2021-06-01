@@ -65,6 +65,7 @@ const state = {
     layer: new VectorLayer({
         source,
         style,
+        id: "measure_layer",
         name: "measure_layer",
         alwaysOnTop: true
     }),

@@ -227,6 +227,7 @@ export default {
             }
             else {
                 this.layer = new VectorLayer({
+                    id: "geometry_selection_layer",
                     name: "Geometry-Selection",
                     source: new VectorSource(),
                     alwaysOnTop: true

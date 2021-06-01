@@ -13,7 +13,7 @@ function createLayersArray (count) {
 
 
     for (let i = 0; i < count; i++) {
-        const layer = new VectorLayer(); // javascript object
+        const layer = new VectorLayer();
 
         layer.setIsSelected = sinon.spy();
         layer.set("name", "Layer" + i);

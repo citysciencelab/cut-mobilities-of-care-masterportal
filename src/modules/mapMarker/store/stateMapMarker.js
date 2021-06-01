@@ -14,12 +14,14 @@ export default {
     pointStyleId: "defaultMapMarkerPoint",
     polygonStyleId: "defaultMapMarkerPolygon",
     markerPoint: new VectorLayer({
+        id: "marker_point_layer",
         name: "markerPoint",
         source: new VectorSource(),
         visible: false,
         style: new Style()
     }),
     markerPolygon: new VectorLayer({
+        id: "marker_polygon_layer",
         name: "markerPolygon",
         source: new VectorSource(),
         visible: false,

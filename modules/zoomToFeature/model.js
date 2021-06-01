@@ -126,6 +126,7 @@ const ZoomToFeature = Backbone.Model.extend({
      */
     createIconVectorLayer: function (iconFeatures) {
         return new VectorLayer({
+            id: "zoom_to_feature_layer",
             source: new VectorSource({
                 features: iconFeatures
             })

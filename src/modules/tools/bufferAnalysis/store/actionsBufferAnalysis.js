@@ -45,6 +45,7 @@ const actions = {
         const features = selectedSourceLayer.get("layerSource").getFeatures(),
             vectorSource = new VectorSource(),
             bufferLayer = new VectorLayer({
+                id: "buffer_layer",
                 source: vectorSource
             });
 
@@ -218,6 +219,7 @@ const actions = {
             const vectorSource = new VectorSource(),
                 gfiAttributes = selectedTargetLayer.get("gfiAttributes"),
                 resultLayer = new VectorLayer({
+                    id: "result_layer",
                     source: vectorSource,
                     style: selectedTargetLayer.get("style")
                 });
