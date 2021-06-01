@@ -558,13 +558,14 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
     },
 
     /**
-     * todo
-     * @param {*} ids - todo
-     * @param {*} layerId - todo
+     * Get extent of features.
+     * @param {String[]} ids - The feature ids.
+     * @param {String} layerId - The layer id.
+     * @param {Object} zoomOptions - The options for zoom to extent.
      * @fires Core.ModelList#RadioRequestModelListGetModelByAttributes
      * @returns {void}
      */
-    zoomToFilteredFeatures: function (ids, layerId) {
+    zoomToFilteredFeatures: function (ids, layerId, zoomOptions) {
         const layer = Radio.request("ModelList", "getModelByAttributes", {id: layerId, type: "layer"}),
             olLayer = layer.get("layer");
 
@@ -594,7 +595,7 @@ const map = Backbone.Model.extend(/** @lends map.prototype */{
 
         if (features.length > 0) {
             extent = this.calculateExtent(features);
-            this.zoomToExtent(extent);
+            this.zoomToExtent(extent, zoomOptions);
         }
     },
 

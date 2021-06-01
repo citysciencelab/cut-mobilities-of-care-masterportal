@@ -26,6 +26,7 @@
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
 - In GFI the layerTitle was shortened in case it contains a colon.
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
+- Fixed a bug where the live zoom in the tool filter did not take into account the configured minWidth.
 
 ---
 
