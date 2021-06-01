@@ -115,7 +115,7 @@ WMTS layers can be added by
 |layers|yes|String||Layer name. Must match the name noted in the WMTS capabilities.|`"geolandbasemap"`|
 |layerAttribution|no|String|`"nicht vorhanden"`|Additional layer information to be shown in the portal's control element *LayerAttribution*, if configured to appear. If `"nicht vorhanden"` (technical key meaning "not available") is chosen, no layer attribution is shown.|`"nicht vorhanden"`|
 |legendURL|yes|String/String[]||_Deprecated, please use "legend"._ Link to static legend image. `"ignore"`: No image is retrieved, `""` (empty string): The service's *GetLegendGraphic* is called.|`"ignore"`|
-|legend|no|String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a boolean value to dynamically generate the legend from a WMS request or the WFS styling respectively. Use a string to link an image or a PDF file.|`false`|
+|legend|no|String[]||Value of the **[services.json](services.json.md)** file. URL to be used to request a static legend image. Use a string[] to link an image or a PDF file.|`false`|
 |matrixSizes|no|Number[][]|Number of tile rows and columns of the grid for each zoom level. The values here are the `TileMatrixWidth` and `TileMatrixHeight` advertised in the GetCapabilities response of the WMTS.|[[1, 1], [2, 2], [4, 4], [8, 8], [16, 16], [32, 32], [64, 64], [128, 128], [256, 256], [512, 512], [1024, 1024], [2048, 2048], [4096, 4096], [8192, 8192], [16384, 16384], [32768, 32768], [65536, 65536], [131072, 131072], [262144, 262144], [524288, 524288]]|
 |maxScale|yes|String||The layer is shown only up to this scale.|`"1000000"`|
 |minScale|yes|String||The layer is shown only down to this scale.|`"0"`|
