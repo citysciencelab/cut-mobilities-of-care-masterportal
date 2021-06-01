@@ -121,10 +121,10 @@
         "language": {
             "languageTitle": "Bitte wählen Sie eine Sprache aus",
             "de": "Deutsch",
-            "en": "Englisch",
-            "it": "Italienisch",
-            "es": "Spanisch",
-            "pt": "Portugisisch"
+            "en": "English",
+            "it": "Italiano",
+            "pt": "Português",
+            "es": "Español"
         },
         "cswParser": {
             "noMetadataMessage": "Keine Metadaten vorhanden.",

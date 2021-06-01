@@ -91,9 +91,9 @@
             "languageTitle": "Please choose a language",
             "de": "Deutsch",
             "en": "English",
-            "it": "Italian",
-            "es": "Spanish",
-            "pt": "Português"
+            "it": "Italiano",
+            "pt": "Português",
+            "es": "Español"
         },
         "core": {
           "modelList": {

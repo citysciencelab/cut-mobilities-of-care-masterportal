@@ -116,7 +116,8 @@
             "de": "Deutsch",
             "en": "English",
             "it": "Italiano",
-            "pt": "Português"
+            "pt": "Português",
+            "es": "Español"
         },
         "cswParser": {
             "noMetadataMessage": "Metadados não estão disponíveis.",

@@ -114,12 +114,11 @@
         },
         "language": {
             "languageTitle": "Si prega di selezionare una lingua",
-            "de": "Tedesco",
-            "en": "Inglese",
+            "de": "Deutsch",
+            "en": "English",
             "it": "Italiano",
             "pt": "Português",
-            "es": "Spagnolo",
-            "tr": "Turco"
+            "es": "Español"
         },
         "cswParser": {
             "noMetadataMessage": "Metadati non disponibili.",
