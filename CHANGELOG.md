@@ -20,6 +20,7 @@
 - New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
+- Update description of the attribute '"extent"' for layer configurations in config.json.md.
 
 ### Deprecated
 
