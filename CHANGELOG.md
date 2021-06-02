@@ -20,7 +20,7 @@
 - New Parameter propertyNames could be added in config.json for WFS layer to receive filtered response.
 - The documentation for WMTS layers, legend field has been adapted. Only one specification in a string[] is possible.
 - The translation for the url in the staticlink in config.json has been removed.
-- Update description of the attribute '"extent"' for layer configurations in config.json.md.
+- Issue #617: Update description of the attribute '"extent"' for layer configurations in config.json.md.
 
 ### Deprecated
 
@@ -30,7 +30,7 @@
 - Now Sensor Layer will show 0 if the dataValue is 0 and not "no data".
 - In GFI the layerTitle was shortened in case it contains a colon.
 - The GFI is now active if this is configured and no other active tool explicitly prevents this.
-- Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
+- Issue #616: Fixed a bug where the live zoom in the tool filter did not take into account the configured minScale.
 - Fixed an error that caused the historical data in the gfiTheme sensor to not be formatted correctly at times.
 
 ---
