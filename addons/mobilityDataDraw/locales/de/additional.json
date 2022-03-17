@@ -170,6 +170,10 @@
         "Point": "Punkt",
         "LineString": "Route",
         "Polygon": "Bereich"
+      },
+      "testMode": {
+        "noDataSent" : "Da sie die Anwendung testen, werden die Daten nicht gespeichert.",
+        "hint" : "Hinweis"
       }
     }
   }

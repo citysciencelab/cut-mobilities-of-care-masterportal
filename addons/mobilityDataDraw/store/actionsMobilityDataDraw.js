@@ -9,6 +9,8 @@ import personApi from "../api/sendPersonalData";
 import entryApi from "../api/sendEntry";
 import audioApi from "../api/sendAudioRecords";
 
+import config from "../config";
+
 const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
     actions = {
         ...drawAndModifyActions,
@@ -33,9 +35,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                     console.error(error);
                     Radio.trigger("Alert", "alert", {
                         text: i18next.t(
-                            "additional:modules.tools.mobilityDataDraw.alert.submitPersonalDataError"
+                            config.TEST_ENV ?
+                                "additional:modules.tools.testMode.noDataSent" :
+                                "additional:modules.tools.mobilityDataDraw.alert.submitPersonalDataError"
                         ),
-                        category: "Error",
+                        category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                         kategorie: "alert-danger"
                     });
                 });
@@ -69,9 +73,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {
                                     text: i18next.t(
-                                        "additional:modules.tools.mobilityDataDraw.alert.submitAudioError"
+                                        config.TEST_ENV ?
+                                            "additional:modules.tools.testMode.noDataSent" :
+                                            "additional:modules.tools.mobilityDataDraw.alert.submitAudioError"
                                     ),
-                                    category: "Error",
+                                    category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                                     kategorie: "alert-danger"
                                 });
                             });
@@ -81,9 +87,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                     console.error(error);
                     Radio.trigger("Alert", "alert", {
                         text: i18next.t(
-                            "additional:modules.tools.mobilityDataDraw.alert.submitMobilityDataError"
+                            config.TEST_ENV ?
+                                "additional:modules.tools.testMode.noDataSent" :
+                                "additional:modules.tools.mobilityDataDraw.alert.submitMobilityDataError"
                         ),
-                        category: "Error",
+                        category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                         kategorie: "alert-danger"
                     });
                 });
