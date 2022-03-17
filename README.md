@@ -1,5 +1,5 @@
-## Mobilities of care
-### City Science Lab - Connected Urban Twin
+# Mobilities of care
+## City Science Lab - Connected Urban Twin
 
 ---
 Care workers have specific demands on urban (transport) infrastructure
@@ -11,14 +11,15 @@ held by the CityScienceLab in order to test new technology in the
 processes. The tools in this repository are two add-ons for the [Connected Urban Twin (CUT)](https://www.hamburg.de/cut/)
 and gather mobility data of unpaid care workers.
 
-The first add-on is a storytelling tool that ....
+The first add-on is a storytelling tool that .... ADD DESCRIPTION
 
-The second add-on enables users to input their ....
+The second add-on enables users to input their ....  ADD DESCRIPTION
 
+### Docker
 This repository is ready to build with Docker if you plan on trying out the application.
 
-
-You can also build this repository with npm if you plan o connecting a database or adjusting the code to your needs.
+### Masterportal setup
+You can also start the application with npm if you plan on connecting a database, creating a new story or adjusting the code to your needs.
 
 #### Node.js
 
