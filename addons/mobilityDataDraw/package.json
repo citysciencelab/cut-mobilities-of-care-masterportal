@@ -1,0 +1,9 @@
+{
+  "name": "mobilityDataDraw",
+  "version": "1.0.0",
+  "description": "Drawing tool for mobility data",
+  "title": "Mobility Data Draw",
+  "dependencies": {
+    "vuetify": "^2.5.1"
+  }
+}

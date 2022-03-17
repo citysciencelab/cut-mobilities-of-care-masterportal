@@ -1,0 +1,65 @@
+{
+  "modules": {
+    "tools": {
+      "storyTellingTool": {
+        "title": "Story Telling Tool",
+        "create": "Story erstellen",
+        "play": "Story starten",
+        "tableOfContents": "Inhaltsverzeichnis",
+        "createStory": "Story erstellen",
+        "createStoryStep": "Storyschritt erstellen",
+        "label": {
+          "storyName": "Storyname",
+          "storyDescription": "Beschreibung",
+          "author": "Autor",
+          "steps": "Schritte",
+          "chapter": "Kapitel",
+          "newChapterNumber": "Nummer des neuen Kapitels",
+          "newChapterTitle": "Titel des neuen Kapitels",
+          "stepNumber": "Schritt Nummer",
+          "stepTitle": "Schritt Titel",
+          "stepWidth": "Fensterbreite",
+          "visible": "Sichtbarkeit",
+          "htmlContent": "Inhalt",
+          "centerCoordinate": "Position der Karte",
+          "zoomLevel": "Zoomstufe der Karte",
+          "layers": "Layer",
+          "interactionAddons": "Erweiterungen"
+        },
+        "warning": {
+          "mapMoved": "Die eingetragene Position entspricht nicht der aktuellen Ansicht der Karte.",
+          "mapZoomed": "Die eingetragene Zoomstufe entspricht nicht der aktuellen Ansicht der Karte."
+        },
+        "error": {
+          "chapterNumberAlreadyExists": "Ein Kapitel mit dieser Nummer existiert bereits. Bitte wählen Sie eine andere Nummer.",
+          "stepNumberAlreadyExists": "Ein Schritt mit dieser Nummer existiert bereits. Bitte wählen Sie eine andere Nummer.",
+          "errorAddingImage": "Das Bild konnte nicht geladen werden. Bitte versuchen Sie es mit einer anderen Datei."
+        },
+        "confirm": {
+          "closeStoryCreation": {
+            "title": "Tool schließen",
+            "description": "Sind Sie sicher, dass Sie das Tool schließen möchten? Eingetragene Daten werden nicht gespeichert.",
+            "confirmButton": "Schließen",
+            "denyButton": "Abbrechen"
+          },
+          "deleteStep": {
+            "title": "Schritt löschen",
+            "description": "Sind Sie sicher, dass Sie diesen Schritt löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+            "confirmButton": "Löschen",
+            "denyButton": "Abbrechen"
+          }
+        },
+        "button": {
+          "cancel": "Abbrechen",
+          "addStep": "Schritt hinzufügen",
+          "deleteStep": "Schritt löschen",
+          "submitAddStep": "Schritt zur Story hinzufügen",
+          "submitEditStep": "Schritt speichern",
+          "previewStory": "Vorschau",
+          "downloadStory": "Story herunterladen"
+        },
+        "newChapter": "Neues Kapitel"
+      }
+    }
+  }
+}

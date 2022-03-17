@@ -1,0 +1,176 @@
+{
+  "modules": {
+    "tools": {
+      "mobilityDataDraw": {
+        "title": "Data Collection Tool",
+        "label": {
+          "personalData": "Personal Data",
+          "age": "Age",
+          "gender": "Gender",
+          "maritalStatus": "Marital Status",
+          "employment": "Employment Status",
+          "householdIncome": "Household Income",
+          "personInNeed": "Who do you take care of?",
+          "personInNeedClass": "Class of Person",
+          "personInNeedAge": "Age of the Person in Need",
+          "sameHousehold": "Is the person in need living in the same household?",
+          "additional": "Do you have anything else important to tell us about yourself?",
+          "mobilityMode": "Means of Transport",
+          "weekdays": "Weekdays",
+          "route": "Route",
+          "location": "Stop",
+          "routes": "Routes",
+          "startTime": "Start",
+          "endTime": "End",
+          "cost": "Costs in Euros",
+          "routeComment": "Route comment",
+          "summary": "Summary",
+          "drawingMode": "Drawing Tool",
+          "annotations": "Annotations",
+          "annotation": "Annotation",
+          "personInNeedTile": "Person in need"
+        },
+        "button": {
+          "startModifyRoute": "Edit route on the map",
+          "stopModifyRoute": "Save route on the map",
+          "deleteRoute": "Delete route",
+          "startModifyLocation": "Edit stop on the map",
+          "stopModifyLocation": "Save stop on the map",
+          "deleteLocation": "Delete stop",
+          "startModifyAnnotation": "Edit annotation on the map",
+          "stopModifyAnnotation": "Save annotation on the map",
+          "deleteAnnotation": "Delete annotation",
+          "previous": "Back",
+          "next": "Continue",
+          "submit": "Submit",
+          "enterMore": "Enter another daily routine",
+          "finish": "Finish",
+          "addPerson": "Add Person",
+          "addRecord": "Add Record",
+          "removeRecord": "Delete Record"
+        },
+        "alert": {
+          "submitPersonalDataError": "Your personal data couldn't be saved. Please try again.",
+          "submitMobilityDataError": "The data couldn't be saved. Please try again.",
+          "submitAudioError": "The audio record couldn't be saved. Please try again."
+        },
+        "confirm": {
+          "closeMobilityDataDraw": {
+            "title": "Close Tool",
+            "description": "Are you sure you want to close this tool? Entered data won't be saved.",
+            "confirmButton": "Close",
+            "denyButton": "Cancel"
+          },
+          "submitPersonalData": {
+            "title": "Submit personal data",
+            "description": "Are you sure you want to submit your personal data? The data can't be edited after submitting.",
+            "confirmButton": "Submit",
+            "denyButton": "Cancel"
+          },
+          "submitDrawnData": {
+            "title": "Submit mobility data",
+            "description": "Are you sure you want to submit your mobility data? The data can't be edited after submitting.",
+            "confirmButton": "Submit",
+            "denyButton": "Cancel"
+          },
+          "deleteLocationFeature": {
+            "title": "Delete stop",
+            "description": "Are you sure you want to delete this stop? This can't be undone.",
+            "confirmButton": "Delete",
+            "denyButton": "Cancel"
+          },
+          "deleteRouteFeature": {
+            "title": "Delete route",
+            "description": "Are you sure you want to delete this route? This can't be undone.",
+            "confirmButton": "Delete",
+            "denyButton": "Cancel"
+          },
+          "deleteAnnotation": {
+            "title": "Delete annotation",
+            "description": "Are you sure you want to delete this annotation? This can't be undone.",
+            "confirmButton": "Delete",
+            "denyButton": "Cancel"
+          },
+          "deleteRecord": {
+            "title": "Delete record",
+            "description": "Are you sure you want to delete this record? This can't be undone.",
+            "confirmButton": "Delete",
+            "denyButton": "Cancel"
+          },
+          "deletePerson": {
+            "title": "Delete person",
+            "description": "Are you sure you want to delete this person? This can't be undone.",
+            "confirmButton": "Delete",
+            "denyButton": "Cancel"
+          }
+        },
+        "personalData": {
+          "genders": {
+            "male": "Male",
+            "female": "Female",
+            "diverse": "Diverse"
+          },
+          "maritalStatuses": {
+            "A": "Married und living together",
+            "A1": "Civil partnership and living together (same-sex)",
+            "B": "Married and separated",
+            "C": "Single",
+            "D": "Divorced",
+            "E": "Widowed",
+            "F": "Civil partnership and separated (same-sex)",
+            "G": "Civil partnership canceled (same-sex)",
+            "H": "Registered civil partner passed away (same-sex)"
+          },
+          "employments": {
+            "A": "Full-time employed",
+            "B": "Part-time employed",
+            "C": "Partial retirement",
+            "D": "Marginally employed (450€ Job, Minijob)",
+            "E": "“One-Euro-Job” (When receiving Arbeitslosengeld II)",
+            "F": "Occasional or irregular employment",
+            "G": "In vocational training/apprenticeship",
+            "H": "In retraining",
+            "I": "Voluntary military service",
+            "J": "Federal voluntary service or voluntary social year",
+            "K": "Maternity leave or parental leave",
+            "L": "Not gainfully employed (including: pupils or students who do not work for money, unemployed, early retirees, pensioners without additional income)"
+          },
+          "personInNeedClasses": {
+            "A": "Child",
+            "B": "Parents",
+            "C": "Other relatives",
+            "D": "Aquaintances",
+            "E": "Through voluntary work"
+          }
+        },
+        "dailyRoutine": {
+          "introduction": "Draw a route on the map to start.",
+          "drawingHint": "Click on the map to start drawing a route. Double click on the map to finish the route.",
+          "addLocationMarker": "Click on the map to place the marker."
+        },
+        "annotations": {
+          "pointDrawingHint": "click on the map to place an annotation point.",
+          "routeDrawingHint": "Click on the map to start drawing a route. Double click on the map to finish the route.",
+          "areaDrawingHint": "Click on the map to start drawing an area. Double click on the map to finish the area.",
+          "introduction": "For further annotations, draw points, routes or areas on the map."
+        },
+        "closing": {
+          "title": "Thank you for participating!",
+          "message": "You're welcome to enter more of your daily routines."
+        }
+      },
+      "mobilityMode": {
+        "bicycle": "Bicycle",
+        "bus": "Bus",
+        "car": "Car",
+        "train": "Train",
+        "walk": "Walk"
+      },
+      "drawingMode": {
+        "Point": "Point",
+        "LineString": "Route",
+        "Polygon": "Area"
+      }
+    }
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "modules": {
+    "tools": {
+      "mobilityDataDraw": {
+        "title": "Data Collection Tool",
+        "label": {
+          "personalData": "Steckbrief",
+          "age": "Alter",
+          "gender": "Geschlecht",
+          "maritalStatus": "Familienstand",
+          "employment": "Erwerbstätigkeit",
+          "householdIncome": "Haushalts-Einkommensklassen",
+          "personInNeed": "Um wen kümmern Sie sich?",
+          "personInNeedClass": "Personenklasse",
+          "personInNeedAge": "Alter der hilfsbedürftigen Person",
+          "sameHousehold": "Lebt die hilfsbedürftige Person im gleichen Haushalt?",
+          "additional": "Haben Sie uns sonst noch etwas wichtiges über Sie mitzuteilen?",
+          "mobilityMode": "Fortbewegungsmittel",
+          "weekdays": "Wochentage",
+          "route": "Route",
+          "location": "Stopp",
+          "routes": "Routen",
+          "startTime": "Start",
+          "endTime": "Ende",
+          "cost": "Kosten in Euro",
+          "routeComment": "Kommentar",
+          "summary": "Zusammenfassung",
+          "drawingMode": "Zeichenwerkzeug",
+          "annotations": "Anmerkungen",
+          "annotation": "Anmerkung",
+          "personInNeedTitle": "Hilfsbedürftige Person"
+        },
+        "button": {
+          "startModifyRoute": "Route auf der Karte bearbeiten",
+          "stopModifyRoute": "Route auf der Karte speichern",
+          "deleteRoute": "Route löschen",
+          "startModifyLocation": "Stopp auf der Karte bearbeiten",
+          "stopModifyLocation": "Stopp auf der Karte speichern",
+          "deleteLocation": "Stopp löschen",
+          "startModifyAnnotation": "Anmerkung auf der Karte bearbeiten",
+          "stopModifyAnnotation": "Anmerkung auf der Karte speichern",
+          "deleteAnnotation": "Anmerkung löschen",
+          "previous": "Zurück",
+          "next": "Weiter",
+          "submit": "Absenden",
+          "enterMore": "Weiteren Tagesablauf eintragen",
+          "finish": "Beenden",
+          "addPerson": "Person hinzufügen",
+          "addRecord": "Aufnahme hinzufügen",
+          "removeRecord": "Aufnahme löschen"
+        },
+        "alert": {
+          "submitPersonalDataError": "Ihre persönlichen Daten konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+          "submitMobilityDataError": "Die Daten konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+          "submitAudioError": "Die Audioaufnahme konnte nicht gespeichert werden. Bitte versuchen Sie es erneut."
+        },
+        "confirm": {
+          "closeMobilityDataDraw": {
+            "title": "Tool schließen",
+            "description": "Sind Sie sicher, dass Sie das Tool schließen möchten? Eingetragene Daten werden nicht gespeichert.",
+            "confirmButton": "Schließen",
+            "denyButton": "Abbrechen"
+          },
+          "submitPersonalData": {
+            "title": "Steckbrief senden",
+            "description": "Sind Sie sicher, dass Sie den Steckbrief senden möchten? Die Daten können nachträglich nicht bearbeitet werden.",
+            "confirmButton": "Senden",
+            "denyButton": "Abbrechen"
+          },
+          "submitDrawnData": {
+            "title": "Mobilitätsdaten senden",
+            "description": "Sind Sie sicher, dass Sie die Mobilitätsdaten senden möchten? Die Daten können nachträglich nicht bearbeitet werden.",
+            "confirmButton": "Senden",
+            "denyButton": "Abbrechen"
+          },
+          "deleteLocationFeature": {
+            "title": "Stopp löschen",
+            "description": "Sind Sie sicher, dass Sie den Stopp löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+            "confirmButton": "Löschen",
+            "denyButton": "Abbrechen"
+          },
+          "deleteRouteFeature": {
+            "title": "Route löschen",
+            "description": "Sind Sie sicher, dass Sie die Route löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+            "confirmButton": "Löschen",
+            "denyButton": "Abbrechen"
+          },
+          "deleteAnnotation": {
+            "title": "Anmerkung löschen",
+            "description": "Sind Sie sicher, dass Sie die Anmerkung löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+            "confirmButton": "Löschen",
+            "denyButton": "Abbrechen"
+          },
+          "deleteRecord": {
+            "title": "Aufnahme löschen",
+            "description": "Sind Sie sicher, dass Sie die Aufnahme löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+            "confirmButton": "Löschen",
+            "denyButton": "Abbrechen"
+          },
+          "deletePerson": {
+            "title": "Person löschen",
+            "description": "Sind Sie sicher, dass Sie die Person löschen möchten? Dies kann nicht rückgängig gemacht werden.",
+            "confirmButton": "Löschen",
+            "denyButton": "Abbrechen"
+          }
+        },
+        "personalData": {
+          "genders": {
+            "male": "Männlich",
+            "female": "Weiblich",
+            "diverse": "Divers"
+          },
+          "maritalStatuses": {
+            "A": "Verheiratet und lebe mit meinem/meiner Ehepartner/-in zusammen",
+            "A1": "In eingetragener Lebenspartnerschaft zusammenlebend (gleichgeschlechtlich)",
+            "B": "Verheiratet und lebe von meinem/meiner Ehepartner/-in getrennt",
+            "C": "Ledig",
+            "D": "Geschieden",
+            "E": "Verwitwet",
+            "F": "Eingetragene Lebenspartnerschaft, getrennt lebend (gleichgeschlechtlich)",
+            "G": "Eingetragene Lebenspartnerschaft aufgehoben (gleichgeschlechtlich)",
+            "H": "Eingetragene/r Lebenspartner/-in verstorben (gleichgeschlechtlich)"
+          },
+          "employments": {
+            "A": "Vollzeiterwerbstätig",
+            "B": "Teilzeiterwerbstätig",
+            "C": "Altersteilzeit (unabhängig davon, ob in der Arbeits- oder Feistellungsphase befindlich)",
+            "D": "Geringfügig erwerbstätig, 450-Euro-Job 4, Minijob",
+            "E": "„Ein-Euro-Job“ (bei Bezug von Arbeitslosengeld II)",
+            "F": "Gelegentlich oder unregelmäßig beschäftigt",
+            "G": "In einer beruflichen Ausbildung/Lehre",
+            "H": "In Umschulung",
+            "I": "Freiwilliger Wehrdienst",
+            "J": "Bundesfreiwilligendienst oder Freiwilliges Soziales Jahr",
+            "K": "Mutterschafts-, Erziehungsurlaub, Elternzeit oder sonstige Beurlaubung (Altersteilzeit unter C angeben)",
+            "L": "Nicht erwerbstätig (einschließlich: Schüler/-innen oder Studierende, die nicht gegen Geld arbeiten, Arbeitslose, Vorruheständler/-innen, Rentner/-innen ohne Nebenverdienst)"
+          },
+          "personInNeedClasses": {
+            "A": "Kind",
+            "B": "Eltern",
+            "C": "Sonstige Verwandte",
+            "D": "Bekannte",
+            "E": "Durch Ehrenamt"
+          }
+        },
+        "dailyRoutine": {
+          "introduction": "Zeichnen Sie eine Route auf die Karte ein, um zu beginnen.",
+          "drawingHint": "Klicken Sie auf die Karte, um mit dem Zeichnen einer Route zu beginnen. Doppelklicken Sie auf die Karte um die Route zu beenden.",
+          "addLocationMarker": "Klicken Sie auf die Karte, um den Marker zu platzieren."
+        },
+        "annotations": {
+          "pointDrawingHint": "Klicken Sie auf die Karte, um einen Anmerkungspunkt zu platzieren.",
+          "routeDrawingHint": "Klicken Sie auf die Karte, um mit dem Zeichnen einer Route zu beginnen. Doppelklicken Sie auf die Karte um die Route zu beenden.",
+          "areaDrawingHint": "Klicken Sie auf die Karte, um mit dem Zeichnen eines Bereichs zu beginnen. Doppelklicken Sie auf die Karte um den Bereich zu beenden.",
+          "introduction": "Für weitere Anmerkungen, zeichnen Sie Punkte, Routen oder Bereiche auf der Karte ein."
+        },
+        "closing": {
+          "title": "Vielen Dank für die Teilnahme!",
+          "message": "Gerne können Sie weitere typische Tagesabläufe eintragen."
+        }
+      },
+      "mobilityMode": {
+        "bicycle": "Fahrrad",
+        "bus": "Bus",
+        "car": "Auto",
+        "train": "Zug",
+        "walk": "Zu Fuß"
+      },
+      "drawingMode": {
+        "Point": "Punkt",
+        "LineString": "Route",
+        "Polygon": "Bereich"
+      }
+    }
+  }
+}

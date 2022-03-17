@@ -1,0 +1,65 @@
+{
+  "modules": {
+    "tools": {
+      "storyTellingTool": {
+        "title": "Story Telling Tool",
+        "create": "Create Story",
+        "play": "Start Story",
+        "tableOfContents": "Table of Contents",
+        "createStory": "Create Story",
+        "createStoryStep": "Create Story Step",
+        "label": {
+          "storyName": "Name of the Story",
+          "storyDescription": "Description",
+          "author": "Author",
+          "steps": "Steps",
+          "chapter": "Chapter",
+          "newChapterNumber": "Number of the new Chapter",
+          "newChapterTitle": "Title of the new Chapter",
+          "stepNumber": "Step Number",
+          "stepTitle": "Step Title",
+          "stepWidth": "Window Width",
+          "visible": "Visibility",
+          "htmlContent": "Content",
+          "centerCoordinate": "Position of the Map",
+          "zoomLevel": "Zoom Level of the Map",
+          "layers": "Layers",
+          "interactionAddons": "AddOns"
+        },
+        "warning": {
+          "mapMoved": "The entered position doesn't match the current map view.",
+          "mapZoomed": "The entered zoom level doesn't match the current map view."
+        },
+        "error": {
+          "chapterNumberAlreadyExists": "A chapter with this number already exists. Please try out a different number.",
+          "stepNumberAlreadyExists": "A step with this number already exists. Please try out a different number.",
+          "errorAddingImage": "The image couldn't be loaded. Please try another file."
+        },
+        "confirm": {
+          "closeStoryCreation": {
+            "title": "Close Tool",
+            "description": "Are you sure you want to close this tool? Entered data won't be saved.",
+            "confirmButton": "Close",
+            "denyButton": "Cancel"
+          },
+          "deleteStep": {
+            "title": "Delete step",
+            "description": "Are you sure you want to delete this step? This can't be undone.",
+            "confirmButton": "Delete",
+            "denyButton": "Cancel"
+          }
+        },
+        "button": {
+          "cancel": "Cancel",
+          "addStep": "Add Step",
+          "deleteStep": "Delete Step",
+          "submitAddStep": "Add Step to Story",
+          "submitEditStep": "Save Step",
+          "previewStory": "Preview Story",
+          "downloadStory": "Download Story"
+        },
+        "newChapter": "New Chapter"
+      }
+    }
+  }
+}
