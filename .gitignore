@@ -52,3 +52,5 @@ npm-debug.log
 !/portal/master
 !/portal/masterCustom
 !/portal/masterDefault
+!/portal/data-drawing-tool
+!/portal/mobility-data

@@ -1,0 +1,79 @@
+{
+  "Portalconfig": {
+    "treeType": "light",
+    "mapView": {
+      "extent": [442800, 5809000, 738000, 6102200],
+      "startResolution": 5.2916638091682096
+    },
+    "searchBar": {
+      "minChars": 3,
+      "placeholder": "translate#common:modules.searchbar.placeholder.addressTopicParcel",
+      "quickHelp": false,
+      "gazetteer": {
+        "minChars": 3,
+        "serviceId": "6",
+        "searchStreets": true,
+        "searchHouseNumbers": true,
+        "searchDistricts": true,
+        "searchParcels": true
+      }
+    },
+    "menu": {
+      "tree": {
+        "name": "translate#common:menu.topics",
+        "glyphicon": "glyphicon-list",
+        "isAlwaysExpanded": ["SelectedLayer"]
+      },
+      "tools": {
+        "name": "translate#common:menu.tools.name",
+        "glyphicon": "glyphicon-wrench",
+        "children": {
+          "mobilityDataDraw": {
+            "name": "translate#additional:modules.tools.mobilityDataDraw.title",
+            "glyphicon": "glyphicon-user",
+            "active": true
+          }
+        }
+      },
+      "legend": {
+        "name": "common:modules.legend.name",
+        "glyphicon": "glyphicon-book",
+        "showCollapseAllButton": true
+      }
+    },
+    "controls": {
+      "orientation3d": false,
+      "button3d": false,
+      "toggleMenu": true,
+      "fullScreen": false,
+      "zoom": false,
+      "orientation": false,
+      "mousePosition": false,
+      "attributions": false,
+      "buttonOblique": false
+    },
+    "singleBaselayer": true
+  },
+  "Themenconfig": {
+    "Hintergrundkarten": {
+      "name": "translate#common:tree.backgroundMaps",
+      "Layer": [
+        {
+          "id": [
+            "1043",
+            "1044",
+            "1045",
+            "1046",
+            "13649",
+            "13652",
+            "13654",
+            "13656"
+          ],
+          "name": "Geobasiskarten (grau-blau)",
+          "visibility": true,
+          "isVisibleInTree": false
+        }
+      ]
+    }
+  }
+}
