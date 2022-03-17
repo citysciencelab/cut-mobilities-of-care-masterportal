@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://user-images.githubusercontent.com/36763878/158801092-5258806e-32e3-4512-9e72-8b5cf9534d1a.jpg" alt="drawing" width="400"/>
+</p>
+
 # Mobilities of care
 ## City Science Lab - Connected Urban Twin
 
