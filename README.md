@@ -1,7 +1,7 @@
 # Mobilities of care
 ## City Science Lab - Connected Urban Twin
 
----
+
 Care workers have specific demands on urban (transport) infrastructure
 due to fragmented mobility patterns, which are not sufficiently addressed
 by current urban development and are underrepresented in planning and participation
@@ -16,9 +16,32 @@ The first add-on is a storytelling tool that .... ADD DESCRIPTION
 The second add-on enables users to input their ....  ADD DESCRIPTION
 
 ### Docker
-This repository is ready to build with Docker if you plan on trying out the application.
+
+This part of the repository is for quickly setting up a local version of a Masterportal instance including both the storytelling tool and the data collection tool. Additionally, a Postgres backend is set up with both an internal and an external API to collect data with the Data collection tool and export it.
+
+#### Docker Deployment
+
+Deploy the frontend and backend applications including database to Docker.
+
+```
+docker-compose up
+```
+
+Default path for frontend in docker deployment: http://localhost/mobility-data/index.html
+
+API is deployed in two variants, external and internal.
+
+External API: http://localhost:8080
+
+Internal API: http://localhost:8081
+
+External API can be exposed to frontend for data collection. Internal API provides endpoints for data analysis, e.g. GET http://localhost:8081/person.
+
+For an overview of all endpoints see [mobility-backend/README.md](mobility-backend/README.md).
+
 
 ### Masterportal setup
+
 You can also start the application with npm if you plan on connecting a database, creating a new story or adjusting the code to your needs.
 
 #### Node.js
