@@ -54,3 +54,8 @@ npm-debug.log
 !/portal/masterDefault
 !/portal/data-drawing-tool
 !/portal/mobility-data
+
+# Docker build
+.DS_Store
+audio_files
+postgresdata
