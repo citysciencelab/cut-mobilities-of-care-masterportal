@@ -16,8 +16,10 @@ processes. The tools in this repository are two add-ons for the [Connected Urban
 and gather mobility data of unpaid care workers.
 
 The first add-on is a storytelling tool that .... ADD DESCRIPTION
+reference thi file: masterportal\addons\storyTellingTool\doc\config.json.md
 
 The second add-on enables users to input their ....  ADD DESCRIPTION
+.... reference this file: masterportal\addons\mobilityDataDraw\doc\config.json.md
 
 ### Docker
 
