@@ -1,7 +1,7 @@
 import {Draw, Snap, Modify} from "ol/interaction";
 import Collection from "ol/Collection";
 
-import {mobilityModes} from "../../../../../../shared/constants/mobilityData";
+import {mobilityModes} from "../../../../shared/constants/mobilityData";
 
 import {
     getMobilityDataDrawLineStyle,

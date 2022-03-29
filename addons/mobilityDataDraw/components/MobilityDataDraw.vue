@@ -1,4 +1,4 @@
-<script src="../../../../shared/constants/mobilityData.js"></script>
+<script src="../../../shared/constants/mobilityData.js"></script>
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import Tool from "../../../src/modules/tools/Tool.vue";
@@ -7,7 +7,7 @@ import DailyRoutineView from "./dailyRoutine/DailyRoutineView.vue";
 import AnnotationsView from "./annotations/AnnotationsView.vue";
 import ClosingView from "./closing/ClosingView.vue";
 import * as toolConstants from "../store/constantsMobilityDataDraw";
-import * as sharedConstants from "../../../../../shared/constants/mobilityData";
+import * as sharedConstants from "../../../shared/constants/mobilityData";
 import actions from "../store/actionsMobilityDataDraw";
 import getters from "../store/gettersMobilityDataDraw";
 import mutations from "../store/mutationsMobilityDataDraw";

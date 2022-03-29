@@ -1,7 +1,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
-import * as sharedConstants from "../../../../../../shared/constants/mobilityData";
+import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
 import getters from "../../store/gettersMobilityDataDraw";
 import mutations from "../../store/mutationsMobilityDataDraw";

@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {mobilityModes} from "../../../../../../../shared/constants/mobilityData";
+import {mobilityModes} from "../../../../../shared/constants/mobilityData";
 import {
     views,
     drawingModes,

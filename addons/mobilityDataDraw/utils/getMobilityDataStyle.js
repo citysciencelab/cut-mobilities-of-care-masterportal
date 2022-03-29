@@ -1,7 +1,7 @@
 import Point from "ol/geom/Point";
 import {Circle, Fill, Stroke, Style, Icon} from "ol/style";
 
-import {mobilityModes} from "../../../../../shared/constants/mobilityData";
+import {mobilityModes} from "../../../shared/constants/mobilityData";
 import {mobilityModeColors} from "../store/constantsMobilityDataDraw";
 
 import {getHandleStyle, getDragStyle} from "./getModifyStyle";

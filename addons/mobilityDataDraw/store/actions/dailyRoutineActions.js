@@ -1,6 +1,6 @@
 import Feature from "ol/Feature";
 
-import {mobilityModes} from "../../../../../../shared/constants/mobilityData";
+import {mobilityModes} from "../../../../shared/constants/mobilityData";
 
 import getMobilityDataStyle from "../../utils/getMobilityDataStyle";
 import getNextGeometryIndex from "../../utils/getNextGeometryIndex";

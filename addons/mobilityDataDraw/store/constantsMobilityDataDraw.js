@@ -1,4 +1,4 @@
-import {mobilityModes} from "../../../../../shared/constants/mobilityData";
+import {mobilityModes} from "../../../shared/constants/mobilityData";
 
 const interactionTypes = {
         DRAW: "draw",
