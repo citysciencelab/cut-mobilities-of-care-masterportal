@@ -5,23 +5,19 @@
 # Mobilities of care
 ## City Science Lab - Connected Urban Twin
 
+Care workers have specific demands on urban (transport) infrastructure due to fragmented mobility patterns, which are not sufficiently addressed by current urban development and are underrepresented in planning and participation processes. The tools in this repository are two add-ons for the Masterportal ([documentation](#following-is-the-official-documentation-of-the-masterportal)) that provide functionality necessary for the co-creative workshops held by the CityScienceLab in order to test new technology in the processes. The tools in this repository are two add-ons for the [Connected Urban Twin (CUT)](https://www.hamburg.de/cut/) and gather mobility data of unpaid care workers.
 
-Care workers have specific demands on urban (transport) infrastructure
-due to fragmented mobility patterns, which are not sufficiently addressed
-by current urban development and are underrepresented in planning and participation
-processes. The tools in this repository are two add-ons for the Masterportal ([documentation](#following-is-the-official-documentation-of-the-masterportal))
-that provide functionality necessary for the co-creative workshops
-held by the CityScienceLab in order to test new technology in the
-processes. The tools in this repository are two add-ons for the [Connected Urban Twin (CUT)](https://www.hamburg.de/cut/)
-and gather mobility data of unpaid care workers.
+The first add-on is a storytelling tool that enables one to both create and play data stories. Such data stories consist of different chapters that each display certain segments of the map with zero or more data layers. In each chapter, the data layers and the map can be contextualized with text and images. A more detailed description of the addon can be found [here](addons/storyTellingTool/doc/config.json.md).
 
-The first add-on is a storytelling tool that .... ADD DESCRIPTION
-reference thi file: masterportal\addons\storyTellingTool\doc\config.json.md
+The second add-on is a data collection tool that enables users to input their routine mobility pattern for any given regular day. It first collects sociodemographic data from the user before the user can start entering their mobility patterns. After any daily routines are finished, there is the possibility to annotate points, lines or areas of interest, e.g. to learn more about certain spaces that are important for the mobility demands of unpaid care workers. A more detailed description of the addon can be found [here](addons/mobilityDataDraw/doc/config.json.md).
 
-The second add-on enables users to input their ....  ADD DESCRIPTION
-.... reference this file: masterportal\addons\mobilityDataDraw\doc\config.json.md
+In order to set up both tools, there are two main ways:
+
+1. For a fully working local version **with** a backend and the respective APIs to store the mobility data, you can use the [Docker setup](#docker)
+1. To experiment and continue developing the addons **without** a pre-defined backend and APIS, you can use the [Masterportal setup](#masterportal-setup)
 
 ### Docker
+
 
 This part of the repository is for quickly setting up a local version of a Masterportal instance including both the storytelling tool and the data collection tool. Additionally, a Postgres backend is set up with both an internal and an external API to collect data with the Data collection tool and export it.
 
@@ -103,8 +99,7 @@ $ npm start
 
 >⚠️ Please note that the demo application described above does not include a database. The data you entered will therefor not be stored.
 
-TODO: What to do with the shared folder? Does it need to be so high up in the folder structure?
-TODO: How to set up te database. Lets include the CREATE statement?
+TODO: How to set up the database. Lets include the CREATE statement?
 In case of a database connection the config.json needs to be adjusted:
 
 ```

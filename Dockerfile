@@ -46,7 +46,7 @@ COPY . ./masterportal
 # Set config for MobilityDraw addon
 RUN touch ./masterportal/addons/mobilityDataDraw/config.json
 RUN cat > ./masterportal/addons/mobilityDataDraw/config.json
-RUN echo '{"API_BASE_URL" : "'$API_BASE'", "TEST_ENV" : '$TEST_ENV'}' >> ./masterportal/addons/mobilityDataDraw/config.json
+RUN echo '{"API_BASE_URL" : "'$API_BASE'", "TEST_ENV" : "'$TEST_ENV'"}' >> ./masterportal/addons/mobilityDataDraw/config.json
 
 RUN npm i --prefix masterportal/addons/mobilityDataDraw
 RUN npm i --prefix masterportal/addons/storyTellingTool
