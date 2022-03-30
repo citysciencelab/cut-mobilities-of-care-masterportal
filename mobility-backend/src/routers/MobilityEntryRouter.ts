@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 //@ts-ignore Path is correct for output folder
-import { mobilityModes } from '../../../shared/constants/mobilityData.js';
+import { mobilityModes } from '../../../shared/constants/mobilityData.js'; 
 
 import MobilityEntryController from '../controllers/MobilityEntryController';
 import FeatureController from '../controllers/FeatureController';

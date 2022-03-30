@@ -4,8 +4,8 @@
   "description": "Backend for HCU-Mobilities-of-Care",
   "main": "dist/src/app.js",
   "scripts": {
-    "build": "rm -r dist && tsc && mv dist/tmp/mobility-backend/src/ dist/src && mv dist/tmp/shared/ dist/src && rm -r dist/tmp",
-    "start": "npm run build && node dist/src/app.js",
+    "build": "rm -r dist && tsc",
+    "start": "npm run build && node dist/src/mobility-backend/src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
