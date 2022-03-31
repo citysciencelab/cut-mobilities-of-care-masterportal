@@ -7,9 +7,14 @@
 
 Care workers have specific demands on urban (transport) infrastructure due to fragmented mobility patterns, which are not sufficiently addressed by current urban development and are underrepresented in planning and participation processes. The tools in this repository are two add-ons for the Masterportal ([documentation](#following-is-the-official-documentation-of-the-masterportal)) that provide functionality necessary for the co-creative workshops held by the CityScienceLab in order to test new technology in the processes. The tools in this repository are two add-ons for the [Connected Urban Twin (CUT)](https://www.hamburg.de/cut/) and gather mobility data of unpaid care workers.
 
-The first add-on is a storytelling tool that enables one to both create and play data stories. Such data stories consist of different chapters that each display certain segments of the map with zero or more data layers. In each chapter, the data layers and the map can be contextualized with text and images. A more detailed description of the addon can be found [here](addons/storyTellingTool/doc/config.json.md).
+The first add-on is a storytelling tool that enables one to both create and play data stories. These stories can be created by an interface integrated in the add-on or created manually in a JSON format.  Besides engaging data visualization, digital storytelling is a key method to support the individual, group or sociocultural understanding of
+information and promote participation in the respective topic. They consist of different chapters that each display certain segments of the map with zero or more data layers. In each chapter, the data layers and the map can be contextualized with text and images.
 
-The second add-on is a data collection tool that enables users to input their routine mobility pattern for any given regular day. It first collects sociodemographic data from the user before the user can start entering their mobility patterns. After any daily routines are finished, there is the possibility to annotate points, lines or areas of interest, e.g. to learn more about certain spaces that are important for the mobility demands of unpaid care workers. A more detailed description of the addon can be found [here](addons/mobilityDataDraw/doc/config.json.md).
+A detailed description about how to manually configure a web GIS data-story can be found [here](addons/storyTellingTool/doc/config.json.md).
+
+The second add-on is a data collection tool that enables users to input their routine mobility pattern for any given regular day. It first collects sociodemographic data from the user before the user can start entering their mobility patterns. After any daily routines are finished, there is the possibility to annotate points, lines or areas of interest, e.g. The gathered data is supposed to enable planners to learn more about certain spaces that are important for the mobility demands of unpaid care workers.
+
+This [documentation](addons\mobilityDataDraw\doc\config.json.md) describes how to configure and activate the mobility data tool.
 
 In order to set up both tools, there are two main ways:
 
@@ -57,50 +62,48 @@ Execute the git bash as admin and navigate to the folder the repository is to be
 Clone the repository and navigate to the folder created:
 
 ```console
-$ git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
+git clone https://bitbucket.org/geowerkstatt-hamburg/masterportal.git
 ```
 
 Install the `node_modules` required for the addons:
 
 Step 1:
 ```console
-$ cd masterportal\addons\mobilityDataDraw
-$ npm install
+cd masterportal\addons\mobilityDataDraw
+npm install
 ```
 
 Step 2:
 ```console
-$ cd masterportal\addons\storyTellingTool
-$ npm install
+cd masterportal\addons\storyTellingTool
+npm install
 ```
 
 Install the `node_modules` required for the Masterportal:
 
 ```console
-$ cd masterportal
-$ npm install
+cd masterportal
+npm install
 ```
 
 With this, all dependencies are installed.
 
-In case you need further information about how add-ons are to be used, please refer to the **[add-ons documentation](addonsVue.md)** for further assistance.
+In case you need further information about how add-ons configured and developed, please refer to the **[add-ons documentation](doc/addonsVue.md)** for further assistance.
 
-### `npm start`
-
-This command starts a local development server.
+This command will start a local development server.
 
 ```console
-$ npm start
+npm start
 ```
 
 - After compilation, you may open the following links for comprehensive demo applications:
     - https://localhost:9001/portal/mobility-data Portal that includes the initial Faircare story as well as the data gathering tool
     - https://localhost:9001/portal/data-drawing-tool Portal that takes you directly to the data gathering
 
->⚠️ Please note that the demo application described above does not include a database. The data you entered will therefor not be stored.
+>⚠️ Please note that the demo application described above does not include a database. The data you entered will therefore not be stored. Starting the tool with [Docker](#docker-deployment) will initialize the tool with a working database.
 
-TODO: How to set up the database. Lets include the CREATE statement?
-In case of a database connection the config.json needs to be adjusted:
+The [sql file](mobility-backend/db/setup/dbinit.sql) contains all necessary statements for a custom database setup.
+In case of an existing/custom database connection the config.json needs to be adjusted:
 
 ```
 Set API_BASE_URL to your database URL and change the TEST_ENV variable to false.
@@ -110,7 +113,7 @@ An example story can be found in the folder:
 ```
 masterportal\portal\mobility-data\assets
 ```
-This story is referenced in the storyConf variable in the config.js (masterportal\portal\mobility-data\config.js).
+The stories are referenced in the storyConf variable in the [config.js](portal\mobility-data\config.js).
 
 ---
 #### Following is the official documentation of the Masterportal
