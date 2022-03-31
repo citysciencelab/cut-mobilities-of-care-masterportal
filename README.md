@@ -12,9 +12,13 @@ information and promote participation in the respective topic. They consist of d
 
 A detailed description about how to manually configure a web GIS data-story can be found [here](addons/storyTellingTool/doc/config.json.md).
 
+https://user-images.githubusercontent.com/36763878/161025746-b8ac51be-a687-4e63-8bcf-b1da01334ead.mp4
+
 The second add-on is a data collection tool that enables users to input their routine mobility pattern for any given regular day. It first collects sociodemographic data from the user before the user can start entering their mobility patterns. After any daily routines are finished, there is the possibility to annotate points, lines or areas of interest, e.g. The gathered data is supposed to enable planners to learn more about certain spaces that are important for the mobility demands of unpaid care workers.
 
 This [documentation](addons\mobilityDataDraw\doc\config.json.md) describes how to configure and activate the mobility data tool.
+
+https://user-images.githubusercontent.com/36763878/161026501-89eca215-a504-4da6-b49b-278b6981cd10.mp4
 
 In order to set up both tools, there are two main ways:
 
