@@ -1,9 +1,40 @@
 **Mobility-Backend**
 
+***Starting by Docker***
 ```
 docker build -t mobility-backend -f mobility-backend/Dockerfile .
 
 docker run -p 80:80 -v /AUDIO_FILES_DIRECTORY:/usr/app/mobility-backend/audio_files -e DB_HOST="host" -e DB_NAME="db" -e DB_USER="user" -e DB_PASS="pass" -e DB_PORT="5432" -e DB_MAX_CONNECTIONS="10" -e API_PORT="8080" -e API_VARIANT="external" -e API_CORS_ORIGINS="http://localhost,http://mobility-frontend.example" mobility-backend
+```
+
+
+***Starting manually***
+
+Set up your local postgresql database and run db/setup/dbinit.sql
+Add an .env file that contains the following variables:
+```
+DB_HOST=localhost
+DB_NAME=mobility-db
+DB_USER=postgresuserame
+DB_PASS=postgrespass
+DB_PORT=5432
+DB_MAX_CONNECTIONS=10
+
+API_PORT=8080
+API_VARIANT=external
+API_CORS_ORIGINS=https://localhost:9001,http://mobility-frontend.example
+```
+Run
+```
+npm install dotenv --save
+```
+Uncomment the dotenv code in the dbconfig/dbconnector.ts file
+
+If you are not running linux based system the package.json might have to be adjusted to read
+```
+"scripts": {
+   "build": "if exist dist rmdir dist /q /s && tsc",
+...
 ```
 
 **External API-Variant**
