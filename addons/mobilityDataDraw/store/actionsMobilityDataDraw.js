@@ -167,7 +167,12 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
 
             // Reset view
             commit("setView", initialState.view);
+        },
+
+        setResizableWindow ({commit}, resizable) {
+            commit("setResizableWindow", resizable);
         }
+
     };
 
 export default actions;

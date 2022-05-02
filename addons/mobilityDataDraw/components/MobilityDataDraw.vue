@@ -113,9 +113,6 @@ export default {
                 element.classList.add("custom-table-column");
             });
         }
-
-        let menu = document.getElementById("table-navigation");
-        menu.style.display = 'none';
     },
     watch: {
         /**
@@ -145,6 +142,7 @@ export default {
             this.setActive(true);
         }
         this.applyTranslationKey(this.name);
+        this.initRoutine();
     },
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),
@@ -156,6 +154,17 @@ export default {
          */
         previousView() {
             this.setView(Math.max(this.minView, this.view - 1));
+        },
+
+        /**
+         * Routine to run through on startup
+         */
+        initRoutine() {
+            if (this.isMobile()) {
+                this.setResizableWindow(false);
+                let sidebarWithPadding = document.getElementById("tool-sidebar-vue");
+                sidebarWithPadding.style.padding = "0 !important";
+            }
         },
 
         /**
@@ -468,9 +477,21 @@ export default {
     margin-left: -15px;
 }
 
-// Fix sizing of map for tool without resize
-#tool-sidebar-vue {
-    // padding: 0 !important;
+// Mobile view without resize bar - no padding
+@media only screen and (max-width: 440px) {
+    #tool-sidebar-vue {
+        padding: 0 !important;
+    }
+}
+
+// Never show tool closing option
+#tool-sidebar-vue .glyphicon-remove {
+    display: none;
+}
+
+// Never table navigation
+#table-navigation {
+    display: none;
 }
 
 // Navigation butto styling
