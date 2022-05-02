@@ -6,6 +6,7 @@ import MobilityDataLocation from "./MobilityDataLocation.vue";
 import MobilityModeSelection from "./MobilityModeSelection.vue";
 import WeekdaySelection from "./WeekdaySelection.vue";
 import AudioRecorderWrapper from "../AudioRecorderWrapper.vue";
+import ImageUploader from "../ImageUploader.vue";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
@@ -20,7 +21,8 @@ export default {
         MobilityDataLocation,
         MobilityModeSelection,
         WeekdaySelection,
-        AudioRecorderWrapper
+        AudioRecorderWrapper,
+        ImageUploader
     },
     data() {
         return {
@@ -197,7 +199,8 @@ export default {
                 "
                 @change="setSummary"
             />
-            <AudioRecorderWrapper/>
+            <AudioRecorderWrapper />
+            <ImageUploader />
         </section>
     </div>
 </template>

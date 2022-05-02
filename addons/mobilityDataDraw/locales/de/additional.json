@@ -47,7 +47,8 @@
           "finish": "Beenden",
           "addPerson": "Person hinzufügen",
           "addRecord": "Aufnahme hinzufügen",
-          "removeRecord": "Aufnahme löschen"
+          "removeRecord": "Aufnahme löschen",
+          "addPicture": "Foto hinzufügen"
         },
         "alert": {
           "submitPersonalDataError": "Ihre persönlichen Daten konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",

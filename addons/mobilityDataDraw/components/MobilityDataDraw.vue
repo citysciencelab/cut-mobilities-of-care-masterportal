@@ -11,6 +11,7 @@ import * as sharedConstants from "../../../shared/constants/mobilityData";
 import actions from "../store/actionsMobilityDataDraw";
 import getters from "../store/gettersMobilityDataDraw";
 import mutations from "../store/mutationsMobilityDataDraw";
+// import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 export default {
     name: "MobilityDataDraw",
@@ -78,7 +79,10 @@ export default {
                     noMobilityDataDrawn) ||
                 isModifying
             );
-        }
+        },
+        possibleMobileWidth: function() {
+            return this.isMobile() ? this.initialState.initialWidthMobile+"px" : "";
+        },
     },
     created() {
         this.$on("close", this.close);
@@ -280,12 +284,28 @@ export default {
             } else {
                 closeMobilityDataDraw();
             }
+        },
+        isMobile () {
+            return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent);
         }
     }
 };
 </script>
 
 <template lang="html">
+    <!--
+    <div>
+        <v-btn
+            rounded
+            color="primary"
+            dark
+        >
+            Rounded Button
+            <v-icon dark>
+                mdi-heart
+            </v-icon>
+        </v-btn>
+        -->
     <Tool
         :title="$t(name)"
         :icon="glyphicon"
@@ -295,6 +315,7 @@ export default {
         :deactivateGFI="deactivateGFI"
         :initial-width="initialWidth"
         :initial-width-mobile="initialWidthMobile"
+        :style="{width: possibleMobileWidth}"
     >
         <template v-slot:toolBody>
             <v-app
@@ -362,6 +383,8 @@ export default {
             </v-app>
         </template>
     </Tool>
+    <!--</div>-->
+
 </template>
 
 <style lang="less" scoped>
@@ -440,6 +463,18 @@ export default {
 .custom-table-row {
     margin-right: -15px;
     margin-left: -15px;
+}
+
+// Fix sizing of map for tool without resize
+#tool-sidebar-vue {
+    // padding: 0 !important;
+}
+
+// Navigation butto styling
+.control-icon {
+    background-color: #f2f2f2 !important;
+    color: #646262 !important;
+    border-radius: 6px;
 }
 
 .custom-table-column {

@@ -3,11 +3,13 @@ import personalDataActions from "./actions/personalDataActions";
 import dailyRoutineActions from "./actions/dailyRoutineActions";
 import annotationsActions from "./actions/annotationsActions";
 import audioRecorderActions from "./actions/audioRecorderActions";
+import imageUploadActions from "./actions/imageUploadActions";
 import stateMobilityDataDraw from "./stateMobilityDataDraw";
 
 import personApi from "../api/sendPersonalData";
 import entryApi from "../api/sendEntry";
 import audioApi from "../api/sendAudioRecords";
+import imageApi from "../api/sendImageUploads";
 
 import config from "../config";
 
@@ -18,6 +20,7 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
         ...dailyRoutineActions,
         ...annotationsActions,
         ...audioRecorderActions,
+        ...imageUploadActions,
 
         /**
          * Submits personal data
@@ -69,6 +72,24 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                     if (audioRecordBlobs.length) {
                         audioApi
                             .sendAudioRecords(entryId, audioRecordBlobs)
+                            .catch(error => {
+                                console.error(error);
+                                Radio.trigger("Alert", "alert", {
+                                    text: i18next.t(
+                                        config.TEST_ENV ?
+                                            "additional:modules.tools.testMode.noDataSent" :
+                                            "additional:modules.tools.mobilityDataDraw.alert.submitAudioError"
+                                    ),
+                                    category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
+                                    kategorie: "alert-danger"
+                                });
+                            });
+                    }
+                    console.log("ingemacht")
+                    const image = state.imageUploads;
+                    if (image.length) {
+                        imageApi
+                            .sendImageUploads(entryId, image)
                             .catch(error => {
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {

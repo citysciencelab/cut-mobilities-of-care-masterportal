@@ -49,6 +49,7 @@ const state = {
             isRecording: false
         }
     ],
+    imageUploads: [],
     drawLineInteraction: null,
     drawPointInteraction: null,
     drawAnnotationInteraction: null,

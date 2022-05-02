@@ -47,7 +47,8 @@
           "finish": "Finish",
           "addPerson": "Add Person",
           "addRecord": "Add Record",
-          "removeRecord": "Delete Record"
+          "removeRecord": "Delete Record",
+          "addPicture": "Add picture"
         },
         "alert": {
           "submitPersonalDataError": "Your personal data couldn't be saved. Please try again.",
