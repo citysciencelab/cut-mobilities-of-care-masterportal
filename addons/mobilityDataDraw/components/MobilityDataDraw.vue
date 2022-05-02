@@ -113,6 +113,9 @@ export default {
                 element.classList.add("custom-table-column");
             });
         }
+
+        let menu = document.getElementById("table-navigation");
+        menu.style.display = 'none';
     },
     watch: {
         /**
