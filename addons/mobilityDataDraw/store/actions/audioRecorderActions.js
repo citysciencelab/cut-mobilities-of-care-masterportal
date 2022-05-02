@@ -31,7 +31,7 @@ function initializeAudioRecorder ({state, commit}) {
     // Get audio stream from the user's microphone
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         let {audioRecorder} = state
-        
+
         if (!state.audioRecorder) {
             audioRecorder = new MediaRecorder(stream);
 

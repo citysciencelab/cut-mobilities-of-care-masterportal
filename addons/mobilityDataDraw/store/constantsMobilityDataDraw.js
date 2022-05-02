@@ -68,10 +68,11 @@ const interactionTypes = {
         stroke: "#196daf"
     },
     views = {
-        PERSONAL_DATA_VIEW: 0,
-        DAILY_ROUTINE_VIEW: 1,
-        ANNOTATIONS_VIEW: 2,
-        CLOSING_VIEW: 3
+        INTRO_VIEW: 0,
+        PERSONAL_DATA_VIEW: 1,
+        DAILY_ROUTINE_VIEW: 2,
+        ANNOTATIONS_VIEW: 3,
+        CLOSING_VIEW: 4
     },
     drawingViews = [views.DAILY_ROUTINE_VIEW, views.ANNOTATIONS_VIEW];
 

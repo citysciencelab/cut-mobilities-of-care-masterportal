@@ -5,8 +5,6 @@
  * @returns {void}
  */
 function addImageUpload ({state, commit}, imageUpload) {
-    //commit("setImageUpload", imageUpload);
-
     commit("setImageUploads", [...state.imageUploads, imageUpload]);
 }
 

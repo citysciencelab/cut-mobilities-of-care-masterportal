@@ -3,6 +3,10 @@
     "tools": {
       "mobilityDataDraw": {
         "title": "Data Collection Tool",
+        "intro": {
+          "greeting": "Willkommen beim FairCare Tool",
+          "message": "asdgasdvadsvasdvdsvasdv"
+        },
         "label": {
           "personalData": "Steckbrief",
           "age": "Alter",

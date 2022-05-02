@@ -41,7 +41,7 @@ import {
  */
 const state = {
     id: "mobilityDataDraw",
-    view: views.PERSONAL_DATA_VIEW,
+    view: views.INTRO_VIEW,
     audioRecorder: null,
     audioRecords: [
         {

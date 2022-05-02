@@ -6,6 +6,7 @@ import PersonalDataView from "./personalData/PersonalDataView.vue";
 import DailyRoutineView from "./dailyRoutine/DailyRoutineView.vue";
 import AnnotationsView from "./annotations/AnnotationsView.vue";
 import ClosingView from "./closing/ClosingView.vue";
+import IntroView from "./intro/IntroView.vue";
 import * as toolConstants from "../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../shared/constants/mobilityData";
 import actions from "../store/actionsMobilityDataDraw";
@@ -20,7 +21,8 @@ export default {
         PersonalDataView,
         DailyRoutineView,
         AnnotationsView,
-        ClosingView
+        ClosingView,
+        IntroView
     },
     data() {
         return {
@@ -335,6 +337,9 @@ export default {
                 id="tool-mobilityDataDraw"
                 :style="constants.mobilityModeCSSColorVariables"
             >
+                <IntroView
+                    v-if="view === constants.views.INTRO_VIEW"
+                />
                 <PersonalDataView
                     v-if="view === constants.views.PERSONAL_DATA_VIEW"
                 />

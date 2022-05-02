@@ -122,7 +122,7 @@ const Config = {
         "https://geodienste.hamburg.de/lgv-config/rest-services-internet.json",
     uiStyle: "table",
     styleConf: "https://geodienste.hamburg.de/lgv-config/style_v3.json",
-    isMenubarVisible: true,
+    isMenubarVisible: false,
     gemarkungen: "https://geodienste.hamburg.de/lgv-config/gemarkung.json",
     obliqueMap: true,
     startingMap3D: false,
