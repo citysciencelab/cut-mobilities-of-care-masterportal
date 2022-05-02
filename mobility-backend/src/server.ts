@@ -10,6 +10,10 @@ import {
   externalRouter as externalAudioFileRouter,
   internalRouter as internalAudioFileRouter
 } from './routers/AudioFileRouter';
+import {
+  externalRouter as externalImageFileRouter,
+  internalRouter as internalImageFileRouter
+} from './routers/ImageFileRouter';
 import aggregatedFeaturesRouter from './routers/AggregatedFeaturesRouter';
 import {
   externalRouter as externalPersonRouter,
@@ -53,6 +57,8 @@ class Server {
 
       this.app.use('/audio', internalAudioFileRouter);
 
+      this.app.use('/image', internalImageFileRouter);
+
       this.app.use('/feature', mobilityFeatureRouter);
     } else {
       this.app.use('/person', externalPersonRouter);
@@ -60,6 +66,8 @@ class Server {
       this.app.use('/entry', externalMobilityEntryRouter);
 
       this.app.use('/audio', externalAudioFileRouter);
+
+      this.app.use('/image', externalImageFileRouter);
     }
 
     this.app.use('/aggregated', aggregatedFeaturesRouter);
