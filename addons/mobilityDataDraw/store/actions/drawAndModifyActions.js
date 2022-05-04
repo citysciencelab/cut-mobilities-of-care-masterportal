@@ -297,7 +297,6 @@ function startDrawingMobilityDataLocation (
             ? {...data, feature: event.feature}
             : data
         );
-
         commit("setMobilityData", newMobilityData);
 
         dispatch("stopDrawingMobilityDataLocation");

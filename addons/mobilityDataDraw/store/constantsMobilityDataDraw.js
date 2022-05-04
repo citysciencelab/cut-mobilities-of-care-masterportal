@@ -69,9 +69,9 @@ const interactionTypes = {
     },
     views = {
         INTRO_VIEW: 0,
-        PERSONAL_DATA_VIEW: 1,
+        ANNOTATIONS_VIEW: 1,
         DAILY_ROUTINE_VIEW: 2,
-        ANNOTATIONS_VIEW: 3,
+        PERSONAL_DATA_VIEW: 3,
         CLOSING_VIEW: 4
     },
     drawingViews = [views.DAILY_ROUTINE_VIEW, views.ANNOTATIONS_VIEW];

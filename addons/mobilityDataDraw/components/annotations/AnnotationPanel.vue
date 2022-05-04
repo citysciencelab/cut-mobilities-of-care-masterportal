@@ -161,6 +161,9 @@ export default {
             </template>
 
             <div class="annotation-header">
+                <v-icon>
+                    {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
+                </v-icon>
                 <input
                     class="annotation-title"
                     :placeholder="
@@ -172,7 +175,7 @@ export default {
                     @change="onSetTitle"
                     @click.stop
                 />
-            </div>
+            </div>#
         </v-expansion-panel-header>
         <v-expansion-panel-content>
             <div class="form-group">
@@ -197,18 +200,14 @@ export default {
                     "
                     @click="startModifyingAnnotationFeature(geometryIndex)"
                 >
-                    {{
-                        $t(
-                            "additional:modules.tools.mobilityDataDraw.button.startModifyAnnotation"
-                        )
-                    }}
+                    <v-icon>
+                        edit
+                    </v-icon>
                 </v-btn>
                 <v-btn v-else @click="stopModifyingAnnotationFeature">
-                    {{
-                        $t(
-                            "additional:modules.tools.mobilityDataDraw.button.stopModifyAnnotation"
-                        )
-                    }}
+                    <v-icon>
+                        save
+                    </v-icon>
                 </v-btn>
 
                 <v-btn
@@ -217,11 +216,9 @@ export default {
                     "
                     @click="onDelete"
                 >
-                    {{
-                        $t(
-                            "additional:modules.tools.mobilityDataDraw.button.deleteAnnotation"
-                        )
-                    }}
+                    <v-icon>
+                        delete_forever
+                    </v-icon>
                 </v-btn>
             </div>
         </v-expansion-panel-content>
@@ -251,6 +248,16 @@ export default {
         > button {
             position: relative !important;
             margin-top: 5px;
+        }
+    }
+
+    .annotation-header {
+        display: flex;
+        i {
+            margin-right: 5px;
+        }
+        input {
+            font: inherit;
         }
     }
 }

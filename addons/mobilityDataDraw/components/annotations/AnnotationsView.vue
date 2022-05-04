@@ -3,6 +3,7 @@ import { mapGetters, mapActions, mapMutations } from "vuex";
 import ScrollContainerWithShadows from "../ScrollContainerWithShadows.vue";
 import DrawingModeSelection from "./DrawingModeSelection.vue";
 import AnnotationPanel from "./AnnotationPanel.vue";
+import MobilityModeSelection from "../dailyRoutine/MobilityModeSelection.vue";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
@@ -14,7 +15,8 @@ export default {
     components: {
         ScrollContainerWithShadows,
         DrawingModeSelection,
-        AnnotationPanel
+        AnnotationPanel,
+        MobilityModeSelection
     },
     data() {
         return {
@@ -31,6 +33,10 @@ export default {
             const data = this.annotations.find(({ feature }) =>
                 feature.get("isSelected")
             );
+            if (this.drawingMode === "LineString") {
+                // TODO: entweder so, oder von hier aus  this.setAnnotationProperties aufrufen
+                data.mobilityMode = this.mobilityMode;
+            }
             return data && data.geometryIndex;
         }
     },
@@ -39,6 +45,19 @@ export default {
     },
     destroyed() {
         this.cleanUpAnnotationsView();
+    },
+    watch: {
+        /**
+         * Sets the mobility mode for the opened annotation
+         * @param {Event}   event   The event fired by the changed state
+         * @returns {void}
+         */
+        mobilityMode(value) {
+            console.log(value)
+        },
+        drawingMode(value) {
+            console.log(value)
+        }
     },
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),
@@ -83,6 +102,10 @@ export default {
                     )
                 }}
             </p>
+        </section>
+
+        <section v-if="drawingMode === constants.drawingModes.LINE">
+            <MobilityModeSelection />
         </section>
 
         <section
