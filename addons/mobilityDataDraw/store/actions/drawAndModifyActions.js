@@ -91,27 +91,34 @@ function removeMobilityDataDrawInteractions ({rootState, state, commit}) {
  * @returns {void}
  */
 function addAnnotationDrawInteraction ({rootState, state, commit, dispatch}) {
-    const source = state.annotationsLayer.getSource(),
-        drawAnnotationInteraction = new Draw({
-            source,
-            type: state.drawingMode,
-            style:
-                state.drawingMode === drawingModes.POINT
-                    ? getAnnotationsDrawPointStyle
-                    : getAnnotationsDrawLineStyle
-        });
+    const source = state.annotationsLayer.getSource();
+    let drawPointAnnotationInteraction, drawLineAnnotationInteraction;
 
     // Remove old draw interaction
-    if (state.drawAnnotationInteraction) {
+    if (state.drawLineAnnotationInteraction || state.drawPointAnnotationInteraction) {
         dispatch("removeAnnotationDrawInteraction");
     }
-
-    commit("setDrawAnnotationInteraction", drawAnnotationInteraction);
-
-    dispatch("createAnnotationDrawInteractionListeners");
-
-    // Add interaction to the current map instance
-    rootState.Map.map.addInteraction(drawAnnotationInteraction);
+    if (state.drawingMode === "Point") {
+        drawPointAnnotationInteraction = new Draw({
+            source,
+            type: "Point",
+            style: getAnnotationsDrawPointStyle
+        });
+        commit("setDrawPointAnnotationInteraction", drawPointAnnotationInteraction);
+        dispatch("createAnnotationPointInteractionListeners");
+        // Add interaction to the current map instance
+        rootState.Map.map.addInteraction(drawPointAnnotationInteraction);
+    } else {
+        drawLineAnnotationInteraction = new Draw({
+            source,
+            type: state.drawingMode,
+            style: () => getAnnotationsDrawLineStyle(state.mobilityMode, state.drawingMode)
+        });
+        commit("setDrawLineAnnotationInteraction", drawLineAnnotationInteraction);
+        dispatch("createAnnotationDrawInteractionListeners");
+        // Add interaction to the current map instance
+        rootState.Map.map.addInteraction(drawLineAnnotationInteraction);
+    }
 
     // Update the snap interaction
     dispatch("addSnapInteraction", source);
@@ -125,7 +132,22 @@ function addAnnotationDrawInteraction ({rootState, state, commit, dispatch}) {
  */
 function createAnnotationDrawInteractionListeners ({state, dispatch}) {
     // Listener to stop drawing a line feature
-    state.drawAnnotationInteraction.on("drawend", event => {
+    state.drawLineAnnotationInteraction.on("drawend", event => {
+        // Add the current mobility mode to the finished feature
+        event.feature.set("mobilityMode", state.mobilityMode);
+        dispatch("addFeatureToAnnotation", event.feature);
+    });
+}
+
+/**
+ * Create listeners for annotation point drawing.
+ *
+ * @param {Object} context actions context object.
+ * @returns {void}
+ */
+function createAnnotationPointInteractionListeners ({state, dispatch}) {
+    // Listener to stop drawing a line feature
+    state.drawPointAnnotationInteraction.on("drawend", event => {
         dispatch("addFeatureToAnnotation", event.feature);
     });
 }
@@ -137,9 +159,13 @@ function createAnnotationDrawInteractionListeners ({state, dispatch}) {
  * @returns {void}
  */
 function removeAnnotationDrawInteraction ({rootState, state, commit}) {
-    if (state.drawAnnotationInteraction) {
-        rootState.Map.map.removeInteraction(state.drawAnnotationInteraction);
-        commit("setDrawAnnotationInteraction", null);
+    if (state.drawLineAnnotationInteraction) {
+        rootState.Map.map.removeInteraction(state.drawLineAnnotationInteraction);
+        commit("setDrawLineAnnotationInteraction", null);
+    }
+    if (state.drawPointAnnotationInteraction) {
+        rootState.Map.map.removeInteraction(state.drawPointAnnotationInteraction);
+        commit("setDrawPointAnnotationInteraction", null);
     }
 }
 
@@ -185,6 +211,7 @@ function removeSnapInteraction ({rootState, state, commit}) {
  * @returns {void}
  */
 function addModifyInteraction ({rootState, state, commit, dispatch}, feature) {
+    console.log("modify")
     const features = new Collection([feature]),
         modifyInteraction = new Modify({
             features,
@@ -343,7 +370,11 @@ function startModifyingAnnotationFeature (
         feature.set("isModifying", true);
 
         // Disable draw annotation interaction
-        state.drawAnnotationInteraction.setActive(false);
+        if (state.drawLineAnnotationInteraction) {
+            state.drawLineAnnotationInteraction.setActive(false);
+        } else if (state.drawPointAnnotationInteraction) {
+            state.drawPointAnnotationInteraction.setActive(false);
+        }
 
         // Add modify interaction for the selected feature
         dispatch("addModifyInteraction", feature);
@@ -371,7 +402,12 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
     dispatch("removeModifyInteraction");
 
     // Enable draw annotation interaction again
-    state.drawAnnotationInteraction.setActive(true);
+    if (state.drawLineAnnotationInteraction) {
+        state.drawLineAnnotationInteraction.setActive(true);
+    } else if (state.drawPointAnnotationInteraction) {
+        state.drawPointAnnotationInteraction.setActive(true);
+    }
+
 }
 
 export default {
@@ -380,6 +416,7 @@ export default {
     removeMobilityDataDrawInteractions,
     addAnnotationDrawInteraction,
     createAnnotationDrawInteractionListeners,
+    createAnnotationPointInteractionListeners,
     removeAnnotationDrawInteraction,
     addSnapInteraction,
     removeSnapInteraction,

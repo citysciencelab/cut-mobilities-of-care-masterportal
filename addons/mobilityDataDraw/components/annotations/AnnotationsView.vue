@@ -33,10 +33,6 @@ export default {
             const data = this.annotations.find(({ feature }) =>
                 feature.get("isSelected")
             );
-            if (this.drawingMode === "LineString") {
-                // TODO: entweder so, oder von hier aus  this.setAnnotationProperties aufrufen
-                data.mobilityMode = this.mobilityMode;
-            }
             return data && data.geometryIndex;
         }
     },
@@ -45,19 +41,6 @@ export default {
     },
     destroyed() {
         this.cleanUpAnnotationsView();
-    },
-    watch: {
-        /**
-         * Sets the mobility mode for the opened annotation
-         * @param {Event}   event   The event fired by the changed state
-         * @returns {void}
-         */
-        mobilityMode(value) {
-            console.log(value)
-        },
-        drawingMode(value) {
-            console.log(value)
-        }
     },
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),
@@ -168,7 +151,9 @@ export default {
 }
 
 .annotations {
+    display: block !important;
     width: calc(100% - 4px);
+    min-width: 450px;
     margin: 0 2px;
 }
 </style>

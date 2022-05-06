@@ -174,8 +174,9 @@ export default {
                     :value="annotationTitle"
                     @change="onSetTitle"
                     @click.stop
+                    @click="onClickAnnotation"
                 />
-            </div>#
+            </div>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
             <div class="form-group">

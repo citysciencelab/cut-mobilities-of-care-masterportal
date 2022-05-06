@@ -32,28 +32,24 @@ export default {
 
 <template lang="html">
     <div id="tool-mobilityDataDraw-view-intro">
-        ascsacascsacascsac
-        ascsacascsacascsac
-        ascsacascsacascsac
-        ascsacascsacascsac
         <h4>
             {{ $t("additional:modules.tools.mobilityDataDraw.intro.greeting") }}
         </h4>
 
-        <p>
+        <p class="intro-text">
             {{
                 $t("additional:modules.tools.mobilityDataDraw.intro.message")
             }}
         </p>
 
-        <v-btn @click="restartDrawing">
+<!--        <v-btn @click="restartDrawing">
             {{
                 $t("additional:modules.tools.mobilityDataDraw.button.enterMore")
             }}
         </v-btn>
         <v-btn @click="$emit('close')">
             {{ $t("additional:modules.tools.mobilityDataDraw.button.finish") }}
-        </v-btn>
+        </v-btn>-->
     </div>
 </template>
 
@@ -61,6 +57,11 @@ export default {
 #tool-mobilityDataDraw-view-intro {
     > button {
         position: relative !important;
+    }
+    .intro-text {
+        overflow-wrap: normal;
+        max-width: 350px;
+        padding-left: 5px;
     }
 }
 </style>
