@@ -37,6 +37,11 @@ If you are not running linux based system the package.json might have to be adju
 ...
 ```
 
+Otherwise, start the mobility backend:
+```
+npm start
+```
+
 **External API-Variant**
 
 _POST /person_

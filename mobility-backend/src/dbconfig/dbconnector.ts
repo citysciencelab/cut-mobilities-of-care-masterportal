@@ -1,5 +1,5 @@
 import { Pool } from 'pg';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 // Initialize the environment variables
 dotenv.config();

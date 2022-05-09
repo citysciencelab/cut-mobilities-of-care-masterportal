@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 //@ts-ignore Path is correct for output folder
-import { mobilityModes } from '../../../shared/constants/mobilityData.js'; 
+import { mobilityModes } from '../../../shared/constants/mobilityData.js';
 
 import MobilityEntryController from '../controllers/MobilityEntryController';
 import FeatureController from '../controllers/FeatureController';
@@ -20,6 +20,7 @@ const {
   ERROR_GEOMETRY_INDICES_NOT_UNIQUE,
   ERROR_NO_FEATURE_GEOMETRY,
   ERROR_NO_MOBILITY_FEATURES,
+  ERROR_NO_ANNOTATION_FEATURES,
   ERROR_PERSON_ID_MISSING,
   ERROR_UNKNOWN_MOBILITY_TYPE
 } = MOBILITY_ENTRY_ERRORS;
@@ -74,7 +75,7 @@ const postAnnotationFeatures = async (
 
   for (let i = 0; i < annotationFeatures.length; i++) {
     const annotationFeature = annotationFeatures[i];
-
+    console.log(annotationFeature)
     // GeometryIndex must be unique
     if (annotation_geometry_indices.includes(annotationFeature.geometryIndex)) {
       throw ERROR_GEOMETRY_INDICES_NOT_UNIQUE;
@@ -118,14 +119,19 @@ externalRouter.post('/', async (req, res) => {
       throw ERROR_PERSON_ID_MISSING;
     }
 
-    // MobilityFeatures must be set
-    if (!mobilityFeatures || !mobilityFeatures.length) {
-      throw ERROR_NO_MOBILITY_FEATURES;
-    }
+    // MobilityFeatures must be se
+      // if (!mobilityFeatures || !mobilityFeatures.length) {
+      //   throw ERROR_NO_MOBILITY_FEATURES;
+      // }
+
+    // AnnotationFeatures must be se
+      if (!annotationFeatures || !annotationFeatures.length) {
+          throw ERROR_NO_ANNOTATION_FEATURES;
+      }
 
     entryId = await mobilityEntryController.post(mobilityEntry);
 
-    await postMobilityFeatures(mobilityFeatures, entryId);
+    // await postMobilityFeatures(mobilityFeatures, entryId);
 
     await postAnnotationFeatures(annotationFeatures, entryId);
 

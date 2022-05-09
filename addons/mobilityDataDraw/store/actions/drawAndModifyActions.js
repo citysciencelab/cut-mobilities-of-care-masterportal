@@ -134,7 +134,9 @@ function createAnnotationDrawInteractionListeners ({state, dispatch}) {
     // Listener to stop drawing a line feature
     state.drawLineAnnotationInteraction.on("drawend", event => {
         // Add the current mobility mode to the finished feature
-        event.feature.set("mobilityMode", state.mobilityMode);
+        if (event.target.mode_ !== "Polygon") {
+            event.feature.set("mobilityMode", state.mobilityMode);
+        }
         dispatch("addFeatureToAnnotation", event.feature);
     });
 }

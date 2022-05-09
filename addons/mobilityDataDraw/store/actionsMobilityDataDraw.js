@@ -62,7 +62,7 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                 mobilityFeatures: state.mobilityData,
                 annotationFeatures: state.annotations
             };
-
+            console.log("sendthstuff")
             return entryApi
                 .sendEntry(entry)
                 .then(({entryId}) => {
@@ -85,7 +85,6 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                                 });
                             });
                     }
-                    console.log("ingemacht")
                     const image = state.imageUploads;
                     if (image.length) {
                         imageApi

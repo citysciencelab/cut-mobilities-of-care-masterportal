@@ -164,6 +164,9 @@ export default {
                 <v-icon>
                     {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
                 </v-icon>
+                <v-icon class="mobility-data-segment-icon">
+                    {{ constants.mobilityModeIcons[this.feature.values_['mobilityMode']] }}
+                </v-icon>
                 <input
                     class="annotation-title"
                     :placeholder="
