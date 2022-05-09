@@ -37,6 +37,12 @@ export default {
         }
     },
     mounted() {
+        // Empty submit of personalData to recieve an id
+        this.submitPersonalData()
+            .then()
+            .finally(() => {
+            });
+
         this.initializeAnnotationsView();
     },
     destroyed() {

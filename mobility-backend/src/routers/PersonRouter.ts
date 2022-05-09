@@ -25,11 +25,17 @@ externalRouter.use(express.json());
  **/
 externalRouter.post('/', async (req, res) => {
   const person: PersonDTO = req.body;
-  let personId: PersonId;
+    let personId: PersonId;
+  console.log(person)
+  if (person.hasOwnProperty('personId')) {
+      console.log("found ad update")
+      personId = person["personId"];
+      await personController.update(person);
+  } else {
+      personId = await personController.post(person);
+  }
 
   try {
-    personId = await personController.post(person);
-
     const personsInNeed = person.personsInNeed;
 
     if (personsInNeed && personsInNeed.length) {

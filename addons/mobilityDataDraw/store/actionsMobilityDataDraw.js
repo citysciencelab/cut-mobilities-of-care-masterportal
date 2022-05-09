@@ -29,6 +29,9 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
          * @returns {Promise<void>} transmission success.
          */
         submitPersonalData ({state, commit}) {
+            if (state.personId) {
+                state.personalData.personId = state.personId;
+            }
             return personApi
                 .sendPersonalData(state.personalData)
                 .then(({personId}) => {
