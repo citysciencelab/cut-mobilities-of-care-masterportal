@@ -3,24 +3,23 @@
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import Tool from "../../../src/modules/tools/Tool.vue";
 import PersonalDataView from "./personalData/PersonalDataView.vue";
-import DailyRoutineView from "./dailyRoutine/DailyRoutineView.vue";
 import AnnotationsView from "./annotations/AnnotationsView.vue";
 import ClosingView from "./closing/ClosingView.vue";
+import PersonalDataOrEndView from "./personalDataOrEnd/personalDataOrEnd.vue";
 import IntroView from "./intro/IntroView.vue";
 import * as toolConstants from "../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../shared/constants/mobilityData";
 import actions from "../store/actionsMobilityDataDraw";
 import getters from "../store/gettersMobilityDataDraw";
 import mutations from "../store/mutationsMobilityDataDraw";
-// import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 export default {
     name: "MobilityDataDraw",
     components: {
         Tool,
         PersonalDataView,
-        DailyRoutineView,
         AnnotationsView,
+        PersonalDataOrEndView,
         ClosingView,
         IntroView
     },
@@ -343,8 +342,8 @@ export default {
                 <PersonalDataView
                     v-if="view === constants.views.PERSONAL_DATA_VIEW"
                 />
-                <DailyRoutineView
-                    v-if="view === constants.views.DAILY_ROUTINE_VIEW"
+                <PersonalDataOrEndView
+                    v-if="view === constants.views.PERSONAL_DATA_OR_END_VIEW"
                 />
                 <AnnotationsView
                     v-if="view === constants.views.ANNOTATIONS_VIEW"
@@ -356,7 +355,7 @@ export default {
 
                 <div
                     id="tool-mobilityDataDraw-actions"
-                    v-if="view !== constants.views.CLOSING_VIEW"
+                    v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
                 >
                     <v-btn
                         v-if="view > minDrawingView"

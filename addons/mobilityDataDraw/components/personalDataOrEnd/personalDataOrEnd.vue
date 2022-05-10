@@ -6,7 +6,7 @@ import actions from "../../store/actionsMobilityDataDraw";
 import mutations from "../../store/mutationsMobilityDataDraw";
 
 export default {
-    name: "ClosingView",
+    name: "PeronalDataOrEnd",
     components: {},
     data() {
         return {
@@ -19,21 +19,19 @@ export default {
         ...mapActions("Tools/MobilityDataDraw", ["resetDrawnData"]),
 
         /**
-         * Resets the drawn data and goes back to the daily routine drawing view
+         * Go to personal data input view
          * @returns {void}
          */
-        restartDrawing() {
-            this.resetDrawnData();
-            this.setView(this.constants.views.ANNOTATIONS_VIEW);
+        goToPersonalData() {
+            this.setView(this.constants.views.PERSONAL_DATA_VIEW);
         },
 
         /**
-         * Resets the drawn data and goes to the intro again
+         * Skip personal data input
          * @returns {void}
          */
-        endTool() {
-            this.resetDrawnData();
-            this.setView(this.constants.views.INTRO_VIEW);
+        goToEndView() {
+            this.setView(this.constants.views.CLOSING_VIEW);
         }
     }
 };
@@ -42,29 +40,31 @@ export default {
 <template lang="html">
     <div id="tool-mobilityDataDraw-view-closing">
         <h4>
-            {{ $t("additional:modules.tools.mobilityDataDraw.closing.title") }}
+            {{ $t("additional:modules.tools.mobilityDataDraw.personalOrEnd.title") }}
         </h4>
 
         <p>
             {{
-                $t("additional:modules.tools.mobilityDataDraw.closing.message")
+                $t("additional:modules.tools.mobilityDataDraw.personalOrEnd.personalDataChoice")
             }}
         </p>
 
-        <v-btn @click="restartDrawing">
+        <v-btn @click="goToPersonalData">
             {{
-                $t("additional:modules.tools.mobilityDataDraw.button.enterMore")
+                $t("additional:modules.tools.mobilityDataDraw.personalOrEnd.personalDataChoiceButton")
             }}
         </v-btn>
 
         <p class="second-row-buttons">
             {{
-                $t("additional:modules.tools.mobilityDataDraw.closing.finishMessage")
+                $t("additional:modules.tools.mobilityDataDraw.personalOrEnd.choseNoPersonalData")
             }}
         </p>
 
-        <v-btn @click="endTool">
-            {{ $t("additional:modules.tools.mobilityDataDraw.button.finish") }}
+        <v-btn @click="goToEndView">
+            {{
+                $t("additional:modules.tools.mobilityDataDraw.personalOrEnd.choseNoPersonalDataButton")
+            }}
         </v-btn>
     </div>
 </template>

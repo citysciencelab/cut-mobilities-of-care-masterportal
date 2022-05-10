@@ -70,8 +70,9 @@ const interactionTypes = {
     views = {
         INTRO_VIEW: 0,
         ANNOTATIONS_VIEW: 1,
-        PERSONAL_DATA_VIEW: 2,
-        CLOSING_VIEW: 3
+        PERSONAL_DATA_OR_END_VIEW: 2,
+        PERSONAL_DATA_VIEW: 3,
+        CLOSING_VIEW: 4
     },
     drawingViews = [views.ANNOTATIONS_VIEW];
 

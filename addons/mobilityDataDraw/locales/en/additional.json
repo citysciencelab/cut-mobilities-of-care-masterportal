@@ -3,6 +3,11 @@
     "tools": {
       "mobilityDataDraw": {
         "title": "Data Collection Tool",
+        "intro": {
+          "greeting": "Welcome to the FairCare Tool",
+          "message": "Urban infrastructure is often unsuitable for the needs of care workers. Identifying these vulnerabilities should increase the visibility of the problems and, at best, help planners better address these needs.",
+          "language": "Tool auf Deutsch"
+        },
         "label": {
           "personalData": "Personal Data",
           "age": "Age",
@@ -157,7 +162,15 @@
         },
         "closing": {
           "title": "Thank you for participating!",
-          "message": "You're welcome to enter more of your daily routines."
+          "message": "You're welcome to enter more of your daily routines.",
+          "finishMessage": "Otherwise we would like to thank you for your time."
+        },
+        "personalOrEnd": {
+          "title": "Thank you for entering your data!",
+          "personalDataChoice": "Share some personal data with us.",
+          "personalDataChoiceButton": "Add personal data",
+          "choseNoPersonalData": "Or click below to complete your input.",
+          "choseNoPersonalDataButton": "Skip personal data."
         }
       },
       "mobilityMode": {

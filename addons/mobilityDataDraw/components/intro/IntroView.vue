@@ -17,14 +17,17 @@ export default {
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", ["setView"]),
         ...mapActions("Tools/MobilityDataDraw", ["resetDrawnData"]),
+        ...mapMutations("Language", ["setCurrentLocale"]),
 
         /**
-         * Resets the drawn data and goes back to the daily routine drawing view
+         * Switch language
          * @returns {void}
          */
-        restartDrawing() {
-            this.resetDrawnData();
-            this.setView(this.constants.views.INTRO_VIEW);
+        switchLanguage() {
+            const language = i18next.language === 'en' ? 'de' : 'en'
+            i18next.changeLanguage(language, () => {
+                this.setCurrentLocale(language);
+            });
         }
     }
 };
@@ -42,14 +45,11 @@ export default {
             }}
         </p>
 
-<!--        <v-btn @click="restartDrawing">
+        <v-btn @click="switchLanguage">
             {{
-                $t("additional:modules.tools.mobilityDataDraw.button.enterMore")
+                $t("additional:modules.tools.mobilityDataDraw.intro.language")
             }}
         </v-btn>
-        <v-btn @click="$emit('close')">
-            {{ $t("additional:modules.tools.mobilityDataDraw.button.finish") }}
-        </v-btn>-->
     </div>
 </template>
 

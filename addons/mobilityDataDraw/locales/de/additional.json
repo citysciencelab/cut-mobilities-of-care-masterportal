@@ -5,7 +5,8 @@
         "title": "Data Collection Tool",
         "intro": {
           "greeting": "Willkommen beim FairCare Tool",
-          "message": "Städtische Infrastruktur ist häufig undgeeignet für die Bedürfnisse pflegender SorgearbeiterInnen. Die Erfassung entsprechender Schwachstellen soll die Sichtbarkeit der Probleme erhöhen und bestenfalls PlanerInnen helfen diese Bedürfnisse besser berücksichtigen zu können."
+          "message": "Städtische Infrastruktur ist häufig undgeeignet für die Bedürfnisse pflegender SorgearbeiterInnen. Die Erfassung entsprechender Schwachstellen soll die Sichtbarkeit der Probleme erhöhen und bestenfalls PlanerInnen helfen diese Bedürfnisse besser berücksichtigen zu können.",
+          "language": "Switch to English"
         },
         "label": {
           "personalData": "Steckbrief",
@@ -161,7 +162,15 @@
         },
         "closing": {
           "title": "Vielen Dank für die Teilnahme!",
-          "message": "Gerne können Sie weitere typische Tagesabläufe eintragen."
+          "message": "Gerne können Sie weitere typische Tagesabläufe eintragen.",
+          "finishMessage": "Andernfalls danken wir Ihnen für Ihre Zeit."
+        },
+        "personalOrEnd": {
+          "title": "Vielen Dank für die Eingabe ihrer Daten!",
+          "personalDataChoice": "Teilen Sie mit uns in einem Steckbrief ein paar Informationen über sich.",
+          "personalDataChoiceButton": "Zum Steckbrief",
+          "choseNoPersonalData": "Oder klicken Sie hier um Ihre Eingabe abzuschließen.",
+          "choseNoPersonalDataButton": "Steckbrief überspringen."
         }
       },
       "mobilityMode": {
