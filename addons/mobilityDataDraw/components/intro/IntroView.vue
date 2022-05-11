@@ -10,7 +10,10 @@ export default {
     components: {},
     data() {
         return {
-            constants: { ...toolConstants, ...sharedConstants }
+            constants: { ...toolConstants, ...sharedConstants },
+            termsAccepted: false,
+            showDialog: false,
+            lang: i18next.language
         };
     },
     computed: {},
@@ -28,6 +31,20 @@ export default {
             i18next.changeLanguage(language, () => {
                 this.setCurrentLocale(language);
             });
+        },
+        /**
+         * If terms have been accepted, continue
+         * @returns {void}
+         */
+        startDrawing() {
+            this.setView(this.constants.views.ANNOTATIONS_VIEW);
+        },
+        /**
+         * If terms have been accepted, continue
+         * @returns {void}
+         */
+        getLanguage() {
+            return i18next.language;
         }
     }
 };
@@ -50,6 +67,61 @@ export default {
                 $t("additional:modules.tools.mobilityDataDraw.intro.language")
             }}
         </v-btn>
+        <div class="terms-holder">
+            <v-checkbox
+                v-model="termsAccepted"
+            ></v-checkbox>
+            <div v-if="getLanguage() === 'de'">
+                <a href="javascript:void(0);" v-on:click="showDialog = !showDialog">{{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms1') }}</a>
+            {{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms2') }}
+            </div>
+            <div v-else>
+                {{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms1') }}
+                <a href="javascript:void(0);" v-on:click="showDialog = !showDialog">{{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms2') }}</a>
+            </div>
+        </div>
+
+        <v-btn
+            @click="startDrawing"
+            :disabled="!termsAccepted"
+        >
+            {{
+                $t("additional:modules.tools.mobilityDataDraw.intro.startTool")
+            }}
+        </v-btn>
+
+        <v-dialog
+            v-model="showDialog"
+            transition="dialog-top-transition"
+            max-width="600"
+        >
+            <v-card>
+                <v-card-title class="text-h5 grey lighten-2">
+                    Privacy Policy
+                </v-card-title>
+
+                <v-card-text>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                    culpa qui officia deserunt mollit anim id est laborum.
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        text
+                        @click="termsAccepted = !termsAccepted; showDialog = false"
+                    >
+                        I accept
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -62,6 +134,14 @@ export default {
         overflow-wrap: normal;
         max-width: 350px;
         padding-left: 5px;
+    }
+    .terms-holder {
+        display: flex;
+        div {
+            margin-top: 22px;
+            font-size: 11pt;
+            padding-top: 8px;
+        }
     }
 }
 </style>

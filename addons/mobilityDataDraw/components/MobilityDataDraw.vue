@@ -355,7 +355,7 @@ export default {
 
                 <div
                     id="tool-mobilityDataDraw-actions"
-                    v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
+                    v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.INTRO_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
                 >
                     <v-btn
                         v-if="view > minDrawingView"

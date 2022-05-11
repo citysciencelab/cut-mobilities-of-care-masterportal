@@ -6,7 +6,10 @@
         "intro": {
           "greeting": "Willkommen beim FairCare Tool",
           "message": "Städtische Infrastruktur ist häufig undgeeignet für die Bedürfnisse pflegender SorgearbeiterInnen. Die Erfassung entsprechender Schwachstellen soll die Sichtbarkeit der Probleme erhöhen und bestenfalls PlanerInnen helfen diese Bedürfnisse besser berücksichtigen zu können.",
-          "language": "Switch to English"
+          "language": "Switch to English",
+          "acceptTerms1": "Datenschutzrichtlinie ",
+          "acceptTerms2": "akzeptieren",
+          "startTool": "Start"
         },
         "label": {
           "personalData": "Steckbrief",
