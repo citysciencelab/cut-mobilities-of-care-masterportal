@@ -46,6 +46,7 @@ export default {
         this.initializeAnnotationsView();
     },
     destroyed() {
+        this.destroyAudioRecorder();
         this.cleanUpAnnotationsView();
     },
     methods: {

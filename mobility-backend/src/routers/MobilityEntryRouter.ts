@@ -75,7 +75,6 @@ const postAnnotationFeatures = async (
 
   for (let i = 0; i < annotationFeatures.length; i++) {
     const annotationFeature = annotationFeatures[i];
-    console.log(annotationFeature)
     // GeometryIndex must be unique
     if (annotation_geometry_indices.includes(annotationFeature.geometryIndex)) {
       throw ERROR_GEOMETRY_INDICES_NOT_UNIQUE;
@@ -89,13 +88,16 @@ const postAnnotationFeatures = async (
       throw ERROR_NO_FEATURE_GEOMETRY;
     }
 
-    await featureController.post(
+    const featureId = await featureController.post(
       entryId,
       annotationFeature,
       FeatureType.ANNOTATION
     );
+    annotationFeature.featureId = featureId;
     annotation_geometry_indices.push(annotationFeature.geometryIndex);
   }
+
+  return annotationFeatures;
 };
 
 /**
@@ -133,9 +135,8 @@ externalRouter.post('/', async (req, res) => {
 
     // await postMobilityFeatures(mobilityFeatures, entryId);
 
-    await postAnnotationFeatures(annotationFeatures, entryId);
-
-    res.status(200).json({ entryId });
+    const annotationFeaturesWithId = await postAnnotationFeatures(annotationFeatures, entryId);
+    res.status(200).json( annotationFeaturesWithId );
   } catch (error) {
     // Rollback if entry has already been inserted
     if (entryId) {

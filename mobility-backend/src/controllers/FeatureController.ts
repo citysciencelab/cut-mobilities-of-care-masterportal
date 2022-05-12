@@ -87,6 +87,8 @@ class FeatureController {
     }
 
     client.release();
+
+    return featureId;
   }
 }
 

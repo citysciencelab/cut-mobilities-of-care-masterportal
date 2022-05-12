@@ -25,7 +25,9 @@ export default {
          * Current audio record
          */
         audioRecord() {
-            return this.audioRecords[this.audioRecordIndex];
+            if (this.audioRecords.length - 1 >= this.audioRecordIndex) {
+                return this.audioRecords[this.audioRecordIndex];
+            }
         },
         /**
          * The URL for the audio record
@@ -47,7 +49,9 @@ export default {
 </script>
 
 <template lang="html">
-    <div id="mobility-data-audio-recorder">
+    <div
+        v-if="audioRecord"
+        id="mobility-data-audio-recorder">
         <v-btn
             v-if="!audioRecord.isRecording"
             :disabled="

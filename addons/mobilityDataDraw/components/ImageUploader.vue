@@ -8,17 +8,20 @@ import actions from "../store/actionsMobilityDataDraw";
 export default {
     name: "ImageUploader",
     components: {},
-    data() {
-        return {
-            constants: { ...toolConstants, ...sharedConstants },
-            chosenFile: null,
-        };
-    },
     props: {
         imageUploadIndex: {
             type: Number,
             default: 0
         }
+    },
+    data () {
+        return {
+            constants: { ...toolConstants, ...sharedConstants },
+            chosenFile: null
+        };
+    },
+    mounted() {
+        this.initializeImageUploader(this.imageUploadIndex);
     },
     computed: {
         ...mapGetters("Tools/MobilityDataDraw", Object.keys(getters)),
@@ -28,9 +31,11 @@ export default {
         /**
          * Current image upload
          */
-        saveUploadedIMage(files) {
-            if (this.chosenFile) {
-                this.addImageUpload(this.chosenFile);
+        saveUploadedIMage(file) {
+            if (file) {
+                this.addImageUpload({chosenFile: file, imageUploadIndex: this.imageUploadIndex});
+            } else {
+                this.removeImageUpload(this.imageUploadIndex);
             }
         }
     }
@@ -55,10 +60,10 @@ export default {
 <style lang="less" scoped>
     #file_upload_holder {
        display: flex;
-    }
 
-    .camera_icon {
-        margin-right: 18px;
-        margin-left: 8px;
+        .camera_icon {
+            margin-right: 18px;
+            margin-left: 8px;
+        }
     }
 </style>

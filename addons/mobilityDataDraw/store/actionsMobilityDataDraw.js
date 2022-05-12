@@ -65,16 +65,16 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                 mobilityFeatures: state.mobilityData,
                 annotationFeatures: state.annotations
             };
-            console.log("sendthstuff")
             return entryApi
                 .sendEntry(entry)
-                .then(({entryId}) => {
+                .then((featuresWithId) => {
                     const audioRecordBlobs = state.audioRecords
                         .map(audioRecord => audioRecord.audioRecordBlob)
                         .filter(Boolean);
+                    const audioRecordings = state.audioRecords;
                     if (audioRecordBlobs.length) {
                         audioApi
-                            .sendAudioRecords(entryId, audioRecordBlobs)
+                            .sendAudioRecords(featuresWithId, audioRecordings)
                             .catch(error => {
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {
@@ -88,10 +88,10 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                                 });
                             });
                     }
-                    const image = state.imageUploads;
-                    if (image.length) {
+                    const uploadedImages = state.imageUploads;
+                    if (uploadedImages.filter(Boolean).length) {
                         imageApi
-                            .sendImageUploads(entryId, image)
+                            .sendImageUploads(featuresWithId, uploadedImages)
                             .catch(error => {
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {
@@ -138,7 +138,7 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
             commit("setAnnotations", initialState.annotations);
 
             // Reset audio record
-            commit("setAudioRecordBlob", initialState.audioRecordBlob);
+            this.destroyAudioRecorder();
 
             // Clear map layers
             if (state.mobilityDataLayer) {

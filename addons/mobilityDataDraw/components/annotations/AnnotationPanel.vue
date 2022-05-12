@@ -1,5 +1,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
+import AudioRecorderWrapper from "../AudioRecorderWrapper.vue";
+import ImageUploader from "../ImageUploader.vue";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
@@ -8,7 +10,10 @@ import mutations from "../../store/mutationsMobilityDataDraw";
 
 export default {
     name: "AnnotationPanel",
-    components: {},
+    components: {
+        AudioRecorderWrapper,
+        ImageUploader
+    },
     props: {
         // The map feature of the annotation
         feature: {
@@ -31,7 +36,7 @@ export default {
             default: ""
         }
     },
-    data() {
+    data () {
         return {
             constants: { ...toolConstants, ...sharedConstants }
         };
@@ -122,6 +127,8 @@ export default {
             const confirmActionSettings = {
                 actionConfirmedCallback: () => {
                     this.deleteAnnotation(this.geometryIndex);
+                    this.removeImageUpload(this.geometryIndex);
+                    this.removeAudioRecord(this.geometryIndex);
                 },
                 confirmCaption: this.$t(
                     "additional:modules.tools.mobilityDataDraw.confirm.deleteAnnotation.confirmButton"
@@ -225,6 +232,8 @@ export default {
                     </v-icon>
                 </v-btn>
             </div>
+            <AudioRecorderWrapper v-bind:audioRecordId="geometryIndex" />
+            <ImageUploader v-bind:imageUploadIndex="geometryIndex" />
         </v-expansion-panel-content>
     </v-expansion-panel>
 </template>
@@ -247,11 +256,16 @@ export default {
     }
 
     &-actions  {
+        text-align: right;
         margin-top: 15px;
 
+        > button:first-of-type {
+            margin-right: 10px;
+        }
         > button {
             position: relative !important;
-            margin-top: 5px;
+            padding: 10px !important;
+            min-width: 0 !important;
         }
     }
 

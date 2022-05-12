@@ -213,7 +213,6 @@ function removeSnapInteraction ({rootState, state, commit}) {
  * @returns {void}
  */
 function addModifyInteraction ({rootState, state, commit, dispatch}, feature) {
-    console.log("modify")
     const features = new Collection([feature]),
         modifyInteraction = new Modify({
             features,

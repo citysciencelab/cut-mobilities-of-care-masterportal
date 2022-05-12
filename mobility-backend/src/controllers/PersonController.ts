@@ -52,8 +52,6 @@ class PersonController {
   }: PersonDTO): Promise<PersonId> {
     const client = await pool.connect();
 
-    console.log("updtae" + personId)
-
     const sql = `UPDATE person SET
                   age = ${valueOrNULL(age)},
                   gender = ${valueOrNULL(gender)},

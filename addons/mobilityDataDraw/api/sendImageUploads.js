@@ -3,26 +3,28 @@ import config from "../config";
 /**
  * Sends an image uploads to the backend
  *
- * @param {string} entryId the id of the entry to add the image upload to
- * @param {Blob[]} imageUploadBlobs the recorded data to send to the api.
+ * @param {string} featuresWithId the id of the entry to add the image upload to
+ * @param {Blob[]} uploadedImages the recorded data to send to the api.
  * @returns {Promise} api response.
  */
-function sendImageUploads (entryId, imageUploadBlobs) {
-    console.log("doing that image thing")
-    if (!entryId) {
+function sendImageUploads (featuresWithId, uploadedImages) {
+    if (!featuresWithId) {
         throw Error("Entry ID is missing.");
     }
 
     const formData = new FormData();
+    formData.append("entryId", featuresWithId
+        .map(feature => feature.featureId).toString());
 
-    formData.append("entryId", entryId);
-
-    imageUploadBlobs.forEach((imageUploadBlob, index) => {
-        formData.append(
-            `image_${index}`,
-            imageUploadBlob,
-            `${entryId}_image_upload_${index}`
-        );
+    uploadedImages.forEach((uploadedImage, index) => {
+        if (uploadedImage) {
+            const id = featuresWithId[index].featureId;
+            formData.append(
+                `image_${id}`,
+                uploadedImage,
+                `${id}_image_upload_${index}`
+            );
+        }
     });
 
     return fetch(config.API_BASE_URL + "/image", {

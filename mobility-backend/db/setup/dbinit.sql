@@ -40,30 +40,6 @@ CREATE TABLE mobility_entry
         ON DELETE CASCADE
 );
 
-CREATE TABLE image
-(
-    image_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    image_file character varying NOT NULL,
-    entry_id integer NOT NULL,
-    CONSTRAINT image_pkey PRIMARY KEY (image_id),
-    CONSTRAINT fk_entry_id
-      FOREIGN KEY(entry_id)
-	    REFERENCES mobility_entry(entry_id)
-        ON DELETE CASCADE
-);
-
-CREATE TABLE audio
-(
-    audio_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    audio_file character varying NOT NULL,
-    entry_id integer NOT NULL,
-    CONSTRAINT audio_pkey PRIMARY KEY (audio_id),
-    CONSTRAINT fk_entry_id
-      FOREIGN KEY(entry_id)
-	    REFERENCES mobility_entry(entry_id)
-        ON DELETE CASCADE
-);
-
 CREATE TABLE feature
 (
     feature_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
@@ -75,8 +51,32 @@ CREATE TABLE feature
     entry_id integer NOT NULL,
     CONSTRAINT feature_pkey PRIMARY KEY (feature_id),
     CONSTRAINT fk_mobility_entry
-      FOREIGN KEY(entry_id)
-	    REFERENCES mobility_entry(entry_id)
+        FOREIGN KEY(entry_id)
+            REFERENCES mobility_entry(entry_id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE image
+(
+    image_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    image_file character varying NOT NULL,
+    feature_id integer NOT NULL,
+    CONSTRAINT image_pkey PRIMARY KEY (image_id),
+    CONSTRAINT fk_feature_id
+      FOREIGN KEY(feature_id)
+	    REFERENCES feature(feature_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE audio
+(
+    audio_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    audio_file character varying NOT NULL,
+    feature_id integer NOT NULL,
+    CONSTRAINT audio_pkey PRIMARY KEY (audio_id),
+    CONSTRAINT fk_feature_id
+      FOREIGN KEY(feature_id)
+	    REFERENCES feature(feature_id)
         ON DELETE CASCADE
 );
 
