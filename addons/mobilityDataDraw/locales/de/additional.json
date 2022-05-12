@@ -80,7 +80,9 @@
             "title": "Mobilitätsdaten senden",
             "description": "Sind Sie sicher, dass Sie die Mobilitätsdaten senden möchten? Die Daten können nachträglich nicht bearbeitet werden.",
             "confirmButton": "Senden",
-            "denyButton": "Abbrechen"
+            "denyButton": "Abbrechen",
+            "noDataText": "Sie haben noch keine Daten eingegeben, bitte machen Sie mindestens einen Eintrag.",
+            "okButton": "OK"
           },
           "deleteLocationFeature": {
             "title": "Stopp löschen",

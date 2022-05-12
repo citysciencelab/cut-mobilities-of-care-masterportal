@@ -80,7 +80,9 @@
             "title": "Submit mobility data",
             "description": "Are you sure you want to submit your mobility data? The data can't be edited after submitting.",
             "confirmButton": "Submit",
-            "denyButton": "Cancel"
+            "denyButton": "Cancel",
+            "noDataText": "You have not entered any data yet, please make at least one entry.",
+            "okButton": "OK"
           },
           "deleteLocationFeature": {
             "title": "Delete stop",

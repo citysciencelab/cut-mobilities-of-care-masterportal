@@ -29,7 +29,8 @@ export default {
             isLoadingNext: false,
             initialState: JSON.parse(
                 JSON.stringify(this.$store.state.Tools.MobilityDataDraw)
-            )
+            ),
+            showDialog: false
         };
     },
     computed: {
@@ -181,6 +182,7 @@ export default {
          * @returns {void}
          */
         submitDataAndNextView() {
+            console.log("action")
             if (this.view === this.constants.views.PERSONAL_DATA_VIEW) {
                 const confirmActionSettings = {
                     actionConfirmedCallback: () => {
@@ -210,33 +212,37 @@ export default {
                     confirmActionSettings
                 );
             } else if (this.view === this.constants.views.ANNOTATIONS_VIEW) {
-                const confirmActionSettings = {
-                    actionConfirmedCallback: () => {
-                        this.isLoadingNext = true;
-                        this.submitDrawnData()
-                            .then(this.nextView)
-                            .finally(() => {
-                                this.isLoadingNext = false;
-                            });
-                    },
-                    confirmCaption: this.$t(
-                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.confirmButton"
-                    ),
-                    denyCaption: this.$t(
-                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.denyButton"
-                    ),
-                    textContent: this.$t(
-                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.description"
-                    ),
-                    headline: this.$t(
-                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
-                    ),
-                    forceClickToClose: true
-                };
-                this.$store.dispatch(
-                    "ConfirmAction/addSingleAction",
-                    confirmActionSettings
-                );
+                if (this.annotations.length) {
+                    const confirmActionSettings = {
+                        actionConfirmedCallback: () => {
+                            this.isLoadingNext = true;
+                            this.submitDrawnData()
+                                .then(this.nextView)
+                                .finally(() => {
+                                    this.isLoadingNext = false;
+                                });
+                        },
+                        confirmCaption: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.confirmButton"
+                        ),
+                        denyCaption: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.denyButton"
+                        ),
+                        textContent: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.description"
+                        ),
+                        headline: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
+                        ),
+                        forceClickToClose: true
+                    };
+                    this.$store.dispatch(
+                        "ConfirmAction/addSingleAction",
+                        confirmActionSettings
+                    );
+                } else {
+                    this.showDialog = true;
+                }
             } else {
                 this.nextView();
             }
@@ -396,6 +402,41 @@ export default {
                         }}
                     </v-btn>
                 </div>
+
+                <v-dialog
+                    v-model="showDialog"
+                    transition="dialog-top-transition"
+                    max-width="600"
+                >
+                    <v-card>
+                        <v-card-title class="text-h5 grey lighten-2">
+                            {{ $t(
+                                "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
+                            ) }}
+                        </v-card-title>
+
+                        <v-card-text class="data-policy-text">
+                            {{ $t(
+                                "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
+                            ) }}
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                color="primary"
+                                text
+                                @click="showDialog = false"
+                            >
+                                {{ $t(
+                                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
+                                ) }}
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
             </v-app>
         </template>
     </Tool>
