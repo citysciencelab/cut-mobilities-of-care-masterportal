@@ -30,7 +30,8 @@ export default {
             initialState: JSON.parse(
                 JSON.stringify(this.$store.state.Tools.MobilityDataDraw)
             ),
-            showDialog: false
+            showDialog: false,
+            menuUp: true
         };
     },
     computed: {
@@ -82,8 +83,7 @@ export default {
                 isModifying
             );
         },
-        possibleMobileWidth: function() {
-            return this.isMobile() ? this.initialState.initialWidthMobile+"px" : "";
+        getMobileStyle: function() {
         },
     },
     created() {
@@ -151,6 +151,16 @@ export default {
         ...mapActions("Tools/MobilityDataDraw", Object.keys(actions)),
 
         /**
+         * Toggles the menu
+         * @returns {void}
+         */
+        toggleMenu() {
+            this.menuUp = !this.menuUp;
+            let sidebar = document.getElementById("tool-sidebar-vue");
+            sidebar.style.top = !this.menuUp ? "calc(100% - 45px)" : "0" ;
+        },
+
+        /**
          * Opens the previous view.
          * @returns {void}
          */
@@ -162,11 +172,7 @@ export default {
          * Routine to run through on startup
          */
         initRoutine() {
-            if (this.isMobile()) {
-                this.setResizableWindow(false);
-                let sidebarWithPadding = document.getElementById("tool-sidebar-vue");
-                sidebarWithPadding.style.padding = "0 !important";
-            }
+
         },
 
         /**
@@ -312,140 +318,144 @@ export default {
 </script>
 
 <template lang="html">
-    <!--
-    <div>
-        <v-btn
-            rounded
-            color="primary"
-            dark
+    <div class="tool-holder">
+        <div
+            id="show-button"
+            @click="toggleMenu"
+            v-if="!menuUp"
         >
-            Rounded Button
-            <v-icon dark>
-                mdi-heart
-            </v-icon>
-        </v-btn>
-        -->
-    <Tool
-        :title="$t(name)"
-        :icon="glyphicon"
-        :active="active"
-        :render-to-window="renderToWindow"
-        :resizable-window="resizableWindow"
-        :deactivateGFI="deactivateGFI"
-        :initial-width="initialWidth"
-        :initial-width-mobile="initialWidthMobile"
-        :style="{width: possibleMobileWidth}"
-    >
-        <template v-slot:toolBody>
-            <v-app
-                v-if="active"
-                id="tool-mobilityDataDraw"
-                :style="constants.mobilityModeCSSColorVariables"
-            >
-                <IntroView
-                    v-if="view === constants.views.INTRO_VIEW"
-                />
-                <PersonalDataView
-                    v-if="view === constants.views.PERSONAL_DATA_VIEW"
-                />
-                <PersonalDataOrEndView
-                    v-if="view === constants.views.PERSONAL_DATA_OR_END_VIEW"
-                />
-                <AnnotationsView
-                    v-if="view === constants.views.ANNOTATIONS_VIEW"
-                />
-                <ClosingView
-                    v-if="view === constants.views.CLOSING_VIEW"
-                    @close="close"
-                />
-
-                <div
-                    id="tool-mobilityDataDraw-actions"
-                    v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.INTRO_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
+            <v-icon size="40">keyboard_double_arrow_up</v-icon>
+        </div>
+        <Tool
+            :title="$t(name)"
+            :icon="glyphicon"
+            :active="active"
+            :render-to-window="renderToWindow"
+            :resizable-window="resizableWindow"
+            :deactivateGFI="deactivateGFI"
+            :initial-width="initialWidth"
+            :initial-width-mobile="initialWidthMobile"
+        >
+            <template v-slot:toolBody>
+                <v-app
+                    v-if="active"
+                    id="tool-mobilityDataDraw"
+                    :style="constants.mobilityModeCSSColorVariables"
                 >
-                    <v-btn
-                        v-if="view > minDrawingView"
-                        class="tool-mobilityDataDraw-actions-previous"
-                        @click="previousView"
-                    >
-                        {{
-                            $t(
-                                "additional:modules.tools.mobilityDataDraw.button.previous"
-                            )
-                        }}
-                    </v-btn>
+                    <IntroView
+                        v-if="view === constants.views.INTRO_VIEW"
+                    />
+                    <PersonalDataView
+                        v-if="view === constants.views.PERSONAL_DATA_VIEW"
+                    />
+                    <PersonalDataOrEndView
+                        v-if="view === constants.views.PERSONAL_DATA_OR_END_VIEW"
+                    />
+                    <AnnotationsView
+                        v-if="view === constants.views.ANNOTATIONS_VIEW"
+                    />
+                    <ClosingView
+                        v-if="view === constants.views.CLOSING_VIEW"
+                        @close="close"
+                    />
 
-                    <v-btn
-                        v-if="view < maxDrawingView"
-                        class="tool-mobilityDataDraw-actions-next"
-                        :disabled="nextButtonDisabled"
-                        :loading="isLoadingNext"
-                        @click="submitDataAndNextView"
+                    <div
+                        id="tool-mobilityDataDraw-actions"
+                        v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.INTRO_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
                     >
-                        {{
-                            $t(
-                                "additional:modules.tools.mobilityDataDraw.button.next"
-                            )
-                        }}
-                    </v-btn>
-                    <v-btn
-                        v-else
-                        class="tool-mobilityDataDraw-actions-submit"
-                        :disabled="nextButtonDisabled"
-                        :loading="isLoadingNext"
-                        @click="submitDataAndNextView"
-                    >
-                        {{
-                            $t(
-                                "additional:modules.tools.mobilityDataDraw.button.submit"
-                            )
-                        }}
-                    </v-btn>
-                </div>
+                        <v-btn
+                            v-if="view > minDrawingView"
+                            class="tool-mobilityDataDraw-actions-previous"
+                            @click="previousView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.previous"
+                                )
+                            }}
+                        </v-btn>
 
-                <v-dialog
-                    v-model="showDialog"
-                    transition="dialog-top-transition"
-                    max-width="600"
-                >
-                    <v-card>
-                        <v-card-title class="text-h5 grey lighten-2">
-                            {{ $t(
+                        <v-btn
+                            v-if="view < maxDrawingView"
+                            class="tool-mobilityDataDraw-actions-next"
+                            :disabled="nextButtonDisabled"
+                            :loading="isLoadingNext"
+                            @click="submitDataAndNextView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.next"
+                                )
+                            }}
+                        </v-btn>
+                        <v-btn
+                            v-else
+                            class="tool-mobilityDataDraw-actions-submit"
+                            :disabled="nextButtonDisabled"
+                            :loading="isLoadingNext"
+                            @click="submitDataAndNextView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.submit"
+                                )
+                            }}
+                        </v-btn>
+                    </div>
+
+                    <v-dialog
+                        v-model="showDialog"
+                        transition="dialog-top-transition"
+                        max-width="600"
+                    >
+                        <v-card>
+                            <v-card-title class="text-h5 grey lighten-2">
+                                {{ $t(
                                 "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
                             ) }}
-                        </v-card-title>
+                            </v-card-title>
 
-                        <v-card-text class="data-policy-text">
-                            {{ $t(
+                            <v-card-text class="data-policy-text">
+                                {{ $t(
                                 "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
                             ) }}
-                        </v-card-text>
+                            </v-card-text>
 
-                        <v-divider></v-divider>
+                            <v-divider></v-divider>
 
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                color="primary"
-                                text
-                                @click="showDialog = false"
-                            >
-                                {{ $t(
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="primary"
+                                    text
+                                    @click="showDialog = false"
+                                >
+                                    {{ $t(
                                     "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
                                 ) }}
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-app>
-        </template>
-    </Tool>
-    <!--</div>-->
-
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-app>
+                <div
+                    id="hide-button"
+                    @click="toggleMenu"
+                    v-if="menuUp"
+                >
+                    <v-icon size="40">keyboard_double_arrow_down</v-icon>
+                </div>
+            </template>
+        </Tool>
+    </div>
 </template>
 
 <style lang="less" scoped>
 @import "~variables";
+
+.tool-holder {
+    height: 100%;
+}
 
 #tool-mobilityDataDraw {
     --mobility-data-draw-background-color-hex: #fff;
@@ -453,6 +463,10 @@ export default {
 
     flex-direction: column;
     height: 100%;
+
+    @media only screen and (max-width: 440px) {
+        height: calc(100% - 40px) !important;
+    }
     background: none;
 
     &::v-deep {
@@ -526,6 +540,36 @@ export default {
 @media only screen and (max-width: 440px) {
     #tool-sidebar-vue {
         padding: 0 !important;
+        width: calc(100% - 75px) !important;
+        height: calc(100% - 20px) !important;
+
+        #basic-resize-handle-sidebar {
+            padding: 0 !important;
+        }
+
+        #hide-button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    #show-button {
+        width: 50px;
+        text-align: center;
+        position: fixed;
+        top: calc(100% - 77px);
+        left: calc(50% - 50px);
+        z-index: 3000;
+        height: 45px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 32px;
+    }
+}
+
+// Hide certain elements when the screen is not mobile
+@media (min-width: 440px) {
+    #show-button, #hide-button {
+        display: none;
     }
 }
 

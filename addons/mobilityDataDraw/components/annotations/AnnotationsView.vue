@@ -160,7 +160,6 @@ export default {
 .annotations {
     display: block !important;
     width: calc(100% - 4px);
-    min-width: 450px;
     margin: 0 2px;
 }
 </style>
