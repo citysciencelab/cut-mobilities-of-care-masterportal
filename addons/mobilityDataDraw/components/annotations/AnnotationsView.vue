@@ -71,21 +71,21 @@ export default {
 
             <DrawingModeSelection />
 
-            <p v-if="drawingMode === constants.drawingModes.POINT" class="hint">
+            <p v-if="!isCurrentMobile && drawingMode === constants.drawingModes.POINT" class="hint">
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.annotations.pointDrawingHint"
                     )
                 }}
             </p>
-            <p v-if="drawingMode === constants.drawingModes.LINE" class="hint">
+            <p v-if="!isCurrentMobile && drawingMode === constants.drawingModes.LINE" class="hint">
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.annotations.routeDrawingHint"
                     )
                 }}
             </p>
-            <p v-if="drawingMode === constants.drawingModes.AREA" class="hint">
+            <p v-if="!isCurrentMobile && drawingMode === constants.drawingModes.AREA" class="hint">
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.annotations.areaDrawingHint"

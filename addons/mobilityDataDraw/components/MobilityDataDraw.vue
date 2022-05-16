@@ -30,8 +30,7 @@ export default {
             initialState: JSON.parse(
                 JSON.stringify(this.$store.state.Tools.MobilityDataDraw)
             ),
-            showDialog: false,
-            menuUp: true
+            showDialog: false
         };
     },
     computed: {
@@ -133,6 +132,25 @@ export default {
                     value === this.constants.interactionTypes.MODIFY
                 );
             }
+            if (value === "modify") {
+                this.setIsMenuUp(false)
+            }
+        },
+        mobilityMode(value) {
+            this.setIsMenuUp(false)
+        },
+        drawingMode(value) {
+            this.setIsMenuUp(false)
+        },
+        view(value) {
+            if (this.constants.views.ANNOTATIONS_VIEW === value && this.isCurrentMobile) {
+                this.toggleMenu();
+                let sidebar = this.$refs.toolMenu;
+                // Should work via refs and getting the second child!?
+                document.getElementsByClassName("win-heading")[0].addEventListener('click', () => {
+                    this.toggleMenu()
+                });
+            }
         }
     },
     /**
@@ -144,7 +162,7 @@ export default {
             this.setActive(true);
         }
         this.applyTranslationKey(this.name);
-        this.initRoutine();
+        this.getIsMobile();
     },
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),
@@ -155,9 +173,7 @@ export default {
          * @returns {void}
          */
         toggleMenu() {
-            this.menuUp = !this.menuUp;
-            let sidebar = document.getElementById("tool-sidebar-vue");
-            sidebar.style.top = !this.menuUp ? "calc(100% - 45px)" : "0" ;
+            this.setIsMenuUp(!this.isMenuUp)
         },
 
         /**
@@ -166,13 +182,6 @@ export default {
          */
         previousView() {
             this.setView(Math.max(this.minView, this.view - 1));
-        },
-
-        /**
-         * Routine to run through on startup
-         */
-        initRoutine() {
-
         },
 
         /**
@@ -188,7 +197,6 @@ export default {
          * @returns {void}
          */
         submitDataAndNextView() {
-            console.log("action")
             if (this.view === this.constants.views.PERSONAL_DATA_VIEW) {
                 const confirmActionSettings = {
                     actionConfirmedCallback: () => {
@@ -310,8 +318,9 @@ export default {
                 closeMobilityDataDraw();
             }
         },
-        isMobile () {
-            return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent);
+        getIsMobile () {
+            this.setIsCurrentMobile((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent));
+            return  this.isCurrentMobile;
         }
     }
 };
@@ -321,12 +330,16 @@ export default {
     <div class="tool-holder">
         <div
             id="show-button"
+            v-bind:class="{ 'show-button-draw-line': drawingMode === constants.drawingModes.LINE }"
             @click="toggleMenu"
-            v-if="!menuUp"
+            v-if="!isMenuUp"
         >
             <v-icon size="40">keyboard_double_arrow_up</v-icon>
         </div>
         <Tool
+            ref="toolMenu"
+            v-bind:class="{'menu-down-one-row': !this.isMenuUp && drawingMode !== constants.drawingModes.LINE,
+            'menu-down-two-rows': !this.isMenuUp && drawingMode === constants.drawingModes.LINE }"
             :title="$t(name)"
             :icon="glyphicon"
             :active="active"
@@ -441,7 +454,7 @@ export default {
                 <div
                     id="hide-button"
                     @click="toggleMenu"
-                    v-if="menuUp"
+                    v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
                 >
                     <v-icon size="40">keyboard_double_arrow_down</v-icon>
                 </div>
@@ -557,12 +570,24 @@ export default {
         width: 50px;
         text-align: center;
         position: fixed;
-        top: calc(100% - 77px);
+        top: calc(100% - 187px);
         left: calc(50% - 50px);
         z-index: 3000;
         height: 45px;
         background-color: rgba(255, 255, 255, 0.6);
         border-radius: 32px;
+    }
+
+    .show-button-draw-line {
+        top: calc(100% - 247px) !important;
+    }
+
+    .menu-down-one-row {
+        top: calc(100% - 150px) !important;
+    }
+
+    .menu-down-two-rows {
+        top: calc(100% - 210px) !important;
     }
 }
 

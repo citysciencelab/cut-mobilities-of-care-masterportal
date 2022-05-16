@@ -130,7 +130,7 @@ function addAnnotationDrawInteraction ({rootState, state, commit, dispatch}) {
  * @param {Object} context actions context object.
  * @returns {void}
  */
-function createAnnotationDrawInteractionListeners ({state, dispatch}) {
+function createAnnotationDrawInteractionListeners ({state, dispatch, commit}) {
     // Listener to stop drawing a line feature
     state.drawLineAnnotationInteraction.on("drawend", event => {
         // Add the current mobility mode to the finished feature
@@ -138,6 +138,7 @@ function createAnnotationDrawInteractionListeners ({state, dispatch}) {
             event.feature.set("mobilityMode", state.mobilityMode);
         }
         dispatch("addFeatureToAnnotation", event.feature);
+        commit("setIsMenuUp", true);
     });
 }
 
@@ -147,10 +148,11 @@ function createAnnotationDrawInteractionListeners ({state, dispatch}) {
  * @param {Object} context actions context object.
  * @returns {void}
  */
-function createAnnotationPointInteractionListeners ({state, dispatch}) {
+function createAnnotationPointInteractionListeners ({state, dispatch, commit}) {
     // Listener to stop drawing a line feature
     state.drawPointAnnotationInteraction.on("drawend", event => {
         dispatch("addFeatureToAnnotation", event.feature);
+        commit("setIsMenuUp", true);
     });
 }
 
@@ -408,8 +410,8 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
     } else if (state.drawPointAnnotationInteraction) {
         state.drawPointAnnotationInteraction.setActive(true);
     }
-
 }
+
 
 export default {
     addMobilityDataDrawInteractions,

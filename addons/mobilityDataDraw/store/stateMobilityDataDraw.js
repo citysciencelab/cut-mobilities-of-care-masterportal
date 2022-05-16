@@ -79,7 +79,9 @@ const state = {
     isVisibleInMenu: true,
     deactivateGFI: true,
     initialWidth: 500,
-    initialWidthMobile: 300
+    initialWidthMobile: 300,
+    isCurrentMobile: false,
+    isMenuUp: true
 };
 
 export default state;
