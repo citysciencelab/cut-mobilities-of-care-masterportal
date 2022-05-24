@@ -328,6 +328,9 @@ export default {
 
 <template lang="html">
     <div class="tool-holder">
+        <div id="background-overlay"
+             v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
+             @click="toggleMenu" />
         <div
             id="show-button"
             v-bind:class="{ 'show-button-draw-line': drawingMode === constants.drawingModes.LINE }"
@@ -564,6 +567,16 @@ export default {
             width: 100%;
             text-align: center;
         }
+    }
+
+    #background-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0);
+        z-index: 1000;
     }
 
     #show-button {
