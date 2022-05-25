@@ -47,6 +47,7 @@
     "bootstrap-select": "1.12.x",
     "bootstrap-slider": "^10.6.2",
     "bootstrap-toggle": "2.x.x",
+    "cesium": "^1.93.0",
     "chart.js": "^2.9.3",
     "core-js": "^3.10.1",
     "d3": "4.13.x",
