@@ -1,4 +1,4 @@
-import config from "../config";
+import config from "../config.json";
 
 /**
  * Sends an image uploads to the backend

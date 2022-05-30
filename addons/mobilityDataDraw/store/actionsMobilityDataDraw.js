@@ -11,7 +11,7 @@ import entryApi from "../api/sendEntry";
 import audioApi from "../api/sendAudioRecords";
 import imageApi from "../api/sendImageUploads";
 
-import config from "../config";
+import config from "../config.json";
 
 const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
     actions = {
