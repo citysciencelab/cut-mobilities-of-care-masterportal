@@ -15,7 +15,6 @@
   },
   "main": "js/main.js",
   "scripts": {
-    "heroku-prebuild": "npm install --legacy-peer-deps",
     "start": "webpack-dev-server --config devtools/webpack.dev.js",
     "test": "mocha-webpack --webpack-config devtools/webpack.test.js --opts test/unittests/deps/mocha.opts --timeout 15000",
     "test:watch": "npm run test -- --watch",
