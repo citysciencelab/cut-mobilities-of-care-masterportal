@@ -21,7 +21,7 @@ CREATE TABLE person_in_need
     person_id integer NOT NULL,
     CONSTRAINT person_in_need_pkey PRIMARY KEY (person_in_need_id),
     CONSTRAINT fk_person_person_in_need
-      FOREIGN KEY(person_id) 
+      FOREIGN KEY(person_id)
 	    REFERENCES person(person_id)
         ON DELETE CASCADE
 );
@@ -35,20 +35,8 @@ CREATE TABLE mobility_entry
     person_id integer NOT NULL,
     CONSTRAINT mobility_entry_pkey PRIMARY KEY (entry_id),
     CONSTRAINT fk_person_mobility_entry
-      FOREIGN KEY(person_id) 
+      FOREIGN KEY(person_id)
 	    REFERENCES person(person_id)
-        ON DELETE CASCADE
-);
-
-CREATE TABLE audio
-(
-    audio_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    audio_file character varying NOT NULL,
-    entry_id integer NOT NULL,
-    CONSTRAINT audio_pkey PRIMARY KEY (audio_id),
-    CONSTRAINT fk_entry_id
-      FOREIGN KEY(entry_id)
-	    REFERENCES mobility_entry(entry_id)
         ON DELETE CASCADE
 );
 
@@ -63,8 +51,32 @@ CREATE TABLE feature
     entry_id integer NOT NULL,
     CONSTRAINT feature_pkey PRIMARY KEY (feature_id),
     CONSTRAINT fk_mobility_entry
-      FOREIGN KEY(entry_id) 
-	    REFERENCES mobility_entry(entry_id)
+        FOREIGN KEY(entry_id)
+            REFERENCES mobility_entry(entry_id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE image
+(
+    image_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    image_file character varying NOT NULL,
+    feature_id integer NOT NULL,
+    CONSTRAINT image_pkey PRIMARY KEY (image_id),
+    CONSTRAINT fk_feature_id
+      FOREIGN KEY(feature_id)
+	    REFERENCES feature(feature_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE audio
+(
+    audio_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    audio_file character varying NOT NULL,
+    feature_id integer NOT NULL,
+    CONSTRAINT audio_pkey PRIMARY KEY (audio_id),
+    CONSTRAINT fk_feature_id
+      FOREIGN KEY(feature_id)
+	    REFERENCES feature(feature_id)
         ON DELETE CASCADE
 );
 
@@ -77,7 +89,7 @@ CREATE TABLE time_traveled
     CONSTRAINT time_traveled_pkey PRIMARY KEY (time_traveled_id),
     CONSTRAINT time_traveled_feature_id_key UNIQUE (feature_id),
     CONSTRAINT fk_feature_id
-      FOREIGN KEY(feature_id) 
+      FOREIGN KEY(feature_id)
 	    REFERENCES feature(feature_id)
         ON DELETE CASCADE
 );
@@ -90,7 +102,7 @@ CREATE TABLE comment
     CONSTRAINT comment_pkey PRIMARY KEY (commend_id),
     CONSTRAINT comment_feature_id_key UNIQUE (feature_id),
     CONSTRAINT fk_feature_id
-      FOREIGN KEY(feature_id) 
+      FOREIGN KEY(feature_id)
 	    REFERENCES feature(feature_id)
         ON DELETE CASCADE
 );
@@ -103,7 +115,7 @@ CREATE TABLE cost
     CONSTRAINT cost_pkey PRIMARY KEY (cost_id),
     CONSTRAINT cost_feature_id_key UNIQUE (feature_id),
     CONSTRAINT fk_feature_id
-      FOREIGN KEY(feature_id) 
+      FOREIGN KEY(feature_id)
 	    REFERENCES feature(feature_id)
         ON DELETE CASCADE
 );

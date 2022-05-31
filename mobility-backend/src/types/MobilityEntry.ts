@@ -1,4 +1,5 @@
 import { AudioFileDAO } from './AudioFile';
+import { ImageFileDAO } from './ImageFile';
 import { MobilityFeatureDTO } from './MobilityFeature';
 import { PersonId } from './Person';
 
@@ -10,6 +11,7 @@ export type MobilityEntryDAO = {
   description: string | null;
   weekdays: number[] | null;
   audio_files: AudioFileDAO[] | null;
+  image_files: ImageFileDAO[] | null;
   personId: PersonId;
 };
 
@@ -19,6 +21,7 @@ export type MobilityEntryDTO = {
   description?: string;
   weekdays?: number[];
   audioFiles?: string[];
+  imageFiles?: string[];
   mobilityFeatures: MobilityFeatureDTO[];
   personId?: PersonId;
 };

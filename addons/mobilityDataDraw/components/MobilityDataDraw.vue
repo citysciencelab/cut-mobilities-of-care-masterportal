@@ -1,0 +1,645 @@
+<script src="../../../shared/constants/mobilityData.js"></script>
+<script>
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import Tool from "../../../src/modules/tools/Tool.vue";
+import PersonalDataView from "./personalData/PersonalDataView.vue";
+import AnnotationsView from "./annotations/AnnotationsView.vue";
+import ClosingView from "./closing/ClosingView.vue";
+import PersonalDataOrEndView from "./personalDataOrEnd/personalDataOrEnd.vue";
+import IntroView from "./intro/IntroView.vue";
+import * as toolConstants from "../store/constantsMobilityDataDraw";
+import * as sharedConstants from "../../../shared/constants/mobilityData";
+import actions from "../store/actionsMobilityDataDraw";
+import getters from "../store/gettersMobilityDataDraw";
+import mutations from "../store/mutationsMobilityDataDraw";
+
+export default {
+    name: "MobilityDataDraw",
+    components: {
+        Tool,
+        PersonalDataView,
+        AnnotationsView,
+        PersonalDataOrEndView,
+        ClosingView,
+        IntroView
+    },
+    data() {
+        return {
+            constants: { ...toolConstants, ...sharedConstants },
+            isLoadingNext: false,
+            initialState: JSON.parse(
+                JSON.stringify(this.$store.state.Tools.MobilityDataDraw)
+            ),
+            showDialog: false
+        };
+    },
+    computed: {
+        ...mapGetters("Tools/MobilityDataDraw", Object.keys(getters)),
+
+        /**
+         * The number of the first view.
+         */
+        minView: function() {
+            return Math.min(...Object.values(this.constants.views));
+        },
+
+        /**
+         * The number of the last view.
+         */
+        maxView: function() {
+            return Math.max(...Object.values(this.constants.views));
+        },
+
+        /**
+         * The number of the first drawing view.
+         */
+        minDrawingView: function() {
+            return Math.min(...this.constants.drawingViews);
+        },
+
+        /**
+         * The number of the last drawing view.
+         */
+        maxDrawingView: function() {
+            return Math.max(...this.constants.drawingViews);
+        },
+
+        /**
+         * Whether the next button is disabled or not
+         *
+         * Disable the button when in modifying mode or
+         * if no mobility data was drawn.
+         */
+        nextButtonDisabled: function() {
+            const isModifying =
+                    this.currentInteraction ===
+                    this.constants.interactionTypes.MODIFY,
+                noMobilityDataDrawn = !this.mobilityData.length;
+
+            return (
+                (this.view === this.constants.views.DAILY_ROUTINE_VIEW &&
+                    noMobilityDataDrawn) ||
+                isModifying
+            );
+        },
+        getMobileStyle: function() {
+        },
+    },
+    created() {
+        this.$on("close", this.close);
+
+        // Fix masterportal main menu styles for "TABLE" UI Style
+        if (Radio.request("Util", "getUiStyle") === "TABLE") {
+            const tableNavigationElement = document.querySelector("#table-nav");
+            if (tableNavigationElement) {
+                tableNavigationElement.classList.remove("row");
+                tableNavigationElement.classList.add("custom-table-row");
+            }
+
+            const tableNavigationMainColumnElement = document.querySelector(
+                "#table-nav > .col-md-4"
+            );
+            if (tableNavigationMainColumnElement) {
+                tableNavigationMainColumnElement.classList.remove("col-md-4");
+                tableNavigationMainColumnElement.classList.add(
+                    "custom-table-column"
+                );
+            }
+
+            const tableNavigationSecondaryColumnElements = document.querySelectorAll(
+                "#table-nav > .col-md-2"
+            );
+            tableNavigationSecondaryColumnElements.forEach(element => {
+                element.classList.remove("col-md-2");
+                element.classList.add("custom-table-column");
+            });
+        }
+    },
+    watch: {
+        /**
+         * Toggles the modifying class.
+         * @param {Boolean} value Value deciding whether the tool is in modifying mode or not.
+         * @returns {void}
+         */
+        currentInteraction(value) {
+            const mobilityDataDrawElement = document.getElementById(
+                "tool-mobilityDataDraw"
+            );
+
+            if (mobilityDataDrawElement) {
+                mobilityDataDrawElement.classList.toggle(
+                    "isModifying",
+                    value === this.constants.interactionTypes.MODIFY
+                );
+            }
+            if (value === "modify") {
+                this.setIsMenuUp(false)
+            }
+        },
+        mobilityMode(value) {
+            this.setIsMenuUp(false)
+        },
+        drawingMode(value) {
+            this.setIsMenuUp(false)
+        },
+        view(value) {
+            if (this.constants.views.ANNOTATIONS_VIEW === value && this.isCurrentMobile) {
+                this.toggleMenu();
+                let sidebar = this.$refs.toolMenu;
+                // Should work via refs and getting the second child!?
+                document.getElementsByClassName("win-heading")[0].addEventListener('click', () => {
+                    this.toggleMenu()
+                });
+            }
+        }
+    },
+    /**
+     * Put initialize here if mounting occurs after config parsing
+     * @returns {void}
+     */
+    mounted() {
+        if (this.active) {
+            this.setActive(true);
+        }
+        this.applyTranslationKey(this.name);
+        this.getIsMobile();
+    },
+    methods: {
+        ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),
+        ...mapActions("Tools/MobilityDataDraw", Object.keys(actions)),
+
+        /**
+         * Toggles the menu
+         * @returns {void}
+         */
+        toggleMenu() {
+            this.setIsMenuUp(!this.isMenuUp)
+        },
+
+        /**
+         * Opens the previous view.
+         * @returns {void}
+         */
+        previousView() {
+            this.setView(Math.max(this.minView, this.view - 1));
+        },
+
+        /**
+         * Opens the next view.
+         * @returns {void}
+         */
+        nextView() {
+            this.setView(Math.min(this.maxView, this.view + 1));
+        },
+
+        /**
+         * Handles submitting data and opens the next view.
+         * @returns {void}
+         */
+        submitDataAndNextView() {
+            if (this.view === this.constants.views.PERSONAL_DATA_VIEW) {
+                const confirmActionSettings = {
+                    actionConfirmedCallback: () => {
+                        this.isLoadingNext = true;
+                        this.submitPersonalData()
+                            .then(this.nextView)
+                            .finally(() => {
+                                this.isLoadingNext = false;
+                            });
+                    },
+                    confirmCaption: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitPersonalData.confirmButton"
+                    ),
+                    denyCaption: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitPersonalData.denyButton"
+                    ),
+                    textContent: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitPersonalData.description"
+                    ),
+                    headline: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitPersonalData.title"
+                    ),
+                    forceClickToClose: true
+                };
+                this.$store.dispatch(
+                    "ConfirmAction/addSingleAction",
+                    confirmActionSettings
+                );
+            } else if (this.view === this.constants.views.ANNOTATIONS_VIEW) {
+                if (this.annotations.length) {
+                    const confirmActionSettings = {
+                        actionConfirmedCallback: () => {
+                            this.isLoadingNext = true;
+                            this.submitDrawnData()
+                                .then(this.nextView)
+                                .finally(() => {
+                                    this.isLoadingNext = false;
+                                });
+                        },
+                        confirmCaption: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.confirmButton"
+                        ),
+                        denyCaption: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.denyButton"
+                        ),
+                        textContent: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.description"
+                        ),
+                        headline: this.$t(
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
+                        ),
+                        forceClickToClose: true
+                    };
+                    this.$store.dispatch(
+                        "ConfirmAction/addSingleAction",
+                        confirmActionSettings
+                    );
+                } else {
+                    this.showDialog = true;
+                }
+            } else {
+                this.nextView();
+            }
+        },
+
+        /**
+         * Closes this tool window by setting active to false
+         * @returns {void}
+         */
+        close() {
+            const closeMobilityDataDraw = () => {
+                this.setActive(false);
+                this.resetModule();
+
+                // TODO replace trigger when Menu is migrated
+                // set the backbone model to active false for changing CSS class in menu (menu/desktop/tool/view.toggleIsActiveClass)
+                // else the menu-entry for this tool is always highlighted
+                const model = Radio.request(
+                    "ModelList",
+                    "getModelByAttributes",
+                    {
+                        id: this.$store.state.Tools.MobilityDataDraw.id
+                    }
+                );
+
+                if (model) {
+                    model.set("isActive", false);
+                }
+            };
+
+            // Confirm tool closing if user has entered data
+            const hasEnteredData =
+                this.view !== this.initialState.view ||
+                JSON.stringify(this.personalData) !==
+                    JSON.stringify(this.initialState.personalData);
+
+            if (hasEnteredData) {
+                const confirmActionSettings = {
+                    actionConfirmedCallback: closeMobilityDataDraw,
+                    confirmCaption: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.closeMobilityDataDraw.confirmButton"
+                    ),
+                    denyCaption: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.closeMobilityDataDraw.denyButton"
+                    ),
+                    textContent: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.closeMobilityDataDraw.description"
+                    ),
+                    headline: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.closeMobilityDataDraw.title"
+                    ),
+                    forceClickToClose: true
+                };
+                this.$store.dispatch(
+                    "ConfirmAction/addSingleAction",
+                    confirmActionSettings
+                );
+            } else {
+                closeMobilityDataDraw();
+            }
+        },
+        getIsMobile () {
+            this.setIsCurrentMobile((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent));
+            return  this.isCurrentMobile;
+        }
+    }
+};
+</script>
+
+<template lang="html">
+    <div class="tool-holder">
+        <div id="background-overlay"
+             v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
+             @click="toggleMenu" />
+        <div
+            id="show-button"
+            v-bind:class="{ 'show-button-draw-line': drawingMode === constants.drawingModes.LINE }"
+            @click="toggleMenu"
+            v-if="!isMenuUp"
+        >
+            <v-icon size="40">keyboard_double_arrow_up</v-icon>
+        </div>
+        <Tool
+            ref="toolMenu"
+            v-bind:class="{'menu-down-one-row': !this.isMenuUp && drawingMode !== constants.drawingModes.LINE,
+            'menu-down-two-rows': !this.isMenuUp && drawingMode === constants.drawingModes.LINE }"
+            :title="$t(name)"
+            :icon="glyphicon"
+            :active="active"
+            :render-to-window="renderToWindow"
+            :resizable-window="resizableWindow"
+            :deactivateGFI="deactivateGFI"
+            :initial-width="initialWidth"
+            :initial-width-mobile="initialWidthMobile"
+        >
+            <template v-slot:toolBody>
+                <v-app
+                    v-if="active"
+                    id="tool-mobilityDataDraw"
+                    :style="constants.mobilityModeCSSColorVariables"
+                >
+                    <IntroView
+                        v-if="view === constants.views.INTRO_VIEW"
+                    />
+                    <PersonalDataView
+                        v-if="view === constants.views.PERSONAL_DATA_VIEW"
+                    />
+                    <PersonalDataOrEndView
+                        v-if="view === constants.views.PERSONAL_DATA_OR_END_VIEW"
+                    />
+                    <AnnotationsView
+                        v-if="view === constants.views.ANNOTATIONS_VIEW"
+                    />
+                    <ClosingView
+                        v-if="view === constants.views.CLOSING_VIEW"
+                        @close="close"
+                    />
+
+                    <div
+                        id="tool-mobilityDataDraw-actions"
+                        v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.INTRO_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
+                    >
+                        <v-btn
+                            v-if="view > minDrawingView"
+                            class="tool-mobilityDataDraw-actions-previous"
+                            @click="previousView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.previous"
+                                )
+                            }}
+                        </v-btn>
+
+                        <v-btn
+                            v-if="view < maxDrawingView"
+                            class="tool-mobilityDataDraw-actions-next"
+                            :disabled="nextButtonDisabled"
+                            :loading="isLoadingNext"
+                            @click="submitDataAndNextView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.next"
+                                )
+                            }}
+                        </v-btn>
+                        <v-btn
+                            v-else
+                            class="tool-mobilityDataDraw-actions-submit"
+                            :disabled="nextButtonDisabled"
+                            :loading="isLoadingNext"
+                            @click="submitDataAndNextView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.submit"
+                                )
+                            }}
+                        </v-btn>
+                    </div>
+
+                    <v-dialog
+                        v-model="showDialog"
+                        transition="dialog-top-transition"
+                        max-width="600"
+                    >
+                        <v-card>
+                            <v-card-title class="text-h5 grey lighten-2">
+                                {{ $t(
+                                "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
+                            ) }}
+                            </v-card-title>
+
+                            <v-card-text class="data-policy-text">
+                                {{ $t(
+                                "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
+                            ) }}
+                            </v-card-text>
+
+                            <v-divider></v-divider>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="primary"
+                                    text
+                                    @click="showDialog = false"
+                                >
+                                    {{ $t(
+                                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
+                                ) }}
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-app>
+                <div
+                    id="hide-button"
+                    @click="toggleMenu"
+                    v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
+                >
+                    <v-icon size="40">keyboard_double_arrow_down</v-icon>
+                </div>
+            </template>
+        </Tool>
+    </div>
+</template>
+
+<style lang="less" scoped>
+@import "~variables";
+
+.tool-holder {
+    height: 100%;
+}
+
+#tool-mobilityDataDraw {
+    --mobility-data-draw-background-color-hex: #fff;
+    --mobility-data-draw-background-color-rgb: 255, 255, 255;
+
+    flex-direction: column;
+    height: 100%;
+
+    @media only screen and (max-width: 440px) {
+        height: calc(100% - 40px) !important;
+    }
+    background: none;
+
+    &::v-deep {
+        .v-application--wrap {
+            min-height: 0;
+        }
+
+        section {
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+
+            &:first-child > :first-child {
+                margin-top: 0;
+            }
+        }
+    }
+
+    &.isModifying {
+        --mobility-data-draw-background-color-hex: #f2f2f2;
+        --mobility-data-draw-background-color-rgb: 242, 242, 242;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(100% + @padding * 2);
+            height: calc(100% + @padding * 2);
+            margin: calc(@padding * -1);
+            background: var(--mobility-data-draw-background-color-hex);
+        }
+    }
+}
+
+// Styles for "TABLE" UI Style
+.table-tool-win-all-vue {
+    #tool-mobilityDataDraw {
+        --mobility-data-draw-background-color-hex: #f2f2f2;
+        --mobility-data-draw-background-color-rgb: 242, 242, 242;
+
+        &.isModifying {
+            --mobility-data-draw-background-color-hex: #d8d8d8;
+            --mobility-data-draw-background-color-rgb: 216, 216, 216;
+        }
+    }
+}
+
+#tool-mobilityDataDraw-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.tool-mobilityDataDraw-actions-next,
+.tool-mobilityDataDraw-actions-submit {
+    position: relative !important;
+    margin-left: auto;
+}
+</style>
+
+<style lang="less">
+// Fix masterportal main menu styles for "TABLE" UI Style
+.custom-table-row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+// Mobile view without resize bar - no padding
+@media only screen and (max-width: 440px) {
+    #tool-sidebar-vue {
+        padding: 0 !important;
+        width: calc(100% - 75px) !important;
+        height: calc(100% - 20px) !important;
+
+        #basic-resize-handle-sidebar {
+            padding: 0 !important;
+        }
+
+        #hide-button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    #background-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0);
+        z-index: 1000;
+    }
+
+    #show-button {
+        width: 50px;
+        text-align: center;
+        position: fixed;
+        top: calc(100% - 187px);
+        left: calc(50% - 50px);
+        z-index: 3000;
+        height: 45px;
+        background-color: rgba(255, 255, 255, 0.6);
+        border-radius: 32px;
+    }
+
+    .show-button-draw-line {
+        top: calc(100% - 247px) !important;
+    }
+
+    .menu-down-one-row {
+        top: calc(100% - 150px) !important;
+    }
+
+    .menu-down-two-rows {
+        top: calc(100% - 210px) !important;
+    }
+}
+
+// Hide certain elements when the screen is not mobile
+@media (min-width: 440px) {
+    #show-button, #hide-button {
+        display: none;
+    }
+}
+
+// Never show tool closing option
+#tool-sidebar-vue .glyphicon-remove {
+    display: none;
+}
+
+// Never table navigation
+#table-navigation {
+    display: none;
+}
+
+// Navigation butto styling
+.control-icon {
+    background-color: #f2f2f2 !important;
+    color: #646262 !important;
+    border-radius: 6px;
+}
+
+.custom-table-column {
+    position: relative;
+
+    @media (min-width: 992px) {
+        float: left;
+    }
+}
+
+// Fix touch operations on the map
+// (see https://github.com/openlayers/openlayers/issues/10910)
+// Can be removed when the masterportal updated OpenLayers to v6.4.0 or above
+#map canvas {
+    touch-action: none;
+}
+</style>

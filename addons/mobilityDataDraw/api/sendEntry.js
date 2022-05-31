@@ -16,8 +16,8 @@ async function sendEntry (data) {
     if (!data.personId) {
         throw Error("`personId` is missing");
     }
-    if (!data.mobilityFeatures.length) {
-        throw Error("`mobilityFeatures` is missing");
+    if (!data.mobilityFeatures.length && !data.annotationFeatures.length) {
+        throw Error("`mobilityFeatures` oder `annotationFeatures` are missing");
     }
 
     const writer = new GeoJSON();

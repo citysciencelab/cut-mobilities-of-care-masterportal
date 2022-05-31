@@ -24,7 +24,16 @@ export default {
          */
         restartDrawing() {
             this.resetDrawnData();
-            this.setView(this.constants.views.DAILY_ROUTINE_VIEW);
+            this.setView(this.constants.views.ANNOTATIONS_VIEW);
+        },
+
+        /**
+         * Resets the drawn data and goes to the intro again
+         * @returns {void}
+         */
+        endTool() {
+            this.resetDrawnData();
+            this.setView(this.constants.views.INTRO_VIEW);
         }
     }
 };
@@ -47,7 +56,14 @@ export default {
                 $t("additional:modules.tools.mobilityDataDraw.button.enterMore")
             }}
         </v-btn>
-        <v-btn @click="$emit('close')">
+
+        <p class="second-row-buttons">
+            {{
+                $t("additional:modules.tools.mobilityDataDraw.closing.finishMessage")
+            }}
+        </p>
+
+        <v-btn @click="endTool">
             {{ $t("additional:modules.tools.mobilityDataDraw.button.finish") }}
         </v-btn>
     </div>
@@ -58,5 +74,9 @@ export default {
     > button {
         position: relative !important;
     }
+}
+
+.second-row-buttons {
+    margin-top: 25px;
 }
 </style>

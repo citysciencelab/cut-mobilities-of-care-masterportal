@@ -3,6 +3,14 @@
     "tools": {
       "mobilityDataDraw": {
         "title": "Data Collection Tool",
+        "intro": {
+          "greeting": "Willkommen beim FairCare Tool",
+          "message": "Städtische Infrastruktur ist häufig undgeeignet für die Bedürfnisse pflegender SorgearbeiterInnen. Die Erfassung entsprechender Schwachstellen soll die Sichtbarkeit der Probleme erhöhen und bestenfalls PlanerInnen helfen diese Bedürfnisse besser berücksichtigen zu können.",
+          "language": "Switch to English",
+          "acceptTerms1": "Datenschutzrichtlinie ",
+          "acceptTerms2": "akzeptieren",
+          "startTool": "Start"
+        },
         "label": {
           "personalData": "Steckbrief",
           "age": "Alter",
@@ -47,7 +55,8 @@
           "finish": "Beenden",
           "addPerson": "Person hinzufügen",
           "addRecord": "Aufnahme hinzufügen",
-          "removeRecord": "Aufnahme löschen"
+          "removeRecord": "Aufnahme löschen",
+          "addPicture": "Foto hinzufügen"
         },
         "alert": {
           "submitPersonalDataError": "Ihre persönlichen Daten konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
@@ -71,7 +80,9 @@
             "title": "Mobilitätsdaten senden",
             "description": "Sind Sie sicher, dass Sie die Mobilitätsdaten senden möchten? Die Daten können nachträglich nicht bearbeitet werden.",
             "confirmButton": "Senden",
-            "denyButton": "Abbrechen"
+            "denyButton": "Abbrechen",
+            "noDataText": "Sie haben noch keine Daten eingegeben, bitte machen Sie mindestens einen Eintrag.",
+            "okButton": "OK"
           },
           "deleteLocationFeature": {
             "title": "Stopp löschen",
@@ -156,7 +167,15 @@
         },
         "closing": {
           "title": "Vielen Dank für die Teilnahme!",
-          "message": "Gerne können Sie weitere typische Tagesabläufe eintragen."
+          "message": "Gerne können Sie weitere typische Tagesabläufe eintragen.",
+          "finishMessage": "Andernfalls danken wir Ihnen für Ihre Zeit."
+        },
+        "personalOrEnd": {
+          "title": "Vielen Dank für die Eingabe ihrer Daten!",
+          "personalDataChoice": "Teilen Sie mit uns in einem Steckbrief ein paar Informationen über sich.",
+          "personalDataChoiceButton": "Zum Steckbrief",
+          "choseNoPersonalData": "Oder klicken Sie hier um Ihre Eingabe abzuschließen.",
+          "choseNoPersonalDataButton": "Steckbrief überspringen."
         }
       },
       "mobilityMode": {

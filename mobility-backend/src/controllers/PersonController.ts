@@ -41,6 +41,34 @@ class PersonController {
     return rows[0].person_id as PersonId;
   }
 
+  public async update({
+    personId,
+    age,
+    gender,
+    maritalStatus,
+    employmentStatus,
+    householdIncome,
+    additional
+  }: PersonDTO): Promise<PersonId> {
+    const client = await pool.connect();
+
+    const sql = `UPDATE person SET
+                  age = ${valueOrNULL(age)},
+                  gender = ${valueOrNULL(gender)},
+                  marital_status = ${valueOrNULL(maritalStatus)},
+                  employment_status = ${valueOrNULL(employmentStatus)},
+                  household_income = ${valueOrNULL(householdIncome)},
+                  additional  = ${valueOrNULL(additional)}
+                  WHERE
+                  person_id = ${valueOrNULL(personId)}`;
+
+    await client.query(sql);
+
+    client.release();
+
+    return personId as PersonId;
+  }
+
   public async delete(personId: PersonId): Promise<void> {
     const client = await pool.connect();
 

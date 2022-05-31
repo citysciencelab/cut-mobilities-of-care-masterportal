@@ -37,14 +37,6 @@ If you are not running linux based system the package.json might have to be adju
 ...
 ```
 
-
-Default linux configuration should be
-```
-"scripts": {
-    "build": "rm -r dist && tsc",
-...
-```
-
 Otherwise, start the mobility backend:
 ```
 npm start

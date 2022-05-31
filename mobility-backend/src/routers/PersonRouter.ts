@@ -25,11 +25,16 @@ externalRouter.use(express.json());
  **/
 externalRouter.post('/', async (req, res) => {
   const person: PersonDTO = req.body;
-  let personId: PersonId;
+    let personId: PersonId;
+
+  if (person.hasOwnProperty('personId')) {
+      personId = person["personId"];
+      await personController.update(person);
+  } else {
+      personId = await personController.post(person);
+  }
 
   try {
-    personId = await personController.post(person);
-
     const personsInNeed = person.personsInNeed;
 
     if (personsInNeed && personsInNeed.length) {
