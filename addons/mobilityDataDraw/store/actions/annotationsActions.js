@@ -105,11 +105,17 @@ function addFeatureToAnnotation ({state, commit, dispatch}, feature) {
     // Sets the id for the new annotation feature
     feature.setId(geometryIndex);
 
+    feature.values_["mode"] = state.drawingMode;
+    feature.values_["mode_index"] = state.drawingMode + " " + geometryIndex + 1;
+    const mobilityMode = feature.values_['mobilityMode'];
+    feature["mobility_mode"] = mobilityMode;
+
     commit("setAnnotations", [
         ...state.annotations,
         {
             feature,
-            geometryIndex
+            geometryIndex,
+            mobilityMode
         }
     ]);
     dispatch("selectAnnotationFeature", geometryIndex);

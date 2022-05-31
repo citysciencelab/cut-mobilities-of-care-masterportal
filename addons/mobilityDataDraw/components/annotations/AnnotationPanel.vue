@@ -1,5 +1,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
+import AudioRecorderWrapper from "../AudioRecorderWrapper.vue";
+import ImageUploader from "../ImageUploader.vue";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
@@ -8,7 +10,10 @@ import mutations from "../../store/mutationsMobilityDataDraw";
 
 export default {
     name: "AnnotationPanel",
-    components: {},
+    components: {
+        AudioRecorderWrapper,
+        ImageUploader
+    },
     props: {
         // The map feature of the annotation
         feature: {
@@ -31,7 +36,7 @@ export default {
             default: ""
         }
     },
-    data() {
+    data () {
         return {
             constants: { ...toolConstants, ...sharedConstants }
         };
@@ -122,6 +127,8 @@ export default {
             const confirmActionSettings = {
                 actionConfirmedCallback: () => {
                     this.deleteAnnotation(this.geometryIndex);
+                    this.removeImageUpload(this.geometryIndex);
+                    this.removeAudioRecord(this.geometryIndex);
                 },
                 confirmCaption: this.$t(
                     "additional:modules.tools.mobilityDataDraw.confirm.deleteAnnotation.confirmButton"
@@ -161,6 +168,12 @@ export default {
             </template>
 
             <div class="annotation-header">
+                <v-icon>
+                    {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
+                </v-icon>
+                <v-icon class="mobility-data-segment-icon">
+                    {{ constants.mobilityModeIcons[this.feature.values_['mobilityMode']] }}
+                </v-icon>
                 <input
                     class="annotation-title"
                     :placeholder="
@@ -171,6 +184,7 @@ export default {
                     :value="annotationTitle"
                     @change="onSetTitle"
                     @click.stop
+                    @click="onClickAnnotation"
                 />
             </div>
         </v-expansion-panel-header>
@@ -197,18 +211,14 @@ export default {
                     "
                     @click="startModifyingAnnotationFeature(geometryIndex)"
                 >
-                    {{
-                        $t(
-                            "additional:modules.tools.mobilityDataDraw.button.startModifyAnnotation"
-                        )
-                    }}
+                    <v-icon>
+                        edit
+                    </v-icon>
                 </v-btn>
                 <v-btn v-else @click="stopModifyingAnnotationFeature">
-                    {{
-                        $t(
-                            "additional:modules.tools.mobilityDataDraw.button.stopModifyAnnotation"
-                        )
-                    }}
+                    <v-icon>
+                        save
+                    </v-icon>
                 </v-btn>
 
                 <v-btn
@@ -217,13 +227,13 @@ export default {
                     "
                     @click="onDelete"
                 >
-                    {{
-                        $t(
-                            "additional:modules.tools.mobilityDataDraw.button.deleteAnnotation"
-                        )
-                    }}
+                    <v-icon>
+                        delete_forever
+                    </v-icon>
                 </v-btn>
             </div>
+            <AudioRecorderWrapper v-bind:audioRecordId="geometryIndex" />
+            <ImageUploader v-bind:imageUploadIndex="geometryIndex" />
         </v-expansion-panel-content>
     </v-expansion-panel>
 </template>
@@ -246,11 +256,26 @@ export default {
     }
 
     &-actions  {
+        text-align: right;
         margin-top: 15px;
 
+        > button:first-of-type {
+            margin-right: 10px;
+        }
         > button {
             position: relative !important;
-            margin-top: 5px;
+            padding: 10px !important;
+            min-width: 0 !important;
+        }
+    }
+
+    .annotation-header {
+        display: flex;
+        i {
+            margin-right: 5px;
+        }
+        input {
+            font: inherit;
         }
     }
 }

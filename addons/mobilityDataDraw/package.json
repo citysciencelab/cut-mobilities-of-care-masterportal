@@ -4,6 +4,7 @@
   "description": "Drawing tool for mobility data",
   "title": "Mobility Data Draw",
   "dependencies": {
+    "material-design-icons-iconfont": "^6.7.0",
     "vuetify": "^2.5.1"
   }
 }
