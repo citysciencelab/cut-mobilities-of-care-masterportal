@@ -1,6 +1,5 @@
 const MOBILITY_ENTRY_ERRORS = {
   ERROR_NO_MOBILITY_FEATURES: 'mobilityFeatures are missing or empty.',
-  ERROR_NO_ANNOTATION_FEATURES: 'annotationFeatures are missing or empty.',
   ERROR_GEOMETRY_INDICES_NOT_UNIQUE: 'geometryIndex values are not unique.',
   ERROR_UNKNOWN_MOBILITY_TYPE:
     'mobilityMode values contain unknown mobility mode.',

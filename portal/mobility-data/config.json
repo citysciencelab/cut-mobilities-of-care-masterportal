@@ -698,7 +698,7 @@
           "id": "127",
           "clusterDistance": 50,
           "name": "Eingegebene Mobilitätsdaten",
-          "url": "http://localhost:8080/aggregated",
+          "url": "https://re1-api.cut.hcu-hamburg.de/aggregated",
           "typ": "GeoJSON",
           "datasets": [],
           "urlIsVisible": true

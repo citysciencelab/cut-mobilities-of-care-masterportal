@@ -10,8 +10,7 @@ export default {
     components: {},
     data() {
         return {
-            constants: { ...toolConstants, ...sharedConstants },
-            showDialog: false,
+            constants: { ...toolConstants, ...sharedConstants }
         };
     },
     computed: {
@@ -50,43 +49,6 @@ export default {
                 </v-icon>
             </label>
         </template>
-        <v-icon
-            class="btn btn-lgv-grey drawing-mode-label info-button"
-            v-if="isCurrentMobile"
-            @click="showDialog = true;"
-        >
-            help_outline
-        </v-icon>
-
-
-        <v-dialog
-            v-model="showDialog"
-            transition="dialog-top-transition"
-            max-width="600"
-        >
-            <v-card>
-                <v-card-title class="text-h5 grey lighten-2">
-                    Drawing mode hints
-                </v-card-title>
-
-                <v-card-text class="data-policy-text">
-
-                </v-card-text>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="primary"
-                        text
-                        @click="showDialog = false"
-                    >
-                        OK
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </div>
 </template>
 
@@ -128,10 +90,4 @@ export default {
         color: currentColor;
     }
 }
-
-.info-button {
-    float: right;
-    background-color: transparent;
-}
-
 </style>

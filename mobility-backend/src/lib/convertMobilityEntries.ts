@@ -1,5 +1,4 @@
 import AudioFileController from '../controllers/AudioFileController';
-import ImageFileController from '../controllers/ImageFileController';
 import FeatureController from '../controllers/FeatureController';
 import { FeatureDAO } from '../types/Feature';
 import { MobilityEntryDAO, MobilityEntryDTO } from '../types/MobilityEntry';
@@ -7,7 +6,6 @@ import convertFeatures from './convertFeatures';
 
 const featureController = new FeatureController();
 const audioFileController = new AudioFileController();
-const imageFileController = new ImageFileController();
 
 /**
  * Converts MobilityEntryDAO database objects to MobilityEntryDTO transmission objects
@@ -40,12 +38,6 @@ const convertMobilityEntries = async (
       if (audioFiles && audioFiles.length)
         mobilityEntry['audioFiles'] = audioFiles.map(
           (audioFile) => audioFile.audio_file
-        );
-
-      const imageFiles = await imageFileController.get(mobility_entry.entry_id);
-      if (imageFiles && imageFiles.length)
-        mobilityEntry['imageFiles'] = imageFiles.map(
-          (imageFile) => imageFile.image_file
         );
 
       const features = convertFeatures(featureDAOs);

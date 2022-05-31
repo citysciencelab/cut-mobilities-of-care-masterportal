@@ -9,14 +9,11 @@ export default {
     components: {
         AudioRecorder
     },
-    props: {
-        audioRecordId: {
-            type: Number,
-            default: 0
-        }
-    },
     mounted() {
-        this.initializeAudioRecorder(this.audioRecordId);
+        this.initializeAudioRecorder();
+    },
+    destroyed() {
+        this.destroyAudioRecorder();
     },
     computed: {
         ...mapGetters("Tools/MobilityDataDraw", Object.keys(getters))
@@ -26,32 +23,27 @@ export default {
             "Tools/MobilityDataDraw",
             Object.keys(audioRecorderActions)
         ),
-        onDeleteAudioRecord: function (actionConfirmedCallback) {
+        onDeleteAudioRecord: function(actionConfirmedCallback){
             const confirmActionSettings = {
-                actionConfirmedCallback,
-                confirmCaption: this.$t(
-                    "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.confirmButton"
-                ),
-                denyCaption: this.$t(
-                    "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.denyButton"
-                ),
-                textContent: this.$t(
-                    "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.description"
-                ),
-                headline: this.$t(
-                    "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.title"
-                ),
-                forceClickToClose: true
-            };
-            this.$store.dispatch(
-                "ConfirmAction/addSingleAction",
-                confirmActionSettings
-            );
-        },
-        isRecordingToDelete () {
-            if (this.audioRecords.length - 1 >= this.audioRecordId) {
-                return this.audioRecords[this.audioRecordId].audioRecordBlob;
-            }
+                    actionConfirmedCallback,
+                    confirmCaption: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.confirmButton"
+                    ),
+                    denyCaption: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.denyButton"
+                    ),
+                    textContent: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.description"
+                    ),
+                    headline: this.$t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.deleteRecord.title"
+                    ),
+                    forceClickToClose: true
+                };
+                this.$store.dispatch(
+                    "ConfirmAction/addSingleAction",
+                    confirmActionSettings
+                );
         }
     }
 };
@@ -59,18 +51,37 @@ export default {
 
 <template lang="html">
     <div>
-        <div>
+        <div
+            v-for="(audioRecord,
+            audioRecordIndex) in audioRecords"
+            :key="'person_' + audioRecordIndex"
+        >
             <div class="audio-recorder-container">
-                <AudioRecorder v-bind:audioRecordIndex="audioRecordId" />
+                <AudioRecorder v-bind:audioRecordIndex="audioRecordIndex" />
                 <v-btn
-                    v-if="isRecordingToDelete()"
+                    v-if="
+                        audioRecordIndex === audioRecords.length - 1 &&
+                            audioRecord.audioRecordBlob
+                    "
+                    icon
+                    :title="
+                        $t(
+                            'additional:modules.tools.mobilityDataDraw.button.addRecord'
+                        )
+                    "
+                    @click="() => addAudioRecord({})"
+                >
+                    <v-icon>add_circle</v-icon>
+                </v-btn>
+                <v-btn
+                    v-if="audioRecord.audioRecordBlob"
                     icon
                     :title="
                         $t(
                             'additional:modules.tools.mobilityDataDraw.button.removeRecord'
                         )
                     "
-                    @click="() => onDeleteAudioRecord(() => removeAudioRecord(audioRecordId))"
+                    @click="() => onDeleteAudioRecord(() => removeAudioRecord(audioRecordIndex))"
                 >
                     <v-icon>delete</v-icon>
                 </v-btn>

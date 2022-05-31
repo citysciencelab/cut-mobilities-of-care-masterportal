@@ -1,4 +1,4 @@
-import config from "../config.json";
+import config from "../config";
 import GeoJSON from "ol/format/GeoJSON";
 
 /**
@@ -16,8 +16,8 @@ async function sendEntry (data) {
     if (!data.personId) {
         throw Error("`personId` is missing");
     }
-    if (!data.mobilityFeatures.length && !data.annotationFeatures.length) {
-        throw Error("`mobilityFeatures` oder `annotationFeatures` are missing");
+    if (!data.mobilityFeatures.length) {
+        throw Error("`mobilityFeatures` is missing");
     }
 
     const writer = new GeoJSON();

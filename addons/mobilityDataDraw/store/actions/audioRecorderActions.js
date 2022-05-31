@@ -14,11 +14,11 @@ function addAudioRecord ({state, commit}, audioRecord) {
  * @param {Number} audioRecordIndex index of the audio record to remove.
  * @returns {void}
  */
-function removeAudioRecord ({state, commit}, audioRecordIndex) {
-    const audioRecords = state.audioRecords;
-    audioRecords[audioRecordIndex].audioRecordBlob = null;
-
-    commit("setAudioRecords", audioRecords);
+ function removeAudioRecord ({state, commit}, audioRecordIndex) {
+    const audioRecords = state.audioRecords.filter(
+        (_, index) => audioRecordIndex !== index
+    );
+    commit("setAudioRecords", audioRecords.length ? [...audioRecords] : [{}]);
 }
 
 /**
@@ -27,22 +27,14 @@ function removeAudioRecord ({state, commit}, audioRecordIndex) {
  * @param {Object} context actions context object.
  * @returns {void}
  */
-function initializeAudioRecorder ({state, commit}, audioRecordId) {
-    if (state.audioRecords.length === audioRecordId) {
-        state.audioRecords.push(
-            {
-                audioRecordBlob: null,
-                isRecording: false,
-                geometryIndex: audioRecordId
-            }
-        );
-    }
+function initializeAudioRecorder ({state, commit}) {
     // Get audio stream from the user's microphone
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         let {audioRecorder} = state
-
+        
         if (!state.audioRecorder) {
             audioRecorder = new MediaRecorder(stream);
+
             commit("setAudioRecorder", audioRecorder);
         }
         // Listen to the `dataavailable` event, which gets triggered whenever
@@ -73,6 +65,7 @@ function destroyAudioRecorder ({state, commit}) {
     }
 
     audioRecorder.stream.getTracks().forEach(track => track.stop());
+
     commit("setAudioRecorder", null);
 }
 

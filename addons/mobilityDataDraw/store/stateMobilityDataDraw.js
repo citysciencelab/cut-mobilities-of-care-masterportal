@@ -15,8 +15,7 @@ import {
  * @property {Blob} audioRecordBlob The recorded audio
  * @property {module:ol/interaction/Draw} drawLineInteraction The draw line interaction of the mobility data draw tool
  * @property {module:ol/interaction/Draw} drawPointInteraction The draw point interaction of the mobility data draw tool
- * @property {module:ol/interaction/Draw} drawLineAnnotationInteraction The line draw interaction to draw annotations
- * @property {module:ol/interaction/Draw} drawPointAnnotationInteraction The point draw interaction to draw annotations
+ * @property {module:ol/interaction/Draw} drawAnnotationInteraction The draw interaction to draw annotations
  * @property {module:ol/interaction/Snap} snapInteraction The snap interaction of the mobility data draw tool
  * @property {module:ol/interaction/Modify} modifyInteraction The modify interaction of the mobility data draw tool
  * @property {string} currentInteraction The current interaction type. Could be "draw" or "modify".
@@ -42,7 +41,7 @@ import {
  */
 const state = {
     id: "mobilityDataDraw",
-    view: views.INTRO_VIEW,
+    view: views.PERSONAL_DATA_VIEW,
     audioRecorder: null,
     audioRecords: [
         {
@@ -50,11 +49,9 @@ const state = {
             isRecording: false
         }
     ],
-    imageUploads: [],
     drawLineInteraction: null,
     drawPointInteraction: null,
-    drawLineAnnotationInteraction: null,
-    drawPointAnnotationInteraction: null,
+    drawAnnotationInteraction: null,
     snapInteraction: null,
     modifyInteraction: null,
     currentInteraction: interactionTypes.DRAW,
@@ -79,9 +76,7 @@ const state = {
     isVisibleInMenu: true,
     deactivateGFI: true,
     initialWidth: 500,
-    initialWidthMobile: 300,
-    isCurrentMobile: false,
-    isMenuUp: true
+    initialWidthMobile: 300
 };
 
 export default state;

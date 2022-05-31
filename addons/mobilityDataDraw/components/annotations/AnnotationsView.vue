@@ -3,7 +3,6 @@ import { mapGetters, mapActions, mapMutations } from "vuex";
 import ScrollContainerWithShadows from "../ScrollContainerWithShadows.vue";
 import DrawingModeSelection from "./DrawingModeSelection.vue";
 import AnnotationPanel from "./AnnotationPanel.vue";
-import MobilityModeSelection from "../dailyRoutine/MobilityModeSelection.vue";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
@@ -15,8 +14,7 @@ export default {
     components: {
         ScrollContainerWithShadows,
         DrawingModeSelection,
-        AnnotationPanel,
-        MobilityModeSelection
+        AnnotationPanel
     },
     data() {
         return {
@@ -37,16 +35,9 @@ export default {
         }
     },
     mounted() {
-        // Empty submit of personalData to recieve an id
-        this.submitPersonalData()
-            .then()
-            .finally(() => {
-            });
-
         this.initializeAnnotationsView();
     },
     destroyed() {
-        this.destroyAudioRecorder();
         this.cleanUpAnnotationsView();
     },
     methods: {
@@ -71,31 +62,27 @@ export default {
 
             <DrawingModeSelection />
 
-            <p v-if="!isCurrentMobile && drawingMode === constants.drawingModes.POINT" class="hint">
+            <p v-if="drawingMode === constants.drawingModes.POINT" class="hint">
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.annotations.pointDrawingHint"
                     )
                 }}
             </p>
-            <p v-if="!isCurrentMobile && drawingMode === constants.drawingModes.LINE" class="hint">
+            <p v-if="drawingMode === constants.drawingModes.LINE" class="hint">
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.annotations.routeDrawingHint"
                     )
                 }}
             </p>
-            <p v-if="!isCurrentMobile && drawingMode === constants.drawingModes.AREA" class="hint">
+            <p v-if="drawingMode === constants.drawingModes.AREA" class="hint">
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.annotations.areaDrawingHint"
                     )
                 }}
             </p>
-        </section>
-
-        <section v-if="drawingMode === constants.drawingModes.LINE">
-            <MobilityModeSelection />
         </section>
 
         <section
@@ -158,7 +145,6 @@ export default {
 }
 
 .annotations {
-    display: block !important;
     width: calc(100% - 4px);
     margin: 0 2px;
 }

@@ -23,7 +23,6 @@ export type FeatureDTO = {
     type: string;
     coordinates: number[];
   };
-  mobility_mode: string;
   geometryIndex: number;
   comment?: string;
 };

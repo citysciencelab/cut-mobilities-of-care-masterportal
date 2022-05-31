@@ -3,15 +3,13 @@ import personalDataActions from "./actions/personalDataActions";
 import dailyRoutineActions from "./actions/dailyRoutineActions";
 import annotationsActions from "./actions/annotationsActions";
 import audioRecorderActions from "./actions/audioRecorderActions";
-import imageUploadActions from "./actions/imageUploadActions";
 import stateMobilityDataDraw from "./stateMobilityDataDraw";
 
 import personApi from "../api/sendPersonalData";
 import entryApi from "../api/sendEntry";
 import audioApi from "../api/sendAudioRecords";
-import imageApi from "../api/sendImageUploads";
 
-import config from "../config.json";
+import config from "../config";
 
 const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
     actions = {
@@ -20,7 +18,6 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
         ...dailyRoutineActions,
         ...annotationsActions,
         ...audioRecorderActions,
-        ...imageUploadActions,
 
         /**
          * Submits personal data
@@ -29,9 +26,6 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
          * @returns {Promise<void>} transmission success.
          */
         submitPersonalData ({state, commit}) {
-            if (state.personId) {
-                state.personalData.personId = state.personId;
-            }
             return personApi
                 .sendPersonalData(state.personalData)
                 .then(({personId}) => {
@@ -65,33 +59,16 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                 mobilityFeatures: state.mobilityData,
                 annotationFeatures: state.annotations
             };
+
             return entryApi
                 .sendEntry(entry)
-                .then((featuresWithId) => {
+                .then(({entryId}) => {
                     const audioRecordBlobs = state.audioRecords
                         .map(audioRecord => audioRecord.audioRecordBlob)
                         .filter(Boolean);
-                    const audioRecordings = state.audioRecords;
                     if (audioRecordBlobs.length) {
                         audioApi
-                            .sendAudioRecords(featuresWithId, audioRecordings)
-                            .catch(error => {
-                                console.error(error);
-                                Radio.trigger("Alert", "alert", {
-                                    text: i18next.t(
-                                        config.TEST_ENV ?
-                                            "additional:modules.tools.testMode.noDataSent" :
-                                            "additional:modules.tools.mobilityDataDraw.alert.submitAudioError"
-                                    ),
-                                    category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
-                                    kategorie: "alert-danger"
-                                });
-                            });
-                    }
-                    const uploadedImages = state.imageUploads;
-                    if (uploadedImages.filter(Boolean).length) {
-                        imageApi
-                            .sendImageUploads(featuresWithId, uploadedImages)
+                            .sendAudioRecords(entryId, audioRecordBlobs)
                             .catch(error => {
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {
@@ -138,7 +115,7 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
             commit("setAnnotations", initialState.annotations);
 
             // Reset audio record
-            this.destroyAudioRecorder();
+            commit("setAudioRecordBlob", initialState.audioRecordBlob);
 
             // Clear map layers
             if (state.mobilityDataLayer) {
@@ -169,12 +146,7 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
 
             // Reset view
             commit("setView", initialState.view);
-        },
-
-        setResizableWindow ({commit}, resizable) {
-            commit("setResizableWindow", resizable);
         }
-
     };
 
 export default actions;

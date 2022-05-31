@@ -1,8 +1,13 @@
 import { Pool } from 'pg';
-import dotenv from 'dotenv';
 
-// Initialize the environment variables
-dotenv.config();
+
+/**
+ * import dotenv from 'dotenv'
+ *
+ * // Initialize the environment variables
+ * dotenv.config();
+ */
+
 
 const { DB_HOST, DB_NAME, DB_USER, DB_PASS, DB_PORT, DB_MAX_CONNECTIONS } =
   process.env;

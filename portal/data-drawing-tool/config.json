@@ -19,6 +19,11 @@
       }
     },
     "menu": {
+      "tree": {
+        "name": "translate#common:menu.topics",
+        "glyphicon": "glyphicon-list",
+        "isAlwaysExpanded": ["SelectedLayer"]
+      },
       "tools": {
         "name": "translate#common:menu.tools.name",
         "glyphicon": "glyphicon-wrench",
@@ -29,15 +34,20 @@
             "active": true
           }
         }
+      },
+      "legend": {
+        "name": "common:modules.legend.name",
+        "glyphicon": "glyphicon-book",
+        "showCollapseAllButton": true
       }
     },
     "controls": {
-      "orientation3d": true,
+      "orientation3d": false,
       "button3d": false,
-      "toggleMenu": false,
+      "toggleMenu": true,
       "fullScreen": false,
-      "zoom": true,
-      "orientation": true,
+      "zoom": false,
+      "orientation": false,
       "mousePosition": false,
       "attributions": false,
       "buttonOblique": false

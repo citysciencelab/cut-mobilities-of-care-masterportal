@@ -1,22 +1,22 @@
 import pool from '../dbconfig/dbconnector';
 import { AudioFileDAO } from '../types/AudioFile';
-import {FeatureId} from "../types/Feature";
+import { MobilityEntryId } from '../types/MobilityEntry';
 
 class AudioFileController {
-  public async post(filePath: string, featureId: FeatureId) {
+  public async post(filePath: string, entryId: MobilityEntryId) {
     const client = await pool.connect();
 
-    const sql = `INSERT INTO audio (audio_file, feature_id) VALUES ('${filePath}','${featureId}')`;
+    const sql = `INSERT INTO audio (audio_file, entry_id) VALUES ('${filePath}','${entryId}')`;
 
     await client.query(sql);
 
     client.release();
   }
 
-  public async get(featureId: FeatureId): Promise<AudioFileDAO[]> {
+  public async get(entryId: MobilityEntryId): Promise<AudioFileDAO[]> {
     const client = await pool.connect();
 
-    const sql = 'SELECT * FROM AUDIO WHERE feature_id = ' + featureId;
+    const sql = 'SELECT * FROM AUDIO WHERE entry_id = ' + entryId;
 
     const { rows } = await client.query(sql);
 

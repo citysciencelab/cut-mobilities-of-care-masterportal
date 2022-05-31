@@ -151,6 +151,7 @@ export default {
                 )
             }}
         </h4>
+
         <ScrollContainerWithShadows>
             <div class="personal-data-form">
                 <div class="form-group">

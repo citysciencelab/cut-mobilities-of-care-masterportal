@@ -91,34 +91,27 @@ function removeMobilityDataDrawInteractions ({rootState, state, commit}) {
  * @returns {void}
  */
 function addAnnotationDrawInteraction ({rootState, state, commit, dispatch}) {
-    const source = state.annotationsLayer.getSource();
-    let drawPointAnnotationInteraction, drawLineAnnotationInteraction;
-
-    // Remove old draw interaction
-    if (state.drawLineAnnotationInteraction || state.drawPointAnnotationInteraction) {
-        dispatch("removeAnnotationDrawInteraction");
-    }
-    if (state.drawingMode === "Point") {
-        drawPointAnnotationInteraction = new Draw({
-            source,
-            type: "Point",
-            style: getAnnotationsDrawPointStyle
-        });
-        commit("setDrawPointAnnotationInteraction", drawPointAnnotationInteraction);
-        dispatch("createAnnotationPointInteractionListeners");
-        // Add interaction to the current map instance
-        rootState.Map.map.addInteraction(drawPointAnnotationInteraction);
-    } else {
-        drawLineAnnotationInteraction = new Draw({
+    const source = state.annotationsLayer.getSource(),
+        drawAnnotationInteraction = new Draw({
             source,
             type: state.drawingMode,
-            style: () => getAnnotationsDrawLineStyle(state.mobilityMode, state.drawingMode)
+            style:
+                state.drawingMode === drawingModes.POINT
+                    ? getAnnotationsDrawPointStyle
+                    : getAnnotationsDrawLineStyle
         });
-        commit("setDrawLineAnnotationInteraction", drawLineAnnotationInteraction);
-        dispatch("createAnnotationDrawInteractionListeners");
-        // Add interaction to the current map instance
-        rootState.Map.map.addInteraction(drawLineAnnotationInteraction);
+
+    // Remove old draw interaction
+    if (state.drawAnnotationInteraction) {
+        dispatch("removeAnnotationDrawInteraction");
     }
+
+    commit("setDrawAnnotationInteraction", drawAnnotationInteraction);
+
+    dispatch("createAnnotationDrawInteractionListeners");
+
+    // Add interaction to the current map instance
+    rootState.Map.map.addInteraction(drawAnnotationInteraction);
 
     // Update the snap interaction
     dispatch("addSnapInteraction", source);
@@ -130,29 +123,10 @@ function addAnnotationDrawInteraction ({rootState, state, commit, dispatch}) {
  * @param {Object} context actions context object.
  * @returns {void}
  */
-function createAnnotationDrawInteractionListeners ({state, dispatch, commit}) {
+function createAnnotationDrawInteractionListeners ({state, dispatch}) {
     // Listener to stop drawing a line feature
-    state.drawLineAnnotationInteraction.on("drawend", event => {
-        // Add the current mobility mode to the finished feature
-        if (event.target.mode_ !== "Polygon") {
-            event.feature.set("mobilityMode", state.mobilityMode);
-        }
+    state.drawAnnotationInteraction.on("drawend", event => {
         dispatch("addFeatureToAnnotation", event.feature);
-        commit("setIsMenuUp", true);
-    });
-}
-
-/**
- * Create listeners for annotation point drawing.
- *
- * @param {Object} context actions context object.
- * @returns {void}
- */
-function createAnnotationPointInteractionListeners ({state, dispatch, commit}) {
-    // Listener to stop drawing a line feature
-    state.drawPointAnnotationInteraction.on("drawend", event => {
-        dispatch("addFeatureToAnnotation", event.feature);
-        commit("setIsMenuUp", true);
     });
 }
 
@@ -163,13 +137,9 @@ function createAnnotationPointInteractionListeners ({state, dispatch, commit}) {
  * @returns {void}
  */
 function removeAnnotationDrawInteraction ({rootState, state, commit}) {
-    if (state.drawLineAnnotationInteraction) {
-        rootState.Map.map.removeInteraction(state.drawLineAnnotationInteraction);
-        commit("setDrawLineAnnotationInteraction", null);
-    }
-    if (state.drawPointAnnotationInteraction) {
-        rootState.Map.map.removeInteraction(state.drawPointAnnotationInteraction);
-        commit("setDrawPointAnnotationInteraction", null);
+    if (state.drawAnnotationInteraction) {
+        rootState.Map.map.removeInteraction(state.drawAnnotationInteraction);
+        commit("setDrawAnnotationInteraction", null);
     }
 }
 
@@ -327,6 +297,7 @@ function startDrawingMobilityDataLocation (
             ? {...data, feature: event.feature}
             : data
         );
+
         commit("setMobilityData", newMobilityData);
 
         dispatch("stopDrawingMobilityDataLocation");
@@ -373,11 +344,7 @@ function startModifyingAnnotationFeature (
         feature.set("isModifying", true);
 
         // Disable draw annotation interaction
-        if (state.drawLineAnnotationInteraction) {
-            state.drawLineAnnotationInteraction.setActive(false);
-        } else if (state.drawPointAnnotationInteraction) {
-            state.drawPointAnnotationInteraction.setActive(false);
-        }
+        state.drawAnnotationInteraction.setActive(false);
 
         // Add modify interaction for the selected feature
         dispatch("addModifyInteraction", feature);
@@ -405,13 +372,8 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
     dispatch("removeModifyInteraction");
 
     // Enable draw annotation interaction again
-    if (state.drawLineAnnotationInteraction) {
-        state.drawLineAnnotationInteraction.setActive(true);
-    } else if (state.drawPointAnnotationInteraction) {
-        state.drawPointAnnotationInteraction.setActive(true);
-    }
+    state.drawAnnotationInteraction.setActive(true);
 }
-
 
 export default {
     addMobilityDataDrawInteractions,
@@ -419,7 +381,6 @@ export default {
     removeMobilityDataDrawInteractions,
     addAnnotationDrawInteraction,
     createAnnotationDrawInteractionListeners,
-    createAnnotationPointInteractionListeners,
     removeAnnotationDrawInteraction,
     addSnapInteraction,
     removeSnapInteraction,
