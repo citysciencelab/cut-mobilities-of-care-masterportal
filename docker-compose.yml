@@ -31,7 +31,7 @@ services:
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
-            API_CORS_ORIGINS: https://re1.cut.hcu-hamburg.de
+            API_CORS_ORIGINS: https://re2.cut.hcu-hamburg.de
             API_PORT: 8080
             API_VARIANT: external
         networks:
@@ -39,7 +39,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.external-mobility-backend.entrypoints=https"
-            - "traefik.http.routers.external-mobility-backend.rule=Host(`re1-api.cut.hcu-hamburg.de`)"
+            - "traefik.http.routers.external-mobility-backend.rule=Host(`re2-api.cut.hcu-hamburg.de`)"
             - "traefik.http.routers.external-mobility-backend.tls=true"
             - "traefik.http.routers.external-mobility-backend.tls.certresolver=lets-encr"
         #ports:
@@ -63,7 +63,7 @@ services:
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
-            API_CORS_ORIGINS: https://re1.cut.hcu-hamburg.de
+            API_CORS_ORIGINS: https://re2.cut.hcu-hamburg.de
             API_PORT: 8081
             API_VARIANT: internal
         #ports:
@@ -76,14 +76,14 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                API_BASE_URL: https://re1-api.cut.hcu-hamburg.de
+                API_BASE_URL: https://re2-api.cut.hcu-hamburg.de
                 TEST_ENV: "false"
         networks:
             - proxy
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.mobility-frontend.entrypoints=https"
-            - "traefik.http.routers.mobility-frontend.rule=Host(`re1.cut.hcu-hamburg.de`)"
+            - "traefik.http.routers.mobility-frontend.rule=Host(`re2.cut.hcu-hamburg.de`)"
             - "traefik.http.routers.mobility-frontend.tls=true"
             - "traefik.http.routers.mobility-frontend.tls.certresolver=lets-encr"
         #ports:
@@ -125,7 +125,7 @@ services:
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
-            API_CORS_ORIGINS: https://re1.cut.hcu-hamburg.de
+            API_CORS_ORIGINS: https://re2.cut.hcu-hamburg.de
             API_PORT: 8080
             API_VARIANT: external
         networks:
@@ -133,7 +133,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.external-mobility-backend.entrypoints=https"
-            - "traefik.http.routers.external-mobility-backend.rule=Host(`re1-api.cut.hcu-hamburg.de`)"
+            - "traefik.http.routers.external-mobility-backend.rule=Host(`re2-api.cut.hcu-hamburg.de`)"
             - "traefik.http.routers.external-mobility-backend.tls=true"
             - "traefik.http.routers.external-mobility-backend.tls.certresolver=lets-encr"
         #ports:
@@ -157,7 +157,7 @@ services:
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
-            API_CORS_ORIGINS: https://re1.cut.hcu-hamburg.de
+            API_CORS_ORIGINS: https://re2.cut.hcu-hamburg.de
             API_PORT: 8081
             API_VARIANT: internal
         #ports:
@@ -170,14 +170,14 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                API_BASE_URL: https://re1-api.cut.hcu-hamburg.de
+                API_BASE_URL: https://re2-api.cut.hcu-hamburg.de
                 TEST_ENV: "false"
         networks:
             - proxy
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.mobility-frontend.entrypoints=https"
-            - "traefik.http.routers.mobility-frontend.rule=Host(`re1.cut.hcu-hamburg.de`)"
+            - "traefik.http.routers.mobility-frontend.rule=Host(`re2.cut.hcu-hamburg.de`)"
             - "traefik.http.routers.mobility-frontend.tls=true"
             - "traefik.http.routers.mobility-frontend.tls.certresolver=lets-encr"
         #ports:
