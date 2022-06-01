@@ -16,6 +16,7 @@ services:
     # Expernal API to retrieve aggregated data of the gathered mobility data
     external-mobility-backend:
         container_name: external-mobility-backend
+        image: external-mobility-backend:re2
         build:
             context: .
             dockerfile: mobility-backend/Dockerfile
@@ -48,6 +49,7 @@ services:
     # Internal API to retrieve detailed information about the mobility data
     internal-mobility-backend:
         container_name: internal-mobility-backend
+        image: internal-mobility-backend:re2
         build:
             context: .
             dockerfile: mobility-backend/Dockerfile
@@ -72,6 +74,7 @@ services:
     # Frontend incl. Masterportal configuration and both the storytelling and the data collection add-on
     mobility-frontend:
         container_name: mobility-frontend
+        image: mobility-frontend:re2
         build:
             context: .
             dockerfile: Dockerfile
@@ -110,6 +113,7 @@ services:
     # Expernal API to retrieve aggregated data of the gathered mobility data
     external-mobility-backend:
         container_name: external-mobility-backend
+        image: external-mobility-backend:re2
         build:
             context: .
             dockerfile: mobility-backend/Dockerfile
@@ -142,6 +146,7 @@ services:
     # Internal API to retrieve detailed information about the mobility data
     internal-mobility-backend:
         container_name: internal-mobility-backend
+        image: internal-mobility-backend:re2
         build:
             context: .
             dockerfile: mobility-backend/Dockerfile
@@ -166,6 +171,7 @@ services:
     # Frontend incl. Masterportal configuration and both the storytelling and the data collection add-on
     mobility-frontend:
         container_name: mobility-frontend
+        image: mobility-frontend:re2
         build:
             context: .
             dockerfile: Dockerfile
