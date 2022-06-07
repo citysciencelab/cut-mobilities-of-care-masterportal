@@ -412,7 +412,6 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
     }
 }
 
-
 export default {
     addMobilityDataDrawInteractions,
     createMobilityDataDrawInteractionListeners,

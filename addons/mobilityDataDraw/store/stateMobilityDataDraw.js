@@ -81,7 +81,8 @@ const state = {
     initialWidth: 500,
     initialWidthMobile: 300,
     isCurrentMobile: false,
-    isMenuUp: true
+    isMenuUp: true,
+    isTestEnvironment: false
 };
 
 export default state;

@@ -41,11 +41,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                     console.error(error);
                     Radio.trigger("Alert", "alert", {
                         text: i18next.t(
-                            config.TEST_ENV ?
+                            state.isTestEnvironment ?
                                 "additional:modules.tools.testMode.noDataSent" :
                                 "additional:modules.tools.mobilityDataDraw.alert.submitPersonalDataError"
                         ),
-                        category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
+                        category: state.isTestEnvironment ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                         kategorie: "alert-danger"
                     });
                 });
@@ -79,11 +79,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {
                                     text: i18next.t(
-                                        config.TEST_ENV ?
+                                        state.isTestEnvironment ?
                                             "additional:modules.tools.testMode.noDataSent" :
                                             "additional:modules.tools.mobilityDataDraw.alert.submitAudioError"
                                     ),
-                                    category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
+                                    category: state.isTestEnvironment ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                                     kategorie: "alert-danger"
                                 });
                             });
@@ -96,11 +96,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                                 console.error(error);
                                 Radio.trigger("Alert", "alert", {
                                     text: i18next.t(
-                                        config.TEST_ENV ?
+                                        state.isTestEnvironment ?
                                             "additional:modules.tools.testMode.noDataSent" :
                                             "additional:modules.tools.mobilityDataDraw.alert.submitAudioError"
                                     ),
-                                    category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
+                                    category: state.isTestEnvironment ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                                     kategorie: "alert-danger"
                                 });
                             });
@@ -110,11 +110,11 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                     console.error(error);
                     Radio.trigger("Alert", "alert", {
                         text: i18next.t(
-                            config.TEST_ENV ?
+                            state.isTestEnvironment ?
                                 "additional:modules.tools.testMode.noDataSent" :
                                 "additional:modules.tools.mobilityDataDraw.alert.submitMobilityDataError"
                         ),
-                        category: config.TEST_ENV ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
+                        category: state.isTestEnvironment ? i18next.t("additional:modules.tools.testMode.hint") : "Error",
                         kategorie: "alert-danger"
                     });
                 });
@@ -174,7 +174,6 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
         setResizableWindow ({commit}, resizable) {
             commit("setResizableWindow", resizable);
         }
-
     };
 
 export default actions;
