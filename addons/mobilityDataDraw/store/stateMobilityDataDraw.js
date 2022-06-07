@@ -76,7 +76,8 @@ const state = {
     isVisibleInMenu: true,
     deactivateGFI: true,
     initialWidth: 500,
-    initialWidthMobile: 300
+    initialWidthMobile: 300,
+    isTestEnvironment: false
 };
 
 export default state;

@@ -138,6 +138,10 @@ export default {
             this.setActive(true);
         }
         this.applyTranslationKey(this.name);
+
+        this.applyTestEnv();
+        this.getIsMobile();
+
     },
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),

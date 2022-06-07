@@ -1,5 +1,6 @@
 import { generateSimpleMutations } from "../../../src/app-store/utils/generators";
 import stateMobilityDataDraw from "./stateMobilityDataDraw";
+import config from "../config.json";
 
 const mutations = {
     /**
@@ -19,6 +20,20 @@ const mutations = {
     applyTranslationKey: (state, payload) => {
         if (payload && payload.indexOf("translate#") > -1) {
             state.name = payload.substr("translate#".length);
+        }
+    },
+
+    /**
+     * Setting the isTestEnvironment variable which can be a boolean or string
+     * @param {object} state of this component
+     * @returns {void}
+     */
+    applyTestEnv: (state) => {
+        const testEnv = config.TEST_ENV;
+        if (typeof testEnv === "boolean") {
+            state.isTestEnvironment = testEnv;
+        } else {
+            state.isTestEnvironment = testEnv.toUpperCase() === "TRUE";
         }
     }
 };
