@@ -2,14 +2,15 @@
   "modules": {
     "tools": {
       "mobilityDataDraw": {
-        "title": "Data Collection Tool",
+        "title": "Datenerhebung Faircare",
         "intro": {
           "greeting": "Willkommen beim FairCare Tool",
           "message": "Städtische Infrastruktur ist häufig undgeeignet für die Bedürfnisse pflegender SorgearbeiterInnen. Die Erfassung entsprechender Schwachstellen soll die Sichtbarkeit der Probleme erhöhen und bestenfalls PlanerInnen helfen diese Bedürfnisse besser berücksichtigen zu können.",
           "language": "Switch to English",
           "acceptTerms1": "Datenschutzrichtlinie ",
           "acceptTerms2": "akzeptieren",
-          "startTool": "Start"
+          "startTool": "Start",
+          "privacyPolicy": "Datenschutzerklärung"
         },
         "label": {
           "personalData": "Steckbrief",
@@ -35,7 +36,7 @@
           "summary": "Zusammenfassung",
           "drawingMode": "Zeichenwerkzeug",
           "annotations": "Anmerkungen",
-          "annotation": "Anmerkung",
+          "annotation": "Titel",
           "personInNeedTitle": "Hilfsbedürftige Person"
         },
         "button": {
@@ -51,8 +52,8 @@
           "previous": "Zurück",
           "next": "Weiter",
           "submit": "Absenden",
-          "enterMore": "Weiteren Tagesablauf eintragen",
-          "finish": "Beenden",
+          "enterMore": "Mehr Daten eintragen",
+          "finish": "Datenerhebung Beenden",
           "addPerson": "Person hinzufügen",
           "addRecord": "Aufnahme hinzufügen",
           "removeRecord": "Aufnahme löschen",
@@ -168,7 +169,7 @@
         "closing": {
           "title": "Vielen Dank für die Teilnahme!",
           "message": "Gerne können Sie weitere typische Tagesabläufe eintragen.",
-          "finishMessage": "Andernfalls danken wir Ihnen für Ihre Zeit."
+          "finishMessage": "Vielen Dank für Ihre Zeit."
         },
         "personalOrEnd": {
           "title": "Vielen Dank für die Eingabe ihrer Daten!",

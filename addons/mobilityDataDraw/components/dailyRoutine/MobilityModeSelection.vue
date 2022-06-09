@@ -99,6 +99,13 @@ export default {
                     0.2
                 );
             }
+            &.mobility-mode-wheel {
+                color: var(--mobility-mode-wheel-color-hex);
+                background-color: rgba(
+                    var(--mobility-mode-wheel-color-rgb),
+                    0.2
+                );
+            }
         }
     }
 }
@@ -114,6 +121,13 @@ export default {
 
     &:not(:last-child) {
         margin-right: 5px;
+    }
+
+    // Mobile view
+    @media only screen and (max-width: 440px) {
+        &:not(:last-child) {
+            margin-right: 0px !important;
+        }
     }
 
     &::v-deep .v-icon {

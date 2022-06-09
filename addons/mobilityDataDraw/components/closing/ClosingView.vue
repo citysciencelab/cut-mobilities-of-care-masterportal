@@ -16,7 +16,7 @@ export default {
     computed: {},
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", ["setView"]),
-        ...mapActions("Tools/MobilityDataDraw", ["resetDrawnData"]),
+        ...mapActions("Tools/MobilityDataDraw", ["resetDrawnData", "destroyAudioRecorder"]),
 
         /**
          * Resets the drawn data and goes back to the daily routine drawing view
@@ -24,6 +24,8 @@ export default {
          */
         restartDrawing() {
             this.resetDrawnData();
+            // Reset audio record
+            this.destroyAudioRecorder();
             this.setView(this.constants.views.ANNOTATIONS_VIEW);
         },
 
@@ -33,6 +35,8 @@ export default {
          */
         endTool() {
             this.resetDrawnData();
+            // Reset audio record
+            this.destroyAudioRecorder();
             this.setView(this.constants.views.INTRO_VIEW);
         }
     }
@@ -44,7 +48,7 @@ export default {
         <h4>
             {{ $t("additional:modules.tools.mobilityDataDraw.closing.title") }}
         </h4>
-
+        <!--
         <p>
             {{
                 $t("additional:modules.tools.mobilityDataDraw.closing.message")
@@ -56,7 +60,7 @@ export default {
                 $t("additional:modules.tools.mobilityDataDraw.button.enterMore")
             }}
         </v-btn>
-
+        -->
         <p class="second-row-buttons">
             {{
                 $t("additional:modules.tools.mobilityDataDraw.closing.finishMessage")

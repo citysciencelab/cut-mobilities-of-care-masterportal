@@ -1,5 +1,6 @@
 export const routeMobilityModes = {
   WALK: "walk",
+  WHEEL: "wheel",
   BICYCLE: "bicycle",
   CAR: "car",
   BUS: "bus",

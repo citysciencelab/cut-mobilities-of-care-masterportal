@@ -189,7 +189,7 @@ export default {
             </div>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-            <div class="form-group">
+            <div class="form-group text-input-form">
                 <label class="form-label">
                     {{
                         $t(
@@ -264,7 +264,7 @@ export default {
         }
         > button {
             position: relative !important;
-            padding: 10px !important;
+            padding: 5px !important;
             min-width: 0 !important;
         }
     }
@@ -276,6 +276,28 @@ export default {
         }
         input {
             font: inherit;
+        }
+    }
+
+
+    // Mobile view without resize bar - no padding
+    @media only screen and (max-width: 440px) {
+        .annotation-actions {
+            margin-top: 5px;
+
+            button {
+                border: 1px solid lightgray;
+                box-shadow: none;
+            }
+        }
+
+        .annotation-title {
+            border: 1px solid lightgray;
+            padding-left: 5px;
+        }
+
+        .text-input-form {
+            margin-bottom: 0;
         }
     }
 }

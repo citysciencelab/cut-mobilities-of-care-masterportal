@@ -86,6 +86,9 @@ export default {
         },
     },
     created() {
+        window.onbeforeunload = function() {
+            return "Data will be lost if you leave the page, are you sure?";
+        };
         this.$on("close", this.close);
 
         // Fix masterportal main menu styles for "TABLE" UI Style
@@ -406,6 +409,19 @@ export default {
                             }}
                         </v-btn>
                         <v-btn
+                            v-else-if="view === maxDrawingView"
+                            class="tool-mobilityDataDraw-actions-next"
+                            :disabled="nextButtonDisabled"
+                            :loading="isLoadingNext"
+                            @click="submitDataAndNextView"
+                        >
+                            {{
+                                $t(
+                                    "additional:modules.tools.mobilityDataDraw.button.finish"
+                                )
+                            }}
+                        </v-btn>
+                        <v-btn
                             v-else
                             class="tool-mobilityDataDraw-actions-submit"
                             :disabled="nextButtonDisabled"
@@ -602,6 +618,13 @@ export default {
 
     .menu-down-two-rows {
         top: calc(100% - 210px) !important;
+    }
+
+    #tool-mobilityDataDraw-actions {
+        justify-content: center !important;
+        button {
+            margin: 0 !important;
+        }
     }
 }
 

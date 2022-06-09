@@ -11,7 +11,7 @@ export default {
 <template lang="html">
     <div class="data-policy-text">
         <h1 style="padding-top: 3pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
-            Privacy policy „Storytelling &amp; Data Collection Tool“</h1>
+            „Faircare Data Collection Tool“</h1>
         <p style="text-indent: 0pt;text-align: left;"><br/></p>
         <p class="s1" style="padding-left: 5pt;text-indent: 0pt;text-align: left;">(Status: 25.11.2021)</p>
         <p style="text-indent: 0pt;text-align: left;"><br/></p>

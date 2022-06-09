@@ -137,9 +137,6 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
             commit("setDrawingMode", initialState.drawingMode);
             commit("setAnnotations", initialState.annotations);
 
-            // Reset audio record
-            this.destroyAudioRecorder();
-
             // Clear map layers
             if (state.mobilityDataLayer) {
                 state.mobilityDataLayer.getSource().clear();

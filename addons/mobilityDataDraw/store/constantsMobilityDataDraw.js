@@ -30,6 +30,11 @@ const interactionTypes = {
             rgb: "255, 204, 0",
             strokeHex: "#997a00"
         },
+        [mobilityModes.WHEEL]: {
+            hex: "#40E0D0",
+            rgb: "64, 224, 208",
+            strokeHex: "#0f625a"
+        },
         [mobilityModes.POI]: {
             hex: "#3F51B5",
             rgb: "63, 81, 181",
@@ -50,6 +55,7 @@ const interactionTypes = {
         [mobilityModes.CAR]: "directions_car",
         [mobilityModes.TRAIN]: "directions_transit",
         [mobilityModes.WALK]: "directions_walk",
+        [mobilityModes.WHEEL]: "accessible_forward",
         [mobilityModes.POI]: "fmd_good"
     },
     drawingModes = {

@@ -102,7 +102,11 @@ export default {
         >
             <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
-                    Privacy Policy
+                    {{
+                        $t(
+                            "additional:modules.tools.mobilityDataDraw.intro.privacyPolicy"
+                        )
+                    }}
                 </v-card-title>
 
                 <v-card-text class="data-policy-holder">
