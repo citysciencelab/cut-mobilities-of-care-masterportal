@@ -2,7 +2,6 @@ version: '3.9'
 services:
   # Postgres database
   postgres-re1:
-    container_name: postgres-re1
     image: postgres:10.4
     volumes:
       - ./postgresdata:/var/lib/postgresql/data
@@ -17,7 +16,6 @@ services:
 
   # Expernal API to retrieve aggregated data of the gathered mobility data
   external-mobility-backend-re1:
-    container_name: external-mobility-backend-re1
     build:
       context: .
       dockerfile: mobility-backend/Dockerfile
@@ -73,7 +71,6 @@ services:
 
   # Frontend incl. Masterportal configuration and both the storytelling and the data collection add-on
   mobility-frontend-re1:
-    container_name: mobility-frontend-re1
     build:
       context: .
       dockerfile: Dockerfile
