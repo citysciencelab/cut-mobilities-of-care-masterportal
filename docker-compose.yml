@@ -1,8 +1,8 @@
 version: '3.9'
 services:
   # Postgres database
-  postgres:
-    container_name: postgres
+  postgres-re1:
+    container_name: postgres-re1
     image: postgres:10.4
     volumes:
       - ./postgresdata:/var/lib/postgresql/data
@@ -12,10 +12,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: hECJFh7*th
       POSTGRES_DB: mobility-db
+    networks:
+      - re1-api
 
   # Expernal API to retrieve aggregated data of the gathered mobility data
-  external-mobility-backend:
-    container_name: external-mobility-backend
+  external-mobility-backend-re1:
+    container_name: external-mobility-backend-re1
     build:
       context: .
       dockerfile: mobility-backend/Dockerfile
@@ -23,52 +25,74 @@ services:
       - ./audio_files:/usr/app/mobility-backend/audio_files
     restart: always
     depends_on:
-      - postgres
+      - postgres-re1
     environment:
-      DB_HOST: postgres
+      DB_HOST: postgres-re1
       DB_NAME: mobility-db
       DB_USER: postgres
       DB_PASS: hECJFh7*th
       DB_PORT: 5432
       DB_MAX_CONNECTIONS: 10
-      API_CORS_ORIGINS: http://localhost
+      API_CORS_ORIGINS: https://re1.cut.hcu-hamburg.de
       API_PORT: 8080
       API_VARIANT: external
-    ports:
-      - '8080:8080'
+    networks:
+      - proxy
+      - re1-api
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.external-mobility-backend-re1.entrypoints=https
+      - traefik.http.routers.external-mobility-backend-re1.tls=true
+      - traefik.http.routers.external-mobility-backend-re1.tls.certresolver=lets-encr
+      - traefik.http.routers.external-mobility-backend-re1.rule=Host(`re1-api.cut.hcu-hamburg.de`)
+      - traefik.http.services.external-mobility-backend-re1.loadbalancer.server.port=8080
 
   # Internal API to retrieve detailed information about the mobility data
-  internal-mobility-backend:
-    container_name: internal-mobility-backend
-    build:
-      context: .
-      dockerfile: mobility-backend/Dockerfile
-    volumes:
-      - ./audio_files:/usr/app/mobility-backend/audio_files
-    restart: always
-    depends_on:
-      - postgres
-    environment:
-      DB_HOST: postgres
-      DB_NAME: mobility-db
-      DB_USER: postgres
-      DB_PASS: hECJFh7*th
-      DB_PORT: 5432
-      DB_MAX_CONNECTIONS: 10
-      API_CORS_ORIGINS: http://localhost
-      API_PORT: 8081
-      API_VARIANT: internal
-    ports:
-      - '8081:8081'
+  #internal-mobility-backend:
+  #  container_name: internal-mobility-backend
+  #  build:
+  #    context: .
+  #    dockerfile: mobility-backend/Dockerfile
+  #  volumes:
+  #    - ./audio_files:/usr/app/mobility-backend/audio_files
+  #  restart: always
+  #  depends_on:
+  #    - postgres
+  #  environment:
+  #    DB_HOST: postgres
+  #    DB_NAME: mobility-db
+  #    DB_USER: postgres
+  #    DB_PASS: hECJFh7*th
+  #    DB_PORT: 5432
+  #    DB_MAX_CONNECTIONS: 10
+  #    API_CORS_ORIGINS: http://localhost
+  #    API_PORT: 8081
+  #    API_VARIANT: internal
+  #  ports:
+  #    - '8081:8081'
 
   # Frontend incl. Masterportal configuration and both the storytelling and the data collection add-on
-  mobility-frontend:
-    container_name: mobility-frontend
+  mobility-frontend-re1:
+    container_name: mobility-frontend-re1
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        API_BASE_URL: http://localhost:8080
+        API_BASE_URL: https://re1-api.cut.hcu-hamburg.de
         TEST_ENV: "false"
-    ports:
-      - '80:80'
+    #ports: not needed for traefik
+    #  - '80:80'
+    networks:
+      - proxy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mobility-frontend-re1.entrypoints=https
+      - traefik.http.routers.mobility-frontend-re1.tls=true
+      - traefik.http.routers.mobility-frontend-re1.tls.certresolver=lets-encr
+      - traefik.http.routers.mobility-frontend-re1.rule=Host(`re1.cut.hcu-hamburg.de`)
+
+networks:
+  proxy:
+    external: true
+  re1-api:
+    external: true
