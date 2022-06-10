@@ -177,6 +177,12 @@ export default {
          * @returns {void}
          */
         toggleMenu() {
+            // If the menu is toggled to be shown and stil in modify mode -> deactivate
+            if (this.currentInteraction === this.constants.interactionTypes.MODIFY && !this.isMenuUp) {
+                console.log("now")
+                this.stopModifyingAnnotationFeature();
+            }
+
             this.setIsMenuUp(!this.isMenuUp)
         },
 

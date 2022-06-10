@@ -162,16 +162,26 @@ export default {
     >
         <v-expansion-panel-header disable-icon-rotate>
             <template v-slot:actions>
-                <v-icon dense :title="comment">
-                    {{ comment ? "comment" : "" }}
+                <v-icon dense :title="comment" :class="{ 'invisible-icon': comment === ''}" style="margin-right: 5px">
+                    comment
+                </v-icon>
+                <v-icon v-if="selectedAnnotationIndex === geometryIndex" class="annotation-header-arrow">
+                    keyboard_double_arrow_up
+                </v-icon>
+                <v-icon v-else class="annotation-header-arrow">
+                    keyboard_double_arrow_down
                 </v-icon>
             </template>
-            <v-icon>
-                {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
-            </v-icon>
-            <v-icon class="mobility-data-segment-icon">
-                {{ constants.mobilityModeIcons[this.feature.values_['mobilityMode']] }}
-            </v-icon>
+            <div class="header-start-icons">
+                <v-icon>
+                    {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
+                </v-icon>
+                <v-icon class="mobility-data-segment-icon"
+                        :class="{ 'invisible-icon': !this.feature.values_['mobilityMode'] }">
+                    {{ constants.mobilityModeIcons[this.feature.values_['mobilityMode']] ? constants.mobilityModeIcons[this.feature.values_['mobilityMode']] : 'directions_bike' }}
+                </v-icon>
+            </div>
+
             <div class="annotation-header">
                 <input
                     class="annotation-title"
@@ -186,12 +196,6 @@ export default {
                     @click="onClickAnnotation"
                 />
             </div>
-            <v-icon v-if="selectedAnnotationIndex === geometryIndex" class="annotation-header-arrow">
-                keyboard_double_arrow_up
-            </v-icon>
-            <v-icon v-else class="annotation-header-arrow">
-                keyboard_double_arrow_down
-            </v-icon>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
             <div class="form-group text-input-form">
@@ -252,6 +256,15 @@ export default {
 
     &.v-expansion-panel--disabled {
         background-color: #f2f2f2;
+    }
+
+    .header-start-icons {
+        width: 70px;
+    }
+
+    // Purely a hack for a constant layout
+    .invisible-icon {
+        color: rgba(0,0,0,.0) !important;
     }
 
     &-header {
