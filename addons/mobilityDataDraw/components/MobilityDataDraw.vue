@@ -148,7 +148,7 @@ export default {
         view(value) {
             if (this.constants.views.ANNOTATIONS_VIEW === value && this.isCurrentMobile) {
                 this.toggleMenu();
-                let sidebar = this.$refs.toolMenu;
+
                 // Should work via refs and getting the second child!?
                 document.getElementsByClassName("win-heading")[0].addEventListener('click', () => {
                     this.toggleMenu()
@@ -179,7 +179,6 @@ export default {
         toggleMenu() {
             // If the menu is toggled to be shown and stil in modify mode -> deactivate
             if (this.currentInteraction === this.constants.interactionTypes.MODIFY && !this.isMenuUp) {
-                console.log("now")
                 this.stopModifyingAnnotationFeature();
             }
 
@@ -343,7 +342,8 @@ export default {
              @click="toggleMenu" />
         <div
             id="show-button"
-            v-bind:class="{ 'show-button-draw-line': drawingMode === constants.drawingModes.LINE }"
+            v-bind:class="{'show-button-modify': currentInteraction === constants.interactionTypes.MODIFY,
+            'show-button-draw-line': drawingMode === constants.drawingModes.LINE && currentInteraction !== constants.interactionTypes.MODIFY}"
             @click="toggleMenu"
             v-if="!isMenuUp"
         >
@@ -351,8 +351,9 @@ export default {
         </div>
         <Tool
             ref="toolMenu"
-            v-bind:class="{'menu-down-one-row': !this.isMenuUp && drawingMode !== constants.drawingModes.LINE,
-            'menu-down-two-rows': !this.isMenuUp && drawingMode === constants.drawingModes.LINE }"
+            v-bind:class="{'menu-down-complete': !isMenuUp && currentInteraction === constants.interactionTypes.MODIFY,
+            'menu-down-one-row': !isMenuUp && drawingMode !== constants.drawingModes.LINE && currentInteraction !== constants.interactionTypes.MODIFY,
+            'menu-down-two-rows': !isMenuUp && drawingMode === constants.drawingModes.LINE && currentInteraction !== constants.interactionTypes.MODIFY }"
             :title="$t(name)"
             :icon="glyphicon"
             :active="active"
@@ -363,6 +364,8 @@ export default {
             :initial-width-mobile="initialWidthMobile"
         >
             <template v-slot:toolBody>
+                {{drawingMode}}
+                {{currentInteraction}}
                 <v-app
                     v-if="active"
                     id="tool-mobilityDataDraw"
@@ -616,6 +619,14 @@ export default {
 
     .show-button-draw-line {
         top: calc(100% - 247px) !important;
+    }
+
+    .show-button-modify {
+        top: calc(100% - 85px) !important;
+    }
+
+    .menu-down-complete {
+        top: calc(100% - 45px) !important;
     }
 
     .menu-down-one-row {

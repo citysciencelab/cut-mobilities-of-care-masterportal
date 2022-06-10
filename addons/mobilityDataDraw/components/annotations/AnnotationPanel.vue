@@ -250,16 +250,8 @@ export default {
 <style lang="less" scoped>
 .annotation {
 
-    .v-expansion-panel-header {
-        padding: 6px;
-    }
-
     &.v-expansion-panel--disabled {
         background-color: #f2f2f2;
-    }
-
-    .header-start-icons {
-        width: 70px;
     }
 
     // Purely a hack for a constant layout
@@ -294,6 +286,7 @@ export default {
 
     .annotation-header {
         display: flex;
+        flex-grow: 10;
         i {
             margin-right: 5px;
         }
@@ -306,20 +299,31 @@ export default {
         }
     }
 
+    .v-expansion-panel-content::v-deep .v-expansion-panel-content__wrap {
+        .text-input-form {
+            margin-bottom: 0;
+        }
+        .annotation-actions {
+            margin-top: 5px;
+        }
+    }
+
 
     // Mobile view without resize bar - no padding
     @media only screen and (max-width: 440px) {
-        .annotation-actions {
-            margin-top: 5px;
 
-            button {
-                border: 1px solid lightgray;
-                box-shadow: none;
-            }
+        .v-expansion-panel-content::v-deep .v-expansion-panel-content__wrap {
+            padding: 6px !important;
         }
 
-        .text-input-form {
-            margin-bottom: 0;
+        .v-expansion-panel-header,
+        .v-expansion-panel-content{
+            padding: 6px !important;
+        }
+
+
+        .header-start-icons {
+            width: 70px;
         }
     }
 }
