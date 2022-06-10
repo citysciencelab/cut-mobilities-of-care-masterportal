@@ -166,14 +166,13 @@ export default {
                     {{ comment ? "comment" : "" }}
                 </v-icon>
             </template>
-
+            <v-icon>
+                {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
+            </v-icon>
+            <v-icon class="mobility-data-segment-icon">
+                {{ constants.mobilityModeIcons[this.feature.values_['mobilityMode']] }}
+            </v-icon>
             <div class="annotation-header">
-                <v-icon>
-                    {{ constants.drawingModeIcons[this.feature.values_['mode']] }}
-                </v-icon>
-                <v-icon class="mobility-data-segment-icon">
-                    {{ constants.mobilityModeIcons[this.feature.values_['mobilityMode']] }}
-                </v-icon>
                 <input
                     class="annotation-title"
                     :placeholder="
@@ -187,6 +186,12 @@ export default {
                     @click="onClickAnnotation"
                 />
             </div>
+            <v-icon v-if="selectedAnnotationIndex === geometryIndex" class="annotation-header-arrow">
+                keyboard_double_arrow_up
+            </v-icon>
+            <v-icon v-else class="annotation-header-arrow">
+                keyboard_double_arrow_down
+            </v-icon>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
             <div class="form-group text-input-form">
@@ -240,6 +245,11 @@ export default {
 
 <style lang="less" scoped>
 .annotation {
+
+    .v-expansion-panel-header {
+        padding: 6px;
+    }
+
     &.v-expansion-panel--disabled {
         background-color: #f2f2f2;
     }
@@ -277,6 +287,10 @@ export default {
         input {
             font: inherit;
         }
+        .annotation-title {
+            border: 1px solid lightgray;
+            padding-left: 5px;
+        }
     }
 
 
@@ -289,11 +303,6 @@ export default {
                 border: 1px solid lightgray;
                 box-shadow: none;
             }
-        }
-
-        .annotation-title {
-            border: 1px solid lightgray;
-            padding-left: 5px;
         }
 
         .text-input-form {

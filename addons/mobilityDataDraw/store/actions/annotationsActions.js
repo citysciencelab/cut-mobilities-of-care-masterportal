@@ -83,7 +83,11 @@ function setAnnotationProperties (
  * @param {number} geometryIndex the geometry index of the feature to select
  * @returns {void}
  */
-function selectAnnotationFeature ({state}, geometryIndex) {
+function selectAnnotationFeature ({state, commit}, geometryIndex) {
+
+    // Update the selected annotation index
+    commit("setSelectedAnnotationIndex", geometryIndex);
+
     for (const annotation of state.annotations) {
         const isSelected = annotation.geometryIndex === geometryIndex;
 

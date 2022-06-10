@@ -70,6 +70,7 @@ const state = {
     summary: null,
     drawingMode: drawingModes.POINT,
     annotations: [],
+    selectedAnnotationIndex: -1,
     // defaults for config.json parameters
     active: false,
     name: "Data Collection Tool",
