@@ -8,7 +8,7 @@ services:
             - ./mobility-backend/db/setup/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
         restart: always
         environment:
-            POSTGRES_USER: postgres-re2
+            POSTGRES_USER: postgres
             POSTGRES_PASSWORD: hECJFh7*th
             POSTGRES_DB: mobility-db-re2
         networks:
@@ -27,7 +27,7 @@ services:
         environment:
             DB_HOST: postgres-re2
             DB_NAME: mobility-db-re2
-            DB_USER: postgres-re2
+            DB_USER: postgres
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
