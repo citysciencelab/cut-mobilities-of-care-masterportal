@@ -79,7 +79,7 @@ services:
             - traefik.http.routers.external-mobility-backend-re2.tls=true
             - traefik.http.routers.external-mobility-backend-re2.tls.certresolver=lets-encr
             - traefik.http.services.external-mobility-backend-re2.loadbalancer.server.port=8081
-            - traefik.http.middlewares.test-auth.basicauth.users=csl:$$2a$$12$$crU51VSBJ1R4yC8y/TWCBua6BNhOxy9WRqSEtMIzbTMGKZr0cTkCC
+            - traefik.http.middlewares.external-mobility-backend-re2.basicauth.users=csl:$$2a$$12$$crU51VSBJ1R4yC8y/TWCBua6BNhOxy9WRqSEtMIzbTMGKZr0cTkCC
         #ports:
         #  - '8081:8081'
 
