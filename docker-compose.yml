@@ -74,13 +74,13 @@ services:
             API_VARIANT: internal
         labels:
             - traefik.enable=true
-            - traefik.http.routers.external-mobility-backend-re2.entrypoints=https
-            - traefik.http.routers.external-mobility-backend-re2.rule=Host(`re2-api-internal.cut.hcu-hamburg.de`)
-            - traefik.http.routers.external-mobility-backend-re2.tls=true
-            - traefik.http.routers.external-mobility-backend-re2.tls.certresolver=lets-encr
-            - traefik.http.services.external-mobility-backend-re2.loadbalancer.server.port=8081
+            - traefik.http.routers.internal-mobility-backend-re2.entrypoints=https
+            - traefik.http.routers.internal-mobility-backend-re2.rule=Host(`re2-api-internal.cut.hcu-hamburg.de`)
+            - traefik.http.routers.internal-mobility-backend-re2.tls=true
+            - traefik.http.routers.internal-mobility-backend-re2.tls.certresolver=lets-encr
+            - traefik.http.services.internal-mobility-backend-re2.loadbalancer.server.port=8081
             - traefik.http.middlewares.re2-internal-auth.basicauth.users=csl:$$2a$$12$$crU51VSBJ1R4yC8y/TWCBua6BNhOxy9WRqSEtMIzbTMGKZr0cTkCC
-            - traefik.http.routers.external-mobility-backend-re2.middlewares=re2-internal-auth@docker
+            - traefik.http.routers.internal-mobility-backend-re2.middlewares=re2-internal-auth@docker
 
         #ports:
         #  - '8081:8081'
