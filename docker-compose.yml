@@ -63,7 +63,7 @@ services:
             - proxy
             - re2-api
         environment:
-            DB_HOST: postgres
+            DB_HOST: postgres-re2
             DB_NAME: mobility-db
             DB_USER: postgres
             DB_PASS: hECJFh7*th
