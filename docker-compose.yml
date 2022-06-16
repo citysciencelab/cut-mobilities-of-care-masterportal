@@ -2,15 +2,15 @@ version: '3.9'
 services:
     # Postgres database
     postgres-re2:
-        image: postgres:11.16-alpine
+        image: postgres:10.4
         volumes:
             - ./postgresdata:/var/lib/postgresql/data
             - ./mobility-backend/db/setup/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
         restart: always
         environment:
-            POSTGRES_USER: postgres
+            POSTGRES_USER: postgres-re2
             POSTGRES_PASSWORD: hECJFh7*th
-            POSTGRES_DB: mobility-db
+            POSTGRES_DB: mobility-db-re2
         networks:
             - re2-api
 
@@ -26,8 +26,8 @@ services:
             - postgres-re2
         environment:
             DB_HOST: postgres-re2
-            DB_NAME: mobility-db
-            DB_USER: postgres
+            DB_NAME: mobility-db-re2
+            DB_USER: postgres-re2
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
