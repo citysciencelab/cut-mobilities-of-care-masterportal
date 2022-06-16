@@ -58,4 +58,5 @@ npm-debug.log
 # Docker build
 .DS_Store
 audio_files
+image_files
 postgresdata
