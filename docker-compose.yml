@@ -16,7 +16,6 @@ services:
 
     # Expernal API to retrieve aggregated data of the gathered mobility data
     external-mobility-backend-re2:
-        image: external-mobility-backend:re2
         build:
             context: .
             dockerfile: mobility-backend/Dockerfile
@@ -85,10 +84,10 @@ services:
             - proxy
         labels:
             - traefik.enable=true
-            - traefik.http.routers.mobility-frontend.entrypoints=https
-            - traefik.http.routers.mobility-frontend.rule=Host(`re2.cut.hcu-hamburg.de`)
-            - traefik.http.routers.mobility-frontend.tls=true
-            - traefik.http.routers.mobility-frontend.tls.certresolver=lets-encr
+            - traefik.http.routers.mobility-frontend-re2.entrypoints=https
+            - traefik.http.routers.mobility-frontend-re2.rule=Host(`re2.cut.hcu-hamburg.de`)
+            - traefik.http.routers.mobility-frontend-re2.tls=true
+            - traefik.http.routers.mobility-frontend-re2.tls.certresolver=lets-encr
         #ports:
         #  - '80:80'
 
