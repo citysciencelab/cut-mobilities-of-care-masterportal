@@ -55,6 +55,7 @@ services:
             dockerfile: mobility-backend/Dockerfile
         volumes:
             - ./audio_files:/usr/app/mobility-backend/audio_files
+            - ./image_files:/usr/app/mobility-backend/image_files
         restart: always
         depends_on:
             - postgres-re2
