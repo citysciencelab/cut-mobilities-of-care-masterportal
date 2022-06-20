@@ -50,6 +50,7 @@ export default {
                 </v-icon>
             </label>
         </template>
+        <!--
         <v-icon
             class="btn btn-lgv-grey drawing-mode-label info-button"
             v-if="isCurrentMobile"
@@ -57,8 +58,7 @@ export default {
         >
             help_outline
         </v-icon>
-
-
+        -->
         <v-dialog
             v-model="showDialog"
             transition="dialog-top-transition"

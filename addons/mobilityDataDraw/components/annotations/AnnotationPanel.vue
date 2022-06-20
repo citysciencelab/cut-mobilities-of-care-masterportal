@@ -314,6 +314,11 @@ export default {
 
         .v-expansion-panel-content::v-deep .v-expansion-panel-content__wrap {
             padding: 6px !important;
+
+            .annotation-actions {
+                height: 30px !important;
+                padding: 4px !important;
+            }
         }
 
         .v-expansion-panel-header,
@@ -324,6 +329,11 @@ export default {
 
         .header-start-icons {
             width: 70px;
+            display: inline-flex;
+        }
+
+        .annotation-title {
+            width: 100%;
         }
     }
 }

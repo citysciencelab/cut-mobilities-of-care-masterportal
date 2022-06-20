@@ -101,13 +101,13 @@ export default {
         <section
             id="tool-mobilityDataDraw-view-annotations-section-annotations"
         >
-            <h4>
+            <h5>
                 {{
                     $t(
                         "additional:modules.tools.mobilityDataDraw.label.annotations"
                     )
                 }}
-            </h4>
+            </h5>
 
             <p v-if="!annotations.length">
                 {{

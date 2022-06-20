@@ -1,11 +1,12 @@
 <script>
-import { mapActions, mapMutations } from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import DataPolicyDE from "./DataPolicyDE.vue";
 import DataPolicyEN from "./DataPolicyEN.vue";
 import * as toolConstants from "../../store/constantsMobilityDataDraw";
 import * as sharedConstants from "../../../../shared/constants/mobilityData";
 import actions from "../../store/actionsMobilityDataDraw";
 import mutations from "../../store/mutationsMobilityDataDraw";
+import getters from "../../store/gettersMobilityDataDraw";
 
 export default {
     name: "IntroView",
@@ -26,6 +27,7 @@ export default {
         ...mapMutations("Tools/MobilityDataDraw", ["setView"]),
         ...mapActions("Tools/MobilityDataDraw", ["resetDrawnData"]),
         ...mapMutations("Language", ["setCurrentLocale"]),
+        ...mapGetters("Tools/MobilityDataDraw", Object.keys(getters)),
 
         /**
          * Switch language
@@ -99,6 +101,7 @@ export default {
             v-model="showDialog"
             transition="dialog-top-transition"
             max-width="600"
+            :fullscreen="isCurrentMobile()"
         >
             <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
@@ -133,8 +136,12 @@ export default {
 
 <style lang="less">
     .data-policy-holder {
-        max-height: 500px;
+        max-height: 450px;
         overflow-y: auto;
+    }
+
+    @media only screen and (max-height: 460px) {
+        max-height: 300px;
     }
 </style>
 

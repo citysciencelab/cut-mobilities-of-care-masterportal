@@ -364,8 +364,6 @@ export default {
             :initial-width-mobile="initialWidthMobile"
         >
             <template v-slot:toolBody>
-                {{drawingMode}}
-                {{currentInteraction}}
                 <v-app
                     v-if="active"
                     id="tool-mobilityDataDraw"
@@ -444,41 +442,6 @@ export default {
                             }}
                         </v-btn>
                     </div>
-
-                    <v-dialog
-                        v-model="showDialog"
-                        transition="dialog-top-transition"
-                        max-width="600"
-                    >
-                        <v-card>
-                            <v-card-title class="text-h5 grey lighten-2">
-                                {{ $t(
-                                "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
-                            ) }}
-                            </v-card-title>
-
-                            <v-card-text class="data-policy-text">
-                                {{ $t(
-                                "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
-                            ) }}
-                            </v-card-text>
-
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    color="primary"
-                                    text
-                                    @click="showDialog = false"
-                                >
-                                    {{ $t(
-                                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
-                                ) }}
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
                 </v-app>
                 <div
                     id="hide-button"
@@ -489,6 +452,40 @@ export default {
                 </div>
             </template>
         </Tool>
+        <v-dialog
+            v-model="showDialog"
+            transition="dialog-top-transition"
+            max-width="600"
+        >
+            <v-card>
+                <v-card-title class="text-h5 grey lighten-2">
+                    {{ $t(
+                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
+                ) }}
+                </v-card-title>
+
+                <v-card-text class="data-policy-text">
+                    {{ $t(
+                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
+                ) }}
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="primary"
+                        text
+                        @click="showDialog = false"
+                    >
+                        {{ $t(
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
+                    ) }}
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -509,6 +506,11 @@ export default {
     @media only screen and (max-width: 440px) {
         height: calc(100% - 40px) !important;
     }
+
+    @media only screen and (max-height: 460px) {
+        height: 100% !important;
+    }
+
     background: none;
 
     &::v-deep {
@@ -579,6 +581,13 @@ export default {
 }
 
 // Mobile view without resize bar - no padding
+@media only screen and (max-height: 460px) {
+    #hide-button {
+        display: none !important;
+    }
+}
+
+// Mobile view without resize bar - no padding
 @media only screen and (max-width: 440px) {
     #tool-sidebar-vue {
         padding: 0 !important;
@@ -593,6 +602,18 @@ export default {
             width: 100%;
             text-align: center;
         }
+
+        #vue-tool-content-body {
+            padding: 7px !important;
+        }
+    }
+
+    .drawing-mode-label, .mobility-mode-label {
+        height: 30px !important;
+        width: 30px !important;
+        font-size: 20px !important;
+        padding: 3px !important;
+        border-radius: 7px !important;
     }
 
     #background-overlay {
@@ -641,6 +662,7 @@ export default {
         justify-content: center !important;
         button {
             margin: 0 !important;
+            height: 26px !important;
         }
     }
 }

@@ -459,6 +459,13 @@ export default {
         .v-text-field__details {
             display: none;
         }
+
+        // List elements smaller if very small screen
+        @media (max-width: 450px) {
+            .v-list-item__title {
+                white-space: break-spaces;
+            }
+        }
     }
 }
 
