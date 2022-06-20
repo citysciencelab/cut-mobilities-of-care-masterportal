@@ -1,4 +1,4 @@
 {
-  "API_BASE_URL" : "http://localhost:8080",
+  "API_BASE_URL" : "https://re2-api.cut.hcu-hamburg.de",
   "TEST_ENV" : false
 }
