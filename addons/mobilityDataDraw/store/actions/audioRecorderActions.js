@@ -74,6 +74,12 @@ function destroyAudioRecorder ({state, commit}) {
 
     audioRecorder.stream.getTracks().forEach(track => track.stop());
     commit("setAudioRecorder", null);
+    commit("setAudioRecords", [
+        {
+            audioRecordBlob: null,
+            isRecording: false
+        }
+    ]);
 }
 
 /**

@@ -22,7 +22,7 @@ export default {
          * Resets the drawn data and goes back to the daily routine drawing view
          * @returns {void}
          */
-        restartDrawing() {
+        restartDrawing () {
             this.resetDrawnData();
             // Reset audio record
             this.destroyAudioRecorder();
@@ -33,7 +33,7 @@ export default {
          * Resets the drawn data and goes to the intro again
          * @returns {void}
          */
-        endTool() {
+        endTool () {
             this.resetDrawnData();
             // Reset audio record
             this.destroyAudioRecorder();
