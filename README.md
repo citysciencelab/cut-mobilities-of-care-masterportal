@@ -5,6 +5,10 @@
 # Mobilities of care
 ## City Science Lab - Connected Urban Twin
 
+https://user-images.githubusercontent.com/61881523/177163402-5a5229a4-9faf-4c12-9067-dcc5f8089c2f.mp4
+(You can acccess the video in 4k [here](https://youtu.be/iqi-qff7fCg))
+
+
 Care workers have specific demands on urban (transport) infrastructure due to fragmented mobility patterns, which are not sufficiently addressed by current urban development and are underrepresented in planning and participation processes. The tools in this repository are two add-ons for the Masterportal ([documentation](#following-is-the-official-documentation-of-the-masterportal)) that provide functionality necessary for the co-creative workshops held by the CityScienceLab in order to test new technology in the processes. The tools in this repository are two add-ons for the [Connected Urban Twin (CUT)](https://www.hamburg.de/cut/) and gather mobility data of unpaid care workers.
 
 The first add-on is a storytelling tool that enables one to both create and play data stories. These stories can be created by an interface integrated in the add-on or created manually in a JSON format.  Besides engaging data visualization, digital storytelling is a key method to support the individual, group or sociocultural understanding of
