@@ -138,7 +138,9 @@ function createAnnotationDrawInteractionListeners ({state, dispatch, commit}) {
             event.feature.set("mobilityMode", state.mobilityMode);
         }
         dispatch("addFeatureToAnnotation", event.feature);
+        commit("setIsDrawingJustEnded", true);
         commit("setIsMenuUp", true);
+        dispatch("createTimerForMapOverlay");
     });
 }
 
@@ -152,7 +154,9 @@ function createAnnotationPointInteractionListeners ({state, dispatch, commit}) {
     // Listener to stop drawing a line feature
     state.drawPointAnnotationInteraction.on("drawend", event => {
         dispatch("addFeatureToAnnotation", event.feature);
+        commit("setIsDrawingJustEnded", true);
         commit("setIsMenuUp", true);
+        dispatch("createTimerForMapOverlay");
     });
 }
 
@@ -412,6 +416,21 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
     }
 }
 
+/**
+ * Creates a listener for the menu not to hide again when it has jut been shown.
+ * The problem comes from the emitting singleClick that gets fired when drawing ends, that hides the menu again
+ * The variable set is being used for the #background-overlay
+ *
+ * @param {Object} context actions context object.
+ * @returns {void}
+ */
+function createTimerForMapOverlay ({commit}) {
+    const afterTimer = () => {
+        commit("setIsDrawingJustEnded", false);
+    };
+    setInterval(afterTimer, 500);
+}
+
 export default {
     addMobilityDataDrawInteractions,
     createMobilityDataDrawInteractionListeners,
@@ -429,5 +448,6 @@ export default {
     startDrawingMobilityDataLocation,
     stopDrawingMobilityDataLocation,
     startModifyingAnnotationFeature,
-    stopModifyingAnnotationFeature
+    stopModifyingAnnotationFeature,
+    createTimerForMapOverlay
 };

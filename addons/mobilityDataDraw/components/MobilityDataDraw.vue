@@ -177,11 +177,10 @@ export default {
          * @returns {void}
          */
         toggleMenu() {
-            // If the menu is toggled to be shown and stil in modify mode -> deactivate
+            // If the menu is toggled to be shown and still in modify mode -> deactivate
             if (this.currentInteraction === this.constants.interactionTypes.MODIFY && !this.isMenuUp) {
                 this.stopModifyingAnnotationFeature();
             }
-
             this.setIsMenuUp(!this.isMenuUp)
         },
 
@@ -338,9 +337,9 @@ export default {
 <template lang="html">
     <div class="tool-holder">
         <div
-            v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
+            v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp && !isDrawingJustEnded"
             id="background-overlay"
-             @click="toggleMenu"
+            @click="toggleMenu"
         />
         <div
             v-if="!isMenuUp"
@@ -608,7 +607,6 @@ export default {
     }
 
     #tool-mobilityDataDraw-actions {
-        justify-content: center !important;
         button {
             margin: 0 !important;
             height: 26px !important;
@@ -639,6 +637,11 @@ export default {
         #vue-tool-content-body {
             padding: 7px !important;
         }
+    }
+
+
+    #tool-mobilityDataDraw-actions {
+        justify-content: center !important;
     }
 
     .tool-mobilityDataDraw-actions-next {

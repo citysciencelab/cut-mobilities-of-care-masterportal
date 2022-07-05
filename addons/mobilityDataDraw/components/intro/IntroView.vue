@@ -79,12 +79,28 @@ export default {
                 v-model="termsAccepted"
             ></v-checkbox>
             <div v-if="getLanguage() === 'de'">
-                <a href="javascript:void(0);" v-on:click="showDialog = !showDialog">{{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms1') }}</a>
-            {{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms2') }}
+                <a
+                    href="javascript:void(0);"
+                    @click="showDialog = !showDialog">
+                    {{
+                        $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms1')
+                    }}
+                </a>
+                {{
+                    $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms2')
+                }}
             </div>
             <div v-else>
-                {{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms1') }}
-                <a href="javascript:void(0);" v-on:click="showDialog = !showDialog">{{ $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms2') }}</a>
+                {{
+                    $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms1')
+                }}
+                <a
+                    href="javascript:void(0);"
+                    @click="showDialog = !showDialog">
+                    {{
+                        $t('additional:modules.tools.mobilityDataDraw.intro.acceptTerms2')
+                    }}
+                </a>
             </div>
         </div>
 

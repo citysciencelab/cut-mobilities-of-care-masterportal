@@ -83,7 +83,8 @@ const state = {
     initialWidthMobile: 300,
     isCurrentMobile: false,
     isMenuUp: true,
-    isTestEnvironment: false
+    isTestEnvironment: false,
+    isDrawingJustEnded: false
 };
 
 export default state;
