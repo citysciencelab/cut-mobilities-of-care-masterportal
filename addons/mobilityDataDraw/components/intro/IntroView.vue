@@ -168,6 +168,10 @@ export default {
             margin-bottom: 3px !important;
         }
 
+        .v-card__text {
+            padding: 10px !important;
+        }
+
         .v-dialog>.v-card>.v-card__actions {
             border-top: 1px solid #e0e0e0 !important;
             height: 40px !important;
