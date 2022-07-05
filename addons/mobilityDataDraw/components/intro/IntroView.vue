@@ -101,7 +101,7 @@ export default {
             v-model="showDialog"
             transition="dialog-top-transition"
             max-width="600"
-            scrollable="true"
+            v-bind:scrollable="true"
         >
             <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
@@ -161,26 +161,6 @@ export default {
     .data-policy-holder {
         max-height: 450px;
         overflow-y: auto;
-    }
-
-    @media only screen and (max-height: 460px) {
-        max-height: 300px;
-
-        .v-card__title {
-            height: 43px !important;
-            padding-top: 8px !important;
-            margin-bottom: 3px !important;
-        }
-
-        .v-card__text {
-            padding: 10px !important;
-        }
-
-        .v-dialog>.v-card>.v-card__actions {
-            border-top: 1px solid #e0e0e0 !important;
-            height: 40px !important;
-            margin-top: 3px !important;
-        }
     }
 
     // CSS created from pdf to css - not well formatted

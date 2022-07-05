@@ -589,10 +589,12 @@ export default {
     }
 
     //For all v-dialog
-    .v-card__title {
+    .v-application .v-card__title .text-h5 {
         height: 43px !important;
         padding-top: 8px !important;
         margin-bottom: 3px !important;
+        font-size: 12pt !important;
+        font-weight: bolder;
     }
 
     .v-card__text {
@@ -603,6 +605,18 @@ export default {
         border-top: 1px solid #e0e0e0 !important;
         height: 40px !important;
         margin-top: 3px !important;
+    }
+
+    #tool-mobilityDataDraw-actions {
+        justify-content: center !important;
+        button {
+            margin: 0 !important;
+            height: 26px !important;
+        }
+    }
+
+    button {
+        font-size: 8pt !important;
     }
 }
 
@@ -627,6 +641,19 @@ export default {
         }
     }
 
+    .tool-mobilityDataDraw-actions-next {
+        margin-left: 0 !important;
+    }
+
+    //For all v-dialog
+    &::v-deep .v-card__title {
+        height: 43px !important;
+        padding-top: 8px !important;
+        margin-bottom: 3px !important;
+        font-size: 12pt !important;
+        font-weight: bolder;
+    }
+
     .drawing-mode-label, .mobility-mode-label {
         height: 30px !important;
         width: 30px !important;
@@ -649,16 +676,16 @@ export default {
         width: 50px;
         text-align: center;
         position: fixed;
-        top: calc(100% - 187px);
+        top: calc(100% - 157px);
         left: calc(50% - 50px);
-        z-index: 3000;
+        z-index: 1000;
         height: 45px;
         background-color: rgba(255, 255, 255, 0.6);
         border-radius: 32px;
     }
 
     .show-button-draw-line {
-        top: calc(100% - 247px) !important;
+        top: calc(100% - 217px) !important;
     }
 
     .show-button-modify {
@@ -670,19 +697,11 @@ export default {
     }
 
     .menu-down-one-row {
-        top: calc(100% - 150px) !important;
+        top: calc(100% - 120px) !important;
     }
 
     .menu-down-two-rows {
-        top: calc(100% - 210px) !important;
-    }
-
-    #tool-mobilityDataDraw-actions {
-        justify-content: center !important;
-        button {
-            margin: 0 !important;
-            height: 26px !important;
-        }
+        top: calc(100% - 180px) !important;
     }
 }
 
