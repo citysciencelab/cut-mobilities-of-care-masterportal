@@ -165,7 +165,7 @@
           "pointDrawingHint": "Click on the map to place an annotation point.",
           "routeDrawingHint": "Click on the map to start drawing a route. Double click on the map to finish the route.",
           "areaDrawingHint": "Click on the map to start drawing an area. Double click on the map to finish the area.",
-          "introduction": "For further annotations, draw points, routes or areas on the map."
+          "introduction": "Please draw points, routes or areas on the map."
         },
         "help": {
           "title": "Draw on the map",

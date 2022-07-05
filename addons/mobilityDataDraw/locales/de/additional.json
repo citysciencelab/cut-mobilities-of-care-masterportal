@@ -165,7 +165,7 @@
           "pointDrawingHint": "Klicken Sie auf die Karte, um einen Anmerkungspunkt zu platzieren.",
           "routeDrawingHint": "Klicken Sie auf die Karte, um mit dem Zeichnen einer Route zu beginnen. Doppelklicken Sie auf die Karte um die Route zu beenden.",
           "areaDrawingHint": "Klicken Sie auf die Karte, um mit dem Zeichnen eines Bereichs zu beginnen. Doppelklicken Sie auf die Karte um den Bereich zu beenden.",
-          "introduction": "Für weitere Anmerkungen, zeichnen Sie Punkte, Routen oder Bereiche auf der Karte ein."
+          "introduction": "Bitte zeichnen Sie Punkte, Routen oder Bereiche auf der Karte ein."
         },
         "help": {
           "title": "Zeichnen auf der Karte",
