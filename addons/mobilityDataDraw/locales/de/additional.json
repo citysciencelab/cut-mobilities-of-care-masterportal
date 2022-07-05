@@ -167,6 +167,16 @@
           "areaDrawingHint": "Klicken Sie auf die Karte, um mit dem Zeichnen eines Bereichs zu beginnen. Doppelklicken Sie auf die Karte um den Bereich zu beenden.",
           "introduction": "Für weitere Anmerkungen, zeichnen Sie Punkte, Routen oder Bereiche auf der Karte ein."
         },
+        "help": {
+          "title": "Zeichnen auf der Karte",
+          "point": "Punkt",
+          "line": "Linien",
+          "area": "Gebiet",
+          "delete": "Löschen",
+          "deleteText": "Zum Löschen eines Eintrags öffenen Sie diesen in der Liste (1.) und klicken Sie auf das Löschen-Symbol (2.)",
+          "edit": "Einträge Bearbeiten",
+          "editText": "Zum Bearbeiten eines Eintrags öffenen Sie diesen in der Liste (1.) und klicken Sie auf das Ändern-Symbol (2.). Das ausgewählte Element wird hervorgehoben und sie können diesen nun verschieben oder anpassen (3.). Kliken Sie das Speichern-Symbol (4.)."
+        },
         "closing": {
           "title": "Vielen Dank für die Teilnahme!",
           "message": "Gerne können Sie weitere typische Tagesabläufe eintragen.",

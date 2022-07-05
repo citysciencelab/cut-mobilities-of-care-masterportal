@@ -50,30 +50,82 @@ export default {
                 </v-icon>
             </label>
         </template>
-        <!--
+
         <v-icon
             class="btn btn-lgv-grey drawing-mode-label info-button"
-            v-if="isCurrentMobile"
             @click="showDialog = true;"
         >
             help_outline
         </v-icon>
-        -->
+
         <v-dialog
             v-model="showDialog"
             transition="dialog-top-transition"
             max-width="600"
+            v-bind:scrollable="true"
         >
             <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
-                    Drawing mode hints
+                    {{ $t(
+                        "additional:modules.tools.mobilityDataDraw.help.title"
+                    ) }}
                 </v-card-title>
 
-                <v-card-text class="data-policy-text">
-
+                <v-card-text class="anotations-help-text">
+                    <h4>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.point"
+                        ) }}
+                    </h4>
+                    <div>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.annotations.pointDrawingHint"
+                        ) }}
+                    </div>
+                    <h4>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.line"
+                        ) }}
+                    </h4>
+                    <div>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.annotations.routeDrawingHint"
+                        ) }}
+                    </div>
+                    <h4>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.area"
+                        ) }}
+                    </h4>
+                    <div>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.annotations.areaDrawingHint"
+                        ) }}
+                    </div>
+                    <h4>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.delete"
+                        ) }}
+                    </h4>
+                    <div>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.deleteText"
+                        ) }}
+                    </div>
+                    <img src="../../assets/images/delete.jpg">
+                    <h4>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.edit"
+                        ) }}
+                    </h4>
+                    <div>
+                        {{ $t(
+                            "additional:modules.tools.mobilityDataDraw.help.editText"
+                        ) }}
+                    </div>
+                    <img src="../../assets/images/edit-1.jpg">
+                    <img src="../../assets/images/edit-2.jpg">
                 </v-card-text>
-
-                <v-divider></v-divider>
 
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -89,6 +141,19 @@ export default {
         </v-dialog>
     </div>
 </template>
+
+<style lang="less">
+.anotations-help-text {
+    h4 {
+        border-bottom: none !important;
+        font-weight: bold;
+    }
+    img {
+        max-width: 410px;
+        margin: 3px 0;
+    }
+}
+</style>
 
 <style lang="less" scoped>
 @import "~variables";

@@ -162,10 +162,20 @@
           "addLocationMarker": "Click on the map to place the marker."
         },
         "annotations": {
-          "pointDrawingHint": "click on the map to place an annotation point.",
+          "pointDrawingHint": "Click on the map to place an annotation point.",
           "routeDrawingHint": "Click on the map to start drawing a route. Double click on the map to finish the route.",
           "areaDrawingHint": "Click on the map to start drawing an area. Double click on the map to finish the area.",
           "introduction": "For further annotations, draw points, routes or areas on the map."
+        },
+        "help": {
+          "title": "Draw on the map",
+          "point": "Point",
+          "line": "Line",
+          "area": "Area",
+          "delete": "Delete",
+          "deleteText": "To delete an entry, open it in the list (1.) and click on the delete icon (2.)",
+          "edit": "Edit entries",
+          "editText": "To edit an entry, open it in the list (1.) and click on the edit icon (2.). The selected element is highlighted and you can now move or adjust it (3.). To finish, click the save icon (4.)."
         },
         "closing": {
           "title": "Thank you for participating!",
