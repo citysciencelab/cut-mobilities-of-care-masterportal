@@ -197,6 +197,7 @@ export default {
                     @change="onSetTitle"
                     @click.stop
                     @click="onClickAnnotation"
+                    @click.native.stop
                 />
             </div>
         </v-expansion-panel-header>
