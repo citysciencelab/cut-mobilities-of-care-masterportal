@@ -49,9 +49,9 @@ export default {
          */
         annotationIsDisabled: function() {
             return (
-                this.currentInteraction ===
+                (this.currentInteraction ===
                     this.constants.interactionTypes.MODIFY &&
-                !this.feature.get("isSelected")
+                !this.feature.get("isSelected"))
             );
         },
 
@@ -60,9 +60,9 @@ export default {
          */
         annotationIsReadonly: function() {
             return (
-                this.currentInteraction ===
+                (this.currentInteraction ===
                     this.constants.interactionTypes.MODIFY &&
-                this.feature.get("isSelected")
+                this.feature.get("isSelected")) || this.isDrawingJustEnded
             );
         }
     },
