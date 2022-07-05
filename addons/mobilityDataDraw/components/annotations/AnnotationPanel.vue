@@ -160,7 +160,10 @@ export default {
         :readonly="annotationIsReadonly"
         @click="onClickAnnotation"
     >
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header
+            disable-icon-rotate
+            @keyup.space.prevent
+        >
             <template v-slot:actions>
                 <v-icon dense :title="comment" :class="{ 'invisible-icon': comment === ''}" style="margin-right: 5px">
                     comment
