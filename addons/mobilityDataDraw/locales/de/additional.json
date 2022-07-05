@@ -10,7 +10,8 @@
           "acceptTerms1": "Datenschutzrichtlinie ",
           "acceptTerms2": "akzeptieren",
           "startTool": "Start",
-          "privacyPolicy": "Datenschutzerklärung"
+          "privacyPolicy": "Datenschutzerklärung",
+          "accept": "Bestätigen"
         },
         "label": {
           "personalData": "Steckbrief",

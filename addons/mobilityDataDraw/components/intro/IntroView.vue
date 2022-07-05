@@ -124,7 +124,11 @@ export default {
                         text
                         @click="termsAccepted = !termsAccepted; showDialog = false"
                     >
-                        I accept
+                        {{
+                            $t(
+                                "additional:modules.tools.mobilityDataDraw.intro.accept"
+                            )
+                        }}
                     </v-btn>
                 </v-card-actions>
             </v-card>

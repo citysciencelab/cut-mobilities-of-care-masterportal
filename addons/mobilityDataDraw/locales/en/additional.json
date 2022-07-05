@@ -10,7 +10,8 @@
           "acceptTerms1": "Accept ",
           "acceptTerms2": "data policy",
           "startTool": "Start",
-          "privacyPolicy": "Privacy Policy"
+          "privacyPolicy": "Privacy Policy",
+          "accept": "Accept"
         },
         "label": {
           "personalData": "Personal Data",
