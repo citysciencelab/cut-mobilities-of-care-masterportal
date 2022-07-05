@@ -337,15 +337,17 @@ export default {
 
 <template lang="html">
     <div class="tool-holder">
-        <div id="background-overlay"
-             v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
-             @click="toggleMenu" />
         <div
+            v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
+            id="background-overlay"
+             @click="toggleMenu"
+        />
+        <div
+            v-if="!isMenuUp"
             id="show-button"
             v-bind:class="{'show-button-modify': currentInteraction === constants.interactionTypes.MODIFY,
             'show-button-draw-line': drawingMode === constants.drawingModes.LINE && currentInteraction !== constants.interactionTypes.MODIFY}"
             @click="toggleMenu"
-            v-if="!isMenuUp"
         >
             <v-icon size="40">keyboard_double_arrow_up</v-icon>
         </div>
@@ -387,8 +389,8 @@ export default {
                     />
 
                     <div
-                        id="tool-mobilityDataDraw-actions"
                         v-if="view !== constants.views.CLOSING_VIEW && view !== constants.views.INTRO_VIEW && view !== constants.views.PERSONAL_DATA_OR_END_VIEW"
+                        id="tool-mobilityDataDraw-actions"
                     >
                         <v-btn
                             v-if="view > minDrawingView"
@@ -444,9 +446,9 @@ export default {
                     </div>
                 </v-app>
                 <div
+                    v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
                     id="hide-button"
                     @click="toggleMenu"
-                    v-if="view === constants.views.ANNOTATIONS_VIEW && isMenuUp"
                 >
                     <v-icon size="40">keyboard_double_arrow_down</v-icon>
                 </div>
@@ -460,14 +462,14 @@ export default {
             <v-card>
                 <v-card-title class="text-h5 grey lighten-2">
                     {{ $t(
-                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
-                ) }}
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.title"
+                    ) }}
                 </v-card-title>
 
                 <v-card-text class="data-policy-text">
                     {{ $t(
-                    "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
-                ) }}
+                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.noDataText"
+                    ) }}
                 </v-card-text>
 
                 <v-divider></v-divider>
@@ -480,8 +482,8 @@ export default {
                         @click="showDialog = false"
                     >
                         {{ $t(
-                        "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
-                    ) }}
+                            "additional:modules.tools.mobilityDataDraw.confirm.submitDrawnData.okButton"
+                        ) }}
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -584,6 +586,23 @@ export default {
 @media only screen and (max-height: 460px) {
     #hide-button {
         display: none !important;
+    }
+
+    //For all v-dialog
+    .v-card__title {
+        height: 43px !important;
+        padding-top: 8px !important;
+        margin-bottom: 3px !important;
+    }
+
+    .v-card__text {
+        padding: 10px !important;
+    }
+
+    .v-dialog>.v-card>.v-card__actions {
+        border-top: 1px solid #e0e0e0 !important;
+        height: 40px !important;
+        margin-top: 3px !important;
     }
 }
 
