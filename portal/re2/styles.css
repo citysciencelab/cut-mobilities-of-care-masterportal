@@ -1,0 +1,40 @@
+body {
+    background-image: url("images/background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+#background-overlay {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.8)
+}
+
+#generic-masterportal-logo {
+    background-color: transparent !important;
+}
+
+.centered-box-wrapper > .centered-box-content {
+    width: 440px;
+    overflow: hidden;
+    line-break: auto;
+    white-space: normal;
+    text-align: left;
+}
+
+#portal-logo-box {
+    text-align: left !important;
+    padding: 0 !important;
+    margin-bottom: 5px !important;
+    background-color: transparent !important;
+}
+
+#portal-logo-sub-title {
+    font-size: 0.55em !important;
+}
+
+#video-box {
+    margin-bottom: 87px;
+    margin-top: 10px;
+}

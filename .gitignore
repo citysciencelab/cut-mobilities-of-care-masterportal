@@ -52,7 +52,7 @@ npm-debug.log
 !/portal/master
 !/portal/masterCustom
 !/portal/masterDefault
-!/portal/data-drawing-tool
+!/portal/draw
 !/portal/mobility-data
 
 # Docker build
