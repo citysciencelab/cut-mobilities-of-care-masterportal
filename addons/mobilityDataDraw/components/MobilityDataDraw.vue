@@ -624,6 +624,7 @@ export default {
         padding: 0 !important;
         width: calc(100% - 75px) !important;
         height: calc(100% - 20px) !important;
+        overflow: unset !important;
 
         #basic-resize-handle-sidebar {
             padding: 0 !important;
@@ -636,6 +637,7 @@ export default {
 
         #vue-tool-content-body {
             padding: 7px !important;
+            overflow: hidden;
         }
     }
 
