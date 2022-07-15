@@ -5,10 +5,16 @@ body {
     background-size: cover;
 }
 
+#intro-text {
+    white-space: pre-line;
+}
+
 #background-overlay {
     width: 100%;
     height: 100%;
-    background-color: rgba(255,255,255,0.8)
+    background-color: rgba(255,255,255,0.8);
+    overflow: auto;
+    position: absolute;
 }
 
 #generic-masterportal-logo {
@@ -35,6 +41,12 @@ body {
 }
 
 #video-box {
-    margin-bottom: 87px;
-    margin-top: 10px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+
+@media only screen and (max-width: 440px) {
+    .centered-box-wrapper > .centered-box-content, iframe, video {
+        width: 100% !important;
+    }
 }
