@@ -138,9 +138,7 @@ function createAnnotationDrawInteractionListeners ({state, dispatch, commit}) {
             event.feature.set("mobilityMode", state.mobilityMode);
         }
         dispatch("addFeatureToAnnotation", event.feature);
-        commit("setIsDrawingJustEnded", true);
-        commit("setIsMenuUp", true);
-        dispatch("createTimerForMapOverlay");
+        dispatch("createDelayToShowMenu");
     });
 }
 
@@ -150,13 +148,11 @@ function createAnnotationDrawInteractionListeners ({state, dispatch, commit}) {
  * @param {Object} context actions context object.
  * @returns {void}
  */
-function createAnnotationPointInteractionListeners ({state, dispatch, commit}) {
+function createAnnotationPointInteractionListeners ({state, dispatch}) {
     // Listener to stop drawing a line feature
     state.drawPointAnnotationInteraction.on("drawend", event => {
         dispatch("addFeatureToAnnotation", event.feature);
-        commit("setIsDrawingJustEnded", true);
-        commit("setIsMenuUp", true);
-        dispatch("createTimerForMapOverlay");
+        dispatch("createDelayToShowMenu");
     });
 }
 
@@ -417,6 +413,21 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
 }
 
 /**
+ * Creates a delay so the user can see the fnished drawing before the menu comes up
+ *
+ * @param {Object} context actions context object.
+ * @returns {void}
+ */
+function createDelayToShowMenu ({commit, dispatch}) {
+    const timer = setInterval(function () {
+        commit("setIsDrawingJustEnded", true);
+        commit("setIsMenuUp", true);
+        dispatch("createTimerForMapOverlay");
+        clearInterval(timer);
+    }, 500);
+}
+
+/**
  * Creates a listener for the menu not to hide again when it has jut been shown.
  * The problem comes from the emitting singleClick that gets fired when drawing ends, that hides the menu again
  * The variable set is being used for the #background-overlay
@@ -425,10 +436,10 @@ function stopModifyingAnnotationFeature ({state, commit, dispatch}) {
  * @returns {void}
  */
 function createTimerForMapOverlay ({commit}) {
-    const afterTimer = () => {
+    const timer = setInterval(function () {
         commit("setIsDrawingJustEnded", false);
-    };
-    setInterval(afterTimer, 500);
+        clearInterval(timer);
+    }, 500);
 }
 
 export default {
@@ -449,5 +460,6 @@ export default {
     stopDrawingMobilityDataLocation,
     startModifyingAnnotationFeature,
     stopModifyingAnnotationFeature,
-    createTimerForMapOverlay
+    createTimerForMapOverlay,
+    createDelayToShowMenu
 };
