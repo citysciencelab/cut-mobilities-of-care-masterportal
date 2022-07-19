@@ -35,6 +35,24 @@ const mutations = {
         } else {
             state.isTestEnvironment = testEnv.toUpperCase() === "TRUE";
         }
+    },
+
+    /**
+     * Setting the isIosDeviceVariable
+     * @param {object} state of this component
+     * @returns {void}
+     */
+    applyIsIosDevice: (state) => {
+        state.isIosDevice = (/(iPad|iPhone|iPod)/g).test(navigator.userAgent);
+    },
+
+    /**
+     * Setting the isCurrentMobile
+     * @param {object} state of this component
+     * @returns {void}
+     */
+    applyIsCurrentMobile: (state) => {
+        state.isCurrentMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent);
     }
 };
 
