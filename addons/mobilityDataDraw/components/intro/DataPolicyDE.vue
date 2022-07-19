@@ -37,7 +37,7 @@ export default {
                     (michael.ziehl@hcu-hamburg.de)</p>
                 <p class="s2"
                    style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
-                    Martin Niggemann (martin.niggemann@hcu-hamburg.de) Tel.: <span class="p">+49 (0)40 4 28 27</span>
+                    Till Degkwitz (till.degkwitz@hcu-hamburg.de)
                 </p></li>
             <p style="text-indent: 0pt;text-align: left;"><br/></p>
             <li><h2 style="padding-left: 27pt;text-indent: -21pt;text-align: left;">Name
@@ -57,9 +57,11 @@ export default {
                 <p class="s2" style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
                     R. 5.003</p>
                 <p class="s2" style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
-                    Tel.: +49 (0)40 4 28 27- 4029 - 5250</p>
+                    Tel.: +49 (0)40 4 28 27- 4029 / 4359</p>
                 <p style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"><a
                     href="mailto:christian.brettschneider@vw.hcu-hamburg.de">christian.brettschneider@vw.hcu-hamburg.de</a>
+                    <a
+                    href="mailto:hcu-datenschutz@vw.hcu-hamburg.de">hcu-datenschutz@vw.hcu-hamburg.de</a>
                 </p>
                 <p style="text-indent: 0pt;text-align: left;"><br/></p></li>
             <li><h2 style="padding-top: 4pt;padding-left: 27pt;text-indent: -21pt;text-align: left;">
@@ -160,7 +162,7 @@ export default {
                                     <li><h4
                                         style="padding-left: 25pt;text-indent: -18pt;text-align: left;">
                                         Kommentare <span
-                                        class="s3">(Freitext oder als Sprachnachricht)</span></h4>
+                                        class="s3">(Freitext, Sprachnachricht oder als Foto)</span></h4>
                                         <p style="text-indent: 0pt;text-align: left;"><br/></p>
                                         <ul id="l7">
                                             <li><p class="s3"
