@@ -52,13 +52,18 @@ export default {
             if (this.audioRecords.length - 1 >= this.audioRecordId) {
                 return this.audioRecords[this.audioRecordId].audioRecordBlob;
             }
+        },
+        isShowRecorder () {
+            return (!this.isIosDevice
+                || (this.isIosDevice && this.getNumberOfRecordings < 1)
+                || (this.isIosDevice && this.getNumberOfRecordings > 0 && this.isRecordingToDelete() !== null));
         }
     }
 };
 </script>
 
 <template lang="html">
-    <div>
+    <div v-if="isShowRecorder()">
         <div>
             <div class="audio-recorder-container">
                 <AudioRecorder v-bind:audioRecordIndex="audioRecordId" />
