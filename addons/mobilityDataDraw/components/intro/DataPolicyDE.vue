@@ -11,7 +11,7 @@ export default {
 <template lang="html">
     <div class="data-policy-text">
         <h1 style="padding-top: 3pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
-            „Faircare Verkehr Datenergebung“</h1>
+            „FairCare Verkehr Datenergebung“</h1>
         <p style="text-indent: 0pt;text-align: left;"><br/></p>
         <p class="s1" style="padding-left: 5pt;text-indent: 0pt;text-align: left;">(Stand: 25.11.2021)</p>
         <p style="text-indent: 0pt;text-align: left;"><br/></p>

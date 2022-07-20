@@ -5,7 +5,7 @@ body {
     background-size: cover;
 }
 
-#intro-text {
+#intro-text, #imprint {
     white-space: pre-line;
 }
 
