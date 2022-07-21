@@ -9,6 +9,10 @@ body {
     white-space: pre-line;
 }
 
+#imprint {
+    font-size: 7pt;
+}
+
 #background-overlay {
     width: 100%;
     height: 100%;
