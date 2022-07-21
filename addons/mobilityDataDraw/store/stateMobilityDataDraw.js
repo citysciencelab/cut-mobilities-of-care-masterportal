@@ -84,7 +84,8 @@ const state = {
     isCurrentMobile: false,
     isMenuUp: true,
     isTestEnvironment: false,
-    isDrawingJustEnded: false
+    isDrawingJustEnded: false,
+    isIosDevice: false
 };
 
 export default state;

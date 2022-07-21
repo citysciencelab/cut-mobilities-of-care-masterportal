@@ -309,6 +309,13 @@ export default {
         }
         .annotation-actions {
             margin-top: 5px;
+
+            button {
+                background-color: white;
+                border: none;
+                box-shadow: none;
+                color: rgba(0,0,0,.54);
+            }
         }
     }
 
@@ -322,10 +329,15 @@ export default {
             .annotation-actions {
                 height: 30px !important;
                 padding: 4px !important;
+                padding-top: 0 !important;
+                padding-right: 1px !important;
+                margin-top: 0 !important;
             }
         }
 
-        .v-expansion-panel-header,
+        .v-expansion-panel-header {
+
+        }
         .v-expansion-panel-content{
             padding: 6px !important;
         }

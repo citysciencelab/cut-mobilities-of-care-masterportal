@@ -166,7 +166,8 @@ export default {
         }
         this.applyTranslationKey(this.name);
         this.applyTestEnv();
-        this.getIsMobile();
+        this.applyIsCurrentMobile();
+        this.applyIsIosDevice();
     },
     methods: {
         ...mapMutations("Tools/MobilityDataDraw", Object.keys(mutations)),
@@ -325,10 +326,6 @@ export default {
             } else {
                 closeMobilityDataDraw();
             }
-        },
-        getIsMobile () {
-            this.setIsCurrentMobile((/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i).test(navigator.userAgent));
-            return  this.isCurrentMobile;
         }
     }
 };

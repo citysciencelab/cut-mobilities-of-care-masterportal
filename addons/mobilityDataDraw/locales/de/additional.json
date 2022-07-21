@@ -2,7 +2,7 @@
   "modules": {
     "tools": {
       "mobilityDataDraw": {
-        "title": "Datenerhebung Faircare",
+        "title": "Datenerhebung FairCare",
         "intro": {
           "greeting": "Willkommen beim FairCare Verkehr Tool",
           "message": "Städtische Infrastruktur ist häufig ungeeignet für die Bedürfnisse pflegender SorgearbeiterInnen. Die Erfassung entsprechender Hemmnisse soll die Sichtbarkeit der Probleme erhöhen und bestenfalls PlanerInnen helfen diese Bedürfnisse besser berücksichtigen zu können.",

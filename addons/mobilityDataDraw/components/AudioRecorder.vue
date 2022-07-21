@@ -86,12 +86,12 @@ export default {
     display: grid;
     grid-template-columns: 40px auto;
     grid-gap: 10px;
-    height: 40px;
+    height: 30px;
 
     button {
         position: relative;
-        width: 40px;
-        height: 40px;
+        width: 30px;
+        height: 30px;
         padding: 0;
         border-radius: 50%;
 
@@ -124,7 +124,7 @@ export default {
 
     audio {
         max-width: 100%;
-        height: 40px;
+        height: 30px;
 
         &::-webkit-media-controls-panel {
             background: #e3e3e3;
