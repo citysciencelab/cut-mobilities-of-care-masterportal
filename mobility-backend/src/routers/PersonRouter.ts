@@ -100,7 +100,7 @@ internalRouter.get('/delete/:personId', async (req, res) => {
       res.sendStatus(400);
       return;
     }
-    await personController.delete(Number(req.params.entryId));
+    //await personController.delete(Number(req.params.entryId));
     res.sendStatus(200);
   } catch (error) {
     console.error(error);
