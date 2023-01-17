@@ -69,7 +69,7 @@ services:
             DB_PASS: hECJFh7*th
             DB_PORT: 5432
             DB_MAX_CONNECTIONS: 10
-            API_CORS_ORIGINS: https://re2.cut.hcu-hamburg.de, /\.hcu-hamburg\.de$/, https://localhost:9001/portal/mobility-results/, /\mobility-results\/$/
+            API_CORS_ORIGINS: https://re2.cut.hcu-hamburg.de, /\.hcu-hamburg\.de$/, https://localhost:9001, /\mobility-results\/$/
             API_PORT: 8081
             API_VARIANT: internal
         labels:
