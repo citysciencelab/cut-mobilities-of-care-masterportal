@@ -14,7 +14,7 @@ import {
   externalRouter as externalImageFileRouter,
   internalRouter as internalImageFileRouter
 } from './routers/ImageFileRouter';
-import aggregatedFeaturesRouter from './routers/AggregatedFeaturesRouter';
+// import aggregatedFeaturesRouter from './routers/AggregatedFeaturesRouter';
 import {
   externalRouter as externalPersonRouter,
   internalRouter as internalPersonRouter
@@ -70,7 +70,7 @@ class Server {
       this.app.use('/image', externalImageFileRouter);
     }
 
-    this.app.use('/aggregated', aggregatedFeaturesRouter);
+    // this.app.use('/aggregated', aggregatedFeaturesRouter);
   }
 
   public start = (port: number) => {
