@@ -37,7 +37,7 @@ class Server {
     this.app.use(
       cors({
         methods: ['GET', 'POST'],
-        origin: '*'
+        origin: ['*', 'https://localhost:9001']
       })
     );
   }
