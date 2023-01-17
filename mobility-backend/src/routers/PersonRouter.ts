@@ -94,7 +94,7 @@ internalRouter.get('/', async (_, res) => {
  * @apiSuccess {HTTPStatusCode} 200
  **/
 internalRouter.get('/delete/:personId', async (req, res) => {
-  const { personId } = req.params;
+  const personId:any = req.params;
   try {
     if (!personId || isNaN(Number(personId))) {
       res.sendStatus(400);
