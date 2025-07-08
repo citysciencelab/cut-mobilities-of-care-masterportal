@@ -1,4 +1,5 @@
 <script src="../../../shared/constants/mobilityData.js"></script>
+
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import Tool from "../../../src/modules/tools/Tool.vue";
@@ -140,7 +141,7 @@ export default {
         this.applyTranslationKey(this.name);
 
         this.applyTestEnv();
-        this.getIsMobile();
+        // this.getIsMobile();
 
     },
     methods: {
@@ -321,8 +322,8 @@ export default {
                 />
 
                 <div
-                    id="tool-mobilityDataDraw-actions"
                     v-if="view !== constants.views.CLOSING_VIEW"
+                    id="tool-mobilityDataDraw-actions"
                 >
                     <v-btn
                         v-if="view > minDrawingView"

@@ -1,4 +1,4 @@
-import { generateSimpleMutations } from "../../../src/app-store/utils/generators";
+import {generateSimpleMutations} from "../../../src/app-store/utils/generators";
 import stateMobilityDataDraw from "./stateMobilityDataDraw";
 import config from "../config.json";
 
@@ -30,9 +30,11 @@ const mutations = {
      */
     applyTestEnv: (state) => {
         const testEnv = config.TEST_ENV;
+
         if (typeof testEnv === "boolean") {
             state.isTestEnvironment = testEnv;
-        } else {
+        }
+        else {
             state.isTestEnvironment = testEnv.toUpperCase() === "TRUE";
         }
     }

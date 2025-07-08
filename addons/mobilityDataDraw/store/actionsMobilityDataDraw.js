@@ -9,7 +9,7 @@ import personApi from "../api/sendPersonalData";
 import entryApi from "../api/sendEntry";
 import audioApi from "../api/sendAudioRecords";
 
-import config from "../config";
+// import config from "../config";
 
 const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
     actions = {
@@ -66,6 +66,7 @@ const initialState = JSON.parse(JSON.stringify(stateMobilityDataDraw)),
                     const audioRecordBlobs = state.audioRecords
                         .map(audioRecord => audioRecord.audioRecordBlob)
                         .filter(Boolean);
+
                     if (audioRecordBlobs.length) {
                         audioApi
 
