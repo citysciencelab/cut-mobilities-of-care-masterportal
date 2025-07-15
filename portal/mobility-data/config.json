@@ -78,11 +78,11 @@
       "Layer": [
         {
           "id": [
-            "1043"
+            "33793"
           ],
           "name": "Geobasiskarten (grau-blau)",
           "visibility": true,
-          "isVisibleInTree": false,
+          "isVisibleInTree": true,
           "legend": false
 
         }
